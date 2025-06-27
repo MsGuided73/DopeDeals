@@ -227,6 +227,14 @@ export class MemStorage implements IStorage {
         ...product,
         id: this.generateId(),
         createdAt: new Date(),
+        categoryId: product.categoryId || null,
+        brandId: product.brandId || null,
+        description: product.description || null,
+        imageUrl: product.imageUrl || null,
+        material: product.material || null,
+        inStock: product.inStock ?? true,
+        featured: product.featured ?? false,
+        vipExclusive: product.vipExclusive ?? false,
       };
       this.products.set(fullProduct.id, fullProduct);
     });
@@ -256,6 +264,10 @@ export class MemStorage implements IStorage {
       ...insertUser,
       id: this.generateId(),
       createdAt: new Date(),
+      fullName: insertUser.fullName || null,
+      membershipTierId: insertUser.membershipTierId || null,
+      ageVerificationStatus: insertUser.ageVerificationStatus || "not_verified",
+      lastVerificationCheck: insertUser.lastVerificationCheck || null,
     };
     this.users.set(user.id, user);
     return user;
@@ -308,6 +320,14 @@ export class MemStorage implements IStorage {
       ...insertProduct,
       id: this.generateId(),
       createdAt: new Date(),
+      description: insertProduct.description || null,
+      categoryId: insertProduct.categoryId || null,
+      brandId: insertProduct.brandId || null,
+      imageUrl: insertProduct.imageUrl || null,
+      material: insertProduct.material || null,
+      inStock: insertProduct.inStock ?? true,
+      featured: insertProduct.featured ?? false,
+      vipExclusive: insertProduct.vipExclusive ?? false,
     };
     this.products.set(product.id, product);
     return product;
@@ -326,6 +346,7 @@ export class MemStorage implements IStorage {
       ...insertCategory,
       id: this.generateId(),
       createdAt: new Date(),
+      description: insertCategory.description || null,
     };
     this.categories.set(category.id, category);
     return category;
@@ -344,6 +365,7 @@ export class MemStorage implements IStorage {
       ...insertBrand,
       id: this.generateId(),
       createdAt: new Date(),
+      description: insertBrand.description || null,
     };
     this.brands.set(brand.id, brand);
     return brand;
@@ -362,6 +384,9 @@ export class MemStorage implements IStorage {
       ...insertOrder,
       id: this.generateId(),
       createdAt: new Date(),
+      userId: insertOrder.userId || null,
+      status: insertOrder.status || "processing",
+      shippingAddress: insertOrder.shippingAddress || null,
     };
     this.orders.set(order.id, order);
     return order;
@@ -376,6 +401,8 @@ export class MemStorage implements IStorage {
       ...insertCartItem,
       id: this.generateId(),
       createdAt: new Date(),
+      userId: insertCartItem.userId || null,
+      productId: insertCartItem.productId || null,
     };
     this.cartItems.set(cartItem.id, cartItem);
     return cartItem;

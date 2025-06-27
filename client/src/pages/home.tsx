@@ -11,11 +11,15 @@ import ShoppingCartSidebar from "@/components/ShoppingCartSidebar";
 export default function Home() {
   const [showAgeModal, setShowAgeModal] = useState(true);
   const [cartOpen, setCartOpen] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
 
   useEffect(() => {
     const ageVerified = localStorage.getItem('ageVerified');
-    if (ageVerified === 'true') {
+    const isDemoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
+    
+    if (ageVerified === 'true' || isDemoMode) {
       setShowAgeModal(false);
+      setDemoMode(isDemoMode);
     }
   }, []);
 
@@ -35,6 +39,11 @@ export default function Home() {
       )}
       
       <div className="bg-steel-900 text-white">
+        {demoMode && (
+          <div className="bg-yellow-400 text-steel-900 px-4 py-2 text-center font-semibold">
+            🏗️ DEMO MODE - Preview the VIP Smoke store design (Age verification bypassed for preview)
+          </div>
+        )}
         <Header onCartToggle={() => setCartOpen(!cartOpen)} />
         <HeroSection />
         <FeaturedCategories />
