@@ -62,7 +62,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Product Info */}
       <div className="p-4">
         <h4 className="font-semibold text-white mb-2">{product.name}</h4>
-        <p className="text-steel-400 text-sm mb-3 line-clamp-2">{product.description}</p>
+        <p className="text-steel-300 text-sm mb-3 line-clamp-2">{product.description}</p>
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-yellow-400">
             {formatPrice(product.price)}
