@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(0, 73%, 51%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* VIP Smoke Custom Colors */
+  --steel-50: hsl(220, 13%, 97%);
+  --steel-100: hsl(220, 14%, 94%);
+  --steel-200: hsl(220, 13%, 87%);
+  --steel-300: hsl(220, 9%, 76%);
+  --steel-400: hsl(220, 9%, 64%);
+  --steel-500: hsl(220, 9%, 46%);
+  --steel-600: hsl(220, 13%, 37%);
+  --steel-700: hsl(215, 25%, 27%);
+  --steel-800: hsl(217, 33%, 17%);
+  --steel-900: hsl(222, 47%, 11%);
+  
+  --gold-400: hsl(45, 93%, 58%);
+  --gold-500: hsl(43, 96%, 56%);
+  --gold-600: hsl(38, 92%, 50%);
+  
+  --vip-red-500: hsl(0, 73%, 51%);
+  --vip-red-600: hsl(0, 70%, 42%);
+  --vip-red-700: hsl(0, 65%, 35%);
+}
+
+.dark {
+  --background: hsl(222, 47%, 11%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(217, 33%, 17%);
+  --muted-foreground: hsl(220, 9%, 64%);
+  --popover: hsl(217, 33%, 17%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(217, 33%, 17%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(215, 25%, 27%);
+  --input: hsl(215, 25%, 27%);
+  --primary: hsl(0, 73%, 51%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(217, 33%, 17%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(217, 33%, 17%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(220, 9%, 76%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .steel-gradient {
+    background: linear-gradient(135deg, hsl(220, 14%, 94%) 0%, hsl(220, 9%, 76%) 100%);
+  }
+  
+  .dark-gradient {
+    background: linear-gradient(135deg, hsl(222, 47%, 11%) 0%, hsl(217, 33%, 17%) 100%);
+  }
+  
+  .gold-gradient {
+    background: linear-gradient(135deg, hsl(45, 93%, 58%) 0%, hsl(43, 96%, 56%) 100%);
+  }
+}
