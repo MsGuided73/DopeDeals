@@ -83,11 +83,11 @@ export default function ShoppingCartSidebar({ isOpen, onClose }: ShoppingCartSid
           {/* Cart Total */}
           <div className="border-t border-steel-700 pt-4">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-steel-400">Subtotal</span>
+              <span className="text-steel-300">Subtotal</span>
               <span className="text-white font-semibold">{formatPrice(subtotal)}</span>
             </div>
             <div className="flex justify-between items-center mb-4">
-              <span className="text-steel-400">Shipping</span>
+              <span className="text-steel-300">Shipping</span>
               <span className="text-green-400">Free</span>
             </div>
             <div className="flex justify-between items-center mb-6">
