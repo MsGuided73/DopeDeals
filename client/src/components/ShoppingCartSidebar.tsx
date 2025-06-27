@@ -57,7 +57,7 @@ export default function ShoppingCartSidebar({ isOpen, onClose }: ShoppingCartSid
                 />
                 <div className="flex-1">
                   <h4 className="font-medium text-white">{item.name}</h4>
-                  <p className="text-steel-400 text-sm">{formatPrice(item.price)}</p>
+                  <p className="text-steel-300 text-sm">{formatPrice(item.price)}</p>
                   <div className="flex items-center space-x-2 mt-2">
                     <Button
                       size="icon"

@@ -80,7 +80,7 @@ export default function ProductCatalog() {
                           handleFilterChange("priceRange", range, checked as boolean)
                         }
                       />
-                      <label htmlFor={range} className="text-steel-300 text-sm">
+                      <label htmlFor={range} className="text-steel-200 text-sm cursor-pointer">
                         {range}
                       </label>
                     </div>
@@ -101,7 +101,7 @@ export default function ProductCatalog() {
                           handleFilterChange("materials", material, checked as boolean)
                         }
                       />
-                      <label htmlFor={material} className="text-steel-300 text-sm">
+                      <label htmlFor={material} className="text-steel-200 text-sm cursor-pointer">
                         {material}
                       </label>
                     </div>
@@ -122,7 +122,7 @@ export default function ProductCatalog() {
                           handleFilterChange("brands", brand.name, checked as boolean)
                         }
                       />
-                      <label htmlFor={brand.id} className="text-steel-300 text-sm">
+                      <label htmlFor={brand.id} className="text-steel-200 text-sm cursor-pointer">
                         {brand.name}
                       </label>
                     </div>
@@ -140,11 +140,11 @@ export default function ProductCatalog() {
                 <SelectTrigger className="w-48 bg-steel-800 text-white border-steel-700">
                   <SelectValue placeholder="Sort by: Featured" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="featured">Sort by: Featured</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="newest">Newest First</SelectItem>
+                <SelectContent className="bg-steel-800 border-steel-700">
+                  <SelectItem value="featured" className="text-white hover:bg-steel-700">Sort by: Featured</SelectItem>
+                  <SelectItem value="price-low" className="text-white hover:bg-steel-700">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high" className="text-white hover:bg-steel-700">Price: High to Low</SelectItem>
+                  <SelectItem value="newest" className="text-white hover:bg-steel-700">Newest First</SelectItem>
                 </SelectContent>
               </Select>
             </div>
