@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Crown, Search, User, Heart, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,24 @@ interface HeaderProps {
 
 export default function Header({ onCartToggle }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="bg-steel-800 border-b border-steel-700 sticky top-0 z-40">
+    <header className={`sticky top-0 z-40 transition-all duration-300 ${
+      scrolled 
+        ? 'glass-morphism shadow-2xl shadow-black/20' 
+        : 'glass-morphism-light'
+    }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
@@ -33,7 +48,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 placeholder="Search premium accessories..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-steel-700 text-white px-4 py-3 pl-12 border-steel-600 focus:border-yellow-400"
+                className="w-full bg-steel-700/70 backdrop-blur-sm text-white px-4 py-3 pl-12 border-steel-600/50 focus:border-yellow-400 focus:bg-steel-700/90 transition-all duration-200"
               />
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-steel-400" />
             </div>
