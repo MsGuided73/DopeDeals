@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Crown, Search, User, Heart, ShoppingCart } from "lucide-react";
+import { Crown, Search, User, Heart, ShoppingCart, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -10,6 +10,7 @@ interface HeaderProps {
 export default function Header({ onCartToggle }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const [showPartsDropdown, setShowPartsDropdown] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,38 +84,119 @@ export default function Header({ onCartToggle }: HeaderProps) {
         <nav className="pb-4">
           <ul className="flex space-x-8">
             <li>
-              <a href="#" className="text-yellow-400 font-medium border-b-2 border-yellow-400 pb-2">
-                Home
+              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+                SHOP BY
               </a>
             </li>
             <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2">
-                Glass Pipes
+              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+                THC & MORE
               </a>
             </li>
             <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2">
-                Water Pipes
+              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+                PIPES
               </a>
             </li>
             <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2">
-                Vaporizers
+              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+                VAPORIZERS
               </a>
             </li>
             <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2">
-                Accessories
+              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+                ROLL YOUR OWN
               </a>
             </li>
-            <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2">
-                Brands
+            <li 
+              className="relative"
+              onMouseEnter={() => setShowPartsDropdown(true)}
+              onMouseLeave={() => setShowPartsDropdown(false)}
+            >
+              <a 
+                href="#" 
+                className="text-blue-400 hover:text-blue-300 transition-colors pb-2 font-medium border-b-2 border-blue-400 flex items-center gap-1"
+              >
+                PARTS & ACCESSORIES
+                <ChevronDown className="w-4 h-4" />
               </a>
+              
+              {/* Dropdown Menu */}
+              {showPartsDropdown && (
+                <div className="absolute top-full left-0 mt-2 w-screen max-w-5xl glass-morphism rounded-lg shadow-2xl z-50 p-6">
+                  <div className="grid grid-cols-4 gap-8">
+                    {/* Pipe Parts & Accessories */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">PIPE PARTS & ACCESSORIES</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Adapters & Converters</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Ash Catchers</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Bangers & Nails</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Bong Bowls & Slides</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Cleaners</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Downstems</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pack & Protect</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Parts & Pieces</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Reclaimers</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Screens</a></li>
+                      </ul>
+                    </div>
+
+                    {/* Tools */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">TOOLS</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Carb Caps</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dab Inserts</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dab Tools</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Extractors</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Hemp Wicks</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pokers & Scrapers</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Multi-Tools & More</a></li>
+                      </ul>
+                    </div>
+
+                    {/* Smoking Gear */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">SMOKING GEAR</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Ashtrays</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dugouts</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Grinders & Presses</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Lighters</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Scales</a></li>
+                      </ul>
+                    </div>
+
+                    {/* Storage */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">STORAGE</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Baggies</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Boxes</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Jars & Containers</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  {/* Lifestyle Section */}
+                  <div className="mt-8 border-t border-steel-700/50 pt-6">
+                    <h3 className="text-steel-200 font-bold mb-4 text-sm">LIFESTYLE</h3>
+                    <div className="flex space-x-8">
+                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Apparel</a>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Incense & Burners</a>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Everything Else</a>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">SMOKEA® Merch</a>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">SMOKEA® Mystery Box</a>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Gift Cards</a>
+                    </div>
+                  </div>
+                </div>
+              )}
             </li>
             <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2">
-                VIP Membership
+              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+                EXOTIC SNACKS
               </a>
             </li>
           </ul>
