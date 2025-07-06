@@ -15,6 +15,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
   const [showThcDropdown, setShowThcDropdown] = useState(false);
   const [showPipesDropdown, setShowPipesDropdown] = useState(false);
   const [showVaporizersDropdown, setShowVaporizersDropdown] = useState(false);
+  const [showRollYourOwnDropdown, setShowRollYourOwnDropdown] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -321,10 +322,56 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 </div>
               )}
             </li>
-            <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+            <li 
+              className="relative"
+              onMouseEnter={() => setShowRollYourOwnDropdown(true)}
+              onMouseLeave={() => setShowRollYourOwnDropdown(false)}
+            >
+              <a 
+                href="#" 
+                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
+              >
                 ROLL YOUR OWN
+                <ChevronDown className="w-4 h-4" />
               </a>
+              
+              {/* ROLL YOUR OWN Dropdown Menu */}
+              {showRollYourOwnDropdown && (
+                <div className="absolute top-full left-0 mt-2 w-64 glass-morphism rounded-lg shadow-2xl z-50 p-4">
+                  <ul className="space-y-3">
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Blunt Wraps
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Filters & Tips
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Pre-Rolled Cones
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Rolling Machines
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Rolling Papers
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Rolling Trays
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </li>
             <li 
               className="relative"
