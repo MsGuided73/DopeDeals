@@ -157,7 +157,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
             >
               <a 
                 href="#" 
-                className="text-blue-400 hover:text-blue-300 transition-colors pb-2 font-medium border-b-2 border-blue-400 flex items-center gap-1"
+                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
               >
                 PARTS & ACCESSORIES
                 <ChevronDown className="w-4 h-4" />
