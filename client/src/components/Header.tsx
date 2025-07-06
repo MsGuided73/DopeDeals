@@ -11,6 +11,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [showPartsDropdown, setShowPartsDropdown] = useState(false);
+  const [showShopByDropdown, setShowShopByDropdown] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,10 +84,51 @@ export default function Header({ onCartToggle }: HeaderProps) {
         {/* Navigation */}
         <nav className="pb-4">
           <ul className="flex space-x-8">
-            <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+            <li 
+              className="relative"
+              onMouseEnter={() => setShowShopByDropdown(true)}
+              onMouseLeave={() => setShowShopByDropdown(false)}
+            >
+              <a 
+                href="#" 
+                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
+              >
                 SHOP BY
+                <ChevronDown className="w-4 h-4" />
               </a>
+              
+              {/* Shop By Dropdown Menu */}
+              {showShopByDropdown && (
+                <div className="absolute top-full left-0 mt-2 w-64 glass-morphism rounded-lg shadow-2xl z-50 p-4">
+                  <ul className="space-y-3">
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        On Sale
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        New Products
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Shop by Brand
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Made in the USA
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
+                        Wholesale (Businesses Only)
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </li>
             <li>
               <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
