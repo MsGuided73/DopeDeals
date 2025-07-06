@@ -12,6 +12,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [showPartsDropdown, setShowPartsDropdown] = useState(false);
   const [showShopByDropdown, setShowShopByDropdown] = useState(false);
+  const [showThcDropdown, setShowThcDropdown] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -130,10 +131,95 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 </div>
               )}
             </li>
-            <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+            <li 
+              className="relative"
+              onMouseEnter={() => setShowThcDropdown(true)}
+              onMouseLeave={() => setShowThcDropdown(false)}
+            >
+              <a 
+                href="#" 
+                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
+              >
                 THC & MORE
+                <ChevronDown className="w-4 h-4" />
               </a>
+              
+              {/* THC & MORE Dropdown Menu */}
+              {showThcDropdown && (
+                <div className="absolute top-full left-0 mt-2 w-screen max-w-4xl glass-morphism rounded-lg shadow-2xl z-50 p-6">
+                  <div className="grid grid-cols-4 gap-8">
+                    {/* THC & CBD */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">THC & CBD</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Cartridges</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Disposable Vapes</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pod Vapes</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Edibles</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Gflets</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dabs</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Flower</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pre-Rolls</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Seeds</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Tinctures</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Topicals</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Capsules</a></li>
+                      </ul>
+                    </div>
+
+                    {/* CANNABINOID */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">CANNABINOID</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Blends</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCA</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 8</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 9</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 10</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">HHC</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">HHCP</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">DELTA 9</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">CBN</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta &nbsp;</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 10</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 11</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">CBG</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">CBT</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCP</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCJD</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCB</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCM</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCV</a></li>
+                      </ul>
+                    </div>
+
+                    {/* KRATOM */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">KRATOM</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">7-OH</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Liquid</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Capsules</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Powder</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Gummies</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Extracts</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Raw Leaf</a></li>
+                      </ul>
+                    </div>
+
+                    {/* MUSHROOMS */}
+                    <div>
+                      <h3 className="text-steel-200 font-bold mb-4 text-sm">MUSHROOMS</h3>
+                      <ul className="space-y-2">
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Vapes</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Gummies</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Tinctures</a></li>
+                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Drinks</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
             </li>
             <li>
               <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
