@@ -104,4 +104,40 @@
     background-color: rgba(17, 25, 40, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
+  
+  /* Header and navigation positioning */
+  .header-container {
+    position: relative;
+    z-index: 50;
+  }
+  
+  .nav-container {
+    position: static;
+    overflow: visible;
+  }
+  
+  .nav-container ul {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+  
+  /* Dropdown menu positioning */
+  .dropdown-menu {
+    position: absolute;
+    z-index: 9999;
+    min-width: max-content;
+    white-space: nowrap;
+  }
+  
+  /* Ensure dropdowns don't get clipped */
+  .dropdown-parent {
+    position: relative;
+    z-index: 9999;
+  }
+  
+  /* Fix for header overflow */
+  .header-overflow-fix {
+    overflow: visible !important;
+  }
 }
