@@ -9,9 +9,10 @@ import { useAutoTrackBehavior } from "@/hooks/useRecommendations";
 interface ProductCardProps {
   product: Product;
   userId?: string;
+  onView?: () => void;
 }
 
-export default function ProductCard({ product, userId }: ProductCardProps) {
+export default function ProductCard({ product, userId, onView }: ProductCardProps) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const { trackAddToCart, trackWishlist, trackProductView } = useAutoTrackBehavior();
 
@@ -51,6 +52,7 @@ export default function ProductCard({ product, userId }: ProductCardProps) {
         source: 'product_card'
       });
     }
+    onView?.(); // Call the onView prop if provided
   };
 
   return (

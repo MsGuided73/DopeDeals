@@ -13,29 +13,29 @@ type RecommendationType = 'trending' | 'personalized' | 'similar' | 'category_ba
 
 const recommendationConfig = {
   trending: {
-    title: 'Trending Products',
+    title: 'Trending',
     description: 'What\'s popular right now',
     icon: TrendingUp,
     color: 'text-amber-500',
     bgColor: 'bg-amber-500/10'
   },
   personalized: {
-    title: 'Recommended for You',
+    title: 'For You',
     description: 'Based on your preferences',
     icon: User,
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10'
   },
   similar: {
-    title: 'Similar Products',
+    title: 'Similar',
     description: 'Products like what you\'ve viewed',
     icon: Search,
     color: 'text-green-500',
     bgColor: 'bg-green-500/10'
   },
   category_based: {
-    title: 'From Your Favorite Categories',
-    description: 'Products from categories you love',
+    title: 'Categories',
+    description: 'From categories you love',
     icon: Grid3X3,
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10'
@@ -44,7 +44,8 @@ const recommendationConfig = {
 
 export default function RecommendationEngine({ userId, className = "" }: RecommendationEngineProps) {
   const [selectedType, setSelectedType] = useState<RecommendationType>('personalized');
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 4; // Show 4 products per page
 
   const { data: recommendations, isLoading, error, refetch } = useQuery({
     queryKey: ['/api/recommendations', userId, selectedType],
@@ -94,19 +95,21 @@ export default function RecommendationEngine({ userId, className = "" }: Recomme
     return sessionId;
   };
 
-  const handleScroll = (direction: 'left' | 'right') => {
-    const container = document.getElementById('recommendation-scroll');
-    if (!container) return;
+  // Calculate pagination
+  const totalPages = Math.ceil((recommendations?.length || 0) / itemsPerPage);
+  const currentProducts = recommendations?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage) || [];
 
-    const cardWidth = 280; // Approximate width of a product card
-    const scrollAmount = direction === 'left' ? -cardWidth * 2 : cardWidth * 2;
-    
-    container.scrollBy({
-      left: scrollAmount,
-      behavior: 'smooth'
-    });
-    
-    setScrollPosition(container.scrollLeft + scrollAmount);
+  const handlePageChange = (direction: 'prev' | 'next') => {
+    if (direction === 'prev' && currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    } else if (direction === 'next' && currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleTypeChange = (type: RecommendationType) => {
+    setSelectedType(type);
+    setCurrentPage(0); // Reset to first page when changing type
   };
 
   const config = recommendationConfig[selectedType];
@@ -129,117 +132,100 @@ export default function RecommendationEngine({ userId, className = "" }: Recomme
   }
 
   return (
-    <div className={`p-6 ${className}`}>
-      {/* Header with recommendation type selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <div className="flex items-center gap-3 mb-4 sm:mb-0">
-          <div className={`p-2 rounded-lg ${config.bgColor}`}>
-            <IconComponent className={`h-6 w-6 ${config.color}`} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-[#2D2D2D] dark:text-white">
-              {config.title}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">
-              {config.description}
-            </p>
-          </div>
-        </div>
-
-        {/* Recommendation Type Tabs */}
-        <div className="flex gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-          {Object.entries(recommendationConfig).map(([type, typeConfig]) => {
-            const TypeIcon = typeConfig.icon;
-            return (
-              <button
-                key={type}
-                onClick={() => setSelectedType(type as RecommendationType)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                  selectedType === type
-                    ? `bg-white dark:bg-gray-700 shadow-sm ${typeConfig.color}`
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                }`}
-              >
-                <TypeIcon className="h-4 w-4" />
-                <span className="hidden sm:inline">{typeConfig.title.split(' ')[0]}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Loading State */}
-      {isLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="bg-gray-200 dark:bg-gray-700 h-64 rounded-lg mb-4"></div>
-              <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-2"></div>
-              <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded w-3/4"></div>
+    <div className={`recommendation-engine bg-steel-900/50 backdrop-blur-sm ${className}`}>
+      {/* Main Content Area with fixed height */}
+      <div className="h-80 flex flex-col">
+        {/* Products Grid - Fixed height matching product card height */}
+        <div className="flex-1 px-6 py-4">
+          {isLoading && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 h-full">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-gray-200 dark:bg-gray-700 h-56 rounded-lg mb-4"></div>
+                  <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded mb-2"></div>
+                  <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded w-3/4"></div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          )}
 
-      {/* Recommendations Grid */}
-      {!isLoading && recommendations && recommendations.length > 0 && (
-        <div className="relative">
-          {/* Scroll Controls */}
-          <div className="flex justify-between items-center mb-4">
+          {!isLoading && recommendations && recommendations.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 h-full">
+              {currentProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  userId={userId}
+                  onView={() => trackProductView(product.id)}
+                />
+              ))}
+            </div>
+          )}
+
+          {!isLoading && (!recommendations || recommendations.length === 0) && (
+            <div className="text-center py-8 h-full flex items-center justify-center">
+              <div>
+                <IconComponent className={`h-12 w-12 ${config.color} mx-auto mb-4`} />
+                <p className="text-gray-500 dark:text-gray-400 text-lg">
+                  No recommendations available
+                </p>
+                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
+                  Browse our products to get personalized recommendations
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom Controls */}
+        <div className="border-t border-steel-700/50 px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Recommendation Type Tabs */}
             <div className="flex gap-2">
+              {Object.entries(recommendationConfig).map(([type, typeConfig]) => {
+                const TypeIcon = typeConfig.icon;
+                return (
+                  <button
+                    key={type}
+                    onClick={() => handleTypeChange(type as RecommendationType)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      selectedType === type
+                        ? `bg-steel-700 text-yellow-400 shadow-md`
+                        : 'text-steel-300 hover:text-yellow-400 hover:bg-steel-800'
+                    }`}
+                  >
+                    <TypeIcon className="h-4 w-4" />
+                    <span className="hidden sm:inline">{typeConfig.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Page Navigation */}
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => handleScroll('left')}
-                className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                disabled={scrollPosition <= 0}
+                onClick={() => handlePageChange('prev')}
+                disabled={currentPage === 0}
+                className="p-2 rounded-lg bg-steel-800 text-steel-300 hover:text-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
+              
+              <span className="text-sm text-steel-400 px-3">
+                {currentPage + 1} / {totalPages || 1}
+              </span>
+              
               <button
-                onClick={() => handleScroll('right')}
-                className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                onClick={() => handlePageChange('next')}
+                disabled={currentPage >= totalPages - 1}
+                className="p-2 rounded-lg bg-steel-800 text-steel-300 hover:text-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {recommendations.length} products found
-            </p>
-          </div>
-
-          {/* Scrollable Grid */}
-          <div
-            id="recommendation-scroll"
-            className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent"
-            style={{ scrollbarWidth: 'thin' }}
-          >
-            {recommendations.map((product) => (
-              <div 
-                key={product.id} 
-                className="flex-shrink-0 w-64"
-                onClick={() => trackProductView(product.id)}
-              >
-                <ProductCard product={product} />
-              </div>
-            ))}
           </div>
         </div>
-      )}
-
-      {/* Empty State */}
-      {!isLoading && (!recommendations || recommendations.length === 0) && (
-        <div className="text-center py-12">
-          <IconComponent className={`h-16 w-16 mx-auto mb-4 ${config.color}`} />
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            No recommendations yet
-          </h3>
-          <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
-            {selectedType === 'personalized' 
-              ? 'Browse some products to get personalized recommendations!'
-              : 'Try a different recommendation type or browse our catalog to build your profile.'
-            }
-          </p>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
