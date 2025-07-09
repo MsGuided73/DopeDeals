@@ -108,7 +108,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
               </a>
               {showShopByDropdown && (
                 <div 
-                  className="dropdown-menu absolute top-full left-0 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
+                  className="dropdown-menu absolute top-full left-1/2 transform -translate-x-1/2 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
                   style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
                   onMouseEnter={() => setShowShopByDropdown(true)}
                   onMouseLeave={() => setShowShopByDropdown(false)}
@@ -287,7 +287,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
               </a>
               {showRollYourOwnDropdown && (
                 <div 
-                  className="dropdown-menu absolute top-full left-0 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
+                  className="dropdown-menu absolute top-full left-1/2 transform -translate-x-1/2 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
                   style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
                   onMouseEnter={() => setShowRollYourOwnDropdown(true)}
                   onMouseLeave={() => setShowRollYourOwnDropdown(false)}
