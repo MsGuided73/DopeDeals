@@ -25,10 +25,10 @@ export default function FeaturedCategories() {
   }
 
   const categoryImages = {
-    "Glass Pipes": "https://pixabay.com/get/g0c8d30604c27667e03fc9ab28d250adb1d740d69769a235f1de3850cae10936da5135771869d62aec70c5ea83106c85b8c9f93e9a6638649b384d56fffe90309_1280.jpg",
-    "Water Pipes": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800",
-    "Vaporizers": "https://images.unsplash.com/photo-1556075798-4825dfaaf498?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800",
-    "Accessories": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800",
+    "Glass Pipes": "https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Water Pipes": "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Vaporizers": "https://images.unsplash.com/photo-1580407196238-dac33f57c410?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Accessories": "https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   };
 
   return (
