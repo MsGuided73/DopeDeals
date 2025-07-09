@@ -132,11 +132,11 @@ export default function RecommendationEngine({ userId, className = "" }: Recomme
   }
 
   return (
-    <div className={`recommendation-engine bg-steel-900/50 backdrop-blur-sm ${className}`}>
+    <div className={`recommendation-engine bg-steel-900/80 backdrop-blur-sm rounded-lg border border-steel-700/50 mx-4 my-6 ${className}`}>
       {/* Main Content Area with fixed height */}
-      <div className="h-80 flex flex-col">
+      <div className="h-96 flex flex-col overflow-hidden">
         {/* Products Grid - Fixed height matching product card height */}
-        <div className="flex-1 px-6 py-4">
+        <div className="flex-1 px-6 py-4 overflow-hidden">
           {isLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 h-full">
               {[...Array(4)].map((_, i) => (
@@ -150,14 +150,15 @@ export default function RecommendationEngine({ userId, className = "" }: Recomme
           )}
 
           {!isLoading && recommendations && recommendations.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 h-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 h-full">
               {currentProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  userId={userId}
-                  onView={() => trackProductView(product.id)}
-                />
+                <div key={product.id} className="h-full max-h-80 overflow-hidden">
+                  <ProductCard
+                    product={product}
+                    userId={userId}
+                    onView={() => trackProductView(product.id)}
+                  />
+                </div>
               ))}
             </div>
           )}
@@ -178,7 +179,7 @@ export default function RecommendationEngine({ userId, className = "" }: Recomme
         </div>
 
         {/* Bottom Controls */}
-        <div className="border-t border-steel-700/50 px-6 py-4">
+        <div className="border-t border-steel-700/50 px-6 py-4 bg-steel-800/50 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             {/* Recommendation Type Tabs */}
             <div className="flex gap-2">
