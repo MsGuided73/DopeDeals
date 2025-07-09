@@ -123,7 +123,6 @@
   
   /* Dropdown menu positioning - positioned relative to nav-container, not parent li */
   .dropdown-menu {
-    position: absolute;
     z-index: 9999;
     min-width: max-content;
     white-space: nowrap;
@@ -133,7 +132,7 @@
   
   /* Ensure dropdowns don't get clipped */
   .dropdown-parent {
-    position: static;
+    position: relative;
     z-index: 9999;
   }
   
