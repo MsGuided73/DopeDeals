@@ -112,7 +112,7 @@
   }
   
   .nav-container {
-    position: static;
+    position: relative;
     overflow: visible;
   }
   
@@ -122,7 +122,7 @@
     overflow-y: visible;
   }
   
-  /* Dropdown menu positioning */
+  /* Dropdown menu positioning - positioned relative to nav-container, not parent li */
   .dropdown-menu {
     position: absolute;
     z-index: 9999;
@@ -132,7 +132,7 @@
   
   /* Ensure dropdowns don't get clipped */
   .dropdown-parent {
-    position: relative;
+    position: static;
     z-index: 9999;
   }
   
