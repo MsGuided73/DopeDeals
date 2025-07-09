@@ -330,7 +330,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
           
           {/* Dropdown Menus - Positioned outside scrollable container */}
           {showShopByDropdown && (
-            <div className="dropdown-menu absolute top-full left-0 mt-1 w-48 bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999]">
+            <div className="dropdown-menu absolute top-full left-0 mt-1 w-48 bg-steel-800/95 backdrop-blur-md rounded-lg shadow-xl border border-steel-700 z-[9999]">
               <div className="py-2">
                 <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">On Sale</a>
                 <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">New Products</a>
@@ -342,7 +342,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
           )}
           
           {showThcDropdown && (
-            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
+            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800/95 backdrop-blur-md rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                 <div>
                   <h3 className="text-yellow-400 font-bold mb-3 text-sm">THC & CBD</h3>
@@ -390,7 +390,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
           )}
           
           {showPipesDropdown && (
-            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-3xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
+            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-3xl bg-steel-800/95 backdrop-blur-md rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div>
                   <h3 className="text-yellow-400 font-bold mb-3 text-sm">DRY PIPES</h3>
@@ -424,7 +424,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
           )}
           
           {showVaporizersDropdown && (
-            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-2xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
+            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-2xl bg-steel-800/95 backdrop-blur-md rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <h3 className="text-yellow-400 font-bold mb-3 text-sm">BY TYPE</h3>
@@ -448,7 +448,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
           )}
           
           {showRollYourOwnDropdown && (
-            <div className="dropdown-menu absolute top-full left-0 mt-2 w-48 bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999]">
+            <div className="dropdown-menu absolute top-full left-0 mt-2 w-48 bg-steel-800/95 backdrop-blur-md rounded-lg shadow-xl border border-steel-700 z-[9999]">
               <div className="py-2">
                 <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Rolling Papers</a>
                 <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Blunt Wraps</a>
@@ -460,7 +460,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
           )}
           
           {showPartsDropdown && (
-            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
+            <div className="dropdown-menu absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800/95 backdrop-blur-md rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                 <div>
                   <h3 className="text-yellow-400 font-bold mb-3 text-sm">PIPE PARTS</h3>
