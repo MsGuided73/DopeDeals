@@ -1,11 +1,14 @@
 import { 
   users, products, categories, brands, orders, orderItems, 
-  memberships, loyaltyPoints, cartItems,
+  memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
+  productSimilarity, recommendationCache,
   type User, type InsertUser, type Product, type InsertProduct, 
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
   type Membership, type InsertMembership, type LoyaltyPoint, type InsertLoyaltyPoint,
-  type CartItem, type InsertCartItem
+  type CartItem, type InsertCartItem, type UserBehavior, type InsertUserBehavior,
+  type UserPreferences, type InsertUserPreferences, type ProductSimilarity, 
+  type InsertProductSimilarity, type RecommendationCache, type InsertRecommendationCache
 } from "@shared/schema";
 
 export interface IStorage {
@@ -51,6 +54,17 @@ export interface IStorage {
   
   // Memberships
   getMemberships(): Promise<Membership[]>;
+  
+  // User Behavior & Preferences
+  trackUserBehavior(behavior: InsertUserBehavior): Promise<UserBehavior>;
+  getUserBehavior(userId: string, limit?: number): Promise<UserBehavior[]>;
+  getUserPreferences(userId: string): Promise<UserPreferences | undefined>;
+  updateUserPreferences(userId: string, preferences: Partial<InsertUserPreferences>): Promise<UserPreferences>;
+  
+  // Recommendations
+  getRecommendations(userId: string, type: 'trending' | 'personalized' | 'similar' | 'category_based', limit?: number): Promise<Product[]>;
+  getProductSimilarity(productId: string, limit?: number): Promise<ProductSimilarity[]>;
+  updateRecommendationCache(userId: string, type: string, productIds: string[], score?: number): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -63,6 +77,10 @@ export class MemStorage implements IStorage {
   private memberships: Map<string, Membership> = new Map();
   private loyaltyPoints: Map<string, LoyaltyPoint> = new Map();
   private cartItems: Map<string, CartItem> = new Map();
+  private userBehaviors: Map<string, UserBehavior> = new Map();
+  private userPreferences: Map<string, UserPreferences> = new Map();
+  private productSimilarities: Map<string, ProductSimilarity> = new Map();
+  private recommendationCaches: Map<string, RecommendationCache> = new Map();
 
   constructor() {
     this.initializeData();
@@ -598,6 +616,312 @@ export class MemStorage implements IStorage {
 
   async getMemberships(): Promise<Membership[]> {
     return Array.from(this.memberships.values());
+  }
+
+  // User Behavior & Preferences
+  async trackUserBehavior(insertBehavior: InsertUserBehavior): Promise<UserBehavior> {
+    const behavior: UserBehavior = {
+      ...insertBehavior,
+      id: this.generateId(),
+      createdAt: new Date(),
+      userId: insertBehavior.userId || null,
+      productId: insertBehavior.productId || null,
+      sessionId: insertBehavior.sessionId || null,
+      metadata: insertBehavior.metadata || null,
+    };
+    this.userBehaviors.set(behavior.id, behavior);
+    
+    // Update user preferences based on behavior
+    if (behavior.userId && behavior.productId) {
+      await this.updateUserPreferencesFromBehavior(behavior);
+    }
+    
+    return behavior;
+  }
+
+  async getUserBehavior(userId: string, limit: number = 50): Promise<UserBehavior[]> {
+    const behaviors = Array.from(this.userBehaviors.values())
+      .filter(b => b.userId === userId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, limit);
+    return behaviors;
+  }
+
+  async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
+    return Array.from(this.userPreferences.values()).find(p => p.userId === userId);
+  }
+
+  async updateUserPreferences(userId: string, preferences: Partial<InsertUserPreferences>): Promise<UserPreferences> {
+    const existing = await this.getUserPreferences(userId);
+    const userPrefs: UserPreferences = existing ? {
+      ...existing,
+      ...preferences,
+      updatedAt: new Date(),
+    } : {
+      id: this.generateId(),
+      userId,
+      preferredCategories: preferences.preferredCategories || [],
+      preferredBrands: preferences.preferredBrands || [],
+      preferredMaterials: preferences.preferredMaterials || [],
+      priceRangeMin: preferences.priceRangeMin || null,
+      priceRangeMax: preferences.priceRangeMax || null,
+      vipProductsOnly: preferences.vipProductsOnly || false,
+      updatedAt: new Date(),
+    };
+    this.userPreferences.set(userPrefs.id, userPrefs);
+    return userPrefs;
+  }
+
+  // Recommendations
+  async getRecommendations(userId: string, type: 'trending' | 'personalized' | 'similar' | 'category_based', limit: number = 8): Promise<Product[]> {
+    // Check cache first
+    const cached = this.getFromRecommendationCache(userId, type);
+    if (cached.length > 0) {
+      return cached.slice(0, limit);
+    }
+
+    let recommendations: Product[] = [];
+    
+    switch (type) {
+      case 'trending':
+        recommendations = await this.getTrendingProducts(limit);
+        break;
+      case 'personalized':
+        recommendations = await this.getPersonalizedRecommendations(userId, limit);
+        break;
+      case 'similar':
+        recommendations = await this.getSimilarProducts(userId, limit);
+        break;
+      case 'category_based':
+        recommendations = await this.getCategoryBasedRecommendations(userId, limit);
+        break;
+    }
+
+    // Cache the results
+    if (recommendations.length > 0) {
+      await this.updateRecommendationCache(userId, type, recommendations.map(p => p.id));
+    }
+
+    return recommendations;
+  }
+
+  async getProductSimilarity(productId: string, limit: number = 10): Promise<ProductSimilarity[]> {
+    return Array.from(this.productSimilarities.values())
+      .filter(s => s.productId1 === productId || s.productId2 === productId)
+      .sort((a, b) => Number(b.similarityScore) - Number(a.similarityScore))
+      .slice(0, limit);
+  }
+
+  async updateRecommendationCache(userId: string, type: string, productIds: string[], score?: number): Promise<void> {
+    const cache: RecommendationCache = {
+      id: this.generateId(),
+      userId,
+      recommendationType: type,
+      productIds,
+      score: score ? score.toString() : null,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      createdAt: new Date(),
+    };
+    this.recommendationCaches.set(cache.id, cache);
+  }
+
+  // Helper methods for recommendation algorithms
+  private async updateUserPreferencesFromBehavior(behavior: UserBehavior): Promise<void> {
+    if (!behavior.productId) return;
+    
+    const product = await this.getProduct(behavior.productId);
+    if (!product) return;
+
+    const preferences = await this.getUserPreferences(behavior.userId!) || {
+      userId: behavior.userId!,
+      preferredCategories: [],
+      preferredBrands: [],
+      preferredMaterials: [],
+      vipProductsOnly: false,
+    };
+
+    // Update preferences based on product interaction
+    if (product.categoryId && !preferences.preferredCategories?.includes(product.categoryId)) {
+      preferences.preferredCategories = [...(preferences.preferredCategories || []), product.categoryId];
+    }
+    if (product.brandId && !preferences.preferredBrands?.includes(product.brandId)) {
+      preferences.preferredBrands = [...(preferences.preferredBrands || []), product.brandId];
+    }
+    if (product.material && !preferences.preferredMaterials?.includes(product.material)) {
+      preferences.preferredMaterials = [...(preferences.preferredMaterials || []), product.material];
+    }
+
+    await this.updateUserPreferences(behavior.userId!, preferences);
+  }
+
+  private async getTrendingProducts(limit: number): Promise<Product[]> {
+    // Get products with most recent interactions
+    const recentBehaviors = Array.from(this.userBehaviors.values())
+      .filter(b => b.createdAt.getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000) // Last 7 days
+      .filter(b => ['view', 'add_to_cart', 'purchase'].includes(b.action));
+
+    const productCounts = new Map<string, number>();
+    recentBehaviors.forEach(b => {
+      if (b.productId) {
+        productCounts.set(b.productId, (productCounts.get(b.productId) || 0) + 1);
+      }
+    });
+
+    const trendingProductIds = Array.from(productCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, limit)
+      .map(([id]) => id);
+
+    const products = await Promise.all(
+      trendingProductIds.map(id => this.getProduct(id))
+    );
+
+    return products.filter(p => p !== undefined) as Product[];
+  }
+
+  private async getPersonalizedRecommendations(userId: string, limit: number): Promise<Product[]> {
+    const preferences = await this.getUserPreferences(userId);
+    const userBehavior = await this.getUserBehavior(userId, 100);
+    
+    const products = await this.getProducts();
+    const scoredProducts = products.map(product => ({
+      product,
+      score: this.calculatePersonalizationScore(product, preferences, userBehavior)
+    }));
+
+    return scoredProducts
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map(sp => sp.product);
+  }
+
+  private async getSimilarProducts(userId: string, limit: number): Promise<Product[]> {
+    const userBehavior = await this.getUserBehavior(userId, 20);
+    const viewedProducts = userBehavior
+      .filter(b => b.action === 'view' && b.productId)
+      .map(b => b.productId!);
+
+    if (viewedProducts.length === 0) {
+      return this.getTrendingProducts(limit);
+    }
+
+    const similarProducts = new Map<string, number>();
+    
+    for (const productId of viewedProducts) {
+      const similarities = await this.getProductSimilarity(productId, 10);
+      similarities.forEach(sim => {
+        const relatedProductId = sim.productId1 === productId ? sim.productId2 : sim.productId1;
+        if (relatedProductId && !viewedProducts.includes(relatedProductId)) {
+          similarProducts.set(relatedProductId, 
+            (similarProducts.get(relatedProductId) || 0) + Number(sim.similarityScore)
+          );
+        }
+      });
+    }
+
+    const sortedSimilar = Array.from(similarProducts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, limit);
+
+    const products = await Promise.all(
+      sortedSimilar.map(([id]) => this.getProduct(id))
+    );
+
+    return products.filter(p => p !== undefined) as Product[];
+  }
+
+  private async getCategoryBasedRecommendations(userId: string, limit: number): Promise<Product[]> {
+    const preferences = await this.getUserPreferences(userId);
+    const userBehavior = await this.getUserBehavior(userId, 50);
+    
+    // Get most interacted categories
+    const categoryInteractions = new Map<string, number>();
+    userBehavior.forEach(b => {
+      if (b.productId) {
+        const product = this.products.get(b.productId);
+        if (product?.categoryId) {
+          categoryInteractions.set(product.categoryId, 
+            (categoryInteractions.get(product.categoryId) || 0) + 1
+          );
+        }
+      }
+    });
+
+    const topCategories = Array.from(categoryInteractions.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([categoryId]) => categoryId);
+
+    // Add preferred categories
+    if (preferences?.preferredCategories) {
+      topCategories.push(...preferences.preferredCategories);
+    }
+
+    const products = await this.getProducts({
+      categoryId: topCategories[0] // Focus on top category
+    });
+
+    return products.slice(0, limit);
+  }
+
+  private calculatePersonalizationScore(product: Product, preferences?: UserPreferences, userBehavior?: UserBehavior[]): number {
+    let score = 0;
+
+    // Category preference
+    if (preferences?.preferredCategories?.includes(product.categoryId || '')) {
+      score += 3;
+    }
+
+    // Brand preference
+    if (preferences?.preferredBrands?.includes(product.brandId || '')) {
+      score += 2;
+    }
+
+    // Material preference
+    if (preferences?.preferredMaterials?.includes(product.material || '')) {
+      score += 1;
+    }
+
+    // Price range preference
+    if (preferences?.priceRangeMin && preferences?.priceRangeMax) {
+      const price = Number(product.price);
+      const minPrice = Number(preferences.priceRangeMin);
+      const maxPrice = Number(preferences.priceRangeMax);
+      if (price >= minPrice && price <= maxPrice) {
+        score += 2;
+      }
+    }
+
+    // VIP preference
+    if (preferences?.vipProductsOnly && product.vipExclusive) {
+      score += 1;
+    }
+
+    // Featured products bonus
+    if (product.featured) {
+      score += 1;
+    }
+
+    // Recency bonus for newer products
+    const daysSinceCreated = (Date.now() - product.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    if (daysSinceCreated < 30) {
+      score += 0.5;
+    }
+
+    return score;
+  }
+
+  private getFromRecommendationCache(userId: string, type: string): Product[] {
+    const cache = Array.from(this.recommendationCaches.values())
+      .find(c => c.userId === userId && c.recommendationType === type && c.expiresAt > new Date());
+    
+    if (!cache) return [];
+
+    const products = cache.productIds
+      .map(id => this.products.get(id))
+      .filter(p => p !== undefined) as Product[];
+
+    return products;
   }
 }
 

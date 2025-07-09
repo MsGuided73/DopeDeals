@@ -163,9 +163,44 @@ Preferred communication style: Simple, everyday language.
 5. Image optimization
 6. Performance monitoring
 
+## Personalized Product Recommendation Engine
+
+### Core Features
+- **Multiple Recommendation Types**: Trending, personalized, similar products, and category-based recommendations
+- **User Behavior Tracking**: Tracks view, add_to_cart, purchase, wishlist, and search actions
+- **Automatic Preference Learning**: Updates user preferences based on interaction patterns
+- **Performance Optimization**: Caching system with 24-hour expiration for recommendation results
+- **Real-time Updates**: Recommendations adapt based on user behavior and product interactions
+
+### Database Schema
+- **UserBehavior**: Tracks all user interactions with products and metadata
+- **UserPreferences**: Stores learned preferences for categories, brands, materials, and price ranges
+- **ProductSimilarity**: Matrix for collaborative filtering and product relationships
+- **RecommendationCache**: Performance optimization with TTL-based caching
+
+### Recommendation Algorithms
+1. **Trending Products**: Most popular items based on recent user interactions (7-day window)
+2. **Personalized**: Score-based algorithm considering user preferences, behavior patterns, and product attributes
+3. **Similar Products**: Collaborative filtering based on user viewing history and product similarity scores
+4. **Category-Based**: Recommendations from user's most interacted categories
+
+### Technical Implementation
+- **Frontend Components**: RecommendationEngine component with tabbed interface and horizontal scrolling
+- **React Hooks**: useRecommendations, useAutoTrackBehavior for seamless integration
+- **API Endpoints**: Complete REST API for recommendations, user behavior, and preferences
+- **Performance**: Automatic caching, efficient querying, and real-time behavior tracking
+
+### User Experience Features
+- Tabbed interface for different recommendation types
+- Horizontal scrolling product grid
+- Automatic behavior tracking on product interactions
+- Session-based tracking for guest users
+- Responsive design with mobile optimization
+
 ## Changelog
 
 Changelog:
+- July 9, 2025. Personalized product recommendation engine implemented - Complete system with behavior tracking, user preferences, and multiple recommendation algorithms
 - July 9, 2025. SEO-optimized product page templates created - Ready for product import with complete SEO implementation
 - July 9, 2025. SEO implementation Phase 1 completed - Basic SEO foundation with meta tags, structured data, robots.txt, and sitemap
 - June 27, 2025. Initial setup

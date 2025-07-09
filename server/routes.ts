@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCartItemSchema } from "@shared/schema";
+import { insertCartItemSchema, insertUserBehaviorSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -112,6 +112,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(memberships);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch memberships" });
+    }
+  });
+
+  // Recommendation routes
+  app.get("/api/recommendations/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { type = 'personalized', limit = 8 } = req.query;
+      
+      const validTypes = ['trending', 'personalized', 'similar', 'category_based'];
+      if (!validTypes.includes(type as string)) {
+        return res.status(400).json({ message: "Invalid recommendation type" });
+      }
+      
+      const recommendations = await storage.getRecommendations(
+        userId,
+        type as 'trending' | 'personalized' | 'similar' | 'category_based',
+        parseInt(limit as string) || 8
+      );
+      res.json(recommendations);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch recommendations" });
+    }
+  });
+
+  app.post("/api/user-behavior", async (req, res) => {
+    try {
+      const validatedData = insertUserBehaviorSchema.parse(req.body);
+      const behavior = await storage.trackUserBehavior(validatedData);
+      res.json(behavior);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid behavior data" });
+    }
+  });
+
+  app.get("/api/user-behavior/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { limit = 50 } = req.query;
+      
+      const behaviors = await storage.getUserBehavior(userId, parseInt(limit as string) || 50);
+      res.json(behaviors);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user behavior" });
+    }
+  });
+
+  app.get("/api/user-preferences/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const preferences = await storage.getUserPreferences(userId);
+      res.json(preferences);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user preferences" });
+    }
+  });
+
+  app.put("/api/user-preferences/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const preferences = await storage.updateUserPreferences(userId, req.body);
+      res.json(preferences);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid preferences data" });
+    }
+  });
+
+  app.get("/api/product-similarity/:productId", async (req, res) => {
+    try {
+      const { productId } = req.params;
+      const { limit = 10 } = req.query;
+      
+      const similarities = await storage.getProductSimilarity(productId, parseInt(limit as string) || 10);
+      res.json(similarities);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch product similarities" });
     }
   });
 
