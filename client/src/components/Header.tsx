@@ -287,8 +287,13 @@ export default function Header({ onCartToggle }: HeaderProps) {
               </a>
               {showRollYourOwnDropdown && (
                 <div 
-                  className="dropdown-menu absolute top-full w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
-                  style={{backgroundColor: 'rgba(30, 41, 59, 0.98)', left: '50%', transform: 'translateX(-50%)', marginTop: '-4px', paddingTop: '8px'}}
+                  className="dropdown-menu absolute top-full w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999]" 
+                  style={{
+                    backgroundColor: 'rgba(30, 41, 59, 0.98)', 
+                    right: '0px',
+                    marginTop: '-2px',
+                    paddingTop: '6px'
+                  }}
                   onMouseEnter={() => setShowRollYourOwnDropdown(true)}
                   onMouseLeave={() => setShowRollYourOwnDropdown(false)}
                 >
