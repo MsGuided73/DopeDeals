@@ -3,6 +3,8 @@ import { Crown, Search, User, Heart, ShoppingCart, ChevronDown } from "lucide-re
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { Category } from "@shared/schema";
 
 interface HeaderProps {
   onCartToggle: () => void;
@@ -11,12 +13,11 @@ interface HeaderProps {
 export default function Header({ onCartToggle }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
-  const [showPartsDropdown, setShowPartsDropdown] = useState(false);
   const [showShopByDropdown, setShowShopByDropdown] = useState(false);
-  const [showThcDropdown, setShowThcDropdown] = useState(false);
-  const [showPipesDropdown, setShowPipesDropdown] = useState(false);
-  const [showVaporizersDropdown, setShowVaporizersDropdown] = useState(false);
-  const [showRollYourOwnDropdown, setShowRollYourOwnDropdown] = useState(false);
+  
+  const { data: categories } = useQuery<Category[]>({
+    queryKey: ["/api/categories"],
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,19 +39,19 @@ export default function Header({ onCartToggle }: HeaderProps) {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/">
-            <div className="flex items-center space-x-3 cursor-pointer">
-              <div className="w-10 h-10 gold-gradient rounded-full flex items-center justify-center">
-                <Crown className="w-6 h-6 text-steel-900" />
+            <div className="flex items-center space-x-2 sm:space-x-3 cursor-pointer">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 gold-gradient rounded-full flex items-center justify-center">
+                <Crown className="w-4 h-4 sm:w-6 sm:h-6 text-steel-900" />
               </div>
               <div>
-                <h1 className="text-2xl font-serif font-bold text-yellow-400">VIP Smoke</h1>
-                <p className="text-xs text-steel-400">Premium Accessories</p>
+                <h1 className="text-xl sm:text-2xl font-serif font-bold text-yellow-400">VIP Smoke</h1>
+                <p className="text-xs text-steel-400 hidden sm:block">Premium Accessories</p>
               </div>
             </div>
           </Link>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
+          <div className="flex-1 max-w-2xl mx-4 sm:mx-8 hidden md:block">
             <div className="relative">
               <Input
                 type="text"
@@ -64,13 +65,13 @@ export default function Header({ onCartToggle }: HeaderProps) {
           </div>
 
           {/* User Actions */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-steel-300 hover:text-yellow-400">
-              <User className="w-6 h-6" />
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <Button variant="ghost" size="icon" className="text-steel-300 hover:text-yellow-400 hidden sm:flex">
+              <User className="w-5 h-5 sm:w-6 sm:h-6" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative text-steel-300 hover:text-yellow-400">
-              <Heart className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <Button variant="ghost" size="icon" className="relative text-steel-300 hover:text-yellow-400 hidden sm:flex">
+              <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                 3
               </span>
             </Button>
@@ -80,8 +81,8 @@ export default function Header({ onCartToggle }: HeaderProps) {
               className="relative text-steel-300 hover:text-yellow-400"
               onClick={onCartToggle}
             >
-              <ShoppingCart className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                 2
               </span>
             </Button>
@@ -90,387 +91,41 @@ export default function Header({ onCartToggle }: HeaderProps) {
 
         {/* Navigation */}
         <nav className="pb-4">
-          <ul className="flex space-x-8">
-            <li>
-              <Link href="/products" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
-                ALL PRODUCTS
-              </Link>
-            </li>
+          <ul className="flex space-x-4 sm:space-x-8 overflow-x-auto">
             <li 
-              className="relative"
+              className="relative flex-shrink-0"
               onMouseEnter={() => setShowShopByDropdown(true)}
               onMouseLeave={() => setShowShopByDropdown(false)}
             >
-              <a 
-                href="#" 
-                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
-              >
-                CATEGORIES
-                <ChevronDown className="w-4 h-4" />
+              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center text-sm sm:text-base">
+                SHOP BY
+                <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
-              
-              {/* Shop By Dropdown Menu */}
               {showShopByDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-64 glass-morphism rounded-lg shadow-2xl z-50 p-4">
-                  <ul className="space-y-3">
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        On Sale
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        New Products
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Shop by Brand
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Made in the USA
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Wholesale (Businesses Only)
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </li>
-            <li 
-              className="relative"
-              onMouseEnter={() => setShowThcDropdown(true)}
-              onMouseLeave={() => setShowThcDropdown(false)}
-            >
-              <a 
-                href="#" 
-                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
-              >
-                THC & MORE
-                <ChevronDown className="w-4 h-4" />
-              </a>
-              
-              {/* THC & MORE Dropdown Menu */}
-              {showThcDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-4xl glass-morphism rounded-lg shadow-2xl z-50 p-6">
-                  <div className="grid grid-cols-4 gap-8">
-                    {/* THC & CBD */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">THC & CBD</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Cartridges</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Disposable Vapes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pod Vapes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Edibles</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Gflets</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dabs</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Flower</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pre-Rolls</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Seeds</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Tinctures</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Topicals</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Capsules</a></li>
-                      </ul>
-                    </div>
-
-                    {/* CANNABINOID */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">CANNABINOID</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Blends</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCA</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 8</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 9</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 10</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">HHC</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">HHCP</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">DELTA 9</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">CBN</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta &nbsp;</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 10</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Delta 11</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">CBG</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">CBT</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCP</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCJD</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCB</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCM</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">THCV</a></li>
-                      </ul>
-                    </div>
-
-                    {/* KRATOM */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">KRATOM</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">7-OH</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Liquid</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Capsules</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Powder</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Gummies</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Extracts</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Raw Leaf</a></li>
-                      </ul>
-                    </div>
-
-                    {/* MUSHROOMS */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">MUSHROOMS</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Vapes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Gummies</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Tinctures</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Mushroom Drinks</a></li>
-                      </ul>
-                    </div>
+                <div className="absolute top-full left-0 mt-1 w-48 bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-50">
+                  <div className="py-2">
+                    {categories?.map((category) => (
+                      <Link 
+                        key={category.id} 
+                        href={`/category/${category.id}`} 
+                        className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700"
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               )}
             </li>
-            <li 
-              className="relative"
-              onMouseEnter={() => setShowPipesDropdown(true)}
-              onMouseLeave={() => setShowPipesDropdown(false)}
-            >
-              <a 
-                href="#" 
-                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
-              >
-                PIPES
-                <ChevronDown className="w-4 h-4" />
-              </a>
-              
-              {/* PIPES Dropdown Menu */}
-              {showPipesDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-3xl glass-morphism rounded-lg shadow-2xl z-50 p-6">
-                  <div className="grid grid-cols-3 gap-8">
-                    {/* DRY PIPES */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">DRY PIPES</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Chillums</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Glass Blunts</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">One Hitters</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Sherlocks</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Specialty Pipes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Spoons</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Steamrollers</a></li>
-                      </ul>
-                    </div>
-
-                    {/* WATER PIPES */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">WATER PIPES</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Bongs</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Bubblers</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dab Rigs</a></li>
-                      </ul>
-                    </div>
-
-                    {/* BY MATERIAL */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">BY MATERIAL</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Acrylic Pipes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Ceramic Pipes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Glass Pipes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Metal Pipes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Silicone Pipes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Wood Pipes</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
+            <li className="flex-shrink-0">
+              <Link href="/products" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium text-sm sm:text-base">
+                ALL PRODUCTS
+              </Link>
             </li>
-            <li 
-              className="relative"
-              onMouseEnter={() => setShowVaporizersDropdown(true)}
-              onMouseLeave={() => setShowVaporizersDropdown(false)}
-            >
-              <a 
-                href="#" 
-                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
-              >
-                VAPORIZERS
-                <ChevronDown className="w-4 h-4" />
-              </a>
-              
-              {/* VAPORIZERS Dropdown Menu */}
-              {showVaporizersDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-2xl glass-morphism rounded-lg shadow-2xl z-50 p-6">
-                  <div className="grid grid-cols-2 gap-8">
-                    {/* BY TYPE */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">BY TYPE</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Vape Pen Batteries</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Desktop Vaporizers</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Portable Vaporizers</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Vaporizer Parts & Accessories</a></li>
-                      </ul>
-                    </div>
-
-                    {/* COMPATIBILITY */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">COMPATIBILITY</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dry Herbs</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Extracts</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Oils & Liquids</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </li>
-            <li 
-              className="relative"
-              onMouseEnter={() => setShowRollYourOwnDropdown(true)}
-              onMouseLeave={() => setShowRollYourOwnDropdown(false)}
-            >
-              <a 
-                href="#" 
-                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
-              >
-                ROLL YOUR OWN
-                <ChevronDown className="w-4 h-4" />
-              </a>
-              
-              {/* ROLL YOUR OWN Dropdown Menu */}
-              {showRollYourOwnDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-64 glass-morphism rounded-lg shadow-2xl z-50 p-4">
-                  <ul className="space-y-3">
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Blunt Wraps
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Filters & Tips
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Pre-Rolled Cones
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Rolling Machines
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Rolling Papers
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors block">
-                        Rolling Trays
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </li>
-            <li 
-              className="relative"
-              onMouseEnter={() => setShowPartsDropdown(true)}
-              onMouseLeave={() => setShowPartsDropdown(false)}
-            >
-              <a 
-                href="#" 
-                className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
-              >
-                PARTS & ACCESSORIES
-                <ChevronDown className="w-4 h-4" />
-              </a>
-              
-              {/* Dropdown Menu */}
-              {showPartsDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-5xl glass-morphism rounded-lg shadow-2xl z-50 p-6">
-                  <div className="grid grid-cols-4 gap-8">
-                    {/* Pipe Parts & Accessories */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">PIPE PARTS & ACCESSORIES</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Adapters & Converters</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Ash Catchers</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Bangers & Nails</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Bong Bowls & Slides</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Cleaners</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Downstems</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pack & Protect</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Parts & Pieces</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Reclaimers</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Screens</a></li>
-                      </ul>
-                    </div>
-
-                    {/* Tools */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">TOOLS</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Carb Caps</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dab Inserts</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dab Tools</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Extractors</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Hemp Wicks</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Pokers & Scrapers</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Multi-Tools & More</a></li>
-                      </ul>
-                    </div>
-
-                    {/* Smoking Gear */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">SMOKING GEAR</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Ashtrays</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Dugouts</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Grinders & Presses</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Lighters</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Scales</a></li>
-                      </ul>
-                    </div>
-
-                    {/* Storage */}
-                    <div>
-                      <h3 className="text-steel-200 font-bold mb-4 text-sm">STORAGE</h3>
-                      <ul className="space-y-2">
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Baggies</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Boxes</a></li>
-                        <li><a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Jars & Containers</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  {/* Lifestyle Section */}
-                  <div className="mt-8 border-t border-steel-700/50 pt-6">
-                    <h3 className="text-steel-200 font-bold mb-4 text-sm">LIFESTYLE</h3>
-                    <div className="flex space-x-8">
-                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Apparel</a>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Incense & Burners</a>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Everything Else</a>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">SMOKEA® Merch</a>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">SMOKEA® Mystery Box</a>
-                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm">Gift Cards</a>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </li>
-            <li>
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
-                EXOTIC SNACKS
-              </a>
+            <li className="flex-shrink-0">
+              <Link href="/membership" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium text-sm sm:text-base">
+                VIP MEMBERSHIP
+              </Link>
             </li>
           </ul>
         </nav>

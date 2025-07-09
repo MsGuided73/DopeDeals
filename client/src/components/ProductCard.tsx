@@ -69,12 +69,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           </h4>
         </Link>
         <p className="text-steel-300 text-sm mb-3 line-clamp-2">{product.description}</p>
-        <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-yellow-400">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <span className="text-xl sm:text-2xl font-bold text-yellow-400">
             {formatPrice(product.price)}
           </span>
           <Button
-            className="bg-red-600 hover:bg-red-700 text-white font-medium"
+            className="bg-red-600 hover:bg-red-700 text-white font-medium text-sm sm:text-base px-3 sm:px-4 py-2"
             onClick={handleAddToCart}
           >
             Add to Cart
