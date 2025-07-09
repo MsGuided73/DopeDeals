@@ -118,8 +118,7 @@
   
   .nav-container ul {
     position: relative;
-    overflow-x: auto;
-    overflow-y: visible;
+    overflow: visible;
   }
   
   /* Dropdown menu positioning - positioned relative to nav-container, not parent li */
