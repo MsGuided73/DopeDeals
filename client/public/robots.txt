@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+
+# Age verification compliance
+Disallow: /age-restricted/
+Disallow: /checkout/
+Disallow: /account/
+
+# SEO optimization
+Sitemap: https://vipsmoke.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Special rules for specific bots
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block known bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

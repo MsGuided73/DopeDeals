@@ -21,13 +21,14 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="bg-steel-800 rounded-xl overflow-hidden border border-steel-700 group hover:border-yellow-400 transition-colors">
+    <article className="bg-steel-800 rounded-xl overflow-hidden border border-steel-700 group hover:border-yellow-400 transition-colors">
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden">
         <img
           src={product.imageUrl || "https://via.placeholder.com/400"}
-          alt={product.name}
+          alt={`${product.name} - Premium smoking accessory`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
         />
         
         {/* Badges */}
@@ -75,6 +76,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           </Button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

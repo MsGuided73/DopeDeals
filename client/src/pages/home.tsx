@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import AgeVerificationModal from "@/components/AgeVerificationModal";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -7,11 +8,25 @@ import ProductCatalog from "@/components/ProductCatalog";
 import VIPMembership from "@/components/VIPMembership";
 import Footer from "@/components/Footer";
 import ShoppingCartSidebar from "@/components/ShoppingCartSidebar";
+import SEOHead from "@/components/SEOHead";
+import { 
+  createOrganizationSchema, 
+  createWebsiteSchema, 
+  createBreadcrumbSchema,
+  createOfferCatalogSchema 
+} from "@/utils/structuredData";
+import type { Product } from "@shared/schema";
 
 export default function Home() {
   const [showAgeModal, setShowAgeModal] = useState(true);
   const [cartOpen, setCartOpen] = useState(false);
   const [demoMode, setDemoMode] = useState(false);
+
+  // Fetch products for SEO structured data
+  const { data: products } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
+    enabled: !showAgeModal // Only fetch after age verification
+  });
 
   useEffect(() => {
     const ageVerified = localStorage.getItem('ageVerified');
@@ -32,8 +47,30 @@ export default function Home() {
     }
   };
 
+  // Create structured data for homepage
+  const structuredData = [
+    createOrganizationSchema(),
+    createWebsiteSchema(),
+    createBreadcrumbSchema([
+      { name: "Home", url: "/" }
+    ])
+  ];
+
+  // Add product catalog structured data if products are available
+  if (products && products.length > 0) {
+    structuredData.push(createOfferCatalogSchema(products.slice(0, 10))); // Top 10 products for performance
+  }
+
   return (
     <>
+      <SEOHead
+        title="VIP Smoke - Premium Smoking Accessories & Paraphernalia | 21+ Only"
+        description="Discover our curated collection of luxury smoking accessories, glass pipes, water pipes, vaporizers, and premium paraphernalia. Handcrafted for the discerning connoisseur. Age verification required - 21+ only."
+        keywords="premium smoking accessories, glass pipes, water pipes, vaporizers, paraphernalia, CBD accessories, luxury smoking, VIP smoke, smoking supplies, bongs, dab rigs, grinders, age restricted, 21+"
+        structuredData={structuredData}
+        noIndex={showAgeModal} // Don't index until age verification
+      />
+      
       {showAgeModal && (
         <AgeVerificationModal onVerification={handleAgeVerification} />
       )}

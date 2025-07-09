@@ -115,6 +115,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // SEO routes
+  app.get("/robots.txt", (req, res) => {
+    res.set('Content-Type', 'text/plain');
+    res.send(`User-agent: *
+Allow: /
+
+# Age verification compliance
+Disallow: /age-restricted/
+Disallow: /checkout/
+Disallow: /account/
+
+# SEO optimization
+Sitemap: https://vipsmoke.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Special rules for specific bots
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block known bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /`);
+  });
+
+  app.get("/sitemap.xml", async (req, res) => {
+    try {
+      const products = await storage.getProducts({});
+      const categories = await storage.getCategories();
+      const baseUrl = 'https://vipsmoke.com';
+      const currentDate = new Date().toISOString().split('T')[0];
+      
+      const urls = [
+        // Static pages
+        { url: `${baseUrl}/`, lastModified: currentDate, changeFrequency: 'daily', priority: 1.0 },
+        { url: `${baseUrl}/products`, lastModified: currentDate, changeFrequency: 'daily', priority: 0.9 },
+        { url: `${baseUrl}/categories`, lastModified: currentDate, changeFrequency: 'weekly', priority: 0.8 },
+        { url: `${baseUrl}/vip-membership`, lastModified: currentDate, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${baseUrl}/about`, lastModified: currentDate, changeFrequency: 'monthly', priority: 0.6 },
+        { url: `${baseUrl}/contact`, lastModified: currentDate, changeFrequency: 'monthly', priority: 0.6 },
+        { url: `${baseUrl}/privacy-policy`, lastModified: currentDate, changeFrequency: 'yearly', priority: 0.3 },
+        { url: `${baseUrl}/terms-of-service`, lastModified: currentDate, changeFrequency: 'yearly', priority: 0.3 }
+      ];
+
+      // Add category pages
+      categories.forEach(category => {
+        urls.push({
+          url: `${baseUrl}/category/${category.id}`,
+          lastModified: currentDate,
+          changeFrequency: 'weekly',
+          priority: 0.7
+        });
+      });
+
+      // Add product pages
+      products.forEach(product => {
+        urls.push({
+          url: `${baseUrl}/product/${product.id}`,
+          lastModified: currentDate,
+          changeFrequency: 'weekly',
+          priority: 0.8
+        });
+      });
+
+      // Generate XML sitemap
+      const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
+      const xmlNamespace = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+      
+      const xmlUrls = urls.map(url => {
+        return `  <url>
+    <loc>${url.url}</loc>
+    <lastmod>${url.lastModified}</lastmod>
+    <changefreq>${url.changeFrequency}</changefreq>
+    <priority>${url.priority}</priority>
+  </url>`;
+      }).join('\n');
+
+      const xmlFooter = '\n</urlset>';
+
+      res.set('Content-Type', 'application/xml');
+      res.send(xmlHeader + xmlNamespace + xmlUrls + xmlFooter);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to generate sitemap" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
