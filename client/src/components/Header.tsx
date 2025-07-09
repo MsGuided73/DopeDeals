@@ -35,12 +35,12 @@ export default function Header({ onCartToggle }: HeaderProps) {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-40 transition-all duration-300 ${
+    <header className={`sticky top-0 z-40 transition-all duration-300 overflow-visible ${
       scrolled 
         ? 'glass-morphism shadow-2xl shadow-black/20' 
         : 'glass-morphism-light'
     }`}>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 overflow-visible">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/">
@@ -95,8 +95,8 @@ export default function Header({ onCartToggle }: HeaderProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="pb-4">
-          <ul className="flex space-x-4 sm:space-x-6 overflow-x-auto">
+        <nav className="pb-4 overflow-visible">
+          <ul className="flex space-x-4 sm:space-x-6 overflow-x-auto overflow-y-visible">
             <li 
               className="relative flex-shrink-0"
               onMouseEnter={() => setShowShopByDropdown(true)}
@@ -107,7 +107,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showShopByDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-48 bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-50">
+                <div className="absolute top-full left-0 mt-1 w-48 bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999]">
                   <div className="py-2">
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">On Sale</a>
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">New Products</a>
@@ -133,7 +133,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showThcDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-50 p-6">
+                <div className="absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">THC & CBD</h3>
@@ -190,7 +190,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showPipesDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-3xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-50 p-6">
+                <div className="absolute top-full left-0 mt-2 w-screen max-w-3xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">DRY PIPES</h3>
@@ -233,7 +233,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showVaporizersDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-2xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-50 p-6">
+                <div className="absolute top-full left-0 mt-2 w-screen max-w-2xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">BY TYPE</h3>
@@ -266,7 +266,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showRollYourOwnDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-50">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999]">
                   <div className="py-2">
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Rolling Papers</a>
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Blunt Wraps</a>
@@ -287,7 +287,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showPartsDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-50 p-6">
+                <div className="absolute top-full left-0 mt-2 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-xl border border-steel-700 z-[9999] p-6">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">PIPE PARTS</h3>
