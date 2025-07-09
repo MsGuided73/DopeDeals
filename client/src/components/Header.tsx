@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Crown, Search, User, Heart, ShoppingCart, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 interface HeaderProps {
   onCartToggle: () => void;
@@ -36,15 +37,17 @@ export default function Header({ onCartToggle }: HeaderProps) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 gold-gradient rounded-full flex items-center justify-center">
-              <Crown className="w-6 h-6 text-steel-900" />
+          <Link href="/">
+            <div className="flex items-center space-x-3 cursor-pointer">
+              <div className="w-10 h-10 gold-gradient rounded-full flex items-center justify-center">
+                <Crown className="w-6 h-6 text-steel-900" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-serif font-bold text-yellow-400">VIP Smoke</h1>
+                <p className="text-xs text-steel-400">Premium Accessories</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-serif font-bold text-yellow-400">VIP Smoke</h1>
-              <p className="text-xs text-steel-400">Premium Accessories</p>
-            </div>
-          </div>
+          </Link>
 
           {/* Search Bar */}
           <div className="flex-1 max-w-2xl mx-8">
@@ -88,6 +91,11 @@ export default function Header({ onCartToggle }: HeaderProps) {
         {/* Navigation */}
         <nav className="pb-4">
           <ul className="flex space-x-8">
+            <li>
+              <Link href="/products" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium">
+                ALL PRODUCTS
+              </Link>
+            </li>
             <li 
               className="relative"
               onMouseEnter={() => setShowShopByDropdown(true)}
@@ -97,7 +105,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 href="#" 
                 className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center gap-1"
               >
-                SHOP BY
+                CATEGORIES
                 <ChevronDown className="w-4 h-4" />
               </a>
               
