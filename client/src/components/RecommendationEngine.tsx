@@ -132,7 +132,7 @@ export default function RecommendationEngine({ userId, className = "" }: Recomme
   }
 
   return (
-    <div className={`recommendation-engine bg-steel-900/80 backdrop-blur-sm rounded-lg border border-steel-700/50 mx-4 my-6 ${className}`}>
+    <div className={`recommendation-engine bg-steel-900 mx-4 my-6 ${className}`}>
       {/* Main Content Area with fixed height */}
       <div className="h-96 flex flex-col overflow-hidden">
         {/* Products Grid - Fixed height matching product card height */}
