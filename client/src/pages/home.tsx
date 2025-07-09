@@ -9,6 +9,7 @@ import VIPMembership from "@/components/VIPMembership";
 import Footer from "@/components/Footer";
 import ShoppingCartSidebar from "@/components/ShoppingCartSidebar";
 import SEOHead from "@/components/SEOHead";
+import RecommendationEngine from "@/components/RecommendationEngine";
 import { 
   createOrganizationSchema, 
   createWebsiteSchema, 
@@ -21,6 +22,7 @@ export default function Home() {
   const [showAgeModal, setShowAgeModal] = useState(true);
   const [cartOpen, setCartOpen] = useState(false);
   const [demoMode, setDemoMode] = useState(false);
+  const [guestUserId] = useState(() => 'guest_' + Date.now().toString(36) + Math.random().toString(36).substring(2));
 
   // Fetch products for SEO structured data
   const { data: products } = useQuery<Product[]>({
@@ -84,7 +86,20 @@ export default function Home() {
         <Header onCartToggle={() => setCartOpen(!cartOpen)} />
         <HeroSection />
         <FeaturedCategories />
-        <ProductCatalog />
+        <ProductCatalog userId={guestUserId} />
+        
+        {/* Personalized Recommendations */}
+        {!showAgeModal && (
+          <section className="bg-steel-800 py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <RecommendationEngine 
+                userId={guestUserId}
+                className="bg-white dark:bg-steel-900 rounded-xl shadow-xl"
+              />
+            </div>
+          </section>
+        )}
+        
         <VIPMembership />
         <Footer />
         <ShoppingCartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />

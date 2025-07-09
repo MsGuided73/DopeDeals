@@ -4,21 +4,53 @@ import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { Link } from "wouter";
 import type { Product } from "@shared/schema";
+import { useAutoTrackBehavior } from "@/hooks/useRecommendations";
 
 interface ProductCardProps {
   product: Product;
+  userId?: string;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, userId }: ProductCardProps) {
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const { trackAddToCart, trackWishlist, trackProductView } = useAutoTrackBehavior();
 
   const handleAddToCart = () => {
+    if (userId) {
+      trackAddToCart(userId, product.id, {
+        productName: product.name,
+        price: product.price,
+        category: product.categoryId,
+        source: 'product_card'
+      });
+    }
     // TODO: Implement add to cart functionality
     console.log("Adding to cart:", product);
   };
 
   const handleToggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
+    const newWishlistState = !isWishlisted;
+    setIsWishlisted(newWishlistState);
+    
+    if (userId && newWishlistState) {
+      trackWishlist(userId, product.id, {
+        productName: product.name,
+        price: product.price,
+        category: product.categoryId,
+        source: 'product_card'
+      });
+    }
+  };
+
+  const handleProductView = () => {
+    if (userId) {
+      trackProductView(userId, product.id, {
+        productName: product.name,
+        price: product.price,
+        category: product.categoryId,
+        source: 'product_card'
+      });
+    }
   };
 
   return (
@@ -64,7 +96,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Product Info */}
       <div className="p-4">
         <Link href={`/product/${product.id}`}>
-          <h4 className="font-semibold text-white mb-2 hover:text-yellow-400 transition-colors cursor-pointer">
+          <h4 
+            className="font-semibold text-white mb-2 hover:text-yellow-400 transition-colors cursor-pointer"
+            onClick={handleProductView}
+          >
             {product.name}
           </h4>
         </Link>

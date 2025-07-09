@@ -86,6 +86,50 @@ export const cartItems = pgTable("cart_items", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+// User behavior tracking for recommendations
+export const userBehavior = pgTable("user_behavior", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id),
+  productId: uuid("product_id").references(() => products.id),
+  action: text("action").notNull(), // view, add_to_cart, purchase, wishlist, search
+  sessionId: text("session_id"),
+  metadata: jsonb("metadata"), // Additional context like search terms, time spent, etc.
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// User preferences for better recommendations
+export const userPreferences = pgTable("user_preferences", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  preferredCategories: text("preferred_categories").array().default('{}'),
+  preferredBrands: text("preferred_brands").array().default('{}'),
+  preferredMaterials: text("preferred_materials").array().default('{}'),
+  priceRangeMin: numeric("price_range_min", { precision: 10, scale: 2 }),
+  priceRangeMax: numeric("price_range_max", { precision: 10, scale: 2 }),
+  vipProductsOnly: boolean("vip_products_only").default(false),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Product similarity matrix for collaborative filtering
+export const productSimilarity = pgTable("product_similarity", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId1: uuid("product_id1").references(() => products.id),
+  productId2: uuid("product_id2").references(() => products.id),
+  similarityScore: numeric("similarity_score", { precision: 5, scale: 4 }).notNull(),
+  calculatedAt: timestamp("calculated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Recommendation cache for performance
+export const recommendationCache = pgTable("recommendation_cache", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id),
+  recommendationType: text("recommendation_type").notNull(), // trending, personalized, similar, category_based
+  productIds: text("product_ids").array().notNull(),
+  score: numeric("score", { precision: 5, scale: 4 }),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
 export const insertCategorySchema = createInsertSchema(categories).omit({ id: true, createdAt: true });
@@ -96,6 +140,10 @@ export const insertOrderItemSchema = createInsertSchema(orderItems).omit({ id: t
 export const insertMembershipSchema = createInsertSchema(memberships).omit({ id: true, createdAt: true });
 export const insertLoyaltyPointSchema = createInsertSchema(loyaltyPoints).omit({ id: true, createdAt: true });
 export const insertCartItemSchema = createInsertSchema(cartItems).omit({ id: true, createdAt: true });
+export const insertUserBehaviorSchema = createInsertSchema(userBehavior).omit({ id: true, createdAt: true });
+export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({ id: true, updatedAt: true });
+export const insertProductSimilaritySchema = createInsertSchema(productSimilarity).omit({ id: true, calculatedAt: true });
+export const insertRecommendationCacheSchema = createInsertSchema(recommendationCache).omit({ id: true, createdAt: true });
 
 // Types
 export type User = typeof users.$inferSelect;
@@ -116,3 +164,11 @@ export type LoyaltyPoint = typeof loyaltyPoints.$inferSelect;
 export type InsertLoyaltyPoint = z.infer<typeof insertLoyaltyPointSchema>;
 export type CartItem = typeof cartItems.$inferSelect;
 export type InsertCartItem = z.infer<typeof insertCartItemSchema>;
+export type UserBehavior = typeof userBehavior.$inferSelect;
+export type InsertUserBehavior = z.infer<typeof insertUserBehaviorSchema>;
+export type UserPreferences = typeof userPreferences.$inferSelect;
+export type InsertUserPreferences = z.infer<typeof insertUserPreferencesSchema>;
+export type ProductSimilarity = typeof productSimilarity.$inferSelect;
+export type InsertProductSimilarity = z.infer<typeof insertProductSimilaritySchema>;
+export type RecommendationCache = typeof recommendationCache.$inferSelect;
+export type InsertRecommendationCache = z.infer<typeof insertRecommendationCacheSchema>;
