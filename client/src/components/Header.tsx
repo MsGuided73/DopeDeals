@@ -96,9 +96,9 @@ export default function Header({ onCartToggle }: HeaderProps) {
 
         {/* Navigation */}
         <nav className="pb-4 nav-container">
-          <ul className="flex space-x-4 sm:space-x-6 overflow-x-auto">
+          <ul className="flex space-x-4 sm:space-x-6 justify-center">
             <li 
-              className="relative flex-shrink-0"
+              className="relative"
               onMouseEnter={() => setShowShopByDropdown(true)}
               onMouseLeave={() => setShowShopByDropdown(false)}
             >
@@ -107,13 +107,13 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
             </li>
-            <li className="flex-shrink-0">
+            <li>
               <Link href="/products" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium text-sm sm:text-base">
                 ALL PRODUCTS
               </Link>
             </li>
             <li 
-              className="dropdown-parent relative flex-shrink-0"
+              className="dropdown-parent relative"
               onMouseEnter={() => setShowThcDropdown(true)}
               onMouseLeave={() => setShowThcDropdown(false)}
             >
@@ -170,7 +170,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
               )}
             </li>
             <li 
-              className="dropdown-parent relative flex-shrink-0"
+              className="dropdown-parent relative"
               onMouseEnter={() => setShowPipesDropdown(true)}
               onMouseLeave={() => setShowPipesDropdown(false)}
             >
@@ -213,7 +213,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
               )}
             </li>
             <li 
-              className="dropdown-parent relative flex-shrink-0"
+              className="dropdown-parent relative"
               onMouseEnter={() => setShowVaporizersDropdown(true)}
               onMouseLeave={() => setShowVaporizersDropdown(false)}
             >
@@ -246,7 +246,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
               )}
             </li>
             <li 
-              className="dropdown-parent relative flex-shrink-0"
+              className="dropdown-parent relative"
               onMouseEnter={() => setShowRollYourOwnDropdown(true)}
               onMouseLeave={() => setShowRollYourOwnDropdown(false)}
             >
@@ -267,7 +267,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
               )}
             </li>
             <li 
-              className="dropdown-parent relative flex-shrink-0"
+              className="dropdown-parent relative"
               onMouseEnter={() => setShowPartsDropdown(true)}
               onMouseLeave={() => setShowPartsDropdown(false)}
             >
@@ -321,11 +321,7 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 </div>
               )}
             </li>
-            <li className="flex-shrink-0">
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium text-sm sm:text-base">
-                EXOTIC SNACKS
-              </a>
-            </li>
+
           </ul>
           
           {/* Dropdown Menus - Positioned outside scrollable container */}
