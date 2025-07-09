@@ -39,8 +39,8 @@ export default function ProductCatalog() {
     return (
       <section className="py-16 bg-steel-900">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            {Array.from({ length: 8 }).map((_, index) => (
               <div key={index} className="animate-pulse">
                 <div className="bg-steel-800 rounded-xl overflow-hidden">
                   <div className="aspect-square bg-steel-700"></div>
@@ -149,7 +149,7 @@ export default function ProductCatalog() {
               </Select>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {products?.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
