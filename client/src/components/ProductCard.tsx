@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
+import { Link } from "wouter";
 import type { Product } from "@shared/schema";
 
 interface ProductCardProps {
@@ -62,7 +63,11 @@ export default function ProductCard({ product }: ProductCardProps) {
       
       {/* Product Info */}
       <div className="p-4">
-        <h4 className="font-semibold text-white mb-2">{product.name}</h4>
+        <Link href={`/product/${product.id}`}>
+          <h4 className="font-semibold text-white mb-2 hover:text-yellow-400 transition-colors cursor-pointer">
+            {product.name}
+          </h4>
+        </Link>
         <p className="text-steel-300 text-sm mb-3 line-clamp-2">{product.description}</p>
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-yellow-400">
