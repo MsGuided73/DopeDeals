@@ -127,6 +127,8 @@
     z-index: 9999;
     min-width: max-content;
     white-space: nowrap;
+    background-color: rgba(30, 41, 59, 0.98) !important;
+    backdrop-filter: blur(8px);
   }
   
   /* Ensure dropdowns don't get clipped */
