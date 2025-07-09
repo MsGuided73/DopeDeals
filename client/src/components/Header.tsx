@@ -107,7 +107,12 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showShopByDropdown && (
-                <div className="dropdown-menu absolute top-full left-0 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999]" style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}>
+                <div 
+                  className="dropdown-menu absolute top-full left-0 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
+                  style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
+                  onMouseEnter={() => setShowShopByDropdown(true)}
+                  onMouseLeave={() => setShowShopByDropdown(false)}
+                >
                   <div className="py-2">
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">On Sale</a>
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">New Products</a>
@@ -133,7 +138,12 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showThcDropdown && (
-                <div className="dropdown-menu absolute top-full left-0 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6" style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}>
+                <div 
+                  className="dropdown-menu absolute top-full left-0 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6 -mt-1 pt-8" 
+                  style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
+                  onMouseEnter={() => setShowThcDropdown(true)}
+                  onMouseLeave={() => setShowThcDropdown(false)}
+                >
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">THC & CBD</h3>
@@ -190,7 +200,12 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showPipesDropdown && (
-                <div className="dropdown-menu absolute top-full left-0 w-screen max-w-3xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6" style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}>
+                <div 
+                  className="dropdown-menu absolute top-full left-0 w-screen max-w-3xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6 -mt-1 pt-8" 
+                  style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
+                  onMouseEnter={() => setShowPipesDropdown(true)}
+                  onMouseLeave={() => setShowPipesDropdown(false)}
+                >
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">DRY PIPES</h3>
@@ -233,7 +248,12 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showVaporizersDropdown && (
-                <div className="dropdown-menu absolute top-full left-0 w-screen max-w-2xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6" style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}>
+                <div 
+                  className="dropdown-menu absolute top-full left-0 w-screen max-w-2xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6 -mt-1 pt-8" 
+                  style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
+                  onMouseEnter={() => setShowVaporizersDropdown(true)}
+                  onMouseLeave={() => setShowVaporizersDropdown(false)}
+                >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">BY TYPE</h3>
@@ -266,7 +286,12 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showRollYourOwnDropdown && (
-                <div className="dropdown-menu absolute top-full left-0 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999]" style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}>
+                <div 
+                  className="dropdown-menu absolute top-full left-0 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
+                  style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
+                  onMouseEnter={() => setShowRollYourOwnDropdown(true)}
+                  onMouseLeave={() => setShowRollYourOwnDropdown(false)}
+                >
                   <div className="py-2">
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Rolling Papers</a>
                     <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Blunt Wraps</a>
@@ -287,7 +312,12 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
               </a>
               {showPartsDropdown && (
-                <div className="dropdown-menu absolute top-full left-0 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6" style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}>
+                <div 
+                  className="dropdown-menu absolute top-full left-0 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6 -mt-1 pt-8" 
+                  style={{backgroundColor: 'rgba(30, 41, 59, 0.98)'}}
+                  onMouseEnter={() => setShowPartsDropdown(true)}
+                  onMouseLeave={() => setShowPartsDropdown(false)}
+                >
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">PIPE PARTS</h3>
