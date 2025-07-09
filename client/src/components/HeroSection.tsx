@@ -13,9 +13,9 @@ export default function HeroSection() {
       
       <div className="relative container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-5xl font-serif font-bold text-yellow-400 mb-6">
+          <h1 className="text-5xl font-serif font-bold text-yellow-400 mb-6">
             Premium Smoking Experience
-          </h2>
+          </h1>
           <p className="text-xl text-steel-300 mb-8">
             Discover our curated collection of luxury smoking accessories, handcrafted for the discerning connoisseur.
           </p>

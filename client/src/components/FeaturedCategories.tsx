@@ -10,7 +10,7 @@ export default function FeaturedCategories() {
     return (
       <section className="py-16 bg-steel-800">
         <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-serif font-bold text-yellow-400 text-center mb-12">Featured Categories</h3>
+          <h2 className="text-3xl font-serif font-bold text-yellow-400 text-center mb-12">Featured Categories</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {Array.from({ length: 4 }).map((_, index) => (
               <div key={index} className="animate-pulse">
@@ -33,7 +33,7 @@ export default function FeaturedCategories() {
   return (
     <section className="py-16 bg-steel-800">
       <div className="container mx-auto px-4">
-        <h3 className="text-3xl font-serif font-bold text-yellow-400 text-center mb-12">Featured Categories</h3>
+        <h2 className="text-3xl font-serif font-bold text-yellow-400 text-center mb-12">Featured Categories</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories?.map((category) => (
             <div key={category.id} className="group cursor-pointer">

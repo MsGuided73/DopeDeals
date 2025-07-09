@@ -15,7 +15,7 @@ export default function VIPMembership() {
           <div className="w-20 h-20 mx-auto gold-gradient rounded-full flex items-center justify-center mb-6">
             <Crown className="w-10 h-10 text-steel-900" />
           </div>
-          <h3 className="text-3xl font-serif font-bold text-yellow-400 mb-6">Join the VIP Club</h3>
+          <h2 className="text-3xl font-serif font-bold text-yellow-400 mb-6">Join the VIP Club</h2>
           <p className="text-xl text-steel-300 mb-8">
             Unlock exclusive benefits, early access to new products, and premium rewards
           </p>
