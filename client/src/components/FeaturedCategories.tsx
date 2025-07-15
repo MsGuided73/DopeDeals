@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import type { Category } from "@shared/schema";
 import waterBongImage from "@assets/image_1752544102455.png";
 import glassPipesImage from "@assets/image_1752544509252.png";
+import accessoriesImage from "@assets/image_1752544596454.png";
 
 export default function FeaturedCategories() {
   const { data: categories, isLoading } = useQuery<Category[]>({
@@ -30,7 +31,7 @@ export default function FeaturedCategories() {
     "Glass Pipes": glassPipesImage,
     "Water Pipes": "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     "Vaporizers": waterBongImage,
-    "Accessories": "https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Accessories": accessoriesImage,
   };
 
   return (
