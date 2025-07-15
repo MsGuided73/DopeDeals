@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,7 +76,8 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-neutral-950 text-white;
+    font-family: 'Inter', sans-serif;
   }
 }
 
@@ -139,5 +142,57 @@
   /* Fix for header overflow */
   .header-overflow-fix {
     overflow: visible !important;
+  }
+
+  /* Gradient background from provided code */
+  .gradient-background {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .gradient-background::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.2) 0%, rgba(217, 70, 239, 0.1) 50%, rgba(251, 191, 36, 0.2) 100%);
+    filter: blur(120px);
+  }
+  
+  .gradient-background::after {
+    content: '';
+    position: absolute;
+    top: -8rem;
+    left: -5rem;
+    width: 24rem;
+    height: 24rem;
+    background: rgba(79, 70, 229, 0.3);
+    border-radius: 50%;
+    filter: blur(48px);
+  }
+  
+  .gradient-blob-1 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 28rem;
+    height: 28rem;
+    background: rgba(236, 72, 153, 0.2);
+    border-radius: 50%;
+    filter: blur(160px);
+  }
+  
+  .gradient-blob-2 {
+    position: absolute;
+    top: 33.333333%;
+    left: 50%;
+    width: 20rem;
+    height: 20rem;
+    background: rgba(251, 191, 36, 0.25);
+    border-radius: 50%;
+    filter: blur(140px);
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
   }
 }

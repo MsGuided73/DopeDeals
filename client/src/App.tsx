@@ -25,7 +25,13 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="dark min-h-screen">
+        <div className="dark min-h-screen bg-neutral-950 text-white">
+          {/* Gradient Background */}
+          <div className="gradient-background">
+            <div className="gradient-blob-1"></div>
+            <div className="gradient-blob-2"></div>
+          </div>
+          
           <Toaster />
           <Router />
         </div>
