@@ -108,11 +108,11 @@ export class MemStorage implements IStorage {
       createdAt: new Date(),
     };
     
-    const vaporizers: Category = {
+    const waterBongs: Category = {
       id: this.generateId(),
-      name: "Vaporizers",
-      description: "Advanced technology devices",
-      slug: "vaporizers",
+      name: "Water Bongs",
+      description: "Premium water filtration bongs",
+      slug: "water-bongs",
       createdAt: new Date(),
     };
     
@@ -126,7 +126,7 @@ export class MemStorage implements IStorage {
 
     this.categories.set(glassPipes.id, glassPipes);
     this.categories.set(waterPipes.id, waterPipes);
-    this.categories.set(vaporizers.id, vaporizers);
+    this.categories.set(waterBongs.id, waterBongs);
     this.categories.set(accessories.id, accessories);
 
     // Initialize brands
@@ -286,39 +286,39 @@ export class MemStorage implements IStorage {
         vipExclusive: true,
       },
       
-      // Vaporizers
+      // Water Bongs
       {
-        name: "Crown Elite Vaporizer",
-        description: "Advanced temperature control with premium build quality. Features digital display and precise heating.",
+        name: "Crown Elite Water Bong",
+        description: "Advanced filtration system with premium borosilicate glass. Features multiple percolators for smooth hits.",
         price: "249.99",
         sku: "CE-003",
-        categoryId: vaporizers.id,
+        categoryId: waterBongs.id,
         brandId: crownCollection.id,
-        imageUrl: "https://images.unsplash.com/photo-1580407196238-dac33f57c410?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
-        material: "Metal",
+        imageUrl: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+        material: "Borosilicate Glass",
         inStock: true,
         featured: true,
         vipExclusive: false,
       },
       {
-        name: "VIP Portable Vaporizer",
-        description: "Compact design for on-the-go use. Long battery life and quick heat-up time with multiple temperature settings.",
+        name: "VIP Portable Water Bong",
+        description: "Compact design perfect for travel. Features removable parts and efficient water filtration system.",
         price: "129.99",
         sku: "VPV-701",
-        categoryId: vaporizers.id,
+        categoryId: waterBongs.id,
         brandId: vipSignature.id,
-        imageUrl: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
-        material: "Metal",
+        imageUrl: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+        material: "Borosilicate Glass",
         inStock: true,
         featured: true,
         vipExclusive: false,
       },
       {
-        name: "Royal Desktop Vaporizer",
-        description: "Professional desktop unit with precise temperature control. Includes whip and balloon attachment options.",
+        name: "Royal Desktop Water Bong",
+        description: "Professional desktop bong with precision glass work. Includes ice catcher and premium diffusion system.",
         price: "399.99",
         sku: "RDV-801",
-        categoryId: vaporizers.id,
+        categoryId: waterBongs.id,
         brandId: royalGlass.id,
         imageUrl: "https://images.unsplash.com/photo-1580407196238-dac33f57c410?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
         material: "Metal",
