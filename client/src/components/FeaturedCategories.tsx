@@ -28,8 +28,7 @@ export default function FeaturedCategories() {
   const categoryImages = {
     "Glass Pipes": "https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     "Water Pipes": "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "Water Bongs": waterBongImage,
-    "Vaporizers": "https://images.unsplash.com/photo-1580407196238-dac33f57c410?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Vaporizers": waterBongImage,
     "Accessories": "https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   };
 
