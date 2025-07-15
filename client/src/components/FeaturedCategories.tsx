@@ -31,7 +31,7 @@ export default function FeaturedCategories() {
 
   const categoryImages = {
     "Glass Pipes": glassPipesImage,
-    "Water Pipes": waterPipeImage,
+    "Dab Rigs": waterPipeImage,
     "Vaporizers": waterBongImage,
     "Accessories": accessoriesImage,
   };

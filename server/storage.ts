@@ -100,11 +100,11 @@ export class MemStorage implements IStorage {
       createdAt: new Date(),
     };
     
-    const waterPipes: Category = {
+    const dabRigs: Category = {
       id: this.generateId(),
-      name: "Water Pipes",
-      description: "Premium filtration systems",
-      slug: "water-pipes",
+      name: "Dab Rigs",
+      description: "Premium concentrate devices",
+      slug: "dab-rigs",
       createdAt: new Date(),
     };
     
@@ -125,7 +125,7 @@ export class MemStorage implements IStorage {
     };
 
     this.categories.set(glassPipes.id, glassPipes);
-    this.categories.set(waterPipes.id, waterPipes);
+    this.categories.set(dabRigs.id, dabRigs);
     this.categories.set(vaporizers.id, vaporizers);
     this.categories.set(accessories.id, accessories);
 
@@ -232,13 +232,13 @@ export class MemStorage implements IStorage {
         vipExclusive: false,
       },
       
-      // Water Pipes
+      // Dab Rigs
       {
-        name: "VIP Imperial Water Pipe",
+        name: "VIP Imperial Dab Rig",
         description: "Professional grade with multi-chamber filtration system. Provides smooth, cool smoke with superior filtration.",
         price: "149.99",
         sku: "VIP-002",
-        categoryId: waterPipes.id,
+        categoryId: dabRigs.id,
         brandId: vipSignature.id,
         imageUrl: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
         material: "Borosilicate Glass",
@@ -247,11 +247,11 @@ export class MemStorage implements IStorage {
         vipExclusive: false,
       },
       {
-        name: "Crown Beaker Base Bong",
+        name: "Crown Beaker Base Dab Rig",
         description: "Classic beaker design with thick glass construction. Features ice catcher and removable downstem.",
         price: "89.99",
         sku: "CBB-401",
-        categoryId: waterPipes.id,
+        categoryId: dabRigs.id,
         brandId: crownCollection.id,
         imageUrl: "https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
         material: "Borosilicate Glass",
@@ -260,11 +260,11 @@ export class MemStorage implements IStorage {
         vipExclusive: false,
       },
       {
-        name: "Royal Percolator Water Pipe",
+        name: "Royal Percolator Dab Rig",
         description: "Advanced percolator system for maximum filtration. Tree perc design with 12 arms for smooth hits.",
         price: "199.99",
         sku: "RPW-501",
-        categoryId: waterPipes.id,
+        categoryId: dabRigs.id,
         brandId: royalGlass.id,
         imageUrl: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
         material: "Borosilicate Glass",
@@ -277,7 +277,7 @@ export class MemStorage implements IStorage {
         description: "Scientific glass recycler design for concentrates. Features internal recycling chamber and quartz banger.",
         price: "249.99",
         sku: "VRD-601",
-        categoryId: waterPipes.id,
+        categoryId: dabRigs.id,
         brandId: vipSignature.id,
         imageUrl: "https://images.unsplash.com/photo-1580407196238-dac33f57c410?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
         material: "Scientific Glass",
