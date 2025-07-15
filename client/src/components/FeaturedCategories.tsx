@@ -4,6 +4,7 @@ import type { Category } from "@shared/schema";
 import waterBongImage from "@assets/image_1752544102455.png";
 import glassPipesImage from "@assets/image_1752544509252.png";
 import accessoriesImage from "@assets/image_1752544596454.png";
+import puffcoImage from "@assets/image_1752544730493.png";
 
 export default function FeaturedCategories() {
   const { data: categories, isLoading } = useQuery<Category[]>({
@@ -29,7 +30,7 @@ export default function FeaturedCategories() {
 
   const categoryImages = {
     "Glass Pipes": glassPipesImage,
-    "Water Pipes": "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "Water Pipes": puffcoImage,
     "Vaporizers": waterBongImage,
     "Accessories": accessoriesImage,
   };
