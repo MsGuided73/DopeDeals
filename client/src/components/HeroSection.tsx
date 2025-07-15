@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
+import heroImage from "@assets/image_1752541939615.png";
 
 export default function HeroSection() {
   return (
     <section className="relative dark-gradient py-20">
       {/* Background overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center opacity-20"
+        className="absolute inset-0 bg-cover bg-center opacity-30"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')"
+          backgroundImage: `url(${heroImage})`
         }}
       />
       
