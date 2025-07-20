@@ -172,3 +172,90 @@ export type ProductSimilarity = typeof productSimilarity.$inferSelect;
 export type InsertProductSimilarity = z.infer<typeof insertProductSimilaritySchema>;
 export type RecommendationCache = typeof recommendationCache.$inferSelect;
 export type InsertRecommendationCache = z.infer<typeof insertRecommendationCacheSchema>;
+
+// Zoho Integration Tables
+export const zohoSyncStatus = pgTable("zoho_sync_status", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  resourceType: text("resource_type").notNull(), // 'product', 'category', 'order', 'customer'
+  resourceId: text("resource_id").notNull(), // Local ID
+  zohoId: text("zoho_id").notNull(), // Zoho ID
+  lastSynced: timestamp("last_synced", { withTimezone: true }).notNull(),
+  syncStatus: text("sync_status").notNull(), // 'success', 'failed', 'pending'
+  errorMessage: text("error_message"),
+  retryCount: integer("retry_count").default(0).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const zohoWebhookEvents = pgTable("zoho_webhook_events", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  eventId: text("event_id").notNull().unique(),
+  eventType: text("event_type").notNull(),
+  eventTime: timestamp("event_time", { withTimezone: true }).notNull(),
+  organizationId: text("organization_id").notNull(),
+  resourceType: text("resource_type").notNull(),
+  resourceId: text("resource_id").notNull(),
+  operation: text("operation").notNull(), // 'create', 'update', 'delete'
+  processed: boolean("processed").default(false).notNull(),
+  processedAt: timestamp("processed_at", { withTimezone: true }),
+  errorMessage: text("error_message"),
+  rawData: text("raw_data").notNull(), // JSON string of the full webhook payload
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const zohoProducts = pgTable("zoho_products", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  zohoItemId: text("zoho_item_id").notNull().unique(),
+  localProductId: uuid("local_product_id").references(() => products.id),
+  name: text("name").notNull(),
+  sku: text("sku").notNull(),
+  description: text("description"),
+  rate: numeric("rate", { precision: 10, scale: 2 }).notNull(),
+  stockOnHand: integer("stock_on_hand").default(0).notNull(),
+  availableStock: integer("available_stock").default(0).notNull(),
+  actualAvailableStock: integer("actual_available_stock").default(0).notNull(),
+  zohoCategoryId: text("zoho_category_id"),
+  zohoCategoryName: text("zoho_category_name"),
+  brand: text("brand"),
+  status: text("status").notNull(), // 'active', 'inactive'
+  lastModifiedTime: timestamp("last_modified_time", { withTimezone: true }).notNull(),
+  syncedAt: timestamp("synced_at", { withTimezone: true }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const zohoOrders = pgTable("zoho_orders", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  zohoSalesorderId: text("zoho_salesorder_id").notNull().unique(),
+  localOrderId: uuid("local_order_id").references(() => orders.id),
+  salesorderNumber: text("salesorder_number").notNull(),
+  customerId: text("customer_id").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerEmail: text("customer_email"),
+  date: timestamp("date", { withTimezone: true }).notNull(),
+  status: text("status").notNull(),
+  invoiceStatus: text("invoice_status").notNull(),
+  paymentStatus: text("payment_status").notNull(),
+  subTotal: numeric("sub_total", { precision: 10, scale: 2 }).notNull(),
+  taxTotal: numeric("tax_total", { precision: 10, scale: 2 }).notNull(),
+  total: numeric("total", { precision: 10, scale: 2 }).notNull(),
+  currencyCode: text("currency_code").notNull(),
+  lastModifiedTime: timestamp("last_modified_time", { withTimezone: true }).notNull(),
+  syncedAt: timestamp("synced_at", { withTimezone: true }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// Zoho insert schemas
+export const insertZohoSyncStatusSchema = createInsertSchema(zohoSyncStatus).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertZohoWebhookEventSchema = createInsertSchema(zohoWebhookEvents).omit({ id: true, createdAt: true });
+export const insertZohoProductSchema = createInsertSchema(zohoProducts).omit({ id: true, createdAt: true, syncedAt: true });
+export const insertZohoOrderSchema = createInsertSchema(zohoOrders).omit({ id: true, createdAt: true, syncedAt: true });
+
+// Zoho types
+export type ZohoSyncStatus = typeof zohoSyncStatus.$inferSelect;
+export type InsertZohoSyncStatus = z.infer<typeof insertZohoSyncStatusSchema>;
+export type ZohoWebhookEvent = typeof zohoWebhookEvents.$inferSelect;
+export type InsertZohoWebhookEvent = z.infer<typeof insertZohoWebhookEventSchema>;
+export type ZohoProduct = typeof zohoProducts.$inferSelect;
+export type InsertZohoProduct = z.infer<typeof insertZohoProductSchema>;
+export type ZohoOrder = typeof zohoOrders.$inferSelect;
+export type InsertZohoOrder = z.infer<typeof insertZohoOrderSchema>;
