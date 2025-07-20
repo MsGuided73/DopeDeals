@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCartItemSchema, insertUserBehaviorSchema } from "@shared/schema";
+import { registerZohoRoutes, initializeZohoServices, startScheduledSync } from "./zoho/routes.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -288,6 +289,22 @@ Disallow: /`);
       res.status(500).json({ message: "Failed to generate sitemap" });
     }
   });
+
+  // Initialize and register Zoho integration routes
+  try {
+    const zohoInitResult = initializeZohoServices();
+    if (zohoInitResult.success) {
+      registerZohoRoutes(app);
+      console.log('[Server] Zoho integration initialized successfully');
+      
+      // Start scheduled sync if enabled
+      startScheduledSync();
+    } else {
+      console.warn('[Server] Zoho integration disabled:', zohoInitResult.error);
+    }
+  } catch (error) {
+    console.error('[Server] Failed to initialize Zoho integration:', error);
+  }
 
   const httpServer = createServer(app);
   return httpServer;
