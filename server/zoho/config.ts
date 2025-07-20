@@ -10,7 +10,7 @@ export function getZohoConfig(): ZohoConfig {
     baseUrl: process.env.ZOHO_BASE_URL || 'https://www.zohoapis.com/inventory/v1',
     warehouse: {
       defaultWarehouseId: process.env.ZOHO_WAREHOUSE_ID || '',
-      warehouseName: process.env.ZOHO_WAREHOUSE_NAME || 'Cash & Carry Default',
+      warehouseName: process.env.ZOHO_WAREHOUSE_NAME || 'BMB Wholesale Warehouse',
       isSharedWarehouse: true,
       parentEntity: 'BMB Wholesale INC. Cash & Carry'
     }
