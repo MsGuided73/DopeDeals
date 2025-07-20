@@ -7,7 +7,13 @@ export function getZohoConfig(): ZohoConfig {
     clientSecret: process.env.ZOHO_CLIENT_SECRET || '',
     refreshToken: process.env.ZOHO_REFRESH_TOKEN || '',
     organizationId: process.env.ZOHO_ORGANIZATION_ID || '',
-    baseUrl: process.env.ZOHO_BASE_URL || 'https://www.zohoapis.com/inventory/v1'
+    baseUrl: process.env.ZOHO_BASE_URL || 'https://www.zohoapis.com/inventory/v1',
+    warehouse: {
+      defaultWarehouseId: process.env.ZOHO_WAREHOUSE_ID || '',
+      warehouseName: process.env.ZOHO_WAREHOUSE_NAME || 'Cash & Carry Default',
+      isSharedWarehouse: true,
+      parentEntity: 'BMB Wholesale INC. Cash & Carry'
+    }
   };
 }
 

@@ -104,6 +104,34 @@ curl -X GET "https://www.zohoapis.com/inventory/v1/organizations" \
 
 ---
 
+### **PHASE 4: Get Warehouse Information** (Multi-Warehouse Setup)
+
+#### Step 10: Identify Default Warehouse ⚠️ *Critical for shared inventory*
+Since VIP Smoke pulls from BMB Wholesale's shared warehouse:
+
+1. **Get Warehouse List:**
+```bash
+curl -X GET "https://www.zohoapis.com/inventory/v1/settings/warehouses" \
+  -H "Authorization: Zoho-oauthtoken YOUR_ACCESS_TOKEN" \
+  -H "organization-id: YOUR_ORGANIZATION_ID"
+```
+
+2. **Find the Default/Primary Warehouse:**
+   - Look for `"is_primary": true` in the response
+   - Or identify by name containing "Cash & Carry" or "Default"
+   - Note the `warehouse_id` and `warehouse_name`
+
+#### Step 11: Test Warehouse Access ✅ **COLLECT WAREHOUSE ID**
+```bash
+curl -X GET "https://www.zohoapis.com/inventory/v1/items?warehouse_id=WAREHOUSE_ID" \
+  -H "Authorization: Zoho-oauthtoken YOUR_ACCESS_TOKEN" \
+  -H "organization-id: YOUR_ORGANIZATION_ID"
+```
+
+If this returns products, you have the correct warehouse ID.
+
+---
+
 ## ✅ **Final Checklist**
 
 Before providing credentials to VIP Smoke, verify you have:
@@ -111,7 +139,8 @@ Before providing credentials to VIP Smoke, verify you have:
 - [ ] **ZOHO_CLIENT_ID** (from OAuth app creation)
 - [ ] **ZOHO_CLIENT_SECRET** (from OAuth app creation)  
 - [ ] **ZOHO_REFRESH_TOKEN** (from token exchange)
-- [ ] **ZOHO_ORGANIZATION_ID** (from Inventory URL or API)
+- [ ] **ZOHO_ORGANIZATION_ID** (BMB Wholesale's organization)
+- [ ] **ZOHO_WAREHOUSE_ID** (Default warehouse for Cash & Carry) 🆕
 
 ---
 

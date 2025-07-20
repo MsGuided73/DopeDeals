@@ -6,6 +6,12 @@ export interface ZohoConfig {
   refreshToken: string;
   organizationId: string;
   baseUrl: string;
+  warehouse?: {
+    defaultWarehouseId: string;
+    warehouseName: string;
+    isSharedWarehouse: boolean;
+    parentEntity: string;
+  };
 }
 
 export interface ZohoAuthResponse {
