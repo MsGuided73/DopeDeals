@@ -19,9 +19,9 @@
 4. **Organization Permissions**: Secondary organization access to primary entity's data
 
 ### **Modified Configuration Requirements**
-- **ZOHO_ORGANIZATION_ID**: BMB Wholesale's organization (primary)
-- **ZOHO_WAREHOUSE_ID**: Default warehouse identifier (to be obtained)
-- **Warehouse Filtering**: All queries filtered by warehouse
+- **ZOHO_ORGANIZATION_ID**: VIP Smoke's own organization ID (secondary org)
+- **ZOHO_WAREHOUSE_ID**: BMB Wholesale's warehouse that VIP has access to
+- **Cross-Organization Access**: VIP Smoke org accessing BMB's warehouse
 - **Enhanced Webhooks**: Critical for real-time inventory updates
 
 ---

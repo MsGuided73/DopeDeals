@@ -85,50 +85,56 @@ From the API response, copy the `refresh_token` value:
 
 ### **PHASE 3: Get Organization ID** (No Admin Required)
 
-#### Step 8: Find Your Organization ID
+#### Step 8: Find VIP Smoke's Organization ID
+**Important**: VIP Smoke should have its own organization in Zoho, separate from BMB Wholesale.
+
 **Method 1: From Zoho Inventory URL**
-1. Log into Zoho Inventory
+1. Log into Zoho Inventory with VIP Smoke credentials
 2. Look at the URL: `https://inventory.zoho.com/app/[ORGANIZATION_ID]`
-3. Copy the organization ID from the URL
+3. Copy VIP Smoke's organization ID from the URL
 
 **Method 2: From API Call**
-Use this curl command with your credentials:
 ```bash
 curl -X GET "https://www.zohoapis.com/inventory/v1/organizations" \
   -H "Authorization: Zoho-oauthtoken YOUR_ACCESS_TOKEN"
 ```
 
-#### Step 9: Record Organization ID ✅ **COLLECT THIS**
-- Copy the `organization_id` from the response
-- This is your `ZOHO_ORGANIZATION_ID`
+**Expected Result**: You should see VIP Smoke's organization listed, possibly with shared access to BMB Wholesale's warehouses.
+
+#### Step 9: Record VIP Smoke's Organization ID ✅ **COLLECT THIS**
+- Copy VIP Smoke's `organization_id` from the response
+- This is your `ZOHO_ORGANIZATION_ID` (NOT BMB Wholesale's)
 
 ---
 
 ### **PHASE 4: Get Warehouse Information** (Multi-Warehouse Setup)
 
-#### Step 10: Identify Default Warehouse ⚠️ *Critical for shared inventory*
-Since VIP Smoke pulls from BMB Wholesale's shared warehouse:
+#### Step 10: Identify BMB Wholesale's Shared Warehouse ⚠️ *Critical for shared inventory*
+VIP Smoke (your org) should have access to BMB Wholesale's warehouse:
 
-1. **Get Warehouse List:**
+1. **Get Warehouse List for VIP Smoke:**
 ```bash
 curl -X GET "https://www.zohoapis.com/inventory/v1/settings/warehouses" \
   -H "Authorization: Zoho-oauthtoken YOUR_ACCESS_TOKEN" \
-  -H "organization-id: YOUR_ORGANIZATION_ID"
+  -H "organization-id: VIP_SMOKE_ORGANIZATION_ID"
 ```
 
-2. **Find the Default/Primary Warehouse:**
-   - Look for `"is_primary": true` in the response
-   - Or identify by name containing "Cash & Carry" or "Default"
+2. **Find BMB Wholesale's Warehouse:**
+   - Look for warehouse name containing "BMB", "Cash & Carry", or "Wholesale"
+   - This warehouse should be shared/accessible to VIP Smoke
    - Note the `warehouse_id` and `warehouse_name`
 
-#### Step 11: Test Warehouse Access ✅ **COLLECT WAREHOUSE ID**
+**If no shared warehouses appear**: Contact BMB Wholesale to grant VIP Smoke access to their warehouse in Zoho.
+
+#### Step 11: Test Cross-Organization Warehouse Access ✅ **COLLECT WAREHOUSE ID**
 ```bash
-curl -X GET "https://www.zohoapis.com/inventory/v1/items?warehouse_id=WAREHOUSE_ID" \
+curl -X GET "https://www.zohoapis.com/inventory/v1/items?warehouse_id=BMB_WAREHOUSE_ID" \
   -H "Authorization: Zoho-oauthtoken YOUR_ACCESS_TOKEN" \
-  -H "organization-id: YOUR_ORGANIZATION_ID"
+  -H "organization-id: VIP_SMOKE_ORGANIZATION_ID"
 ```
 
-If this returns products, you have the correct warehouse ID.
+**Success**: If this returns BMB's product catalog, you have correct access.
+**Failure**: If this fails, BMB Wholesale needs to grant VIP Smoke warehouse access permissions.
 
 ---
 
@@ -139,8 +145,8 @@ Before providing credentials to VIP Smoke, verify you have:
 - [ ] **ZOHO_CLIENT_ID** (from OAuth app creation)
 - [ ] **ZOHO_CLIENT_SECRET** (from OAuth app creation)  
 - [ ] **ZOHO_REFRESH_TOKEN** (from token exchange)
-- [ ] **ZOHO_ORGANIZATION_ID** (BMB Wholesale's organization)
-- [ ] **ZOHO_WAREHOUSE_ID** (Default warehouse for Cash & Carry) 🆕
+- [ ] **ZOHO_ORGANIZATION_ID** (VIP Smoke's own organization)
+- [ ] **ZOHO_WAREHOUSE_ID** (BMB Wholesale's warehouse that VIP can access) 🆕
 
 ---
 
