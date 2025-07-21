@@ -19,6 +19,14 @@ import {
   type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics
 } from "@shared/schema";
 
+import {
+  shipstationOrders, shipstationShipments, shipstationWebhooks, shipstationProducts, 
+  shipstationWarehouses, shipstationSyncStatus,
+  type ShipstationOrder, type InsertShipstationOrder, type ShipstationShipment, type InsertShipstationShipment,
+  type ShipstationWebhook, type InsertShipstationWebhook, type ShipstationProduct, type InsertShipstationProduct,
+  type ShipstationWarehouse, type InsertShipstationWarehouse, type ShipstationSyncStatus, type InsertShipstationSyncStatus
+} from "@shared/shipstation-schema";
+
 export interface IStorage {
   // Users
   getUser(id: string): Promise<User | undefined>;
@@ -116,6 +124,32 @@ export interface IStorage {
   updateConciergeRecommendation(recommendationId: string, updates: Partial<InsertConciergeRecommendation>): Promise<ConciergeRecommendation | undefined>;
   createConciergeAnalytics(analytics: InsertConciergeAnalytics): Promise<ConciergeAnalytics>;
   getConciergeAnalytics(conversationId?: string, dateRange?: { start: Date; end: Date }): Promise<ConciergeAnalytics[]>;
+
+  // ShipStation Integration
+  insertShipstationOrder(order: InsertShipstationOrder): Promise<ShipstationOrder>;
+  getShipstationOrderByOrderId(orderId: string): Promise<ShipstationOrder | undefined>;
+  getShipstationOrderByShipstationId(shipstationOrderId: string): Promise<ShipstationOrder | undefined>;
+  updateShipstationOrder(id: string, updates: Partial<InsertShipstationOrder>): Promise<ShipstationOrder | undefined>;
+  
+  insertShipstationShipment(shipment: InsertShipstationShipment): Promise<ShipstationShipment>;
+  getShipstationShipment(id: string): Promise<ShipstationShipment | undefined>;
+  updateShipstationShipment(id: string, updates: Partial<InsertShipstationShipment>): Promise<ShipstationShipment | undefined>;
+  
+  insertShipstationWebhook(webhook: InsertShipstationWebhook): Promise<ShipstationWebhook>;
+  getUnprocessedShipstationWebhooks(): Promise<ShipstationWebhook[]>;
+  markShipstationWebhookProcessed(id: string): Promise<boolean>;
+  
+  insertShipstationProduct(product: InsertShipstationProduct): Promise<ShipstationProduct>;
+  getShipstationProductByProductId(productId: string): Promise<ShipstationProduct | undefined>;
+  getShipstationProductBySku(sku: string): Promise<ShipstationProduct | undefined>;
+  updateShipstationProduct(id: string, updates: Partial<InsertShipstationProduct>): Promise<ShipstationProduct | undefined>;
+  
+  insertShipstationWarehouse(warehouse: InsertShipstationWarehouse): Promise<ShipstationWarehouse>;
+  getShipstationWarehouses(): Promise<ShipstationWarehouse[]>;
+  updateShipstationWarehouse(id: string, updates: Partial<InsertShipstationWarehouse>): Promise<ShipstationWarehouse | undefined>;
+  
+  insertShipstationSyncStatus(status: InsertShipstationSyncStatus): Promise<ShipstationSyncStatus>;
+  getLatestShipstationSyncStatus(syncType?: string): Promise<ShipstationSyncStatus | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -143,6 +177,14 @@ export class MemStorage implements IStorage {
   private conciergeMessages: Map<string, ConciergeMessage> = new Map();
   private conciergeRecommendations: Map<string, ConciergeRecommendation> = new Map();
   private conciergeAnalytics: Map<string, ConciergeAnalytics> = new Map();
+  
+  // ShipStation storage
+  private shipstationOrders: Map<string, ShipstationOrder> = new Map();
+  private shipstationShipments: Map<string, ShipstationShipment> = new Map();
+  private shipstationWebhooks: Map<string, ShipstationWebhook> = new Map();
+  private shipstationProducts: Map<string, ShipstationProduct> = new Map();
+  private shipstationWarehouses: Map<string, ShipstationWarehouse> = new Map();
+  private shipstationSyncStatuses: Map<string, ShipstationSyncStatus> = new Map();
 
   constructor() {
     this.initializeData();
@@ -1302,6 +1344,189 @@ export class MemStorage implements IStorage {
     }
 
     return analytics.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  }
+
+  // ShipStation Integration Methods
+  async insertShipstationOrder(order: InsertShipstationOrder): Promise<ShipstationOrder> {
+    const id = this.generateId();
+    const newOrder: ShipstationOrder = {
+      id,
+      ...order,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      syncedAt: order.syncedAt || new Date()
+    };
+    this.shipstationOrders.set(id, newOrder);
+    return newOrder;
+  }
+
+  async getShipstationOrderByOrderId(orderId: string): Promise<ShipstationOrder | undefined> {
+    return Array.from(this.shipstationOrders.values()).find(order => order.orderId === orderId);
+  }
+
+  async getShipstationOrderByShipstationId(shipstationOrderId: string): Promise<ShipstationOrder | undefined> {
+    return Array.from(this.shipstationOrders.values()).find(order => order.shipstationOrderId === shipstationOrderId);
+  }
+
+  async updateShipstationOrder(id: string, updates: Partial<InsertShipstationOrder>): Promise<ShipstationOrder | undefined> {
+    const order = this.shipstationOrders.get(id);
+    if (!order) return undefined;
+
+    const updatedOrder: ShipstationOrder = {
+      ...order,
+      ...updates,
+      id: order.id,
+      updatedAt: new Date()
+    };
+    this.shipstationOrders.set(id, updatedOrder);
+    return updatedOrder;
+  }
+
+  async insertShipstationShipment(shipment: InsertShipstationShipment): Promise<ShipstationShipment> {
+    const id = this.generateId();
+    const newShipment: ShipstationShipment = {
+      id,
+      ...shipment,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.shipstationShipments.set(id, newShipment);
+    return newShipment;
+  }
+
+  async getShipstationShipment(id: string): Promise<ShipstationShipment | undefined> {
+    return this.shipstationShipments.get(id);
+  }
+
+  async updateShipstationShipment(id: string, updates: Partial<InsertShipstationShipment>): Promise<ShipstationShipment | undefined> {
+    const shipment = this.shipstationShipments.get(id);
+    if (!shipment) return undefined;
+
+    const updatedShipment: ShipstationShipment = {
+      ...shipment,
+      ...updates,
+      id: shipment.id,
+      updatedAt: new Date()
+    };
+    this.shipstationShipments.set(id, updatedShipment);
+    return updatedShipment;
+  }
+
+  async insertShipstationWebhook(webhook: InsertShipstationWebhook): Promise<ShipstationWebhook> {
+    const id = this.generateId();
+    const newWebhook: ShipstationWebhook = {
+      id,
+      ...webhook,
+      createdAt: new Date()
+    };
+    this.shipstationWebhooks.set(id, newWebhook);
+    return newWebhook;
+  }
+
+  async getUnprocessedShipstationWebhooks(): Promise<ShipstationWebhook[]> {
+    return Array.from(this.shipstationWebhooks.values()).filter(webhook => !webhook.processed);
+  }
+
+  async markShipstationWebhookProcessed(id: string): Promise<boolean> {
+    const webhook = this.shipstationWebhooks.get(id);
+    if (!webhook) return false;
+
+    const updatedWebhook: ShipstationWebhook = {
+      ...webhook,
+      processed: true,
+      processedAt: new Date()
+    };
+    this.shipstationWebhooks.set(id, updatedWebhook);
+    return true;
+  }
+
+  async insertShipstationProduct(product: InsertShipstationProduct): Promise<ShipstationProduct> {
+    const id = this.generateId();
+    const newProduct: ShipstationProduct = {
+      id,
+      ...product,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      syncedAt: product.syncedAt || new Date()
+    };
+    this.shipstationProducts.set(id, newProduct);
+    return newProduct;
+  }
+
+  async getShipstationProductByProductId(productId: string): Promise<ShipstationProduct | undefined> {
+    return Array.from(this.shipstationProducts.values()).find(product => product.productId === productId);
+  }
+
+  async getShipstationProductBySku(sku: string): Promise<ShipstationProduct | undefined> {
+    return Array.from(this.shipstationProducts.values()).find(product => product.sku === sku);
+  }
+
+  async updateShipstationProduct(id: string, updates: Partial<InsertShipstationProduct>): Promise<ShipstationProduct | undefined> {
+    const product = this.shipstationProducts.get(id);
+    if (!product) return undefined;
+
+    const updatedProduct: ShipstationProduct = {
+      ...product,
+      ...updates,
+      id: product.id,
+      updatedAt: new Date()
+    };
+    this.shipstationProducts.set(id, updatedProduct);
+    return updatedProduct;
+  }
+
+  async insertShipstationWarehouse(warehouse: InsertShipstationWarehouse): Promise<ShipstationWarehouse> {
+    const id = this.generateId();
+    const newWarehouse: ShipstationWarehouse = {
+      id,
+      ...warehouse,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      syncedAt: warehouse.syncedAt || new Date()
+    };
+    this.shipstationWarehouses.set(id, newWarehouse);
+    return newWarehouse;
+  }
+
+  async getShipstationWarehouses(): Promise<ShipstationWarehouse[]> {
+    return Array.from(this.shipstationWarehouses.values());
+  }
+
+  async updateShipstationWarehouse(id: string, updates: Partial<InsertShipstationWarehouse>): Promise<ShipstationWarehouse | undefined> {
+    const warehouse = this.shipstationWarehouses.get(id);
+    if (!warehouse) return undefined;
+
+    const updatedWarehouse: ShipstationWarehouse = {
+      ...warehouse,
+      ...updates,
+      id: warehouse.id,
+      updatedAt: new Date()
+    };
+    this.shipstationWarehouses.set(id, updatedWarehouse);
+    return updatedWarehouse;
+  }
+
+  async insertShipstationSyncStatus(status: InsertShipstationSyncStatus): Promise<ShipstationSyncStatus> {
+    const id = this.generateId();
+    const newStatus: ShipstationSyncStatus = {
+      id,
+      ...status,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.shipstationSyncStatuses.set(id, newStatus);
+    return newStatus;
+  }
+
+  async getLatestShipstationSyncStatus(syncType?: string): Promise<ShipstationSyncStatus | undefined> {
+    const statuses = Array.from(this.shipstationSyncStatuses.values());
+    
+    let filtered = statuses;
+    if (syncType) {
+      filtered = statuses.filter(status => status.syncType === syncType);
+    }
+    
+    return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
   }
 }
 
