@@ -70,7 +70,10 @@ export function VIPConciergeWidget() {
   // Get conversation
   const { data: conversation, isLoading } = useQuery({
     queryKey: ['/api/concierge/conversation', conversationId],
-    queryFn: () => conversationId ? apiRequest(`/api/concierge/conversation/${conversationId}`) : Promise.resolve(null),
+    queryFn: ({ queryKey }) => {
+      const [, id] = queryKey;
+      return id ? apiRequest(`/api/concierge/conversation/${id}`) : Promise.resolve(null);
+    },
     enabled: !!conversationId,
     refetchInterval: 2000 // Refresh every 2 seconds for real-time updates
   });
@@ -99,14 +102,14 @@ export function VIPConciergeWidget() {
           <Button
             onClick={handleOpen}
             size="lg"
-            className="h-14 w-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse"
+            className="h-14 w-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <MessageCircle className="h-6 w-6 text-white" />
           </Button>
           
           {/* Notification Badge */}
           <div className="absolute -top-2 -right-2">
-            <Badge variant="destructive" className="h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs animate-bounce">
+            <Badge variant="destructive" className="h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs">
               VIP
             </Badge>
           </div>
