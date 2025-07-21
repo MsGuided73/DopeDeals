@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertCartItemSchema, insertUserBehaviorSchema } from "@shared/schema";
 import { registerZohoRoutes, initializeZohoServices, startScheduledSync } from "./zoho/routes.js";
 import kajaPayRoutes, { initializeKajaPayRoutes } from "./kajapay/routes.js";
+import emojiRoutes, { initializeEmojiRoutes } from "./ai/emoji-routes.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -314,6 +315,15 @@ Disallow: /`);
     console.log('[Server] KajaPay payment integration initialized successfully');
   } catch (error) {
     console.error('[Server] Failed to initialize KajaPay integration:', error);
+  }
+
+  // Initialize and register AI Emoji recommendation routes
+  try {
+    const emojiAIRoutes = initializeEmojiRoutes(storage);
+    app.use('/api/emoji', emojiAIRoutes);
+    console.log('[Server] AI Emoji recommendation system initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize AI Emoji system:', error);
   }
 
   const httpServer = createServer(app);

@@ -201,6 +201,9 @@ export const insertPaymentMethodSchema = createInsertSchema(paymentMethods).omit
 export const insertPaymentTransactionSchema = createInsertSchema(paymentTransactions).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertKajaPayWebhookEventSchema = createInsertSchema(kajaPayWebhookEvents).omit({ id: true, createdAt: true });
 
+// Add emoji schema exports
+export * from '../shared/emoji-schema';
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
