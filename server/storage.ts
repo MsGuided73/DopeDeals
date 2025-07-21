@@ -3,6 +3,7 @@ import {
   memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
   productSimilarity, recommendationCache, paymentMethods, paymentTransactions, kajaPayWebhookEvents,
   emojiUsage, userEmojiPreferences, emojiRecommendations, productEmojiAssociations,
+  conciergeConversations, conciergeMessages, conciergeRecommendations, conciergeAnalytics,
   type User, type InsertUser, type Product, type InsertProduct, 
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
@@ -13,7 +14,9 @@ import {
   type PaymentMethod, type InsertPaymentMethod, type PaymentTransaction, type InsertPaymentTransaction,
   type KajaPayWebhookEvent, type InsertKajaPayWebhookEvent,
   type EmojiUsage, type InsertEmojiUsage, type UserEmojiPreferences, type InsertUserEmojiPreferences,
-  type EmojiRecommendations, type InsertEmojiRecommendations, type ProductEmojiAssociations, type InsertProductEmojiAssociations
+  type EmojiRecommendations, type InsertEmojiRecommendations, type ProductEmojiAssociations, type InsertProductEmojiAssociations,
+  type ConciergeConversation, type InsertConciergeConversation, type ConciergeMessage, type InsertConciergeMessage,
+  type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics
 } from "@shared/schema";
 
 export interface IStorage {
@@ -102,6 +105,17 @@ export interface IStorage {
   markEmojiRecommendationUsed(userId: string, context: string, usedEmoji: string): Promise<boolean>;
   getProductEmojiAssociations(productId: string): Promise<Array<{emoji: string; emojiCode: string; usageCount: number; sentiment: string; associationStrength: number}>>;
   upsertProductEmojiAssociation(association: InsertProductEmojiAssociations): Promise<ProductEmojiAssociations>;
+
+  // VIP Concierge
+  createConciergeConversation(conversation: InsertConciergeConversation): Promise<ConciergeConversation>;
+  getConciergeConversation(conversationId: string): Promise<ConciergeConversation | undefined>;
+  updateConciergeConversation(conversationId: string, updates: Partial<InsertConciergeConversation>): Promise<ConciergeConversation | undefined>;
+  createConciergeMessage(message: InsertConciergeMessage): Promise<ConciergeMessage>;
+  getConciergeMessages(conversationId: string): Promise<ConciergeMessage[]>;
+  createConciergeRecommendation(recommendation: InsertConciergeRecommendation): Promise<ConciergeRecommendation>;
+  updateConciergeRecommendation(recommendationId: string, updates: Partial<InsertConciergeRecommendation>): Promise<ConciergeRecommendation | undefined>;
+  createConciergeAnalytics(analytics: InsertConciergeAnalytics): Promise<ConciergeAnalytics>;
+  getConciergeAnalytics(conversationId?: string, dateRange?: { start: Date; end: Date }): Promise<ConciergeAnalytics[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -125,6 +139,10 @@ export class MemStorage implements IStorage {
   private userEmojiPrefs: Map<string, UserEmojiPreferences> = new Map();
   private emojiRecs: Map<string, EmojiRecommendations> = new Map();
   private productEmojiAssocs: Map<string, ProductEmojiAssociations> = new Map();
+  private conciergeConversations: Map<string, ConciergeConversation> = new Map();
+  private conciergeMessages: Map<string, ConciergeMessage> = new Map();
+  private conciergeRecommendations: Map<string, ConciergeRecommendation> = new Map();
+  private conciergeAnalytics: Map<string, ConciergeAnalytics> = new Map();
 
   constructor() {
     this.initializeData();
@@ -1194,6 +1212,96 @@ export class MemStorage implements IStorage {
       this.productEmojiAssocs.set(assoc.id, assoc);
       return assoc;
     }
+  }
+
+  // VIP Concierge Methods
+  async createConciergeConversation(conversation: InsertConciergeConversation): Promise<ConciergeConversation> {
+    const newConversation: ConciergeConversation = {
+      ...conversation,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastActiveAt: new Date()
+    };
+    this.conciergeConversations.set(conversation.id, newConversation);
+    return newConversation;
+  }
+
+  async getConciergeConversation(conversationId: string): Promise<ConciergeConversation | undefined> {
+    return this.conciergeConversations.get(conversationId);
+  }
+
+  async updateConciergeConversation(conversationId: string, updates: Partial<InsertConciergeConversation>): Promise<ConciergeConversation | undefined> {
+    const existing = this.conciergeConversations.get(conversationId);
+    if (!existing) return undefined;
+
+    const updated: ConciergeConversation = {
+      ...existing,
+      ...updates,
+      updatedAt: new Date()
+    };
+    this.conciergeConversations.set(conversationId, updated);
+    return updated;
+  }
+
+  async createConciergeMessage(message: InsertConciergeMessage): Promise<ConciergeMessage> {
+    const newMessage: ConciergeMessage = {
+      ...message,
+      createdAt: new Date()
+    };
+    this.conciergeMessages.set(message.id, newMessage);
+    return newMessage;
+  }
+
+  async getConciergeMessages(conversationId: string): Promise<ConciergeMessage[]> {
+    return Array.from(this.conciergeMessages.values())
+      .filter(msg => msg.conversationId === conversationId)
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  }
+
+  async createConciergeRecommendation(recommendation: InsertConciergeRecommendation): Promise<ConciergeRecommendation> {
+    const newRecommendation: ConciergeRecommendation = {
+      ...recommendation,
+      createdAt: new Date()
+    };
+    this.conciergeRecommendations.set(recommendation.id, newRecommendation);
+    return newRecommendation;
+  }
+
+  async updateConciergeRecommendation(recommendationId: string, updates: Partial<InsertConciergeRecommendation>): Promise<ConciergeRecommendation | undefined> {
+    const existing = this.conciergeRecommendations.get(recommendationId);
+    if (!existing) return undefined;
+
+    const updated: ConciergeRecommendation = {
+      ...existing,
+      ...updates
+    };
+    this.conciergeRecommendations.set(recommendationId, updated);
+    return updated;
+  }
+
+  async createConciergeAnalytics(analytics: InsertConciergeAnalytics): Promise<ConciergeAnalytics> {
+    const newAnalytics: ConciergeAnalytics = {
+      ...analytics,
+      createdAt: new Date()
+    };
+    this.conciergeAnalytics.set(analytics.id, newAnalytics);
+    return newAnalytics;
+  }
+
+  async getConciergeAnalytics(conversationId?: string, dateRange?: { start: Date; end: Date }): Promise<ConciergeAnalytics[]> {
+    let analytics = Array.from(this.conciergeAnalytics.values());
+
+    if (conversationId) {
+      analytics = analytics.filter(a => a.conversationId === conversationId);
+    }
+
+    if (dateRange) {
+      analytics = analytics.filter(a => 
+        a.createdAt >= dateRange.start && a.createdAt <= dateRange.end
+      );
+    }
+
+    return analytics.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
   }
 }
 

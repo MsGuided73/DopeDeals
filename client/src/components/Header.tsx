@@ -128,6 +128,11 @@ export default function Header({ onCartToggle }: HeaderProps) {
                 ALL PRODUCTS
               </Link>
             </li>
+            <li>
+              <Link href="/concierge" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium text-sm sm:text-base flex items-center gap-1">
+                🤖 VIP CONCIERGE
+              </Link>
+            </li>
             <li 
               className="dropdown-parent relative"
               onMouseEnter={() => setShowThcDropdown(true)}

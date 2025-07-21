@@ -5,6 +5,7 @@ import { insertCartItemSchema, insertUserBehaviorSchema } from "@shared/schema";
 import { registerZohoRoutes, initializeZohoServices, startScheduledSync } from "./zoho/routes.js";
 import kajaPayRoutes, { initializeKajaPayRoutes } from "./kajapay/routes.js";
 import emojiRoutes, { initializeEmojiRoutes } from "./ai/emoji-routes.js";
+import { initializeConciergeRoutes } from "./concierge/routes.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -324,6 +325,15 @@ Disallow: /`);
     console.log('[Server] AI Emoji recommendation system initialized successfully');
   } catch (error) {
     console.error('[Server] Failed to initialize AI Emoji system:', error);
+  }
+
+  // Initialize and register VIP Concierge AI routes
+  try {
+    const conciergeRoutes = initializeConciergeRoutes(storage);
+    app.use('/api/concierge', conciergeRoutes);
+    console.log('[Server] VIP Concierge AI system initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize VIP Concierge system:', error);
   }
 
   const httpServer = createServer(app);
