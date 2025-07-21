@@ -4,13 +4,13 @@ export interface ZohoConfig {
   clientId: string;
   clientSecret: string;
   refreshToken: string;
-  organizationId: string;
+  organizationId: string; // VIP Smoke organization ID (separate from BMB Wholesale Inc.)
   baseUrl: string;
   warehouse?: {
     defaultWarehouseId: string;
     warehouseName: string;
     isSharedWarehouse: boolean;
-    parentEntity: string;
+    parentEntity: string; // BMB Wholesale Inc. parent entity
   };
 }
 

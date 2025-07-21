@@ -6,7 +6,7 @@ export function getZohoConfig(): ZohoConfig {
     clientId: process.env.ZOHO_CLIENT_ID || '',
     clientSecret: process.env.ZOHO_CLIENT_SECRET || '',
     refreshToken: process.env.ZOHO_REFRESH_TOKEN || '',
-    organizationId: process.env.ZOHO_ORGANIZATION_ID || '',
+    organizationId: process.env.VIP_SMOKE_ORGANIZATION_ID || process.env.ZOHO_ORGANIZATION_ID || '',
     baseUrl: process.env.ZOHO_BASE_URL || 'https://www.zohoapis.com/inventory/v1',
     warehouse: {
       defaultWarehouseId: process.env.ZOHO_WAREHOUSE_ID || '',
@@ -185,7 +185,7 @@ export function validateZohoConfig(config: ZohoConfig): { valid: boolean; errors
   if (!config.clientId) errors.push('ZOHO_CLIENT_ID is required');
   if (!config.clientSecret) errors.push('ZOHO_CLIENT_SECRET is required');
   if (!config.refreshToken) errors.push('ZOHO_REFRESH_TOKEN is required');
-  if (!config.organizationId) errors.push('ZOHO_ORGANIZATION_ID is required');
+  if (!config.organizationId) errors.push('VIP_SMOKE_ORGANIZATION_ID or ZOHO_ORGANIZATION_ID is required');
   
   return {
     valid: errors.length === 0,
