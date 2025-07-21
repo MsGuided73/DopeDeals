@@ -8,6 +8,7 @@ import emojiRoutes, { initializeEmojiRoutes } from "./ai/emoji-routes.js";
 import { initializeConciergeRoutes } from "./concierge/routes.js";
 import { createShipstationRoutes } from "./shipstation/routes";
 import { ShipstationService, ShipstationServiceConfig } from "./shipstation/service";
+import { fixRLS } from "./routes/admin";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -381,6 +382,9 @@ Disallow: /`);
     const shipstationRoutes = createShipstationRoutes(null);
     app.use('/api/shipstation', shipstationRoutes);
   }
+
+  // Admin routes for database management
+  app.post('/api/admin/fix-rls', fixRLS);
 
   const httpServer = createServer(app);
   return httpServer;
