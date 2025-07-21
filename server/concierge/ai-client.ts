@@ -166,7 +166,7 @@ export class VIPConciergeAI {
     const searchTerms = lowerQuery.split(' ').filter(term => term.length > 2);
     
     let relevantProducts = this.products.filter(product => {
-      const productText = `${product.name} ${product.description} ${product.category} ${product.brand}`.toLowerCase();
+      const productText = `${product.name || ''} ${product.description || ''} ${product.category || ''} ${product.brand || ''}`.toLowerCase();
       return searchTerms.some(term => productText.includes(term));
     });
 
@@ -176,13 +176,13 @@ export class VIPConciergeAI {
       
       if (prefs.categories?.length) {
         relevantProducts = relevantProducts.filter(p => 
-          prefs.categories!.some(cat => p.category.toLowerCase().includes(cat.toLowerCase()))
+          prefs.categories!.some(cat => p.category?.toLowerCase()?.includes(cat.toLowerCase()))
         );
       }
       
       if (prefs.brands?.length) {
         relevantProducts = relevantProducts.filter(p => 
-          prefs.brands!.some(brand => p.brand.toLowerCase().includes(brand.toLowerCase()))
+          prefs.brands!.some(brand => p.brand?.toLowerCase()?.includes(brand.toLowerCase()))
         );
       }
       
@@ -205,7 +205,7 @@ export class VIPConciergeAI {
 
   private calculateRelevanceScore(product: any, searchTerms: string[]): number {
     let score = 0;
-    const productText = `${product.name} ${product.description} ${product.category} ${product.brand}`.toLowerCase();
+    const productText = `${product.name || ''} ${product.description || ''} ${product.category || ''} ${product.brand || ''}`.toLowerCase();
     
     searchTerms.forEach(term => {
       if (product.name.toLowerCase().includes(term)) score += 10;
