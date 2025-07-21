@@ -48,7 +48,14 @@ export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id),
   status: text("status").notNull().default("processing"), // processing, shipped, completed, failed, review_needed
+  paymentStatus: text("payment_status").notNull().default("pending"), // pending, processing, paid, failed, refunded
+  paymentMethod: text("payment_method"), // card, ach, digital_wallet
+  transactionId: text("transaction_id"),
+  subtotalAmount: numeric("subtotal_amount", { precision: 10, scale: 2 }).notNull(),
+  taxAmount: numeric("tax_amount", { precision: 10, scale: 2 }).notNull().default('0'),
+  shippingAmount: numeric("shipping_amount", { precision: 10, scale: 2 }).notNull().default('0'),
   totalAmount: numeric("total_amount", { precision: 10, scale: 2 }).notNull(),
+  billingAddress: jsonb("billing_address"),
   shippingAddress: jsonb("shipping_address"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
@@ -101,9 +108,9 @@ export const userBehavior = pgTable("user_behavior", {
 export const userPreferences = pgTable("user_preferences", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id).notNull(),
-  preferredCategories: text("preferred_categories").array().default('{}'),
-  preferredBrands: text("preferred_brands").array().default('{}'),
-  preferredMaterials: text("preferred_materials").array().default('{}'),
+  preferredCategories: text("preferred_categories").array(),
+  preferredBrands: text("preferred_brands").array(),
+  preferredMaterials: text("preferred_materials").array(),
   priceRangeMin: numeric("price_range_min", { precision: 10, scale: 2 }),
   priceRangeMax: numeric("price_range_max", { precision: 10, scale: 2 }),
   vipProductsOnly: boolean("vip_products_only").default(false),
@@ -130,6 +137,52 @@ export const recommendationCache = pgTable("recommendation_cache", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+// Payment Methods Table
+export const paymentMethods = pgTable("payment_methods", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id),
+  kajaPayToken: text("kajapay_token").notNull(),
+  cardLast4: text("card_last4"),
+  cardType: text("card_type"),
+  expiryMonth: integer("expiry_month"),
+  expiryYear: integer("expiry_year"),
+  billingName: text("billing_name"),
+  billingAddress: jsonb("billing_address"),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// Payment Transactions Table
+export const paymentTransactions = pgTable("payment_transactions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orderId: uuid("order_id").references(() => orders.id),
+  kajaPayTransactionId: integer("kajapay_transaction_id"),
+  kajaPayReferenceNumber: integer("kajapay_reference_number"),
+  transactionType: text("transaction_type").notNull(), // charge, refund, void
+  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: text("currency").notNull().default("USD"),
+  status: text("status").notNull(), // pending, approved, declined, refunded
+  kajaPayStatusCode: text("kajapay_status_code"),
+  authCode: text("auth_code"),
+  errorMessage: text("error_message"),
+  paymentMethodData: jsonb("payment_method_data"),
+  transactionDetails: jsonb("transaction_details"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// KajaPay Webhook Events Table
+export const kajaPayWebhookEvents = pgTable("kajapay_webhook_events", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  eventType: text("event_type").notNull(),
+  kajaPayTransactionId: integer("kajapay_transaction_id"),
+  payload: jsonb("payload").notNull(),
+  processed: boolean("processed").default(false),
+  processedAt: timestamp("processed_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
 export const insertCategorySchema = createInsertSchema(categories).omit({ id: true, createdAt: true });
@@ -144,6 +197,9 @@ export const insertUserBehaviorSchema = createInsertSchema(userBehavior).omit({ 
 export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({ id: true, updatedAt: true });
 export const insertProductSimilaritySchema = createInsertSchema(productSimilarity).omit({ id: true, calculatedAt: true });
 export const insertRecommendationCacheSchema = createInsertSchema(recommendationCache).omit({ id: true, createdAt: true });
+export const insertPaymentMethodSchema = createInsertSchema(paymentMethods).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertPaymentTransactionSchema = createInsertSchema(paymentTransactions).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertKajaPayWebhookEventSchema = createInsertSchema(kajaPayWebhookEvents).omit({ id: true, createdAt: true });
 
 // Types
 export type User = typeof users.$inferSelect;
@@ -172,6 +228,12 @@ export type ProductSimilarity = typeof productSimilarity.$inferSelect;
 export type InsertProductSimilarity = z.infer<typeof insertProductSimilaritySchema>;
 export type RecommendationCache = typeof recommendationCache.$inferSelect;
 export type InsertRecommendationCache = z.infer<typeof insertRecommendationCacheSchema>;
+export type PaymentMethod = typeof paymentMethods.$inferSelect;
+export type InsertPaymentMethod = z.infer<typeof insertPaymentMethodSchema>;
+export type PaymentTransaction = typeof paymentTransactions.$inferSelect;
+export type InsertPaymentTransaction = z.infer<typeof insertPaymentTransactionSchema>;
+export type KajaPayWebhookEvent = typeof kajaPayWebhookEvents.$inferSelect;
+export type InsertKajaPayWebhookEvent = z.infer<typeof insertKajaPayWebhookEventSchema>;
 
 // Zoho Integration Tables
 export const zohoSyncStatus = pgTable("zoho_sync_status", {
