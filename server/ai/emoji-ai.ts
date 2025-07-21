@@ -2,9 +2,9 @@ import OpenAI from 'openai';
 import { EmojiContext, EmojiRecommendation, EmojiPersonalityProfile } from '@shared/emoji-schema';
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-const openai = new OpenAI({ 
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({ 
   apiKey: process.env.OPENAI_API_KEY 
-});
+}) : null;
 
 // Comprehensive emoji database with categories and sentiments
 const EMOJI_DATABASE = {
@@ -65,7 +65,7 @@ export class EmojiAI {
   ): Promise<EmojiRecommendation[]> {
     try {
       // If OpenAI is not available, fall back to rule-based recommendations
-      if (!process.env.OPENAI_API_KEY) {
+      if (!openai) {
         return this.getRuleBasedRecommendations(context, userPersonality, userHistory);
       }
 
@@ -196,9 +196,13 @@ Return JSON format:
     // Product category specific
     if (context.productCategory?.toLowerCase().includes('glass')) {
       recommendations.push(...EMOJI_DATABASE.objects.glass.map(e => ({
-        ...e,
+        emoji: e.emoji,
+        emojiCode: e.code,
+        name: e.name,
         category: 'objects',
-        reason: 'Related to glass products'
+        confidence: e.confidence,
+        reason: 'Related to glass products',
+        sentiment: e.sentiment
       })));
     }
 
@@ -206,9 +210,13 @@ Return JSON format:
     if (context.productName?.toLowerCase().includes('vip') || 
         context.productName?.toLowerCase().includes('premium')) {
       recommendations.push(...EMOJI_DATABASE.objects.premium.map(e => ({
-        ...e,
+        emoji: e.emoji,
+        emojiCode: e.code,
+        name: e.name,
         category: 'objects',
-        reason: 'Emphasizes premium quality'
+        confidence: e.confidence,
+        reason: 'Emphasizes premium quality',
+        sentiment: e.sentiment
       })));
     }
 
@@ -245,15 +253,23 @@ Return JSON format:
     
     // Add variety from different categories
     general.push(...EMOJI_DATABASE.smileys.positive.slice(0, 2).map(e => ({
-      ...e,
+      emoji: e.emoji,
+      emojiCode: e.code,
+      name: e.name,
       category: 'smileys',
-      reason: 'General positive expression'
+      confidence: e.confidence,
+      reason: 'General positive expression',
+      sentiment: e.sentiment
     })));
 
     general.push(...EMOJI_DATABASE.objects.smoking.slice(0, 2).map(e => ({
-      ...e,
+      emoji: e.emoji,
+      emojiCode: e.code,
+      name: e.name,
       category: 'objects',
-      reason: 'Related to smoking accessories'
+      confidence: e.confidence,
+      reason: 'Related to smoking accessories',
+      sentiment: e.sentiment
     })));
 
     return general;

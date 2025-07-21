@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import ProductPage from "@/pages/product";
 import CategoryPage from "@/pages/category";
 import ProductsPage from "@/pages/products";
+import EmojiDemo from "@/pages/EmojiDemo";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/products" component={ProductsPage} />
       <Route path="/product/:id" component={ProductPage} />
       <Route path="/category/:id" component={CategoryPage} />
+      <Route path="/emoji-demo" component={EmojiDemo} />
       <Route component={NotFound} />
     </Switch>
   );

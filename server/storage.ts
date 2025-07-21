@@ -2,6 +2,7 @@ import {
   users, products, categories, brands, orders, orderItems, 
   memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
   productSimilarity, recommendationCache, paymentMethods, paymentTransactions, kajaPayWebhookEvents,
+  emojiUsage, userEmojiPreferences, emojiRecommendations, productEmojiAssociations,
   type User, type InsertUser, type Product, type InsertProduct, 
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
@@ -10,7 +11,9 @@ import {
   type UserPreferences, type InsertUserPreferences, type ProductSimilarity, 
   type InsertProductSimilarity, type RecommendationCache, type InsertRecommendationCache,
   type PaymentMethod, type InsertPaymentMethod, type PaymentTransaction, type InsertPaymentTransaction,
-  type KajaPayWebhookEvent, type InsertKajaPayWebhookEvent
+  type KajaPayWebhookEvent, type InsertKajaPayWebhookEvent,
+  type EmojiUsage, type InsertEmojiUsage, type UserEmojiPreferences, type InsertUserEmojiPreferences,
+  type EmojiRecommendations, type InsertEmojiRecommendations, type ProductEmojiAssociations, type InsertProductEmojiAssociations
 } from "@shared/schema";
 
 export interface IStorage {
@@ -86,6 +89,19 @@ export interface IStorage {
   createWebhookEvent(event: InsertKajaPayWebhookEvent): Promise<KajaPayWebhookEvent>;
   getUnprocessedWebhookEvents(): Promise<KajaPayWebhookEvent[]>;
   markWebhookEventProcessed(id: string): Promise<boolean>;
+  
+  // Emoji System
+  createEmojiUsage(usage: InsertEmojiUsage): Promise<EmojiUsage>;
+  getRecentEmojiUsage(userId: string, limit: number): Promise<EmojiUsage[]>;
+  getAllEmojiUsage(userId: string): Promise<EmojiUsage[]>;
+  getUserEmojiPreferences(userId: string): Promise<UserEmojiPreferences | undefined>;
+  createUserEmojiPreferences(preferences: InsertUserEmojiPreferences): Promise<UserEmojiPreferences>;
+  updateUserEmojiPreferences(userId: string, updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined>;
+  createEmojiRecommendations(recommendations: InsertEmojiRecommendations): Promise<EmojiRecommendations>;
+  getCachedEmojiRecommendations(userId: string, context: string, contextData: string): Promise<EmojiRecommendations | undefined>;
+  markEmojiRecommendationUsed(userId: string, context: string, usedEmoji: string): Promise<boolean>;
+  getProductEmojiAssociations(productId: string): Promise<Array<{emoji: string; emojiCode: string; usageCount: number; sentiment: string; associationStrength: number}>>;
+  upsertProductEmojiAssociation(association: InsertProductEmojiAssociations): Promise<ProductEmojiAssociations>;
 }
 
 export class MemStorage implements IStorage {
@@ -105,6 +121,10 @@ export class MemStorage implements IStorage {
   private paymentMethods: Map<string, PaymentMethod> = new Map();
   private paymentTransactions: Map<string, PaymentTransaction> = new Map();
   private webhookEvents: Map<string, KajaPayWebhookEvent> = new Map();
+  private emojiUsages: Map<string, EmojiUsage> = new Map();
+  private userEmojiPrefs: Map<string, UserEmojiPreferences> = new Map();
+  private emojiRecs: Map<string, EmojiRecommendations> = new Map();
+  private productEmojiAssocs: Map<string, ProductEmojiAssociations> = new Map();
 
   constructor() {
     this.initializeData();
@@ -1053,6 +1073,127 @@ export class MemStorage implements IStorage {
     };
     this.webhookEvents.set(id, updated);
     return true;
+  }
+
+  // Emoji System Implementation
+  async createEmojiUsage(usage: InsertEmojiUsage): Promise<EmojiUsage> {
+    const eu: EmojiUsage = {
+      id: this.generateId(),
+      ...usage,
+      createdAt: new Date(),
+    };
+    this.emojiUsages.set(eu.id, eu);
+    return eu;
+  }
+
+  async getRecentEmojiUsage(userId: string, limit: number): Promise<EmojiUsage[]> {
+    return Array.from(this.emojiUsages.values())
+      .filter(usage => usage.userId === userId)
+      .sort((a, b) => b.lastUsed!.getTime() - a.lastUsed!.getTime())
+      .slice(0, limit);
+  }
+
+  async getAllEmojiUsage(userId: string): Promise<EmojiUsage[]> {
+    return Array.from(this.emojiUsages.values())
+      .filter(usage => usage.userId === userId);
+  }
+
+  async getUserEmojiPreferences(userId: string): Promise<UserEmojiPreferences | undefined> {
+    return Array.from(this.userEmojiPrefs.values())
+      .find(prefs => prefs.userId === userId);
+  }
+
+  async createUserEmojiPreferences(preferences: InsertUserEmojiPreferences): Promise<UserEmojiPreferences> {
+    const prefs: UserEmojiPreferences = {
+      id: this.generateId(),
+      ...preferences,
+      createdAt: new Date(),
+      lastUpdated: new Date(),
+    };
+    this.userEmojiPrefs.set(prefs.id, prefs);
+    return prefs;
+  }
+
+  async updateUserEmojiPreferences(userId: string, updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined> {
+    const existing = Array.from(this.userEmojiPrefs.values())
+      .find(prefs => prefs.userId === userId);
+    
+    if (!existing) return undefined;
+
+    const updated: UserEmojiPreferences = {
+      ...existing,
+      ...updates,
+      lastUpdated: new Date(),
+    };
+    this.userEmojiPrefs.set(existing.id, updated);
+    return updated;
+  }
+
+  async createEmojiRecommendations(recommendations: InsertEmojiRecommendations): Promise<EmojiRecommendations> {
+    const recs: EmojiRecommendations = {
+      id: this.generateId(),
+      ...recommendations,
+      createdAt: new Date(),
+    };
+    this.emojiRecs.set(recs.id, recs);
+    return recs;
+  }
+
+  async getCachedEmojiRecommendations(userId: string, context: string, contextData: string): Promise<EmojiRecommendations | undefined> {
+    return Array.from(this.emojiRecs.values())
+      .find(rec => rec.userId === userId && rec.context === context && rec.expiresAt > new Date());
+  }
+
+  async markEmojiRecommendationUsed(userId: string, context: string, usedEmoji: string): Promise<boolean> {
+    const rec = Array.from(this.emojiRecs.values())
+      .find(r => r.userId === userId && r.context === context);
+    
+    if (!rec) return false;
+
+    const updated: EmojiRecommendations = {
+      ...rec,
+      used: true,
+      usedEmojiId: usedEmoji,
+    };
+    this.emojiRecs.set(rec.id, updated);
+    return true;
+  }
+
+  async getProductEmojiAssociations(productId: string): Promise<Array<{emoji: string; emojiCode: string; usageCount: number; sentiment: string; associationStrength: number}>> {
+    return Array.from(this.productEmojiAssocs.values())
+      .filter(assoc => assoc.productId === productId)
+      .map(assoc => ({
+        emoji: assoc.emoji,
+        emojiCode: assoc.emojiCode,
+        usageCount: assoc.usageCount,
+        sentiment: assoc.sentiment || 'neutral',
+        associationStrength: assoc.associationStrength
+      }));
+  }
+
+  async upsertProductEmojiAssociation(association: InsertProductEmojiAssociations): Promise<ProductEmojiAssociations> {
+    const existing = Array.from(this.productEmojiAssocs.values())
+      .find(assoc => assoc.productId === association.productId && assoc.emoji === association.emoji);
+
+    if (existing) {
+      const updated: ProductEmojiAssociations = {
+        ...existing,
+        usageCount: existing.usageCount + 1,
+        associationStrength: Math.min(100, existing.associationStrength + 1),
+        lastUpdated: new Date(),
+      };
+      this.productEmojiAssocs.set(existing.id, updated);
+      return updated;
+    } else {
+      const assoc: ProductEmojiAssociations = {
+        id: this.generateId(),
+        ...association,
+        createdAt: new Date(),
+        lastUpdated: new Date(),
+      };
+      this.productEmojiAssocs.set(assoc.id, assoc);
+      return assoc;
+    }
   }
 }
 
