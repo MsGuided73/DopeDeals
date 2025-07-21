@@ -6,6 +6,8 @@ import { registerZohoRoutes, initializeZohoServices, startScheduledSync } from "
 import kajaPayRoutes, { initializeKajaPayRoutes } from "./kajapay/routes.js";
 import emojiRoutes, { initializeEmojiRoutes } from "./ai/emoji-routes.js";
 import { initializeConciergeRoutes } from "./concierge/routes.js";
+import { createShipstationRoutes } from "./shipstation/routes";
+import { ShipstationService, ShipstationServiceConfig } from "./shipstation/service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -334,6 +336,50 @@ Disallow: /`);
     console.log('[Server] VIP Concierge AI system initialized successfully');
   } catch (error) {
     console.error('[Server] Failed to initialize VIP Concierge system:', error);
+  }
+
+  // Initialize and register ShipStation integration routes
+  try {
+    let shipstationService: ShipstationService | null = null;
+    
+    // Check if ShipStation credentials are available
+    const shipstationApiKey = process.env.SHIPSTATION_API_KEY;
+    const shipstationApiSecret = process.env.SHIPSTATION_API_SECRET;
+    
+    if (shipstationApiKey && shipstationApiSecret) {
+      const shipstationConfig: ShipstationServiceConfig = {
+        apiKey: shipstationApiKey,
+        apiSecret: shipstationApiSecret,
+        webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL,
+        defaultWarehouseId: process.env.SHIPSTATION_DEFAULT_WAREHOUSE_ID,
+        autoSyncInterval: process.env.SHIPSTATION_SYNC_INTERVAL ? parseInt(process.env.SHIPSTATION_SYNC_INTERVAL) : 3600000, // Default 1 hour
+        enableWebhooks: process.env.SHIPSTATION_ENABLE_WEBHOOKS === 'true'
+      };
+      
+      shipstationService = new ShipstationService(shipstationConfig, storage);
+      
+      // Validate configuration
+      const validation = await shipstationService.validateConfiguration();
+      if (validation.valid) {
+        console.log('[Server] ShipStation integration initialized successfully');
+      } else {
+        console.warn('[Server] ShipStation configuration validation failed:', validation.error);
+        shipstationService = null;
+      }
+    } else {
+      console.log('[Server] ShipStation integration disabled: API credentials not provided');
+    }
+    
+    // Register routes regardless (they will handle missing service gracefully)
+    const shipstationRoutes = createShipstationRoutes(shipstationService);
+    app.use('/api/shipstation', shipstationRoutes);
+    
+  } catch (error) {
+    console.error('[Server] Failed to initialize ShipStation integration:', error);
+    
+    // Still register routes with null service for error handling
+    const shipstationRoutes = createShipstationRoutes(null);
+    app.use('/api/shipstation', shipstationRoutes);
   }
 
   const httpServer = createServer(app);
