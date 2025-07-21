@@ -301,6 +301,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 21, 2025. Comprehensive Zoho admin setup guide created - Complete documentation with step-by-step OAuth setup, scope configuration, and credential generation for Zoho Inventory integration
 - July 21, 2025. ShipStation integration fully implemented - Complete order fulfillment system with API client, service layer, database schema, webhook processing, and comprehensive documentation ready for production
 - July 21, 2025. Integration credentials checklist created - Complete breakdown of all required credentials for Zoho, KajaPay, and ShipStation integrations with setup priorities and verification steps
 - July 21, 2025. AI-powered emoji recommendation system implemented - Complete system with OpenAI integration, user learning, analytics, and interactive demo page
