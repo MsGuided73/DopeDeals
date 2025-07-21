@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCartItemSchema, insertUserBehaviorSchema } from "@shared/schema";
 import { registerZohoRoutes, initializeZohoServices, startScheduledSync } from "./zoho/routes.js";
+import kajaPayRoutes, { initializeKajaPayRoutes } from "./kajapay/routes.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -304,6 +305,15 @@ Disallow: /`);
     }
   } catch (error) {
     console.error('[Server] Failed to initialize Zoho integration:', error);
+  }
+
+  // Initialize and register KajaPay payment routes
+  try {
+    const kajaPayRoutes = initializeKajaPayRoutes(storage);
+    app.use('/api/kajapay', kajaPayRoutes);
+    console.log('[Server] KajaPay payment integration initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize KajaPay integration:', error);
   }
 
   const httpServer = createServer(app);
