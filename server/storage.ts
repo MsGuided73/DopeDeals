@@ -1,14 +1,16 @@
 import { 
   users, products, categories, brands, orders, orderItems, 
   memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
-  productSimilarity, recommendationCache,
+  productSimilarity, recommendationCache, paymentMethods, paymentTransactions, kajaPayWebhookEvents,
   type User, type InsertUser, type Product, type InsertProduct, 
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
   type Membership, type InsertMembership, type LoyaltyPoint, type InsertLoyaltyPoint,
   type CartItem, type InsertCartItem, type UserBehavior, type InsertUserBehavior,
   type UserPreferences, type InsertUserPreferences, type ProductSimilarity, 
-  type InsertProductSimilarity, type RecommendationCache, type InsertRecommendationCache
+  type InsertProductSimilarity, type RecommendationCache, type InsertRecommendationCache,
+  type PaymentMethod, type InsertPaymentMethod, type PaymentTransaction, type InsertPaymentTransaction,
+  type KajaPayWebhookEvent, type InsertKajaPayWebhookEvent
 } from "@shared/schema";
 
 export interface IStorage {
@@ -65,6 +67,25 @@ export interface IStorage {
   getRecommendations(userId: string, type: 'trending' | 'personalized' | 'similar' | 'category_based', limit?: number): Promise<Product[]>;
   getProductSimilarity(productId: string, limit?: number): Promise<ProductSimilarity[]>;
   updateRecommendationCache(userId: string, type: string, productIds: string[], score?: number): Promise<void>;
+  
+  // Payment Methods
+  getUserPaymentMethods(userId: string): Promise<PaymentMethod[]>;
+  getPaymentMethod(id: string): Promise<PaymentMethod | undefined>;
+  createPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod>;
+  updatePaymentMethod(id: string, updates: Partial<PaymentMethod>): Promise<PaymentMethod | undefined>;
+  deletePaymentMethod(id: string): Promise<boolean>;
+  
+  // Payment Transactions
+  getTransaction(id: string): Promise<PaymentTransaction | undefined>;
+  createTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction>;
+  updateTransaction(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction | undefined>;
+  getUserTransactions(userId: string): Promise<PaymentTransaction[]>;
+  getOrderTransactions(orderId: string): Promise<PaymentTransaction[]>;
+  
+  // Webhook Events
+  createWebhookEvent(event: InsertKajaPayWebhookEvent): Promise<KajaPayWebhookEvent>;
+  getUnprocessedWebhookEvents(): Promise<KajaPayWebhookEvent[]>;
+  markWebhookEventProcessed(id: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -81,6 +102,9 @@ export class MemStorage implements IStorage {
   private userPreferences: Map<string, UserPreferences> = new Map();
   private productSimilarities: Map<string, ProductSimilarity> = new Map();
   private recommendationCaches: Map<string, RecommendationCache> = new Map();
+  private paymentMethods: Map<string, PaymentMethod> = new Map();
+  private paymentTransactions: Map<string, PaymentTransaction> = new Map();
+  private webhookEvents: Map<string, KajaPayWebhookEvent> = new Map();
 
   constructor() {
     this.initializeData();
@@ -922,6 +946,113 @@ export class MemStorage implements IStorage {
       .filter(p => p !== undefined) as Product[];
 
     return products;
+  }
+
+  // Payment Methods
+  async getUserPaymentMethods(userId: string): Promise<PaymentMethod[]> {
+    return Array.from(this.paymentMethods.values())
+      .filter(pm => pm.userId === userId);
+  }
+
+  async getPaymentMethod(id: string): Promise<PaymentMethod | undefined> {
+    return this.paymentMethods.get(id);
+  }
+
+  async createPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
+    const pm: PaymentMethod = {
+      id: this.generateId(),
+      ...paymentMethod,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.paymentMethods.set(pm.id, pm);
+    return pm;
+  }
+
+  async updatePaymentMethod(id: string, updates: Partial<PaymentMethod>): Promise<PaymentMethod | undefined> {
+    const existing = this.paymentMethods.get(id);
+    if (!existing) return undefined;
+
+    const updated: PaymentMethod = {
+      ...existing,
+      ...updates,
+      updatedAt: new Date(),
+    };
+    this.paymentMethods.set(id, updated);
+    return updated;
+  }
+
+  async deletePaymentMethod(id: string): Promise<boolean> {
+    return this.paymentMethods.delete(id);
+  }
+
+  // Payment Transactions
+  async getTransaction(id: string): Promise<PaymentTransaction | undefined> {
+    return this.paymentTransactions.get(id);
+  }
+
+  async createTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction> {
+    const tx: PaymentTransaction = {
+      id: this.generateId(),
+      ...transaction,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.paymentTransactions.set(tx.id, tx);
+    return tx;
+  }
+
+  async updateTransaction(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction | undefined> {
+    const existing = this.paymentTransactions.get(id);
+    if (!existing) return undefined;
+
+    const updated: PaymentTransaction = {
+      ...existing,
+      ...updates,
+      updatedAt: new Date(),
+    };
+    this.paymentTransactions.set(id, updated);
+    return updated;
+  }
+
+  async getUserTransactions(userId: string): Promise<PaymentTransaction[]> {
+    // Note: In a real implementation, you'd need to join with orders table to get userId
+    // For now, this is a simplified implementation
+    return Array.from(this.paymentTransactions.values());
+  }
+
+  async getOrderTransactions(orderId: string): Promise<PaymentTransaction[]> {
+    return Array.from(this.paymentTransactions.values())
+      .filter(tx => tx.orderId === orderId);
+  }
+
+  // Webhook Events
+  async createWebhookEvent(event: InsertKajaPayWebhookEvent): Promise<KajaPayWebhookEvent> {
+    const we: KajaPayWebhookEvent = {
+      id: this.generateId(),
+      ...event,
+      createdAt: new Date(),
+    };
+    this.webhookEvents.set(we.id, we);
+    return we;
+  }
+
+  async getUnprocessedWebhookEvents(): Promise<KajaPayWebhookEvent[]> {
+    return Array.from(this.webhookEvents.values())
+      .filter(we => !we.processed);
+  }
+
+  async markWebhookEventProcessed(id: string): Promise<boolean> {
+    const event = this.webhookEvents.get(id);
+    if (!event) return false;
+
+    const updated: KajaPayWebhookEvent = {
+      ...event,
+      processed: true,
+      processedAt: new Date(),
+    };
+    this.webhookEvents.set(id, updated);
+    return true;
   }
 }
 
