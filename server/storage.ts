@@ -1530,5 +1530,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Keep using memory storage - database authentication still failing
+// Revert to memory storage - still having authentication issues
 export const storage = new MemStorage();
