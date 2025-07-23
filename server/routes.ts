@@ -9,6 +9,7 @@ import { initializeConciergeRoutes } from "./concierge/routes.js";
 import { createShipstationRoutes } from "./shipstation/routes";
 import { ShipstationService, ShipstationServiceConfig } from "./shipstation/service";
 import { fixRLS } from "./routes/admin";
+import { getAuthorizationUrl, exchangeToken } from "./zoho/oauth-helper.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
@@ -311,6 +312,10 @@ Disallow: /`);
   } catch (error) {
     console.error('[Server] Failed to initialize Zoho integration:', error);
   }
+
+  // Zoho OAuth helper endpoints (available even if integration is disabled)
+  app.get("/api/zoho/auth-url", getAuthorizationUrl);
+  app.post("/api/zoho/exchange-token", exchangeToken);
 
   // Initialize and register KajaPay payment routes
   try {
