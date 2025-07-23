@@ -1530,5 +1530,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Keep using memory storage until pooler URL is confirmed
+// Keep using memory storage until correct Transaction pooler URL is obtained
 export const storage = new MemStorage();
