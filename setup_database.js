@@ -3,21 +3,39 @@ const { Client } = pkg;
 import fs from 'fs';
 
 async function setupDatabase() {
-  // Use URL constructor to properly parse DATABASE_URL with special characters
-  const dbUrl = new URL(process.env.DATABASE_URL);
+  // Handle special characters in password by URL encoding them manually
+  let connectionString = process.env.DATABASE_URL;
   
-  const user = dbUrl.username;
-  const password = dbUrl.password; // Already decoded by URL constructor
-  const host = dbUrl.hostname;
-  const port = dbUrl.port;
-  const database = dbUrl.pathname.slice(1); // Remove leading slash
+  // Manual parsing for complex password with @ and ! characters
+  // Expected format: postgres://postgres:SAB@459dcr!@db.qirbapivptotybspnbet.supabase.co:6543/postgres
+  const parts = connectionString.split(':');
+  if (parts.length < 4) {
+    throw new Error('Invalid DATABASE_URL format');
+  }
+  
+  const username = 'postgres';
+  
+  // Extract password: everything between second : and before the hostname
+  // From: postgres://postgres:SAB@459dcr!@db.qirbapivptotybspnbet.supabase.co:6543/postgres
+  // Password is: SAB@459dcr!
+  const afterSecondColon = parts.slice(2).join(':'); // "SAB@459dcr!@db.qirbapivptotybspnbet.supabase.co:6543/postgres"
+  const hostStartIndex = afterSecondColon.indexOf('@db.'); // Find where host starts
+  const rawPassword = afterSecondColon.substring(0, hostStartIndex); // "SAB@459dcr!"
+  const hostAndDb = afterSecondColon.substring(hostStartIndex + 1); // "db.qirbapivptotybspnbet.supabase.co:6543/postgres"
+  
+  console.log('Detected password:', rawPassword);
+  console.log('Host and DB:', hostAndDb);
+  
+  // URL encode special characters in password
+  const encodedPassword = encodeURIComponent(rawPassword);
+  
+  // Reconstruct the connection string with encoded password
+  connectionString = `postgresql://${username}:${encodedPassword}@${hostAndDb}`;
+  
+  console.log('Using encoded connection string...');
   
   const client = new Client({
-    user,
-    password,
-    host,
-    port: parseInt(port),
-    database,
+    connectionString,
     ssl: { rejectUnauthorized: false }
   });
   
