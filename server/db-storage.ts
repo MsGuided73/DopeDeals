@@ -32,12 +32,8 @@ import {
 
 import { type IStorage } from "./storage";
 
-const sql = postgres(process.env.DATABASE_URL!, {
-  ssl: 'require',
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 60,
-});
+// Disable prefetch as it is not supported for "Transaction" pool mode
+const sql = postgres(process.env.DATABASE_URL!, { prepare: false });
 const db = drizzle(sql);
 
 export class DatabaseStorage implements IStorage {

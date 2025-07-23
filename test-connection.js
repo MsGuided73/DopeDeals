@@ -4,12 +4,7 @@ async function testConnection() {
   try {
     console.log('Testing direct Supabase connection...');
     
-    const sql = postgres(process.env.DATABASE_URL, {
-      ssl: 'require',
-      max: 1,
-      idle_timeout: 20,
-      connect_timeout: 60,
-    });
+    const sql = postgres(process.env.DATABASE_URL, { prepare: false });
     
     const result = await sql`SELECT 1 as test`;
     console.log('✅ Connection successful!', result);
