@@ -137,7 +137,7 @@ Send these **4 pieces of information** securely to the development team:
 1. **ZOHO_CLIENT_ID:** `1000.XXXXXXXXXXXXXXXXXXXXXXXXX`
 2. **ZOHO_CLIENT_SECRET:** `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 3. **ZOHO_REFRESH_TOKEN:** `1000.xxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxx`
-4. **ZOHO_ORGANIZATION_ID:** `10234695` (BMB Wholesale Inc. organization ID from Step 1)
+4. **ZOHO_ORGANIZATION_ID:** `850205569` (BMB Wholesale Inc. organization ID)
 
 ### Optional (Auto-detected):
 - **ZOHO_API_DOMAIN:** `https://www.zohoapis.com` (or your region's domain)
