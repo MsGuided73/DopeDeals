@@ -104,7 +104,7 @@ export class ZohoInventoryClient {
     search_text?: string;
     filter_by?: string;
     sort_column?: string;
-    sort_order?: 'ascending' | 'descending';
+    sort_order?: 'asc' | 'desc';
   }): Promise<ZohoProductsResponse> {
     try {
       const response: AxiosResponse<ZohoProductsResponse> = await this.client.get('/items', {

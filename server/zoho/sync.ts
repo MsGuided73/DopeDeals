@@ -44,9 +44,7 @@ export class ZohoSyncManager {
       do {
         const zohoResponse = await this.zohoClient.getProducts({
           page,
-          per_page: perPage,
-          sort_column: 'last_modified_time',
-          sort_order: 'descending'
+          per_page: perPage
         });
 
         for (const zohoProduct of zohoResponse.items) {
@@ -77,11 +75,12 @@ export class ZohoSyncManager {
     const localProduct = this.mapZohoProductToLocal(zohoProduct);
     
     // Check if product already exists in local database
-    const existingProducts = await storage.getProducts({ sku: localProduct.sku });
+    const existingProducts = await storage.getProducts();
     
-    if (existingProducts.length > 0) {
+    const existingProduct = existingProducts.find(p => p.sku === localProduct.sku);
+    
+    if (existingProduct) {
       // Update existing product
-      const existingProduct = existingProducts[0];
       await this.updateLocalProduct(existingProduct.id, localProduct, zohoProduct);
     } else {
       // Create new product
@@ -108,7 +107,7 @@ export class ZohoSyncManager {
     return {
       name: zohoProduct.name,
       description: zohoProduct.description || '',
-      price: zohoProduct.rate.toString(),
+      price: zohoProduct.rate?.toString() || '0',
       sku: zohoProduct.sku,
       imageUrl: this.extractImageUrl(zohoProduct),
       material: this.extractMaterial(zohoProduct),
@@ -274,7 +273,7 @@ export class ZohoSyncManager {
       console.log(`[Zoho Sync] Created local order: ${zohoOrder.salesorder_number}`);
     }
 
-    this.updateSyncStatus('order', zohoOrder.salesorder_id, localOrder.userId, 'success');
+    this.updateSyncStatus('order', zohoOrder.salesorder_id, localUserId, 'success');
   }
 
   private async ensureCustomerExists(zohoOrder: ZohoOrder): Promise<string> {
@@ -288,9 +287,8 @@ export class ZohoSyncManager {
     // Create new customer
     const newUser: InsertUser = {
       email: zohoOrder.customer_email || `customer-${zohoOrder.customer_id}@zoho.local`,
-      hashedPassword: 'zoho-imported', // Placeholder - these users will need to reset password
-      isAgeVerified: false, // Will need manual verification
-      membershipTier: 'basic'
+      fullName: zohoOrder.customer_name,
+      ageVerificationStatus: 'unverified' // Will need manual verification
     };
 
     const createdUser = await storage.createUser(newUser);
