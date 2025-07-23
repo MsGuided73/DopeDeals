@@ -1530,5 +1530,23 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Revert to memory storage - authentication consistently failing
-export const storage = new MemStorage();
+// Import the new Supabase storage implementation
+import { SupabaseStorage } from "./supabase-storage";
+
+// Use Supabase storage for production, memory storage for development/testing
+let storage: IStorage;
+
+try {
+  if (process.env.VITE_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    storage = new SupabaseStorage();
+    console.log('✅ Using Supabase storage with authentication');
+  } else {
+    storage = new MemStorage();
+    console.log('⚠️  Using memory storage - add Supabase credentials for production');
+  }
+} catch (error) {
+  console.warn('Failed to initialize Supabase storage, falling back to memory storage:', error);
+  storage = new MemStorage();
+}
+
+export { storage };
