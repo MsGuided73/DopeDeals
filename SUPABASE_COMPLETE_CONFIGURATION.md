@@ -5,13 +5,13 @@
 ### 1. Database Password Reset
 - Go to **Settings** → **Database**
 - Click **"Reset database password"**
-- Set a simple password: `vipsmoke2025!`
+- Set a simple password: `vipsmoke2025` (no special characters)
 - Save and note this password
 
 ### 2. Connection String (After Password Reset)
 After resetting password, copy the **Transaction pooler** URL:
 ```
-postgresql://postgres.qirbapivptotybspnbet:vipsmoke2025!@aws-0-us-west-1.pooler.supabase.com:6543/postgres
+postgresql://postgres.qirbapivptotybspnbet:vipsmoke2025@aws-0-us-west-1.pooler.supabase.com:6543/postgres
 ```
 
 ## Authentication Configuration
@@ -79,7 +79,7 @@ After Supabase configuration:
 
 **DATABASE_URL:**
 ```
-postgresql://postgres.qirbapivptotybspnbet:vipsmoke2025!@aws-0-us-west-1.pooler.supabase.com:6543/postgres
+postgresql://postgres.qirbapivptotybspnbet:vipsmoke2025@aws-0-us-west-1.pooler.supabase.com:6543/postgres
 ```
 
 **SUPABASE_URL:** (from Settings → API)
