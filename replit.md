@@ -299,22 +299,42 @@ Preferred communication style: Simple, everyday language.
 - **Database**: Supabase PostgreSQL with complete schemas for all integrations
 - **Security**: Age verification, PCI compliance, secure credential management
 
-## Supabase Configuration Requirements
+## Supabase Migration Plan
 
-### Database Setup
-- **Password**: Simple password like `vipsmoke2025` (no special characters to avoid URL encoding issues)
-- **Connection**: IPv4-compatible Transaction pooler URL required for Replit environment
-- **Current Issue**: SASL authentication mismatch with existing credentials
+### Migration Strategy
+- **From**: Neon Database + Replit Auth + Memory Storage
+- **To**: Complete Supabase Integration (Database + Authentication)
+- **Benefits**: Unified platform, persistent user accounts, enhanced security, scalable infrastructure
 
-### Auth Configuration (For Future User System)
-- **Site URL**: `http://localhost:5000` 
-- **Redirect URLs**: Multiple localhost endpoints for auth callbacks, dashboard, profile, checkout, orders, concierge
-- **Production URLs**: Will need updating when deployed to `.replit.app` domain
+### Phase 1: Fresh Supabase Project
+- Create new Supabase project with clean authentication
+- Simple password: `vipsmoke2025` (no special characters)
+- Configure authentication URLs for development and production
+
+### Phase 2: Database Migration
+- Update DATABASE_URL with new Supabase connection
+- Enable Row Level Security (RLS) for production security
+- Migrate all existing table schemas
+- Test database connection and operations
+
+### Phase 3: Authentication Integration
+- Install @supabase/supabase-js client library
+- Implement user registration with age verification (21+)
+- Replace current age verification modal with proper user accounts
+- Add login/logout functionality
+
+### Phase 4: Enhanced User Features
+- Persistent shopping carts tied to user accounts
+- User profiles with VIP membership integration
+- Order history and tracking
+- Personalized recommendations based on user data
 
 ### Current Status
-- Website: ✅ Fully operational with memory storage
-- Database: ❌ Authentication issue preventing connection
-- Impact: Zero user impact, data resets on server restart
+- Planning: ✅ Complete migration guide created
+- Supabase Client: ✅ Library installed and configured
+- Auth Hooks: ✅ useAuth hook implemented
+- Database Setup: ✅ SQL schema prepared
+- Ready for: Fresh Supabase project creation
 
 ## Changelog
 
