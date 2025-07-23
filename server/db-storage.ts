@@ -32,8 +32,20 @@ import {
 
 import { type IStorage } from "./storage";
 
+// Handle special characters in DATABASE_URL by URL encoding them
+let connectionString = process.env.DATABASE_URL!;
+const urlMatch = connectionString.match(/postgresql:\/\/([^:]+):(.+)@([^@]+)$/);
+if (urlMatch) {
+  const [, username, passwordAndHost, finalHostPart] = urlMatch;
+  const lastAtIndex = passwordAndHost.lastIndexOf('@');
+  const rawPassword = passwordAndHost.substring(0, lastAtIndex);
+  const hostAndDb = passwordAndHost.substring(lastAtIndex + 1) + '@' + finalHostPart;
+  const encodedPassword = encodeURIComponent(rawPassword);
+  connectionString = `postgresql://${username}:${encodedPassword}@${hostAndDb}`;
+}
+
 // Disable prefetch as it is not supported for "Transaction" pool mode
-const sql = postgres(process.env.DATABASE_URL!, { prepare: false });
+const sql = postgres(connectionString, { prepare: false });
 const db = drizzle(sql);
 
 export class DatabaseStorage implements IStorage {
