@@ -265,7 +265,7 @@ export default function ProductsPage() {
                     <SelectContent>
                       <SelectItem value="">All Materials</SelectItem>
                       {uniqueMaterials.map(material => (
-                        <SelectItem key={material} value={material}>
+                        <SelectItem key={material} value={material || ''}>
                           {material}
                         </SelectItem>
                       ))}
