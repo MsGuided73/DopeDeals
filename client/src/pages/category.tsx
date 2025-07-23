@@ -128,7 +128,7 @@ export default function CategoryPage() {
   // Create breadcrumb items
   const breadcrumbItems = [
     { name: "Categories", href: "/categories" },
-    { name: category.name, current: true }
+    { name: category?.name || 'Category', current: true }
   ];
 
   // Create structured data
@@ -142,10 +142,10 @@ export default function CategoryPage() {
   ];
 
   // SEO data
-  const seoTitle = `${category.name} - Premium Smoking Accessories | VIP Smoke`;
-  const seoDescription = category.description || `Shop our premium ${category.name.toLowerCase()} collection. High-quality smoking accessories with fast shipping. Age verification required - 21+ only.`;
+  const seoTitle = `${category?.name || 'Category'} - Premium Smoking Accessories | VIP Smoke`;
+  const seoDescription = category?.description || `Shop our premium ${category?.name?.toLowerCase() || 'smoking accessories'} collection. High-quality smoking accessories with fast shipping. Age verification required - 21+ only.`;
   const seoKeywords = [
-    category.name.toLowerCase(),
+    category?.name?.toLowerCase() || 'smoking accessories',
     "smoking accessories",
     "paraphernalia",
     "premium smoking",
@@ -160,7 +160,7 @@ export default function CategoryPage() {
         title={seoTitle}
         description={seoDescription}
         keywords={seoKeywords}
-        canonical={`https://vipsmoke.com/category/${category.id}`}
+        canonical={`https://vipsmoke.com/category/${category?.id || ''}`}
         structuredData={structuredData}
       />
       
@@ -172,9 +172,9 @@ export default function CategoryPage() {
         
         {/* Category Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">{category.name}</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">{category?.name || 'Category'}</h1>
           <p className="text-xl text-steel-300 mb-6">
-            {category.description || `Discover our premium ${category.name.toLowerCase()} collection, carefully curated for the discerning connoisseur.`}
+            {category?.description || `Discover our premium ${category?.name?.toLowerCase() || 'products'} collection, carefully curated for the discerning connoisseur.`}
           </p>
           <div className="flex items-center justify-between">
             <p className="text-steel-400">
