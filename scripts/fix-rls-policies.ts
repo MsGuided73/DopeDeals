@@ -1,7 +1,11 @@
 #!/usr/bin/env tsx
-import { neon } from '@neondatabase/serverless';
+import pkg from 'pg';
+const { Client } = pkg;
 
-const sql = neon(process.env.DATABASE_URL!);
+const client = new Client({
+  connectionString: process.env.DATABASE_URL!,
+  ssl: { rejectUnauthorized: false }
+});
 
 async function fixRLSPolicies() {
   console.log('🔧 Fixing Supabase RLS policies...');
