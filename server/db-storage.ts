@@ -44,8 +44,14 @@ if (urlMatch) {
   connectionString = `postgresql://${username}:${encodedPassword}@${hostAndDb}`;
 }
 
-// Disable prefetch as it is not supported for "Transaction" pool mode
-const sql = postgres(connectionString, { prepare: false });
+// Configure postgres client for Supabase with proper SSL configuration
+const sql = postgres(connectionString, { 
+  prepare: false,
+  ssl: { rejectUnauthorized: false },
+  max: 10,
+  idle_timeout: 20,
+  connect_timeout: 30
+});
 const db = drizzle(sql);
 
 export class DatabaseStorage implements IStorage {
