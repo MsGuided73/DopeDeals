@@ -102,10 +102,10 @@ export default function Header({ onCartToggle }: HeaderProps) {
               onMouseEnter={() => setShowShopByDropdown(true)}
               onMouseLeave={() => setShowShopByDropdown(false)}
             >
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center text-sm sm:text-base">
+              <button className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center text-sm sm:text-base">
                 SHOP BY
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
-              </a>
+              </button>
               {showShopByDropdown && (
                 <div 
                   className="dropdown-menu absolute top-full left-0 w-48 bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] -mt-1 pt-2" 
@@ -114,11 +114,11 @@ export default function Header({ onCartToggle }: HeaderProps) {
                   onMouseLeave={() => setShowShopByDropdown(false)}
                 >
                   <div className="py-2">
-                    <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">On Sale</a>
-                    <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">New Products</a>
-                    <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Shop by Brand</a>
-                    <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Made in the USA</a>
-                    <a href="#" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Wholesale (Businesses Only)</a>
+                    <Link href="/products?featured=true" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">On Sale</Link>
+                    <Link href="/products?sort=newest" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">New Products</Link>
+                    <Link href="/products" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Shop by Brand</Link>
+                    <Link href="/products" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Made in the USA</Link>
+                    <Link href="/products" className="block px-4 py-2 text-steel-300 hover:text-yellow-400 hover:bg-steel-700">Wholesale (Businesses Only)</Link>
                   </div>
                 </div>
               )}
@@ -138,10 +138,10 @@ export default function Header({ onCartToggle }: HeaderProps) {
               onMouseEnter={() => setShowThcDropdown(true)}
               onMouseLeave={() => setShowThcDropdown(false)}
             >
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center text-sm sm:text-base">
+              <button className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center text-sm sm:text-base">
                 THC & MORE
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
-              </a>
+              </button>
               {showThcDropdown && (
                 <div 
                   className="dropdown-menu absolute top-full left-0 w-screen max-w-4xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6 -mt-1 pt-8" 
@@ -200,10 +200,10 @@ export default function Header({ onCartToggle }: HeaderProps) {
               onMouseEnter={() => setShowPipesDropdown(true)}
               onMouseLeave={() => setShowPipesDropdown(false)}
             >
-              <a href="#" className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center text-sm sm:text-base">
+              <button className="text-steel-300 hover:text-yellow-400 transition-colors pb-2 font-medium flex items-center text-sm sm:text-base">
                 PIPES
                 <ChevronDown className="ml-1 w-3 h-3 sm:w-4 sm:h-4" />
-              </a>
+              </button>
               {showPipesDropdown && (
                 <div 
                   className="dropdown-menu absolute top-full left-0 w-screen max-w-3xl bg-steel-800 rounded-lg shadow-2xl border border-steel-600 z-[9999] p-6 -mt-1 pt-8" 
@@ -215,28 +215,28 @@ export default function Header({ onCartToggle }: HeaderProps) {
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">DRY PIPES</h3>
                       <ul className="space-y-2">
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Chillums</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Glass Blunts</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">One Hitters</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Spoons</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Steamrollers</a></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Chillums</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Glass Blunts</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">One Hitters</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Spoons</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Steamrollers</Link></li>
                       </ul>
                     </div>
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">WATER PIPES</h3>
                       <ul className="space-y-2">
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Bongs</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Bubblers</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Dab Rigs</a></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Bongs</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Bubblers</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Dab Rigs</Link></li>
                       </ul>
                     </div>
                     <div>
                       <h3 className="text-yellow-400 font-bold mb-3 text-sm">BY MATERIAL</h3>
                       <ul className="space-y-2">
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Glass Pipes</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Metal Pipes</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Silicone Pipes</a></li>
-                        <li><a href="#" className="text-steel-300 hover:text-yellow-400 text-sm">Wood Pipes</a></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Glass Pipes</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Metal Pipes</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Silicone Pipes</Link></li>
+                        <li><Link href="/products" className="text-steel-300 hover:text-yellow-400 text-sm">Wood Pipes</Link></li>
                       </ul>
                     </div>
                   </div>
