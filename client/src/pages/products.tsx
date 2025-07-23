@@ -80,7 +80,7 @@ export default function ProductsPage() {
     const matchesSearch = !searchQuery || 
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+    const matchesPrice = parseFloat(product.price) >= priceRange[0] && parseFloat(product.price) <= priceRange[1];
     const matchesCategory = !selectedCategory || product.categoryId === selectedCategory;
     const matchesBrand = !selectedBrand || product.brandId === selectedBrand;
     const matchesMaterial = !selectedMaterial || product.material === selectedMaterial;
@@ -91,13 +91,13 @@ export default function ProductsPage() {
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case 'price-low':
-        return a.price - b.price;
+        return parseFloat(a.price) - parseFloat(b.price);
       case 'price-high':
-        return b.price - a.price;
+        return parseFloat(b.price) - parseFloat(a.price);
       case 'name':
         return a.name.localeCompare(b.name);
       case 'newest':
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
       case 'featured':
       default:
         return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
@@ -105,7 +105,7 @@ export default function ProductsPage() {
   });
 
   // Get unique materials from products
-  const uniqueMaterials = [...new Set(products?.map(p => p.material).filter(Boolean))];
+  const uniqueMaterials = Array.from(new Set(products?.map(p => p.material).filter(Boolean) || []));
 
   // Create breadcrumb items
   const breadcrumbItems = [
