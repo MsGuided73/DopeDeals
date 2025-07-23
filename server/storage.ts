@@ -1530,5 +1530,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Revert to memory storage - still having authentication issues
+// Revert to memory storage - authentication consistently failing
 export const storage = new MemStorage();
