@@ -14,7 +14,7 @@ async function setupDatabase() {
   
   const client = new Client({
     user,
-    password: decodedPassword,
+    password,
     host,
     port: parseInt(port),
     database,
