@@ -1530,5 +1530,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Temporarily using memory storage until database connection is fixed
+// Keep using memory storage until pooler URL is confirmed
 export const storage = new MemStorage();
