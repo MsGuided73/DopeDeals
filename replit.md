@@ -301,7 +301,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
-- July 21, 2025. Zoho multi-organization architecture implemented - Updated integration to support VIP Smoke as additional Organization ID under BMB Wholesale Inc.'s existing Zoho account with complete data isolation
+- July 22, 2025. Zoho single organization strategy implemented - Updated integration to work directly with BMB Wholesale Inc.'s existing Zoho organization, using categories and tags for VIP Smoke product management
 - July 21, 2025. Comprehensive Zoho admin setup guide created - Complete documentation with step-by-step OAuth setup, scope configuration, and credential generation for Zoho Inventory integration
 - July 21, 2025. ShipStation integration fully implemented - Complete order fulfillment system with API client, service layer, database schema, webhook processing, and comprehensive documentation ready for production
 - July 21, 2025. Integration credentials checklist created - Complete breakdown of all required credentials for Zoho, KajaPay, and ShipStation integrations with setup priorities and verification steps
