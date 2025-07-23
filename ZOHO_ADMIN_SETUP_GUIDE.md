@@ -8,28 +8,17 @@ This guide provides step-by-step instructions for setting up the Zoho Inventory 
 - Access to Zoho Developer Console
 - Organization ID from your Zoho Inventory account
 
-## Step 1: Setup VIP Smoke Organization in BMB Wholesale Account
+## Step 1: Get BMB Wholesale Inc. Organization ID
 
-**Important:** Since VIP Smoke will be added as an additional organization under your existing BMB Wholesale Inc. Zoho Inventory account, you need to:
+**Important:** VIP Smoke will integrate directly with your existing BMB Wholesale Inc. Zoho Inventory organization. You'll need to provide the current organization ID.
 
-### 1.1 Create VIP Smoke Organization
+### 1.1 Find Your Organization ID
 1. Log into your BMB Wholesale Inc. Zoho Inventory account
-2. Click the **Organization Switcher** (usually in top-right corner)
-3. Click **+ Add Organization** or **Create New Organization**
-4. Enter organization details:
-   - **Organization Name:** `VIP Smoke`
-   - **Industry:** `Retail/E-commerce`
-   - **Currency:** `USD` (or your preferred currency)
-   - **Time Zone:** Your local time zone
-5. Complete the organization setup
-
-### 1.2 Get VIP Smoke Organization ID
-1. Switch to the **VIP Smoke** organization
 2. Go to **Settings** → **Organization Profile**
 3. Copy the **Organization ID** (it will be a long number like `10234695`)
 4. Save this ID - this is what you'll provide to the development team
 
-**Note:** The integration will connect specifically to the VIP Smoke organization, keeping it separate from BMB Wholesale Inc. inventory and orders.
+**Note:** VIP Smoke products will be managed within your existing BMB Wholesale Inc. inventory system. You may want to use categories, brands, or custom fields to distinguish VIP Smoke products from other inventory.
 
 ## Step 2: Create a Connected App in Zoho Developer Console
 
@@ -47,7 +36,7 @@ Select **Self Client** because:
 
 ### 2.3 App Registration Details
 - **Client Name:** `VIP Smoke E-Commerce Integration`
-- **Description:** `Backend integration for VIP Smoke organization to sync inventory, orders, and product data separately from BMB Wholesale Inc.`
+- **Description:** `Backend integration for VIP Smoke platform to sync inventory, orders, and product data within BMB Wholesale Inc. Zoho Inventory`
 
 ### 2.4 Get Client Credentials
 After creation, you'll receive:
@@ -148,7 +137,7 @@ Send these **4 pieces of information** securely to the development team:
 1. **ZOHO_CLIENT_ID:** `1000.XXXXXXXXXXXXXXXXXXXXXXXXX`
 2. **ZOHO_CLIENT_SECRET:** `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 3. **ZOHO_REFRESH_TOKEN:** `1000.xxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxx`
-4. **VIP_SMOKE_ORGANIZATION_ID:** `10234695` (VIP Smoke organization ID from Step 1, NOT BMB Wholesale Inc.)
+4. **ZOHO_ORGANIZATION_ID:** `10234695` (BMB Wholesale Inc. organization ID from Step 1)
 
 ### Optional (Auto-detected):
 - **ZOHO_API_DOMAIN:** `https://www.zohoapis.com` (or your region's domain)
@@ -159,19 +148,19 @@ Once the development team has configured the credentials:
 
 ### 7.1 Initial Sync Test
 The system will automatically:
-- Test connection to your VIP Smoke organization specifically
-- Sync product categories and brands from VIP Smoke organization
-- Import active products from VIP Smoke organization only
+- Test connection to your BMB Wholesale Inc. Zoho Inventory
+- Sync product categories and brands
+- Import active products (VIP Smoke will filter/manage relevant inventory)
 - Set up webhook endpoints for real-time updates
-- Verify data isolation from BMB Wholesale Inc. organization
+- Configure product categorization for VIP Smoke-specific items
 
 ### 7.2 Expected Results
 You should see:
-- Products from VIP Smoke organization appearing in VIP Smoke platform
-- Inventory levels synchronized for VIP Smoke organization only
-- Orders from VIP Smoke creating sales orders in VIP Smoke organization
-- Real-time stock updates specific to VIP Smoke
-- Complete separation from BMB Wholesale Inc. data
+- Products from BMB Wholesale Inc. inventory available in VIP Smoke platform
+- Inventory levels synchronized in real-time
+- Orders from VIP Smoke creating sales orders in BMB Wholesale Inc. Zoho Inventory
+- Real-time stock updates across both systems
+- VIP Smoke products managed within your existing inventory system
 
 ## Troubleshooting
 
