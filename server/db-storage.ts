@@ -1,5 +1,5 @@
-import { drizzle } from "drizzle-orm/neon-serverless";
-import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import { eq, and, gte, lte, inArray, desc, sql } from "drizzle-orm";
 import { 
   users, products, categories, brands, orders, orderItems, 
@@ -32,8 +32,13 @@ import {
 
 import { type IStorage } from "./storage";
 
-const sql_connection = neon(process.env.DATABASE_URL!);
-const db = drizzle(sql_connection);
+const sql = postgres(process.env.DATABASE_URL!, {
+  ssl: 'require',
+  max: 1,
+  idle_timeout: 20,
+  connect_timeout: 60,
+});
+const db = drizzle(sql);
 
 export class DatabaseStorage implements IStorage {
   // Users
