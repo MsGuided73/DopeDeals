@@ -1530,5 +1530,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Keep using memory storage until database connection is resolved
+// Revert to memory storage due to SASL authentication mismatch
 export const storage = new MemStorage();
