@@ -1530,5 +1530,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Revert to memory storage while troubleshooting database connection
+// Keep using memory storage until database connection is resolved
 export const storage = new MemStorage();
