@@ -302,7 +302,7 @@ Preferred communication style: Simple, everyday language.
 ## Supabase Configuration Requirements
 
 ### Database Setup
-- **Password**: Simple password like `vipsmoke2025!` (to avoid special character encoding issues)
+- **Password**: Simple password like `vipsmoke2025` (no special characters to avoid URL encoding issues)
 - **Connection**: IPv4-compatible Transaction pooler URL required for Replit environment
 - **Current Issue**: SASL authentication mismatch with existing credentials
 
