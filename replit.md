@@ -299,6 +299,23 @@ Preferred communication style: Simple, everyday language.
 - **Database**: Supabase PostgreSQL with complete schemas for all integrations
 - **Security**: Age verification, PCI compliance, secure credential management
 
+## Supabase Configuration Requirements
+
+### Database Setup
+- **Password**: Simple password like `vipsmoke2025!` (to avoid special character encoding issues)
+- **Connection**: IPv4-compatible Transaction pooler URL required for Replit environment
+- **Current Issue**: SASL authentication mismatch with existing credentials
+
+### Auth Configuration (For Future User System)
+- **Site URL**: `http://localhost:5000` 
+- **Redirect URLs**: Multiple localhost endpoints for auth callbacks, dashboard, profile, checkout, orders, concierge
+- **Production URLs**: Will need updating when deployed to `.replit.app` domain
+
+### Current Status
+- Website: ✅ Fully operational with memory storage
+- Database: ❌ Authentication issue preventing connection
+- Impact: Zero user impact, data resets on server restart
+
 ## Changelog
 
 Changelog:
