@@ -57,6 +57,12 @@ export interface ZohoProduct {
     label: string;
     value: string;
   }>;
+  // VIP Smoke specific custom fields
+  cf_dtc_description?: string; // Consumer-facing product description
+  cf_msrp?: number; // Suggested retail price for DTC sales
+  cf_club_discount?: number; // Member discount percentage
+  cf_age_required?: boolean; // Age verification required flag
+  cf_restricted_states?: string[]; // States where shipping is banned
   tags?: string[];
   documents?: Array<{
     document_id: string;

@@ -6,7 +6,7 @@ export function getZohoConfig(): ZohoConfig {
     clientId: process.env.ZOHO_CLIENT_ID || '',
     clientSecret: process.env.ZOHO_CLIENT_SECRET || '',
     refreshToken: process.env.ZOHO_REFRESH_TOKEN || '',
-    organizationId: process.env.ZOHO_ORGANIZATION_ID || '',
+    organizationId: process.env.ZOHO_ORGANIZATION_ID || '850205569',
     baseUrl: process.env.ZOHO_BASE_URL || 'https://www.zohoapis.com/inventory/v1',
     warehouse: {
       defaultWarehouseId: process.env.ZOHO_WAREHOUSE_ID || '',

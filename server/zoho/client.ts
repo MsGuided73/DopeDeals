@@ -375,6 +375,50 @@ export class ZohoInventoryClient {
     }
   }
 
+  // Custom fields management
+  async getCustomFields(): Promise<any> {
+    try {
+      const response = await this.client.get(`/settings/customfields`, {
+        params: {
+          organization_id: this.config.organizationId
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('[Zoho] Error fetching custom fields:', error);
+      throw error;
+    }
+  }
+
+  // Warehouse management
+  async getWarehouses(): Promise<any> {
+    try {
+      const response = await this.client.get(`/warehouses`, {
+        params: {
+          organization_id: this.config.organizationId
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('[Zoho] Error fetching warehouses:', error);
+      throw error;
+    }
+  }
+
+  // Stock adjustments for real-time inventory updates
+  async createStockAdjustment(adjustmentData: any): Promise<any> {
+    try {
+      const response = await this.client.post(`/stock_adjustments`, {
+        ...adjustmentData,
+        organization_id: this.config.organizationId
+      });
+      return response.data;
+    } catch (error) {
+      console.error('[Zoho] Error creating stock adjustment:', error);
+      throw error;
+    }
+  }
+
   // Health check method
   async healthCheck(): Promise<{ status: 'healthy' | 'unhealthy'; message: string }> {
     try {
