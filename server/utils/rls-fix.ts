@@ -1,6 +1,10 @@
-import { neon } from '@neondatabase/serverless';
+import pkg from 'pg';
+const { Client } = pkg;
 
-const sql = neon(process.env.DATABASE_URL!);
+const client = new Client({
+  connectionString: process.env.DATABASE_URL!,
+  ssl: { rejectUnauthorized: false }
+});
 
 export async function fixRLSPolicies() {
   console.log('🔧 Attempting to fix RLS policies through raw SQL...');
