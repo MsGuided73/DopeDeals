@@ -8,7 +8,7 @@ import emojiRoutes, { initializeEmojiRoutes } from "./ai/emoji-routes.js";
 import { initializeConciergeRoutes } from "./concierge/routes.js";
 import { createShipstationRoutes } from "./shipstation/routes";
 import { ShipstationService, ShipstationServiceConfig } from "./shipstation/service";
-import { fixRLS } from "./routes/admin";
+// Admin utilities removed - all database operations through Supabase SDK
 import { getAuthorizationUrl, exchangeToken } from "./zoho/oauth-helper.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -388,8 +388,7 @@ Disallow: /`);
     app.use('/api/shipstation', shipstationRoutes);
   }
 
-  // Admin routes for database management
-  app.post('/api/admin/fix-rls', fixRLS);
+  // Admin routes removed - RLS handled automatically by Supabase
 
   const httpServer = createServer(app);
   return httpServer;
