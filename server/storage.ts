@@ -1530,15 +1530,14 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Supabase storage implementation temporarily disabled for debugging
-// import { SupabaseStorage } from "./supabase-storage";
-
-// Use memory storage with Supabase authentication ready for integration
+// Pure Supabase integration - SDK only, no direct PostgreSQL
+// Temporarily using memory storage until tables are created in Supabase
 let storage: IStorage;
 
 if (process.env.VITE_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  console.log('✅ Supabase credentials configured - authentication ready');
-  console.log('⚠️  Using memory storage temporarily - database migration needed');
+  console.log('✅ Supabase SDK credentials configured');
+  console.log('⚠️  Using memory storage until schema is created in Supabase');
+  console.log('📋 Next: Create tables in Supabase SQL Editor, then activate SupabaseStorage');
 } else {
   console.log('⚠️  Add Supabase credentials for production authentication');
 }

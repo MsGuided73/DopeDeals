@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { eq, and, gte, lte, inArray, desc, sql } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+// Pure Supabase SDK implementation - no direct PostgreSQL dependencies
 import { 
   users, products, categories, brands, orders, orderItems, 
   memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
@@ -46,26 +44,7 @@ export const supabaseAdmin = supabaseUrl && supabaseServiceKey
   ? createClient(supabaseUrl, supabaseServiceKey)
   : null;
 
-// Also maintain Drizzle connection for complex queries
-let connectionString = process.env.DATABASE_URL!;
-const urlMatch = connectionString.match(/postgresql:\/\/([^:]+):(.+)@([^@]+)$/);
-if (urlMatch) {
-  const [, username, passwordAndHost, finalHostPart] = urlMatch;
-  const lastAtIndex = passwordAndHost.lastIndexOf('@');
-  const rawPassword = passwordAndHost.substring(0, lastAtIndex);
-  const hostAndDb = passwordAndHost.substring(lastAtIndex + 1) + '@' + finalHostPart;
-  const encodedPassword = encodeURIComponent(rawPassword);
-  connectionString = `postgresql://${username}:${encodedPassword}@${hostAndDb}`;
-}
-
-const sql = postgres(connectionString, { 
-  prepare: false,
-  ssl: { rejectUnauthorized: false },
-  max: 10,
-  idle_timeout: 20,
-  connect_timeout: 30
-});
-const db = drizzle(sql);
+// All database operations use Supabase SDK for consistency and RLS support
 
 export class SupabaseStorage implements IStorage {
   constructor() {
