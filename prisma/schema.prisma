@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                    String   @unique
+  fullName                 String?  @map("full_name")
+  membershipTierId         String?  @map("membership_tier_id") @db.Uuid
+  ageVerificationStatus    String   @default("not_verified") @map("age_verification_status")
+  lastVerificationCheck    DateTime? @map("last_verification_check")
+  createdAt               DateTime @default(now()) @map("created_at")
+  
+  cartItems               CartItem[]
+  userBehaviors           UserBehavior[]
+  loyaltyPoints           LoyaltyPoint[]
+  orders                  Order[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  slug        String    @unique
+  createdAt   DateTime  @default(now()) @map("created_at")
+  
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Brand {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  slug        String    @unique
+  createdAt   DateTime  @default(now()) @map("created_at")
+  
+  products    Product[]
+
+  @@map("brands")
+}
+
+model Product {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  description  String?
+  price        Decimal  @db.Decimal(10, 2)
+  sku          String   @unique
+  categoryId   String?  @map("category_id") @db.Uuid
+  brandId      String?  @map("brand_id") @db.Uuid
+  imageUrl     String?  @map("image_url")
+  material     String?
+  inStock      Boolean  @default(true) @map("in_stock")
+  featured     Boolean  @default(false)
+  vipExclusive Boolean  @default(false) @map("vip_exclusive")
+  createdAt    DateTime @default(now()) @map("created_at")
+  
+  category     Category?    @relation(fields: [categoryId], references: [id])
+  brand        Brand?       @relation(fields: [brandId], references: [id])
+  cartItems    CartItem[]
+  orderItems   OrderItem[]
+  userBehaviors UserBehavior[]
+
+  @@map("products")
+}
+
+model Order {
+  id               String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String?     @map("user_id") @db.Uuid
+  status           String      @default("processing")
+  paymentStatus    String      @default("pending") @map("payment_status")
+  paymentMethod    String?     @map("payment_method")
+  transactionId    String?     @map("transaction_id")
+  subtotalAmount   Decimal     @map("subtotal_amount") @db.Decimal(10, 2)
+  taxAmount        Decimal     @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  shippingAmount   Decimal     @default(0) @map("shipping_amount") @db.Decimal(10, 2)
+  totalAmount      Decimal     @map("total_amount") @db.Decimal(10, 2)
+  billingAddress   Json?       @map("billing_address")
+  shippingAddress  Json?       @map("shipping_address")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  
+  user             User?       @relation(fields: [userId], references: [id])
+  orderItems       OrderItem[]
+  loyaltyPoints    LoyaltyPoint[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId           String  @map("order_id") @db.Uuid
+  productId         String  @map("product_id") @db.Uuid
+  quantity          Int
+  priceAtPurchase   Decimal @map("price_at_purchase") @db.Decimal(10, 2)
+  
+  order             Order   @relation(fields: [orderId], references: [id])
+  product           Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Membership {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tierName      String   @map("tier_name")
+  monthlyPrice  Decimal  @map("monthly_price") @db.Decimal(10, 2)
+  benefits      String[]
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("memberships")
+}
+
+model LoyaltyPoint {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  points           Int
+  transactionType  String   @map("transaction_type")
+  orderId          String?  @map("order_id") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+  
+  user             User     @relation(fields: [userId], references: [id])
+  order            Order?   @relation(fields: [orderId], references: [id])
+
+  @@map("loyalty_points")
+}
+
+model CartItem {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  quantity  Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("cart_items")
+}
+
+model UserBehavior {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  action    String
+  sessionId String?  @map("session_id")
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user      User?    @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("user_behavior")
+}

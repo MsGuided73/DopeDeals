@@ -101,12 +101,12 @@ export class SupabaseStorage implements IStorage {
   }): Promise<Product[]> {
     let query = supabaseAdmin.from('products').select('*');
     
-    // Database now uses camelCase column names - direct filtering
+    // Database uses snake_case column names - use correct names
     if (filters?.categoryId) {
-      query = query.eq('categoryId', filters.categoryId);
+      query = query.eq('category_id', filters.categoryId);
     }
     if (filters?.brandId) {
-      query = query.eq('brandId', filters.brandId);
+      query = query.eq('brand_id', filters.brandId);
     }
     if (filters?.material) {
       query = query.eq('material', filters.material);
@@ -121,10 +121,10 @@ export class SupabaseStorage implements IStorage {
       query = query.eq('featured', filters.featured);
     }
     if (filters?.vipExclusive !== undefined) {
-      query = query.eq('vipExclusive', filters.vipExclusive);
+      query = query.eq('vip_exclusive', filters.vipExclusive);
     }
 
-    const { data, error } = await query.order('createdAt', { ascending: false });
+    const { data, error } = await query.order('created_at', { ascending: false });
     if (error) throw error;
     
     return data as Product[];

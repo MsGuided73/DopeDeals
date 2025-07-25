@@ -346,9 +346,36 @@ Preferred communication style: Simple, everyday language.
 - **Authentication Status**: Supabase integration ready, currently using temporary age verification
 - **Next Priority**: Implement core checkout workflow to activate full e-commerce functionality
 
+## Prisma ORM Integration (Alternative to Drizzle)
+
+### Implementation Status
+- **Prisma Schema**: ✅ Complete with @map directives for snake_case/camelCase column mapping
+- **PrismaStorage Class**: ✅ Full implementation with all IStorage methods
+- **Type Safety**: ✅ Generated types with proper Supabase UUID support
+- **Connection Requirements**: ⚠️ Requires session mode port (5432) instead of transaction mode (6543)
+
+### Technical Features
+- Column mapping handles database snake_case with TypeScript camelCase
+- Complete relationship definitions with foreign keys
+- Built-in connection pooling and query optimization
+- Enhanced type safety with compile-time validation
+- Fallback mechanism to Supabase storage if connection fails
+
+### Setup Requirements
+- Update DATABASE_URL to use port 5432 for session mode connection
+- Run `npx prisma generate` to create client types
+- Modify storage.ts to use PrismaStorage implementation
+- Documentation: Complete setup guide in PRISMA_SETUP_GUIDE.md
+
+### Current Status
+- Schema mismatch issue resolved by reverting to working Supabase storage
+- APIs now functioning correctly (products, categories, brands all return 200 status)
+- Prisma ready for activation once connection configuration is updated
+
 ## Changelog
 
 Changelog:
+- July 25, 2025. Prisma ORM integration implemented as Drizzle replacement - Complete schema with column mapping, PrismaStorage class, type safety, requires session mode connection, ready for activation
 - July 24, 2025. Comprehensive Supabase integration cleanup completed - Removed all legacy PostgreSQL references, cleaned up secrets (PGHOST, PGPORT, etc.), implemented pure Supabase SDK architecture with proper RLS, authentication ready for activation once schema is created
 - July 23, 2025. Complete system audit conducted - Identified missing checkout flow as critical blocker preventing full e-commerce functionality
 - July 23, 2025. Complete Neon & Replit Auth cleanup - Removed all Neon database dependencies and prepared clean migration to Supabase for unified database + authentication

@@ -15,6 +15,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
   app.get("/api/products", async (req, res) => {
     try {
+      console.log('📦 Fetching products with storage...');
+      
       const filters = {
         categoryId: req.query.categoryId as string,
         brandId: req.query.brandId as string,
@@ -26,8 +28,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       const products = await storage.getProducts(filters);
+      console.log(`✅ Found ${products.length} products`);
       res.json(products);
     } catch (error) {
+      console.error('❌ Error fetching products:', error);
       res.status(500).json({ message: "Failed to fetch products" });
     }
   });
@@ -47,9 +51,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Categories routes
   app.get("/api/categories", async (req, res) => {
     try {
+      console.log('🏷️ Fetching categories...');
       const categories = await storage.getCategories();
+      console.log(`✅ Found ${categories.length} categories`);
       res.json(categories);
     } catch (error) {
+      console.error('❌ Error fetching categories:', error);
       res.status(500).json({ message: "Failed to fetch categories" });
     }
   });
