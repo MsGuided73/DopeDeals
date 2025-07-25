@@ -156,7 +156,7 @@ export class SupabaseStorage implements IStorage {
       stock_quantity: 0,
       vip_price: null,
       channels: ['vip_smoke'],
-      is_active: true
+      is_active: true,
       featured: product.featured || false,
       vip_exclusive: product.vipExclusive || false
     };

@@ -11,6 +11,8 @@ import {
   OrderMapping
 } from './types.js';
 import { storage } from '../storage.js';
+import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
 import type { 
   Product, 
   InsertProduct, 
@@ -138,24 +140,54 @@ export class ZohoSyncManager {
     return 'Glass'; // Default material for VIP Smoke products
   }
 
-  private mapZohoCategoryToLocal(zohoCategoryId?: string): string {
-    // This would need to be implemented based on your category mapping strategy
-    // For now, return a default category ID
-    return 'default-category-id';
+  private mapZohoCategoryToLocal(zohoCategoryId?: string): string | null {
+    // Return null instead of non-existent ID to avoid foreign key violations
+    return null;
   }
 
-  private mapZohoBrandToLocal(zohoBrand?: string): string {
-    // This would need to be implemented based on your brand mapping strategy
-    // For now, return a default brand ID
-    return 'default-brand-id';
+  private mapZohoBrandToLocal(zohoBrand?: string): string | null {
+    // Return null instead of non-existent ID to avoid foreign key violations
+    return null;
   }
 
   private async createLocalProduct(localProduct: InsertProduct, zohoProduct: ZohoProduct): Promise<void> {
     try {
-      await storage.createProduct(localProduct);
-      console.log(`[Zoho Sync] Created local product: ${localProduct.name}`);
+      // Create product object with correct database schema (snake_case)
+      const dbProduct = {
+        id: crypto.randomUUID(),
+        name: zohoProduct.name,
+        description: zohoProduct.description || '',
+        price: Number(zohoProduct.rate) || 0,
+        sku: zohoProduct.sku || zohoProduct.item_id,
+        category_id: null, // Set to null to avoid foreign key violations
+        brand_id: null, // Set to null to avoid foreign key violations
+        materials: zohoProduct.category_name ? [zohoProduct.category_name] : null,
+        image_urls: zohoProduct.images?.length > 0 ? zohoProduct.images.map(img => img.file_path) : null,
+        stock_quantity: zohoProduct.stock_on_hand || 0,
+        vip_price: null,
+        channels: ['vip_smoke'],
+        is_active: zohoProduct.status === 'active',
+        featured: false,
+        vip_exclusive: false
+      };
+      
+      // Use the existing Supabase client from supabase-storage
+      const supabaseAdmin = createClient(
+        process.env.VITE_SUPABASE_URL!, 
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      
+      const { data, error } = await supabaseAdmin
+        .from('products')
+        .insert(dbProduct)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      console.log(`[Zoho Sync] Created local product: ${dbProduct.name}`);
     } catch (error) {
-      console.error(`[Zoho Sync] Failed to create local product ${localProduct.name}:`, error);
+      console.error(`[Zoho Sync] Failed to create local product ${zohoProduct.name}:`, error);
       throw error;
     }
   }
