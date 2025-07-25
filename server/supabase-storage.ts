@@ -142,10 +142,28 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {
-    // Database now uses camelCase column names - direct mapping
+    // Generate UUID and map only the columns that exist in the database
+    const dbProduct = {
+      id: crypto.randomUUID(),
+      name: product.name,
+      description: product.description || null,
+      price: product.price,
+      sku: product.sku,
+      category_id: product.categoryId || null,
+      brand_id: product.brandId || null,
+      materials: product.material ? [product.material] : null,
+      image_urls: product.imageUrl ? [product.imageUrl] : null,
+      stock_quantity: 0,
+      vip_price: null,
+      channels: ['vip_smoke'],
+      is_active: true
+      featured: product.featured || false,
+      vip_exclusive: product.vipExclusive || false
+    };
+    
     const { data, error } = await supabaseAdmin
       .from('products')
-      .insert(product)
+      .insert(dbProduct)
       .select()
       .single();
     
