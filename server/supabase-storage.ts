@@ -101,6 +101,7 @@ export class SupabaseStorage implements IStorage {
   }): Promise<Product[]> {
     let query = supabaseAdmin.from('products').select('*');
     
+    // Database now uses camelCase column names - direct filtering
     if (filters?.categoryId) {
       query = query.eq('categoryId', filters.categoryId);
     }
@@ -123,8 +124,9 @@ export class SupabaseStorage implements IStorage {
       query = query.eq('vipExclusive', filters.vipExclusive);
     }
 
-    const { data, error } = await query;
+    const { data, error } = await query.order('createdAt', { ascending: false });
     if (error) throw error;
+    
     return data as Product[];
   }
 
@@ -140,45 +142,15 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {
-    // Map camelCase to snake_case for database
-    const dbProduct = {
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      sku: product.sku,
-      category_id: product.categoryId,
-      brand_id: product.brandId,
-      image_url: product.imageUrl,
-      material: product.material,
-      in_stock: product.inStock,
-      featured: product.featured,
-      vip_exclusive: product.vipExclusive
-    };
-    
+    // Database now uses camelCase column names - direct mapping
     const { data, error } = await supabaseAdmin
       .from('products')
-      .insert(dbProduct)
+      .insert(product)
       .select()
       .single();
     
     if (error) throw error;
-    
-    // Map snake_case back to camelCase for return
-    return {
-      id: data.id,
-      name: data.name,
-      description: data.description,
-      price: data.price,
-      sku: data.sku,
-      categoryId: data.category_id,
-      brandId: data.brand_id,
-      imageUrl: data.image_url,
-      material: data.material,
-      inStock: data.in_stock,
-      featured: data.featured,
-      vipExclusive: data.vip_exclusive,
-      createdAt: data.created_at
-    } as Product;
+    return data as Product;
   }
 
   // Categories

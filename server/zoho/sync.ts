@@ -103,7 +103,7 @@ export class ZohoSyncManager {
       }
     }
 
-    // Default mappings
+    // Map to match database schema (snake_case)
     return {
       name: zohoProduct.name,
       description: zohoProduct.description || '',
