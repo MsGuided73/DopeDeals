@@ -11,7 +11,8 @@ import ProductsPage from "@/pages/products";
 import EmojiDemo from "@/pages/EmojiDemo";
 import VIPConcierge from "@/pages/VIPConcierge";
 import CompliancePage from "@/pages/CompliancePage";
-import AIClassificationPage from "@/pages/AIClassificationPage";
+import BackgroundAIMonitor from "@/pages/BackgroundAIMonitor";
+
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -24,7 +25,8 @@ function Router() {
       <Route path="/emoji-demo" component={EmojiDemo} />
       <Route path="/concierge" component={VIPConcierge} />
       <Route path="/compliance" component={CompliancePage} />
-      <Route path="/ai-classification" component={AIClassificationPage} />
+      <Route path="/admin/ai-monitor" component={BackgroundAIMonitor} />
+
       <Route component={NotFound} />
     </Switch>
   );

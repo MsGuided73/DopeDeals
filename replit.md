@@ -240,9 +240,34 @@ Preferred communication style: Simple, everyday language.
 - API Routes: ✅ Complete with validation and error handling
 - Testing: ⏳ Ready for KajaPay sandbox credentials
 
+## AI-Powered Background Compliance Engine
+
+### Complete Implementation (New - Hidden from Users)
+- **Background AI Classification**: Automatic product analysis using OpenAI GPT-4o-mini behind the scenes
+- **Invisible Operation**: Users never see AI classification process - completely transparent
+- **Automatic Compliance**: Identifies and hides nicotine/tobacco products from main site automatically
+- **Queue System**: Background processing with configurable delays to avoid rate limiting
+- **Admin Monitoring**: Complete admin-only dashboard for monitoring background AI operations
+- **Real-time Processing**: Automatic classification during Zoho product imports
+
+### Technical Features
+- Background service with automatic queue processing (2-second delays between classifications)
+- Product filtering based on AI classification results (nicotine/tobacco detection)
+- Admin-only monitoring at `/admin/ai-monitor` with real-time statistics
+- Integration with Zoho sync pipeline for automatic processing of new products
+- Configurable auto-hiding of compliance-sensitive products
+- Complete audit logging and performance monitoring
+
+### Integration Status
+- Background Service: ✅ Complete with queue processing and automatic filtering
+- Admin Interface: ✅ Complete admin-only monitoring dashboard
+- Zoho Integration: ✅ Automatic queuing of products during import
+- API Routes: ✅ Complete admin-only endpoints for monitoring and control
+- User Interface: ✅ Removed from user-facing interface (admin-only access)
+
 ## AI-Powered Personalized Emoji Recommendation System
 
-### Complete Implementation (New)
+### Complete Implementation
 - **AI Engine**: OpenAI GPT-4o integration with rule-based fallback system for emoji recommendations
 - **Context-Aware Suggestions**: Personalized emojis based on product type, user mood, and interaction context
 - **Learning System**: Tracks user preferences and behavior to improve recommendations over time
@@ -375,6 +400,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 26, 2025. AI Classification System moved to background operation - Removed user-facing interface, implemented automatic background processing with admin-only monitoring, complete integration with Zoho sync pipeline for transparent compliance management
 - July 25, 2025. Prisma ORM integration implemented as Drizzle replacement - Complete schema with column mapping, PrismaStorage class, type safety, requires session mode connection, ready for activation
 - July 24, 2025. Comprehensive Supabase integration cleanup completed - Removed all legacy PostgreSQL references, cleaned up secrets (PGHOST, PGPORT, etc.), implemented pure Supabase SDK architecture with proper RLS, authentication ready for activation once schema is created
 - July 23, 2025. Complete system audit conducted - Identified missing checkout flow as critical blocker preventing full e-commerce functionality

@@ -370,6 +370,14 @@ Disallow: /`);
     console.error('[Server] Failed to initialize AI Classification Service:', error);
   }
 
+  // Initialize Background AI Classification Service
+  try {
+    const { backgroundClassificationService } = await import('./services/backgroundClassifier.js');
+    console.log('[Server] Background AI Classification Service initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize Background AI Classification Service:', error);
+  }
+
   // Initialize and register Admin AI routes
   try {
     const { adminAIRouter } = await import('./admin/ai-routes.js');
@@ -377,6 +385,15 @@ Disallow: /`);
     console.log('[Server] Admin AI routes initialized successfully');
   } catch (error) {
     console.error('[Server] Failed to initialize Admin AI routes:', error);
+  }
+
+  // Initialize and register Background AI Admin routes (admin only)
+  try {
+    const { adminAIBackgroundRouter } = await import('./admin/ai-background-routes.js');
+    app.use('/api/admin/ai-background', adminAIBackgroundRouter);
+    console.log('[Server] Background AI Admin routes initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize Background AI Admin routes:', error);
   }
 
   // Initialize and register ShipStation integration routes
