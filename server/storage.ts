@@ -4,6 +4,7 @@ import {
   productSimilarity, recommendationCache, paymentMethods, paymentTransactions, kajaPayWebhookEvents,
   emojiUsage, userEmojiPreferences, emojiRecommendations, productEmojiAssociations,
   conciergeConversations, conciergeMessages, conciergeRecommendations, conciergeAnalytics,
+  complianceRules, productCompliance, complianceAuditLog,
   type User, type InsertUser, type Product, type InsertProduct, 
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
@@ -16,7 +17,9 @@ import {
   type EmojiUsage, type InsertEmojiUsage, type UserEmojiPreferences, type InsertUserEmojiPreferences,
   type EmojiRecommendations, type InsertEmojiRecommendations, type ProductEmojiAssociations, type InsertProductEmojiAssociations,
   type ConciergeConversation, type InsertConciergeConversation, type ConciergeMessage, type InsertConciergeMessage,
-  type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics
+  type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics,
+  type ComplianceRule, type InsertComplianceRule, type ProductCompliance, type InsertProductCompliance,
+  type ComplianceAuditLog, type InsertComplianceAuditLog
 } from "@shared/schema";
 
 import {
@@ -150,6 +153,26 @@ export interface IStorage {
   
   insertShipstationSyncStatus(status: InsertShipstationSyncStatus): Promise<ShipstationSyncStatus>;
   getLatestShipstationSyncStatus(syncType?: string): Promise<ShipstationSyncStatus | undefined>;
+  
+  // Compliance Engine
+  getAllComplianceRules(): Promise<ComplianceRule[]>;
+  getComplianceRulesByCategory(category: string): Promise<ComplianceRule[]>;
+  getComplianceRuleById(id: string): Promise<ComplianceRule | undefined>;
+  createComplianceRule(rule: InsertComplianceRule): Promise<ComplianceRule>;
+  updateComplianceRule(id: string, updates: Partial<InsertComplianceRule>): Promise<ComplianceRule | undefined>;
+  
+  getProductComplianceByProductId(productId: string): Promise<ProductCompliance[]>;
+  createProductCompliance(compliance: InsertProductCompliance): Promise<ProductCompliance>;
+  deleteProductCompliance(productId: string, complianceId: string): Promise<boolean>;
+  
+  createComplianceAuditLog(log: InsertComplianceAuditLog): Promise<ComplianceAuditLog>;
+  getComplianceAuditLogs(filters?: { page?: number; limit?: number; severity?: string }): Promise<ComplianceAuditLog[]>;
+  resolveComplianceViolation(logId: string, resolvedBy: string, notes?: string): Promise<boolean>;
+  getComplianceStats(): Promise<{ totalViolations: number; criticalViolations: number; resolvedViolations: number }>;
+  
+  // Additional helper methods for compliance
+  getProductById(id: string): Promise<Product | undefined>;
+  getAllProducts(): Promise<Product[]>;
 }
 
 export class MemStorage implements IStorage {

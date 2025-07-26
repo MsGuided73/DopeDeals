@@ -351,6 +351,16 @@ Disallow: /`);
     console.error('[Server] Failed to initialize VIP Concierge system:', error);
   }
 
+  // Initialize and register Compliance Engine routes
+  try {
+    // Import the compliance routes
+    const { complianceRouter } = await import('./compliance/routes.js');
+    app.use('/api/compliance', complianceRouter);
+    console.log('[Server] Compliance Engine initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize Compliance Engine:', error);
+  }
+
   // Initialize and register ShipStation integration routes
   try {
     let shipstationService: ShipstationService | null = null;

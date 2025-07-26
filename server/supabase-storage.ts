@@ -18,7 +18,10 @@ import {
   type EmojiUsage, type InsertEmojiUsage, type UserEmojiPreferences, type InsertUserEmojiPreferences,
   type EmojiRecommendations, type InsertEmojiRecommendations, type ProductEmojiAssociations, type InsertProductEmojiAssociations,
   type ConciergeConversation, type InsertConciergeConversation, type ConciergeMessage, type InsertConciergeMessage,
-  type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics
+  type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics,
+  complianceRules, productCompliance, complianceAuditLog,
+  type ComplianceRule, type InsertComplianceRule, type ProductCompliance, type InsertProductCompliance,
+  type ComplianceAuditLog, type InsertComplianceAuditLog
 } from "@shared/schema";
 
 import {
@@ -533,5 +536,138 @@ export class SupabaseStorage implements IStorage {
     
     if (error) throw error;
     return data as ShipstationSyncStatus;
+  }
+
+  // Compliance Engine Methods
+  async getAllComplianceRules(): Promise<ComplianceRule[]> {
+    const { data } = await supabaseAdmin!
+      .from('compliance_rules')
+      .select('*')
+      .order('created_at', { ascending: false });
+    return data || [];
+  }
+
+  async getComplianceRulesByCategory(category: string): Promise<ComplianceRule[]> {
+    const { data } = await supabaseAdmin!
+      .from('compliance_rules')
+      .select('*')
+      .eq('category', category);
+    return data || [];
+  }
+
+  async getComplianceRuleById(id: string): Promise<ComplianceRule | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('compliance_rules')
+      .select('*')
+      .eq('id', id)
+      .single();
+    return data || undefined;
+  }
+
+  async createComplianceRule(rule: InsertComplianceRule): Promise<ComplianceRule> {
+    const { data } = await supabaseAdmin!
+      .from('compliance_rules')
+      .insert(rule)
+      .select()
+      .single();
+    return data!;
+  }
+
+  async updateComplianceRule(id: string, updates: Partial<InsertComplianceRule>): Promise<ComplianceRule | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('compliance_rules')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    return data || undefined;
+  }
+
+  async getProductComplianceByProductId(productId: string): Promise<ProductCompliance[]> {
+    const { data } = await supabaseAdmin!
+      .from('product_compliance')
+      .select('*')
+      .eq('product_id', productId);
+    return data || [];
+  }
+
+  async createProductCompliance(compliance: InsertProductCompliance): Promise<ProductCompliance> {
+    const { data } = await supabaseAdmin!
+      .from('product_compliance')
+      .insert(compliance)
+      .select()
+      .single();
+    return data!;
+  }
+
+  async deleteProductCompliance(productId: string, complianceId: string): Promise<boolean> {
+    const { error } = await supabaseAdmin!
+      .from('product_compliance')
+      .delete()
+      .eq('product_id', productId)
+      .eq('compliance_id', complianceId);
+    return !error;
+  }
+
+  async createComplianceAuditLog(log: InsertComplianceAuditLog): Promise<ComplianceAuditLog> {
+    const { data } = await supabaseAdmin!
+      .from('compliance_audit_log')
+      .insert(log)
+      .select()
+      .single();
+    return data!;
+  }
+
+  async getComplianceAuditLogs(filters?: { page?: number; limit?: number; severity?: string }): Promise<ComplianceAuditLog[]> {
+    let query = supabaseAdmin!
+      .from('compliance_audit_log')
+      .select('*')
+      .order('detected_at', { ascending: false });
+
+    if (filters?.severity) {
+      query = query.eq('severity', filters.severity);
+    }
+
+    if (filters?.page && filters?.limit) {
+      const offset = (filters.page - 1) * filters.limit;
+      query = query.range(offset, offset + filters.limit - 1);
+    }
+
+    const { data } = await query;
+    return data || [];
+  }
+
+  async resolveComplianceViolation(logId: string, resolvedBy: string, notes?: string): Promise<boolean> {
+    const { error } = await supabaseAdmin!
+      .from('compliance_audit_log')
+      .update({
+        resolved_by: resolvedBy,
+        resolved_at: new Date().toISOString(),
+        notes: notes
+      })
+      .eq('id', logId);
+    return !error;
+  }
+
+  async getComplianceStats(): Promise<{ totalViolations: number; criticalViolations: number; resolvedViolations: number }> {
+    const [total, critical, resolved] = await Promise.all([
+      supabaseAdmin!.from('compliance_audit_log').select('id', { count: 'exact' }),
+      supabaseAdmin!.from('compliance_audit_log').select('id', { count: 'exact' }).eq('severity', 'critical'),
+      supabaseAdmin!.from('compliance_audit_log').select('id', { count: 'exact' }).not('resolved_by', 'is', null)
+    ]);
+
+    return {
+      totalViolations: total.count || 0,
+      criticalViolations: critical.count || 0,
+      resolvedViolations: resolved.count || 0
+    };
+  }
+
+  async getProductById(id: string): Promise<Product | undefined> {
+    return this.getProduct(id);
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    return this.getProducts();
   }
 }
