@@ -12,12 +12,21 @@ import EmojiDemo from "@/pages/EmojiDemo";
 import VIPConcierge from "@/pages/VIPConcierge";
 import CompliancePage from "@/pages/CompliancePage";
 import BackgroundAIMonitor from "@/pages/BackgroundAIMonitor";
+import NewHomePage from "@/pages/NewHomePage";
+import NewProductsPage from "@/pages/NewProductsPage";
+import NewProductDetailPage from "@/pages/NewProductDetailPage";
 
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
+      {/* New Premium Design Routes */}
+      <Route path="/new" component={NewHomePage} />
+      <Route path="/new/products" component={NewProductsPage} />
+      <Route path="/new/product/:id" component={NewProductDetailPage} />
+      
+      {/* Legacy Routes */}
       <Route path="/" component={Home} />
       <Route path="/products" component={ProductsPage} />
       <Route path="/product/:id" component={ProductPage} />
@@ -33,19 +42,24 @@ function Router() {
 }
 
 function App() {
+  // Determine if we're on new design routes
+  const isNewDesign = window.location.pathname.startsWith('/new');
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="dark min-h-screen bg-neutral-950 text-white">
-          {/* Gradient Background */}
-          <div className="gradient-background">
-            <div className="gradient-blob-1"></div>
-            <div className="gradient-blob-2"></div>
-          </div>
+        <div className={isNewDesign ? "min-h-screen bg-background" : "dark min-h-screen bg-neutral-950 text-white"}>
+          {/* Legacy Gradient Background */}
+          {!isNewDesign && (
+            <div className="gradient-background">
+              <div className="gradient-blob-1"></div>
+              <div className="gradient-blob-2"></div>
+            </div>
+          )}
           
           <Toaster />
           <Router />
-          <VIPConciergeWidget />
+          {!isNewDesign && <VIPConciergeWidget />}
         </div>
       </TooltipProvider>
     </QueryClientProvider>
