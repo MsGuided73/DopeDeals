@@ -6,7 +6,7 @@ const classificationSchema = z.object({
   categories: z.array(z.enum(["THCA", "Kratom", "7-Hydroxy", "Nicotine", "Other"])),
   nicotineProduct: z.boolean(),
   requiresLabTest: z.boolean(),
-  hiddenReason: z.string().optional()
+  hiddenReason: z.string().nullable()
 });
 
 export async function classifyProduct(productId: string) {
