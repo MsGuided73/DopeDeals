@@ -162,7 +162,8 @@ export class ZohoSyncManager {
         category_id: null, // Set to null to avoid foreign key violations
         brand_id: null, // Set to null to avoid foreign key violations
         materials: zohoProduct.category_name ? [zohoProduct.category_name] : null,
-        image_urls: zohoProduct.images?.length > 0 ? zohoProduct.images.map(img => img.file_path) : null,
+        image_urls: zohoProduct.images && zohoProduct.images.length > 0 ? 
+          zohoProduct.images.map(img => `/zoho/product-image/${zohoProduct.item_id}`) : null,
         stock_quantity: zohoProduct.stock_on_hand || 0,
         vip_price: null,
         channels: ['vip_smoke'],
@@ -193,7 +194,8 @@ export class ZohoSyncManager {
         await classifyProduct(data.id);
         console.log(`[Zoho Sync] AI classification completed for imported product: ${dbProduct.name}`);
       } catch (error) {
-        console.warn(`[Zoho Sync] AI classification failed for product ${dbProduct.name}:`, error.message);
+        console.warn(`[Zoho Sync] AI classification failed for product ${dbProduct.name}:`, 
+          error instanceof Error ? error.message : String(error));
         // Continue sync even if AI classification fails - it's not critical to product import
       }
     } catch (error) {
@@ -340,7 +342,7 @@ export class ZohoSyncManager {
   private mapZohoOrderToLocal(zohoOrder: ZohoOrder, userId: string): InsertOrder {
     return {
       userId,
-      totalAmount: zohoOrder.total,
+      totalAmount: Number(zohoOrder.total),
       status: this.mapZohoOrderStatus(zohoOrder.status),
       shippingAddress: this.formatAddress(zohoOrder.shipping_address),
       billingAddress: this.formatAddress(zohoOrder.billing_address)
