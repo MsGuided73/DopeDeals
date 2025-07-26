@@ -670,4 +670,14 @@ export class SupabaseStorage implements IStorage {
   async getAllProducts(): Promise<Product[]> {
     return this.getProducts();
   }
+
+  async updateProduct(id: string, updates: Partial<Product>): Promise<Product | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('products')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    return data || undefined;
+  }
 }

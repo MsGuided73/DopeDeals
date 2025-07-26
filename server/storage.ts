@@ -173,6 +173,7 @@ export interface IStorage {
   // Additional helper methods for compliance
   getProductById(id: string): Promise<Product | undefined>;
   getAllProducts(): Promise<Product[]>;
+  updateProduct(id: string, updates: Partial<InsertProduct>): Promise<Product | undefined>;
 }
 
 export class MemStorage implements IStorage {
