@@ -188,13 +188,13 @@ export class ZohoSyncManager {
       
       console.log(`[Zoho Sync] Created local product: ${dbProduct.name}`);
 
-      // Phase 3: Automatic AI Classification for imported products
+      // Phase 3: Automatic Background AI Classification for imported products
       try {
-        const { classifyProduct } = await import('../services/aiClassifier.js');
-        await classifyProduct(data.id);
-        console.log(`[Zoho Sync] AI classification completed for imported product: ${dbProduct.name}`);
+        const { backgroundClassificationService } = await import('../services/backgroundClassifier.js');
+        await backgroundClassificationService.queueProduct(data.id);
+        console.log(`[Zoho Sync] Queued product for background AI classification: ${dbProduct.name}`);
       } catch (error) {
-        console.warn(`[Zoho Sync] AI classification failed for product ${dbProduct.name}:`, 
+        console.warn(`[Zoho Sync] Failed to queue for AI classification ${dbProduct.name}:`, 
           error instanceof Error ? error.message : String(error));
         // Continue sync even if AI classification fails - it's not critical to product import
       }
