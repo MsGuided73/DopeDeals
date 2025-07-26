@@ -174,6 +174,11 @@ export interface IStorage {
   getProductById(id: string): Promise<Product | undefined>;
   getAllProducts(): Promise<Product[]>;
   updateProduct(id: string, updates: Partial<InsertProduct>): Promise<Product | undefined>;
+  
+  // Lab Certificate methods
+  createLabCertificate(certificate: InsertLabCertificate): Promise<LabCertificate>;
+  getLabCertificatesByProductId(productId: string): Promise<LabCertificate[]>;
+  updateLabCertificate(id: string, updates: Partial<InsertLabCertificate>): Promise<LabCertificate | undefined>;
 }
 
 export class MemStorage implements IStorage {

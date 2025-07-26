@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Crown, Search, User, Heart, ShoppingCart, ChevronDown } from "lucide-react";
+import { Crown, Search, User, Heart, ShoppingCart, ChevronDown, Shield, Bot } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -71,6 +71,16 @@ export default function Header({ onCartToggle }: HeaderProps) {
 
           {/* User Actions */}
           <div className="flex items-center space-x-2 sm:space-x-4">
+            <Link href="/compliance">
+              <Button variant="ghost" size="icon" className="text-steel-300 hover:text-yellow-400 hidden sm:flex">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
+              </Button>
+            </Link>
+            <Link href="/ai-classification">
+              <Button variant="ghost" size="icon" className="text-steel-300 hover:text-yellow-400 hidden sm:flex">
+                <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
+              </Button>
+            </Link>
             <Button variant="ghost" size="icon" className="text-steel-300 hover:text-yellow-400 hidden sm:flex">
               <User className="w-5 h-5 sm:w-6 sm:h-6" />
             </Button>
