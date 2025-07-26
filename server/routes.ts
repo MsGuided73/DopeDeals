@@ -361,6 +361,15 @@ Disallow: /`);
     console.error('[Server] Failed to initialize Compliance Engine:', error);
   }
 
+  // Initialize and register AI Classification routes
+  try {
+    const { aiClassificationRouter } = await import('./ai/classification-routes.js');
+    app.use('/api/ai/classification', aiClassificationRouter);
+    console.log('[Server] AI Classification Service initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize AI Classification Service:', error);
+  }
+
   // Initialize and register ShipStation integration routes
   try {
     let shipstationService: ShipstationService | null = null;

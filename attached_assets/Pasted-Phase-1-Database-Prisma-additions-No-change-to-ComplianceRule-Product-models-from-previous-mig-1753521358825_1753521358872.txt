@@ -1,0 +1,208 @@
+Phase 1 – Database (Prisma additions)
+No change to ComplianceRule / Product models from previous migration.
+Add COA extract store:
+
+prisma
+Copy
+Edit
+model LabCertificate {
+  id            String   @id @default(uuid())
+  productId     String
+  batchNumber   String?
+  potency       Json?      // {delta9:0.27, thca:23.1, ...}
+  testedAt      DateTime?
+  url           String
+  parsedByAI    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  product       Product  @relation(fields:[productId], references:[id])
+}
+Run:
+
+bash
+Copy
+Edit
+npx prisma migrate dev --name add_lab_certificate
+Phase 2 – AI‑Services Folder
+css
+Copy
+Edit
+src/
+ └─ services/
+     ├─ aiClassifier.ts
+     ├─ coaParser.ts
+     └─ openaiClient.ts
+2.1 openaiClient.ts
+ts
+Copy
+Edit
+import OpenAI from "openai";
+
+export const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+export async function chatJSON(messages, model=process.env.OPENAI_MODEL){
+  return openai.chat.completions.create({
+    model,
+    response_format: {type: "json_object"},
+    temperature: 0,
+    messages
+  });
+}
+2.2 aiClassifier.ts
+ts
+Copy
+Edit
+import { prisma } from "@/lib/db";
+import { chatJSON } from "./openaiClient";
+import { z } from "zod";
+
+const schema = z.object({
+  categories: z.array(z.enum(["THCA","Kratom","7-Hydroxy","Nicotine","Other"])),
+  nicotineProduct: z.boolean(),
+  requiresLabTest: z.boolean(),
+  hiddenReason: z.string().optional()
+});
+
+export async function classifyProduct(productId:string){
+  const p = await prisma.product.findUnique({ where:{id:productId} });
+  if(!p) throw new Error("Product not found");
+
+  const {choices:[{message:{content}}]} = await chatJSON([
+    {role:"system",content:`You are a compliance‑classification agent for VIP Smoke.
+Return JSON matching this schema:
+
+{
+  "categories": ["THCA" | "Kratom" | "7-Hydroxy" | "Nicotine" | "Other"...],
+  "nicotineProduct": boolean,
+  "requiresLabTest": boolean,
+  "hiddenReason": string?    // if product must be hidden on main site
+}
+
+Rules:
+• Any cannabinoid (delta‑8, delta‑9, THCA, THCP) => category THCA, requiresLabTest true.
+• "Kratom" or "Mitragyna" => Kratom.
+• "7‑Hydroxy" => 7-Hydroxy.
+• "Nicotine", "Tobacco", "Cigar", "Vape" => Nicotine, nicotineProduct true, hiddenReason "Nicotine products restricted to tobacco site".
+Respond ONLY with JSON.`},
+    {role:"user",content:`TITLE: ${p.name}\nDESCRIPTION: ${p.description}`}
+  ]);
+
+  const parsed = schema.parse(JSON.parse(content));
+
+  /* 1️⃣ Link categories */
+  const rules = await prisma.complianceRule.findMany({
+    where:{ category:{in:parsed.categories} }
+  });
+  await prisma.productCompliance.createMany({
+    data: rules.map(r=>({productId:p.id, complianceId:r.id})),
+    skipDuplicates: true
+  });
+
+  /* 2️⃣ Toggle flags */
+  await prisma.product.update({
+    where:{id:p.id},
+    data:{
+      nicotineProduct:parsed.nicotineProduct,
+      requiresLabTest:parsed.requiresLabTest,
+      visibleOnMainSite: parsed.nicotineProduct ? false : p.visibleOnMainSite,
+      hiddenReason: parsed.hiddenReason
+    }
+  });
+}
+2.3 coaParser.ts
+ts
+Copy
+Edit
+import pdf from "pdf-parse";
+import { prisma } from "@/lib/db";
+
+export async function ingestCOA(productId:string,fileBuffer:Buffer,url:string){
+  const data = await pdf(fileBuffer);
+  // naive regex extraction – can be upgraded later
+  const potencyMatch = /THCA[:\s]+([\d.]+)/i.exec(data.text);
+  const batchMatch   = /Batch(?:\sNo\.?):?\s*([A-Za-z0-9-]+)/i.exec(data.text);
+  const dateMatch    = /(19|20)\d{2}[-/]\d{2}[-/]\d{2}/.exec(data.text);
+
+  await prisma.labCertificate.create({
+    data:{
+      productId,
+      url,
+      batchNumber: batchMatch?.[1],
+      potency: potencyMatch ? {thca:parseFloat(potencyMatch[1])} : null,
+      testedAt: dateMatch ? new Date(dateMatch[0]) : null,
+      parsedByAI: false
+    }
+  });
+
+  await prisma.product.update({
+    where:{id:productId},
+    data:{ labTestUrl:url, requiresLabTest: false }  // now satisfied
+  });
+}
+Phase 3 – Import Pipeline Hook
+src/jobs/zohoImport.ts (after upserting products):
+
+ts
+Copy
+Edit
+for (const product of importedProducts) {
+  try {
+    await classifyProduct(product.id);
+  } catch (e){
+    console.error("AI classification failed", e);
+    // Push row to 'manual_review' table for staff
+  }
+}
+Phase 4 – Admin Panel End‑points
+POST /admin/classify/:productId – manual re‑run
+
+POST /admin/coa-upload – accepts file, calls ingestCOA, returns parsed result.
+
+Update RBAC: only role = "admin" can hit these.
+
+Phase 5 – Front‑End Touchpoints
+Product Detail
+
+Render badges from product.complianceLinks[].complianceRule.warningLabels.
+
+Show “COA Available” link if labTestUrl exists.
+
+Admin Product Table
+
+Column “AI Status”: ✅ Classified / ❌ Needs Review.
+
+Button “Re‑classify”.
+
+COA Upload Modal
+
+Drag‑and‑drop → /admin/coa-upload.
+
+Phase 6 – n8n Workflows (summary – implemented elsewhere)
+Nightly audit (missing COA, nicotine on wrong site, expiration, etc.)
+
+Monthly policy‑drift watcher – scrape state statutes, update rules.
+
+Deliverables Checklist (v2)
+ Models & migrations up to date (ComplianceRule, LabCertificate).
+
+ AI service files (aiClassifier.ts, coaParser.ts, openaiClient.ts).
+
+ Env vars set in Replit Secrets.
+
+ Zoho import pipeline calls classifyProduct.
+
+ Admin endpoints & UI hooks wired.
+
+ n8n nightly audit already configured.
+
+ Docs: README‑Compliance.md updated with AI agent flow.
+
+Complete this list and the in‑app AI agent will autonomously tag every SKU, enforce nicotine segregation, and validate lab tests; n8n covers ongoing legal drift.
+
+makefile
+Copy
+Edit
+
+::contentReference[oaicite:0]{index=0}
