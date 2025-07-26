@@ -248,11 +248,11 @@ export default function BackgroundAIMonitor() {
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
             <h4 className="text-sm font-medium text-amber-800 mb-2">How Background AI Works:</h4>
             <ul className="text-sm text-amber-700 space-y-1">
-              <li>• Automatically analyzes new products imported from Zoho</li>
-              <li>• Identifies nicotine and tobacco products for compliance</li>
-              <li>• Hides restricted products from regular users (admin can still see them)</li>
-              <li>• Processes products in batches with delays to avoid rate limiting</li>
-              <li>• Runs completely behind the scenes - users never see this process</li>
+              <li>• <strong>Rule-based filtering:</strong> Fast keyword detection for obvious cases (nicotine, tobacco, etc.)</li>
+              <li>• <strong>AI classification:</strong> Complex analysis for ambiguous products using OpenAI</li>
+              <li>• <strong>Automatic compliance:</strong> Hides restricted products from regular users</li>
+              <li>• <strong>Zoho integration:</strong> Processes new imports automatically in background</li>
+              <li>• <strong>Invisible operation:</strong> Users never see this process happening</li>
             </ul>
           </div>
         </CardContent>

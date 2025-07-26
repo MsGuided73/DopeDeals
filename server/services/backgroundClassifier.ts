@@ -5,6 +5,7 @@
 
 import { classifyProduct, bulkClassifyProducts } from './aiClassifier.js';
 import { storage } from '../storage.js';
+import { complianceRuleEngine } from './complianceRules.js';
 
 interface BackgroundClassificationConfig {
   enabled: boolean;
@@ -82,28 +83,51 @@ class BackgroundClassificationService {
    */
   private async classifyAndFilterProduct(productId: string): Promise<void> {
     try {
-      // Run AI classification
-      const classificationResult = await classifyProduct(productId);
-      
-      // Get the product to update its visibility
+      // Get the product first
       const product = await storage.getProduct(productId);
       if (!product) return;
 
-      // Check if product should be hidden based on classification
+      // Step 1: Quick rule-based check for obvious cases
+      const ruleAnalysis = complianceRuleEngine.analyzeProduct(product.name, product.description || '');
+      
       let shouldHide = false;
       let hideReason = '';
+      let classificationMethod = 'rules';
 
-      if (classificationResult.nicotineProduct && this.config.autoHideNicotineProducts) {
+      if (ruleAnalysis.shouldHide) {
         shouldHide = true;
-        hideReason = 'Nicotine product - restricted access';
-      }
+        hideReason = `${ruleAnalysis.category} product - restricted access (rule-based)`;
+        console.log(`[Background AI] Product ${product.name} flagged by rules: ${ruleAnalysis.category} (confidence: ${ruleAnalysis.confidence.toFixed(2)})`);
+      } else if (ruleAnalysis.confidence < 0.7) {
+        // Step 2: AI classification for complex cases only when rules aren't confident
+        try {
+          const classificationResult = await classifyProduct(productId);
+          classificationMethod = 'ai';
 
-      if (classificationResult.categories.some(cat => 
-        cat.toLowerCase().includes('tobacco') || 
-        cat.toLowerCase().includes('cigarette')
-      ) && this.config.autoHideTobaccoProducts) {
-        shouldHide = true;
-        hideReason = 'Tobacco product - restricted access';
+          if (classificationResult.nicotineProduct && this.config.autoHideNicotineProducts) {
+            shouldHide = true;
+            hideReason = 'Nicotine product - restricted access (AI classified)';
+          }
+
+          if (classificationResult.categories.some(cat => 
+            cat.toLowerCase().includes('tobacco') || 
+            cat.toLowerCase().includes('cigarette')
+          ) && this.config.autoHideTobaccoProducts) {
+            shouldHide = true;
+            hideReason = 'Tobacco product - restricted access (AI classified)';
+          }
+
+          console.log(`[Background AI] AI classified product ${product.name}: ${classificationResult.categories.join(', ')}`);
+        } catch (aiError) {
+          console.warn(`[Background AI] AI classification failed for ${product.name}, using rules only:`, aiError);
+          // If AI fails but rules found something concerning, err on the side of caution
+          if (ruleAnalysis.triggeredRules.length > 0) {
+            shouldHide = true;
+            hideReason = `${ruleAnalysis.category} product - restricted access (rule-based fallback)`;
+          }
+        }
+      } else {
+        console.log(`[Background AI] Product ${product.name} cleared by rules (no AI needed)`);
       }
 
       // Update product visibility if needed
@@ -111,7 +135,7 @@ class BackgroundClassificationService {
         await this.hideProductFromPublic(productId, hideReason);
       }
 
-      console.log(`[Background AI] Classified product ${product.name}: ${classificationResult.categories.join(', ')} ${shouldHide ? '(HIDDEN)' : '(VISIBLE)'}`);
+      console.log(`[Background AI] Product ${product.name} processed via ${classificationMethod}: ${shouldHide ? '(HIDDEN)' : '(VISIBLE)'}`);
 
     } catch (error) {
       console.error(`[Background AI] Classification failed for product ${productId}:`, error);
