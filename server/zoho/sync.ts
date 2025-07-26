@@ -342,7 +342,7 @@ export class ZohoSyncManager {
   private mapZohoOrderToLocal(zohoOrder: ZohoOrder, userId: string): InsertOrder {
     return {
       userId,
-      totalAmount: Number(zohoOrder.total),
+      totalAmount: String(zohoOrder.total),
       status: this.mapZohoOrderStatus(zohoOrder.status),
       shippingAddress: this.formatAddress(zohoOrder.shipping_address),
       billingAddress: this.formatAddress(zohoOrder.billing_address)
