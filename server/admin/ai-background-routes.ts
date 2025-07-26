@@ -4,6 +4,7 @@
 
 import { Router } from 'express';
 import { backgroundClassificationService } from '../services/backgroundClassifier.js';
+import { complianceRuleEngine } from '../services/complianceRules.js';
 
 const adminAIBackgroundRouter = Router();
 
@@ -62,6 +63,50 @@ adminAIBackgroundRouter.post('/config', requireAdmin, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to update configuration'
+    });
+  }
+});
+
+// Get compliance rules statistics (admin only)
+adminAIBackgroundRouter.get('/rules', requireAdmin, async (req, res) => {
+  try {
+    const stats = complianceRuleEngine.getRuleStats();
+    res.json({
+      success: true,
+      rules: stats,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get rules statistics'
+    });
+  }
+});
+
+// Test product against compliance rules (admin only)
+adminAIBackgroundRouter.post('/test-rules', requireAdmin, async (req, res) => {
+  try {
+    const { productName, productDescription } = req.body;
+    
+    if (!productName) {
+      return res.status(400).json({
+        success: false,
+        error: 'Product name is required'
+      });
+    }
+
+    const analysis = complianceRuleEngine.analyzeProduct(productName, productDescription);
+    
+    res.json({
+      success: true,
+      analysis,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to test rules'
     });
   }
 });
