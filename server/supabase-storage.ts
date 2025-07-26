@@ -680,4 +680,34 @@ export class SupabaseStorage implements IStorage {
       .single();
     return data || undefined;
   }
+
+  // Lab Certificate methods
+  async createLabCertificate(certificate: InsertLabCertificate): Promise<LabCertificate> {
+    const { data } = await supabaseAdmin!
+      .from('lab_certificates')
+      .insert(certificate)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create lab certificate');
+    return data;
+  }
+
+  async getLabCertificatesByProductId(productId: string): Promise<LabCertificate[]> {
+    const { data } = await supabaseAdmin!
+      .from('lab_certificates')
+      .select('*')
+      .eq('product_id', productId)
+      .order('created_at', { ascending: false });
+    return data || [];
+  }
+
+  async updateLabCertificate(id: string, updates: Partial<InsertLabCertificate>): Promise<LabCertificate | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('lab_certificates')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    return data || undefined;
+  }
 }

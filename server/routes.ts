@@ -370,6 +370,15 @@ Disallow: /`);
     console.error('[Server] Failed to initialize AI Classification Service:', error);
   }
 
+  // Initialize and register Admin AI routes
+  try {
+    const { adminAIRouter } = await import('./admin/ai-routes.js');
+    app.use('/api/admin/ai', adminAIRouter);
+    console.log('[Server] Admin AI routes initialized successfully');
+  } catch (error) {
+    console.error('[Server] Failed to initialize Admin AI routes:', error);
+  }
+
   // Initialize and register ShipStation integration routes
   try {
     let shipstationService: ShipstationService | null = null;

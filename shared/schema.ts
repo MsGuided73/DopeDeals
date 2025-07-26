@@ -131,6 +131,23 @@ export const complianceAuditLog = pgTable("compliance_audit_log", {
   notes: text("notes"),
 });
 
+// Lab Certificate Table for COA storage and parsing
+export const labCertificates = pgTable("lab_certificates", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id").references(() => products.id).notNull(),
+  batchNumber: text("batch_number"),
+  potency: jsonb("potency"), // {delta9:0.27, thca:23.1, cbd:15.2, ...}
+  testedAt: timestamp("tested_at", { withTimezone: true }),
+  url: text("url").notNull(),
+  parsedByAI: boolean("parsed_by_ai").default(false),
+  labName: text("lab_name"),
+  expirationDate: timestamp("expiration_date", { withTimezone: true }),
+  contaminantResults: jsonb("contaminant_results"), // {pesticides: "pass", heavyMetals: "pass", ...}
+  isValid: boolean("is_valid").default(true),
+  validationErrors: text("validation_errors").array().default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
 export const cartItems = pgTable("cart_items", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id),
@@ -375,6 +392,7 @@ export type InsertZohoOrder = z.infer<typeof insertZohoOrderSchema>;
 export const insertComplianceRuleSchema = createInsertSchema(complianceRules).omit({ id: true, createdAt: true });
 export const insertProductComplianceSchema = createInsertSchema(productCompliance).omit({ id: true, createdAt: true });
 export const insertComplianceAuditLogSchema = createInsertSchema(complianceAuditLog).omit({ id: true, detectedAt: true });
+export const insertLabCertificateSchema = createInsertSchema(labCertificates).omit({ id: true, createdAt: true });
 
 export type ComplianceRule = typeof complianceRules.$inferSelect;
 export type InsertComplianceRule = z.infer<typeof insertComplianceRuleSchema>;
@@ -382,6 +400,8 @@ export type ProductCompliance = typeof productCompliance.$inferSelect;
 export type InsertProductCompliance = z.infer<typeof insertProductComplianceSchema>;
 export type ComplianceAuditLog = typeof complianceAuditLog.$inferSelect;
 export type InsertComplianceAuditLog = z.infer<typeof insertComplianceAuditLogSchema>;
+export type LabCertificate = typeof labCertificates.$inferSelect;
+export type InsertLabCertificate = z.infer<typeof insertLabCertificateSchema>;
 
 export * from './emoji-schema';
 export * from './concierge-schema';

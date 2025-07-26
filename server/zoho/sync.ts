@@ -186,6 +186,16 @@ export class ZohoSyncManager {
       if (error) throw error;
       
       console.log(`[Zoho Sync] Created local product: ${dbProduct.name}`);
+
+      // Phase 3: Automatic AI Classification for imported products
+      try {
+        const { classifyProduct } = await import('../services/aiClassifier.js');
+        await classifyProduct(data.id);
+        console.log(`[Zoho Sync] AI classification completed for imported product: ${dbProduct.name}`);
+      } catch (error) {
+        console.warn(`[Zoho Sync] AI classification failed for product ${dbProduct.name}:`, error.message);
+        // Continue sync even if AI classification fails - it's not critical to product import
+      }
     } catch (error) {
       console.error(`[Zoho Sync] Failed to create local product ${zohoProduct.name}:`, error);
       throw error;
