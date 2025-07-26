@@ -10,6 +10,7 @@ import CategoryPage from "@/pages/category";
 import ProductsPage from "@/pages/products";
 import EmojiDemo from "@/pages/EmojiDemo";
 import VIPConcierge from "@/pages/VIPConcierge";
+import CompliancePage from "@/pages/CompliancePage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/category/:id" component={CategoryPage} />
       <Route path="/emoji-demo" component={EmojiDemo} />
       <Route path="/concierge" component={VIPConcierge} />
+      <Route path="/compliance" component={CompliancePage} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, numeric, timestamp, uuid, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, numeric, timestamp, uuid, jsonb, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -41,6 +41,18 @@ export const products = pgTable("products", {
   inStock: boolean("in_stock").default(true),
   featured: boolean("featured").default(false),
   vipExclusive: boolean("vip_exclusive").default(false),
+  
+  // Compliance fields for high-risk products
+  nicotineProduct: boolean("nicotine_product").default(false),
+  visibleOnMainSite: boolean("visible_on_main_site").default(true),
+  visibleOnTobaccoSite: boolean("visible_on_tobacco_site").default(false),
+  requiresLabTest: boolean("requires_lab_test").default(false),
+  labTestUrl: text("lab_test_url"),
+  batchNumber: text("batch_number"),
+  expirationDate: timestamp("expiration_date", { withTimezone: true }),
+  hiddenReason: text("hidden_reason"),
+  overrideRestrictions: jsonb("override_restrictions"),
+  
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
@@ -83,6 +95,40 @@ export const loyaltyPoints = pgTable("loyalty_points", {
   transactionType: text("transaction_type").notNull(), // earn_purchase, redeem_discount, membership_bonus
   orderId: uuid("order_id").references(() => orders.id),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// Compliance Engine Tables
+export const complianceRules = pgTable("compliance_rules", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  category: text("category").notNull(), // "THCA", "Kratom", "Nicotine", "7-Hydroxy"
+  substanceType: text("substance_type"), // optional finer detail
+  restrictedStates: text("restricted_states").array().default([]), // ["ID","IN","UT"]
+  ageRequirement: integer("age_requirement").default(21), // 18 or 21
+  labTestingRequired: boolean("lab_testing_required").default(false),
+  batchTrackingRequired: boolean("batch_tracking_required").default(false),
+  warningLabels: text("warning_labels").array().default([]), // ["Not FDA approved"]
+  shippingRestrictions: jsonb("shipping_restrictions"), // weight limits, carrier restrictions
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productCompliance = pgTable("product_compliance", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id").references(() => products.id).notNull(),
+  complianceId: uuid("compliance_id").references(() => complianceRules.id).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+}, (table) => ({
+  uniqueProductCompliance: unique().on(table.productId, table.complianceId),
+}));
+
+export const complianceAuditLog = pgTable("compliance_audit_log", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id").references(() => products.id).notNull(),
+  violation: text("violation").notNull(),
+  detectedAt: timestamp("detected_at", { withTimezone: true }).defaultNow(),
+  resolvedBy: text("resolved_by"), // user id or "n8n"
+  resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+  severity: text("severity").default("medium"), // low, medium, high, critical
+  notes: text("notes"),
 });
 
 export const cartItems = pgTable("cart_items", {
@@ -324,6 +370,18 @@ export type ZohoProduct = typeof zohoProducts.$inferSelect;
 export type InsertZohoProduct = z.infer<typeof insertZohoProductSchema>;
 export type ZohoOrder = typeof zohoOrders.$inferSelect;
 export type InsertZohoOrder = z.infer<typeof insertZohoOrderSchema>;
+
+// Compliance schemas and types
+export const insertComplianceRuleSchema = createInsertSchema(complianceRules).omit({ id: true, createdAt: true });
+export const insertProductComplianceSchema = createInsertSchema(productCompliance).omit({ id: true, createdAt: true });
+export const insertComplianceAuditLogSchema = createInsertSchema(complianceAuditLog).omit({ id: true, detectedAt: true });
+
+export type ComplianceRule = typeof complianceRules.$inferSelect;
+export type InsertComplianceRule = z.infer<typeof insertComplianceRuleSchema>;
+export type ProductCompliance = typeof productCompliance.$inferSelect;
+export type InsertProductCompliance = z.infer<typeof insertProductComplianceSchema>;
+export type ComplianceAuditLog = typeof complianceAuditLog.$inferSelect;
+export type InsertComplianceAuditLog = z.infer<typeof insertComplianceAuditLogSchema>;
 
 export * from './emoji-schema';
 export * from './concierge-schema';
