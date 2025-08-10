@@ -1,4 +1,6 @@
 /**
+"use client";
+
  * SEO Head Component for Dynamic Meta Tags
  * Optimized for e-commerce and AI search engines
  */
@@ -38,13 +40,13 @@ const SEOHead = ({
     const updateMeta = (property: string, content: string, isProperty = false) => {
       const attribute = isProperty ? 'property' : 'name';
       let meta = document.querySelector(`meta[${attribute}="${property}"]`);
-      
+
       if (!meta) {
         meta = document.createElement('meta');
         meta.setAttribute(attribute, property);
         document.head.appendChild(meta);
       }
-      
+
       meta.setAttribute('content', content);
     };
 

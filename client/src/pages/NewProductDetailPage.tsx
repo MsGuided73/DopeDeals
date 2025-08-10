@@ -13,7 +13,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Link } from 'wouter';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import PremiumHeader from '@/components/layout/PremiumHeader';
 import SEOHead from '@/components/SEO/SEOHead';
