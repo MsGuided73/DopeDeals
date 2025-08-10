@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
-import { Link } from "wouter";
+import Link from "next/link";
 import type { Product } from "@shared/schema";
 import { useAutoTrackBehavior } from "@/hooks/useRecommendations";
 
