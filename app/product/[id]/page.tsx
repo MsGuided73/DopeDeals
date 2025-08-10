@@ -1,5 +1,5 @@
 import ProductPage from "@/pages/product";
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: any) {
   return { title: `Product ${params.id} | Dope Deals` };
 }
 
