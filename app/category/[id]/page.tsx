@@ -1,8 +1,5 @@
 import CategoryPage from "@/pages/category";
-import type { Metadata } from "next";
-
-type Params = { params: { id: string } };
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string } }) {
   return { title: `Category ${params.id} | Dope Deals` };
 }
 export default function Page({ params }: Params) {

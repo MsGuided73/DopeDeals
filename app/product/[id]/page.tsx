@@ -1,9 +1,5 @@
 import ProductPage from "@/pages/product";
-import type { Metadata } from "next";
-
-type Params = { params: { id: string } };
-
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string } }) {
   return { title: `Product ${params.id} | Dope Deals` };
 }
 
