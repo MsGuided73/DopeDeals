@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import AgeVerificationModal from "@/components/AgeVerificationModal";
@@ -10,11 +12,11 @@ import Footer from "@/components/Footer";
 import ShoppingCartSidebar from "@/components/ShoppingCartSidebar";
 import SEOHead from "@/components/SEOHead";
 import RecommendationEngine from "@/components/RecommendationEngine";
-import { 
-  createOrganizationSchema, 
-  createWebsiteSchema, 
+import {
+  createOrganizationSchema,
+  createWebsiteSchema,
   createBreadcrumbSchema,
-  createOfferCatalogSchema 
+  createOfferCatalogSchema
 } from "@/utils/structuredData";
 import type { Product } from "@shared/schema";
 
@@ -33,7 +35,7 @@ export default function Home() {
   useEffect(() => {
     const ageVerified = localStorage.getItem('ageVerified');
     const isDemoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
-    
+
     if (ageVerified === 'true' || isDemoMode) {
       setShowAgeModal(false);
       setDemoMode(isDemoMode);
@@ -72,11 +74,11 @@ export default function Home() {
         structuredData={structuredData}
         noIndex={showAgeModal} // Don't index until age verification
       />
-      
+
       {showAgeModal && (
         <AgeVerificationModal onVerification={handleAgeVerification} />
       )}
-      
+
       <div className="bg-steel-900 text-white">
         {demoMode && (
           <div className="bg-yellow-400 text-steel-900 px-4 py-2 text-center font-semibold">
@@ -87,19 +89,19 @@ export default function Home() {
         <HeroSection />
         <FeaturedCategories />
         <ProductCatalog userId={guestUserId} />
-        
+
         {/* Personalized Recommendations */}
         {!showAgeModal && (
           <section className="bg-steel-800 py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <RecommendationEngine 
+              <RecommendationEngine
                 userId={guestUserId}
                 className="bg-white dark:bg-steel-900 rounded-xl shadow-xl"
               />
             </div>
           </section>
         )}
-        
+
         <VIPMembership />
         <Footer />
         <ShoppingCartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />

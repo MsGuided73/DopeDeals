@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Premium VIP Smoke Homepage - Modern E-Commerce Design
  * SEO optimized with structured data and AI search optimization
@@ -16,20 +18,20 @@ import PremiumHeader from '@/components/layout/PremiumHeader';
 const useSEO = (title: string, description: string) => {
   useEffect(() => {
     document.title = title;
-    
+
     // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', description);
     }
-    
+
     // Update Open Graph tags
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.setAttribute('content', title);
-    
+
     const ogDescription = document.querySelector('meta[property="og:description"]');
     if (ogDescription) ogDescription.setAttribute('content', description);
-    
+
     // Add structured data for search engines
     const structuredData = {
       "@context": "https://schema.org",
@@ -49,7 +51,7 @@ const useSEO = (title: string, description: string) => {
         "contactType": "customer service"
       }
     };
-    
+
     let script = document.querySelector('#structured-data') as HTMLScriptElement;
     if (!script) {
       script = document.createElement('script');
@@ -171,7 +173,7 @@ const NewHomePage = () => {
   return (
     <div className="min-h-screen bg-background">
       <PremiumHeader />
-      
+
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-hero">
         <div className="relative h-[600px] flex items-center">
@@ -223,7 +225,7 @@ const NewHomePage = () => {
               </div>
             </div>
           ))}
-          
+
           {/* Slider Indicators */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
             {heroSlides.map((_, index) => (
@@ -265,7 +267,7 @@ const NewHomePage = () => {
               Explore our curated collections of premium smoking accessories
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {topCategories.map((category, index) => (
               <Link key={index} href={category.href}>
@@ -305,7 +307,7 @@ const NewHomePage = () => {
               </Button>
             </Link>
           </div>
-          
+
           <div className="product-grid">
             {featuredProducts.slice(0, 8).map((product: any) => (
               <ProductCard key={product.id} product={product} />
@@ -329,7 +331,7 @@ const NewHomePage = () => {
               </Button>
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {newProducts.slice(0, 6).map((product: any) => (
               <ProductCard key={product.id} product={product} showNewBadge />
@@ -435,7 +437,7 @@ const ProductCard = ({ product, showNewBadge = false }: { product: any; showNewB
             <Heart className="w-4 h-4" />
           </Button>
         </div>
-        
+
         <div className="p-4">
           <h3 className="font-semibold text-sm mb-1 line-clamp-2">{product.name}</h3>
           <div className="flex items-center mb-2">

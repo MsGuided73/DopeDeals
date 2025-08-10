@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Premium Product Detail Page - Modern E-Commerce Design
  * SEO optimized with rich product information and AI search optimization
@@ -77,7 +79,7 @@ const NewProductDetailPage = ({ productId }: ProductDetailPageProps) => {
         }}
         image={product.imageUrl}
       />
-      
+
       <AISearchOptimization
         pageType="product"
         content={{
@@ -123,11 +125,11 @@ const NewProductDetailPage = ({ productId }: ProductDetailPageProps) => {
                 alt={product.name}
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />
-              
+
               {product.isNew && (
                 <Badge className="badge-new absolute top-4 left-4">New Arrival</Badge>
               )}
-              
+
               {product.isVipExclusive && (
                 <Badge className="badge-gold absolute top-4 right-4">
                   <Crown className="w-4 h-4 mr-1" />
@@ -186,7 +188,7 @@ const NewProductDetailPage = ({ productId }: ProductDetailPageProps) => {
                 <Badge variant="outline">{product.category?.name}</Badge>
                 {product.brand && <Badge variant="outline">{product.brand}</Badge>}
               </div>
-              
+
               <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
 
               {/* Rating */}
@@ -368,7 +370,7 @@ const NewProductDetailPage = ({ productId }: ProductDetailPageProps) => {
                   <h3 className="text-xl font-semibold mb-4">Product Details</h3>
                   <div className="prose max-w-none">
                     <p className="mb-4">{product.longDescription || product.description}</p>
-                    
+
                     {features.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-2">Key Features:</h4>
@@ -447,7 +449,7 @@ const NewProductDetailPage = ({ productId }: ProductDetailPageProps) => {
                         <li>• Age verification required (21+)</li>
                       </ul>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-semibold mb-2">Return Policy</h4>
                       <ul className="space-y-1 text-muted-foreground">

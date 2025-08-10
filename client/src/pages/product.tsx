@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -11,10 +13,10 @@ import SEOHead from "@/components/SEOHead";
 import Breadcrumb from "@/components/Breadcrumb";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { 
-  createProductSchema, 
-  createBreadcrumbSchema, 
-  createOrganizationSchema 
+import {
+  createProductSchema,
+  createBreadcrumbSchema,
+  createOrganizationSchema
 } from "@/utils/structuredData";
 import type { Product, Brand, Category } from "@shared/schema";
 
@@ -163,13 +165,13 @@ export default function ProductPage({ params }: { params?: { id?: string } }) {
         canonical={`https://vipsmoke.com/product/${product.id}`}
         structuredData={structuredData}
       />
-      
+
       <Header onCartToggle={() => setCartOpen(!cartOpen)} />
-      
+
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumb Navigation */}
         <Breadcrumb items={breadcrumbItems} className="mb-8" />
-        
+
         {/* Product Details */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
@@ -181,7 +183,7 @@ export default function ProductPage({ params }: { params?: { id?: string } }) {
                 className="w-full h-full object-cover"
               />
             </div>
-            
+
             {/* Thumbnail Gallery */}
             <div className="grid grid-cols-4 gap-2">
               {productImages.map((image, index) => (
@@ -342,7 +344,7 @@ export default function ProductPage({ params }: { params?: { id?: string } }) {
               <TabsTrigger value="shipping">Shipping</TabsTrigger>
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="details" className="mt-8">
               <div className="bg-steel-800 rounded-xl p-6">
                 <h3 className="text-xl font-semibold mb-4">Product Details</h3>
@@ -370,7 +372,7 @@ export default function ProductPage({ params }: { params?: { id?: string } }) {
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="shipping" className="mt-8">
               <div className="bg-steel-800 rounded-xl p-6">
                 <h3 className="text-xl font-semibold mb-4">Shipping Information</h3>
@@ -394,7 +396,7 @@ export default function ProductPage({ params }: { params?: { id?: string } }) {
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="reviews" className="mt-8">
               <div className="bg-steel-800 rounded-xl p-6">
                 <h3 className="text-xl font-semibold mb-4">Customer Reviews</h3>
@@ -410,7 +412,7 @@ export default function ProductPage({ params }: { params?: { id?: string } }) {
           </Tabs>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

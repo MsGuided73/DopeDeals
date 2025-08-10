@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Premium Products Page - Modern E-Commerce Design
  * SEO optimized with comprehensive filtering and AI search optimization
@@ -80,7 +82,7 @@ const NewProductsPage = () => {
         keywords="smoking accessories, glass bongs, vaporizers, pipes, premium glass, VIP exclusive"
         type="website"
       />
-      
+
       <AISearchOptimization
         pageType="category"
         content={{
@@ -373,15 +375,15 @@ const ProductCard = ({ product }: { product: any }) => {
               className="product-image"
             />
           </div>
-          
+
           {product.isNew && (
             <Badge className="badge-new absolute top-2 left-2">New</Badge>
           )}
-          
+
           {product.isVipExclusive && (
             <Badge className="badge-gold absolute top-2 right-2">VIP</Badge>
           )}
-          
+
           <Button
             size="icon"
             variant="ghost"
@@ -390,10 +392,10 @@ const ProductCard = ({ product }: { product: any }) => {
             <Heart className="w-4 h-4" />
           </Button>
         </div>
-        
+
         <div className="p-4">
           <h3 className="font-semibold text-sm mb-1 line-clamp-2">{product.name}</h3>
-          
+
           <div className="flex items-center mb-2">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
@@ -407,7 +409,7 @@ const ProductCard = ({ product }: { product: any }) => {
             </div>
             <span className="text-xs text-muted-foreground ml-1">(24)</span>
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-1">
               <span className="font-semibold text-lg">${product.price}</span>
@@ -440,7 +442,7 @@ const ProductListItem = ({ product }: { product: any }) => {
               className="w-full h-full object-cover rounded-lg"
             />
           </div>
-          
+
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between">
               <div>
@@ -448,7 +450,7 @@ const ProductListItem = ({ product }: { product: any }) => {
                 <p className="text-muted-foreground text-sm mb-2 line-clamp-2">
                   {product.description}
                 </p>
-                
+
                 <div className="flex items-center mb-2">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
@@ -463,7 +465,7 @@ const ProductListItem = ({ product }: { product: any }) => {
                   <span className="text-sm text-muted-foreground ml-1">(24 reviews)</span>
                 </div>
               </div>
-              
+
               <div className="text-right">
                 <div className="flex items-center space-x-1 mb-2">
                   <span className="font-semibold text-xl">${product.price}</span>
@@ -473,7 +475,7 @@ const ProductListItem = ({ product }: { product: any }) => {
                     </span>
                   )}
                 </div>
-                
+
                 <div className="flex space-x-2">
                   <Button size="icon" variant="outline">
                     <Heart className="w-4 h-4" />

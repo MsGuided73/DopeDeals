@@ -1,15 +1,17 @@
+"use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Filter, Grid, List, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,10 +20,10 @@ import SEOHead from "@/components/SEOHead";
 import Breadcrumb from "@/components/Breadcrumb";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { 
-  createBreadcrumbSchema, 
+import {
+  createBreadcrumbSchema,
   createOrganizationSchema,
-  createOfferCatalogSchema 
+  createOfferCatalogSchema
 } from "@/utils/structuredData";
 import type { Product, Category, Brand } from "@shared/schema";
 
@@ -44,7 +46,7 @@ export default function CategoryPage({ params }: { params?: { id?: string } }) {
 
   // Fetch products for this category
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products", { 
+    queryKey: ["/api/products", {
       categoryId: id,
       brandId: selectedBrand || undefined,
       material: selectedMaterial || undefined,
@@ -163,13 +165,13 @@ export default function CategoryPage({ params }: { params?: { id?: string } }) {
         canonical={`https://vipsmoke.com/category/${category?.id || ''}`}
         structuredData={structuredData}
       />
-      
+
       <Header onCartToggle={() => setCartOpen(!cartOpen)} />
-      
+
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumb Navigation */}
         <Breadcrumb items={breadcrumbItems} className="mb-8" />
-        
+
         {/* Category Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">{category?.name || 'Category'}</h1>
@@ -289,8 +291,8 @@ export default function CategoryPage({ params }: { params?: { id?: string } }) {
         {/* Products Grid */}
         {sortedProducts.length > 0 ? (
           <div className={`grid gap-6 ${
-            viewMode === 'grid' 
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+            viewMode === 'grid'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
               : 'grid-cols-1'
           }`}>
             {sortedProducts.map((product) => (
@@ -308,7 +310,7 @@ export default function CategoryPage({ params }: { params?: { id?: string } }) {
           </div>
         )}
       </main>
-      
+
       <Footer />
     </div>
   );
