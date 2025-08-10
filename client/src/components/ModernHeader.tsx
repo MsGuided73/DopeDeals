@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Crown, Search, User, Heart, ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import type { Category } from "@shared/schema";
 

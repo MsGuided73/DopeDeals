@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "wouter";
+import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Star, Heart, ShoppingCart, Share2, Shield, Truck, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,9 +18,9 @@ import {
 } from "@/utils/structuredData";
 import type { Product, Brand, Category } from "@shared/schema";
 
-export default function ProductPage() {
-  const { id } = useParams<{ id: string }>();
-  const [, navigate] = useLocation();
+export default function ProductPage({ params }: { params?: { id?: string } }) {
+  const id = params?.id;
+  const router = useRouter();
   const { toast } = useToast();
   const [cartOpen, setCartOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -75,7 +75,7 @@ export default function ProductPage() {
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl font-bold mb-4">Product Not Found</h1>
           <p className="text-steel-300 mb-8">The product you're looking for doesn't exist or has been removed.</p>
-          <Button onClick={() => navigate("/")}>Return to Home</Button>
+          <Button onClick={() => router.push("/")}>Return to Home</Button>
         </div>
         <Footer />
       </div>
