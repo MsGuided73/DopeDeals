@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import Link from "next/link";
 import type { Category } from "@shared/schema";
 import waterBongImage from "@assets/image_1752544102455.png";
 import glassPipesImage from "@assets/image_1752544509252.png";

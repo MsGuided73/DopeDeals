@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useLocation } from "wouter";
+import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Filter, Grid, List, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,9 +25,9 @@ import {
 } from "@/utils/structuredData";
 import type { Product, Category, Brand } from "@shared/schema";
 
-export default function CategoryPage() {
-  const { id } = useParams<{ id: string }>();
-  const [, navigate] = useLocation();
+export default function CategoryPage({ params }: { params?: { id?: string } }) {
+  const id = params?.id;
+  const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('featured');
@@ -93,7 +93,7 @@ export default function CategoryPage() {
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl font-bold mb-4">Category Not Found</h1>
           <p className="text-steel-300 mb-8">The category you're looking for doesn't exist or has been removed.</p>
-          <Button onClick={() => navigate("/")}>Return to Home</Button>
+          <Button onClick={() => router.push("/")}>Return to Home</Button>
         </div>
         <Footer />
       </div>
