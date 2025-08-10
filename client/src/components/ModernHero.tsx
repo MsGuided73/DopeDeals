@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronRight, Sparkles, Crown, Star, ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import Link from "next/link";
 
 export default function ModernHero() {
   const [currentSlide, setCurrentSlide] = useState(0);
