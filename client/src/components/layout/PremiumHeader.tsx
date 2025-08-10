@@ -8,7 +8,7 @@ import { Search, User, Heart, ShoppingCart, Menu, Crown, ChevronDown, Shield, Ph
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Link } from 'wouter';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 
 const PremiumHeader = () => {
