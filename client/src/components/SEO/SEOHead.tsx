@@ -1,6 +1,5 @@
-/**
 "use client";
-
+/**
  * SEO Head Component for Dynamic Meta Tags
  * Optimized for e-commerce and AI search engines
  */
