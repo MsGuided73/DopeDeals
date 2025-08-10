@@ -1,15 +1,17 @@
+"use client";
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Filter, Grid, List, SlidersHorizontal, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import ProductCard from "@/components/ProductCard";
@@ -17,10 +19,10 @@ import SEOHead from "@/components/SEOHead";
 import Breadcrumb from "@/components/Breadcrumb";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { 
-  createBreadcrumbSchema, 
+import {
+  createBreadcrumbSchema,
   createOrganizationSchema,
-  createOfferCatalogSchema 
+  createOfferCatalogSchema
 } from "@/utils/structuredData";
 import type { Product, Category, Brand } from "@shared/schema";
 
@@ -77,14 +79,14 @@ export default function ProductsPage() {
 
   // Filter and sort products
   const filteredProducts = products?.filter(product => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesPrice = parseFloat(product.price) >= priceRange[0] && parseFloat(product.price) <= priceRange[1];
     const matchesCategory = !selectedCategory || product.categoryId === selectedCategory;
     const matchesBrand = !selectedBrand || product.brandId === selectedBrand;
     const matchesMaterial = !selectedMaterial || product.material === selectedMaterial;
-    
+
     return matchesSearch && matchesPrice && matchesCategory && matchesBrand && matchesMaterial;
   }) || [];
 
@@ -133,13 +135,13 @@ export default function ProductsPage() {
         canonical="https://vipsmoke.com/products"
         structuredData={structuredData}
       />
-      
+
       <Header onCartToggle={() => setCartOpen(!cartOpen)} />
-      
+
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumb Navigation */}
         <Breadcrumb items={breadcrumbItems} className="mb-8" />
-        
+
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">Premium Smoking Accessories</h1>
@@ -312,8 +314,8 @@ export default function ProductsPage() {
         {/* Products Grid */}
         {sortedProducts.length > 0 ? (
           <div className={`grid gap-6 ${
-            viewMode === 'grid' 
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+            viewMode === 'grid'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
               : 'grid-cols-1'
           }`}>
             {sortedProducts.map((product) => (
@@ -342,7 +344,7 @@ export default function ProductsPage() {
           </div>
         )}
       </main>
-      
+
       <Footer />
     </div>
   );

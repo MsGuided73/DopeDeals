@@ -10,7 +10,7 @@ import { Star, ShoppingCart, Heart, ArrowRight, Shield, Truck, Crown, Gift, Zap,
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Link } from 'wouter';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import PremiumHeader from '@/components/layout/PremiumHeader';
 
