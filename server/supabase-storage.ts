@@ -35,7 +35,7 @@ import {
 import { type IStorage } from "./storage";
 
 // Supabase configuration - only required in production mode
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Server-side key for admin operations
 
 if (!supabaseUrl || !supabaseServiceKey) {
@@ -43,7 +43,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 }
 
 // Create Supabase client for server-side operations (only if credentials available)
-export const supabaseAdmin = supabaseUrl && supabaseServiceKey 
+export const supabaseAdmin = supabaseUrl && supabaseServiceKey
   ? createClient(supabaseUrl, supabaseServiceKey)
   : null;
 

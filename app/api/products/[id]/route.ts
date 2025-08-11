@@ -1,0 +1,13 @@
+import { NextResponse } from 'next/server';
+import { storage } from '../../../../server/storage';
+
+export async function GET(_req: Request, { params }: { params: { id: string } }) {
+  try {
+    const product = await storage.getProduct(params.id);
+    if (!product) return NextResponse.json({ message: 'Product not found' }, { status: 404 });
+    return NextResponse.json(product);
+  } catch (_error: any) {
+    return NextResponse.json({ message: 'Failed to fetch product' }, { status: 500 });
+  }
+}
+
