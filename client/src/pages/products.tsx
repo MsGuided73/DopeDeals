@@ -38,8 +38,21 @@ export default function ProductsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   // Fetch all products
+  // Determine nicotine filter from URL
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const nicotineParam = searchParams.get('nicotine');
+  const nicotine = nicotineParam === 'true' ? true : nicotineParam === 'false' ? false : undefined;
+
+  // Fetch all products with nicotine filter if present
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products"]
+    queryKey: ["/api/products", { nicotine }],
+    queryFn: async () => {
+      const url = new URL("/api/products", window.location.origin);
+      if (nicotine !== undefined) url.searchParams.set('nicotine', String(nicotine));
+      const res = await fetch(url.toString(), { credentials: 'include' });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    }
   });
 
   // Fetch categories and brands for filters
@@ -145,9 +158,29 @@ export default function ProductsPage() {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">Premium Smoking Accessories</h1>
-          <p className="text-xl text-steel-300 mb-6">
+          <p className="text-xl text-steel-300 mb-4">
             Discover our complete collection of premium smoking accessories, carefully curated for the discerning connoisseur.
           </p>
+          {/* Nicotine filter toggle (affects query via URL param) */}
+          <div className="mt-2">
+            <label className="inline-flex items-center gap-2 text-sm text-steel-300">
+              <input
+                type="checkbox"
+                className="accent-white"
+                onChange={(e) => {
+                  const url = new URL(window.location.href);
+                  if (e.target.checked) {
+                    url.searchParams.set('nicotine', 'true');
+                  } else {
+                    url.searchParams.delete('nicotine');
+                  }
+                  window.history.replaceState({}, '', url.toString());
+                }}
+                defaultChecked={typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('nicotine') === 'true'}
+              />
+              Nicotine products only
+            </label>
+          </div>
         </div>
 
         {/* Search and Filter Bar */}

@@ -4,6 +4,9 @@ import { storage } from '../../../server/storage';
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
+    const nicotineParam = searchParams.get('nicotine');
+    const nicotine = nicotineParam === 'true' ? true : nicotineParam === 'false' ? false : undefined;
+
     const filters = {
       categoryId: searchParams.get('categoryId') || undefined,
       brandId: searchParams.get('brandId') || undefined,
@@ -15,7 +18,19 @@ export async function GET(req: NextRequest) {
     };
 
     const products = await storage.getProducts(filters);
-    return NextResponse.json(products);
+
+    // Apply nicotine filter at the API layer to support both schemas:
+    // - Prisma Product.nicotine (boolean)
+    // - Drizzle/Supabase Product.nicotineProduct (boolean)
+    let result = products;
+    if (nicotine !== undefined) {
+      result = products.filter((p: any) => {
+        const value = p.nicotine ?? p.nicotineProduct ?? false;
+        return value === nicotine;
+      });
+    }
+
+    return NextResponse.json(result);
   } catch (error: any) {
     return NextResponse.json({ message: 'Failed to fetch products' }, { status: 500 });
   }
