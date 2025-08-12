@@ -64,8 +64,9 @@ model Product {
   inStock      Boolean  @default(true) @map("in_stock")
   featured     Boolean  @default(false)
   vipExclusive Boolean  @default(false) @map("vip_exclusive")
+  nicotine     Boolean  @default(false)
   createdAt    DateTime @default(now()) @map("created_at")
-  
+
   category     Category?    @relation(fields: [categoryId], references: [id])
   brand        Brand?       @relation(fields: [brandId], references: [id])
   cartItems    CartItem[]
