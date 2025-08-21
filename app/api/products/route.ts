@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
       vipExclusive: searchParams.get('vipExclusive') === 'true' ? true : searchParams.get('vipExclusive') === 'false' ? false : undefined,
     } as const;
 
-    const usePrisma = !!process.env.DATABASE_URL;
+    const usePrisma = process.env.PRISMA_ENABLED === 'true';
 
     if (usePrisma) {
       const where: any = {};

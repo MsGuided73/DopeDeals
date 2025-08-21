@@ -7,7 +7,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
   try {
     const { id } = await ctx.params;
 
-    if (process.env.DATABASE_URL) {
+    if (process.env.PRISMA_ENABLED === 'true') {
       const product = await prisma.product.findUnique({ where: { id } });
       if (!product) return NextResponse.json({ message: 'Product not found' }, { status: 404 });
       return NextResponse.json(product);

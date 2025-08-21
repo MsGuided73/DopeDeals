@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    if (process.env.DATABASE_URL) {
+    if (process.env.PRISMA_ENABLED === 'true') {
       const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
       return NextResponse.json(categories);
     }
