@@ -1,7 +1,6 @@
 {
   "include": [
     "app/**/*",
-    "client/src/**/*",
     "server/**/*",
     "shared/**/*",
     ".next/types/**/*.ts"
@@ -10,7 +9,7 @@
     "node_modules",
     "build",
     "dist",
-    "client/src/admin/**/*",
+    "client/src/**/*",
     "**/*.test.ts"
   ],
   "compilerOptions": {
@@ -31,12 +30,11 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "types": [
-      "node",
-      "vite/client"
+      "node"
     ],
     "paths": {
       "@/*": [
-        "./client/src/*"
+        "./app/*"
       ],
       "@shared/*": [
         "./shared/*"
