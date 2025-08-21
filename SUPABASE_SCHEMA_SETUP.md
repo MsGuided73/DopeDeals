@@ -171,7 +171,7 @@ After running the SQL, test the connection:
 ```bash
 node -e "
 const { createClient } = require('@supabase/supabase-js');
-const admin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+const admin = createClient(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 admin.from('categories').select('*').then(console.log).catch(console.error);
 "
 ```
