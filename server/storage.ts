@@ -1564,7 +1564,7 @@ import { SupabaseStorage } from "./supabase-storage";
 
 let storage: IStorage;
 
-if (process.env.VITE_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+if ((process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) && process.env.SUPABASE_SERVICE_ROLE_KEY) {
   console.log('✅ Supabase SDK credentials configured');
   console.log('🔄 Testing Supabase connection...');
   
