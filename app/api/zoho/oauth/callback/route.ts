@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code');
-  const dc = 'us';
+  const dc = process.env.ZOHO_DC || 'us';
 
   if (!code) return NextResponse.json({ error: 'Missing code' }, { status: 400 });
 
