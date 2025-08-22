@@ -1,16 +1,16 @@
-import { 
-  users, products, categories, brands, orders, orderItems, 
+import {
+  users, products, categories, brands, orders, orderItems,
   memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
   productSimilarity, recommendationCache, paymentMethods, paymentTransactions, kajaPayWebhookEvents,
   emojiUsage, userEmojiPreferences, emojiRecommendations, productEmojiAssociations,
   conciergeConversations, conciergeMessages, conciergeRecommendations, conciergeAnalytics,
   complianceRules, productCompliance, complianceAuditLog,
-  type User, type InsertUser, type Product, type InsertProduct, 
+  type User, type InsertUser, type Product, type InsertProduct,
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
   type Membership, type InsertMembership, type LoyaltyPoint, type InsertLoyaltyPoint,
   type CartItem, type InsertCartItem, type UserBehavior, type InsertUserBehavior,
-  type UserPreferences, type InsertUserPreferences, type ProductSimilarity, 
+  type UserPreferences, type InsertUserPreferences, type ProductSimilarity,
   type InsertProductSimilarity, type RecommendationCache, type InsertRecommendationCache,
   type PaymentMethod, type InsertPaymentMethod, type PaymentTransaction, type InsertPaymentTransaction,
   type KajaPayWebhookEvent, type InsertKajaPayWebhookEvent,
@@ -23,7 +23,7 @@ import {
 } from "@shared/schema";
 
 import {
-  shipstationOrders, shipstationShipments, shipstationWebhooks, shipstationProducts, 
+  shipstationOrders, shipstationShipments, shipstationWebhooks, shipstationProducts,
   shipstationWarehouses, shipstationSyncStatus,
   type ShipstationOrder, type InsertShipstationOrder, type ShipstationShipment, type InsertShipstationShipment,
   type ShipstationWebhook, type InsertShipstationWebhook, type ShipstationProduct, type InsertShipstationProduct,
@@ -35,7 +35,7 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   // Products
   getProducts(filters?: {
     categoryId?: string;
@@ -48,62 +48,65 @@ export interface IStorage {
   }): Promise<Product[]>;
   getProduct(id: string): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
-  
+
   // Categories
   getCategories(): Promise<Category[]>;
   getCategory(id: string): Promise<Category | undefined>;
   createCategory(category: InsertCategory): Promise<Category>;
-  
+
   // Brands
   getBrands(): Promise<Brand[]>;
   getBrand(id: string): Promise<Brand | undefined>;
   createBrand(brand: InsertBrand): Promise<Brand>;
-  
+
   // Orders
   getUserOrders(userId: string): Promise<Order[]>;
   getOrder(id: string): Promise<Order | undefined>;
   createOrder(order: InsertOrder): Promise<Order>;
-  
+  // Order Items
+  createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
+  getOrderItemsByOrder(orderId: string): Promise<OrderItem[]>;
+
   // Cart
   getUserCartItems(userId: string): Promise<CartItem[]>;
   addToCart(cartItem: InsertCartItem): Promise<CartItem>;
   updateCartItem(id: string, quantity: number): Promise<CartItem | undefined>;
   removeFromCart(id: string): Promise<boolean>;
   clearCart(userId: string): Promise<boolean>;
-  
+
   // Memberships
   getMemberships(): Promise<Membership[]>;
-  
+
   // User Behavior & Preferences
   trackUserBehavior(behavior: InsertUserBehavior): Promise<UserBehavior>;
   getUserBehavior(userId: string, limit?: number): Promise<UserBehavior[]>;
   getUserPreferences(userId: string): Promise<UserPreferences | undefined>;
   updateUserPreferences(userId: string, preferences: Partial<InsertUserPreferences>): Promise<UserPreferences>;
-  
+
   // Recommendations
   getRecommendations(userId: string, type: 'trending' | 'personalized' | 'similar' | 'category_based', limit?: number): Promise<Product[]>;
   getProductSimilarity(productId: string, limit?: number): Promise<ProductSimilarity[]>;
   updateRecommendationCache(userId: string, type: string, productIds: string[], score?: number): Promise<void>;
-  
+
   // Payment Methods
   getUserPaymentMethods(userId: string): Promise<PaymentMethod[]>;
   getPaymentMethod(id: string): Promise<PaymentMethod | undefined>;
   createPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod>;
   updatePaymentMethod(id: string, updates: Partial<PaymentMethod>): Promise<PaymentMethod | undefined>;
   deletePaymentMethod(id: string): Promise<boolean>;
-  
+
   // Payment Transactions
   getTransaction(id: string): Promise<PaymentTransaction | undefined>;
   createTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction>;
   updateTransaction(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction | undefined>;
   getUserTransactions(userId: string): Promise<PaymentTransaction[]>;
   getOrderTransactions(orderId: string): Promise<PaymentTransaction[]>;
-  
+
   // Webhook Events
   createWebhookEvent(event: InsertKajaPayWebhookEvent): Promise<KajaPayWebhookEvent>;
   getUnprocessedWebhookEvents(): Promise<KajaPayWebhookEvent[]>;
   markWebhookEventProcessed(id: string): Promise<boolean>;
-  
+
   // Emoji System
   createEmojiUsage(usage: InsertEmojiUsage): Promise<EmojiUsage>;
   getRecentEmojiUsage(userId: string, limit: number): Promise<EmojiUsage[]>;
@@ -133,48 +136,48 @@ export interface IStorage {
   getShipstationOrderByOrderId(orderId: string): Promise<ShipstationOrder | undefined>;
   getShipstationOrderByShipstationId(shipstationOrderId: string): Promise<ShipstationOrder | undefined>;
   updateShipstationOrder(id: string, updates: Partial<InsertShipstationOrder>): Promise<ShipstationOrder | undefined>;
-  
+
   insertShipstationShipment(shipment: InsertShipstationShipment): Promise<ShipstationShipment>;
   getShipstationShipment(id: string): Promise<ShipstationShipment | undefined>;
   updateShipstationShipment(id: string, updates: Partial<InsertShipstationShipment>): Promise<ShipstationShipment | undefined>;
-  
+
   insertShipstationWebhook(webhook: InsertShipstationWebhook): Promise<ShipstationWebhook>;
   getUnprocessedShipstationWebhooks(): Promise<ShipstationWebhook[]>;
   markShipstationWebhookProcessed(id: string): Promise<boolean>;
-  
+
   insertShipstationProduct(product: InsertShipstationProduct): Promise<ShipstationProduct>;
   getShipstationProductByProductId(productId: string): Promise<ShipstationProduct | undefined>;
   getShipstationProductBySku(sku: string): Promise<ShipstationProduct | undefined>;
   updateShipstationProduct(id: string, updates: Partial<InsertShipstationProduct>): Promise<ShipstationProduct | undefined>;
-  
+
   insertShipstationWarehouse(warehouse: InsertShipstationWarehouse): Promise<ShipstationWarehouse>;
   getShipstationWarehouses(): Promise<ShipstationWarehouse[]>;
   updateShipstationWarehouse(id: string, updates: Partial<InsertShipstationWarehouse>): Promise<ShipstationWarehouse | undefined>;
-  
+
   insertShipstationSyncStatus(status: InsertShipstationSyncStatus): Promise<ShipstationSyncStatus>;
   getLatestShipstationSyncStatus(syncType?: string): Promise<ShipstationSyncStatus | undefined>;
-  
+
   // Compliance Engine
   getAllComplianceRules(): Promise<ComplianceRule[]>;
   getComplianceRulesByCategory(category: string): Promise<ComplianceRule[]>;
   getComplianceRuleById(id: string): Promise<ComplianceRule | undefined>;
   createComplianceRule(rule: InsertComplianceRule): Promise<ComplianceRule>;
   updateComplianceRule(id: string, updates: Partial<InsertComplianceRule>): Promise<ComplianceRule | undefined>;
-  
+
   getProductComplianceByProductId(productId: string): Promise<ProductCompliance[]>;
   createProductCompliance(compliance: InsertProductCompliance): Promise<ProductCompliance>;
   deleteProductCompliance(productId: string, complianceId: string): Promise<boolean>;
-  
+
   createComplianceAuditLog(log: InsertComplianceAuditLog): Promise<ComplianceAuditLog>;
   getComplianceAuditLogs(filters?: { page?: number; limit?: number; severity?: string }): Promise<ComplianceAuditLog[]>;
   resolveComplianceViolation(logId: string, resolvedBy: string, notes?: string): Promise<boolean>;
   getComplianceStats(): Promise<{ totalViolations: number; criticalViolations: number; resolvedViolations: number }>;
-  
+
   // Additional helper methods for compliance
   getProductById(id: string): Promise<Product | undefined>;
   getAllProducts(): Promise<Product[]>;
   updateProduct(id: string, updates: Partial<InsertProduct>): Promise<Product | undefined>;
-  
+
   // Lab Certificate methods
   createLabCertificate(certificate: InsertLabCertificate): Promise<LabCertificate>;
   getLabCertificatesByProductId(productId: string): Promise<LabCertificate[]>;
@@ -206,7 +209,7 @@ export class MemStorage implements IStorage {
   private conciergeMessages: Map<string, ConciergeMessage> = new Map();
   private conciergeRecommendations: Map<string, ConciergeRecommendation> = new Map();
   private conciergeAnalytics: Map<string, ConciergeAnalytics> = new Map();
-  
+
   // ShipStation storage
   private shipstationOrders: Map<string, ShipstationOrder> = new Map();
   private shipstationShipments: Map<string, ShipstationShipment> = new Map();
@@ -232,7 +235,7 @@ export class MemStorage implements IStorage {
       slug: "glass-pipes",
       createdAt: new Date(),
     };
-    
+
     const dabRigs: Category = {
       id: this.generateId(),
       name: "Dab Rigs",
@@ -240,7 +243,7 @@ export class MemStorage implements IStorage {
       slug: "dab-rigs",
       createdAt: new Date(),
     };
-    
+
     const glassBongs: Category = {
       id: this.generateId(),
       name: "Glass Bongs",
@@ -248,7 +251,7 @@ export class MemStorage implements IStorage {
       slug: "glass-bongs",
       createdAt: new Date(),
     };
-    
+
     const accessories: Category = {
       id: this.generateId(),
       name: "Accessories",
@@ -270,7 +273,7 @@ export class MemStorage implements IStorage {
       slug: "vip-signature",
       createdAt: new Date(),
     };
-    
+
     const royalGlass: Brand = {
       id: this.generateId(),
       name: "Royal Glass",
@@ -278,7 +281,7 @@ export class MemStorage implements IStorage {
       slug: "royal-glass",
       createdAt: new Date(),
     };
-    
+
     const crownCollection: Brand = {
       id: this.generateId(),
       name: "Crown Collection",
@@ -364,7 +367,7 @@ export class MemStorage implements IStorage {
         featured: false,
         vipExclusive: false,
       },
-      
+
       // Dab Rigs
       {
         name: "VIP Imperial Dab Rig",
@@ -418,7 +421,7 @@ export class MemStorage implements IStorage {
         featured: true,
         vipExclusive: true,
       },
-      
+
       // Glass Bongs
       {
         name: "Crown Elite Glass Bong",
@@ -459,7 +462,7 @@ export class MemStorage implements IStorage {
         featured: false,
         vipExclusive: true,
       },
-      
+
       // Accessories
       {
         name: "VIP Platinum Accessory Set",
@@ -709,6 +712,22 @@ export class MemStorage implements IStorage {
     };
     this.orders.set(order.id, order);
     return order;
+
+  async createOrderItem(insertItem: InsertOrderItem): Promise<OrderItem> {
+    const item: OrderItem = {
+      ...insertItem,
+      id: this.generateId(),
+      orderId: insertItem.orderId || null,
+      productId: insertItem.productId || null,
+    } as any;
+    this.orderItems.set(item.id, item);
+    return item;
+  }
+
+  async getOrderItemsByOrder(orderId: string): Promise<OrderItem[]> {
+    return Array.from(this.orderItems.values()).filter(oi => oi.orderId === orderId);
+  }
+
   }
 
   async getUserCartItems(userId: string): Promise<CartItem[]> {
@@ -763,12 +782,12 @@ export class MemStorage implements IStorage {
       metadata: insertBehavior.metadata || null,
     };
     this.userBehaviors.set(behavior.id, behavior);
-    
+
     // Update user preferences based on behavior
     if (behavior.userId && behavior.productId) {
       await this.updateUserPreferencesFromBehavior(behavior);
     }
-    
+
     return behavior;
   }
 
@@ -814,7 +833,7 @@ export class MemStorage implements IStorage {
     }
 
     let recommendations: Product[] = [];
-    
+
     switch (type) {
       case 'trending':
         recommendations = await this.getTrendingProducts(limit);
@@ -861,7 +880,7 @@ export class MemStorage implements IStorage {
   // Helper methods for recommendation algorithms
   private async updateUserPreferencesFromBehavior(behavior: UserBehavior): Promise<void> {
     if (!behavior.productId) return;
-    
+
     const product = await this.getProduct(behavior.productId);
     if (!product) return;
 
@@ -915,7 +934,7 @@ export class MemStorage implements IStorage {
   private async getPersonalizedRecommendations(userId: string, limit: number): Promise<Product[]> {
     const preferences = await this.getUserPreferences(userId);
     const userBehavior = await this.getUserBehavior(userId, 100);
-    
+
     const products = await this.getProducts();
     const scoredProducts = products.map(product => ({
       product,
@@ -939,13 +958,13 @@ export class MemStorage implements IStorage {
     }
 
     const similarProducts = new Map<string, number>();
-    
+
     for (const productId of viewedProducts) {
       const similarities = await this.getProductSimilarity(productId, 10);
       similarities.forEach(sim => {
         const relatedProductId = sim.productId1 === productId ? sim.productId2 : sim.productId1;
         if (relatedProductId && !viewedProducts.includes(relatedProductId)) {
-          similarProducts.set(relatedProductId, 
+          similarProducts.set(relatedProductId,
             (similarProducts.get(relatedProductId) || 0) + Number(sim.similarityScore)
           );
         }
@@ -966,14 +985,14 @@ export class MemStorage implements IStorage {
   private async getCategoryBasedRecommendations(userId: string, limit: number): Promise<Product[]> {
     const preferences = await this.getUserPreferences(userId);
     const userBehavior = await this.getUserBehavior(userId, 50);
-    
+
     // Get most interacted categories
     const categoryInteractions = new Map<string, number>();
     userBehavior.forEach(b => {
       if (b.productId) {
         const product = this.products.get(b.productId);
         if (product?.categoryId) {
-          categoryInteractions.set(product.categoryId, 
+          categoryInteractions.set(product.categoryId,
             (categoryInteractions.get(product.categoryId) || 0) + 1
           );
         }
@@ -1047,7 +1066,7 @@ export class MemStorage implements IStorage {
   private getFromRecommendationCache(userId: string, type: string): Product[] {
     const cache = Array.from(this.recommendationCaches.values())
       .find(c => c.userId === userId && c.recommendationType === type && c.expiresAt > new Date());
-    
+
     if (!cache) return [];
 
     const products = cache.productIds
@@ -1206,7 +1225,7 @@ export class MemStorage implements IStorage {
   async updateUserEmojiPreferences(userId: string, updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined> {
     const existing = Array.from(this.userEmojiPrefs.values())
       .find(prefs => prefs.userId === userId);
-    
+
     if (!existing) return undefined;
 
     const updated: UserEmojiPreferences = {
@@ -1236,7 +1255,7 @@ export class MemStorage implements IStorage {
   async markEmojiRecommendationUsed(userId: string, context: string, usedEmoji: string): Promise<boolean> {
     const rec = Array.from(this.emojiRecs.values())
       .find(r => r.userId === userId && r.context === context);
-    
+
     if (!rec) return false;
 
     const updated: EmojiRecommendations = {
@@ -1367,7 +1386,7 @@ export class MemStorage implements IStorage {
     }
 
     if (dateRange) {
-      analytics = analytics.filter(a => 
+      analytics = analytics.filter(a =>
         a.createdAt >= dateRange.start && a.createdAt <= dateRange.end
       );
     }
@@ -1549,12 +1568,12 @@ export class MemStorage implements IStorage {
 
   async getLatestShipstationSyncStatus(syncType?: string): Promise<ShipstationSyncStatus | undefined> {
     const statuses = Array.from(this.shipstationSyncStatuses.values());
-    
+
     let filtered = statuses;
     if (syncType) {
       filtered = statuses.filter(status => status.syncType === syncType);
     }
-    
+
     return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
   }
 }
@@ -1567,7 +1586,7 @@ let storage: IStorage;
 if ((process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) && process.env.SUPABASE_SERVICE_ROLE_KEY) {
   console.log('✅ Supabase SDK credentials configured');
   console.log('🔄 Testing Supabase connection...');
-  
+
   try {
     storage = new SupabaseStorage();
     console.log('✅ Supabase storage activated - persistent data enabled');

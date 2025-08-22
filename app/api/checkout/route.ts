@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
   const shipping = 0;
   const total = subtotal + tax + shipping;
 
-  // Create order; we don't yet persist orderItems in storage abstraction, so we store order with totals
+  // Create order
   const order = await storage.createOrder({
     userId: user.id,
     subtotalAmount: subtotal.toString(),
@@ -55,13 +55,25 @@ export async function POST(req: NextRequest) {
     status: 'processing',
   } as any);
 
-  // TODO: persist order_items when storage layer supports it explicitly
+  // Persist order_items
+  const createdItems = [] as Array<{ id: string; productId: string; quantity: number; priceAtPurchase: string }>;
+  for (const line of items) {
+    const product = await storage.getProduct(line.productId)!;
+    const oi = await storage.createOrderItem({
+      orderId: order.id,
+      productId: product!.id,
+      quantity: line.quantity,
+      priceAtPurchase: product!.price,
+    } as any);
+    createdItems.push({ id: oi.id, productId: oi.productId as any, quantity: oi.quantity as any, priceAtPurchase: oi.priceAtPurchase as any });
+  }
 
   // Optional: clear cart
   await storage.clearCart(user.id);
 
   return NextResponse.json({
     order,
+    items: createdItems,
     summary: {
       items,
       totals: { subtotal, tax, shipping, total },
