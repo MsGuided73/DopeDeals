@@ -1,10 +1,21 @@
 "use client";
-import { useEffect, useState } from 'react';
+import * as React from "react";
+import {
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+} from "./toast";
 
+// Standard Toaster mounting point for shadcn toast primitives
 export function Toaster() {
-  // Minimal no-op Toaster to unblock build; wire to shadcn toast later
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  return mounted ? null : null;
+  return (
+    <ToastProvider>
+      <ToastViewport />
+      {/* Individual Toasts are rendered by the use-toast hook via portals */}
+    </ToastProvider>
+  );
 }
 
