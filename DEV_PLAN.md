@@ -117,7 +117,7 @@ Updated immediate next tasks
 ### Task 1.1: Gather Zoho Inventory Information
 **Priority: HIGH**
 **Info Needed:**
-- Zoho Inventory API credentials (Client ID, Client Secret, Refresh Token) - in env.local...  
+- Zoho Inventory OAuth credentials (Client ID, Client Secret) in .env.local (dev) / platform secrets (prod); refresh_token is stored in the database (zoho_tokens) after first OAuth callback
 - Zoho organization ID and region
 - Current product schema in Zoho (fields, data types, required fields) - where can I get this?
 - Current inventory structure (categories, brands, product types)
