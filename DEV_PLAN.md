@@ -1,5 +1,82 @@
-
 # VIP Smoke E-Commerce Development Plan
+
+## Migration to Next.js – Current Status (as of 2025-08-22)
+
+- [x] Initialize Next.js App Router structure and routing basics (2025-08-22)
+- [x] Port core API endpoints to `app/api` (brands, categories, products, health) (2025-08-22)
+- [x] Add health checks for Prisma and Supabase (`/api/health`) (2025-08-22)
+- [x] Harmonize Supabase env usage (server uses `SUPABASE_URL` with `NEXT_PUBLIC_*` fallback; client uses `NEXT_PUBLIC_*`) (2025-08-22)
+- [x] Replace legacy root page with `app/(public)/page.tsx` and remove old `app/page.tsx` + `client/index.html` (2025-08-22)
+- [x] Remove legacy large assets from `attached_assets/` (2025-08-22)
+- [ ] Standardize package manager to pnpm (remove `package-lock.json`, set VS Code `npm.packageManager = pnpm`)
+- [ ] Remove legacy Vite client and `vite.config.ts` once all pages/components are ported
+- [ ] Consolidate storage to Supabase-only implementation (remove Prisma/memory fallbacks when safe)
+
+## Updated Immediate Priorities (Next.js-first ordering)
+
+1) Standardize package manager to pnpm and update workspace settings
+   - Remove `package-lock.json`
+   - Add `.vscode/settings.json` with `{"npm.packageManager": "pnpm"}`
+   - Optional: Add `"packageManager": "pnpm@<version>"` to `package.json`
+
+2) Complete App Router migration
+   - Port remaining API routes (if any) and UI pages
+   - Decommission `client/` and `vite.config.ts`
+   - Ensure all envs use `NEXT_PUBLIC_*` on the client and server-only vars are not exposed
+
+3) Persistence & storage
+   - Finalize Supabase Storage implementation path
+   - Remove memory/Prisma fallbacks after verification
+
+4) E‑commerce critical path (post-migration)
+   - Checkout API + order creation workflow
+   - Inventory validation at checkout
+   - Activate Supabase Auth for gated flows
+
+## Status Annotations for Existing Plan (do not remove original tasks)
+
+- Phase 1 (Pre-Integration Setup): Partially complete; pending credentials & monitoring specifics
+  - Task 1.1 Zoho Inventory Info – Pending (blocked: credentials)
+  - Task 1.2 Environment Configuration – In Progress (health checks added 2025-08-22; Supabase envs harmonized 2025-08-22)
+  - Task 1.3 ShipStation Info – Pending
+
+- Phase 2 (Backend Infrastructure): Not started, planned after migration baseline
+  - Task 2.1 Database Schema Updates – Planned (awaiting Zoho field mapping)
+  - Task 2.2 Order Processing System – Planned (target after checkout endpoint)
+  - Task 2.3 Inventory Management System – Planned
+
+- Phase 3 (Zoho Integration): Not started (blocked by credentials)
+  - Task 3.1 API Client Setup – Planned
+  - Task 3.2 Product Sync Service – Planned
+  - Task 3.3 Order Sync Service – Planned
+
+- Phase 4 (Shipping & Fulfillment): Not started
+  - Task 4.1 Shipping Restrictions Engine – Planned
+  - Task 4.2 ShipStation Integration – Planned
+  - Task 4.3 Shipping Calculator – Planned
+
+- Phase 5 (Frontend Enhancements): Not started
+  - Task 5.1 Loyalty Program – Planned
+  - Task 5.2 Order Management UI – Planned
+  - Task 5.3 Admin Dashboard – Planned
+
+- Phase 6 (Testing & Deployment): In planning
+  - Task 6.1 Integration Testing – Planned (health endpoint scaffold in place 2025-08-22)
+  - Task 6.2 Performance Optimization – Planned
+
+## Reordered Work Breakdown (reflecting current build)
+
+- Now
+  - Complete App Router migration tasks (pnpm standardization, remove Vite/client when safe)
+  - Wire Supabase as primary storage path and validate `/api/health`
+- Next
+  - Implement Checkout API and Order workflow
+  - Add Inventory validation
+  - Activate Supabase Auth in gated flows
+- Later
+  - Zoho sync (import + real-time)
+  - ShipStation integration and shipping calculator
+  - Loyalty, Admin dashboard, Performance & Testing sweep
 
 ## Phase 1: Pre-Integration Setup (Days 1-2)
 
