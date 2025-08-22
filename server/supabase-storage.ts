@@ -272,6 +272,8 @@ export class SupabaseStorage implements IStorage {
 
     if (error) throw error;
     return data as Order;
+  }
+
 
   async createOrderItem(item: InsertOrderItem): Promise<OrderItem> {
     const { data, error } = await supabaseAdmin!
@@ -292,7 +294,6 @@ export class SupabaseStorage implements IStorage {
     return (data || []) as OrderItem[];
   }
 
-  }
 
   // Cart - User-specific with real-time updates
   async getUserCartItems(userId: string): Promise<CartItem[]> {

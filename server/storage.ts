@@ -712,6 +712,8 @@ export class MemStorage implements IStorage {
     };
     this.orders.set(order.id, order);
     return order;
+  }
+
 
   async createOrderItem(insertItem: InsertOrderItem): Promise<OrderItem> {
     const item: OrderItem = {
@@ -726,8 +728,6 @@ export class MemStorage implements IStorage {
 
   async getOrderItemsByOrder(orderId: string): Promise<OrderItem[]> {
     return Array.from(this.orderItems.values()).filter(oi => oi.orderId === orderId);
-  }
-
   }
 
   async getUserCartItems(userId: string): Promise<CartItem[]> {

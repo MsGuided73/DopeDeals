@@ -39,11 +39,11 @@ export async function GET(req: NextRequest) {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const orgId = process.env.ZOHO_ORGANIZATION_ID || process.env.ZOHO_ORG_ID;
-  const dc = process.env.ZOHO_DC || 'us';
+  const dataCenter = process.env.ZOHO_DC || 'us';
 
   const { error } = await supabase
     .from('zoho_tokens')
-    .upsert({ org_id: orgId, refresh_token, access_token, expires_at, dc })
+    .upsert({ org_id: orgId, refresh_token, access_token, expires_at, dc: dataCenter })
     .eq('org_id', orgId);
 
   if (error) {
