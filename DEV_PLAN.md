@@ -12,6 +12,40 @@
 - [ ] Remove legacy Vite client and `vite.config.ts` once all pages/components are ported
 - [ ] Consolidate storage to Supabase-only implementation (remove Prisma/memory fallbacks when safe)
 
+
+## Progress Update – 2025-08-22
+
+Completed today
+
+- [x] Supabase Auth scaffolding
+  - SSR client helper with @supabase/ssr (app/lib/supabase-server-ssr.ts)
+  - Browser client + /auth page (sign up/in/out)
+  - Basic /api/auth route for testing
+- [x] Checkout API (Phase A)
+  - POST /api/checkout with auth gating via Supabase session
+  - Payload validation (Zod)
+  - Local inventory checks (inStock) and order creation with summary
+- [x] Zoho OAuth scaffolding
+  - /api/zoho/oauth/start and /api/zoho/oauth/callback
+  - Token exchange + persistence in Supabase (zoho_tokens table)
+  - /api/zoho/health reads stored token (org/DC) for verification
+- [x] Dev UX fixes
+  - Added QueryClient helper at '@/lib/queryClient'
+  - Temporary UI placeholders for Tooltip/Toaster to unblock build
+
+In progress
+
+- [/] Standardize to pnpm (package-lock.json absent; add VS Code setting later)
+- [/] App Router migration (continuing; remove legacy Vite after pages are ported)
+
+Updated immediate next tasks
+
+1) Checkout: persist order_items in storage (Supabase + MemStorage) and return line items in response
+2) Zoho: add token refresh flow and a live health ping to Zoho Items API; then minimal Items sync (SKU→Product mapping)
+3) Replace placeholder Tooltip/Toaster with shadcn UI components
+4) Protect user pages with a small requireAuth helper and add an Orders page stub
+5) Remove legacy Vite/client when safe; standardize workspace settings to pnpm
+
 ## Updated Immediate Priorities (Next.js-first ordering)
 
 1) Standardize package manager to pnpm and update workspace settings
