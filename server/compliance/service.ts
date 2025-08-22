@@ -144,7 +144,7 @@ export class ComplianceService {
     for (const compliance of productCompliances) {
       const rule = await storage.getComplianceRuleById(compliance.complianceId);
       
-      if (rule && rule.restrictedStates.includes(state)) {
+      if (rule && rule.restrictedStates && (rule.restrictedStates as string[]).includes(state)) {
         allowed = false;
         violations.push(`Product contains ${rule.category} which is restricted in ${state}`);
       }
@@ -255,8 +255,8 @@ export class ComplianceService {
       const rule = await storage.getComplianceRuleById(compliance.complianceId);
       if (rule) {
         activeRules.push(rule);
-        restrictedStates.push(...rule.restrictedStates);
-        requiredWarnings.push(...rule.warningLabels);
+        if (rule.restrictedStates) restrictedStates.push(...(rule.restrictedStates as string[]));
+        if (rule.warningLabels) requiredWarnings.push(...(rule.warningLabels as string[]));
       }
     }
 

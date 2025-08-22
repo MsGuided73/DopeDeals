@@ -3,10 +3,6 @@ import * as React from "react";
 import {
   ToastProvider,
   ToastViewport,
-  Toast,
-  ToastTitle,
-  ToastDescription,
-  ToastClose,
 } from "./toast";
 
 // Standard Toaster mounting point for shadcn toast primitives

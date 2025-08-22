@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     const product = await storage.getProduct(id);
     if (!product) return NextResponse.json({ message: 'Product not found' }, { status: 404 });
     return NextResponse.json(product);
-  } catch (_error: any) {
+  } catch {
     return NextResponse.json({ message: 'Failed to fetch product' }, { status: 500 });
   }
 }

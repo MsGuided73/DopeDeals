@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const usePrisma = process.env.PRISMA_ENABLED === 'true';
 
     if (usePrisma) {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
       if (filters.categoryId) where.categoryId = filters.categoryId;
       if (filters.brandId) where.brandId = filters.brandId;
       if (filters.material) where.material = filters.material;
@@ -29,9 +29,9 @@ export async function GET(req: NextRequest) {
       if (filters.vipExclusive !== undefined) where.vipExclusive = filters.vipExclusive;
       if (nicotine !== undefined) where.nicotine = nicotine;
       if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
-        where.price = {};
-        if (filters.priceMin !== undefined) where.price.gte = filters.priceMin;
-        if (filters.priceMax !== undefined) where.price.lte = filters.priceMax;
+        where.price = {} as Record<string, unknown>;
+        if (filters.priceMin !== undefined) (where.price as Record<string, unknown>).gte = filters.priceMin;
+        if (filters.priceMax !== undefined) (where.price as Record<string, unknown>).lte = filters.priceMax;
       }
 
       const prismaProducts = await prisma.product.findMany({
@@ -49,14 +49,14 @@ export async function GET(req: NextRequest) {
     // - Drizzle/Supabase Product.nicotineProduct (boolean)
     let result = products;
     if (nicotine !== undefined) {
-      result = products.filter((p: any) => {
+      result = products.filter((p: Record<string, unknown>) => {
         const value = p.nicotine ?? p.nicotineProduct ?? false;
         return value === nicotine;
       });
     }
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch {
     return NextResponse.json({ message: 'Failed to fetch products' }, { status: 500 });
   }
 }

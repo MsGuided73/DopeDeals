@@ -53,19 +53,20 @@ export async function POST(req: NextRequest) {
     shippingAddress: shippingAddress || null,
     billingAddress: billingAddress || null,
     status: 'processing',
-  } as any);
+  } as Parameters<typeof storage.createOrder>[0]);
 
   // Persist order_items
   const createdItems = [] as Array<{ id: string; productId: string; quantity: number; priceAtPurchase: string }>;
   for (const line of items) {
-    const product = await storage.getProduct(line.productId)!;
+    const product = await storage.getProduct(line.productId);
+    if (!product) continue;
     const oi = await storage.createOrderItem({
       orderId: order.id,
-      productId: product!.id,
+      productId: product.id,
       quantity: line.quantity,
-      priceAtPurchase: product!.price,
-    } as any);
-    createdItems.push({ id: oi.id, productId: oi.productId as any, quantity: oi.quantity as any, priceAtPurchase: oi.priceAtPurchase as any });
+      priceAtPurchase: product.price,
+    } as Parameters<typeof storage.createOrderItem>[0]);
+    createdItems.push({ id: oi.id, productId: oi.productId as string, quantity: oi.quantity as number, priceAtPurchase: oi.priceAtPurchase as string });
   }
 
   // Optional: clear cart

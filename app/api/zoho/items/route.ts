@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
   // Fetch a page of items from Zoho
   const accessToken = await getValidAccessToken(tokenRow.refresh_token, dc);
   const url = new URL(`https://inventory.${dc}.zoho.com/api/v1/items`);
-  url.searchParams.set('organization_id', orgId);
+  url.searchParams.set('organization_id', orgId!);
   url.searchParams.set('page', '1');
   url.searchParams.set('per_page', '50');
 
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
 
   // Optionally map to local products by SKU
   // For now, return items with basic fields
-  const items = (data.items || []).map((i: any) => ({ id: i.item_id, name: i.name, sku: i.sku, rate: i.rate, available_stock: i.available_stock }));
+  const items = (data.items || []).map((i: Record<string, unknown>) => ({ id: i.item_id, name: i.name, sku: i.sku, rate: i.rate, available_stock: i.available_stock }));
 
   return NextResponse.json({ items });
 }

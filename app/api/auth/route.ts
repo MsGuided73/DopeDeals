@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Unsupported type' }, { status: 400 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Auth error' }, { status: 400 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: (err as Error)?.message || 'Auth error' }, { status: 400 });
   }
 }
 

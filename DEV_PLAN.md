@@ -117,9 +117,9 @@ Updated immediate next tasks
 ### Task 1.1: Gather Zoho Inventory Information
 **Priority: HIGH**
 **Info Needed:**
-- Zoho Inventory API credentials (Client ID, Client Secret, Refresh Token)
+- Zoho Inventory API credentials (Client ID, Client Secret, Refresh Token) - in env.local...  
 - Zoho organization ID and region
-- Current product schema in Zoho (fields, data types, required fields)
+- Current product schema in Zoho (fields, data types, required fields) - where can I get this?
 - Current inventory structure (categories, brands, product types)
 - Webhook URLs for inventory sync
 - API rate limits and pagination details
@@ -127,7 +127,7 @@ Updated immediate next tasks
 ### Task 1.2: Environment Configuration
 **Priority: HIGH**
 **Requirements:**
-- Set up Zoho API credentials in Replit Secrets
+- Set up Zoho API credentials in Next.js environment files (.env.local for dev) and platform secrets for deployments
 - Configure environment variables for production/development
 - Set up error logging and monitoring
 

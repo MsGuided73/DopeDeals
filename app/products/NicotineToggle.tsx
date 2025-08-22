@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+// import { Label } from "@/components/ui/label"; // Using native label for now
 
 export function NicotineToggle() {
   const [enabled, setEnabled] = useState<boolean | undefined>(undefined);
@@ -32,7 +32,7 @@ export function NicotineToggle() {
         checked={enabled === true}
         onCheckedChange={(checked) => setEnabled(checked ? true : undefined)}
       />
-      <Label htmlFor="nicotine-toggle">Nicotine products only</Label>
+      <label htmlFor="nicotine-toggle" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Nicotine products only</label>
       {enabled === false && (
         <span className="text-xs text-muted-foreground">(Showing nicotine-free only)</span>
       )}

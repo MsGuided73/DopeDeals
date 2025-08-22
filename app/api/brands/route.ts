@@ -11,7 +11,7 @@ export async function GET() {
 
     const brands = await storage.getBrands();
     return NextResponse.json(brands);
-  } catch (_error: any) {
+  } catch {
     return NextResponse.json({ message: 'Failed to fetch brands' }, { status: 500 });
   }
 }

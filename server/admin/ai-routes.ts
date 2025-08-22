@@ -123,9 +123,9 @@ adminAIRouter.get('/status', async (req, res) => {
     // Filter products based on AI classification status
     let filteredProducts = products;
     if (filter === 'classified') {
-      filteredProducts = products.filter(p => p.aiClassified);
+      filteredProducts = products.filter(p => (p as any).aiClassified);
     } else if (filter === 'unclassified') {
-      filteredProducts = products.filter(p => !p.aiClassified);
+      filteredProducts = products.filter(p => !(p as any).aiClassified);
     } else if (filter === 'needs_review') {
       filteredProducts = products.filter(p => p.nicotineProduct || p.requiresLabTest);
     }
@@ -160,8 +160,8 @@ adminAIRouter.get('/status', async (req, res) => {
       },
       stats: {
         total: products.length,
-        classified: products.filter(p => p.aiClassified).length,
-        unclassified: products.filter(p => !p.aiClassified).length,
+        classified: products.filter(p => (p as any).aiClassified).length,
+        unclassified: products.filter(p => !(p as any).aiClassified).length,
         nicotineProducts: products.filter(p => p.nicotineProduct).length,
         requiresLabTest: products.filter(p => p.requiresLabTest).length
       }
@@ -199,7 +199,7 @@ adminAIRouter.get('/history/:productId', async (req, res) => {
       product: {
         id: product.id,
         name: product.name,
-        aiClassified: product.aiClassified,
+        aiClassified: (product as any).aiClassified,
         nicotineProduct: product.nicotineProduct,
         requiresLabTest: product.requiresLabTest,
         visibleOnMainSite: product.visibleOnMainSite,

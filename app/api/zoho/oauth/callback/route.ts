@@ -30,8 +30,8 @@ export async function GET(req: NextRequest) {
   const data = await res.json();
 
   // Persist tokens in Supabase table 'zoho_tokens'
-  const { access_token, refresh_token, expires_in } = data as any;
-  const expires_at = new Date(Date.now() + (expires_in || 3600) * 1000).toISOString();
+  const { access_token, refresh_token, expires_in } = data as Record<string, unknown>;
+  const expires_at = new Date(Date.now() + ((expires_in as number) || 3600) * 1000).toISOString();
 
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;

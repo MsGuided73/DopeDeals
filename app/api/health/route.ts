@@ -14,8 +14,8 @@ export async function GET() {
       // Simple connectivity test
       await prisma.$queryRaw`SELECT 1`;
       checks.prisma = true;
-    } catch (err: any) {
-      errors.push(`prisma: ${err?.message || 'unknown error'}`);
+    } catch (err: unknown) {
+      errors.push(`prisma: ${(err as Error)?.message || 'unknown error'}`);
     }
   }
 
@@ -25,8 +25,8 @@ export async function GET() {
       const { error } = await supabaseAdmin.from('products').select('id').limit(1);
       if (!error) checks.supabase = true; else errors.push(`supabase: ${error.message}`);
     }
-  } catch (err: any) {
-    errors.push(`supabase: ${err?.message || 'unknown error'}`);
+  } catch (err: unknown) {
+    errors.push(`supabase: ${(err as Error)?.message || 'unknown error'}`);
   }
 
   // Migration readiness checks

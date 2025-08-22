@@ -1,6 +1,6 @@
-import { NextRequest } from 'next/server';
+// No imports needed for this simple redirect
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const dc = 'us';
   const clientId = process.env.ZOHO_CLIENT_ID!;
   const redirectUri = process.env.ZOHO_REDIRECT_URI!;

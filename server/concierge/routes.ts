@@ -123,7 +123,7 @@ router.post('/conversation/message', async (req, res) => {
     const response = await conciergeService.processMessage(
       validatedData.conversationId,
       validatedData.message,
-      validatedData.context
+      validatedData.context as any
     );
 
     res.json({

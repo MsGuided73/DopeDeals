@@ -101,10 +101,10 @@ export function createConciergeService(storage: IStorage) {
         content: userMessage,
         messageType: 'text',
         metadata: JSON.stringify({
-          currentPage: context?.currentPage,
-          viewedProducts: context?.viewedProducts,
-          cartItems: context?.cartItems,
-          searchHistory: context?.searchHistory
+          currentPage: (context as any)?.currentPage,
+          viewedProducts: (context as any)?.viewedProducts,
+          cartItems: (context as any)?.cartItems,
+          searchHistory: (context as any)?.searchHistory
         }),
         confidence: 100
       };
@@ -129,7 +129,7 @@ export function createConciergeService(storage: IStorage) {
         conversationId,
         customerProfile,
         currentQuery: userMessage,
-        context: context
+        context: context as any
       };
 
       // Initialize AI client with current product data
