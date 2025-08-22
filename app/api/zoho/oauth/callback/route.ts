@@ -29,8 +29,27 @@ export async function GET(req: NextRequest) {
 
   const data = await res.json();
 
-  // TODO: persist refresh_token securely (Supabase table or Secrets Manager)
-  // For now, return minimal info as a placeholder
-  return NextResponse.json({ ok: true, received: Object.keys(data) });
+  // Persist tokens in Supabase table 'zoho_tokens'
+  const { access_token, refresh_token, expires_in } = data as any;
+  const expires_at = new Date(Date.now() + (expires_in || 3600) * 1000).toISOString();
+
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  const { createClient } = await import('@supabase/supabase-js');
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const orgId = process.env.ZOHO_ORGANIZATION_ID || process.env.ZOHO_ORG_ID;
+  const dc = process.env.ZOHO_DC || 'us';
+
+  const { error } = await supabase
+    .from('zoho_tokens')
+    .upsert({ org_id: orgId, refresh_token, access_token, expires_at, dc })
+    .eq('org_id', orgId);
+
+  if (error) {
+    return NextResponse.json({ ok: false, error: 'Failed to persist token', detail: error.message }, { status: 500 });
+  }
+
+  return NextResponse.redirect('/api/zoho/health');
 }
 
