@@ -93,21 +93,21 @@ This document captures a comprehensive audit of legacy references from the Repli
 ### B) Dependency cleanup (package.json)
 
 Observations
-- Legacy tooling present in devDependencies and scripts; some legacy server deps remain.
+- Legacy tooling present in devDependencies and scripts; legacy server deps pruned.
 
 Safe to remove now (devDependencies)
-- vite, @vitejs/plugin-react, @tailwindcss/vite, esbuild, drizzle-kit
-- Also remove file drizzle.config.ts
+- DONE: Removed vite, @vitejs/plugin-react, @tailwindcss/vite, esbuild, drizzle-kit
+- DONE: Deleted drizzle.config.ts
 
-Candidates to remove after confirming no legacy Express usage (dependencies)
-- express, express-session, memorystore, multer, passport, passport-local
-- postgres (Postgres.js client), ws, pdf-parse (if unused)
+Legacy server dependencies cleanup (status)
+- REMOVED: express-session, memorystore, passport, passport-local, postgres, ws
+- KEPT (admin/Express tools): express, multer (uploads), pdf-parse (COA parsing)
 
 Scripts
-- Remove scripts: legacy:dev, legacy:build, legacy:start when Express flow is retired
+- REMOVED: legacy:dev, legacy:build, legacy:start, db:push
 
 Rationale
-- These packages support the legacy Vite/Express/Drizzle stack. The Next.js App Router + Supabase model renders them unnecessary and they add maintenance overhead.
+- These packages supported the legacy Vite/Express/Drizzle stack. With the Next.js App Router + Supabase model, they are unnecessary; admin/Express tools remain supported with express, multer, and pdf-parse retained.
 
 ---
 
