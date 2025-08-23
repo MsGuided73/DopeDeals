@@ -19,7 +19,8 @@ import {
   type ConciergeConversation, type InsertConciergeConversation, type ConciergeMessage, type InsertConciergeMessage,
   type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics,
   type ComplianceRule, type InsertComplianceRule, type ProductCompliance, type InsertProductCompliance,
-  type ComplianceAuditLog, type InsertComplianceAuditLog
+  type ComplianceAuditLog, type InsertComplianceAuditLog,
+  type LabCertificate, type InsertLabCertificate
 } from "@shared/schema";
 
 import {
@@ -184,7 +185,7 @@ export interface IStorage {
   updateLabCertificate(id: string, updates: Partial<InsertLabCertificate>): Promise<LabCertificate | undefined>;
 }
 
-export class MemStorage implements IStorage {
+export class MemStorage {
   private users: Map<string, User> = new Map();
   private products: Map<string, Product> = new Map();
   private categories: Map<string, Category> = new Map();
@@ -557,6 +558,15 @@ export class MemStorage implements IStorage {
         inStock: product.inStock ?? true,
         featured: product.featured ?? false,
         vipExclusive: product.vipExclusive ?? false,
+        nicotineProduct: product.nicotineProduct ?? null,
+        visibleOnMainSite: product.visibleOnMainSite ?? null,
+        visibleOnTobaccoSite: product.visibleOnTobaccoSite ?? null,
+        requiresLabTest: product.requiresLabTest ?? null,
+        labTestUrl: product.labTestUrl || null,
+        batchNumber: product.batchNumber || null,
+        expirationDate: product.expirationDate || null,
+        hiddenReason: product.hiddenReason || null,
+        overrideRestrictions: product.overrideRestrictions ?? null,
       };
       this.products.set(fullProduct.id, fullProduct);
     });
@@ -650,7 +660,16 @@ export class MemStorage implements IStorage {
       inStock: insertProduct.inStock ?? true,
       featured: insertProduct.featured ?? false,
       vipExclusive: insertProduct.vipExclusive ?? false,
-    };
+      nicotineProduct: insertProduct.nicotineProduct ?? null,
+      visibleOnMainSite: insertProduct.visibleOnMainSite ?? null,
+      visibleOnTobaccoSite: insertProduct.visibleOnTobaccoSite ?? null,
+      requiresLabTest: insertProduct.requiresLabTest ?? null,
+      labTestUrl: insertProduct.labTestUrl || null,
+      batchNumber: insertProduct.batchNumber || null,
+      expirationDate: insertProduct.expirationDate || null,
+      hiddenReason: insertProduct.hiddenReason || null,
+      overrideRestrictions: insertProduct.overrideRestrictions ?? null,
+    } as any;
     this.products.set(product.id, product);
     return product;
   }
@@ -708,8 +727,16 @@ export class MemStorage implements IStorage {
       createdAt: new Date(),
       userId: insertOrder.userId || null,
       status: insertOrder.status || "processing",
+      paymentStatus: insertOrder.paymentStatus || "pending",
+      paymentMethod: insertOrder.paymentMethod || null,
+      transactionId: insertOrder.transactionId || null,
+      subtotalAmount: insertOrder.subtotalAmount,
+      taxAmount: insertOrder.taxAmount ?? '0',
+      shippingAmount: insertOrder.shippingAmount ?? '0',
+      totalAmount: insertOrder.totalAmount,
+      billingAddress: insertOrder.billingAddress || null,
       shippingAddress: insertOrder.shippingAddress || null,
-    };
+    } as any;
     this.orders.set(order.id, order);
     return order;
   }
@@ -794,7 +821,7 @@ export class MemStorage implements IStorage {
   async getUserBehavior(userId: string, limit: number = 50): Promise<UserBehavior[]> {
     const behaviors = Array.from(this.userBehaviors.values())
       .filter(b => b.userId === userId)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .sort((a: any, b: any) => new Date(b.createdAt as any).getTime() - new Date(a.createdAt as any).getTime())
       .slice(0, limit);
     return behaviors;
   }
@@ -886,9 +913,9 @@ export class MemStorage implements IStorage {
 
     const preferences = await this.getUserPreferences(behavior.userId!) || {
       userId: behavior.userId!,
-      preferredCategories: [],
-      preferredBrands: [],
-      preferredMaterials: [],
+      preferredCategories: [] as string[],
+      preferredBrands: [] as string[],
+      preferredMaterials: [] as string[],
       vipProductsOnly: false,
     };
 
@@ -909,7 +936,7 @@ export class MemStorage implements IStorage {
   private async getTrendingProducts(limit: number): Promise<Product[]> {
     // Get products with most recent interactions
     const recentBehaviors = Array.from(this.userBehaviors.values())
-      .filter(b => b.createdAt.getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000) // Last 7 days
+      .filter((b: any) => new Date(b.createdAt as any).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000) // Last 7 days
       .filter(b => ['view', 'add_to_cart', 'purchase'].includes(b.action));
 
     const productCounts = new Map<string, number>();
@@ -1055,7 +1082,8 @@ export class MemStorage implements IStorage {
     }
 
     // Recency bonus for newer products
-    const daysSinceCreated = (Date.now() - product.createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    const created = (product as any).createdAt ? new Date((product as any).createdAt as any) : new Date();
+    const daysSinceCreated = (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24);
     if (daysSinceCreated < 30) {
       score += 0.5;
     }
@@ -1089,10 +1117,18 @@ export class MemStorage implements IStorage {
   async createPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
     const pm: PaymentMethod = {
       id: this.generateId(),
-      ...paymentMethod,
+      userId: paymentMethod.userId || null,
+      kajaPayToken: paymentMethod.kajaPayToken,
+      cardLast4: paymentMethod.cardLast4 || null,
+      cardType: paymentMethod.cardType || null,
+      expiryMonth: paymentMethod.expiryMonth ?? null,
+      expiryYear: paymentMethod.expiryYear ?? null,
+      billingName: paymentMethod.billingName || null,
+      billingAddress: (paymentMethod as any).billingAddress ?? null,
+      isDefault: (paymentMethod as any).isDefault ?? null,
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
+    } as any;
     this.paymentMethods.set(pm.id, pm);
     return pm;
   }
@@ -1122,10 +1158,21 @@ export class MemStorage implements IStorage {
   async createTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction> {
     const tx: PaymentTransaction = {
       id: this.generateId(),
-      ...transaction,
+      orderId: (transaction as any).orderId ?? null,
+      kajaPayTransactionId: (transaction as any).kajaPayTransactionId ?? null,
+      kajaPayReferenceNumber: (transaction as any).kajaPayReferenceNumber ?? null,
+      transactionType: transaction.transactionType,
+      amount: transaction.amount,
+      currency: (transaction as any).currency ?? 'USD',
+      status: transaction.status,
+      kajaPayStatusCode: (transaction as any).kajaPayStatusCode ?? null,
+      authCode: (transaction as any).authCode ?? null,
+      errorMessage: (transaction as any).errorMessage ?? null,
+      paymentMethodData: (transaction as any).paymentMethodData ?? null,
+      transactionDetails: (transaction as any).transactionDetails ?? null,
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
+    } as any;
     this.paymentTransactions.set(tx.id, tx);
     return tx;
   }
@@ -1158,9 +1205,13 @@ export class MemStorage implements IStorage {
   async createWebhookEvent(event: InsertKajaPayWebhookEvent): Promise<KajaPayWebhookEvent> {
     const we: KajaPayWebhookEvent = {
       id: this.generateId(),
-      ...event,
+      eventType: event.eventType,
+      kajaPayTransactionId: (event as any).kajaPayTransactionId ?? null,
+      payload: (event as any).payload as any,
+      processed: (event as any).processed ?? null,
+      processedAt: (event as any).processedAt ?? null,
       createdAt: new Date(),
-    };
+    } as any;
     this.webhookEvents.set(we.id, we);
     return we;
   }
@@ -1187,9 +1238,16 @@ export class MemStorage implements IStorage {
   async createEmojiUsage(usage: InsertEmojiUsage): Promise<EmojiUsage> {
     const eu: EmojiUsage = {
       id: this.generateId(),
-      ...usage,
+      userId: usage.userId,
+      emoji: usage.emoji,
+      emojiCode: usage.emojiCode,
+      context: usage.context,
+      contextId: (usage as any).contextId ?? null,
+      sentiment: (usage as any).sentiment ?? null,
+      frequency: (usage as any).frequency ?? 1,
+      lastUsed: (usage as any).lastUsed ?? new Date(),
       createdAt: new Date(),
-    };
+    } as any;
     this.emojiUsages.set(eu.id, eu);
     return eu;
   }
@@ -1214,10 +1272,14 @@ export class MemStorage implements IStorage {
   async createUserEmojiPreferences(preferences: InsertUserEmojiPreferences): Promise<UserEmojiPreferences> {
     const prefs: UserEmojiPreferences = {
       id: this.generateId(),
-      ...preferences,
+      userId: preferences.userId,
+      favoriteEmojis: (preferences as any).favoriteEmojis ?? null,
+      preferredCategories: (preferences as any).preferredCategories ?? null,
+      emojiPersonality: (preferences as any).emojiPersonality ?? null,
+      contextualPreferences: (preferences as any).contextualPreferences ?? null,
       createdAt: new Date(),
       lastUpdated: new Date(),
-    };
+    } as any;
     this.userEmojiPrefs.set(prefs.id, prefs);
     return prefs;
   }
@@ -1240,9 +1302,17 @@ export class MemStorage implements IStorage {
   async createEmojiRecommendations(recommendations: InsertEmojiRecommendations): Promise<EmojiRecommendations> {
     const recs: EmojiRecommendations = {
       id: this.generateId(),
-      ...recommendations,
+      userId: recommendations.userId,
+      context: recommendations.context,
+      contextData: (recommendations as any).contextData ?? null,
+      recommendedEmojis: (recommendations as any).recommendedEmojis as any,
+      algorithmVersion: (recommendations as any).algorithmVersion ?? '1.0',
+      confidence: recommendations.confidence,
+      used: (recommendations as any).used ?? null,
+      usedEmojiId: (recommendations as any).usedEmojiId ?? null,
+      expiresAt: recommendations.expiresAt,
       createdAt: new Date(),
-    };
+    } as any;
     this.emojiRecs.set(recs.id, recs);
     return recs;
   }
@@ -1295,10 +1365,15 @@ export class MemStorage implements IStorage {
     } else {
       const assoc: ProductEmojiAssociations = {
         id: this.generateId(),
-        ...association,
+        productId: association.productId,
+        emoji: association.emoji,
+        emojiCode: association.emojiCode,
+        associationStrength: association.associationStrength,
+        usageCount: (association as any).usageCount ?? 1,
+        sentiment: (association as any).sentiment ?? null,
         createdAt: new Date(),
         lastUpdated: new Date(),
-      };
+      } as any;
       this.productEmojiAssocs.set(assoc.id, assoc);
       return assoc;
     }
@@ -1307,11 +1382,17 @@ export class MemStorage implements IStorage {
   // VIP Concierge Methods
   async createConciergeConversation(conversation: InsertConciergeConversation): Promise<ConciergeConversation> {
     const newConversation: ConciergeConversation = {
-      ...conversation,
+      id: (conversation as any).id || this.generateId(),
+      sessionId: conversation.sessionId,
+      userId: (conversation as any).userId ?? null,
+      status: (conversation as any).status ?? 'active',
+      priority: (conversation as any).priority ?? 'normal',
+      customerInfo: (conversation as any).customerInfo ?? null,
+      metadata: (conversation as any).metadata ?? null,
       createdAt: new Date(),
       updatedAt: new Date(),
       lastActiveAt: new Date()
-    };
+    } as any;
     this.conciergeConversations.set(conversation.id, newConversation);
     return newConversation;
   }
@@ -1335,9 +1416,17 @@ export class MemStorage implements IStorage {
 
   async createConciergeMessage(message: InsertConciergeMessage): Promise<ConciergeMessage> {
     const newMessage: ConciergeMessage = {
-      ...message,
+      id: (message as any).id || this.generateId(),
+      conversationId: message.conversationId,
+      role: message.role,
+      content: message.content,
+      messageType: (message as any).messageType ?? 'text',
+      metadata: (message as any).metadata ?? null,
+      aiProvider: (message as any).aiProvider ?? null,
+      confidence: (message as any).confidence ?? null,
+      isVisible: (message as any).isVisible ?? true,
       createdAt: new Date()
-    };
+    } as any;
     this.conciergeMessages.set(message.id, newMessage);
     return newMessage;
   }
@@ -1350,9 +1439,19 @@ export class MemStorage implements IStorage {
 
   async createConciergeRecommendation(recommendation: InsertConciergeRecommendation): Promise<ConciergeRecommendation> {
     const newRecommendation: ConciergeRecommendation = {
-      ...recommendation,
+      id: (recommendation as any).id || this.generateId(),
+      conversationId: recommendation.conversationId,
+      messageId: recommendation.messageId,
+      productId: (recommendation as any).productId ?? null,
+      recommendationType: recommendation.recommendationType,
+      confidence: recommendation.confidence,
+      reason: recommendation.reason,
+      metadata: (recommendation as any).metadata ?? null,
+      userFeedback: (recommendation as any).userFeedback ?? null,
+      clickedAt: (recommendation as any).clickedAt ?? null,
+      purchasedAt: (recommendation as any).purchasedAt ?? null,
       createdAt: new Date()
-    };
+    } as any;
     this.conciergeRecommendations.set(recommendation.id, newRecommendation);
     return newRecommendation;
   }
@@ -1371,9 +1470,13 @@ export class MemStorage implements IStorage {
 
   async createConciergeAnalytics(analytics: InsertConciergeAnalytics): Promise<ConciergeAnalytics> {
     const newAnalytics: ConciergeAnalytics = {
-      ...analytics,
+      id: (analytics as any).id || this.generateId(),
+      conversationId: analytics.conversationId,
+      eventType: analytics.eventType,
+      eventData: (analytics as any).eventData ?? null,
+      performanceMetrics: (analytics as any).performanceMetrics ?? null,
       createdAt: new Date()
-    };
+    } as any;
     this.conciergeAnalytics.set(analytics.id, newAnalytics);
     return newAnalytics;
   }

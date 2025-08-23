@@ -69,7 +69,7 @@ export class PaymentService {
         authCode: result.authCode,
         errorMessage: result.errorMessage,
         transactionDetails: {
-          ...transactionData.transactionDetails,
+          ...(((transactionData as any).transactionDetails && typeof (transactionData as any).transactionDetails === 'object') ? (transactionData as any).transactionDetails : {}),
           maskedCardNumber: result.maskedCardNumber,
           cardType: result.cardType,
           avsResponseCode: result.avsResponseCode,

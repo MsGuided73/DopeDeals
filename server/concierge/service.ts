@@ -311,18 +311,18 @@ export function createConciergeService(storage: IStorage) {
         
         if (messages.length > 0) {
           const responseTimes = messages
-            .map(m => m.performanceMetrics?.responseTime)
+            .map((m: any) => m.performanceMetrics?.responseTime)
             .filter(rt => rt !== undefined);
           processed.avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length || 0;
 
           const confidences = messages
-            .map(m => m.performanceMetrics?.confidence)
+            .map((m: any) => m.performanceMetrics?.confidence)
             .filter(c => c !== undefined);
           processed.avgConfidence = confidences.reduce((a, b) => a + b, 0) / confidences.length || 0;
         }
 
         // Calculate rates
-        const totalRecommendations = messages.reduce((total, msg) => {
+        const totalRecommendations = messages.reduce((total, msg: any) => {
           return total + (msg.eventData?.recommendationCount || 0);
         }, 0);
 

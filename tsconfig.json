@@ -10,7 +10,17 @@
     "build",
     "dist",
     "client/src/**/*",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    // Exclude legacy Express route files (not part of Next.js app)
+    "server/index.ts",
+    "server/routes.ts",
+    "server/**/routes.ts",
+    "server/services/**/*",
+    "server/kajapay/**/*",
+    "server/concierge/**/*",
+    "server/ai/**/*",
+    "server/shipstation/**/*",
+    "server/zoho/routes.ts"
   ],
   "compilerOptions": {
     "incremental": true,
