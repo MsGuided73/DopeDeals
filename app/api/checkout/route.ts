@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { storage } from '../../../server/storage';
+import { getStorage } from '@/lib/server-storage';
 import { requireAuth } from '@/lib/requireAuth';
 import { z } from 'zod';
 
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
   const { items, shippingAddress, billingAddress } = parse.data;
 
   // Validate inventory locally (Phase A)
+  const storage = await getStorage();
   for (const line of items) {
     const product = await storage.getProduct(line.productId);
     if (!product) return NextResponse.json({ error: `Product not found: ${line.productId}` }, { status: 404 });

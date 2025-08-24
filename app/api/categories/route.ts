@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { storage } from '../../../server/storage';
+import { getStorage } from '@/lib/server-storage';
 import { prisma } from '@/lib/prisma';
 
 export async function GET() {
@@ -9,6 +9,7 @@ export async function GET() {
       return NextResponse.json(categories);
     }
 
+    const storage = await getStorage();
     const categories = await storage.getCategories();
     return NextResponse.json(categories);
   } catch {

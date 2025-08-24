@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { storage } from '../../../server/storage';
+import { getStorage } from '@/lib/server-storage';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(req: NextRequest) {
@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
     } as const;
 
     const usePrisma = process.env.PRISMA_ENABLED === 'true';
+    const storage = await getStorage();
 
     if (usePrisma) {
       const where: Record<string, unknown> = {};
