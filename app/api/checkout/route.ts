@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { storage } from '../../../server/storage';
-import { getSessionUser } from '@/lib/supabase-server-ssr';
+import { requireAuth } from '@/lib/requireAuth';
 import { z } from 'zod';
 
 const CheckoutSchema = z.object({
@@ -11,8 +11,9 @@ const CheckoutSchema = z.object({
 
 export async function POST(req: NextRequest) {
   // Require auth
-  const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireAuth();
+  if (auth instanceof NextResponse) return auth;
+  const { user } = auth;
 
   const body = await req.json().catch(() => ({}));
   const parse = CheckoutSchema.safeParse(body);
