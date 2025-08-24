@@ -61,7 +61,7 @@ export async function GET() {
     lockfiles: { pnpmLock, npmLock },
     legacy,
     envs,
-    storageMode: supabaseAdmin ? 'supabase' : 'memory',
+    storageMode: envs.SUPABASE_SERVICE_ROLE_KEY ? 'supabase' : 'memory',
   } as const;
 
   return NextResponse.json({

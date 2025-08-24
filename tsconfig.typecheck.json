@@ -9,7 +9,9 @@
     "build",
     "dist",
     "server/**/*",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "**/server/storage.ts",
+    "**/server/supabase-storage.ts"
   ],
   "compilerOptions": {
     "incremental": false,
