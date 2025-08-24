@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { supabaseAdmin } from '../../../server/supabase-storage';
+import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 
@@ -21,8 +21,11 @@ export async function GET() {
 
   // Supabase server admin check (if configured)
   try {
-    if (supabaseAdmin) {
-      const { error } = await supabaseAdmin.from('products').select('id').limit(1);
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (supabaseUrl && supabaseServiceKey) {
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
+      const { error } = await supabase.from('products').select('id').limit(1);
       if (!error) checks.supabase = true; else errors.push(`supabase: ${error.message}`);
     }
   } catch (err: unknown) {
