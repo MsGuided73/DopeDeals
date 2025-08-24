@@ -35,9 +35,8 @@ jobs:
       # - name: Type-check
       #   run: pnpm check
 
-      # Temporarily disable lint during migration (Next.js build already ignores during builds); re-enable after ESLint config is finalized
-      # - name: Lint
-      #   run: pnpm lint
+      - name: Lint
+        run: pnpm lint
 
       - name: Test
         run: pnpm test
