@@ -2,6 +2,24 @@
 
 Status: Next.js App Router migration is complete. All new work should target app/ and app/api/ using pnpm.
 
+## ✅ Phased plan to complete migration + feature buildout
+
+### Phase 0 — CI/Tooling stabilization (now)
+- [ ] Finalize ESLint v9 flat config; local `pnpm lint` passes
+- [ ] Re-enable Lint step in CI
+- [ ] Scope TypeScript check to `app/` + `shared/` via `tsconfig.typecheck.json`
+- [ ] Re-enable Type-check step in CI
+- [ ] Add minimal vitest route smoke tests (health, products, checkout)
+- Acceptance: PRs show green Lint, Type-check, Tests, and Build
+
+### Phase 1 — App Router migration completion
+- [ ] Remove legacy `client/` and `vite.config.ts`
+- [ ] Verify Tailwind content globs include `app/**` and shared paths
+- [ ] Ensure `.env.example` has NEXT_PUBLIC_/server secrets documented
+- Acceptance: Single Next.js app; no legacy client/Vite; envs documented
+
+
+
 ## 🚨 CRITICAL PATH (NOW)
 
 1. Checkout, Payments, Inventory

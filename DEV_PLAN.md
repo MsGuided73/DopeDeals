@@ -8,6 +8,59 @@
 - [x] Harmonize Supabase env usage (server uses `SUPABASE_URL` with `NEXT_PUBLIC_*` fallback; client uses `NEXT_PUBLIC_*`) (2025-08-22)
 - [x] Replace legacy root page with `app/(public)/page.tsx` and remove old `app/page.tsx` + `client/index.html` (2025-08-22)
 - [x] Remove legacy large assets from `attached_assets/` (2025-08-22)
+
+## Phased plan to complete migration + feature buildout (concise)
+
+- Phase 0 — CI/Tooling stabilization
+  - Finalize ESLint v9 flat config; re‑enable Lint in CI
+  - Scope TypeScript check to app/ + shared/; re‑enable tsc in CI
+  - Add minimal vitest route smoke tests (health, products, checkout)
+  - Acceptance: PRs gated by Lint, Type‑check, Tests, Build
+
+- Phase 1 — App Router migration completion
+  - Remove legacy client/ and vite.config.ts; verify Tailwind globs
+  - Ensure .env.example documents NEXT_PUBLIC_ and server secrets
+  - Acceptance: Single Next.js app; envs documented
+
+- Phase 2 — Auth gating and accounts
+  - Apply requireAuth to checkout, orders, account, admin; verify SSR auth
+  - Acceptance: Anonymous redirected; signed‑in users access protected pages
+
+- Phase 3 — Orders, Checkout, Inventory (Supabase)
+  - Extend /api/checkout to create orders + order_items; decrement stock atomically
+  - Add Orders API (GET self, GET by id, PATCH status); tests
+  - Acceptance: Happy‑path checkout creates paid order; inventory updates; tests pass
+
+- Phase 4 — Payments (KajaPay) + webhooks
+  - Implement client for pay/refund/void; persist paymentTransactions; handle webhooks
+  - Acceptance: Capture → order paid; refund/void update state; webhook integration verified
+
+- Phase 5 — Shipping (ShipStation)
+  - Create order on paid order; tracking updates via webhooks; rate quotes for checkout
+  - Acceptance: ShipStation mapping stored; tracking visible; quotes returned
+
+- Phase 6 — Zoho inventory sync
+  - OAuth/refresh; Items sync SKU→Product; stock sync; health endpoint OK
+  - Acceptance: Catalog/stock synced; health OK
+
+- Phase 7 — Admin, SEO, Observability
+  - Admin screens for core entities; metadata via Next metadata API; Sentry added
+  - Acceptance: Admin CRUD baseline; SEO metadata present; Sentry capturing
+
+- Phase 8 — AI ports
+  - Port legacy AI routes to app/api; add tests
+  - Acceptance: AI endpoints reachable; tests green
+
+## Acceptance criteria summary
+- CI: Lint + Type‑check + Tests + Build green on PRs
+- Checkout: creates paid order, order_items stored, stock decremented atomically
+- Payments: capture/refund/void reflected in transactions and orders via webhooks
+- Shipping: paid orders appear in ShipStation; tracking syncs back
+- Zoho: items/stock sync working; health endpoint OK
+- Admin: core screens usable; role‑gated
+- SEO/Obs: metadata present; Sentry enabled; /api/health and integration health endpoints OK
+
+
 - [ ] Standardize package manager to pnpm (remove `package-lock.json`, set VS Code `npm.packageManager = pnpm`)
 - [ ] Remove legacy Vite client and `vite.config.ts` once all pages/components are ported
 - [ ] Consolidate storage to Supabase-only implementation (remove Prisma/memory fallbacks when safe)
