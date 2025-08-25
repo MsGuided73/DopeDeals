@@ -1,5 +1,8 @@
 # NicheNexus (Dope Deals) – Next.js App Router TODO (Post‑Migration)
 
+> Consolidation note (2025-08-25): Active task tracking moved to taskmanage.md. This file remains for historical context.
+
+
 Status: Next.js App Router migration is complete. All new work should target app/ and app/api/ using pnpm.
 
 ## ✅ Phased plan to complete migration + feature buildout

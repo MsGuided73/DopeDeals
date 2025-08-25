@@ -379,120 +379,164 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const CompliancePage = () => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Compliance</h1>
-        <button className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
-          Generate Report
-        </button>
-      </div>
+  const CompliancePage = () => {
+    const [loading, setLoading] = useState(false);
+    const [initLoading, setInitLoading] = useState(false);
+    const [auditLoading, setAuditLoading] = useState(false);
+    const [rules, setRules] = useState<any[]>([]);
+    const [logs, setLogs] = useState<any[]>([]);
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Age Verifications</p>
-              <p className="text-2xl font-bold text-green-600">2,847</p>
-              <p className="text-sm text-gray-500">This month</p>
-            </div>
-            <div className="text-3xl">✅</div>
+    async function loadRules() {
+      try {
+        setLoading(true);
+        const res = await fetch('/api/compliance/rules');
+        const data = await res.json();
+        setRules(Array.isArray(data) ? data : []);
+      } catch (e) {
+        console.error('Failed to load rules', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function loadLogs() {
+      try {
+        const res = await fetch('/api/compliance/audit/logs?limit=20');
+        const data = await res.json();
+        setLogs(Array.isArray(data) ? data : (data?.items || []));
+      } catch (e) {
+        console.error('Failed to load logs', e);
+      }
+    }
+
+    async function initializeRules() {
+      try {
+        setInitLoading(true);
+        await fetch('/api/compliance/initialize', { method: 'POST' });
+        await loadRules();
+      } catch (e) {
+        console.error('Initialize rules failed', e);
+      } finally {
+        setInitLoading(false);
+      }
+    }
+
+    async function auditAllProducts() {
+      try {
+        setAuditLoading(true);
+        await fetch('/api/compliance/audit/all', { method: 'POST' });
+        await loadLogs();
+      } catch (e) {
+        console.error('Audit all failed', e);
+      } finally {
+        setAuditLoading(false);
+      }
+    }
+
+    React.useEffect(() => {
+      loadRules();
+      loadLogs();
+    }, []);
+
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-gray-900">Compliance</h1>
+          <div className="flex gap-2">
+            <button
+              onClick={initializeRules}
+              disabled={initLoading}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            >
+              {initLoading ? 'Initializing…' : 'Initialize Default Rules'}
+            </button>
+            <button
+              onClick={auditAllProducts}
+              disabled={auditLoading}
+              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50"
+            >
+              {auditLoading ? 'Auditing…' : 'Audit All Products'}
+            </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Failed Verifications</p>
-              <p className="text-2xl font-bold text-red-600">23</p>
-              <p className="text-sm text-gray-500">This month</p>
-            </div>
-            <div className="text-3xl">❌</div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Audit Score</p>
-              <p className="text-2xl font-bold text-green-600">98.5%</p>
-              <p className="text-sm text-gray-500">Last audit</p>
-            </div>
-            <div className="text-3xl">📋</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold mb-4">Recent Compliance Events</h3>
-          <div className="space-y-3">
-            <div className="p-3 border border-green-200 bg-green-50 rounded-lg">
-              <div className="flex items-center gap-2">
-                <span className="text-green-600">✅</span>
-                <span className="font-medium">Age verification passed</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Compliance Rules</p>
+                <p className="text-2xl font-bold text-gray-900">{loading ? '…' : rules.length}</p>
+                <p className="text-sm text-gray-500">Total active rules</p>
               </div>
-              <p className="text-sm text-gray-600 ml-6">Customer ID: C-2847 | Order: #ORD-001</p>
-              <p className="text-xs text-gray-500 ml-6">2 hours ago</p>
+              <div className="text-3xl">📏</div>
             </div>
+          </div>
 
-            <div className="p-3 border border-red-200 bg-red-50 rounded-lg">
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">❌</span>
-                <span className="font-medium">Age verification failed</span>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Audit Log Entries</p>
+                <p className="text-2xl font-bold text-gray-900">{logs.length}</p>
+                <p className="text-sm text-gray-500">Most recent page</p>
               </div>
-              <p className="text-sm text-gray-600 ml-6">IP: 192.168.1.100 | Attempted purchase blocked</p>
-              <p className="text-xs text-gray-500 ml-6">4 hours ago</p>
+              <div className="text-3xl">📋</div>
             </div>
+          </div>
 
-            <div className="p-3 border border-blue-200 bg-blue-50 rounded-lg">
-              <div className="flex items-center gap-2">
-                <span className="text-blue-600">📋</span>
-                <span className="font-medium">Product compliance check</span>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">AI Status</p>
+                <p className="text-2xl font-bold text-green-600">OK</p>
+                <p className="text-sm text-gray-500">OpenAI configured</p>
               </div>
-              <p className="text-sm text-gray-600 ml-6">Product: GRAV-001 | Status: Approved</p>
-              <p className="text-xs text-gray-500 ml-6">1 day ago</p>
+              <div className="text-3xl">🤖</div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold mb-4">Compliance Rules</h3>
-          <div className="space-y-3">
-            <div className="p-3 border border-gray-200 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Age Verification Required</p>
-                  <p className="text-sm text-gray-600">All users must verify 21+ before purchase</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold mb-4">Recent Compliance Events</h3>
+            <div className="space-y-3">
+              {logs.length === 0 && (
+                <div className="text-sm text-gray-500">No recent events</div>
+              )}
+              {logs.map((log, idx) => (
+                <div key={log.id || idx} className="p-3 border border-gray-200 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="font-medium">{log.severity?.toUpperCase?.() || 'INFO'}</div>
+                    <div className="text-xs text-gray-500">{new Date(log.detected_at || Date.now()).toLocaleString()}</div>
+                  </div>
+                  <div className="text-sm text-gray-700 mt-1">{log.message || 'Compliance event'}</div>
                 </div>
-                <StatusBadge status="Active" />
-              </div>
+              ))}
             </div>
+          </div>
 
-            <div className="p-3 border border-gray-200 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Location-based Restrictions</p>
-                  <p className="text-sm text-gray-600">Block sales to restricted states</p>
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold mb-4">Compliance Rules</h3>
+            <div className="space-y-3">
+              {rules.map((r, idx) => (
+                <div key={r.id || idx} className="p-3 border border-gray-200 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{r.category}</p>
+                      {Array.isArray(r.restricted_states) && r.restricted_states.length > 0 && (
+                        <p className="text-sm text-gray-600">Restricted in: {r.restricted_states.join(', ')}</p>
+                      )}
+                    </div>
+                    <StatusBadge status="Active" />
+                  </div>
                 </div>
-                <StatusBadge status="Active" />
-              </div>
-            </div>
-
-            <div className="p-3 border border-gray-200 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Product Category Limits</p>
-                  <p className="text-sm text-gray-600">Max 2 bongs per order in certain states</p>
-                </div>
-                <StatusBadge status="Active" />
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
+
 
   const IntegrationsPage = () => (
     <div className="space-y-6">

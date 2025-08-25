@@ -28,6 +28,7 @@
 
 - Phase 3 — Orders, Checkout, Inventory (Supabase)
   - Extend /api/checkout to create orders + order_items; decrement stock atomically
+  - Implement checkout_atomic RPC and call via SupabaseStorage.checkoutAtomic()
   - Add Orders API (GET self, GET by id, PATCH status); tests
   - Acceptance: Happy‑path checkout creates paid order; inventory updates; tests pass
 

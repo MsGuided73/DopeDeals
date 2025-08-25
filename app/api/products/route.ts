@@ -5,8 +5,6 @@ import { prisma } from '@/lib/prisma';
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const nicotineParam = searchParams.get('nicotine');
-    const nicotine = nicotineParam === 'true' ? true : nicotineParam === 'false' ? false : undefined;
 
     const filters = {
       categoryId: searchParams.get('categoryId') || undefined,
@@ -18,17 +16,21 @@ export async function GET(req: NextRequest) {
       vipExclusive: searchParams.get('vipExclusive') === 'true' ? true : searchParams.get('vipExclusive') === 'false' ? false : undefined,
     } as const;
 
+    const q = (searchParams.get('q') || '').trim().toLowerCase();
+    const sort = (searchParams.get('sort') || 'newest') as 'newest' | 'price_asc' | 'price_desc';
+
     const usePrisma = process.env.PRISMA_ENABLED === 'true';
     const storage = await getStorage();
 
     if (usePrisma) {
-      const where: Record<string, unknown> = {};
+      const where: Record<string, unknown> = { isActive: true };
       if (filters.categoryId) where.categoryId = filters.categoryId;
       if (filters.brandId) where.brandId = filters.brandId;
       if (filters.material) where.material = filters.material;
       if (filters.featured !== undefined) where.featured = filters.featured;
       if (filters.vipExclusive !== undefined) where.vipExclusive = filters.vipExclusive;
-      if (nicotine !== undefined) where.nicotine = nicotine;
+      // Always exclude nicotine/tobacco when Prisma path is enabled
+      Object.assign(where, { nicotine: false, tobacco: false });
       if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
         where.price = {} as Record<string, unknown>;
         if (filters.priceMin !== undefined) (where.price as Record<string, unknown>).gte = filters.priceMin;
@@ -36,27 +38,28 @@ export async function GET(req: NextRequest) {
       }
 
       const prismaProducts = await prisma.product.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
+        where: q ? {
+          ...where,
+          OR: [
+            { name: { contains: q, mode: 'insensitive' } },
+            { description: { contains: q, mode: 'insensitive' } },
+          ],
+        } : where,
+        orderBy: sort === 'price_asc' ? { price: 'asc' } : sort === 'price_desc' ? { price: 'desc' } : { createdAt: 'desc' },
       });
       return NextResponse.json(prismaProducts);
     }
 
-    // Fallback to storage implementation
-    const products = await storage.getProducts(filters);
-
-    // Apply nicotine filter at the API layer to support both schemas:
-    // - Prisma Product.nicotine (boolean)
-    // - Drizzle/Supabase Product.nicotineProduct (boolean)
-    let result = products;
-    if (nicotine !== undefined) {
-      result = products.filter((p: Record<string, unknown>) => {
-        const value = p.nicotine ?? p.nicotineProduct ?? false;
-        return value === nicotine;
-      });
+    // Supabase path: storage enforces exclusion; no extra nicotine/tobacco filtering needed here
+    let products = await storage.getProducts(filters);
+    if (q) {
+      const qlc = q.toLowerCase();
+      products = products.filter((p: any) => String(p.name || '').toLowerCase().includes(qlc) || String(p.description || '').toLowerCase().includes(qlc));
     }
-
-    return NextResponse.json(result);
+    if (sort === 'price_asc') products.sort((a: any, b: any) => Number(a.price) - Number(b.price));
+    else if (sort === 'price_desc') products.sort((a: any, b: any) => Number(b.price) - Number(a.price));
+    else products.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return NextResponse.json(products);
   } catch {
     return NextResponse.json({ message: 'Failed to fetch products' }, { status: 500 });
   }

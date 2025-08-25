@@ -68,6 +68,14 @@ export interface IStorage {
   createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
   getOrderItemsByOrder(orderId: string): Promise<OrderItem[]>;
 
+  // Atomic checkout (preferred when backed by Supabase)
+  checkoutAtomic?(params: {
+    userId: string;
+    items: Array<{ productId: string; quantity: number }>;
+    shippingAddress?: unknown;
+    billingAddress?: unknown;
+  }): Promise<{ order: Order; items: OrderItem[] }>;
+
   // Cart
   getUserCartItems(userId: string): Promise<CartItem[]>;
   addToCart(cartItem: InsertCartItem): Promise<CartItem>;

@@ -43,7 +43,25 @@ export async function POST(req: NextRequest) {
   const shipping = 0;
   const total = subtotal + tax + shipping;
 
-  // Create order
+  // Prefer atomic checkout when available (Supabase)
+  if (typeof storage.checkoutAtomic === 'function') {
+    const { order, items: createdItems } = await storage.checkoutAtomic({
+      userId: user.id,
+      items,
+      shippingAddress,
+      billingAddress,
+    });
+
+    await storage.clearCart(user.id);
+
+    return NextResponse.json({
+      order,
+      items: createdItems,
+      summary: { items, totals: { subtotal, tax, shipping, total } },
+    }, { status: 201 });
+  }
+
+  // Fallback: create order and items separately (memory or Prisma path)
   const order = await storage.createOrder({
     userId: user.id,
     subtotalAmount: subtotal.toString(),
@@ -57,7 +75,6 @@ export async function POST(req: NextRequest) {
     status: 'processing',
   } as Parameters<typeof storage.createOrder>[0]);
 
-  // Persist order_items
   const createdItems = [] as Array<{ id: string; productId: string; quantity: number; priceAtPurchase: string }>;
   for (const line of items) {
     const product = await storage.getProduct(line.productId);
@@ -71,16 +88,12 @@ export async function POST(req: NextRequest) {
     createdItems.push({ id: oi.id, productId: oi.productId as string, quantity: oi.quantity as number, priceAtPurchase: oi.priceAtPurchase as string });
   }
 
-  // Optional: clear cart
   await storage.clearCart(user.id);
 
   return NextResponse.json({
     order,
     items: createdItems,
-    summary: {
-      items,
-      totals: { subtotal, tax, shipping, total },
-    },
+    summary: { items, totals: { subtotal, tax, shipping, total } },
   }, { status: 201 });
 }
 

@@ -3,12 +3,19 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: `Product ${id} | Dope Deals` };
 }
 
+import { getStorage } from '@/lib/server-storage';
+import ProductDetail from './ProductDetail';
+import { Hero } from '@/components/design/NikeIndustrial';
+
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const storage = await getStorage();
+  const product = await storage.getProduct(id);
+
   return (
-    <div className="p-6 space-y-2">
-      <h1 className="text-2xl font-semibold">Product {id}</h1>
-      <p className="text-sm text-muted-foreground">This page is being migrated to the new Next.js UI.</p>
+    <div className="px-6 py-8 space-y-8">
+      <Hero title={product?.name || 'Product'} subtitle={product?.description} />
+      <ProductDetail product={product} />
     </div>
   );
 }

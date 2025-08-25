@@ -104,6 +104,15 @@ export class SupabaseStorage implements IStorage {
   }): Promise<Product[]> {
     let query = supabaseAdmin.from('products').select('*');
 
+    // Enforce consumer-safe visibility when using service role (no RLS):
+    // - is_active = true
+    // - nicotine_product = false
+    // - tobacco_product = false
+    query = query
+      .eq('is_active', true)
+      .eq('nicotine_product', false)
+      .eq('tobacco_product', false);
+
     // Database uses snake_case column names - use correct names
     if (filters?.categoryId) {
       query = query.eq('category_id', filters.categoryId);
@@ -274,6 +283,18 @@ export class SupabaseStorage implements IStorage {
     return data as Order;
   }
 
+  // Atomic checkout via Postgres function
+  async checkoutAtomic(params: { userId: string; items: Array<{ productId: string; quantity: number }>; shippingAddress?: unknown; billingAddress?: unknown; }): Promise<{ order: Order; items: OrderItem[] }> {
+    const { data, error } = await supabaseAdmin!.rpc('checkout_atomic', {
+      p_user_id: params.userId,
+      p_items: params.items,
+      p_billing: params.billingAddress ?? null,
+      p_shipping: params.shippingAddress ?? null,
+    });
+    if (error) throw error;
+    const payload = data as any;
+    return { order: payload.order as Order, items: (payload.items || []) as OrderItem[] };
+  }
 
   async createOrderItem(item: InsertOrderItem): Promise<OrderItem> {
     const { data, error } = await supabaseAdmin!
