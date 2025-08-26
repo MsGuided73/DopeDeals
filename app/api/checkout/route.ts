@@ -52,6 +52,33 @@ export async function POST(req: NextRequest) {
       billingAddress,
     });
 
+    // Fire-and-forget: create ShipStation order after paid (placeholder until payment integration)
+    try {
+      const { ShipstationService } = await import('@/server/shipstation/service');
+      const { storage: serverStorage } = await import('@/server/storage');
+      const apiKey = process.env.SHIPSTATION_API_KEY;
+      const apiSecret = process.env.SHIPSTATION_API_SECRET;
+      if (apiKey && apiSecret) {
+        const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, serverStorage);
+        const map = {
+          orderNumber: order.id,
+          orderDate: new Date().toISOString(),
+          orderStatus: 'awaiting_shipment',
+          billTo: (billingAddress || shippingAddress || {}) as any,
+          shipTo: (shippingAddress || billingAddress || {}) as any,
+          items: createdItems.map((ci: any) => ({
+            name: ci.name || 'Item',
+            sku: ci.sku,
+            quantity: ci.quantity,
+            unitPrice: Number(ci.priceAtPurchase || 0),
+          })),
+          orderTotal: Number(total),
+          amountPaid: Number(total),
+        } as any;
+        svc.createShipstationOrder(map).catch(() => void 0);
+      }
+    } catch {}
+
     await storage.clearCart(user.id);
 
     return NextResponse.json({
