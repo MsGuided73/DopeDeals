@@ -8,21 +8,21 @@ The previous setup was using Supabase as just a PostgreSQL provider through Driz
 
 ### Frontend (Client-side)
 ```env
-VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-public-key
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
 ```
 
 ### Backend (Server-side)
 ```env
-VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-DATABASE_URL=postgresql://...  # Still needed for Drizzle complex queries
+DATABASE_URL=postgresql://...  # For Prisma/Drizzle when used
 ```
 
 ## What Changed
 
 ### 1. Proper Supabase Client Integration
-- **Frontend**: Uses `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`
+- **Frontend**: Uses `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **Backend**: Uses service role key for admin operations
 - **Authentication**: Now uses Supabase auth instead of localStorage
 

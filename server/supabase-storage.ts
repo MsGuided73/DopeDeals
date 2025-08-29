@@ -1,17 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 // Pure Supabase SDK implementation - no direct PostgreSQL dependencies
-import { 
-  users, products, categories, brands, orders, orderItems, 
+import {
+  users, products, categories, brands, orders, orderItems,
   memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
   productSimilarity, recommendationCache, paymentMethods, paymentTransactions, kajaPayWebhookEvents,
   emojiUsage, userEmojiPreferences, emojiRecommendations, productEmojiAssociations,
   conciergeConversations, conciergeMessages, conciergeRecommendations, conciergeAnalytics,
-  type User, type InsertUser, type Product, type InsertProduct, 
+  type User, type InsertUser, type Product, type InsertProduct,
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
   type Membership, type InsertMembership, type LoyaltyPoint, type InsertLoyaltyPoint,
   type CartItem, type InsertCartItem, type UserBehavior, type InsertUserBehavior,
-  type UserPreferences, type InsertUserPreferences, type ProductSimilarity, 
+  type UserPreferences, type InsertUserPreferences, type ProductSimilarity,
   type InsertProductSimilarity, type RecommendationCache, type InsertRecommendationCache,
   type PaymentMethod, type InsertPaymentMethod, type PaymentTransaction, type InsertPaymentTransaction,
   type KajaPayWebhookEvent, type InsertKajaPayWebhookEvent,
@@ -25,7 +25,7 @@ import {
 } from "@shared/schema";
 
 import {
-  shipstationOrders, shipstationShipments, shipstationWebhooks, shipstationProducts, 
+  shipstationOrders, shipstationShipments, shipstationWebhooks, shipstationProducts,
   shipstationWarehouses, shipstationSyncStatus,
   type ShipstationOrder, type InsertShipstationOrder, type ShipstationShipment, type InsertShipstationShipment,
   type ShipstationWebhook, type InsertShipstationWebhook, type ShipstationProduct, type InsertShipstationProduct,
@@ -35,7 +35,7 @@ import {
 import { type IStorage } from "./storage";
 
 // Supabase configuration - only required in production mode
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Server-side key for admin operations
 
 if (!supabaseUrl || !supabaseServiceKey) {
@@ -43,7 +43,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 }
 
 // Create Supabase client for server-side operations (only if credentials available)
-export const supabaseAdmin = supabaseUrl && supabaseServiceKey 
+export const supabaseAdmin = supabaseUrl && supabaseServiceKey
   ? createClient(supabaseUrl, supabaseServiceKey)
   : null;
 
@@ -59,13 +59,13 @@ export class SupabaseStorage implements IStorage {
   // Users - Use Supabase auth integration
   async getUser(id: string): Promise<User | undefined> {
     if (!supabaseAdmin) return undefined;
-    
+
     const { data, error } = await supabaseAdmin
       .from('users')
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as User;
   }
@@ -76,7 +76,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('email', email)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as User;
   }
@@ -87,7 +87,7 @@ export class SupabaseStorage implements IStorage {
       .insert(user)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as User;
   }
@@ -103,7 +103,16 @@ export class SupabaseStorage implements IStorage {
     vipExclusive?: boolean;
   }): Promise<Product[]> {
     let query = supabaseAdmin.from('products').select('*');
-    
+
+    // Enforce consumer-safe visibility when using service role (no RLS):
+    // - is_active = true
+    // - nicotine_product = false
+    // - tobacco_product = false
+    query = query
+      .eq('is_active', true)
+      .eq('nicotine_product', false)
+      .eq('tobacco_product', false);
+
     // Database uses snake_case column names - use correct names
     if (filters?.categoryId) {
       query = query.eq('category_id', filters.categoryId);
@@ -129,7 +138,7 @@ export class SupabaseStorage implements IStorage {
 
     const { data, error } = await query.order('created_at', { ascending: false });
     if (error) throw error;
-    
+
     return data as Product[];
   }
 
@@ -139,7 +148,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as Product;
   }
@@ -163,13 +172,13 @@ export class SupabaseStorage implements IStorage {
       featured: product.featured || false,
       vip_exclusive: product.vipExclusive || false
     };
-    
+
     const { data, error } = await supabaseAdmin
       .from('products')
       .insert(dbProduct)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as Product;
   }
@@ -180,7 +189,7 @@ export class SupabaseStorage implements IStorage {
       .from('categories')
       .select('*')
       .order('name');
-    
+
     if (error) throw error;
     return data as Category[];
   }
@@ -191,7 +200,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as Category;
   }
@@ -202,7 +211,7 @@ export class SupabaseStorage implements IStorage {
       .insert(category)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as Category;
   }
@@ -213,7 +222,7 @@ export class SupabaseStorage implements IStorage {
       .from('brands')
       .select('*')
       .order('name');
-    
+
     if (error) throw error;
     return data as Brand[];
   }
@@ -224,7 +233,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as Brand;
   }
@@ -235,7 +244,7 @@ export class SupabaseStorage implements IStorage {
       .insert(brand)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as Brand;
   }
@@ -247,7 +256,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('userId', userId)
       .order('createdAt', { ascending: false });
-    
+
     if (error) throw error;
     return data as Order[];
   }
@@ -258,7 +267,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as Order;
   }
@@ -269,10 +278,43 @@ export class SupabaseStorage implements IStorage {
       .insert(order)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as Order;
   }
+
+  // Atomic checkout via Postgres function
+  async checkoutAtomic(params: { userId: string; items: Array<{ productId: string; quantity: number }>; shippingAddress?: unknown; billingAddress?: unknown; }): Promise<{ order: Order; items: OrderItem[] }> {
+    const { data, error } = await supabaseAdmin!.rpc('checkout_atomic', {
+      p_user_id: params.userId,
+      p_items: params.items,
+      p_billing: params.billingAddress ?? null,
+      p_shipping: params.shippingAddress ?? null,
+    });
+    if (error) throw error;
+    const payload = data as any;
+    return { order: payload.order as Order, items: (payload.items || []) as OrderItem[] };
+  }
+
+  async createOrderItem(item: InsertOrderItem): Promise<OrderItem> {
+    const { data, error } = await supabaseAdmin!
+      .from('order_items')
+      .insert(item)
+      .select()
+      .single();
+    if (error) throw error;
+    return data as OrderItem;
+  }
+
+  async getOrderItemsByOrder(orderId: string): Promise<OrderItem[]> {
+    const { data, error } = await supabaseAdmin!
+      .from('order_items')
+      .select('*')
+      .eq('order_id', orderId);
+    if (error) throw error;
+    return (data || []) as OrderItem[];
+  }
+
 
   // Cart - User-specific with real-time updates
   async getUserCartItems(userId: string): Promise<CartItem[]> {
@@ -289,7 +331,7 @@ export class SupabaseStorage implements IStorage {
         )
       `)
       .eq('userId', userId);
-    
+
     if (error) throw error;
     return data as CartItem[];
   }
@@ -311,7 +353,7 @@ export class SupabaseStorage implements IStorage {
         .eq('id', existing.id)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data as CartItem;
     } else {
@@ -321,7 +363,7 @@ export class SupabaseStorage implements IStorage {
         .insert(cartItem)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data as CartItem;
     }
@@ -334,7 +376,7 @@ export class SupabaseStorage implements IStorage {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error || !data) return undefined;
     return data as CartItem;
   }
@@ -344,7 +386,7 @@ export class SupabaseStorage implements IStorage {
       .from('cartItems')
       .delete()
       .eq('id', id);
-    
+
     return !error;
   }
 
@@ -353,7 +395,7 @@ export class SupabaseStorage implements IStorage {
       .from('cartItems')
       .delete()
       .eq('userId', userId);
-    
+
     return !error;
   }
 
@@ -363,7 +405,7 @@ export class SupabaseStorage implements IStorage {
       .from('memberships')
       .select('*')
       .order('monthlyPrice');
-    
+
     if (error) throw error;
     return data as Membership[];
   }
@@ -375,14 +417,14 @@ export class SupabaseStorage implements IStorage {
       .insert(behavior)
       .select()
       .single();
-    
+
     if (error) throw error;
-    
+
     // Update user preferences based on behavior
     if (behavior.userId && behavior.productId) {
       await this.updateUserPreferencesFromBehavior(data as UserBehavior);
     }
-    
+
     return data as UserBehavior;
   }
 
@@ -401,7 +443,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('userId', userId)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as UserPreferences;
   }
@@ -412,7 +454,7 @@ export class SupabaseStorage implements IStorage {
       .upsert({ userId, ...preferences, updatedAt: new Date() })
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as UserPreferences;
   }
@@ -430,7 +472,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('userId', userId)
       .eq('isActive', true);
-    
+
     if (error) throw error;
     return data as PaymentMethod[];
   }
@@ -441,7 +483,7 @@ export class SupabaseStorage implements IStorage {
       .insert(paymentMethod)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as PaymentMethod;
   }
@@ -452,7 +494,7 @@ export class SupabaseStorage implements IStorage {
       .insert(transaction)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as PaymentTransaction;
   }
@@ -464,7 +506,7 @@ export class SupabaseStorage implements IStorage {
       .eq('id', id)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as PaymentTransaction;
   }
@@ -480,7 +522,7 @@ export class SupabaseStorage implements IStorage {
       .upsert(similarity)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as ProductSimilarity;
   }
@@ -495,7 +537,7 @@ export class SupabaseStorage implements IStorage {
       .upsert(cache)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as RecommendationCache;
   }
@@ -511,7 +553,7 @@ export class SupabaseStorage implements IStorage {
       .insert(order)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as ShipstationOrder;
   }
@@ -522,7 +564,7 @@ export class SupabaseStorage implements IStorage {
       .insert(webhook)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as ShipstationWebhook;
   }
@@ -533,7 +575,7 @@ export class SupabaseStorage implements IStorage {
       .insert(status)
       .select()
       .single();
-    
+
     if (error) throw error;
     return data as ShipstationSyncStatus;
   }

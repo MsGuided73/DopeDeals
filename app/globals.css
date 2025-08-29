@@ -1,0 +1,5 @@
+/* Tailwind base and custom CSS should live here post-migration */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+

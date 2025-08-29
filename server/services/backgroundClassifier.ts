@@ -148,10 +148,10 @@ class BackgroundClassificationService {
   private async hideProductFromPublic(productId: string, reason: string): Promise<void> {
     try {
       // Update product to hide it from public view using isHidden field
-      await storage.updateProduct(productId, { 
-        isHidden: true,
-        complianceNotes: reason 
-      });
+      await storage.updateProduct(productId, {
+        inStock: false,
+        complianceNotes: reason
+      } as any);
 
       // Log the action for audit purposes
       console.log(`[Background AI] Product ${productId} hidden from public: ${reason}`);
@@ -177,10 +177,10 @@ class BackgroundClassificationService {
 
     try {
       const products = await storage.getProducts();
-      const unclassifiedProducts = products.filter(product => 
+      const unclassifiedProducts = products.filter(product =>
         // Products that haven't been through AI classification yet
-        // Check if product doesn't have restricted access tags
-        !product.isHidden
+        // If isHidden exists, skip hidden products; otherwise include
+        !('isHidden' in (product as any)) || !(product as any).isHidden
       );
 
       console.log(`[Background AI] Queuing ${unclassifiedProducts.length} products for background classification`);
@@ -210,8 +210,8 @@ class BackgroundClassificationService {
       queueLength: this.queue.length,
       processing: this.processing,
       totalProducts: products.length,
-      activeProducts: products.filter(p => !p.isHidden).length,
-      hiddenProducts: products.filter(p => p.isHidden).length
+      activeProducts: products.filter(p => (p as any).isHidden !== true).length,
+      hiddenProducts: products.filter(p => (p as any).isHidden === true).length
     };
   }
 

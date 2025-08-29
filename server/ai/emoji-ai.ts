@@ -188,6 +188,7 @@ Return JSON format:
     if (context.currentMood === 'happy' || context.currentMood === 'satisfied') {
       recommendations.push(...EMOJI_DATABASE.smileys.positive.map(e => ({
         ...e,
+        emojiCode: e.code,
         category: 'smileys',
         reason: 'Perfect for expressing satisfaction with the product'
       })));

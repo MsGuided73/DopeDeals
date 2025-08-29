@@ -1,4 +1,10 @@
-import NewProductsPage from "@/pages/NewProductsPage";
 export const metadata = { title: "Products — New | Dope Deals" };
-export default function Page() { return <NewProductsPage />; }
+export default function Page() {
+  return (
+    <div className="p-6 space-y-2">
+      <h1 className="text-2xl font-semibold">Products (New)</h1>
+      <p className="text-sm text-muted-foreground">This page is being migrated to the new Next.js UI.</p>
+    </div>
+  );
+}
 

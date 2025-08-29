@@ -1,6 +1,8 @@
 # 🎉 Supabase Integration Cleanup Complete
 
-## ✅ **Comprehensive Codebase Scan Results**
+
+## ✅ Comprehensive Codebase Scan Results
+
 
 ### Removed Old PostgreSQL References
 - ✅ `server/db-storage.ts` - Direct PostgreSQL connection (deleted)
@@ -14,7 +16,7 @@
 ### Cleaned Up Secrets
 - ✅ **Removed**: `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`
 - ✅ **Updated**: `DATABASE_URL` with proper Supabase connection string
-- ✅ **Active**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
+- ✅ **Active**: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
 
 ### Supabase SDK Integration Status
 - ✅ **Frontend Client**: `client/src/lib/supabase.ts` - Pure Supabase SDK

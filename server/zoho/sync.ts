@@ -13,12 +13,12 @@ import {
 import { storage } from '../storage.js';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-import type { 
-  Product, 
-  InsertProduct, 
-  Category, 
-  InsertCategory, 
-  Order, 
+import type {
+  Product,
+  InsertProduct,
+  Category,
+  InsertCategory,
+  Order,
   InsertOrder,
   User,
   InsertUser
@@ -37,7 +37,7 @@ export class ZohoSyncManager {
   // Product Sync Methods
   async syncProducts(fullSync: boolean = false): Promise<{ success: number; failed: number; errors: string[] }> {
     console.log(`[Zoho Sync] Starting ${fullSync ? 'full' : 'incremental'} product sync`);
-    
+
     const results = { success: 0, failed: 0, errors: [] as string[] };
     let page = 1;
     const perPage = this.config.batchSize || 50;
@@ -75,19 +75,24 @@ export class ZohoSyncManager {
 
   private async syncSingleProduct(zohoProduct: ZohoProduct): Promise<void> {
     const localProduct = this.mapZohoProductToLocal(zohoProduct);
-    
+
     // Check if product already exists in local database
     const existingProducts = await storage.getProducts();
-    
+
     const existingProduct = existingProducts.find(p => p.sku === localProduct.sku);
-    
+
+    let localId: string;
     if (existingProduct) {
       // Update existing product
-      await this.updateLocalProduct(existingProduct.id, localProduct, zohoProduct);
+      localId = existingProduct.id as string;
+      await this.updateLocalProduct(localId, localProduct, zohoProduct);
     } else {
       // Create new product
-      await this.createLocalProduct(localProduct, zohoProduct);
+      localId = await this.createLocalProduct(localProduct, zohoProduct);
     }
+
+    // Upsert inventory mirror from Zoho
+    await this.upsertInventoryForZohoProduct(localId, zohoProduct);
 
     // Update sync status
     this.updateSyncStatus('product', zohoProduct.item_id, localProduct.sku, 'success');
@@ -150,7 +155,7 @@ export class ZohoSyncManager {
     return null;
   }
 
-  private async createLocalProduct(localProduct: InsertProduct, zohoProduct: ZohoProduct): Promise<void> {
+  private async createLocalProduct(localProduct: InsertProduct, zohoProduct: ZohoProduct): Promise<string> {
     try {
       // Create product object with correct database schema (snake_case)
       const dbProduct = {
@@ -162,7 +167,7 @@ export class ZohoSyncManager {
         category_id: null, // Set to null to avoid foreign key violations
         brand_id: null, // Set to null to avoid foreign key violations
         materials: zohoProduct.category_name ? [zohoProduct.category_name] : null,
-        image_urls: zohoProduct.images && zohoProduct.images.length > 0 ? 
+        image_urls: zohoProduct.images && zohoProduct.images.length > 0 ?
           zohoProduct.images.map(img => `/zoho/product-image/${zohoProduct.item_id}`) : null,
         stock_quantity: zohoProduct.stock_on_hand || 0,
         vip_price: null,
@@ -171,21 +176,21 @@ export class ZohoSyncManager {
         featured: false,
         vip_exclusive: false
       };
-      
+
       // Use the existing Supabase client from supabase-storage
       const supabaseAdmin = createClient(
-        process.env.VITE_SUPABASE_URL!, 
+        process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_SERVICE_ROLE_KEY!
       );
-      
+
       const { data, error } = await supabaseAdmin
         .from('products')
         .insert(dbProduct)
         .select()
         .single();
-      
+
       if (error) throw error;
-      
+
       console.log(`[Zoho Sync] Created local product: ${dbProduct.name}`);
 
       // Phase 3: Automatic Background AI Classification for imported products
@@ -194,10 +199,12 @@ export class ZohoSyncManager {
         await backgroundClassificationService.queueProduct(data.id);
         console.log(`[Zoho Sync] Queued product for background AI classification: ${dbProduct.name}`);
       } catch (error) {
-        console.warn(`[Zoho Sync] Failed to queue for AI classification ${dbProduct.name}:`, 
+        console.warn(`[Zoho Sync] Failed to queue for AI classification ${dbProduct.name}:`,
           error instanceof Error ? error.message : String(error));
         // Continue sync even if AI classification fails - it's not critical to product import
       }
+
+      return data.id as string;
     } catch (error) {
       console.error(`[Zoho Sync] Failed to create local product ${zohoProduct.name}:`, error);
       throw error;
@@ -212,7 +219,7 @@ export class ZohoSyncManager {
   // Category Sync Methods
   async syncCategories(): Promise<{ success: number; failed: number; errors: string[] }> {
     console.log('[Zoho Sync] Starting category sync');
-    
+
     const results = { success: 0, failed: 0, errors: [] as string[] };
 
     try {
@@ -239,11 +246,11 @@ export class ZohoSyncManager {
 
   private async syncSingleCategory(zohoCategory: ZohoCategory): Promise<void> {
     const localCategory = this.mapZohoCategoryToLocalCategory(zohoCategory);
-    
+
     // Check if category already exists
     const existingCategories = await storage.getCategories();
     const existing = existingCategories.find(cat => cat.slug === localCategory.slug);
-    
+
     if (!existing) {
       await storage.createCategory(localCategory);
       console.log(`[Zoho Sync] Created local category: ${localCategory.name}`);
@@ -263,7 +270,7 @@ export class ZohoSyncManager {
   // Order Sync Methods
   async syncOrders(startDate?: Date): Promise<{ success: number; failed: number; errors: string[] }> {
     console.log('[Zoho Sync] Starting order sync');
-    
+
     const results = { success: 0, failed: 0, errors: [] as string[] };
     let page = 1;
     const perPage = this.config.batchSize || 50;
@@ -305,13 +312,13 @@ export class ZohoSyncManager {
   private async syncSingleOrder(zohoOrder: ZohoOrder): Promise<void> {
     // First ensure customer exists
     const localUserId = await this.ensureCustomerExists(zohoOrder);
-    
+
     const localOrder = this.mapZohoOrderToLocal(zohoOrder, localUserId);
-    
+
     // Check if order already exists
     const existingOrders = await storage.getUserOrders(localUserId);
     const existing = existingOrders.find(order => order.id === zohoOrder.salesorder_id);
-    
+
     if (!existing) {
       await storage.createOrder(localOrder);
       console.log(`[Zoho Sync] Created local order: ${zohoOrder.salesorder_number}`);
@@ -323,7 +330,7 @@ export class ZohoSyncManager {
   private async ensureCustomerExists(zohoOrder: ZohoOrder): Promise<string> {
     // Check if customer exists in local database
     const existingUser = await storage.getUserByEmail(zohoOrder.customer_email || '');
-    
+
     if (existingUser) {
       return existingUser.id;
     }
@@ -369,7 +376,7 @@ export class ZohoSyncManager {
   // Inventory Sync Methods
   async syncInventoryLevels(): Promise<{ success: number; failed: number; errors: string[] }> {
     console.log('[Zoho Sync] Starting inventory level sync');
-    
+
     const results = { success: 0, failed: 0, errors: [] as string[] };
 
     try {
@@ -384,11 +391,9 @@ export class ZohoSyncManager {
 
           if (zohoProducts.items.length > 0) {
             const zohoProduct = zohoProducts.items[0];
-            const inStock = zohoProduct.available_stock > 0;
-            
-            // Update local product inventory status
-            // This would need an update method in storage
-            console.log(`[Zoho Sync] Updated inventory for ${product.name}: ${inStock ? 'In Stock' : 'Out of Stock'}`);
+
+            // Mirror to inventory table
+            await this.upsertInventoryForZohoProduct(product.id as string, zohoProduct);
             results.success++;
           }
         } catch (error) {
@@ -503,18 +508,18 @@ export class ZohoSyncManager {
     switch (strategy) {
       case 'zoho_wins':
         return zohoData;
-      
+
       case 'local_wins':
         return localData;
-      
+
       case 'merge':
         return { ...localData, ...zohoData };
-      
+
       case 'manual':
         // Log conflict for manual resolution
         console.warn(`[Zoho Sync] Manual conflict resolution required for ${resourceType}`);
         return localData; // Keep local data until manual resolution
-      
+
       default:
         return zohoData;
     }
@@ -535,7 +540,7 @@ export class ZohoSyncManager {
       const syncStatuses = Array.from(this.syncStatus.values());
       if (syncStatuses.length > 0) {
         lastSync = new Date(Math.max(...syncStatuses.map(s => s.lastSynced.getTime())));
-        
+
         const failedSyncs = syncStatuses.filter(s => s.syncStatus === 'failed');
         if (failedSyncs.length > 0) {
           errors.push(`${failedSyncs.length} failed syncs detected`);
@@ -553,5 +558,32 @@ export class ZohoSyncManager {
         errors: [`Health check failed: ${error}`]
       };
     }
+  }
+
+  private async upsertInventoryForZohoProduct(localProductId: string, zohoProduct: ZohoProduct): Promise<void> {
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const available = Number(zohoProduct.available_stock ?? 0);
+    const reserved = Number(zohoProduct.committed_stock ?? 0);
+    const warehouse_id = null; // Extend to multi-warehouse later
+
+    const payload = {
+      product_id: localProductId,
+      warehouse_id,
+      available,
+      reserved,
+      source_version: String(zohoProduct.last_modified_time || zohoProduct.item_id),
+      last_synced_at: new Date().toISOString(),
+    } as const;
+
+    const { error } = await supabaseAdmin
+      .from('inventory')
+      .upsert(payload, { onConflict: 'product_id,warehouse_id' });
+
+    if (error) throw error;
+    console.log(`[Zoho Sync] Inventory upserted for product ${localProductId}: avail=${available}, res=${reserved}`);
   }
 }
