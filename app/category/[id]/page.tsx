@@ -1,11 +1,14 @@
-import CategoryPage from "@/pages/category";
-import type { Metadata } from "next";
-
-type Params = { params: { id: string } };
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  return { title: `Category ${params.id} | Dope Deals` };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return { title: `Category ${id} | Dope Deals` };
 }
-export default function Page({ params }: Params) {
-  return <CategoryPage params={params} />;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return (
+    <div className="p-6 space-y-2">
+      <h1 className="text-2xl font-semibold">Category {id}</h1>
+      <p className="text-sm text-muted-foreground">This page is being migrated to the new Next.js UI.</p>
+    </div>
+  );
 }
 

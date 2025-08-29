@@ -1,23 +1,66 @@
 {
-  "include": ["client/src/**/*", "shared/**/*", "server/**/*"],
-  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
+  "include": [
+    "app/**/*",
+    "server/**/*",
+    "shared/**/*",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "client/src/**/*",
+    "**/*.test.ts",
+    // Exclude legacy Express route files (not part of Next.js app)
+    "server/index.ts",
+    "server/routes.ts",
+    "server/**/routes.ts",
+    "server/services/**/*",
+    "server/kajapay/**/*",
+    "server/concierge/**/*",
+    "server/ai/**/*",
+    "server/shipstation/**/*",
+    "server/zoho/routes.ts"
+  ],
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
     "noEmit": true,
     "module": "ESNext",
     "strict": true,
-    "lib": ["esnext", "dom", "dom.iterable"],
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
     "jsx": "preserve",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "moduleResolution": "bundler",
     "baseUrl": ".",
-    "types": ["node", "vite/client"],
+    "types": [
+      "node"
+    ],
     "paths": {
-      "@/*": ["./client/src/*"],
-      "@shared/*": ["./shared/*"]
-    }
+      "@/*": [
+        "./app/*"
+      ],
+      "@shared/*": [
+        "./shared/*"
+      ],
+      "@assets/*": [
+        "./attached_assets/*"
+      ]
+    },
+    "target": "ES2017",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   }
 }

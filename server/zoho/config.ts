@@ -109,7 +109,7 @@ export function getDefaultZohoIntegrationConfig(): ZohoIntegrationConfig {
     batchSize: parseInt(process.env.ZOHO_BATCH_SIZE || '50'),
     retryAttempts: parseInt(process.env.ZOHO_RETRY_ATTEMPTS || '3'),
     retryDelay: parseInt(process.env.ZOHO_RETRY_DELAY || '5000'), // 5 seconds
-    webhookUrl: process.env.ZOHO_WEBHOOK_URL || `${process.env.REPLIT_DEV_DOMAIN || 'http://localhost:5000'}/api/zoho/webhook`,
+    webhookUrl: process.env.ZOHO_WEBHOOK_URL || `${process.env.BASE_URL || 'http://localhost:3000'}/api/zoho/webhook`,
     webhookSecret: process.env.ZOHO_WEBHOOK_SECRET || '',
     autoSync: {
       products: process.env.ZOHO_AUTO_SYNC_PRODUCTS !== 'false',
@@ -152,7 +152,7 @@ function mapCategoryNameToId(categoryName: string): string {
     'Dab Rigs': 'dab-rigs-id',
     'Glass Bongs': 'glass-bongs-id',
     'Accessories': 'accessories-id',
-    'Water Pipes': 'dab-rigs-id', // Map old water pipes to dab rigs
+    'Water Pipes': 'glass-bongs-id', // Map old water pipes to glass bongs
     'Vaporizers': 'glass-bongs-id' // Map vaporizers to glass bongs
   };
   

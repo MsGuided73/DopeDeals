@@ -72,12 +72,10 @@ VIP Smoke is a modern, full-stack e-commerce platform built for the premium para
 - **Express Middleware**: Authentication, logging, error handling
 - **CORS Configuration**: Cross-origin resource sharing
 
-### **Session Management**
-- **Express Session**: Server-side session handling
-- **Connect PG Simple**: PostgreSQL session store
-- **Memory Store**: Development session storage
-- **Passport.js**: Authentication strategies
-- **Passport Local**: Local authentication strategy
+### **Session Management (Legacy - Retired)**
+- Previously used: Express Session, Connect PG Simple, Memory Store, Passport.js, Passport Local
+- Current: Supabase Auth + SSR helpers (no server sessions in Next.js App Router)
+- Admin/Express tools may still exist, but they do not use Express Session/Passport
 
 ### **Real-Time Features**
 - **WebSocket (ws)**: Real-time communication

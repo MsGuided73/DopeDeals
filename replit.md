@@ -360,7 +360,7 @@ Preferred communication style: Simple, everyday language.
 - Supabase Integration: ✅ Complete hybrid architecture implemented
 - Auth System: ✅ Full Supabase authentication with RLS
 - Storage Layer: ✅ Hybrid Supabase + Drizzle for optimal performance
-- Credentials Needed: ⏳ VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+- Credentials Needed: ⏳ NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 
 ## System Audit Results
 

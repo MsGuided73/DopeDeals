@@ -166,7 +166,7 @@ Once you've created the schema, run this to verify everything works:
 ```bash
 node -e "
 const { createClient } = require('@supabase/supabase-js');
-const admin = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+const admin = createClient(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 admin.from('categories').select('*').then(result => {
   console.log('✅ Database connection successful!');
   console.log('📋 Categories found:', result.data?.length || 0);
