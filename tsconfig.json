@@ -49,6 +49,9 @@
       "@shared/*": [
         "./shared/*"
       ],
+      "@server/*": [
+        "./server/*"
+      ],
       "@assets/*": [
         "./attached_assets/*"
       ]
