@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 const HERO_IMAGES = [
-  '/dope-city/hero/dope-city-hero.jpg',
+  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Upscale%20DOPE%20CITY%20Scape.png',
 ];
 
 const COLLECTIONS: Array<{ key: string; name: string; href: string; img: string; subtitle?: string; }>= [
