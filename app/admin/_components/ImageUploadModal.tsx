@@ -21,7 +21,7 @@ export default function ImageUploadModal({ open, onClose }: { open: boolean; onC
       const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Upload failed');
-      setMessage(`Uploaded! URL: ${json.url}`);
+      setMessage(`Uploaded! URL: ${json.urls?.original}`);
       setFile(null);
     } catch (err: any) {
       setMessage(err.message);
