@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseServer } from '../../lib/supabase-server';
 
 function normalizeZip(zip: string | null): string | null {
   if (!zip) return null;
@@ -19,12 +19,7 @@ export async function GET(req: NextRequest) {
     const offset = (page - 1) * limit;
 
     // Resolve state
-    const supabase = createClient(
-      process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
-    const { data: zipRow, error: zipErr } = await supabase
+    const { data: zipRow, error: zipErr } = await supabaseServer
       .from('us_zipcodes')
       .select('state')
       .eq('zip', zip)
@@ -33,7 +28,7 @@ export async function GET(req: NextRequest) {
     const state = zipRow.state as string;
 
     // Get restricted categories for state
-    const { data: rules } = await supabase
+    const { data: rules } = await supabaseServer
       .from('compliance_rules')
       .select('category')
       .contains('restricted_states', [state]);

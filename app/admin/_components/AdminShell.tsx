@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useState } from 'react';
+import ImageUploadModal from './ImageUploadModal';
 
 const nav = [
   { href: '/admin', label: 'Dashboard', icon: '📊' },
@@ -22,6 +23,7 @@ const nav = [
 export default function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
   return (
     <div className="flex h-screen bg-gray-100">
       <aside className={`bg-white shadow-lg transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'}`}>
@@ -63,6 +65,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <button onClick={() => setShowUpload(true)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"><span className="text-xl">🖼️</span></button>
             <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"><span className="text-xl">🔔</span></button>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center"><span className="text-white text-sm font-bold">A</span></div>
@@ -71,6 +74,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           </div>
         </div>
         <div className="flex-1 overflow-auto p-6">{children}</div>
+        <ImageUploadModal open={showUpload} onClose={() => setShowUpload(false)} />
       </main>
     </div>
   );
