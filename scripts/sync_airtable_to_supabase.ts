@@ -58,6 +58,58 @@ function toSlug(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 80);
 }
 
+// Infer nicotine/tobacco flags from Airtable fields (heuristic; conservative)
+function inferNicotineTobacco(fields: Record<string, any>): { nicotine: boolean; tobacco: boolean } {
+  const parts: string[] = [];
+  const push = (v: any) => {
+    if (!v) return;
+    if (Array.isArray(v)) parts.push(v.join(' '));
+    else if (typeof v === 'string') parts.push(v);
+    else if (typeof v === 'number') parts.push(String(v));
+    else if (typeof v === 'object') parts.push(JSON.stringify(v));
+  };
+
+  // Common field names
+  push(fields.Name || fields.name);
+  push(fields.Description || fields.description);
+  push(fields['Short Description'] || fields.short_description);
+  push(fields.Category || fields.category);
+  push(fields.Categories || fields.categories);
+  push(fields.Brand || fields.brand);
+  push(fields.Tags || fields.tags);
+  push(fields['Product Type'] || fields.product_type || fields.type);
+  push(fields.Subcategory || fields['Sub Category']);
+
+  const blob = parts.join(' ').toLowerCase();
+
+  const has = (s: string) => blob.includes(s);
+  const any = (arr: string[]) => arr.some(has);
+
+  // Negative phrases (override positives when clearly stated)
+  const nicotineNeg = ['nicotine-free', 'no nicotine', '0mg nicotine', '0 mg nicotine'];
+  const tobaccoNeg = ['tobacco-free', 'herbal hookah', 'hemp wrap', 'tea leaf wrap'];
+
+  // Nicotine signals (including TFN = tobacco-free nicotine which is still nicotine)
+  const nicotineSignals = [
+    'nicotine', 'nic salt', 'salt nic', 'salt-nic', 'e-liquid', 'e juice', 'e-juice',
+    'vape', 'vaping', 'pod system', 'pods', 'disposable vape', 'disposable', 'e-cig', 'tfn'
+  ];
+
+  // Tobacco product signals
+  const tobaccoSignals = [
+    'tobacco', 'cigar', 'cigars', 'cigarillo', 'cigarillos', 'hookah tobacco', 'pipe tobacco', 'chew', 'snus'
+  ];
+
+  let nicotine = any(nicotineSignals) && !any(nicotineNeg);
+  // If brand/category contains strongly nicotine-associated brands, also flag
+  const nicotineBrands = ['juul', 'elf bar', 'smok', 'geek bar', 'lost mary', 'mr fog', 'fume'];
+  if (!nicotine) nicotine = any(nicotineBrands);
+
+  let tobacco = any(tobaccoSignals) && !any(tobaccoNeg);
+
+  return { nicotine, tobacco };
+}
+
 async function ensureProductBySku(fields: any) {
   const sku = String(fields.SKU || fields.sku || '').trim();
   if (!sku) throw new Error('Missing SKU');
@@ -69,6 +121,8 @@ async function ensureProductBySku(fields: any) {
   const { data: found, error: findErr } = await supa.from('products').select('id, slug').eq('sku', sku).limit(1).maybeSingle();
   if (findErr) throw findErr;
 
+  const inferred = inferNicotineTobacco(fields);
+
   const payload: any = {
     sku,
     name,
@@ -76,6 +130,9 @@ async function ensureProductBySku(fields: any) {
     description_md: desc,
     slug: toSlug(name),
     airtable_record_id: fields.id || fields.recordId || undefined,
+    // Set compliance flags to ensure they are hidden on main site
+    nicotine_product: inferred.nicotine,
+    tobacco_product: inferred.tobacco,
   };
 
   if (found?.id) {

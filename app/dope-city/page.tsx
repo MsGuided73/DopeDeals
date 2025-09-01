@@ -54,16 +54,24 @@ export default function DopeCityLanding() {
   return (
     <div className="relative min-h-screen text-white">
       {/* Hero */}
-      <section id="top" className="relative isolate min-h-[92vh] overflow-hidden">
-        <Image src={hero} alt="Smoke hero" fill priority className="object-cover opacity-70 blur-[1.5px] md:blur-[2px]" unoptimized />
-        <div className="absolute inset-0 bg-[radial-gradient(120%_70%_at_50%_10%,rgba(0,0,0,0.2),rgba(0,0,0,0.88))]" />
-        <div className="relative max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-24 flex flex-col items-start justify-end h-full">
-          <div className="max-w-3xl">
+      <section id="top" className="relative isolate py-8 sm:py-12">
+        <div className="mx-auto w-[95vw] max-w-[1800px] px-2 sm:px-4">
+          {/* Glassmorphic frame */}
+          <div className="relative h-[68vh] sm:h-[78vh] rounded-3xl border border-white/15 bg-white/[0.06] backdrop-blur-xl overflow-hidden shadow-[0_20px_120px_-24px_rgba(0,0,0,0.7)]">
+            {/* Contained hero image (show entire image) */}
+            <Image src={hero} alt="Dope City hero" fill priority className="object-contain" unoptimized />
+            {/* subtle glass highlights */}
+            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10" />
+            <div className="pointer-events-none absolute -inset-[30%] bg-[radial-gradient(60%_40%_at_50%_10%,rgba(255,255,255,0.12),transparent_50%)]" />
+          </div>
+
+          {/* Headline below the frame */}
+          <div className="mt-8 max-w-5xl">
             <div className="mb-2 text-sm font-medium tracking-widest text-white/70">WELCOME TO</div>
-            <h1 className="text-[64px] leading-[0.9] sm:text-[96px] md:text-[120px] font-black tracking-tight uppercase">
+            <h1 className="text-[52px] leading-[0.95] sm:text-[88px] md:text-[110px] font-black tracking-tight uppercase">
               DOPE <span className="text-white/80">CITY</span>
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-white/85">
+            <p className="mt-5 max-w-2xl text-lg text-white/85">
               Curated glass. Premium rigs. Zero compromises. Explore collections crafted for the culture — no nicotine products displayed.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">

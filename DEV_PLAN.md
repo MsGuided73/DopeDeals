@@ -1,5 +1,112 @@
 # VIP Smoke E-Commerce Development Plan
 
+## Codebase Audit — 2025-08-28
+
+Summary: The codebase is now a unified Next.js App Router app with Supabase-first storage, shadcn/Tailwind, and TanStack Query. Legacy Vite/client has been removed; a legacy Express server remains in the repo but is excluded from type-check and is not used by Next.js. Core health endpoints exist. Checkout API is implemented with Supabase atomic path available. Third-party integrations are scaffolded, with Zoho furthest along.
+
+- Validation run
+  - pnpm test: PASS (7 files, 9 tests)
+  - /app/api/health reports migration readiness and env hygiene
+
+### 1) Current State Analysis
+- Next.js App Router
+  - app/ and app/api/ in place; layout.tsx, providers.tsx, globals.css present
+  - Tailwind configured with app/** and server/** globs; shadcn components wired via components.json
+  - TanStack Query integrated via QueryClientProvider (app/lib/queryClient.ts + app/providers.tsx)
+- Legacy code
+  - No client/ folder; no vite.config.* in repo (only ignored in .gitignore)
+  - server/index.ts references Express+Vite helpers, but vite middleware file was deleted; server/* is excluded by tsconfig for type-check and not part of Next.js runtime
+- Supabase storage
+  - server/supabase-storage.ts implements Supabase SDK path including checkoutAtomic rpc
+  - server/storage.ts selects SupabaseStorage when SUPABASE_URL/NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set, else MemStorage fallback
+  - app/api/health tests Supabase with service key and reports storageMode
+- UI stack
+  - shadcn: Tooltip/Toaster providers are referenced from components/ui
+  - Tailwind + tailwindcss-animate + @tailwindcss/typography enabled
+
+### 2) Feature Integration Assessment
+- Zoho Inventory
+  - Status: Partial
+    - OAuth scaffolding present (app/api/zoho/oauth/*)
+    - Health endpoint does live ping to Items API using refresh_token stored in Supabase (zoho_tokens) and ZOHO_DC/ORG
+    - server/zoho/* client/config/types exist for full integration
+  - Missing: scheduled token refresh/storage, items/stock sync jobs, sales order creation on paid orders
+- KajaPay Payments
+  - Status: Scaffolded
+    - server/kajapay/* has a rich client/service and types
+    - app/api/kajapay/health exists but returns uninitialized
+  - Missing: payment capture in checkout, transactions persistence, webhook handler, refunds/void
+- ShipStation
+  - Status: Scaffolded/Partial
+    - server/shipstation/* client/service present; webhook route dir exists
+    - app/api/shipstation/health exists; checkout route optionally creates ShipStation order after atomic checkout (fire-and-forget)
+  - Missing: rate quotes endpoint, robust order mapping, webhook processing and status sync
+- Environment variables
+  - Code uses NEXT_PUBLIC_* on client and server-only vars on server (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY). No VITE_* usage in code; a few references remain in docs
+  - .env.example covers Supabase, Zoho, KajaPay, ShipStation, OpenAI; suggest adding NEXT_SERVER_ACTIONS_ENCRYPTION_KEY and optional toggles (e.g., ZOHO_INTEGRATION_ENABLED, ZOHO_RETRY_*), and removing stray SUPABASE_ANON_KEY duplicate
+- Health endpoints
+  - Present: /api/health, /api/zoho/health, /api/kajapay/health, /api/shipstation/health
+
+### 3) Development Gaps and Technical Debt
+- Payments not integrated into checkout; no end-to-end capture/refund/void yet
+- Orders API (list/get/update) not present in app/api
+- ShipStation rate quotes + webhook processing not implemented
+- Zoho items/stock sync not implemented; sales order creation not wired on paid orders
+- Legacy Express server still present; consider decommissioning or isolating behind an npm script separate from Next.js
+- Tests exist and pass but are minimal; need API/integration coverage for checkout + integrations
+- Docs cleanup: replace VITE_* references in remaining docs; tighten .env.example
+
+### 4) Updated Roadmap (Actionable, with estimates and dependencies)
+
+A. Migration Completion and Hygiene
+- A1 Remove/retire legacy Express server code paths or gate behind "legacy:*" scripts; document deprecation (0.5–1 day)
+  - Dep: None
+- A2 Update .env.example (add NEXT_SERVER_ACTIONS_ENCRYPTION_KEY; add Zoho/KajaPay/ShipStation toggles; remove duplicate SUPABASE_ANON_KEY) (0.25 day)
+- A3 Docs sweep to purge VITE_* examples; update TECH_STACK_OVERVIEW, todo.md notes (0.5 day)
+
+B. Payments (KajaPay)
+- B1 Implement capture in POST /api/checkout using server/kajapay client; persist paymentTransactions; update order paymentStatus (1–2 days)
+  - Dep: A2 (envs), C1 (atomic checkout available), D1 (orders API schema agreed)
+- B2 Implement refund and void endpoints (app/api/payments/*) and service methods; link to orders (1 day)
+  - Dep: B1
+- B3 KajaPay webhook endpoint to upsert transactions and update order/payment status (0.5–1 day)
+  - Dep: B1
+
+C. Orders & Inventory
+- C1 Ensure Supabase checkout_atomic RPC is present and validated; finalize mapping for order and order_items (0.5 day)
+- C2 Orders API: GET /api/orders, GET /api/orders/[id], PATCH /api/orders/[id]/status (1 day)
+  - Dep: C1
+- C3 Inventory decrement/reservation semantics within checkout_atomic; prevent oversell (0.5–1 day)
+  - Dep: C1
+
+D. ShipStation
+- D1 Create ShipStation order on paid orders; persist mapping in Supabase; add error handling/retries (1 day)
+  - Dep: B1, C2
+- D2 Rate quotes endpoint for checkout (app/api/shipping/rates) using server/shipstation client (0.75 day)
+  - Dep: D1 optional
+- D3 Webhooks: shipment/tracking updates to update order status (1 day)
+  - Dep: D1
+
+E. Zoho Inventory
+- E1 Refresh-token scheduler and token persistence hardening; health endpoint asserts token freshness (0.5 day)
+- E2 Items sync (SKU→Product mapping) initial import then delta by modified_time; store mapping table; log mismatches (1–2 days)
+  - Dep: E1, C1
+- E3 Stock sync job both directions (Zoho→site authoritative) with conflict policy (1 day)
+  - Dep: E2
+- E4 Create Zoho Sales Order on paid order; status sync back via polling or webhook if available (1–1.5 days)
+  - Dep: B1, C2
+
+F. Testing & Observability
+- F1 Add API tests: checkout happy path with KajaPay mock, orders API, ShipStation quotes (1–2 days)
+- F2 Integration tests: paid order → ShipStation order created; Zoho sales order created (1–2 days)
+- F3 Add Sentry for Next.js (client/server) and extend /api/health to include integration readiness flags (0.5 day)
+
+G. Deployment Preparation
+- G1 CI: enable lint/type-check/tests/build gates; ensure pnpm-only (0.5 day)
+- G2 Production env checklist: secrets in platform env, rotate any exposed keys, set NEXT_SERVER_ACTIONS_ENCRYPTION_KEY (0.25 day)
+
+Immediate next focus aligned to owner preference: E (Zoho) then B (KajaPay) and D (ShipStation).
+
 ## Migration to Next.js – Current Status (as of 2025-08-22)
 
 - [x] Initialize Next.js App Router structure and routing basics (2025-08-22)

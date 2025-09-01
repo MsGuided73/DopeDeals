@@ -624,6 +624,11 @@ export class MemStorage {
   }): Promise<Product[]> {
     let products = Array.from(this.products.values());
 
+    // Always enforce consumer-safe visibility
+    products = products.filter(p => (p as any).isActive !== false)
+                       .filter(p => (p as any).nicotineProduct !== true)
+                       .filter(p => (p as any).tobaccoProduct !== true);
+
     if (filters) {
       if (filters.categoryId) {
         products = products.filter(p => p.categoryId === filters.categoryId);
@@ -652,7 +657,12 @@ export class MemStorage {
   }
 
   async getProduct(id: string): Promise<Product | undefined> {
-    return this.products.get(id);
+    const p = this.products.get(id);
+    if (!p) return undefined;
+    if ((p as any).nicotineProduct === true) return undefined;
+    if ((p as any).tobaccoProduct === true) return undefined;
+    if ((p as any).isActive === false) return undefined;
+    return p;
   }
 
   async createProduct(insertProduct: InsertProduct): Promise<Product> {

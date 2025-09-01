@@ -147,6 +147,9 @@ export class SupabaseStorage implements IStorage {
       .from('products')
       .select('*')
       .eq('id', id)
+      .eq('is_active', true)
+      .eq('nicotine_product', false)
+      .eq('tobacco_product', false)
       .single();
 
     if (error || !data) return undefined;
