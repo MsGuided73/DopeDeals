@@ -1,38 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStorage } from '@/lib/server-storage';
+import { createClient } from '@supabase/supabase-js';
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
+    // Direct Supabase connection for testing
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    const filters = {
-      categoryId: searchParams.get('categoryId') || undefined,
-      brandId: searchParams.get('brandId') || undefined,
-      material: searchParams.get('material') || undefined,
-      priceMin: searchParams.get('priceMin') ? parseFloat(searchParams.get('priceMin') as string) : undefined,
-      priceMax: searchParams.get('priceMax') ? parseFloat(searchParams.get('priceMax') as string) : undefined,
-      featured: searchParams.get('featured') === 'true' ? true : searchParams.get('featured') === 'false' ? false : undefined,
-      vipExclusive: searchParams.get('vipExclusive') === 'true' ? true : searchParams.get('vipExclusive') === 'false' ? false : undefined,
-    } as const;
-
-    const q = (searchParams.get('q') || '').trim().toLowerCase();
-    const sort = (searchParams.get('sort') || 'newest') as 'newest' | 'price_asc' | 'price_desc';
-
-    // Use Supabase storage (Prisma disabled during migration)
-    const storage = await getStorage();
-
-    // Supabase path: storage enforces exclusion; no extra nicotine/tobacco filtering needed here
-    let products = await storage.getProducts(filters);
-    if (q) {
-      const qlc = q.toLowerCase();
-      products = products.filter((p: any) => String(p.name || '').toLowerCase().includes(qlc) || String(p.description || '').toLowerCase().includes(qlc));
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({ message: 'Supabase credentials not configured' }, { status: 500 });
     }
-    if (sort === 'price_asc') products.sort((a: any, b: any) => Number(a.price) - Number(b.price));
-    else if (sort === 'price_desc') products.sort((a: any, b: any) => Number(b.price) - Number(a.price));
-    else products.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    return NextResponse.json(products);
-  } catch {
-    return NextResponse.json({ message: 'Failed to fetch products' }, { status: 500 });
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Test query to get products count first
+    const { count, error: countError } = await supabase
+      .from('products')
+      .select('*', { count: 'exact', head: true });
+
+    if (countError) {
+      console.error('Supabase count error:', countError);
+      return NextResponse.json({ message: 'Database connection failed', error: countError.message }, { status: 500 });
+    }
+
+    // Get first 10 products for testing
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('*')
+      .limit(10);
+
+    if (error) {
+      console.error('Supabase query error:', error);
+      return NextResponse.json({ message: 'Failed to fetch products', error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      message: 'Products API working!',
+      totalCount: count,
+      sampleProducts: products?.length || 0,
+      products: products
+    });
+  } catch (error) {
+    console.error('API error:', error);
+    return NextResponse.json({ message: 'Failed to fetch products', error: String(error) }, { status: 500 });
   }
 }
 
