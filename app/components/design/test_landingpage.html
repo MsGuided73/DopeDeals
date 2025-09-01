@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DOPE CITY — Premium Online Smoke Shop</title>
+  <meta name="description" content="Discover premium pipes, bongs, dab rigs, and CBD products. Elevate your smoking experience with DOPE CITY's curated collection." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f1a;
+      --bg-2:#0c1323;
+      --text:#e6ebff;
+      --muted:#9aa4bf;
+      --panel:rgba(255,255,255,0.06);
+      --border:rgba(255,255,255,0.14);
+      --border-soft:rgba(255,255,255,0.10);
+      --accent:#dc2626;
+      --accent-mid:#f97316;
+      --accent-light:#eab308;
+      --radius-xl:22px;
+      --radius-lg:16px;
+      --radius-md:12px;
+      --maxw:1120px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 50% 0%, rgba(220,38,38,.12) 0%, rgba(249,115,22,.08) 40%, rgba(234,179,8,.04) 80%, transparent 100%),
+        radial-gradient(800px 600px at 80% 20%, rgba(249,115,22,.06) 0%, rgba(234,179,8,.03) 60%, transparent 100%),
+        radial-gradient(600px 400px at 20% 80%, rgba(234,179,8,.04) 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      letter-spacing:.01em;
+      overflow-x:hidden;
+    }
+    .grain::before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:url('data:image/svg+xml;utf8,\
+        <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">\
+        <filter id="n"><feTurbulence baseFrequency="0.8" numOctaves="2" seed="3" type="fractalNoise"/>\
+        <feColorMatrix type="saturate" values="0"/>\
+        <feComponentTransfer><feFuncA type="table" tableValues="0 0 .03 0"/></feComponentTransfer>\
+        </filter>\
+        <rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+      opacity:.9; pointer-events:none;
+      mix-blend-mode:soft-light;
+    }
+    .vignette::after{
+      content:"";
+      position:fixed; inset:-10vh -10vw;
+      pointer-events:none;
+      background:radial-gradient(65vw 65vh at 50% 10%, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 70%);
+    }
+    header{
+      position:sticky; top:0;
+      backdrop-filter:saturate(140%) blur(8px);
+      background:linear-gradient(180deg, rgba(12,19,35,.85), rgba(12,19,35,.6));
+      border-bottom:1px solid var(--border-soft);
+      z-index:10;
+    }
+    .nav{
+      max-width:var(--maxw);
+      margin:0 auto; padding:14px 20px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.06em}
+    .brand-badge{
+      width:28px; height:28px; border-radius:9px;
+      background:conic-gradient(from 0deg, var(--accent), var(--accent-mid), var(--accent-light), var(--accent));
+      box-shadow:inset 0 0 0 2px rgba(255,255,255,.15);
+    }
+    .nav-links{display:flex; gap:24px; font-size:14px; font-weight:500}
+    .nav-links a{color:var(--muted); text-decoration:none; transition:color .2s ease}
+    .nav-links a:hover{color:var(--text)}
+    .nav-actions{display:flex; gap:12px}
+    .btn-nav{
+      padding:8px 16px; border-radius:999px; font-size:14px; font-weight:600;
+      text-decoration:none; transition:all .2s ease;
+    }
+    .btn-ghost{color:var(--muted); border:1px solid var(--border-soft)}
+    .btn-ghost:hover{color:var(--text); border-color:var(--border)}
+    .btn-primary{
+      background:linear-gradient(90deg, var(--accent), var(--accent-mid));
+      color:white; border:none;
+    }
+    .btn-primary:hover{opacity:.9; transform:translateY(-1px)}
+    .container{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+    .hero{padding:70px 0 30px; text-align:center; position:relative}
+    .eyebrow{
+      display:inline-block; letter-spacing:.35em; text-transform:uppercase; font-weight:600;
+      font-size:12px; color:#9aa4bf; margin-bottom:18px;
+    }
+    h1{
+      margin:0 auto;
+      font-size: clamp(38px, 6.6vw, 74px);
+      line-height:1.02;
+      font-weight:800;
+      letter-spacing:-.02em;
+      max-width:980px;
+      text-wrap:balance;
+      text-shadow:0 1px 0 rgba(255,255,255,.05);
+    }
+    h1 span.em{
+      background:linear-gradient(90deg, var(--accent), var(--accent-mid) 40%, var(--accent-light) 80%);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .sub{
+      margin:22px auto 26px;
+      max-width:800px;
+      color:#9aa4bf; font-size:18px; line-height:1.6;
+    }
+    .social{
+      display:flex; gap:12px; align-items:center; justify-content:center;
+      color:#9aa4bf; font-size:14px;
+    }
+    .avatars{display:flex}
+    .avatar{
+      width:28px; height:28px; border-radius:50%; border:1px solid rgba(255,255,255,.45);
+      box-shadow:0 4px 10px rgba(0,0,0,.35); display:inline-block;
+      background-size:cover; background-position:center; margin-left:-8px
+    }
+    .avatar:first-child{margin-left:0}
+    .a1{background-image:linear-gradient(135deg,var(--accent),var(--accent-mid))}
+    .a2{background-image:linear-gradient(135deg,var(--accent-mid),var(--accent-light))}
+    .a3{background-image:linear-gradient(135deg,var(--accent-light),#fbbf24)}
+    
+    /* Product showcase frame */
+    .frame{
+      margin:46px auto 70px;
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border:1px solid var(--border);
+      border-radius:var(--radius-xl);
+      box-shadow:0 20px 40px rgba(0,0,0,.3);
+      overflow:hidden;
+    }
+    .frame-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 14px; background:rgba(0,0,0,.25);
+      border-bottom:1px solid var(--border-soft);
+    }
+    .dots{display:flex; gap:8px}
+    .dot{width:10px; height:10px; border-radius:50%; background:#556; box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+    .tiny{font-size:12px; opacity:.8}
+    
+    .categories-grid{
+      display:grid; gap:18px; padding:18px;
+      grid-template-columns:repeat(2, 1fr);
+    }
+    @media (max-width:980px){ .categories-grid{grid-template-columns:1fr} .frame{margin-bottom:40px} }
+    
+    .category-card{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius-lg);
+      padding:24px;
+      text-align:center;
+      transition:all .3s ease;
+    }
+    .category-card:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.06);
+      border-color:var(--border);
+    }
+    .category-icon{
+      font-size:48px; margin-bottom:16px; display:block;
+    }
+    .category-title{
+      font-size:18px; font-weight:700; margin-bottom:8px; color:var(--text);
+    }
+    .category-desc{
+      font-size:14px; color:var(--muted); line-height:1.5; margin-bottom:16px;
+    }
+    .category-btn{
+      background:linear-gradient(90deg, rgba(220,38,38,.2), rgba(249,115,22,.25), rgba(234,179,8,.15));
+      border:1px solid var(--border);
+      padding:10px 20px; border-radius:999px; color:white;
+      text-decoration:none; font-weight:600; font-size:14px;
+      transition:all .2s ease;
+    }
+    .category-btn:hover{
+      background:linear-gradient(90deg, rgba(220,38,38,.3), rgba(249,115,22,.35), rgba(234,179,8,.25));
+      transform:translateY(-1px);
+    }
+    
+    /* Featured products section */
+    .products-section{
+      padding:60px 0;
+    }
+    .section-header{
+      text-align:center; margin-bottom:48px;
+    }
+    .section-title{
+      font-size:clamp(28px, 4vw, 48px); font-weight:800; margin-bottom:16px;
+      color:var(--text);
+    }
+    .section-subtitle{
+      font-size:18px; color:var(--muted); max-width:600px; margin:0 auto;
+    }
+    
+    .products-grid{
+      display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;
+    }
+    @media (max-width:880px){ .products-grid{grid-template-columns:1fr} }
+    
+    .product-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius-lg);
+      overflow:hidden;
+      transition:all .3s ease;
+    }
+    .product-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 40px rgba(0,0,0,.2);
+    }
+    
+    .product-image{
+      height:200px;
+      background:linear-gradient(135deg, rgba(220,38,38,.15), rgba(249,115,22,.1), rgba(234,179,8,.05));
+      display:flex; align-items:center; justify-content:center;
+      font-size:60px;
+    }
+    
+    .product-info{
+      padding:20px;
+    }
+    .product-name{
+      font-size:18px; font-weight:700; margin-bottom:8px; color:var(--text);
+    }
+    .product-desc{
+      font-size:14px; color:var(--muted); line-height:1.5; margin-bottom:16px;
+    }
+    .product-footer{
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .price{
+      font-size:24px; font-weight:800; 
+      background:linear-gradient(90deg, var(--accent), var(--accent-mid));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .add-to-cart{
+      background:linear-gradient(90deg, var(--accent), var(--accent-mid));
+      color:white; border:none; padding:10px 16px; border-radius:8px;
+      font-weight:600; cursor:pointer; transition:all .2s ease;
+    }
+    .add-to-cart:hover{
+      opacity:.9; transform:translateY(-1px);
+    }
+    
+    /* Features section */
+    .features-section{
+      padding:60px 0;
+      background:rgba(255,255,255,.02);
+    }
+    .features-grid{
+      display:grid; grid-template-columns:repeat(3, 1fr); gap:32px;
+    }
+    @media (max-width:880px){ .features-grid{grid-template-columns:1fr} }
+    
+    .feature-card{
+      text-align:center; padding:24px;
+    }
+    .feature-icon{
+      width:64px; height:64px; margin:0 auto 20px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-mid), var(--accent-light));
+      border-radius:50%; display:flex; align-items:center; justify-content:center;
+      font-size:24px; color:white;
+    }
+    .feature-title{
+      font-size:20px; font-weight:700; margin-bottom:12px; color:var(--text);
+    }
+    .feature-desc{
+      font-size:15px; color:var(--muted); line-height:1.6;
+    }
+    
+    /* CTA section */
+    .cta-section{
+      padding:80px 0; text-align:center;
+    }
+    .cta-title{
+      font-size:clamp(32px, 5vw, 56px); font-weight:800; margin-bottom:20px;
+      background:linear-gradient(90deg, var(--text), var(--accent-mid), var(--accent-light));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .cta-subtitle{
+      font-size:18px; color:var(--muted); margin-bottom:32px; max-width:600px; margin-left:auto; margin-right:auto;
+    }
+    .cta-buttons{
+      display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+    }
+    .btn-cta{
+      padding:16px 32px; border-radius:12px; font-size:16px; font-weight:700;
+      text-decoration:none; transition:all .3s ease;
+    }
+    .btn-cta-primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent-mid), var(--accent-light));
+      color:white; border:none;
+    }
+    .btn-cta-primary:hover{
+      transform:translateY(-2px); opacity:.9;
+      box-shadow:0 12px 24px rgba(220,38,38,.3);
+    }
+    .btn-cta-secondary{
+      background:transparent; color:var(--text);
+      border:2px solid var(--border);
+    }
+    .btn-cta-secondary:hover{
+      background:rgba(255,255,255,.05); border-color:var(--border);
+    }
+    
+    footer{
+      color:#9aa4bf;
+      text-align:center; padding:38px 0 70px;
+      border-top:1px solid var(--border-soft);
+    }
+    
+    @media (max-width:768px){
+      .nav-links{display:none}
+      .hero{padding:50px 0 20px}
+      .cta-buttons{flex-direction:column; align-items:center}
+      .btn-cta{width:100%; max-width:280px}
+    }
+  </style>
+</head>
+<body class="grain vignette">
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="brand-badge" aria-hidden="true"></div>
+        DOPE CITY
+      </div>
+      <div class="nav-links">
+        <a href="#shop">Shop</a>
+        <a href="#categories">Categories</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a href="#" class="btn-nav btn-ghost">Search</a>
+        <a href="#" class="btn-nav btn-primary">Cart (0)</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container hero">
+    <div class="eyebrow">Premium Smoke Shop</div>
+    <h1>Elevate Your Experience With <span class="em">Premium Smoking Essentials</span></h1>
+    <p class="sub">Discover our curated collection of high-quality pipes, bongs, dab rigs, and CBD products. Crafted for connoisseurs who appreciate the finest smoking accessories.</p>
+    <div class="social">
+      <div class="avatars" aria-hidden="true">
+        <span class="avatar a1" title="Alex"></span>
+        <span class="avatar a2" title="Jordan"></span>
+        <span class="avatar a3" title="Sam"></span>
+      </div>
+      <span>12,000+ satisfied customers</span>
+    </div>
+
+    <section class="frame" aria-label="Featured product categories">
+      <div class="frame-head">
+        <div class="dots">
+          <span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+        </div>
+        <div class="tiny" style="opacity:.75">/ DOPE CITY / Premium Collections</div>
+      </div>
+      <div class="categories-grid">
+        <div class="category-card">
+          <span class="category-icon">🔥</span>
+          <h3 class="category-title">Glass Pipes</h3>
+          <p class="category-desc">Handcrafted borosilicate glass pipes with unique artistic designs and superior functionality.</p>
+          <a href="#" class="category-btn">Shop Pipes</a>
+        </div>
+        <div class="category-card">
+          <span class="category-icon">💨</span>
+          <h3 class="category-title">Water Bongs</h3>
+          <p class="category-desc">Premium water filtration systems engineered for smooth, clean hits every time.</p>
+          <a href="#" class="category-btn">Shop Bongs</a>
+        </div>
+        <div class="category-card">
+          <span class="category-icon">⚡</span>
+          <h3 class="category-title">Dab Rigs</h3>
+          <p class="category-desc">Professional-grade concentrate rigs and accessories for the ultimate dabbing experience.</p>
+          <a href="#" class="category-btn">Shop Dab Rigs</a>
+        </div>
+        <div class="category-card">
+          <span class="category-icon">🌿</span>
+          <h3 class="category-title">CBD & Wellness</h3>
+          <p class="category-desc">Premium CBD, THCA, Delta 8 & 10 products for health-conscious consumers.</p>
+          <a href="#" class="category-btn">Shop CBD</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Featured Products -->
+  <section class="products-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-subtitle">Handpicked favorites from our premium collection</p>
+      </div>
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-image">🔥</div>
+          <div class="product-info">
+            <h3 class="product-name">Cosmic Galaxy Pipe</h3>
+            <p class="product-desc">Handblown borosilicate with mesmerizing galaxy swirl pattern</p>
+            <div class="product-footer">
+              <span class="price">$89.99</span>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-image">💨</div>
+          <div class="product-info">
+            <h3 class="product-name">Ocean Wave Bong</h3>
+            <p class="product-desc">12" beaker base with triple percolator system</p>
+            <div class="product-footer">
+              <span class="price">$149.99</span>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-image">⚡</div>
+          <div class="product-info">
+            <h3 class="product-name">Elite Dab Rig</h3>
+            <p class="product-desc">Precision engineered for concentrate connoisseurs</p>
+            <div class="product-footer">
+              <span class="price">$199.99</span>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose DOPE CITY</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3 class="feature-title">Premium Quality</h3>
+          <p class="feature-desc">Every product is carefully selected and tested to meet our high standards of quality and craftsmanship.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚚</div>
+          <h3 class="feature-title">Fast & Discrete</h3>
+          <p class="feature-desc">Quick, reliable shipping in unmarked packages. Your privacy is our priority.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💎</div>
+          <h3 class="feature-title">Expert Curation</h3>
+          <p class="feature-desc">Our team of enthusiasts handpicks every product to ensure the best smoking experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="cta-title">Ready to Elevate?</h2>
+      <p class="cta-subtitle">Join thousands of satisfied customers who trust DOPE CITY for their premium smoking essentials.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn-cta btn-cta-primary">Start Shopping</a>
+        <a href="#" class="btn-cta btn-cta-secondary">Browse Collections</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div class="tiny">© 2025 DOPE CITY. Premium smoking accessories for adults 21+. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', function() {
+        this.textContent = 'Added!';
+        this.style.background = '#22c55e';
+        setTimeout(() => {
+          this.textContent = 'Add to Cart';
+          this.style.background = 'linear-gradient(90deg, var(--accent), var(--accent-mid))';
+        }, 2000);
+      });
+    });
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
