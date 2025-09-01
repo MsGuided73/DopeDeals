@@ -414,7 +414,13 @@ Disallow: /`);
         enableWebhooks: process.env.SHIPSTATION_ENABLE_WEBHOOKS === 'true'
       };
       
-      shipstationService = new ShipstationService(shipstationConfig, storage);
+      const useMockShipstation = process.env.MOCK_SHIPSTATION === 'true';
+      if (useMockShipstation) {
+        const { MockShipstationService } = await import('./shipstation/mockService.js');
+        shipstationService = new MockShipstationService(shipstationConfig, storage) as any;
+      } else {
+        shipstationService = new ShipstationService(shipstationConfig, storage);
+      }
       
       // Validate configuration
       const validation = await shipstationService.validateConfiguration();

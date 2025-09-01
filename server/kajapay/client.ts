@@ -419,5 +419,7 @@ export class KajaPayClient {
   }
 }
 
-// Export singleton instance
-export const kajaPayClient = new KajaPayClient();
+// Export singleton instance (mockable via env toggle)
+import { mockKajaPayClient } from './mockClient';
+const useMock = process.env.MOCK_KAJAPAY === 'true';
+export const kajaPayClient = useMock ? (mockKajaPayClient as any) : new KajaPayClient();
