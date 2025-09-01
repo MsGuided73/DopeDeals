@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '@/lib/server-storage';
-import { prisma } from '@/lib/prisma';
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,36 +18,8 @@ export async function GET(req: NextRequest) {
     const q = (searchParams.get('q') || '').trim().toLowerCase();
     const sort = (searchParams.get('sort') || 'newest') as 'newest' | 'price_asc' | 'price_desc';
 
-    const usePrisma = process.env.PRISMA_ENABLED === 'true';
+    // Use Supabase storage (Prisma disabled during migration)
     const storage = await getStorage();
-
-    if (usePrisma) {
-      const where: Record<string, unknown> = { isActive: true };
-      if (filters.categoryId) where.categoryId = filters.categoryId;
-      if (filters.brandId) where.brandId = filters.brandId;
-      if (filters.material) where.material = filters.material;
-      if (filters.featured !== undefined) where.featured = filters.featured;
-      if (filters.vipExclusive !== undefined) where.vipExclusive = filters.vipExclusive;
-      // Always exclude nicotine/tobacco when Prisma path is enabled
-      Object.assign(where, { nicotine: false, tobacco: false });
-      if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
-        where.price = {} as Record<string, unknown>;
-        if (filters.priceMin !== undefined) (where.price as Record<string, unknown>).gte = filters.priceMin;
-        if (filters.priceMax !== undefined) (where.price as Record<string, unknown>).lte = filters.priceMax;
-      }
-
-      const prismaProducts = await prisma.product.findMany({
-        where: q ? {
-          ...where,
-          OR: [
-            { name: { contains: q, mode: 'insensitive' } },
-            { description: { contains: q, mode: 'insensitive' } },
-          ],
-        } : where,
-        orderBy: sort === 'price_asc' ? { price: 'asc' } : sort === 'price_desc' ? { price: 'desc' } : { createdAt: 'desc' },
-      });
-      return NextResponse.json(prismaProducts);
-    }
 
     // Supabase path: storage enforces exclusion; no extra nicotine/tobacco filtering needed here
     let products = await storage.getProducts(filters);
