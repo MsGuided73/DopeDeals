@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Countdown from './Countdown';
-import { track } from '@/lib/analytics';
+import { track } from 'lib/analytics';
 
 export default function Hero() {
   return (

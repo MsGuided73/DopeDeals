@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
-import { recommend, type VibeInputs } from '@/lib/productFilters';
-import { track } from '@/lib/analytics';
+import { recommend, type VibeInputs } from 'lib/productFilters';
+import { track } from 'lib/analytics';
 
 export default function VibeFinder() {
   const [inputs, setInputs] = useState<VibeInputs>({ what: 'Flower', where: 'Home', flavorClouds: 50, budget: 'All' });

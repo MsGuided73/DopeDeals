@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { track } from '@/lib/analytics';
+import { track } from 'lib/analytics';
 
 export default function EmailCapture({ cta = 'Get early access' }: { cta?: string }) {
   const [email, setEmail] = useState('');
