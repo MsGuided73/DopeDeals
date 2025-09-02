@@ -15,7 +15,7 @@ export default function Page() {
     { title: 'Dab Rigs', tagline: 'Precision for concentrates.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/dab-rigs' },
     { title: 'Water Bongs', tagline: 'Smooth pulls, big chambers.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/water-bongs' },
     { title: 'Pipes', tagline: 'Pocketable. Classic.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/pipes' },
-    { title: 'Vapes/Disposables', tagline: 'Convenience, anywhere.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/vapes' },
+    { title: 'CBD, THCA & More', tagline: 'Convenience, anywhere.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/vapes' },
     { title: 'Kratom / 7-OH', tagline: 'Strictly sourced, know your supply.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/kratom' },
     { title: 'Accessories', tagline: 'Dial in your setup.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/accessories' },
   ];
