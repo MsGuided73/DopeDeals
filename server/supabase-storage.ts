@@ -111,7 +111,9 @@ export class SupabaseStorage implements IStorage {
     query = query
       .eq('is_active', true)
       .eq('nicotine_product', false)
-      .eq('tobacco_product', false);
+      .eq('tobacco_product', false)
+      // Exclude out-of-stock items. Prefer explicit boolean if present, else stock quantity > 0
+      .or('in_stock.eq.true,stock_quantity.gt.0');
 
     // Database uses snake_case column names - use correct names
     if (filters?.categoryId) {

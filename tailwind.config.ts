@@ -5,12 +5,9 @@ export default {
   content: ["./app/**/*.{ts,tsx}", "./server/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       colors: {
+        brand: { dark: '#0B0B0B', accent: '#FF6A3D' },
+        surface: { light: '#FAFAF9' },
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
@@ -61,6 +58,15 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+        '2xl': '1rem',
+      },
+      boxShadow: {
+        lift: '0 10px 30px -10px rgba(0,0,0,.35)',
       },
       keyframes: {
         "accordion-down": {

@@ -3,3 +3,92 @@
 @tailwind components;
 @tailwind utilities;
 
+
+:root {
+  --background: #ffffff;
+  --foreground: #0b0b0d;
+  --card: #ffffff;
+  --card-foreground: #0b0b0d;
+  --primary: #ff7a59;
+  --primary-foreground: #0b0b0d;
+  --secondary: #ffb199;
+  --secondary-foreground: #0b0b0d;
+  --muted: #a1a1aa;
+  --muted-foreground: #3f3f46;
+  --accent: #111216;
+  --accent-foreground: #e8e8ea;
+  --border: rgba(0,0,0,0.12);
+  --input: rgba(0,0,0,0.16);
+  --ring: rgba(0,0,0,0.12);
+}
+
+.dark {
+  --background: #0b0b0d;
+  --foreground: #e8e8ea;
+  --card: #111216;
+  --card-foreground: #e8e8ea;
+  --primary: #ff7a59;
+  --primary-foreground: #0b0b0d;
+  --secondary: #ffb199;
+  --secondary-foreground: #0b0b0d;
+  --muted: #a1a1aa;
+  --muted-foreground: #d4d4d8;
+  --accent: #181a20;
+  --accent-foreground: #e8e8ea;
+  --border: rgba(255,255,255,0.12);
+  --input: rgba(255,255,255,0.16);
+  --ring: rgba(255,255,255,0.12);
+}
+
+html, body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Utility styles per style guide */
+.neon {
+  color: var(--primary);
+  text-shadow: 0 0 8px rgba(255,122,89,0.35), 0 0 24px rgba(255,122,89,0.25);
+}
+.gradient-text {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.card {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -12px rgba(0,0,0,0.35);
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 20px 50px -12px rgba(0,0,0,0.45); }
+.glass {
+  background: color-mix(in oklab, var(--background) 80%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Marquee for reviews */
+@keyframes marquee-x {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-x 30s linear infinite;
+}
+
+/* Header blur */
+.header-blur {
+  backdrop-filter: blur(10px);
+  background: color-mix(in oklab, var(--background) 80%, transparent);
+  border-bottom: 1px solid var(--border);
+}
+
+@import '../styles/buttons.css';
+
+h1, h2, .display { font-family: var(--font-display), system-ui, sans-serif; letter-spacing: 0.02em; }
+body, p, a, button, input, select, textarea { font-family: var(--font-sans), system-ui, sans-serif; }

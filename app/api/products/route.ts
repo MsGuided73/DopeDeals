@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     const storage = await getStorage();
 
     if (usePrisma) {
-      const where: Record<string, unknown> = { isActive: true };
+      const where: Record<string, unknown> = { isActive: true, inStock: true };
       if (filters.categoryId) where.categoryId = filters.categoryId;
       if (filters.brandId) where.brandId = filters.brandId;
       if (filters.material) where.material = filters.material;

@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 const HERO_IMAGES = [
-  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Upscale%20DOPE%20CITY%20Scape.png',
+  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/hero-image_DC1.png',
 ];
 
 const COLLECTIONS: Array<{ key: string; name: string; href: string; img: string; subtitle?: string; }>= [
@@ -31,14 +31,15 @@ function GlassCard({ c, i }: { c: (typeof COLLECTIONS)[number]; i: number }) {
       <div className="absolute inset-0">
         {/* background image */}
         <Image src={c.img} alt="" fill priority={i < 6} className="object-cover opacity-70 group-hover:opacity-80 transition-opacity" unoptimized />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/55 to-black/85" />
+        {/* Removed heavy dark overlay per request */}
+<div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/40" />
         {/* glass highlight */}
         <div className="pointer-events-none absolute -inset-[30%] bg-[radial-gradient(60%_40%_at_50%_10%,rgba(255,255,255,0.15),transparent_50%)]" />
       </div>
       <div className="relative p-6 sm:p-7 md:p-8 h-44 sm:h-56 md:h-64 flex items-end">
         <div>
           <div className="text-xs uppercase tracking-widest text-white/70">Collection</div>
-          <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white drop-shadow-md">
+          <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-md">
             {c.name}
           </h3>
         </div>
@@ -121,6 +122,53 @@ export default function DopeCityLanding() {
           <span className="h-px w-5 bg-white/10" />
           <span>Fast Fulfillment</span>
         </div>
+      {/* Reviews Marquee */}
+      <section className="relative border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-12 overflow-hidden">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="text-sm uppercase tracking-widest text-white/60">Reviews</span>
+            <span className="h-px w-10 bg-white/20" />
+          </div>
+          <div className="relative">
+            <div className="marquee gap-6">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="min-w-[320px] max-w-[360px] card p-4 bg-white/5 text-white/90 border-white/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="h-6 w-6 rounded-full bg-yellow-400" />
+                    <div className="text-sm text-white/80">★★★★★</div>
+                  </div>
+                  <p className="text-sm">“Best glass I’ve picked up in years. Shipping was quick and the piece rips.”</p>
+                  <div className="mt-2 text-xs text-white/60">— Alex M.</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Visual Interest: Gradient wave */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <div className="h-[200px] md:h-[300px] bg-gradient-to-r from-primary/40 via-secondary/30 to-primary/20 blur-3xl" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="card p-6 bg-white/[0.06] border-white/10">
+              <div className="text-2xl font-black gradient-text">Premium Glass</div>
+              <p className="mt-2 text-white/70 text-sm">Hand-selected pieces from top makers.</p>
+            </div>
+            <div className="card p-6 bg-white/[0.06] border-white/10">
+              <div className="text-2xl font-black gradient-text">VIP Access</div>
+              <p className="mt-2 text-white/70 text-sm">Drops, rewards, and early access.</p>
+            </div>
+            <div className="card p-6 bg-white/[0.06] border-white/10">
+              <div className="text-2xl font-black gradient-text">Fast Fulfillment</div>
+              <p className="mt-2 text-white/70 text-sm">Quick turnaround and secure packaging.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       </section>
     </div>
   );
