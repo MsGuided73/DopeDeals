@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import EmailCapture from './EmailCapture';
-import { track } from '@/lib/analytics';
+import { track } from 'lib/analytics';
 
 export default function ExitIntent() {
   const [open, setOpen] = useState(false);
