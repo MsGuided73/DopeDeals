@@ -83,14 +83,6 @@ export default function DopeCityLanding() {
         </div>
       </section>
 
-      {/* Sticky right nav */}
-      <aside className="hidden md:block fixed right-6 top-1/2 -translate-y-1/2 z-40">
-        <nav className="backdrop-blur-xl bg-white/10 border border-white/15 rounded-2xl shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)] p-2 flex flex-col items-stretch gap-2">
-          <a href="#top" className="px-3 py-2 rounded-lg text-sm hover:bg-white/15 transition">Top</a>
-          <a href="#collections" className="px-3 py-2 rounded-lg text-sm hover:bg-white/15 transition">Collections</a>
-          <a href="/products" className="px-3 py-2 rounded-lg text-sm hover:bg-white/15 transition">All Products</a>
-        </nav>
-      </aside>
 
       {/* Collections */}
       <section id="collections" className="relative bg-gradient-to-b from-black via-black to-black/95 py-16 sm:py-24">

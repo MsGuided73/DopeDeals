@@ -2,17 +2,28 @@ import Image from 'next/image';
 
 type CTA = { label:string; href:string; variant?:'primary'|'ghost'|'outline' };
 
-export default function Hero({ bgUrl, bgPosition = 'center top 35%', title, subtitle, ctas = [] }: { bgUrl: string; bgPosition?: string; title?: string; subtitle?: string; ctas?: CTA[] }) {
+type HeroProps = {
+  bgUrl: string;
+  bgPosition?: string;
+  bgFit?: 'cover' | 'contain';
+  title?: string;
+  subtitle?: string;
+  ctas?: CTA[];
+  contentClassName?: string; // optional positioning for text box
+};
+
+export default function Hero({ bgUrl, bgPosition = '50% 20%', bgFit = 'cover', title, subtitle, ctas = [], contentClassName }: HeroProps) {
+  const fitClass = bgFit === 'contain' ? 'object-contain' : 'object-cover';
   return (
-    <section className="relative isolate min-h-[70vh] w-full bg-brand-dark text-white">
+    <section className="relative isolate min-h-screen w-full bg-brand-dark text-white flex items-center">
       {/* background */}
       <div className="absolute inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={bgUrl} alt="Dope City hero background" className="h-full w-full object-cover" style={{ objectPosition: bgPosition }} />
+        <img src={bgUrl} alt="Dope City hero background" className={`h-full w-full ${fitClass}`} style={{ objectPosition: bgPosition }} />
         {/* overlay for contrast */}
         <div className="absolute inset-0 bg-black/40" />
       </div>
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className={`mx-auto max-w-7xl px-6 py-16 ${contentClassName ?? ''}`}>
         <h1 className="text-4xl md:text-6xl font-black tracking-tight uppercase">{title ?? 'DOPE CITY'}</h1>
         {subtitle && <p className="mt-3 max-w-2xl text-white/85">{subtitle}</p>}
         {ctas.length > 0 && (

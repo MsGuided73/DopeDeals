@@ -6,23 +6,15 @@ const bebas = Bebas_Neue({ weight: '400', subsets: ['latin'], variable: '--font-
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 import ThemeToggle from "@/components/ThemeToggle";
+import RightSideNav from "@/components/RightSideNav";
+
 
 function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 header-blur">
-        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-4">
-          <Link href="/" className="font-black tracking-widest gradient-text text-xl">DOPE CITY</Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <Link href="/dope-city" className="hover:text-primary">Dope City</Link>
-            <Link href="/products" className="hover:text-primary">Products</Link>
-            <Link href="/category/pipes" className="hover:text-primary">Collections</Link>
-            <Link href="/cart" className="hover:text-primary">Cart</Link>
-          </nav>
-          <ThemeToggle />
-        </div>
-      </header>
-      <main className="flex-1">{children}</main>
+      {/* Top header removed; nav moved to right side */}
+      <RightSideNav />
+      <main className="flex-1 relative">{children}</main>
       <footer className="mt-12 border-t border-border">
         <div className="mx-auto max-w-7xl px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-muted-foreground">
           <div>

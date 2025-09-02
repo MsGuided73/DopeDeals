@@ -21,9 +21,11 @@ export default function Page() {
     <>
       <Hero
         bgUrl="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/hero-image_DC1.png"
-        bgPosition="center top 35%"
+        bgPosition="center top"
         title="Gear for the culture, built by the culture."
+        bgFit="cover"
         subtitle="No hype, no clutter—just clean design and quality that hits right."
+        contentClassName="translate-y-10 md:translate-y-24 md:translate-x-8"
         ctas={[{ label:'Shop New Arrivals', href:'/products', variant:'primary' }, { label:'Explore Collections', href:'#collections', variant:'ghost' }, { label:'Join the Club', href:'#club', variant:'outline' }]} />
       <CollectionsMosaic tiles={tiles} />
       <WhyDopeCity />
