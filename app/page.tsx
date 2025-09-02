@@ -1,37 +1,74 @@
-import Hero from '@/components/dope-city/Hero';
-import CollectionsMosaic from '@/components/dope-city/CollectionsMosaic';
-import WhyDopeCity from '@/components/dope-city/WhyDopeCity';
-import ExperienceSpectrum from '@/components/dope-city/ExperienceSpectrum';
-import ClubSection from '@/components/dope-city/ClubSection';
-import type { CollectionTile } from '@/components/dope-city/types';
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import ProductCategoryCard from '@/components/ProductCategoryCard';
+import TestimonialCard from '@/components/TestimonialCard';
+import EmailCapture from '@/components/EmailCapture';
+import Footer from '@/components/Footer';
+import StickyMobileBar from '@/components/StickyMobileBar';
+import VibeFinder from '@/components/VibeFinder';
 
-export const metadata = { title: 'DOPE CITY' };
+export const metadata = { title: 'DOPE CITY — Premium hits. Everyday prices.' };
 
 export default function Page() {
-  const tiles: CollectionTile[] = [
-    { title: 'Dab Rigs', href: '/collections/dab-rigs', img: '/dope-city/collections/dope-deals-card.jpg', blurb: 'Precision rigs & tools for big draws.', tag: 'Clouds', size: 'feature' },
-    { title: 'Water Bongs', href: '/collections/water-bongs', img: '/dope-city/hero/dope-city-hero.jpg', blurb: 'Smooth pulls. Hand-picked glass.', tag: 'Balance', size: 'wide' },
-    { title: 'Pipes', href: '/collections/pipes', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Flavor', size: 'small' },
-    { title: 'Vapes & Disposables', href: '/collections/vapes', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Balance', size: 'small' },
-    { title: 'Kratom / 7-OH', href: '/collections/kratom', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Balance', size: 'small' },
-    { title: 'Accessories', href: '/collections/accessories', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Flavor', size: 'small' },
+  const categories = [
+    { title: 'Dab Rigs', tagline: 'Precision for concentrates.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/dab-rigs' },
+    { title: 'Water Bongs', tagline: 'Smooth pulls, big chambers.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/water-bongs' },
+    { title: 'Pipes', tagline: 'Pocketable. Classic.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/pipes' },
+    { title: 'Vapes/Disposables', tagline: 'Convenience, anywhere.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/vapes' },
+    { title: 'Kratom / 7-OH', tagline: 'Strictly sourced, know your supply.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/kratom' },
+    { title: 'Accessories', tagline: 'Dial in your setup.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/accessories' },
   ];
 
   return (
-    <>
-      <Hero
-        bgUrl="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/hero-image_DC1.png"
-        bgPosition="center top"
-        title="Gear for the culture, built by the culture."
-        bgFit="cover"
-        subtitle="No hype, no clutter—just clean design and quality that hits right."
-        contentClassName="translate-y-10 md:translate-y-24 md:translate-x-8"
-        ctas={[{ label:'Shop New Arrivals', href:'/products', variant:'primary' }, { label:'Explore Collections', href:'#collections', variant:'ghost' }, { label:'Join the Club', href:'#club', variant:'outline' }]} />
-      <CollectionsMosaic tiles={tiles} />
-      <WhyDopeCity />
-      <ExperienceSpectrum />
-      <ClubSection id="club" />
-    </>
+    <div className="bg-base-900 text-text">
+      <Navbar />
+      <Hero />
+
+      {/* Categories */}
+      <section id="categories" className="mx-auto max-w-7xl px-6 py-12">
+        <h2 className="text-2xl font-bold">Shop by category</h2>
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {categories.map((c) => (<ProductCategoryCard key={c.title} {...c} />))}
+        </div>
+      </section>
+
+      {/* Vibe Finder */}
+      <VibeFinder />
+
+      {/* Social Proof strip */}
+      <section className="mx-auto max-w-7xl px-6 py-12">
+        <div className="rounded-2xl border border-white/10 bg-glass p-6 text-center text-text/80">Trusted by <span className="text-neon font-semibold">10,000+</span> customers</div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="mx-auto max-w-7xl px-6 py-6 grid gap-4 md:grid-cols-3">
+        {[
+          { quote: 'Fast shipping, clean glass, no fluff.', author: 'Lee R.' },
+          { quote: 'My daily driver came from DC — unreal value.', author: 'Maya C.' },
+          { quote: 'VIP pricing paid for itself week one.', author: 'Jesse P.' },
+        ].map((t) => (<TestimonialCard key={t.author} {...t} />))}
+      </section>
+
+      {/* VIP Section */}
+      <section id="vip" className="mx-auto max-w-7xl px-6 py-12">
+        <div className="rounded-2xl bg-gradient-to-br from-black/70 via-black/50 to-black/30 border border-white/10 p-6 md:p-8">
+          <h2 className="text-2xl font-bold">Unlock Dope City VIP</h2>
+          <ul className="mt-3 grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm text-text/80">
+            <li className="rounded-lg bg-black/40 p-3">Early access to drops</li>
+            <li className="rounded-lg bg-black/40 p-3">VIP pricing</li>
+            <li className="rounded-lg bg-black/40 p-3">Secret bundles</li>
+            <li className="rounded-lg bg-black/40 p-3">Setup guides</li>
+          </ul>
+          <p className="mt-3 text-sm text-text/70">Enrollment closes when this drop ends.</p>
+          <div className="mt-4">
+            <EmailCapture cta="Join Dope City VIP" />
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+      <StickyMobileBar />
+    </div>
   );
 }
 

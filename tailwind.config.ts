@@ -8,6 +8,13 @@ export default {
       colors: {
         brand: { dark: '#0B0B0B', accent: '#FF6A3D' },
         surface: { light: '#FAFAF9' },
+        // Design tokens (Dope City)
+        base: { 900: '#0B0B0C', 800: '#121316' },
+        text: { DEFAULT: '#EDEDED', muted: '#B3B3B3' },
+        accent: { DEFAULT: '#FF6A2A' },
+        neon: { DEFAULT: '#FF8F4E', glow: '#FFB98F' },
+        glass: { DEFAULT: 'rgba(255,255,255,0.06)' },
+        // Existing CSS variable driven tokens
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
@@ -29,10 +36,6 @@ export default {
         muted: {
           DEFAULT: "var(--muted)",
           foreground: "var(--muted-foreground)",
-        },
-        accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
         },
         destructive: {
           DEFAULT: "var(--destructive)",
