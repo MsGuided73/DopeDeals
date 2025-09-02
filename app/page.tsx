@@ -6,6 +6,7 @@ import EmailCapture from '@/components/EmailCapture';
 import Footer from '@/components/Footer';
 import StickyMobileBar from '@/components/StickyMobileBar';
 import VibeFinder from '@/components/VibeFinder';
+import ExitIntent from '@/components/ExitIntent';
 
 export const metadata = { title: 'DOPE CITY — Premium hits. Everyday prices.' };
 
@@ -68,6 +69,7 @@ export default function Page() {
 
       <Footer />
       <StickyMobileBar />
+      <ExitIntent />
     </div>
   );
 }
