@@ -1,6 +1,7 @@
 import Navbar from 'components/Navbar';
-import Hero from 'components/Hero';
-import ProductCategoryCard from 'components/ProductCategoryCard';
+import Hero from '@/components/dope-city/Hero';
+import CollectionsMosaic from '@/components/dope-city/CollectionsMosaic';
+import type { CollectionTile } from '@/components/dope-city/types';
 import TestimonialCard from 'components/TestimonialCard';
 import EmailCapture from 'components/EmailCapture';
 import Footer from 'components/Footer';
@@ -11,27 +12,30 @@ import ExitIntent from 'components/ExitIntent';
 export const metadata = { title: 'DOPE CITY — Premium hits. Everyday prices.' };
 
 export default function Page() {
-  const categories = [
-    { title: 'Dab Rigs', tagline: 'Precision for concentrates.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/dab-rigs' },
-    { title: 'Water Bongs', tagline: 'Smooth pulls, big chambers.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/water-bongs' },
-    { title: 'Pipes', tagline: 'Pocketable. Classic.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/pipes' },
-    { title: 'CBD, THCA & More', tagline: 'Convenience, anywhere.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/vapes' },
-    { title: 'Kratom / 7-OH', tagline: 'Strictly sourced, know your supply.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/kratom' },
-    { title: 'Accessories', tagline: 'Dial in your setup.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/accessories' },
+  const tiles: CollectionTile[] = [
+    { title: 'Dab Rigs', href: '/collections/dab-rigs', img: '/dope-city/collections/dope-deals-card.jpg', blurb: 'Precision rigs & tools for big draws.', tag: 'Clouds', size: 'feature' },
+    { title: 'Water Bongs', href: '/collections/water-bongs', img: '/dope-city/hero/dope-city-hero.jpg', blurb: 'Smooth pulls. Hand-picked glass.', tag: 'Balance', size: 'wide' },
+    { title: 'Pipes', href: '/collections/pipes', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Flavor', size: 'small' },
+    { title: 'CBD, THCA & More', href: '/collections/vapes', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Balance', size: 'small' },
+    { title: 'Kratom / 7-OH', href: '/collections/kratom', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Balance', size: 'small' },
+    { title: 'Accessories', href: '/collections/accessories', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Flavor', size: 'small' },
   ];
 
   return (
     <div className="bg-base-900 text-text">
       <Navbar />
-      <Hero />
+      <Hero
+        bgUrl="/dope-city/hero/dope-city-hero.jpg"
+        title="DOPE CITY"
+        subtitle="From daily drivers to legendary pieces—always at Dope City prices."
+        ctas={[
+          { label: 'Shop This Week’s Drop', href: '/products', variant: 'primary' },
+          { label: 'Join Dope City VIP — early access', href: '#vip', variant: 'ghost' },
+        ]}
+      />
 
-      {/* Categories */}
-      <section id="categories" className="mx-auto max-w-7xl px-6 py-12">
-        <h2 className="text-2xl font-bold">Shop by category</h2>
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {categories.map((c) => (<ProductCategoryCard key={c.title} {...c} />))}
-        </div>
-      </section>
+      {/* Collections Mosaic */}
+      <CollectionsMosaic tiles={tiles} />
 
       {/* Vibe Finder */}
       <VibeFinder />
