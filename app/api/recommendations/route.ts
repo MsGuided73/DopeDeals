@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { recommend, type VibeInputs } from '@/lib/productFilters';
+import { recommend, type VibeInputs } from 'lib/productFilters';
 
 export async function POST(req: NextRequest) {
   try {

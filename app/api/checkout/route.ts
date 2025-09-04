@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStorage } from '@/lib/server-storage';
 import { requireAuth } from '@/lib/requireAuth';
+import * as db from '@/lib/storage';
+import { ShipstationService } from '@/lib/services/shipstation';
 import { z } from 'zod';
 
 const CheckoutSchema = z.object({
@@ -24,9 +25,8 @@ export async function POST(req: NextRequest) {
   const { items, shippingAddress, billingAddress } = parse.data;
 
   // Validate inventory locally (Phase A)
-  const storage = await getStorage();
   for (const line of items) {
-    const product = await storage.getProduct(line.productId);
+    const product = await db.getProduct(line.productId);
     if (!product) return NextResponse.json({ error: `Product not found: ${line.productId}` }, { status: 404 });
     if (product.inStock === false) {
       return NextResponse.json({ error: `Product out of stock: ${product.name}` }, { status: 409 });
@@ -36,30 +36,28 @@ export async function POST(req: NextRequest) {
   // Compute totals (basic)
   let subtotal = 0;
   for (const line of items) {
-    const product = await storage.getProduct(line.productId)!;
+    const product = await db.getProduct(line.productId)!;
     subtotal += Number(product!.price) * line.quantity;
   }
   const tax = 0;
   const shipping = 0;
   const total = subtotal + tax + shipping;
 
-  // Prefer atomic checkout when available (Supabase)
-  if (typeof storage.checkoutAtomic === 'function') {
-    const { order, items: createdItems } = await storage.checkoutAtomic({
+  // Prefer atomic checkout when available
+  if (typeof (db as any).checkoutAtomic === 'function') {
+    const { order, items: createdItems } = await (db as any).checkoutAtomic({
       userId: user.id,
       items,
       shippingAddress,
       billingAddress,
     });
 
-    // Fire-and-forget: create ShipStation order after paid (placeholder until payment integration)
+    // Fire-and-forget: create ShipStation order after paid (placeholder)
     try {
-      const { ShipstationService } = await import('@/server/shipstation/service');
-      const { storage: serverStorage } = await import('@/server/storage');
       const apiKey = process.env.SHIPSTATION_API_KEY;
       const apiSecret = process.env.SHIPSTATION_API_SECRET;
       if (apiKey && apiSecret) {
-        const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, serverStorage);
+        const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL });
         const map = {
           orderNumber: order.id,
           orderDate: new Date().toISOString(),
@@ -79,7 +77,7 @@ export async function POST(req: NextRequest) {
       }
     } catch {}
 
-    await storage.clearCart(user.id);
+    await db.clearCart(user.id);
 
     return NextResponse.json({
       order,
@@ -88,8 +86,8 @@ export async function POST(req: NextRequest) {
     }, { status: 201 });
   }
 
-  // Fallback: create order and items separately (memory or Prisma path)
-  const order = await storage.createOrder({
+  // Fallback: create order and items separately
+  const order = await db.createOrder({
     userId: user.id,
     subtotalAmount: subtotal.toString(),
     taxAmount: tax.toString(),
@@ -100,22 +98,23 @@ export async function POST(req: NextRequest) {
     shippingAddress: shippingAddress || null,
     billingAddress: billingAddress || null,
     status: 'processing',
-  } as Parameters<typeof storage.createOrder>[0]);
+  } as Parameters<typeof db.createOrder>[0]);
 
   const createdItems = [] as Array<{ id: string; productId: string; quantity: number; priceAtPurchase: string }>;
   for (const line of items) {
-    const product = await storage.getProduct(line.productId);
+    const product = await db.getProduct(line.productId);
     if (!product) continue;
-    const oi = await storage.createOrderItem({
+    const oi = await db.createOrderItem({
       orderId: order.id,
       productId: product.id,
       quantity: line.quantity,
       priceAtPurchase: product.price,
-    } as Parameters<typeof storage.createOrderItem>[0]);
-    createdItems.push({ id: oi.id, productId: oi.productId as string, quantity: oi.quantity as number, priceAtPurchase: oi.priceAtPurchase as string });
+    } as Parameters<typeof db.createOrderItem>[0]);
+    const oiAny: any = oi as any;
+    createdItems.push({ id: oiAny.id as string, productId: oiAny.productId as string, quantity: oiAny.quantity as number, priceAtPurchase: oiAny.priceAtPurchase as string });
   }
 
-  await storage.clearCart(user.id);
+  await db.clearCart(user.id);
 
   return NextResponse.json({
     order,

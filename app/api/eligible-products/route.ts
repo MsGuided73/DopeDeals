@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
 
     // Query eligible products joined with inventory
     // Note: This assumes product_compliance links product->category; if not, we filter by product flags + future mapping.
-    const { data: products, error } = await supabaseServer
+    const { data: products, error } = await supabase
       .from('products')
       .select('id, name, price, sku, vip_exclusive, featured, image_urls, materials, category_id, stock_quantity, nicotine_product, tobacco_product')
       .eq('is_active', true)
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
     let available: Record<string, number> = {};
 
     if (ids.length > 0) {
-      const { data: inv } = await supabaseServer
+      const { data: inv } = await supabase
         .from('inventory')
         .select('product_id, available')
         .in('product_id', ids);
