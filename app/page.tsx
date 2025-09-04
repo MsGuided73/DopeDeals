@@ -19,7 +19,7 @@ export default function Page() {
   ];
 
   return (
-    <div className="bg-base-900 text-text">
+    <div>
       <Hero />
 
       {/* Categories (dark) */}
