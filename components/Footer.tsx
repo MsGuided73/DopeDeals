@@ -6,8 +6,8 @@ export default function Footer() {
   return (
     <footer className="mt-16 border-t border-white/10 bg-base-900 text-text/80">
       {/* Upper: newsletter + link columns */}
-      <div className="mx-auto max-w-7xl px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
-        <div className="md:col-span-2">
+      <div className="mx-auto max-w-7xl px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm items-start">
+        <div className="sm:col-span-2">
           <div className="font-black tracking-[0.2em] text-text">DOPE CITY</div>
           <p className="mt-2 text-xs text-text/60">Gear for the culture, built by the culture.</p>
           <div className="mt-4">
