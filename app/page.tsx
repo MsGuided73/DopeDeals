@@ -1,7 +1,6 @@
 import Navbar from 'components/Navbar';
-import Hero from '@/components/dope-city/Hero';
-import CollectionsMosaic from '@/components/dope-city/CollectionsMosaic';
-import type { CollectionTile } from '@/components/dope-city/types';
+import Hero from 'components/Hero';
+import ProductCategoryCard from 'components/ProductCategoryCard';
 import TestimonialCard from 'components/TestimonialCard';
 import EmailCapture from 'components/EmailCapture';
 import Footer from 'components/Footer';
@@ -12,40 +11,58 @@ import ExitIntent from 'components/ExitIntent';
 export const metadata = { title: 'DOPE CITY — Premium hits. Everyday prices.' };
 
 export default function Page() {
-  const tiles: CollectionTile[] = [
-    { title: 'Dab Rigs', href: '/collections/dab-rigs', img: '/dope-city/collections/dope-deals-card.jpg', blurb: 'Precision rigs & tools for big draws.', tag: 'Clouds', size: 'feature' },
-    { title: 'Water Bongs', href: '/collections/water-bongs', img: '/dope-city/hero/dope-city-hero.jpg', blurb: 'Smooth pulls. Hand-picked glass.', tag: 'Balance', size: 'wide' },
-    { title: 'Pipes', href: '/collections/pipes', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Flavor', size: 'small' },
-    { title: 'CBD, THCA & More', href: '/collections/vapes', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Balance', size: 'small' },
-    { title: 'Kratom / 7-OH', href: '/collections/kratom', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Balance', size: 'small' },
-    { title: 'Accessories', href: '/collections/accessories', img: '/dope-city/collections/dope-deals-card.jpg', tag: 'Flavor', size: 'small' },
+  const categories = [
+    { title: 'Dab Rigs', tagline: 'Precision for concentrates.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/dab-rigs' },
+    { title: 'Water Bongs', tagline: 'Smooth pulls, big chambers.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/water-bongs' },
+    { title: 'Pipes', tagline: 'Pocketable. Classic.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/pipes' },
+    { title: 'CBD, THCA & More', tagline: 'Convenience, anywhere.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/vapes' },
+    { title: 'Kratom / 7-OH', tagline: 'Strictly sourced, know your supply.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/kratom' },
+    { title: 'Accessories', tagline: 'Dial in your setup.', img: '/dope-city/collections/dope-deals-card.jpg', href: '/collections/accessories' },
   ];
 
   return (
     <div className="bg-base-900 text-text">
       <Navbar />
-      <Hero
-        bgUrl="/dope-city/hero/dope-city-hero.jpg"
-        title="DOPE CITY"
-        subtitle="From daily drivers to legendary pieces—always at Dope City prices."
-        ctas={[
-          { label: 'Shop This Week’s Drop', href: '/products', variant: 'primary' },
-          { label: 'Join Dope City VIP — early access', href: '#vip', variant: 'ghost' },
-        ]}
-      />
+      <Hero />
 
-      {/* Collections Mosaic */}
-      <CollectionsMosaic tiles={tiles} />
+      {/* Categories (dark) */}
+      <section id="categories" className="mx-auto max-w-7xl px-6 py-12">
+        <h2 className="text-2xl font-bold">Shop by category</h2>
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {categories.map((c) => (<ProductCategoryCard key={c.title} {...c} />))}
+        </div>
+      </section>
 
-      {/* Vibe Finder */}
+      {/* Light section to bring back contrast */}
+      <section className="bg-white text-black">
+        <div className="mx-auto max-w-7xl px-6 py-12">
+          <h2 className="text-2xl font-bold">Why Dope City</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <div className="rounded-xl border border-black/10 bg-white p-4 shadow-sm">
+              <div className="font-semibold">Curated ≠ Clutter</div>
+              <p className="mt-1 text-sm text-black/70">No gimmicks—just hard‑picked glass and gear that actually performs.</p>
+            </div>
+            <div className="rounded-xl border border-black/10 bg-white p-4 shadow-sm">
+              <div className="font-semibold">Experience‑first</div>
+              <p className="mt-1 text-sm text-black/70">Flavor, balance, or clouds—dial your setup to your goal.</p>
+            </div>
+            <div className="rounded-xl border border-black/10 bg-white p-4 shadow-sm">
+              <div className="font-semibold">Fast & Fair</div>
+              <p className="mt-1 text-sm text-black/70">Quick shipping, easy returns, and straight answers.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Vibe Finder (dark) */}
       <VibeFinder />
 
-      {/* Social Proof strip */}
+      {/* Social Proof strip (dark) */}
       <section className="mx-auto max-w-7xl px-6 py-12">
         <div className="rounded-2xl border border-white/10 bg-glass p-6 text-center text-text/80">Trusted by <span className="text-neon font-semibold">10,000+</span> customers</div>
       </section>
 
-      {/* Testimonials */}
+      {/* Testimonials (dark) */}
       <section className="mx-auto max-w-7xl px-6 py-6 grid gap-4 md:grid-cols-3">
         {[
           { quote: 'Fast shipping, clean glass, no fluff.', author: 'Lee R.' },

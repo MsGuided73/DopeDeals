@@ -1,0 +1,759 @@
+html = <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DOPE CITY — Premium hits. Everyday prices.</title>
+  <meta name="description" content="DOPE CITY — Big-image mosaic layout, Vibe Finder, Staff Picks scroller, and VIP conversion landing page." />
+  <style>
+    /* ===== Theme Tokens (CSS Variables) ===== */
+    :root{
+      --base-900:#0B0B0C;
+      --base-800:#121316;
+      --base-700:#1A1B1F;
+      --text:#EDEDED;
+      --text-muted:#B3B3B3;
+      --accent:#FF6A2A;
+      --neon:#FF8F4E;
+      --neon-glow:#FFB98F;
+      --glass:rgba(255,255,255,0.08);
+      --radius-xl:1.25rem;
+      --shadow-card:0 10px 24px rgba(0,0,0,0.35);
+      --shadow-glow:0 0 28px rgba(255,143,78,0.35);
+      --gutter:24px;
+      --tile-height: 280px; /* base row height for mosaic */
+    }
+    @media (min-width:1440px){
+      :root{ --gutter:28px; --tile-height: 300px; }
+    }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 800px at 10% 0%, #17181c 0%, var(--base-900) 50%),
+                  linear-gradient(180deg, var(--base-900), #09090b 60%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Inter, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+      line-height:1.45;
+    }
+    a{ color:inherit; text-decoration:none }
+    .container{ width: min(1200px, 92vw); margin-inline:auto }
+
+    /* ===== Utilities ===== */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:.9rem 1.25rem; border-radius:.8rem; font-weight:700;
+      border:1px solid transparent; transition: all .18s ease;
+    }
+    .btn-primary{ background:var(--accent); color:#111; box-shadow: var(--shadow-glow) }
+    .btn-primary:hover{ transform:translateY(-1px); box-shadow: 0 0 0 1px rgba(255,106,42,.35), var(--shadow-glow) }
+    .btn-ghost{ background:transparent; border-color:rgba(255,255,255,.18); color:var(--text) }
+    .btn-ghost:hover{ background:rgba(255,255,255,.06) }
+    .chip{ display:inline-flex; gap:.5rem; align-items:center; padding:.4rem .7rem; border-radius:999px; font-size:.85rem; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12) }
+    .eyebrow{ letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted); font-size:.8rem }
+
+    .section{ padding: clamp(36px, 6vw, 72px) 0 }
+    .h1{
+      font-size: clamp(48px, 8vw, 96px);
+      letter-spacing:.02em; margin:0 0 .4rem 0; font-weight:900;
+      text-shadow: 0 1px 0 rgba(0,0,0,.3), 0 0 24px rgba(255,191,143,.22), 0 0 48px rgba(255,143,78,.12);
+    }
+    .subhead{ color:var(--text-muted); font-size: clamp(16px, 2.2vw, 20px); margin:.5rem 0 1.25rem 0 }
+    .value-chips{ display:flex; flex-wrap:wrap; gap:.6rem }
+    .center{ text-align:center }
+
+    /* ===== Glass Navbar ===== */
+    .nav{
+      position:sticky; top:0; z-index:1000;
+      backdrop-filter:saturate(120%) blur(10px);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav .row{ display:flex; align-items:center; justify-content:space-between; padding:.7rem 0 }
+    .nav a.logo{ font-weight:900; letter-spacing:.08em }
+    .nav .links{ display:flex; gap:1rem; align-items:center }
+    .nav .links a{ color:var(--text-muted); font-weight:600 }
+    .nav .links a:hover{ color:var(--text) }
+
+    /* ===== Hero ===== */
+    .hero{
+      position:relative; overflow:hidden; padding: clamp(72px, 10vw, 120px) 0 clamp(40px, 6vw, 60px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hero::before{
+      content:""; position:absolute; inset:-20% -10% -10% -10%;
+      background:
+        radial-gradient(600px 300px at 80% 0%, rgba(255,143,78,.14), transparent 60%),
+        radial-gradient(800px 600px at -10% 20%, rgba(120,180,255,.08), transparent 55%);
+      pointer-events:none;
+    }
+    .hero .cta-row{ display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem }
+    .countdown{
+      margin-top:1rem; display:flex; align-items:center; gap:.6rem; color:#151515;
+      background:linear-gradient(90deg, var(--neon) 0%, #FFD1B4 60%, #FFE1CE 100%);
+      padding:.55rem .8rem; border-radius:.7rem; font-weight:800; width:max-content;
+      box-shadow: 0 0 0 1px rgba(255,143,78,.28), var(--shadow-glow);
+    }
+
+    /* ===== Social Proof ===== */
+    .proof{ display:flex; gap:1rem; align-items:center; justify-content:center; color:var(--text-muted) }
+    .stars{ color:#FFD166 }
+
+    /* ===== Collections Mosaic (3–4 columns) ===== */
+    .mosaic{
+      display:grid; gap:var(--gutter);
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: var(--tile-height);
+    }
+    @media (min-width:1440px){
+      .mosaic{ grid-template-columns: repeat(4, minmax(320px, 1fr)); justify-content:center }
+    }
+    @media (max-width:980px){
+      .mosaic{ grid-template-columns: repeat(2, 1fr) }
+    }
+    @media (max-width:640px){
+      .mosaic{ grid-template-columns: 1fr }
+    }
+    .tile{
+      position:relative; border-radius: var(--radius-xl); overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow-card);
+      isolation:isolate; min-height: var(--tile-height);
+    }
+    .tile::before{
+      content:""; position:absolute; inset:0;
+      background: radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.05), rgba(0,0,0,.35)),
+                  linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.45));
+      z-index:0;
+    }
+    .tile .img{
+      position:absolute; inset:0; z-index:-1; transform:scale(1.02);
+      background-size:cover; background-position:center;
+      filter: saturate(1.05) contrast(1.05) brightness(.9);
+    }
+    /* Placeholder "imagery" using gradients since we avoid external assets */
+    .img.dab { background-image: linear-gradient(135deg, #2b2b2b, #1a1a1a), radial-gradient(circle at 70% 30%, #ffb98f33, transparent 40%); }
+    .img.bong{ background-image: linear-gradient(135deg, #1b2a2a, #0f1616), radial-gradient(circle at 20% 20%, #6ad9ff33, transparent 45%); }
+    .img.pipe{ background-image: linear-gradient(135deg, #2a1b1b, #141010), radial-gradient(circle at 50% 10%, #ffa86a2e, transparent 50%); }
+    .img.cbd { background-image: linear-gradient(135deg, #20221b, #10120d), radial-gradient(circle at 60% 30%, #c9ff6a33, transparent 45%); }
+    .img.krat{ background-image: linear-gradient(135deg, #21221c, #11120d), radial-gradient(circle at 20% 70%, #d6ff7a2e, transparent 45%); }
+    .img.acc { background-image: linear-gradient(135deg, #1b1c22, #0f1016), radial-gradient(circle at 75% 35%, #9ca2ff2e, transparent 50%); }
+
+    .tile.feature{ grid-column: span 2; grid-row: span 2; min-height: calc(var(--tile-height) * 2 + var(--gutter)) }
+    .tile.wide{ grid-column: span 2 }
+    .tile.tall{ grid-row: span 2; min-height: calc(var(--tile-height) * 2 + var(--gutter)) }
+
+    .badge{
+      position:absolute; top:14px; left:14px; z-index:2;
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+      padding:.4rem .7rem; border-radius:999px; font-weight:700; font-size:.8rem;
+      backdrop-filter: blur(6px);
+    }
+    .tile-content{
+      position:absolute; left:0; right:0; bottom:0; padding:16px 18px;
+      display:flex; flex-direction:column; gap:.25rem; z-index:2;
+    }
+    .tile h3{ margin:0; font-size: clamp(22px, 2.3vw, 28px); text-shadow: 0 0 18px rgba(0,0,0,.45) }
+    .tile p{ margin:0; color:var(--text-muted) }
+    .tile .shop{ margin-top:.35rem; align-self:flex-start; font-weight:800; padding:.45rem .7rem; border-radius:999px; border:1px solid rgba(255,255,255,.25) }
+    .tile:hover{ outline:1px solid rgba(255,143,78,.35); box-shadow: var(--shadow-glow), var(--shadow-card) }
+    .tile:hover .img{ transform:scale(1.05) }
+
+    /* ===== Staff Picks Scroller ===== */
+    .staff-wrap{
+      position:relative; overflow:hidden; border-radius: var(--radius-xl);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadow-card);
+    }
+    .staff-header{
+      display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.08)
+    }
+    .staff-header .fomo{ font-weight:800; color:#161616; background:linear-gradient(90deg, var(--neon), #ffd9bf); padding:.35rem .7rem; border-radius:999px; box-shadow: var(--shadow-glow) }
+    .ribbon{
+      position:absolute; top:14px; left:-10px; background:var(--accent); color:#111; font-weight:900; padding:.35rem .75rem; transform:skewX(-12deg);
+      box-shadow: var(--shadow-glow); border:1px solid rgba(255,255,255,.18);
+    }
+    .scroller{
+      display:flex; gap:16px; align-items:stretch; padding:12px 14px;
+      animation: slide 24s linear infinite;
+    }
+    .scroller:hover{ animation-play-state: paused }
+    @keyframes slide{
+      from{ transform: translateX(0) }
+      to{ transform: translateX(-50%) }
+    }
+    .p-card{
+      min-width: 260px; max-width: 260px;
+      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);
+      border-radius: .9rem; padding:12px; box-shadow: var(--shadow-card)
+    }
+    .p-img{ height:140px; border-radius:.7rem; background: linear-gradient(135deg, #2b2f33, #1a1d20) }
+    .p-title{ margin:.5rem 0 .25rem; font-weight:800 }
+    .price-row{ display:flex; align-items:center; gap:.5rem }
+    .orig{ color:var(--text-muted); text-decoration:line-through }
+    .sale{ color:#fff; font-weight:900 }
+    .badge-vip{ margin-left:auto; font-size:.85rem; color:#161616; background:linear-gradient(90deg, var(--neon), #ffd9bf); padding:.1rem .45rem; border-radius:999px; font-weight:900 }
+
+    /* ===== Vibe Finder (Prominent) ===== */
+    .vibe-zone{
+      position:relative; isolation:isolate;
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(800px 400px at 85% -10%, rgba(255,143,78,.15), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow: var(--shadow-card), 0 0 0 2px rgba(255,143,78,.08), inset 0 0 60px rgba(255,143,78,.06);
+      padding: clamp(18px, 3vw, 28px);
+      overflow:hidden;
+    }
+    .vibe-zone::after{
+      content:""; position:absolute; inset:-20%; pointer-events:none;
+      background: radial-gradient(800px 400px at 10% 100%, rgba(255,191,143,.10), transparent 60%);
+      z-index:-1;
+    }
+    .vibe-title{
+      display:flex; align-items:center; justify-content:center; gap:.6rem; margin-bottom:.75rem;
+      font-size: clamp(22px, 3vw, 28px); font-weight:900;
+      text-shadow: 0 0 28px rgba(255,143,78,.28);
+    }
+    .vibe-badge{
+      font-size:.78rem; font-weight:900; color:#111; background:linear-gradient(90deg, var(--neon), #ffd9bf);
+      padding:.25rem .6rem; border-radius:999px; box-shadow: var(--shadow-glow)
+    }
+    .vibe .stepper{ display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; justify-content:center }
+    .vibe .stepper .dot{ width:12px; height:12px; border-radius:50%; background:#2a2a2e; border:1px solid #3a3a40 }
+    input[name="step"]{ display:none }
+    .step{ display:none; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); padding:18px; border-radius:var(--radius-xl) }
+    #s1:checked ~ .steps #step1,
+    #s2:checked ~ .steps #step2,
+    #s3:checked ~ .steps #step3,
+    #s4:checked ~ .steps #step4,
+    #s5:checked ~ .steps #step5{ display:block }
+    #s1:checked ~ .stepper .d1,
+    #s2:checked ~ .stepper .d1, #s2:checked ~ .stepper .d2,
+    #s3:checked ~ .stepper .d1, #s3:checked ~ .stepper .d2, #s3:checked ~ .stepper .d3,
+    #s4:checked ~ .stepper .d1, #s4:checked ~ .stepper .d2, #s4:checked ~ .stepper .d3, #s4:checked ~ .stepper .d4,
+    #s5:checked ~ .stepper .d1, #s5:checked ~ .stepper .d2, #s5:checked ~ .stepper .d3, #s5:checked ~ .stepper .d4, #s5:checked ~ .stepper .d5
+    { background:linear-gradient(180deg, var(--neon), var(--neon-glow)) }
+
+    .choices{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center }
+    .choice{ padding:.7rem 1rem; border:1px solid rgba(255,255,255,.18); border-radius:999px; background:rgba(255,255,255,.06); cursor:pointer; font-weight:700 }
+    .choice:hover{ outline:1px solid rgba(255,143,78,.35) }
+    .slider-row{ display:flex; align-items:center; gap:.8rem; justify-content:center }
+    .slider-row input[type="range"]{ width:min(720px, 90%) }
+    .helper{ color:var(--text-muted); font-size:.95rem; text-align:center }
+
+    .view-matches{ display:flex; gap:.6rem; align-items:center; justify-content:center; margin-top:12px }
+    .results-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:var(--gutter); margin-top:18px }
+    @media (max-width:980px){ .results-grid{ grid-template-columns: repeat(2, 1fr) } }
+    @media (max-width:640px){ .results-grid{ grid-template-columns: 1fr } }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.08); border-radius: var(--radius-xl);
+      padding:14px; box-shadow: var(--shadow-card);
+    }
+    .card .mock-img{ height:160px; border-radius: .9rem; background: linear-gradient(135deg, #2b2f33, #1a1d20) }
+    .card h4{ margin:10px 0 4px; font-size:1.05rem }
+    .price{ color:#EDEDED; font-weight:900 }
+    .vip{ margin-left:.4rem; font-size:.85rem; color:#161616; background:linear-gradient(90deg, var(--neon), #ffd9bf); padding:.15rem .5rem; border-radius:999px; font-weight:900 }
+    .why{ color:var(--text-muted); font-size:.95rem; margin:.35rem 0 .6rem }
+    .btn-row{ display:flex; gap:.5rem; flex-wrap:wrap }
+
+    /* ===== VIP Section with Animated Neon Border ===== */
+    .vip-panel{
+      position:relative;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border-radius: var(--radius-xl);
+      padding: clamp(18px, 3vw, 28px);
+      box-shadow: var(--shadow-card);
+      overflow:hidden;
+    }
+    .vip-panel::before, .vip-panel::after{
+      content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none;
+    }
+    .vip-panel::before{
+      border:2px solid transparent;
+      background:
+        linear-gradient(var(--base-900), var(--base-900)) padding-box,
+        conic-gradient(from 0deg, rgba(255,106,42,.0), rgba(255,106,42,.8), rgba(255,191,143,.7), rgba(255,106,42,.0)) border-box;
+      animation: spin 6s linear infinite;
+      filter: drop-shadow(0 0 12px rgba(255,106,42,.45));
+    }
+    .vip-panel::after{
+      inset:4px; border-radius: calc(var(--radius-xl) - 4px);
+      border:1px solid rgba(255,255,255,.10);
+      background: radial-gradient(600px 300px at 80% 0%, rgba(255,143,78,.12), transparent 60%);
+    }
+    @keyframes spin{
+      to { transform: rotate(360deg) }
+    }
+    .perks{ display:grid; grid-template-columns: repeat(5, 1fr); gap:12px; margin:12px 0 }
+    @media (max-width:980px){ .perks{ grid-template-columns: repeat(3, 1fr) } }
+    @media (max-width:640px){ .perks{ grid-template-columns: repeat(2, 1fr) } }
+    .perk{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:.9rem; padding:.6rem .7rem; font-weight:700; text-align:center }
+
+    /* ===== Testimonials ===== */
+    .testimonials{ display:grid; grid-template-columns: repeat(3, 1fr); gap:var(--gutter) }
+    @media (max-width:980px){ .testimonials{ grid-template-columns: repeat(2, 1fr) } }
+    @media (max-width:640px){ .testimonials{ grid-template-columns: 1fr } }
+    .tcard{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius-xl); padding:18px }
+    .avatar{ width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #40444c, #2a2d33) }
+
+    /* ===== Sticky Mobile Bar ===== */
+    .stickybar{
+      position:fixed; bottom:12px; left:50%; transform: translateX(-50%);
+      display:none; gap:.6rem; background:rgba(25,25,25,.7); border:1px solid rgba(255,255,255,.12);
+      padding:.5rem; border-radius:999px; backdrop-filter: blur(8px); box-shadow: var(--shadow-card);
+      z-index:1000;
+    }
+    @media (max-width:768px){ .stickybar{ display:flex } }
+
+    /* ===== Footer ===== */
+    footer{ border-top:1px solid rgba(255,255,255,.06); color:var(--text-muted); padding:28px 0 48px }
+    footer a{ color:var(--text-muted) }
+    footer a:hover{ color:var(--text) }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navbar ===== -->
+  <nav class="nav">
+    <div class="container row">
+      <a class="logo" href="#"><span class="eyebrow">DOPE</span> CITY</a>
+      <div class="links" role="navigation" aria-label="Primary">
+        <a href="#">Collections</a>
+        <a href="#">Bundles</a>
+        <a href="#">Specials</a>
+        <a href="#">Knowledge</a>
+        <a href="#">Merch</a>
+        <a class="btn btn-primary" href="#vip">Join Dope City VIP</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <div class="container">
+      <h1 class="h1">DOPE CITY</h1>
+      <p class="subhead">Premium hits. Everyday prices.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#collections" aria-label="Shop This Week’s Drop">Shop This Week’s Drop</a>
+        <a class="btn btn-ghost" href="#vip" aria-label="Join Dope City VIP for early access">Join Dope City VIP — early access</a>
+      </div>
+      <div class="countdown" aria-live="polite">Drop ends in <strong>02:12:45</strong></div>
+      <div style="height:12px"></div>
+      <div class="value-chips">
+        <span class="chip">Stacked selection by vibe</span>
+        <span class="chip">Premium steals at every budget</span>
+        <span class="chip">Fast shipping & easy returns</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Staff Picks (Auto-Scrolling) ===== -->
+  <section class="section">
+    <div class="container staff-wrap">
+      <div class="ribbon">Staff Picks</div>
+      <div class="staff-header">
+        <div class="eyebrow">Fresh picks from the team</div>
+        <div class="fomo" aria-live="polite">Hurry — limited stock</div>
+      </div>
+      <div class="scroller" role="list" aria-label="Staff picks scrolling list">
+        <!-- Duplicate ~2x for seamless scroll -->
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Terp Saver Mini</div>
+          <div class="price-row">
+            <span class="orig">$129.00</span>
+            <span class="sale">$99.00</span>
+            <span class="badge-vip">VIP −10%</span>
+          </div>
+        </div>
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Beaker XL</div>
+          <div class="price-row">
+            <span class="orig">$149.00</span>
+            <span class="sale">$119.00</span>
+            <span class="badge-vip">VIP −12%</span>
+          </div>
+        </div>
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Daily Driver Pipe</div>
+          <div class="price-row">
+            <span class="orig">$32.00</span>
+            <span class="sale">$24.00</span>
+            <span class="badge-vip">VIP −8%</span>
+          </div>
+        </div>
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Quartz Banger Set</div>
+          <div class="price-row">
+            <span class="orig">$49.00</span>
+            <span class="sale">$39.00</span>
+            <span class="badge-vip">VIP −10%</span>
+          </div>
+        </div>
+
+        <!-- Repeat for seamless scroll -->
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Terp Saver Mini</div>
+          <div class="price-row">
+            <span class="orig">$129.00</span>
+            <span class="sale">$99.00</span>
+            <span class="badge-vip">VIP −10%</span>
+          </div>
+        </div>
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Beaker XL</div>
+          <div class="price-row">
+            <span class="orig">$149.00</span>
+            <span class="sale">$119.00</span>
+            <span class="badge-vip">VIP −12%</span>
+          </div>
+        </div>
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Daily Driver Pipe</div>
+          <div class="price-row">
+            <span class="orig">$32.00</span>
+            <span class="sale">$24.00</span>
+            <span class="badge-vip">VIP −8%</span>
+          </div>
+        </div>
+        <div class="p-card" role="listitem">
+          <div class="p-img" aria-hidden="true"></div>
+          <div class="p-title">Quartz Banger Set</div>
+          <div class="price-row">
+            <span class="orig">$49.00</span>
+            <span class="sale">$39.00</span>
+            <span class="badge-vip">VIP −10%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Collections Mosaic ===== -->
+  <section id="collections" class="section">
+    <div class="container">
+      <div class="center">
+        <div class="eyebrow">Collections</div>
+        <h2 style="margin:.25rem 0 1rem">Find your lane</h2>
+      </div>
+
+      <div class="mosaic" aria-label="Collections mosaic">
+        <!-- Dab Rigs (feature) -->
+        <a class="tile feature" href="/collections/dab-rigs" aria-label="Shop Dab Rigs">
+          <div class="img dab" aria-hidden="true"></div>
+          <div class="badge">Classic</div>
+          <div class="tile-content">
+            <h3>Dab Rigs</h3>
+            <p>Terps first. Always.</p>
+            <span class="shop">Shop →</span>
+          </div>
+        </a>
+
+        <!-- Water Bongs (tall) -->
+        <a class="tile tall" href="/collections/water-bongs" aria-label="Shop Water Bongs">
+          <div class="img bong" aria-hidden="true"></div>
+          <div class="badge">Balance</div>
+          <div class="tile-content">
+            <h3>Water Bongs</h3>
+            <p>Smooth pulls. Big laughs.</p>
+            <span class="shop">Shop →</span>
+          </div>
+        </a>
+
+        <!-- Pipes (standard) -->
+        <a class="tile" href="/collections/pipes" aria-label="Shop Pipes">
+          <div class="img pipe" aria-hidden="true"></div>
+          <div class="badge">Flavor</div>
+          <div class="tile-content">
+            <h3>Pipes</h3>
+            <p>Pocket. Pack. Go.</p>
+            <span class="shop">Shop →</span>
+          </div>
+        </a>
+
+        <!-- CBD, THCA & More (wide) -->
+        <a class="tile wide" href="/collections/cbd-thca" aria-label="Shop CBD, THCA & More">
+          <div class="img cbd" aria-hidden="true"></div>
+          <div class="badge">Balance</div>
+          <div class="tile-content">
+            <h3>CBD, THCA &amp; More</h3>
+            <p>Curated cannabinoids—gummies, tinctures, more.</p>
+            <span class="shop">Shop →</span>
+          </div>
+        </a>
+
+        <!-- Kratom / 7-OH (standard) -->
+        <a class="tile" href="/collections/kratom" aria-label="Shop Kratom / 7-OH">
+          <div class="img krat" aria-hidden="true"></div>
+          <div class="badge">Balance</div>
+          <div class="tile-content">
+            <h3>Kratom / 7-OH</h3>
+            <p>Strictly sourced. No guesswork.</p>
+            <span class="shop">Shop →</span>
+          </div>
+        </a>
+
+        <!-- Accessories (standard) -->
+        <a class="tile" href="/collections/accessories" aria-label="Shop Accessories">
+          <div class="img acc" aria-hidden="true"></div>
+          <div class="badge">Flavor</div>
+          <div class="tile-content">
+            <h3>Accessories</h3>
+            <p>Dial it. Style it.</p>
+            <span class="shop">Shop →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Vibe Finder (Prominent) ===== -->
+  <section class="section">
+    <div class="container vibe-zone">
+      <div class="vibe-title">
+        <span class="vibe-badge">Personal Shopper</span>
+        <span>Vibe Finder</span>
+      </div>
+      <p class="subhead center" style="max-width:780px;margin-inline:auto">
+        Tell us your setup and budget. We’ll match gear that fits your lane—then show **VIP** savings on top.
+      </p>
+
+      <!-- Step toggles (CSS-only) -->
+      <div class="vibe">
+        <input id="s1" type="radio" name="step" checked />
+        <input id="s2" type="radio" name="step" />
+        <input id="s3" type="radio" name="step" />
+        <input id="s4" type="radio" name="step" />
+        <input id="s5" type="radio" name="step" />
+
+        <div class="stepper center">
+          <span class="dot d1" title="What"></span>
+          <span class="dot d2" title="Where"></span>
+          <span class="dot d3" title="Vibe"></span>
+          <span class="dot d4" title="Heat"></span>
+          <span class="dot d5" title="Budget"></span>
+        </div>
+
+        <div class="steps">
+          <div id="step1" class="step">
+            <div class="eyebrow">Step 1</div>
+            <h3 style="margin:.25rem 0 .75rem">What do you smoke?</h3>
+            <div class="choices">
+              <label class="choice" for="s2" title="Flower">Flower</label>
+              <label class="choice" for="s2" title="Resin">Resin</label>
+              <label class="choice" for="s2" title="Rosin">Rosin</label>
+              <label class="choice" for="s2" title="Hash">Hash</label>
+            </div>
+            <p class="helper">Pick your lane.</p>
+          </div>
+
+          <div id="step2" class="step">
+            <div class="eyebrow">Step 2</div>
+            <h3 style="margin:.25rem 0 .75rem">Where do you smoke?</h3>
+            <div class="choices">
+              <label class="choice" for="s3">Home</label>
+              <label class="choice" for="s3">On-the-Go</label>
+              <label class="choice" for="s3">Party</label>
+            </div>
+            <p class="helper">Couch? Street? Crew?</p>
+          </div>
+
+          <div id="step3" class="step">
+            <div class="eyebrow">Step 3</div>
+            <h3 style="margin:.25rem 0 .75rem">Flavor ↔ Clouds</h3>
+            <div class="slider-row">
+              <span>Flavor</span>
+              <input type="range" min="0" max="100" value="30" aria-label="Flavor vs Clouds slider" />
+              <span>Clouds</span>
+            </div>
+            <p class="helper">0–33: Flavor chaser • 34–66: Balanced • 67–100: Cloud machine</p>
+            <div class="view-matches">
+              <label class="btn btn-primary" for="s4">Next</label>
+            </div>
+          </div>
+
+          <div id="step4" class="step">
+            <div class="eyebrow">Step 4</div>
+            <h3 style="margin:.25rem 0 .75rem">Heat (for Resin/Rosin)</h3>
+            <div class="choices">
+              <label class="choice" for="s5">Torch</label>
+              <label class="choice" for="s5">E‑Nail</label>
+              <label class="choice" for="s5">Battery</label>
+            </div>
+            <p class="helper">Skip if you chose Flower or Hash.</p>
+          </div>
+
+          <div id="step5" class="step">
+            <div class="eyebrow">Step 5</div>
+            <h3 style="margin:.25rem 0 .75rem">Budget</h3>
+            <div class="choices">
+              <a class="choice" href="#vibe-results">Budget</a>
+              <a class="choice" href="#vibe-results">Mid</a>
+              <a class="choice" href="#vibe-results">Premium</a>
+              <a class="choice" href="#vibe-results">Show all</a>
+            </div>
+            <p class="helper">Starters • Daily drivers • Showpieces</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock Results -->
+      <div id="vibe-results" class="results-grid" aria-live="polite" aria-label="Vibe Finder results (mock)">
+        <div class="card">
+          <div class="mock-img" role="img" aria-label="Quartz Mini Rig image"></div>
+          <h4>Quartz Mini Rig</h4>
+          <div><span class="price">$149.99</span><span class="vip">VIP −10%</span></div>
+          <p class="why">Smaller chamber + low-temp quartz to preserve terps.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#">Add to Cart</a>
+            <a class="btn btn-ghost" href="#">Learn More</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="mock-img" role="img" aria-label="Beaker Bong image"></div>
+          <h4>Beaker Bong</h4>
+          <div><span class="price">$89.00</span><span class="vip">VIP −12%</span></div>
+          <p class="why">Smooth pulls at home; durable glass for party nights.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#">Add to Cart</a>
+            <a class="btn btn-ghost" href="#">Learn More</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="mock-img" role="img" aria-label="Hand Pipe image"></div>
+          <h4>Hand Pipe</h4>
+          <div><span class="price">$24.00</span><span class="vip">VIP −8%</span></div>
+          <p class="why">Pocketable daily driver for on‑the‑go sessions.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#">Add to Cart</a>
+            <a class="btn btn-ghost" href="#">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VIP Section ===== -->
+  <section id="vip" class="section">
+    <div class="container vip-panel">
+      <div class="center">
+        <div class="eyebrow">Dope City VIP</div>
+        <h2 style="margin:.25rem 0 .5rem">Unlock VIP Access — Extra 10% Off</h2>
+        <p class="subhead" style="max-width:760px; margin-inline:auto">
+          Sign up for <strong>Dope City VIP</strong> now and get an additional <strong>10% off</strong> today’s prices. Early drops, VIP pricing, secret bundles, setup guides, and priority support.
+        </p>
+      </div>
+      <div class="perks" role="list">
+        <div class="perk" role="listitem">Early access</div>
+        <div class="perk" role="listitem">VIP pricing</div>
+        <div class="perk" role="listitem">Extra 10% today</div>
+        <div class="perk" role="listitem">Secret bundles</div>
+        <div class="perk" role="listitem">Priority support</div>
+      </div>
+      <div class="center" style="margin-top:8px">
+        <a class="btn btn-primary" href="#">Join Dope City VIP</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Testimonials ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="center">
+        <div class="eyebrow">What people say</div>
+        <h2 style="margin:.25rem 0 1rem">Real ones. Real takes.</h2>
+      </div>
+      <div class="testimonials">
+        <div class="tcard">
+          <div style="display:flex; gap:.8rem; align-items:center">
+            <div class="avatar" aria-hidden="true"></div>
+            <div><strong>@glassfiend</strong><div class="stars">★★★★★</div></div>
+          </div>
+          <p style="margin-top:.6rem; color:var(--text-muted)">“Picked by vibe, not hype. My daily driver came from their matches—spot on.”</p>
+        </div>
+        <div class="tcard">
+          <div style="display:flex; gap:.8rem; align-items:center">
+            <div class="avatar" aria-hidden="true"></div>
+            <div><strong>@terptruth</strong><div class="stars">★★★★★</div></div>
+          </div>
+          <p style="margin-top:.6rem; color:var(--text-muted)">“VIP pricing is legit. Got a top‑shelf rig for less than I expected.”</p>
+        </div>
+        <div class="tcard">
+          <div style="display:flex; gap:.8rem; align-items:center">
+            <div class="avatar" aria-hidden="true"></div>
+            <div><strong>@partyglass</strong><div class="stars">★★★★☆</div></div>
+          </div>
+          <p style="margin-top:.6rem; color:var(--text-muted)">“The mosaic makes shopping fun—big pics, fast choices. Easy W.”</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap">
+      <div>© <span id="year"></span> DOPE CITY</div>
+      <div style="display:flex; gap:1rem">
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">Specials</a>
+        <a href="#">Knowledge Base</a>
+        <a href="#">Merch</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== Sticky Mobile Bar ===== -->
+  <div class="stickybar" aria-label="Mobile quick actions">
+    <a class="btn btn-ghost" href="#collections">Shop Drops</a>
+    <a class="btn btn-primary" href="#vip">Join VIP</a>
+  </div>
+
+  <!-- ===== Embedded JSON (Data examples) ===== -->
+  <script type="application/json" id="staff-picks">
+  {
+    "items":[
+      {"sku":"DC-TSM-001","title":"Terp Saver Mini","orig":"129.00","sale":"99.00","vip":"-10%"},
+      {"sku":"DC-BKR-XL","title":"Beaker XL","orig":"149.00","sale":"119.00","vip":"-12%"},
+      {"sku":"DC-PIPE-DR","title":"Daily Driver Pipe","orig":"32.00","sale":"24.00","vip":"-8%"},
+      {"sku":"DC-QTZ-SET","title":"Quartz Banger Set","orig":"49.00","sale":"39.00","vip":"-10%"}
+    ]
+  }
+  </script>
+
+  <script type="application/json" id="price-bands">
+  {
+    "priceBands": {
+      "budget":  {"min":0,     "max":7999},
+      "mid":     {"min":8000,  "max":19999},
+      "premium": {"min":20000, "max":500000},
+      "all":     {"min":0,     "max":500000}
+    }
+  }
+  </script>
+
+  <script>
+    // tiny enhancement: update footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+"""
+open_path = "/mnt/data/dope-city-landing-mock-v2.html"
+with open(open_path, "w", encoding="utf-8") as f:
+    f.write(html)
+
+open_path
