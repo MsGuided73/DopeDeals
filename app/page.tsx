@@ -1,9 +1,7 @@
-import Navbar from 'components/Navbar';
 import Hero from 'components/Hero';
 import ProductCategoryCard from 'components/ProductCategoryCard';
 import TestimonialCard from 'components/TestimonialCard';
 import EmailCapture from 'components/EmailCapture';
-import Footer from 'components/Footer';
 import StickyMobileBar from 'components/StickyMobileBar';
 import VibeFinder from 'components/VibeFinder';
 import ExitIntent from 'components/ExitIntent';
@@ -22,7 +20,6 @@ export default function Page() {
 
   return (
     <div className="bg-base-900 text-text">
-      <Navbar />
       <Hero />
 
       {/* Categories (dark) */}
@@ -88,7 +85,6 @@ export default function Page() {
         </div>
       </section>
 
-      <Footer />
       <StickyMobileBar />
       <ExitIntent />
     </div>
