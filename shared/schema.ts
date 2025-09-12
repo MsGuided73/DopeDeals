@@ -5,10 +5,18 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").notNull().unique(),
-  fullName: text("full_name"),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  fullName: text("full_name"), // Computed field for backward compatibility
   membershipTierId: uuid("membership_tier_id"),
   ageVerificationStatus: text("age_verification_status").notNull().default("not_verified"), // not_verified, pending, verified, failed
   lastVerificationCheck: timestamp("last_verification_check", { withTimezone: true }),
+
+  // Personalization fields
+  preferredGreeting: text("preferred_greeting"), // "Hi", "Hello", "Hey", etc.
+  lastLoginAt: timestamp("last_login_at", { withTimezone: true }),
+  loginCount: integer("login_count").default(0),
+
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
