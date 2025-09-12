@@ -6,7 +6,12 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
 # Local environment files
 .env
 .env.local
 .local.env
+
+# Legacy documentation and migration files
+legacy-docs/
+*.backup
