@@ -1,14 +1,13 @@
 export const metadata = {
-  title: "Products | Dope Deals",
+  title: 'Products | Dope Deals',
 };
-import { getStorage } from '@/lib/server-storage';
 import Filters from './components/Filters';
 import ProductCard from './components/ProductCard';
 import { Hero } from '@/components/design/NikeIndustrial';
+import { supabaseServer } from '@/lib/supabase-server';
 
 export default async function Page() {
-  const storage = await getStorage();
-  const products = await storage.getProducts();
+  const { data: products } = await supabaseServer.from('products').select('*');
   return (
     <div className="px-6 py-8 space-y-8">
       <Hero title="Dope Deals" subtitle="Industrial minimalism. Bold energy. Premium glass and accessories." />
@@ -17,11 +16,10 @@ export default async function Page() {
         <Filters />
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {products.map((p: any) => (
+        {products?.map((p: any) => (
           <ProductCard key={p.id} product={p} />
         ))}
       </div>
     </div>
   );
 }
-
