@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brand Logo Carousel</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .carousel-container {
+      overflow: hidden;
+      width: 100%;
+      background: #f9f9f9;
+      padding: 1rem 0;
+    }
+    .carousel-track {
+      display: flex;
+      width: calc(200%);
+      animation: scroll 20s linear infinite;
+    }
+    .carousel-item {
+      flex: 0 0 auto;
+      width: 150px;
+      margin: 0 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-item img {
+      max-width: 100%;
+      max-height: 80px;
+      object-fit: contain;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease;
+    }
+    .carousel-item:hover img {
+      filter: grayscale(0%);
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="carousel-container">
+    <div class="carousel-track">
+      <a href="#" class="carousel-item" title="Brand 1"><img src="https://via.placeholder.com/150x80?text=Brand+1" alt="Brand 1" /></a>
+      <a href="#" class="carousel-item" title="Brand 2"><img src="https://via.placeholder.com/150x80?text=Brand+2" alt="Brand 2" /></a>
+      <a href="#" class="carousel-item" title="Brand 3"><img src="https://via.placeholder.com/150x80?text=Brand+3" alt="Brand 3" /></a>
+      <a href="#" class="carousel-item" title="Brand 4"><img src="https://via.placeholder.com/150x80?text=Brand+4" alt="Brand 4" /></a>
+      <a href="#" class="carousel-item" title="Brand 5"><img src="https://via.placeholder.com/150x80?text=Brand+5" alt="Brand 5" /></a>
+      <a href="#" class="carousel-item" title="Brand 6"><img src="https://via.placeholder.com/150x80?text=Brand+6" alt="Brand 6" /></a>
+      <a href="#" class="carousel-item" title="Brand 7"><img src="https://via.placeholder.com/150x80?text=Brand+7" alt="Brand 7" /></a>
+      <a href="#" class="carousel-item" title="Brand 8"><img src="https://via.placeholder.com/150x80?text=Brand+8" alt="Brand 8" /></a>
+      <!-- Repeat logos for continuous scroll -->
+      <a href="#" class="carousel-item" title="Brand 1"><img src="https://via.placeholder.com/150x80?text=Brand+1" alt="Brand 1" /></a>
+      <a href="#" class="carousel-item" title="Brand 2"><img src="https://via.placeholder.com/150x80?text=Brand+2" alt="Brand 2" /></a>
+      <a href="#" class="carousel-item" title="Brand 3"><img src="https://via.placeholder.com/150x80?text=Brand+3" alt="Brand 3" /></a>
+      <a href="#" class="carousel-item" title="Brand 4"><img src="https://via.placeholder.com/150x80?text=Brand+4" alt="Brand 4" /></a>
+      <a href="#" class="carousel-item" title="Brand 5"><img src="https://via.placeholder.com/150x80?text=Brand+5" alt="Brand 5" /></a>
+      <a href="#" class="carousel-item" title="Brand 6"><img src="https://via.placeholder.com/150x80?text=Brand+6" alt="Brand 6" /></a>
+      <a href="#" class="carousel-item" title="Brand 7"><img src="https://via.placeholder.com/150x80?text=Brand+7" alt="Brand 7" /></a>
+      <a href="#" class="carousel-item" title="Brand 8"><img src="https://via.placeholder.com/150x80?text=Brand+8" alt="Brand 8" /></a>
+    </div>
+  </div>
+</body>
+</html>

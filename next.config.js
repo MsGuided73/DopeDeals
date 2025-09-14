@@ -1,9 +1,22 @@
+// Load environment variables
+if (typeof require !== 'undefined') {
+  require('dotenv').config({ path: 'env.local' });
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   // TEMP: allow preview while we tidy up repo-wide TypeScript types
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
+
+  // Expose only safe public vars to the client; keep server secrets out of client bundles
+  env: {
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  },
+
   async headers() {
     return [
       {

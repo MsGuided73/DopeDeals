@@ -5,6 +5,19 @@ export default {
   content: ["./app/**/*.{ts,tsx}", "./server/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        'chalets': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
+        'black': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
+        'street': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        '9xl': ['8rem', { lineHeight: '1' }],
+        '10xl': ['10rem', { lineHeight: '1' }],
+      },
+      letterSpacing: {
+        'wider': '0.1em',
+        'widest': '0.2em',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
