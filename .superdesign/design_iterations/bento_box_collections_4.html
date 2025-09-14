@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Abstract Bento Box Collections Grid - Text Block Moved Down</title>
+  <link rel="stylesheet" href="bento_box_secondary_font_theme.css" />
+  <style>
+    @font-face {
+      font-family: 'chalets';
+      src: url('../assets/fonts/chalets-webfont.woff2') format('woff2'),
+           url('../assets/fonts/chalets-webfont.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    @import url('https://cdn.tailwindcss.com');
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      font-family: var(--font-sans) !important; /* chalets for headers */
+      background-color: var(--background) !important;
+      color: var(--foreground) !important;
+    }
+    .collection-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      grid-template-rows: repeat(4, 200px) !important;
+      gap: var(--spacing) !important;
+      max-width: 1200px !important;
+      margin: 2rem auto !important;
+    }
+    .collection-item {
+      position: relative !important;
+      color: var(--title-color) !important;
+      overflow: hidden !important;
+      border-radius: var(--radius) !important;
+      box-shadow: var(--shadow) !important;
+      cursor: pointer !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-end !important;
+      padding: 1rem !important;
+      background-size: cover !important;
+      background-position: center !important;
+      transition: transform 0.3s ease !important;
+    }
+    .collection-item:hover {
+      transform: scale(1.05) !important;
+      z-index: 10 !important;
+    }
+    .collection-overlay {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background-color: var(--overlay-bg) !important;
+      z-index: 1 !important;
+    }
+    .collection-content {
+      position: relative !important;
+      z-index: 2 !important;
+      margin-bottom: -1rem !important; /* Move text block down */
+    }
+    .collection-title {
+      font-family: 'chalets', var(--font-sans) !important; /* chalets */
+      font-weight: normal !important;
+      font-size: 2.5rem !important;
+      text-transform: uppercase !important;
+      margin-bottom: 0.1rem !important;
+      letter-spacing: normal !important;
+      line-height: 1 !important;
+    }
+    .collection-subtitle {
+      display: inline-block !important;
+      background-color: rgba(255, 255, 255, 0.7) !important;
+      color: var(--subtitle-color) !important;
+      padding: 0.25rem 0.75rem !important;
+      font-size: 0.75rem !important;
+      border-radius: 9999px !important;
+      font-weight: normal !important;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1) !important;
+      font-family: var(--font-secondary) !important; /* Plus Jakarta Sans */
+      margin-top: 0 !important;
+      margin-bottom: 0.25rem !important;
+    }
+  </style>
+</head>
+<body>
+  <section class="collection-grid">
+    <div class="collection-item bongs" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">Bongs & Water Pipes</h2>
+        <span class="collection-subtitle">Get your bubble on</span>
+      </div>
+    </div>
+    <div class="collection-item grinders" style="background-image: url('https://images.unsplash.com/photo-1602524811323-1a7a7a7a7a7a?auto=format&fit=crop&w=400&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">Grinders</h2>
+        <span class="collection-subtitle">Shop Weed Grinders</span>
+      </div>
+    </div>
+    <div class="collection-item e-rigs" style="background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">E-Rigs</h2>
+        <span class="collection-subtitle">Shop Electric Dab Rigs</span>
+      </div>
+    </div>
+    <div class="collection-item dab-rigs" style="background-image: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">Dab Rigs</h2>
+        <span class="collection-subtitle">A little dab will do ya</span>
+      </div>
+    </div>
+    <div class="collection-item vaporizers" style="background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">Dry Herb Vaporizers</h2>
+        <span class="collection-subtitle">Clean and dry high.</span>
+      </div>
+    </div>
+    <div class="collection-item hand-pipes" style="background-image: url('https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">Pipes</h2>
+        <span class="collection-subtitle">Follow your pipe dreams</span>
+      </div>
+    </div>
+    <div class="collection-item rolling-accessories" style="background-image: url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=400&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">Accessories</h2>
+        <span class="collection-subtitle">Get into high gear</span>
+      </div>
+    </div>
+    <div class="collection-item dab-accessories" style="background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80');">
+      <div class="collection-overlay"></div>
+      <div class="collection-content">
+        <h2 class="collection-title">Dab Accessories</h2>
+        <span class="collection-subtitle">Outfit your kit</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
