@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Products | Dope Deals',
-};
+};ck and 
 
 import Filters from './components/Filters';
 import ProductCard from './components/ProductCard';
