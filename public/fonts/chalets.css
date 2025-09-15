@@ -1,0 +1,43 @@
+/* Chalets Font - Premium Typography */
+@font-face {
+  font-family: 'Chalets';
+  src: url('/fonts/chalets-webfont.woff2') format('woff2'),
+       url('/fonts/chalets-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Chalets Font Variations */
+@font-face {
+  font-family: 'Chalets-Bold';
+  src: url('/fonts/chalets-webfont.woff2') format('woff2'),
+       url('/fonts/chalets-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Utility classes for Chalets font */
+.font-chalets {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif;
+}
+
+.font-chalets-bold {
+  font-family: 'Chalets-Bold', 'Chalets', 'Inter', system-ui, sans-serif;
+  font-weight: bold;
+}
+
+/* DOPE CITY specific typography */
+.dope-city-title {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dope-city-heading {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+}
