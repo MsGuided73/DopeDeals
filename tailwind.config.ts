@@ -24,6 +24,20 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        // DOPE CITY Brand Colors
+        'dope-orange': {
+          DEFAULT: '#ff6b35',
+          50: '#fff4f1',
+          100: '#ffe6de',
+          200: '#ffd0bd',
+          300: '#ffb08c',
+          400: '#ff8c5a',
+          500: '#ff6b35',
+          600: '#e55a2b',
+          700: '#cc4a21',
+          800: '#a63c1c',
+          900: '#8a321a',
+        },
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {

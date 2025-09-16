@@ -1,5 +1,6 @@
 import "./globals.css";
 import AppProviders from "./providers";
+import DopeCityFooter from "../components/DopeCityFooter";
 
 export const metadata = {
   title: "DOPE CITY - Premium Cannabis Culture & Smoke Shop",
@@ -9,9 +10,14 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50">
+      <body className="bg-black">
         <AppProviders>
-          {children}
+          <div className="min-h-screen flex flex-col">
+            <main className="flex-1">
+              {children}
+            </main>
+            <DopeCityFooter />
+          </div>
         </AppProviders>
       </body>
     </html>
