@@ -229,27 +229,44 @@ export default function ProductsPageContent() {
 // Mock data generator
 function generateMockProducts(): Product[] {
   const brands = ['GRAV', 'Hemper', 'ROOR', 'Puffco', 'RAW', 'Santa Cruz Shredder', 'Storz & Bickel'];
-  const categories = ['Glass Pieces', 'Vaporizers', 'Grinders', 'Papers & Wraps', 'Accessories', 'Storage'];
+  const categories = ['Water Bongs', 'Pipes', 'Glass Pieces', 'Vaporizers', 'Grinders', 'Papers & Wraps', 'Accessories', 'Storage', 'THCA Flower & More'];
   const materials = ['Borosilicate Glass', 'Aluminum', 'Stainless Steel', 'Ceramic', 'Silicone'];
+  const sizes = {
+    'Water Bongs': ['6-8"', '8-12"', '12-16"', '16-20"'],
+    'Pipes': ['3-4"', '4-6"', '6-8"', 'Pocket Size'],
+    'Glass Pieces': ['6-8"', '8-12"', '12-16"', '16-20"'],
+    'Vaporizers': ['Portable', 'Desktop', 'Pen Style', 'Hybrid'],
+    'Grinders': ['2-Piece', '3-Piece', '4-Piece', '5-Piece'],
+    'Papers & Wraps': ['1¼"', '1½"', 'King Size', 'Extra Long'],
+    'Accessories': ['Small', 'Medium', 'Large', 'Universal'],
+    'Storage': ['Small', 'Medium', 'Large', 'XL'],
+    'THCA Flower & More': ['1g', '3.5g', '7g', '14g', 'Variety', 'Standard', 'Premium', 'Deluxe']
+  };
 
-  return Array.from({ length: 48 }, (_, i) => ({
-    id: `product-${i + 1}`,
-    name: `Premium Product ${i + 1}`,
-    price: Math.floor(Math.random() * 300) + 20,
-    originalPrice: Math.random() > 0.7 ? Math.floor(Math.random() * 400) + 50 : undefined,
-    image: `/images/products/product-${(i % 12) + 1}.jpg`,
-    images: [`/images/products/product-${(i % 12) + 1}.jpg`, `/images/products/product-${(i % 12) + 1}-2.jpg`],
-    brand: brands[i % brands.length],
-    category: categories[i % categories.length],
-    material: Math.random() > 0.3 ? materials[i % materials.length] : undefined,
-    size: Math.random() > 0.5 ? ['Small', 'Medium', 'Large'][i % 3] : undefined,
-    inStock: Math.random() > 0.1,
+  return Array.from({ length: 48 }, (_, i) => {
+    const category = categories[i % categories.length];
+    const brand = brands[i % brands.length];
+    const material = Math.random() > 0.3 ? materials[i % materials.length] : undefined;
+    const size = Math.random() > 0.2 ? sizes[category as keyof typeof sizes][i % sizes[category as keyof typeof sizes].length] : undefined;
 
-    isNew: Math.random() > 0.8,
-    isSale: Math.random() > 0.7,
-    isBestseller: Math.random() > 0.85,
-    description: `High-quality ${categories[i % categories.length].toLowerCase()} with premium construction and excellent performance.`,
-    features: ['Premium Construction', 'Durable Design', 'Easy to Use', 'Great Value'],
-    tags: ['premium', 'quality', 'accessories'],
-  }));
+    return {
+      id: `product-${i + 1}`,
+      name: `${brand} ${category.replace(' & ', ' ')} ${i + 1}`,
+      price: Math.floor(Math.random() * 300) + 20,
+      originalPrice: Math.random() > 0.7 ? Math.floor(Math.random() * 400) + 50 : undefined,
+      image: `/images/products/product-${(i % 12) + 1}.jpg`,
+      images: [`/images/products/product-${(i % 12) + 1}.jpg`, `/images/products/product-${(i % 12) + 1}-2.jpg`],
+      brand,
+      category,
+      material,
+      size,
+      inStock: Math.random() > 0.1,
+      isNew: Math.random() > 0.8,
+      isSale: Math.random() > 0.7,
+      isBestseller: Math.random() > 0.85,
+      description: `High-quality ${category.toLowerCase()} with premium construction and excellent performance.`,
+      features: ['Premium Construction', 'Durable Design', 'Easy to Use', 'Great Value'],
+      tags: ['premium', 'quality', 'accessories'],
+    };
+  });
 }

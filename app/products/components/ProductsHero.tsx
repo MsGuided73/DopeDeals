@@ -42,35 +42,53 @@ export default function ProductsHero() {
 
           {/* Category Quick Links */}
           <div className="flex flex-wrap justify-center gap-4">
-            <a 
-              href="#glass" 
+            <a
+              href="#water-bongs"
               className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+            >
+              Water Bongs
+            </a>
+            <a
+              href="#pipes"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+            >
+              Pipes
+            </a>
+            <a
+              href="#glass"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
             >
               Glass Pieces
             </a>
-            <a 
-              href="#vaporizers" 
+            <a
+              href="#vaporizers"
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
             >
               Vaporizers
             </a>
-            <a 
-              href="#grinders" 
+            <a
+              href="#grinders"
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
             >
               Grinders
             </a>
-            <a 
-              href="#papers" 
+            <a
+              href="#papers"
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
             >
               Papers
             </a>
-            <a 
-              href="#accessories" 
+            <a
+              href="#accessories"
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
             >
               Accessories
+            </a>
+            <a
+              href="#thca-flower-more"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+            >
+              THCA Flower & More
             </a>
           </div>
         </div>
