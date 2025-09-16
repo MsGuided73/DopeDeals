@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { User, ShoppingCart, Search } from 'lucide-react';
 
 export default function HomePage() {
@@ -127,11 +128,11 @@ export default function HomePage() {
               {openDropdown === 'brands' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">RAW</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Puffco</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Storz & Bickel</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">ROOR</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">View All Brands</a>
+                    <Link href="/brands/raw" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
+                    <Link href="/brands/puffco" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
+                    <Link href="/brands/storz-bickel" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
+                    <Link href="/brands/roor" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
+                    <Link href="/brands" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
                   </div>
                 </div>
               )}
@@ -151,11 +152,11 @@ export default function HomePage() {
               {openDropdown === 'thca' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">THCA Flower</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Pre-Rolls</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Concentrates</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Edibles</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">CBD Products</a>
+                    <Link href="/products?q=thca" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Flower</Link>
+                    <Link href="/products?q=pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Pre-Rolls</Link>
+                    <Link href="/products?q=concentrates" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Concentrates</Link>
+                    <Link href="/products?q=edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                    <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
                   </div>
                 </div>
               )}
@@ -175,11 +176,11 @@ export default function HomePage() {
               {openDropdown === 'bongs' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Glass Bongs</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Beaker Bongs</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Straight Tube</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Percolator Bongs</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Mini Bongs</a>
+                    <Link href="/products?category=bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Bongs</Link>
+                    <Link href="/products?q=glass+bong" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Glass Bongs</Link>
+                    <Link href="/products?q=beaker+bong" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Beaker Bongs</Link>
+                    <Link href="/products?q=straight+tube" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Straight Tube</Link>
+                    <Link href="/products?q=percolator" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Percolator Bongs</Link>
                   </div>
                 </div>
               )}
@@ -199,11 +200,11 @@ export default function HomePage() {
               {openDropdown === 'pipes' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Glass Pipes</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Spoon Pipes</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Sherlock Pipes</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">Chillums</a>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-yellow-400/20 transition-colors">One Hitters</a>
+                    <Link href="/products?category=pipes" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Pipes</Link>
+                    <Link href="/products?q=glass+pipe" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Glass Pipes</Link>
+                    <Link href="/products?q=spoon+pipe" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Spoon Pipes</Link>
+                    <Link href="/products?q=sherlock" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Sherlock Pipes</Link>
+                    <Link href="/products?q=chillum" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Chillums</Link>
                   </div>
                 </div>
               )}
@@ -211,22 +212,22 @@ export default function HomePage() {
 
             {/* Dab Rigs */}
             <li>
-              <a
-                href="#"
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors"
+              <Link
+                href="/products?category=dab-rigs"
+                className="text-black dark:text-white font-medium hover:text-dope-orange transition-colors"
               >
                 Dab Rigs
-              </a>
+              </Link>
             </li>
 
             {/* Vaporizers */}
             <li>
-              <a
-                href="#"
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors"
+              <Link
+                href="/products?category=vaporizers"
+                className="text-black dark:text-white font-medium hover:text-dope-orange transition-colors"
               >
                 Vaporizers
-              </a>
+              </Link>
             </li>
 
             {/* Accessories */}
@@ -256,8 +257,8 @@ export default function HomePage() {
       <main className="max-w-6xl mx-auto px-6 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Row 1 */}
-          <a
-            href="#"
+          <Link
+            href="/products?category=bongs"
             className="relative row-span-2 h-[500px] bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('/Images/RooRBong_collection.png'), linear-gradient(135deg, #1f2937 0%, #374151 100%)",
@@ -270,12 +271,12 @@ export default function HomePage() {
               <h3 className="font-bold text-lg mb-2">Bongs & Water Pipes</h3>
               <p className="text-sm opacity-90">Premium glass pieces for everyone</p>
             </div>
-          </a>
+          </Link>
 
-          <a
-            href="#"
+          <Link
+            href="/products?q=grinder"
             className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
-            style={{ 
+            style={{
               backgroundImage: "linear-gradient(135deg, #059669 0%, #10b981 100%)",
               backgroundSize: "cover"
             }}
@@ -285,10 +286,10 @@ export default function HomePage() {
               <h3 className="font-bold">Grinders</h3>
               <p className="text-sm opacity-90">Precision tools for every lifestyle</p>
             </div>
-          </a>
+          </Link>
 
-          <a
-            href="#"
+          <Link
+            href="/products?q=e-rig"
             className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "linear-gradient(135deg, #dc2626 0%, #ef4444 100%)",
@@ -300,11 +301,11 @@ export default function HomePage() {
               <h3 className="font-bold">E-Rigs</h3>
               <p className="text-sm opacity-90">Electric dabbing</p>
             </div>
-          </a>
+          </Link>
 
           {/* Row 2 */}
-          <a
-            href="#"
+          <Link
+            href="/products?category=dab-rigs"
             className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)",
@@ -316,10 +317,10 @@ export default function HomePage() {
               <h3 className="font-bold">Dab Rigs</h3>
               <p className="text-sm opacity-90">Concentrate essentials</p>
             </div>
-          </a>
+          </Link>
 
-          <a
-            href="#"
+          <Link
+            href="/products?category=vaporizers"
             className="relative row-span-2 h-[500px] bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "linear-gradient(135deg, #ea580c 0%, #f97316 100%)",
@@ -331,11 +332,11 @@ export default function HomePage() {
               <h3 className="font-bold text-lg mb-2">Vaporizers</h3>
               <p className="text-sm opacity-90">Latest technology</p>
             </div>
-          </a>
+          </Link>
 
           {/* Row 3 */}
-          <a
-            href="#"
+          <Link
+            href="/products?category=pipes"
             className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)",
@@ -347,10 +348,10 @@ export default function HomePage() {
               <h3 className="font-bold">Hand Pipes</h3>
               <p className="text-sm opacity-90">Classic pieces for everyone</p>
             </div>
-          </a>
+          </Link>
 
-          <a
-            href="#"
+          <Link
+            href="/products?q=rolling"
             className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('/Images/pre-rolls_collection.png'), linear-gradient(135deg, #be185d 0%, #ec4899 100%)",
@@ -363,7 +364,7 @@ export default function HomePage() {
               <h3 className="font-bold">Rolling Accessories</h3>
               <p className="text-sm opacity-90">Papers & pre-rolls for all</p>
             </div>
-          </a>
+          </Link>
 
           <a
             href="#"
