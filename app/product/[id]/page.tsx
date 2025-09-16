@@ -1,6 +1,6 @@
 import ProductDetail from './ProductDetail';
-import ProductRecommendations from '@/components/ProductRecommendations';
-import { Hero } from '@/components/design/NikeIndustrial';
+import ProductRecommendations from '../../../components/ProductRecommendations';
+import { Hero } from '../../components/design/NikeIndustrial';
 
 export function generateMetadata({ params }: { params: { id: string } }) {
   const { id } = params;

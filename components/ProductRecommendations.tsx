@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { supabaseBrowser } from '@/lib/supabase-browser';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { supabaseBrowser } from '../app/lib/supabase-browser';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import { Sparkles, Heart, TrendingUp, DollarSign } from 'lucide-react';
 
 interface ProductRecommendation {

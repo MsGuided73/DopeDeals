@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import { Panel, MetalDivider } from '@/components/design/NikeIndustrial';
+import { Panel, MetalDivider } from '../../components/design/NikeIndustrial';
 
 export default function ProductDetail({ product }: { product: any }) {
   return (
