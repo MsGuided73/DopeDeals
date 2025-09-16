@@ -1,34 +1,29 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 
 export async function GET() {
-  const checks = { prisma: false as boolean, supabase: false as boolean };
+  const checks = { supabase: false as boolean };
   const errors: string[] = [];
-
-  // Prisma check when explicitly enabled
-  if (process.env.PRISMA_ENABLED === 'true') {
-    try {
-      // Simple connectivity test
-      await prisma.$queryRaw`SELECT 1`;
-      checks.prisma = true;
-    } catch (err: unknown) {
-      errors.push(`prisma: ${(err as Error)?.message || 'unknown error'}`);
-    }
-  }
 
   // Supabase server admin check (if configured)
   try {
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    console.log('[Health] Supabase URL:', supabaseUrl ? 'SET' : 'MISSING');
+    console.log('[Health] Service Key:', supabaseServiceKey ? 'SET' : 'MISSING');
+
     if (supabaseUrl && supabaseServiceKey) {
       const supabase = createClient(supabaseUrl, supabaseServiceKey);
-      const { error } = await supabase.from('products').select('id').limit(1);
+      const { data, error } = await supabase.from('products').select('id').limit(1);
+      console.log('[Health] Supabase query result:', { data: data?.length || 0, error: error?.message });
       if (!error) checks.supabase = true; else errors.push(`supabase: ${error.message}`);
+    } else {
+      errors.push('supabase: Missing URL or service key');
     }
   } catch (err: unknown) {
+    console.error('[Health] Supabase error:', err);
     errors.push(`supabase: ${(err as Error)?.message || 'unknown error'}`);
   }
 
@@ -65,7 +60,7 @@ export async function GET() {
   } as const;
 
   return NextResponse.json({
-    ok: checks.prisma || checks.supabase,
+    ok: checks.supabase,
     service: 'next-app',
     checks,
     migration,
