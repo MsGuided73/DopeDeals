@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./app/**/*.{ts,tsx}", "./server/**/*.{ts,tsx}"],
+  content: ["./app/**/*.{ts,tsx}", "./server/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -15,6 +15,8 @@ export default {
         '10xl': ['10rem', { lineHeight: '1' }],
       },
       letterSpacing: {
+        'tighter': '-0.02em',
+        'tight': '-0.01em',
         'wider': '0.1em',
         'widest': '0.2em',
       },
@@ -110,6 +112,16 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(20px)',
+        'blur-sm': 'blur(4px)',
+        'blur-md': 'blur(12px)',
+        'blur-lg': 'blur(16px)',
+        'blur-xl': 'blur(24px)',
+        'blur-2xl': 'blur(40px)',
+        'blur-3xl': 'blur(64px)',
       },
     },
   },

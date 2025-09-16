@@ -4,10 +4,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* DOPE CITY Style Guide Enforcement */
+/* 1. Chalets font should never be bold */
+.font-chalets,
+.font-chalets *,
+[class*="font-chalets"] {
+  font-weight: normal !important;
+  letter-spacing: -0.01em;
+}
+
+/* 2. DOPE CITY title specific styling */
+.dope-city-title,
+.dope-city-title * {
+  font-weight: normal !important;
+  letter-spacing: -0.02em;
+}
+
 @layer base {
   :root {
     /* DOPE CITY Color Scheme */
-    --dope-orange: #ff6b35; /* Primary accent color - glowing orange */
+    --dope-orange: #fa6934f6; /* Primary accent color - glowing orange */
     --dope-orange-dark: #e55a2b; /* Hover states, darker orange */
     --dope-orange-light: #ff8c5a; /* Light orange for subtle accents */
     --dope-black: #000000;
@@ -96,11 +112,11 @@
   }
 
   .dope-gradient-orange {
-    background: linear-gradient(135deg, #ff6b35, #e55a2b);
+    background: linear-gradient(135deg, #f8d71c, #e55a2b);
   }
 
   .dope-gradient-dark {
-    background: linear-gradient(135deg, #000000, #1f2937);
+    background: linear-gradient(135deg, #c7c4c4c5, #1f2937);
   }
 
   /* Hover Effects */
@@ -114,7 +130,7 @@
   }
 
   .dope-glow-orange:hover {
-    box-shadow: 0 0 20px 5px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 0 20px 5px rgba(250, 208, 20, 0.3);
     transform: translateY(-2px);
   }
 
@@ -124,8 +140,61 @@
 
   .dope-glass {
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Enhanced Glassmorphic Effects */
+  .glassmorphic-light {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .glassmorphic-medium {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  .glassmorphic-strong {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .glassmorphic-dark {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Reviews Carousel Animation */
+  .animate-scroll-reviews {
+    animation: scroll-reviews 30s linear infinite;
+  }
+
+  @keyframes scroll-reviews {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Pause animation on hover */
+  .animate-scroll-reviews:hover {
+    animation-play-state: paused;
   }
 
   .dope-hover-lift {
