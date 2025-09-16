@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStorage } from '@/lib/server-storage';
+import { getStorage } from '../../../lib/storage';
 import { requireAuth } from '@/lib/requireAuth';
 import { z } from 'zod';
 

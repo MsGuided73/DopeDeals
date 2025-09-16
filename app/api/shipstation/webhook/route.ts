@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStorage } from '@/lib/server-storage';
 import { ShipstationService } from '@/server/shipstation/service';
 
 // Lightweight initializer (avoids importing Express router)
