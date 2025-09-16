@@ -4,6 +4,36 @@
 
 ---
 
+## ⚠️ **CRITICAL STYLE REQUIREMENTS**
+
+### **MANDATORY RULES - NEVER VIOLATE**
+
+#### **1. Chalets Font Rules**
+- **NEVER BOLD**: Chalets font must NEVER be bold-faced (`font-weight: normal` always)
+- **TIGHT SPACING**: Use `letter-spacing: -0.01em` or `-0.02em` for tighter letter spacing
+- **NO OVERRIDES**: Never apply `font-weight: bold` or `font-weight: 600+` to Chalets
+
+#### **2. Product Grid Layout Rules**
+- **MAXIMUM 3 COLUMNS**: Never more than 3 images per row on any screen size
+- **RESPONSIVE BREAKPOINTS**:
+  - Mobile: 1 column (`grid-cols-1`)
+  - Tablet: 2 columns (`sm:grid-cols-2`)
+  - Desktop: 3 columns max (`lg:grid-cols-3`)
+- **FORBIDDEN**: `xl:grid-cols-4`, `2xl:grid-cols-5`, or any 4+ column layouts
+
+#### **3. Implementation Enforcement**
+```css
+/* Global CSS enforcement in globals.css */
+.font-chalets,
+.font-chalets *,
+[class*="font-chalets"] {
+  font-weight: normal !important;
+  letter-spacing: -0.01em;
+}
+```
+
+---
+
 ## 🎨 **BRAND IDENTITY**
 
 ### **Brand Positioning**
@@ -32,24 +62,26 @@ DOPE CITY
 - **Font**: Chalets (custom premium font)
 - **Treatment**: "DOPE" in white, "CITY" in gold (#fbbf24)
 - **Spacing**: 2-character space between words
-- **Weight**: Black (900)
-- **Tracking**: Wider (0.1em)
+- **Weight**: Normal (400) - NEVER BOLD
+- **Tracking**: Tighter (-0.02em) - LESS SPACE BETWEEN LETTERS
 
 #### **Typography Hierarchy**
 
 **Headlines (H1-H2)**
-- **Font**: Chalets Black
-- **Sizes**: 
+- **Font**: Chalets (NEVER BOLD)
+- **Weight**: Normal (400) - CRITICAL: Never use bold
+- **Sizes**:
   - H1: 3xl-6xl (mobile-desktop)
   - H2: 2xl-4xl (mobile-desktop)
 - **Color**: White or Gold
-- **Treatment**: All caps, wide tracking
+- **Treatment**: All caps, tight tracking (-0.02em)
 
 **Subheadings (H3-H4)**
-- **Font**: Chalets Regular
+- **Font**: Chalets (NEVER BOLD)
+- **Weight**: Normal (400) - CRITICAL: Never use bold
 - **Sizes**: xl-2xl
 - **Color**: White, Gray-100, or Gold
-- **Treatment**: Sentence case or Title Case
+- **Treatment**: Sentence case or Title Case, tight tracking (-0.01em)
 
 **Body Text**
 - **Font**: Inter (fallback to system fonts)
@@ -524,14 +556,22 @@ DOPE CITY
 </section>
 ```
 
-### **Product Grid Layout**
+### **Product Grid Layout - CRITICAL REQUIREMENTS**
 ```tsx
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- ⚠️ MAXIMUM 3 COLUMNS - NEVER MORE THAN 3 IMAGES PER ROW -->
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   {products.map((product) => (
     <ProductCard key={product.id} product={product} />
   ))}
 </div>
 ```
+
+**LAYOUT RULES:**
+- **Mobile**: 1 column (`grid-cols-1`)
+- **Tablet**: 2 columns (`sm:grid-cols-2`)
+- **Desktop**: 3 columns maximum (`lg:grid-cols-3`)
+- **NEVER USE**: `xl:grid-cols-4` or higher
+- **Reason**: Maintains visual hierarchy and prevents overcrowding
 
 ### **Loading States**
 ```tsx
