@@ -382,6 +382,376 @@ export default function HomePage() {
           </a>
         </div>
 
+        {/* NEW ARRIVALS Section */}
+        <section className="mt-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white">
+              NEW ARRIVALS
+            </h2>
+            <Link
+              href="/products?filter=new"
+              className="text-dope-orange-500 hover:text-dope-orange-600 font-medium transition-colors"
+            >
+              Shop all →
+            </Link>
+          </div>
+
+          {/* New Arrivals Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+            {/* Product 01 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 01</h3>
+                <p className="text-gray-400 text-sm mb-3">Premium glass piece</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$29</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 02 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 02</h3>
+                <p className="text-gray-400 text-sm mb-3">High-quality accessory</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$35</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 03 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 03</h3>
+                <p className="text-gray-400 text-sm mb-3">Latest innovation</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$31</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 04 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 04</h3>
+                <p className="text-gray-400 text-sm mb-3">Premium quality</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$32</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 05 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 05</h3>
+                <p className="text-gray-400 text-sm mb-3">Exclusive design</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$33</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 06 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 06</h3>
+                <p className="text-gray-400 text-sm mb-3">Top-rated item</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$34</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 07 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 07</h3>
+                <p className="text-gray-400 text-sm mb-3">Customer favorite</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$36</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 08 */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="text-gray-500 text-sm">Product Image</div>
+              </div>
+              <div className="p-4">
+                <h3 className="text-white font-medium mb-1">Product 08</h3>
+                <p className="text-gray-400 text-sm mb-3">Limited edition</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-dope-orange-400 font-bold">$38</span>
+                  <div className="flex gap-2">
+                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                      View
+                    </button>
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Customer Reviews Section */}
+        <section className="mt-16">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white mb-4">
+              What Our Customers Say
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Real reviews from real customers
+            </p>
+          </div>
+
+          {/* Reviews Carousel */}
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll-reviews">
+              {/* Review 1 */}
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Mike Johnson</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "Amazing quality! The glass is thick and the design is perfect. Fast shipping too. Will definitely order again!"
+                </p>
+              </div>
+
+              {/* Review 2 */}
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Sarah Chen</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "Best smoke shop online! Great prices and the customer service is top notch. Highly recommend DOPE CITY!"
+                </p>
+              </div>
+
+              {/* Review 3 */}
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Alex Rodriguez</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "The vaporizer I bought works perfectly. Great build quality and arrived exactly as described. 5 stars!"
+                </p>
+              </div>
+
+              {/* Review 4 */}
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Emma Wilson</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "Love the selection and quality. The packaging was discreet and professional. Will be a repeat customer!"
+                </p>
+              </div>
+
+              {/* Review 5 */}
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">David Kim</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "Excellent products and fast delivery. The grinder I ordered is solid and works great. Highly recommended!"
+                </p>
+              </div>
+
+              {/* Review 6 */}
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Jessica Taylor</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "Perfect experience from start to finish. Quality products, fair prices, and excellent customer support!"
+                </p>
+              </div>
+
+              {/* Duplicate reviews for seamless loop */}
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Mike Johnson</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "Amazing quality! The glass is thick and the design is perfect. Fast shipping too. Will definitely order again!"
+                </p>
+              </div>
+
+              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face"
+                    alt="Customer"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white">Sarah Chen</h4>
+                    <div className="flex text-yellow-400">
+                      ★★★★★
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  "Best smoke shop online! Great prices and the customer service is top notch. Highly recommend DOPE CITY!"
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Staff Picks Section */}
         <section className="mt-16">
           <div className="text-center mb-8">
