@@ -1,10 +1,10 @@
 export const metadata = {
   title: 'Products | Dope Deals',
-};ck and 
+};
 
 import Filters from './components/Filters';
 import ProductCard from './components/ProductCard';
-import { Hero } from '@/components/design/NikeIndustrial';
+import { Hero } from '../components/design/NikeIndustrial';
 
 export default function Page() {
   // Mock data for now - no backend integration
