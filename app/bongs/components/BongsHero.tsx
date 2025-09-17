@@ -5,10 +5,10 @@ export default function BongsHero() {
     <div className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <div 
+        <div
           className="w-full h-full bg-cover bg-center bg-no-repeat opacity-30"
           style={{
-            backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/bongs-hero-bg.jpg')"
+            backgroundImage: "url('https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=1200&h=600&fit=crop&crop=entropy&auto=format&q=80')"
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70" />

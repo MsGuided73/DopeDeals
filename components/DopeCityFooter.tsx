@@ -27,12 +27,11 @@ export default function DopeCityFooter() {
     <footer className="relative bg-black">
       {/* DOPE CITY Skyline Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/50 z-10"></div>
         {/* Skyline Background Image */}
         <div
-          className="absolute inset-0 opacity-40 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 opacity-15 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/background/footer/DopeCity%20Skyline%20-%20Dk1.png')"
+            backgroundImage: "url('https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=400&fit=crop&crop=entropy&auto=format&q=80')"
           }}
         ></div>
       </div>
