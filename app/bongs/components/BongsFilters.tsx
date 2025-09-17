@@ -13,8 +13,6 @@ interface BongsFiltersProps {
     percolators: string[];
     categories: string[];
     inStock: boolean;
-    onSale: boolean;
-    isNew: boolean;
   };
   setFilters: (filters: any) => void;
   products: BongProduct[];
@@ -39,13 +37,13 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
     }));
   };
 
-  // Extract unique values from products
-  const uniqueBrands = [...new Set(products.map(p => p.brand))].sort();
-  const uniqueMaterials = [...new Set(products.map(p => p.material))].sort();
-  const uniqueHeights = [...new Set(products.map(p => p.height))].sort();
-  const uniqueJointSizes = [...new Set(products.map(p => p.jointSize))].sort();
+  // Extract unique values from products (updated for Supabase data structure)
+  const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
+  const uniqueMaterials = [...new Set(products.map(p => p.material).filter(Boolean))].sort();
+  const uniqueHeights = [...new Set(products.map(p => p.height).filter(Boolean))].sort();
+  const uniqueJointSizes = [...new Set(products.map(p => p.joint_size).filter(Boolean))].sort();
   const uniquePercolators = [...new Set(products.map(p => p.percolator).filter(Boolean))].sort();
-  const uniqueCategories = [...new Set(products.map(p => p.category))].sort();
+  const uniqueCategories = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
 
   const handleCheckboxChange = (filterType: string, value: string, checked: boolean) => {
     setFilters((prev: any) => ({
