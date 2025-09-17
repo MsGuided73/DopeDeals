@@ -155,8 +155,10 @@ async function syncAllProductData(
   let page = 1;
   const perPage = 50;
   let hasMorePages = true;
+  let totalProcessed = 0;
+  const maxProducts = 100; // Limit to first 100 products for testing
 
-  while (hasMorePages) {
+  while (hasMorePages && totalProcessed < maxProducts) {
     try {
       // Get basic product list
       const itemsUrl = `https://www.zohoapis.com/inventory/v1/items?organization_id=${orgId}&page=${page}&per_page=${perPage}`;
@@ -178,33 +180,43 @@ async function syncAllProductData(
 
       // Process each item with detailed data
       for (const basicItem of items) {
+        if (totalProcessed >= maxProducts) break;
+
         try {
+          // Add rate limiting delay
+          await new Promise(resolve => setTimeout(resolve, 200));
+
           // Get detailed item data
           const detailedItem = await getDetailedItemData(accessToken, basicItem.item_id);
-          
+
           // Process and sync the item with ALL available data
           await syncSingleProductWithAllData(
-            supabase, 
-            basicItem, 
-            detailedItem, 
-            customFieldsMap, 
+            supabase,
+            basicItem,
+            detailedItem,
+            customFieldsMap,
             options,
             results
           );
 
           results.success++;
+          totalProcessed++;
         } catch (itemError) {
           results.failed++;
           results.errors.push(`Item ${basicItem.item_id}: ${itemError}`);
           console.error(`[Enhanced Zoho Sync] Failed to sync item ${basicItem.item_id}:`, itemError);
+          totalProcessed++;
         }
       }
 
       page++;
-      
+
       // Check if we have more pages
-      if (items.length < perPage) {
+      if (items.length < perPage || totalProcessed >= maxProducts) {
         hasMorePages = false;
+      } else {
+        // Add delay between pages to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
     } catch (pageError) {
@@ -322,12 +334,12 @@ async function syncSingleProductWithAllData(
     results.fieldsProcessed.customFields++;
   }
 
-  // Process images - temporarily disabled due to schema cache issue
+  // Process images - now using correct field name image_urls
   if (options.includeImages && item.images && item.images.length > 0) {
-    // Store image information in image_url field (snake_case for Supabase)
-    // productData.image_url = item.images[0].image_url || `/api/zoho/images/${item.images[0].image_id}`;
+    // Store image information in image_urls field (snake_case for Supabase)
+    productData.image_urls = item.images[0].image_url || `/api/zoho/images/${item.images[0].image_id}`;
     results.fieldsProcessed.images++;
-    console.log(`[Enhanced Zoho Sync] Found ${item.images.length} images for item ${item.item_id}, but image sync is temporarily disabled`);
+    console.log(`[Enhanced Zoho Sync] Found ${item.images.length} images for item ${item.item_id}, storing in image_urls field`);
   }
 
   // Check if product exists by SKU
