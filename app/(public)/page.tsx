@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, ShoppingCart, Search } from 'lucide-react';
+import EnhancedSearchBar from '../components/EnhancedSearchBar';
+import AgeVerification from '../components/AgeVerification';
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
@@ -60,6 +62,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Age Verification Popup */}
+      <AgeVerification />
+
       {/* Masthead Section */}
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ease-in-out ${
@@ -67,58 +72,60 @@ export default function HomePage() {
         }`}
       >
         {/* Black top bar */}
-        <div className="bg-black text-white px-6 flex items-center justify-between" style={{ minHeight: '120px', height: '120px' }}>
+        <div className="bg-black text-white px-6 flex items-center justify-between gap-8" style={{ minHeight: '140px', height: '140px' }}>
+          {/* Left: HUGE DOPE CITY Logo */}
           <div
-            className="font-chalets tracking-normal leading-none text-white"
+            className="font-chalets font-black leading-none text-white flex-shrink-0"
             style={{
-              fontSize: 'clamp(3rem, 8vw, 6rem)',
-              lineHeight: '1',
-              height: 'calc(100% - 4px)',
-              display: 'flex',
-              alignItems: 'center',
-              letterSpacing: '0.02em'
+              fontSize: 'clamp(4rem, 12vw, 7rem)',
+              lineHeight: '1.1',
+              letterSpacing: '0.01em'
             }}
           >
             DOPE CITY
           </div>
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search For Dope Things"
-                className="px-4 py-2 pl-10 rounded-md text-black dark:text-white dark:bg-gray-800 bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            </div>
-            <button className="p-2 hover:text-yellow-400 transition-colors">
+
+          {/* Center: Search Bar */}
+          <div className="flex-1 max-w-3xl mx-8">
+            <EnhancedSearchBar />
+          </div>
+
+          {/* Right: User Actions */}
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <Link href="/sitemap-page" className="p-2 hover:text-yellow-400 transition-colors" title="Site Map">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+            </Link>
+            <Link href="/auth" className="p-2 hover:text-yellow-400 transition-colors" title="Account">
               <User className="w-6 h-6" />
-            </button>
-            <button className="p-2 hover:text-yellow-400 transition-colors relative">
+            </Link>
+            <Link href="/cart" className="p-2 hover:text-yellow-400 transition-colors relative" title="Shopping Cart">
               <ShoppingCart className="w-6 h-6" />
               <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                 0
               </span>
-            </button>
+            </Link>
           </div>
         </div>
 
-        {/* Fire gradient divider */}
-        <div className="h-2 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500"></div>
+        {/* DOPE Orange divider line */}
+        <div className="h-1 bg-dope-orange"></div>
 
         {/* Glassmorphic nav bar */}
         <nav
           className={`backdrop-blur-lg transition-all duration-300 ease-in-out ${
             scrolled
-              ? "bg-white/30 dark:bg-gray-900/30 shadow-lg"
-              : "bg-white/20 dark:bg-gray-900/20 shadow-sm"
+              ? "bg-white/80 dark:bg-gray-900/80 shadow-lg"
+              : "bg-white/70 dark:bg-gray-900/70 shadow-md"
           }`}
         >
-          <ul className="flex items-center justify-center gap-6 py-3 flex-wrap relative">
+          <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
             {/* Shop by Brand Dropdown */}
             <li className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'brands' ? null : 'brands')}
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors flex items-center gap-1"
+                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
               >
                 Shop by Brand
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,7 +149,7 @@ export default function HomePage() {
             <li className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'thca' ? null : 'thca')}
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors flex items-center gap-1"
+                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
               >
                 THCA &amp; More
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +173,7 @@ export default function HomePage() {
             <li className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'bongs' ? null : 'bongs')}
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors flex items-center gap-1"
+                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
               >
                 Bongs
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +183,7 @@ export default function HomePage() {
               {openDropdown === 'bongs' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
-                    <Link href="/products?category=bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Bongs</Link>
+                    <Link href="/bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Bongs</Link>
                     <Link href="/products?q=glass+bong" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Glass Bongs</Link>
                     <Link href="/products?q=beaker+bong" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Beaker Bongs</Link>
                     <Link href="/products?q=straight+tube" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Straight Tube</Link>
@@ -190,7 +197,7 @@ export default function HomePage() {
             <li className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'pipes' ? null : 'pipes')}
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors flex items-center gap-1"
+                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
               >
                 Pipes
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,7 +221,7 @@ export default function HomePage() {
             <li>
               <Link
                 href="/products?category=dab-rigs"
-                className="text-black dark:text-white font-medium hover:text-dope-orange transition-colors"
+                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
               >
                 Dab Rigs
               </Link>
@@ -224,7 +231,7 @@ export default function HomePage() {
             <li>
               <Link
                 href="/products?category=vaporizers"
-                className="text-black dark:text-white font-medium hover:text-dope-orange transition-colors"
+                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
               >
                 Vaporizers
               </Link>
@@ -234,7 +241,7 @@ export default function HomePage() {
             <li>
               <a
                 href="#"
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors"
+                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
               >
                 Accessories
               </a>
@@ -244,7 +251,7 @@ export default function HomePage() {
             <li>
               <a
                 href="#"
-                className="text-black dark:text-white font-medium hover:text-yellow-500 transition-colors"
+                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
               >
                 Munchies
               </a>
@@ -254,165 +261,196 @@ export default function HomePage() {
       </header>
 
       {/* Collections Grid */}
-      <main className="max-w-6xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Row 1 */}
+      <main className="w-full px-8 py-16">
+        {/* Collections Header */}
+        <div className="text-left mb-12">
+          <h2 className="text-5xl font-black text-black mb-4 font-chalets uppercase tracking-tight">Our Collections</h2>
+        </div>
+
+        <div className="grid grid-cols-6 gap-6 h-[1200px] max-w-none">
+          {/* Large Bongs Card - Takes up 2x3 space */}
           <Link
-            href="/products?category=bongs"
-            className="relative row-span-2 h-[500px] bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/bongs"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('/Images/RooRBong_collection.png'), linear-gradient(135deg, #1f2937 0%, #374151 100%)",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Screenshot%202025-09-12%20162627.png'), linear-gradient(135deg, #1f2937 0%, #374151 100%)",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
+            title="Click anywhere to explore our dope collection of bongs & water pipes!"
           >
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold text-lg mb-2">Bongs & Water Pipes</h3>
-              <p className="text-sm opacity-90">Premium glass pieces for everyone</p>
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-2xl mb-3">Bongs & Water Pipes</h3>
+              <p className="text-lg opacity-90">Premium glass pieces for everyone</p>
             </div>
           </Link>
 
+          {/* Pre-Rolls Card */}
           <Link
-            href="/products?q=grinder"
-            className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/pre-rolls"
+            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "linear-gradient(135deg, #059669 0%, #10b981 100%)",
-              backgroundSize: "cover"
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Pre-Roll%20Sample%203.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center"
             }}
+            title="Click anywhere to discover our fire pre-roll selection!"
           >
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold">Grinders</h3>
-              <p className="text-sm opacity-90">Precision tools for every lifestyle</p>
-            </div>
           </Link>
 
+          {/* E-Rigs Card */}
           <Link
             href="/products?q=e-rig"
-            className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "linear-gradient(135deg, #dc2626 0%, #ef4444 100%)",
-              backgroundSize: "cover"
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Screenshot%202025-09-12%20123511.png'), linear-gradient(135deg, #dc2626 0%, #ef4444 100%)",
+              backgroundSize: "cover",
+              backgroundPosition: "center"
             }}
+            title="Click anywhere to check out our electric dabbing rigs!"
           >
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold">E-Rigs</h3>
-              <p className="text-sm opacity-90">Electric dabbing</p>
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-xl">E-Rigs</h3>
+              <p className="text-base opacity-90">Electric dabbing</p>
             </div>
           </Link>
 
-          {/* Row 2 */}
+          {/* Dab Rigs Card */}
           <Link
             href="/products?category=dab-rigs"
-            className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)",
               backgroundSize: "cover"
             }}
+            title="Click anywhere to explore our concentrate essentials!"
           >
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold">Dab Rigs</h3>
-              <p className="text-sm opacity-90">Concentrate essentials</p>
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-xl">Dab Rigs</h3>
+              <p className="text-base opacity-90">Concentrate essentials</p>
             </div>
           </Link>
 
+          {/* Vaporizers Card - Large */}
           <Link
             href="/products?category=vaporizers"
-            className="relative row-span-2 h-[500px] bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "linear-gradient(135deg, #ea580c 0%, #f97316 100%)",
               backgroundSize: "cover"
             }}
+            title="Click anywhere to discover our latest vaporizer technology!"
           >
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold text-lg mb-2">Vaporizers</h3>
-              <p className="text-sm opacity-90">Latest technology</p>
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-2xl mb-3">Vaporizers</h3>
+              <p className="text-lg opacity-90">Latest technology</p>
             </div>
           </Link>
 
-          {/* Row 3 */}
+          {/* Hand Pipes Card */}
           <Link
-            href="/products?category=pipes"
-            className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/pipes"
+            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)",
               backgroundSize: "cover"
             }}
+            title="Click anywhere to browse our classic hand pipe collection!"
           >
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold">Hand Pipes</h3>
-              <p className="text-sm opacity-90">Classic pieces for everyone</p>
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-xl">Hand Pipes</h3>
+              <p className="text-base opacity-90">Classic pieces for everyone</p>
             </div>
           </Link>
 
+          {/* Dab Accessories Card */}
+          <Link
+            href="/products?q=dab"
+            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
+            style={{
+              backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+              backgroundSize: "cover"
+            }}
+            title="Click anywhere to find all your dabbing tools & torches!"
+          >
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-xl">Dab Accessories</h3>
+              <p className="text-base opacity-90">Tools & torches</p>
+            </div>
+          </Link>
+
+          {/* Storage & Cases Card */}
+          <Link
+            href="/products?q=storage"
+            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
+            style={{
+              backgroundImage: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+              backgroundSize: "cover"
+            }}
+            title="Click anywhere to keep your gear safe with our storage solutions!"
+          >
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-xl">Storage & Cases</h3>
+              <p className="text-base opacity-90">Keep your gear safe</p>
+            </div>
+          </Link>
+
+          {/* Rolling Accessories Card - Large */}
           <Link
             href="/products?q=rolling"
-            className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-4 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('/Images/pre-rolls_collection.png'), linear-gradient(135deg, #be185d 0%, #ec4899 100%)",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
           >
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold">Rolling Accessories</h3>
-              <p className="text-sm opacity-90">Papers & pre-rolls for all</p>
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <h3 className="font-bold text-2xl">Rolling Accessories</h3>
+              <p className="text-lg opacity-90">Papers & pre-rolls for all</p>
             </div>
           </Link>
-
-          <a
-            href="#"
-            className="relative h-[240px] bg-cover bg-center rounded-xl overflow-hidden group"
-            style={{
-              backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
-              backgroundSize: "cover"
-            }}
-          >
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-bold">Dab Accessories</h3>
-              <p className="text-sm opacity-90">Tools & torches</p>
-            </div>
-          </a>
         </div>
 
         {/* NEW ARRIVALS Section */}
-        <section className="mt-16">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white">
+        <section className="mt-24">
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="text-5xl font-chalets text-gray-900 dark:text-white">
               NEW ARRIVALS
             </h2>
             <Link
               href="/products?filter=new"
-              className="text-dope-orange-500 hover:text-dope-orange-600 font-medium transition-colors"
+              className="text-dope-orange-500 hover:text-dope-orange-600 font-medium text-lg transition-colors"
             >
               Shop all →
             </Link>
           </div>
 
           {/* New Arrivals Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
             {/* Product 01 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
+                <div className="text-gray-500 text-lg">Product Image</div>
               </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 01</h3>
-                <p className="text-gray-400 text-sm mb-3">Premium glass piece</p>
+              <div className="p-6">
+                <h3 className="text-white font-medium mb-2 text-lg">Product 01</h3>
+                <p className="text-gray-400 text-base mb-4">Premium glass piece</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$29</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                  <span className="text-dope-orange-400 font-bold text-xl">$29</span>
+                  <div className="flex gap-3">
+                    <button className="text-gray-400 hover:text-white text-base transition-colors">
                       View
                     </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
                       Add
                     </button>
                   </div>
@@ -422,19 +460,19 @@ export default function HomePage() {
 
             {/* Product 02 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
+                <div className="text-gray-500 text-lg">Product Image</div>
               </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 02</h3>
-                <p className="text-gray-400 text-sm mb-3">High-quality accessory</p>
+              <div className="p-6">
+                <h3 className="text-white font-medium mb-2 text-lg">Product 02</h3>
+                <p className="text-gray-400 text-base mb-4">High-quality accessory</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$35</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                  <span className="text-dope-orange-400 font-bold text-xl">$35</span>
+                  <div className="flex gap-3">
+                    <button className="text-gray-400 hover:text-white text-base transition-colors">
                       View
                     </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
                       Add
                     </button>
                   </div>
@@ -444,19 +482,19 @@ export default function HomePage() {
 
             {/* Product 03 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
+                <div className="text-gray-500 text-lg">Product Image</div>
               </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 03</h3>
-                <p className="text-gray-400 text-sm mb-3">Latest innovation</p>
+              <div className="p-6">
+                <h3 className="text-white font-medium mb-2 text-lg">Product 03</h3>
+                <p className="text-gray-400 text-base mb-4">Latest innovation</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$31</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                  <span className="text-dope-orange-400 font-bold text-xl">$31</span>
+                  <div className="flex gap-3">
+                    <button className="text-gray-400 hover:text-white text-base transition-colors">
                       View
                     </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
                       Add
                     </button>
                   </div>
@@ -466,19 +504,19 @@ export default function HomePage() {
 
             {/* Product 04 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
+              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
+                <div className="text-gray-500 text-lg">Product Image</div>
               </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 04</h3>
-                <p className="text-gray-400 text-sm mb-3">Premium quality</p>
+              <div className="p-6">
+                <h3 className="text-white font-medium mb-2 text-lg">Product 04</h3>
+                <p className="text-gray-400 text-base mb-4">Premium quality</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$32</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
+                  <span className="text-dope-orange-400 font-bold text-xl">$32</span>
+                  <div className="flex gap-3">
+                    <button className="text-gray-400 hover:text-white text-base transition-colors">
                       View
                     </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
                       Add
                     </button>
                   </div>
@@ -486,93 +524,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Product 05 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 05</h3>
-                <p className="text-gray-400 text-sm mb-3">Exclusive design</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$33</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            {/* Product 06 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 06</h3>
-                <p className="text-gray-400 text-sm mb-3">Top-rated item</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$34</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 07 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 07</h3>
-                <p className="text-gray-400 text-sm mb-3">Customer favorite</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$36</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 08 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <div className="text-gray-500 text-sm">Product Image</div>
-              </div>
-              <div className="p-4">
-                <h3 className="text-white font-medium mb-1">Product 08</h3>
-                <p className="text-gray-400 text-sm mb-3">Limited edition</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold">$38</span>
-                  <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-white text-sm transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
