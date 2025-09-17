@@ -148,11 +148,7 @@ export default function BongsProductGrid({ products, viewMode }: BongsProductGri
                   SALE
                 </span>
               )}
-              {product.isBestseller && (
-                <span className="bg-dope-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                  BESTSELLER
-                </span>
-              )}
+
             </div>
 
             {/* Favorite Button */}

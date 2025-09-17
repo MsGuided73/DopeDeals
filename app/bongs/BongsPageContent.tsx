@@ -10,29 +10,28 @@ import BongsBreadcrumb from './components/BongsBreadcrumb';
 import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
 import BongsViewToggle from './components/BongsViewToggle';
+import EnhancedSearchBar from '../components/EnhancedSearchBar';
+import { supabaseBrowser } from '../lib/supabase-browser';
+import AgeVerification from '../components/AgeVerification';
 
 export interface BongProduct {
   id: string;
   name: string;
   price: number;
-  originalPrice?: number;
-  image: string;
-  images?: string[];
-  brand: string;
-  category: string;
-  subcategory?: string;
-  material: string;
-  height: string;
-  jointSize: string;
+  vip_price?: number;
+  image_url?: string;
+  description?: string;
+  sku: string;
+  stock_quantity: number;
+  is_active: boolean;
+  brand?: string;
+  category?: string;
+  material?: string;
+  height?: string;
+  joint_size?: string;
   percolator?: string;
-  inStock: boolean;
-
-  isNew?: boolean;
-  isSale?: boolean;
-  isBestseller?: boolean;
-  description: string;
-  features: string[];
-  tags: string[];
+  created_at: string;
+  updated_at: string;
 }
 
 export default function BongsPageContent() {
@@ -55,13 +54,11 @@ export default function BongsPageContent() {
     percolators: [] as string[],
     categories: [] as string[],
     inStock: false,
-    onSale: false,
-    isNew: false,
   });
 
   useEffect(() => {
-    // Load mock data - replace with actual API call
-    loadMockProducts();
+    // Load real bong products from Supabase
+    loadBongProducts();
   }, []);
 
   useEffect(() => {
@@ -70,29 +67,24 @@ export default function BongsPageContent() {
 
     // Apply filters
     if (filters.brands.length > 0) {
-      filtered = filtered.filter(p => filters.brands.includes(p.brand));
+      filtered = filtered.filter(p => p.brand && filters.brands.includes(p.brand));
     }
     if (filters.materials.length > 0) {
-      filtered = filtered.filter(p => filters.materials.includes(p.material));
+      filtered = filtered.filter(p => p.material && filters.materials.includes(p.material));
     }
     if (filters.heights.length > 0) {
-      filtered = filtered.filter(p => filters.heights.includes(p.height));
+      filtered = filtered.filter(p => p.height && filters.heights.includes(p.height));
     }
     if (filters.jointSizes.length > 0) {
-      filtered = filtered.filter(p => filters.jointSizes.includes(p.jointSize));
+      filtered = filtered.filter(p => p.joint_size && filters.jointSizes.includes(p.joint_size));
     }
     if (filters.percolators.length > 0) {
       filtered = filtered.filter(p => p.percolator && filters.percolators.includes(p.percolator));
     }
     if (filters.inStock) {
-      filtered = filtered.filter(p => p.inStock);
+      filtered = filtered.filter(p => p.stock_quantity > 0);
     }
-    if (filters.onSale) {
-      filtered = filtered.filter(p => p.isSale);
-    }
-    if (filters.isNew) {
-      filtered = filtered.filter(p => p.isNew);
-    }
+    // Note: onSale and isNew filters removed since we're using real data without these fields
 
     // Price range filter
     filtered = filtered.filter(p => p.price >= filters.priceRange[0] && p.price <= filters.priceRange[1]);
@@ -110,21 +102,44 @@ export default function BongsPageContent() {
         break;
 
       case 'newest':
-        filtered.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+        filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         break;
       default: // featured
-        filtered.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
+        // Sort by newest first, then by stock quantity
+        filtered.sort((a, b) => {
+          const dateA = new Date(a.created_at).getTime();
+          const dateB = new Date(b.created_at).getTime();
+          if (dateA !== dateB) return dateB - dateA;
+          return b.stock_quantity - a.stock_quantity;
+        });
     }
 
     setFilteredProducts(filtered);
     setCurrentPage(1); // Reset to first page when filters change
   }, [products, filters, sortBy]);
 
-  const loadMockProducts = () => {
-    // Mock data - replace with actual API call
-    const mockProducts: BongProduct[] = generateMockBongs();
-    setProducts(mockProducts);
-    setLoading(false);
+  const loadBongProducts = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabaseBrowser
+        .from('products')
+        .select('*')
+        .or('name.ilike.%bong%, name.ilike.%water pipe%, description.ilike.%bong%, description.ilike.%water pipe%, category.ilike.%bong%')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching bong products:', error);
+        setProducts([]);
+      } else {
+        setProducts(data || []);
+      }
+    } catch (error) {
+      console.error('Error loading bong products:', error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Pagination
@@ -142,10 +157,87 @@ export default function BongsPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-white">
+      {/* Age Verification Popup */}
+      <AgeVerification />
+
+      {/* Masthead */}
+      <div className="bg-black text-white">
+        <div className="px-6 flex items-center justify-between gap-8" style={{ minHeight: '140px', height: '140px' }}>
+          {/* HUGE DOPE CITY Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/" className="font-black" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '0.01em', fontSize: 'clamp(4rem, 12vw, 7rem)', lineHeight: '1.1' }}>
+              DOPE CITY
+            </Link>
+          </div>
+
+          {/* Enhanced Search Bar */}
+          <div className="flex-1 max-w-3xl mx-8">
+            <EnhancedSearchBar />
+          </div>
+
+          {/* Cart and Account Icons */}
+          <div className="flex items-center gap-4 flex-shrink-0">
+              <Link href="/sitemap-page" className="p-2 hover:bg-gray-800 rounded-md" title="Site Map">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+              </Link>
+              <Link href="/auth" className="p-2 hover:bg-gray-800 rounded-md" title="Account">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </Link>
+              <Link href="/cart" className="p-2 hover:bg-gray-800 rounded-md relative" title="Shopping Cart">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
+                </svg>
+                <span className="absolute -top-1 -right-1 bg-dope-orange text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  0
+                </span>
+              </Link>
+          </div>
+        </div>
+
+        {/* DOPE Orange divider line */}
+        <div className="h-1 bg-dope-orange"></div>
+      </div>
+
+      {/* Navigation Bar */}
+      <nav className="bg-gray-100 shadow-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center space-x-8 h-14">
+            <Link href="/brands" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
+              Shop by Brand
+            </Link>
+            <Link href="/products?category=thca" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
+              THCA & More
+            </Link>
+            <Link href="/bongs" className="flex items-center px-3 py-2 text-lg font-bold text-dope-orange border-b-2 border-dope-orange leading-tight">
+              Bongs
+            </Link>
+            <Link href="/pipes" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
+              Pipes
+            </Link>
+            <Link href="/products?category=dab-rigs" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
+              Dab Rigs
+            </Link>
+            <Link href="/products?category=vaporizers" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
+              Vaporizers
+            </Link>
+            <Link href="/products?category=accessories" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
+              Accessories
+            </Link>
+            <Link href="/products?category=edibles" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
+              Munchies
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {/* Breadcrumb */}
       <BongsBreadcrumb />
-      
+
       {/* Hero Section */}
       <BongsHero />
 
@@ -226,35 +318,4 @@ export default function BongsPageContent() {
   );
 }
 
-// Mock data generator
-function generateMockBongs(): BongProduct[] {
-  const brands = ['GRAV', 'Hemper', 'ROOR', 'Puffco', 'Calibear', 'Empire Glassworks', 'MAV Glass'];
-  const materials = ['Borosilicate Glass', 'Scientific Glass', 'Colored Glass', 'Clear Glass'];
-  const heights = ['6-8"', '8-12"', '12-16"', '16-20"', '20"+'];
-  const jointSizes = ['14mm', '18mm', '19mm'];
-  const percolators = ['Tree Perc', 'Honeycomb', 'Showerhead', 'Matrix', 'Inline', 'Turbine'];
-  const categories = ['Beaker Bongs', 'Straight Tube', 'Recycler', 'Mini Bongs', 'Scientific Glass'];
-
-  return Array.from({ length: 48 }, (_, i) => ({
-    id: `bong-${i + 1}`,
-    name: `Premium Glass Bong ${i + 1}`,
-    price: Math.floor(Math.random() * 400) + 50,
-    originalPrice: Math.random() > 0.7 ? Math.floor(Math.random() * 500) + 100 : undefined,
-    image: `/images/bongs/bong-${(i % 12) + 1}.jpg`,
-    images: [`/images/bongs/bong-${(i % 12) + 1}.jpg`, `/images/bongs/bong-${(i % 12) + 1}-2.jpg`],
-    brand: brands[i % brands.length],
-    category: categories[i % categories.length],
-    material: materials[i % materials.length],
-    height: heights[i % heights.length],
-    jointSize: jointSizes[i % jointSizes.length],
-    percolator: Math.random() > 0.3 ? percolators[i % percolators.length] : undefined,
-    inStock: Math.random() > 0.1,
-
-    isNew: Math.random() > 0.8,
-    isSale: Math.random() > 0.7,
-    isBestseller: Math.random() > 0.85,
-    description: `High-quality ${materials[i % materials.length].toLowerCase()} bong with premium construction and smooth hits.`,
-    features: ['Premium Glass Construction', 'Smooth Airflow', 'Easy to Clean', 'Durable Design'],
-    tags: ['glass', 'bong', 'water pipe', 'premium'],
-  }));
-}
+// Mock data generator removed - now using real Supabase data
