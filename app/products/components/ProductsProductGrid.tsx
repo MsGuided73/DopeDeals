@@ -142,11 +142,7 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
                   SALE
                 </span>
               )}
-              {product.isBestseller && (
-                <span className="bg-dope-orange-500 text-white px-2 py-1 rounded-md text-xs font-bold">
-                  BESTSELLER
-                </span>
-              )}
+
             </div>
 
             {/* Favorite Button */}

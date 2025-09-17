@@ -118,7 +118,7 @@ export default function ProductsPageContent() {
         filtered.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
         break;
       default: // featured
-        filtered.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
+        filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
     }
 
     setFilteredProducts(filtered);
@@ -263,7 +263,6 @@ function generateMockProducts(): Product[] {
       inStock: Math.random() > 0.1,
       isNew: Math.random() > 0.8,
       isSale: Math.random() > 0.7,
-      isBestseller: Math.random() > 0.85,
       description: `High-quality ${category.toLowerCase()} with premium construction and excellent performance.`,
       features: ['Premium Construction', 'Durable Design', 'Easy to Use', 'Great Value'],
       tags: ['premium', 'quality', 'accessories'],
