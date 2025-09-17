@@ -60,8 +60,8 @@
 DOPE CITY
 ```
 - **Font**: Chalets (custom premium font)
-- **Treatment**: "DOPE" in white, "CITY" in gold (#fbbf24)
-- **Spacing**: 2-character space between words
+- **Treatment**: "DOPE" in white, "CITY" in orange (#ff6b35)
+- **Spacing**: 1-character space between words
 - **Weight**: Normal (400) - NEVER BOLD
 - **Tracking**: Tighter (-0.02em) - LESS SPACE BETWEEN LETTERS
 
@@ -73,7 +73,7 @@ DOPE CITY
 - **Sizes**:
   - H1: 3xl-6xl (mobile-desktop)
   - H2: 2xl-4xl (mobile-desktop)
-- **Color**: White or Gold
+- **Color**: White or Orange
 - **Treatment**: All caps, tight tracking (-0.02em)
 
 **Subheadings (H3-H4)**
@@ -126,7 +126,7 @@ DOPE CITY
 - **Orange**: Primary CTAs, highlights, brand elements, active states, hover effects
 - **Orange Dark**: Hover states, pressed states, active elements
 - **Orange Light**: Subtle accents, borders, focus states
-- **Black**: Primary backgrounds, headers, premium sections
+- **Black**: Primary backgrounds, title barsheaders, premium sections
 - **White**: Primary text on dark backgrounds, clean sections
 - **Gray-900**: Card backgrounds, secondary sections
 - **Gray-800**: Hover states, borders, dividers
@@ -269,8 +269,8 @@ DOPE CITY
 - **Background**: bg-black/90 backdrop-blur-md
 - **Border**: border-b border-white/10
 - **Height**: h-16 lg:h-20
-- **Logo**: Chalets font, DOPE (white) CITY (gold)
-- **Links**: White text, gold hover
+- **Logo**: Chalets font, DOPE (white) CITY (white or orange)
+- **Links**: White text, gold to orange gradient hover
 
 #### **Mobile Menu**
 - **Background**: bg-black/95 backdrop-blur-lg
@@ -522,8 +522,7 @@ DOPE CITY
     <h4 className="text-red-400 font-semibold">Age Restricted Product</h4>
   </div>
   <p className="text-red-300 text-sm">
-    This product contains nicotine and is restricted to customers 21+ years old.
-    Age verification required at checkout.
+      Age verification required at checkout.
   </p>
 </div>
 ```
