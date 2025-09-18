@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Abstract Bento Box Collections Grid - Text Block Moved Down</title>
+  <title>Bento Box Collections #5 - Puffco Image in All Frames</title>
   <link rel="stylesheet" href="bento_box_secondary_font_theme.css" />
   <style>
     @font-face {
@@ -18,7 +18,7 @@
     body {
       margin: 0 !important;
       padding: 0 !important;
-      font-family: var(--font-sans) !important; /* chalets for headers */
+      font-family: var(--font-sans) !important;
       background-color: var(--background) !important;
       color: var(--foreground) !important;
     }
@@ -61,10 +61,10 @@
     .collection-content {
       position: relative !important;
       z-index: 2 !important;
-      margin-bottom: -1rem !important; /* Move text block down */
+      margin-bottom: -1rem !important;
     }
     .collection-title {
-      font-family: 'chalets', var(--font-sans) !important; /* chalets */
+      font-family: 'chalets', var(--font-sans) !important;
       font-weight: normal !important;
       font-size: 2.5rem !important;
       text-transform: uppercase !important;
@@ -81,110 +81,93 @@
       border-radius: 9999px !important;
       font-weight: normal !important;
       box-shadow: 0 0 5px rgba(0,0,0,0.1) !important;
-      font-family: var(--font-secondary) !important; /* Plus Jakarta Sans */
+      font-family: var(--font-secondary) !important;
       margin-top: 0 !important;
       margin-bottom: 0.25rem !important;
     }
-  .animated-button {
-  background: transparent;
-  border: 2px solid transparent;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: color 0.3s ease;
-}
-.animated-button::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 0.5rem;
-  border: 2px solid transparent;
-  background: linear-gradient(90deg, orange, white, orange);
-  background-size: 200% 200%;
-  animation: glow 3s linear infinite;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-  opacity: 0;
-}
-.animated-button:hover {
-  color: orange;
-}
-.animated-button:hover::before {
-  opacity: 1;
-}
-@keyframes glow {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
-  }
-}
-</style>
+    /* Grid item sizes for Bento Box layout */
+    .collection-item.bongs {
+      grid-column: span 2 !important;
+      grid-row: span 2 !important;
+    }
+    .collection-item.grinders {
+      grid-column: span 1 !important;
+      grid-row: span 1 !important;
+    }
+    .collection-item.e-rigs {
+      grid-column: span 1 !important;
+      grid-row: span 1 !important;
+    }
+    .collection-item.dab-rigs {
+      grid-column: span 1 !important;
+      grid-row: span 1 !important;
+    }
+    .collection-item.vaporizers {
+      grid-column: span 1 !important;
+      grid-row: span 2 !important;
+    }
+    .collection-item.hand-pipes {
+      grid-column: span 1 !important;
+      grid-row: span 1 !important;
+    }
+    .collection-item.rolling-accessories {
+      grid-column: span 1 !important;
+      grid-row: span 1 !important;
+    }
+    .collection-item.dab-accessories {
+      grid-column: span 1 !important;
+      grid-row: span 1 !important;
+    }
+  </style>
 </head>
 <body>
   <section class="collection-grid">
-    <div class="collection-item e-rigs" style="background-image: url('../assets/images/puffco_image.png');">
+    <div class="collection-item bongs" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
-        <h2 class="collection-title">E-Rigs</h2>
-        <button class="animated-button">Shop Electric Dab Rigs</button>
+        <h2 class="collection-title">Bongs & Water Pipes</h2>
       </div>
     </div>
-    <div class="collection-item grinders" style="background-image: url('https://images.unsplash.com/photo-1602524811323-1a7a7a7a7a7a?auto=format&fit=crop&w=400&q=80');">
+    <div class="collection-item grinders" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
         <h2 class="collection-title">Grinders</h2>
-        <span class="collection-subtitle">Shop Weed Grinders</span>
       </div>
     </div>
-    <div class="collection-item e-rigs" style="background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80');">
+    <div class="collection-item e-rigs" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
         <h2 class="collection-title">E-Rigs</h2>
-        <span class="collection-subtitle">Shop Electric Dab Rigs</span>
       </div>
     </div>
-    <div class="collection-item dab-rigs" style="background-image: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80');">
+    <div class="collection-item dab-rigs" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
         <h2 class="collection-title">Dab Rigs</h2>
-        <span class="collection-subtitle">A little dab will do ya</span>
       </div>
     </div>
-    <div class="collection-item vaporizers" style="background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80');">
+    <div class="collection-item vaporizers" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
         <h2 class="collection-title">Dry Herb Vaporizers</h2>
-        <span class="collection-subtitle">Clean and dry high.</span>
       </div>
     </div>
-    <div class="collection-item hand-pipes" style="background-image: url('https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80');">
+    <div class="collection-item hand-pipes" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
         <h2 class="collection-title">Pipes</h2>
-        <span class="collection-subtitle">Follow your pipe dreams</span>
       </div>
     </div>
-    <div class="collection-item rolling-accessories" style="background-image: url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=400&q=80');">
+    <div class="collection-item rolling-accessories" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
         <h2 class="collection-title">Accessories</h2>
-        <span class="collection-subtitle">Get into high gear</span>
       </div>
     </div>
-    <div class="collection-item dab-accessories" style="background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80');">
+    <div class="collection-item dab-accessories" style="background-image: url('../assets/images/E-RIGS-Puffco1.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
         <h2 class="collection-title">Dab Accessories</h2>
-        <span class="collection-subtitle">Outfit your kit</span>
       </div>
     </div>
   </section>
