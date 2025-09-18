@@ -18,12 +18,12 @@ export default function GlobalMasthead() {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Main Masthead */}
-      <div className="bg-black text-white h-[140px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-          {/* Left: DOPE CITY Logo */}
+      <div>
+        {/* Main Masthead - Match Home Page Exactly */}
+        <div className="bg-black text-white px-6 flex items-center justify-between gap-8" style={{ minHeight: '140px', height: '140px' }}>
+          {/* Left: HUGE DOPE CITY Logo */}
           <div
-            className="font-chalets font-normal leading-none text-white flex-shrink-0"
+            className="font-chalets font-black leading-none text-white flex-shrink-0"
             style={{
               fontSize: 'clamp(4rem, 12vw, 7rem)',
               lineHeight: '1.1',

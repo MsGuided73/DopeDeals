@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Search, ChevronDown, Mic } from 'lucide-react'
+import { Search, ChevronDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface SearchCategory {
@@ -260,15 +260,6 @@ export default function EnhancedSearchBar() {
             className="w-full px-6 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dope-orange-500 focus:ring-inset transition-all duration-200"
           />
         </div>
-
-        {/* Voice Search Button */}
-        <button
-          type="button"
-          className="px-3 text-gray-400 hover:text-gray-600 transition-colors"
-          title="Voice search"
-        >
-          <Mic className="w-5 h-5" />
-        </button>
 
         {/* Search Button */}
         <button

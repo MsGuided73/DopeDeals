@@ -29,9 +29,9 @@ export default function DopeCityFooter() {
       <div className="absolute inset-0 overflow-hidden">
         {/* Skyline Background Image */}
         <div
-          className="absolute inset-0 opacity-15 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 opacity-45 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=400&fit=crop&crop=entropy&auto=format&q=80')"
+            backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/background/footer/DopeCity%20Skyline%20-%20Dk1.png')"
           }}
         ></div>
       </div>
@@ -41,13 +41,13 @@ export default function DopeCityFooter() {
         {/* Service Features */}
         <div className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Fast and Free Shipping */}
+            {/* Get loyalty rewards and rocket up the ladder in the DOPE CLUB */}
             <div className="text-center">
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-8 h-8 text-dope-orange-400" />
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">FAST AND FREE</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md">Shipping</p>
+              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">GET LOYALTY REWARDS</h3>
+              <p className="text-gray-200 text-xs drop-shadow-md">Rocket up the ladder in the DOPE CLUB and reap the benefits for years to come</p>
             </div>
 
             {/* Low Price Guarantee */}
@@ -190,7 +190,7 @@ export default function DopeCityFooter() {
         <div className="mt-12 text-center">
           <div className="mb-8">
             <p className="text-gray-200 text-sm mb-2 drop-shadow-lg">
-              © 2024 DOPE CITY. All rights reserved. | Designed with
+              © 2025 DOPE CITY. All rights reserved. | Designed with
               <span className="text-dope-orange-400 mx-1">♥</span>
               for better shopping experience.
             </p>
@@ -199,7 +199,7 @@ export default function DopeCityFooter() {
           {/* Large DOPE CITY Branding */}
           <div className="mb-8">
             <Link href="/" className="inline-block dope-hover hover:scale-105">
-              <h1 className="font-chalets text-6xl md:text-8xl font-black tracking-wider drop-shadow-2xl">
+              <h1 className="font-chalets text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl">
                 <span className="text-white drop-shadow-2xl">DOPE</span>
                 <span className="text-dope-orange-500 ml-4 drop-shadow-2xl">CITY</span>
               </h1>

@@ -44,15 +44,11 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
               {/* Product Image */}
               <div className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg overflow-hidden">
                 <Image
-                  src={product.image}
+                  src={product.imageUrl || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=400&fit=crop&auto=format'}
                   alt={product.name}
                   width={96}
                   height={96}
                   className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = '/images/placeholder-product.jpg';
-                  }}
                 />
               </div>
 
@@ -120,14 +116,10 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
           {/* Product Image */}
           <div className="relative aspect-square bg-gray-100 overflow-hidden">
             <Image
-              src={product.image}
+              src={product.imageUrl || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=400&fit=crop&auto=format'}
               alt={product.name}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = '/images/placeholder-product.jpg';
-              }}
             />
             
             {/* Badges */}
