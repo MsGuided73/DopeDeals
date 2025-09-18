@@ -107,28 +107,71 @@ export async function getStorage() {
       return data;
     },
 
-    // User Behavior for Recommendations
+    // User Behavior for Recommendations (with graceful fallback)
     async trackUserBehavior(behavior: any) {
-      const { data, error } = await supabase
-        .from('user_behavior')
-        .insert(behavior)
-        .select()
-        .single();
-      
-      if (error) throw error;
-      return data;
+      try {
+        const { data, error } = await supabase
+          .from('user_behavior')
+          .insert(behavior)
+          .select()
+          .single();
+
+        if (error) {
+          // If table doesn't exist, log but don't throw
+          if (error.code === '42P01') {
+            console.warn('⚠️ user_behavior table does not exist, skipping behavior tracking');
+            return null;
+          }
+          throw error;
+        }
+        return data;
+      } catch (error) {
+        console.warn('⚠️ Error tracking user behavior:', error);
+        return null;
+      }
     },
 
     async getUserBehavior(userId: string, limit = 50) {
-      const { data, error } = await supabase
-        .from('user_behavior')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(limit);
-      
-      if (error) throw error;
-      return data || [];
+      try {
+        const { data, error } = await supabase
+          .from('user_behavior')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(limit);
+
+        if (error) {
+          // If table doesn't exist, return empty array
+          if (error.code === '42P01') {
+            console.warn('⚠️ user_behavior table does not exist, returning empty behavior');
+            return [];
+          }
+          throw error;
+        }
+        return data || [];
+      } catch (error) {
+        console.warn('⚠️ Error fetching user behavior:', error);
+        return [];
+      }
+    },
+
+    // Get all products for recommendations
+    async getAllProducts() {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('is_active', true)
+          .eq('nicotine_product', false)
+          .eq('tobacco_product', false)
+          .limit(100);
+
+        if (error) throw error;
+        return data || [];
+      } catch (error) {
+        console.warn('⚠️ Error fetching all products:', error);
+        return [];
+      }
     },
 
     // Orders for Purchase History
