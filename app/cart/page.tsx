@@ -1,287 +1,304 @@
 "use client";
-
-import { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import EnhancedSearchBar from '../components/EnhancedSearchBar';
-import { supabaseBrowser } from '../lib/supabase-browser';
-
-interface CartItem {
-  id: string;
-  product_id: string;
-  quantity: number;
-  created_at: string;
-  products: {
-    id: string;
-    name: string;
-    price: number;
-    vip_price?: number;
-    image_url?: string;
-    description?: string;
-    sku: string;
-    stock_quantity: number;
-    is_active: boolean;
-  };
-}
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
+import GlobalMasthead from '../components/GlobalMasthead';
+import {
+  getCart,
+  updateCartQuantity,
+  removeFromCart,
+  formatPrice,
+  getSessionId,
+  type Cart,
+  type CartItem
+} from '../lib/cart-utils';
 
 export default function CartPage() {
-  const router = useRouter();
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [updating, setUpdating] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    checkUser();
-  }, []);
 
-  const checkUser = async () => {
-    const { data: { user } } = await supabaseBrowser.auth.getUser();
-    setUser(user);
-    if (user) {
-      fetchCartItems(user.id);
+
+  const fetchCart = async () => {
+    setLoading(true);
+    setError(null);
+
+    const cartData = await getCart();
+    if (cartData) {
+      setCart(cartData);
     } else {
-      setLoading(false);
+      setError('Failed to load cart');
     }
-  };
 
-  const fetchCartItems = async (userId: string) => {
-    try {
-      const { data, error } = await supabaseBrowser
-        .from('cart_items')
-        .select(`
-          id,
-          product_id,
-          quantity,
-          created_at,
-          products (
-            id,
-            name,
-            price,
-            vip_price,
-            image_url,
-            description,
-            sku,
-            stock_quantity,
-            is_active
-          )
-        `)
-        .eq('user_id', userId);
-
-      if (error) throw error;
-      setCartItems(data || []);
-    } catch (error) {
-      console.error('Error fetching cart items:', error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   const updateQuantity = async (cartItemId: string, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      removeItem(cartItemId);
-      return;
+    setUpdating(cartItemId);
+    const success = await updateCartQuantity(cartItemId, newQuantity);
+    if (success) {
+      await fetchCart(); // Refresh cart
     }
-
-    try {
-      const { error } = await supabaseBrowser
-        .from('cart_items')
-        .update({ quantity: newQuantity })
-        .eq('id', cartItemId);
-
-      if (error) throw error;
-
-      // Update local state
-      setCartItems(items =>
-        items.map(item =>
-          item.id === cartItemId ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    } catch (error) {
-      console.error('Error updating quantity:', error);
-    }
+    setUpdating(null);
   };
 
   const removeItem = async (cartItemId: string) => {
-    try {
-      const { error } = await supabaseBrowser
-        .from('cart_items')
-        .delete()
-        .eq('id', cartItemId);
-
-      if (error) throw error;
-
-      // Update local state
-      setCartItems(items => items.filter(item => item.id !== cartItemId));
-    } catch (error) {
-      console.error('Error removing item:', error);
+    const success = await removeFromCart(cartItemId);
+    if (success) {
+      await fetchCart(); // Refresh cart
     }
   };
 
-  const subtotal = cartItems.reduce((sum, item) => {
-    const price = user?.user_metadata?.membership_tier === 'vip' && item.products.vip_price
-      ? item.products.vip_price
-      : item.products.price;
-    return sum + (price * item.quantity);
-  }, 0);
-  const tax = subtotal * 0.08;
-  const total = subtotal + tax;
+  const clearCart = async () => {
+    try {
+      const sessionId = getSessionId();
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Masthead */}
-      <div className="bg-black text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <Link href="/" className="text-2xl font-normal tracking-[-0.1em]" style={{ fontFamily: 'Chalets, sans-serif' }}>
-                DOPE CITY
-              </Link>
-            </div>
+      const response = await fetch(`/api/cart?sessionId=${sessionId}`, {
+        method: 'DELETE'
+      });
 
-            {/* Enhanced Search Bar */}
-            <div className="flex-1 max-w-2xl mx-8">
-              <EnhancedSearchBar />
-            </div>
+      const data = await response.json();
 
-            {/* Cart and Account Icons */}
-            <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-800 rounded-md">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </button>
-              <button className="p-2 hover:bg-gray-800 rounded-md relative">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
-                </svg>
-                {cartItems.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-dope-orange text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
-                  </span>
-                )}
-              </button>
+      if (data.success) {
+        await fetchCart();
+      } else {
+        setError(data.error || 'Failed to clear cart');
+      }
+    } catch (err) {
+      setError('Failed to clear cart');
+      console.error('Clear cart error:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <GlobalMasthead />
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
+            <div className="space-y-4">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="flex gap-4 p-6 bg-gray-50 rounded-lg">
+                  <div className="w-24 h-24 bg-gray-200 rounded"></div>
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
+    );
+  }
 
-      {/* Navigation Bar */}
-      <nav className="bg-gray-100 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center space-x-8 h-12">
-            <Link href="/brands" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              Shop by Brand
-            </Link>
-            <Link href="/products?category=thca" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              THCA & More
-            </Link>
-            <Link href="/products?category=bongs" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              Bongs
-            </Link>
-            <Link href="/pipes" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              Pipes
-            </Link>
-            <Link href="/products?category=dab-rigs" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              Dab Rigs
-            </Link>
-            <Link href="/products?category=vaporizers" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              Vaporizers
-            </Link>
-            <Link href="/products?category=accessories" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              Accessories
-            </Link>
-            <Link href="/products?category=edibles" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">
-              Munchies
-            </Link>
-          </div>
+  return (
+    <div className="min-h-screen bg-white">
+      <GlobalMasthead />
+
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+          {cart && cart.items.length > 0 && (
+            <button
+              onClick={clearCart}
+              className="text-red-600 hover:text-red-700 text-sm font-medium"
+            >
+              Clear Cart
+            </button>
+          )}
         </div>
-      </nav>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
-        <h1 className="text-3xl font-normal text-gray-900" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
-          Shopping Cart
-        </h1>
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
 
-        {/* Compliance Placeholder */}
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4">
-          <div className="flex">
-            <div className="ml-3">
-              <p className="text-sm text-yellow-700">
-                <strong>Compliance Note:</strong> Cart contents filtered for CBD/Hemp only. Age verification and zipcode eligibility checked at checkout.
-              </p>
+        {!cart || cart.items.length === 0 ? (
+          /* Empty cart state */
+          <div className="text-center py-16">
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <ShoppingBag className="w-12 h-12 text-gray-400" />
             </div>
-          </div>
-        </div>
-
-        {mockCartItems.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-xl text-gray-500 mb-4">Your cart is empty</p>
-            <Button variant="outline" onClick={() => router.push('/products')}>Continue Shopping</Button>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
+            <p className="text-gray-600 mb-8">Add some products to get started!</p>
+            <Link
+              href="/products"
+              className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              Continue Shopping
+            </Link>
           </div>
         ) : (
-          <>
-            <div className="space-y-4">
-              {mockCartItems.map((item) => (
-                <Card key={item.id} className="flex flex-col md:flex-row">
-                  <CardHeader className="flex flex-row items-center space-x-4 flex-shrink-0 w-full md:w-48">
-                    <div className="aspect-square bg-gray-100 rounded-md flex items-center justify-center">
-                      {item.imageUrl ? (
-                        <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover rounded-md" />
+          /* Cart with items */
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Cart Items */}
+            <div className="lg:col-span-2 space-y-4">
+              {cart.items.map((item) => (
+                <div key={item.id} className="bg-gray-50 rounded-lg p-6">
+                  <div className="flex gap-4">
+                    {/* Product Image */}
+                    <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                      {item.product?.imageUrl ? (
+                        <Image
+                          src={item.product.imageUrl}
+                          alt={item.product.name}
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
-                        <span className="text-gray-400">No Image</span>
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          <ShoppingBag className="w-8 h-8" />
+                        </div>
                       )}
                     </div>
-                  </CardHeader>
-                  <CardContent className="flex-1 space-y-2">
-                    <CardTitle className="text-lg">
-                      <Link href={`/product/${item.id}`} className="hover:underline">
-                        {item.name}
-                      </Link>
-                    </CardTitle>
-                    <CardDescription>{item.description}</CardDescription>
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold">${item.price.toFixed(2)}</span>
-                      <div className="flex items-center space-x-2">
-                        <Button variant="outline" size="sm" onClick={() => { /* Decrease quantity */ }}>-</Button>
-                        <span>{item.quantity}</span>
-                        <Button variant="outline" size="sm" onClick={() => { /* Increase quantity */ }}>+</Button>
+
+                    {/* Product Details */}
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 mb-1">
+                        {item.product?.name || 'Product Unavailable'}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2">
+                        SKU: {item.product?.sku || 'N/A'}
+                      </p>
+
+                      {/* Price */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-lg font-bold text-gray-900">
+                          ${item.priceAtTime.toFixed(2)}
+                        </span>
+                        {item.product && item.product.currentPrice !== item.priceAtTime && (
+                          <span className="text-sm text-gray-500">
+                            (Current: ${item.product.currentPrice.toFixed(2)})
+                          </span>
+                        )}
                       </div>
+
+                      {/* Quantity Controls */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            disabled={updating === item.id || item.quantity <= 1}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+
+                          <span className="w-12 text-center font-medium">
+                            {updating === item.id ? '...' : item.quantity}
+                          </span>
+
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            disabled={updating === item.id || !item.product?.inStock}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Remove Button */}
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          disabled={updating === item.id}
+                          className="text-red-600 hover:text-red-700 p-2 disabled:opacity-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Stock Warning */}
+                      {item.product && !item.product.inStock && (
+                        <p className="text-sm text-red-600 mt-2">Out of stock</p>
+                      )}
                     </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-end">
-                    <Button variant="outline" className="text-red-600 border-red-300 hover:bg-red-50" size="sm" onClick={() => { /* Remove item */ }}>
-                      Remove
-                    </Button>
-                  </CardFooter>
-                </Card>
+
+                    {/* Item Total */}
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-gray-900">
+                        ${item.itemTotal.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
 
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex justify-between text-lg font-semibold">
-                  <span>Subtotal:</span>
-                  <span>${subtotal.toFixed(2)}</span>
+            {/* Order Summary */}
+            <div className="lg:col-span-1">
+              <div className="bg-gray-50 rounded-lg p-6 sticky top-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Subtotal ({cart.itemCount} items)</span>
+                    <span className="font-medium">${cart.subtotal.toFixed(2)}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Tax</span>
+                    <span className="font-medium">${cart.taxAmount.toFixed(2)}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Shipping</span>
+                    <span className="font-medium">
+                      {cart.shippingAmount === 0 ? 'FREE' : `$${cart.shippingAmount.toFixed(2)}`}
+                    </span>
+                  </div>
+
+                  {cart.shippingAmount === 0 && cart.subtotal < 75 && (
+                    <p className="text-sm text-green-600">
+                      Add ${(75 - cart.subtotal).toFixed(2)} more for free shipping!
+                    </p>
+                  )}
+
+                  <div className="border-t pt-3">
+                    <div className="flex justify-between text-lg font-bold">
+                      <span>Total</span>
+                      <span>${cart.total.toFixed(2)}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600 mt-2">
-                  <span>Tax (8%):</span>
-                  <span>${tax.toFixed(2)}</span>
+
+                <div className="mt-6 space-y-3">
+                  <Link
+                    href="/checkout"
+                    className="w-full bg-black text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center block"
+                  >
+                    Proceed to Checkout
+                  </Link>
+
+                  <Link
+                    href="/products"
+                    className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors text-center block"
+                  >
+                    Continue Shopping
+                  </Link>
                 </div>
-                <div className="flex justify-between text-xl font-bold mt-4 border-t pt-4">
-                  <span>Total:</span>
-                  <span>${total.toFixed(2)}</span>
+
+                {/* Compliance Notice */}
+                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Note:</strong> Age verification and zipcode eligibility will be verified at checkout.
+                  </p>
                 </div>
-              </CardContent>
-              <CardFooter className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => router.push('/products')}>Continue Shopping</Button>
-                <Button onClick={() => router.push('/checkout')}>Proceed to Checkout</Button>
-              </CardFooter>
-            </Card>
-          </>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
