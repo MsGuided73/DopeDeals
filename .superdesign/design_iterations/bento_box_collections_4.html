@@ -85,15 +85,57 @@
       margin-top: 0 !important;
       margin-bottom: 0.25rem !important;
     }
-  </style>
+  .animated-button {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+.animated-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  background: linear-gradient(90deg, orange, white, orange);
+  background-size: 200% 200%;
+  animation: glow 3s linear infinite;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+.animated-button:hover {
+  color: orange;
+}
+.animated-button:hover::before {
+  opacity: 1;
+}
+@keyframes glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+</style>
 </head>
 <body>
   <section class="collection-grid">
-    <div class="collection-item bongs" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80');">
+    <div class="collection-item e-rigs" style="background-image: url('../assets/images/puffco_image.png');">
       <div class="collection-overlay"></div>
       <div class="collection-content">
-        <h2 class="collection-title">Bongs & Water Pipes</h2>
-        <span class="collection-subtitle">Get your bubble on</span>
+        <h2 class="collection-title">E-Rigs</h2>
+        <button class="animated-button">Shop Electric Dab Rigs</button>
       </div>
     </div>
     <div class="collection-item grinders" style="background-image: url('https://images.unsplash.com/photo-1602524811323-1a7a7a7a7a7a?auto=format&fit=crop&w=400&q=80');">
