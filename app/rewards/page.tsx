@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import GlobalMasthead from '../components/GlobalMasthead';
+import DopeClubSignup from '../../components/DopeClubSignup';
 
 export const metadata = {
   title: 'DOPE CITY Rewards | VIP Club & Loyalty Program',
@@ -10,16 +12,33 @@ export const metadata = {
 export default function RewardsPage() {
   return (
     <div className="min-h-screen bg-black">
+      {/* Global Masthead */}
+      <GlobalMasthead />
+
+      {/* DOPE CLUB Title Bar with Image */}
+      <section className="relative bg-black py-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="relative rounded-2xl overflow-hidden">
+            <Image
+              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/DOPE%20CLUB%203.png"
+              alt="DOPE CLUB - Exclusive VIP Membership Program"
+              width={1200}
+              height={300}
+              className="w-full h-auto object-cover"
+              priority
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-black/70" />
-        
+      <section className="relative bg-gradient-to-br from-gray-900 via-black to-gray-900 py-16">
         <div className="relative max-w-7xl mx-auto px-6 text-center">
-          <h1 className="font-chalets text-5xl lg:text-7xl text-white mb-6 tracking-tighter">
-            DOPE CITY <span className="text-dope-orange-500">REWARDS</span>
+          <h1 className="font-chalets text-4xl lg:text-6xl text-white mb-6 tracking-tighter">
+            VIP <span className="text-dope-orange-500">REWARDS PROGRAM</span>
           </h1>
           <p className="text-xl lg:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Join the VIP Club and unlock exclusive rewards, early access, and premium perks
+            Join the DOPE CLUB and unlock exclusive rewards, early access, and premium perks
           </p>
         </div>
       </section>
