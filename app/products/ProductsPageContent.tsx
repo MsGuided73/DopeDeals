@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { supabaseBrowser } from '../lib/supabase-browser';
 import ProductsFilters from './components/ProductsFilters';
 import ProductsProductGrid from './components/ProductsProductGrid';
 import ProductsBreadcrumb from './components/ProductsBreadcrumb';
@@ -54,12 +55,62 @@ export default function ProductsPageContent() {
     newArrivals: false,
   });
 
-  // Initialize products
+  // Initialize products from Supabase
   useEffect(() => {
-    const mockProducts = generateMockProducts();
-    setProducts(mockProducts);
-    setFilteredProducts(mockProducts);
-    setLoading(false);
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        const { data, error } = await supabaseBrowser
+          .from('products')
+          .select(`
+            id, name, description, price, vip_price, image_url, sku,
+            stock_quantity, is_active, brand_id, category_id, materials,
+            featured, vip_exclusive, tags, created_at, updated_at, channels
+          `)
+          .eq('is_active', true)
+          .eq('nicotine_product', false)
+          .eq('tobacco_product', false)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching products:', error);
+          setProducts([]);
+          setFilteredProducts([]);
+        } else {
+          // Transform Supabase data to match our Product interface
+          const transformedProducts = (data || []).map(product => ({
+            id: product.id,
+            name: product.name,
+            description: product.description || '',
+            price: product.price,
+            vipPrice: product.vip_price,
+            imageUrl: product.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=400&fit=crop&auto=format',
+            sku: product.sku,
+            brand: product.brand_id || 'Unknown',
+            category: product.category_id || 'Accessories',
+            material: Array.isArray(product.materials) ? product.materials[0] : 'Glass',
+            size: 'Standard',
+            inStock: (product.stock_quantity || 0) > 0,
+            featured: product.featured || false,
+            vipExclusive: product.vip_exclusive || false,
+            onSale: product.vip_price && product.vip_price < product.price,
+            newArrival: new Date(product.created_at).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000,
+            tags: Array.isArray(product.tags) ? product.tags : []
+          }));
+
+          setProducts(transformedProducts);
+          setFilteredProducts(transformedProducts);
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setProducts([]);
+        setFilteredProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
   }, []);
 
   // Apply filters
@@ -226,46 +277,4 @@ export default function ProductsPageContent() {
   );
 }
 
-// Mock data generator
-function generateMockProducts(): Product[] {
-  const brands = ['GRAV', 'Hemper', 'ROOR', 'Puffco', 'RAW', 'Santa Cruz Shredder', 'Storz & Bickel'];
-  const categories = ['Water Bongs', 'Pipes', 'Glass Pieces', 'Vaporizers', 'Grinders', 'Papers & Wraps', 'Accessories', 'Storage', 'THCA Flower & More'];
-  const materials = ['Borosilicate Glass', 'Aluminum', 'Stainless Steel', 'Ceramic', 'Silicone'];
-  const sizes = {
-    'Water Bongs': ['6-8"', '8-12"', '12-16"', '16-20"'],
-    'Pipes': ['3-4"', '4-6"', '6-8"', 'Pocket Size'],
-    'Glass Pieces': ['6-8"', '8-12"', '12-16"', '16-20"'],
-    'Vaporizers': ['Portable', 'Desktop', 'Pen Style', 'Hybrid'],
-    'Grinders': ['2-Piece', '3-Piece', '4-Piece', '5-Piece'],
-    'Papers & Wraps': ['1¼"', '1½"', 'King Size', 'Extra Long'],
-    'Accessories': ['Small', 'Medium', 'Large', 'Universal'],
-    'Storage': ['Small', 'Medium', 'Large', 'XL'],
-    'THCA Flower & More': ['1g', '3.5g', '7g', '14g', 'Variety', 'Standard', 'Premium', 'Deluxe']
-  };
 
-  return Array.from({ length: 48 }, (_, i) => {
-    const category = categories[i % categories.length];
-    const brand = brands[i % brands.length];
-    const material = Math.random() > 0.3 ? materials[i % materials.length] : undefined;
-    const size = Math.random() > 0.2 ? sizes[category as keyof typeof sizes][i % sizes[category as keyof typeof sizes].length] : undefined;
-
-    return {
-      id: `product-${i + 1}`,
-      name: `${brand} ${category.replace(' & ', ' ')} ${i + 1}`,
-      price: Math.floor(Math.random() * 300) + 20,
-      originalPrice: Math.random() > 0.7 ? Math.floor(Math.random() * 400) + 50 : undefined,
-      image: `/images/products/product-${(i % 12) + 1}.jpg`,
-      images: [`/images/products/product-${(i % 12) + 1}.jpg`, `/images/products/product-${(i % 12) + 1}-2.jpg`],
-      brand,
-      category,
-      material,
-      size,
-      inStock: Math.random() > 0.1,
-      isNew: Math.random() > 0.8,
-      isSale: Math.random() > 0.7,
-      description: `High-quality ${category.toLowerCase()} with premium construction and excellent performance.`,
-      features: ['Premium Construction', 'Durable Design', 'Easy to Use', 'Great Value'],
-      tags: ['premium', 'quality', 'accessories'],
-    };
-  });
-}
