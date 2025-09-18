@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { RecommendationAgent } from '@/lib/recommendation-agent';
-import { getSessionUser } from '@/lib/supabase-server-ssr';
+import { RecommendationAgent } from '../../../lib/recommendation-agent';
+import { getSessionUser } from '../../../lib/supabase-server-ssr';
 
 export async function GET(request: NextRequest) {
   try {
