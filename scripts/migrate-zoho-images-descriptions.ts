@@ -58,16 +58,89 @@ interface MigrationStats {
 }
 
 async function getZohoAccessToken(): Promise<string> {
-  const { data, error } = await supabase
+  const orgId = process.env.ZOHO_ORGANIZATION_ID!;
+
+  // First, try to get token from database
+  const { data: tokenRow, error } = await supabase
     .from('zoho_tokens')
-    .select('access_token')
+    .select('*')
+    .eq('org_id', orgId)
     .single();
 
-  if (error || !data?.access_token) {
-    throw new Error('No valid Zoho access token found. Please run Zoho auth first.');
+  if (error || !tokenRow) {
+    throw new Error('No Zoho token found in database. Please run Zoho OAuth first.');
   }
 
-  return data.access_token;
+  // Check if token is expired
+  const now = new Date();
+  const expiresAt = new Date(tokenRow.expires_at);
+
+  if (expiresAt > now && tokenRow.access_token) {
+    console.log('🔑 Using existing valid access token');
+    return tokenRow.access_token;
+  }
+
+  // Token is expired, refresh it
+  console.log('🔄 Token expired, refreshing...');
+  const newAccessToken = await refreshZohoToken(tokenRow.refresh_token, tokenRow.dc, orgId);
+
+  return newAccessToken;
+}
+
+async function refreshZohoToken(refreshToken: string, dc: string, orgId: string): Promise<string> {
+  const clientId = process.env.ZOHO_CLIENT_ID;
+  const clientSecret = process.env.ZOHO_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    throw new Error('Missing Zoho client credentials in environment variables');
+  }
+
+  const tokenUrl = `https://accounts.zoho.com/oauth/v2/token`;
+  const params = new URLSearchParams({
+    grant_type: 'refresh_token',
+    client_id: clientId,
+    client_secret: clientSecret,
+    refresh_token: refreshToken,
+  });
+
+  const response = await fetch(tokenUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString(),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to refresh Zoho access token: ${response.status} ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  if (data.error) {
+    throw new Error(`Zoho token refresh error: ${data.error_description || data.error}`);
+  }
+
+  const newAccessToken = data.access_token;
+  const expiresIn = data.expires_in || 3600; // Default 1 hour
+  const expiresAt = new Date(Date.now() + (expiresIn * 1000)).toISOString();
+
+  // Update the token in database
+  const { error: updateError } = await supabase
+    .from('zoho_tokens')
+    .update({
+      access_token: newAccessToken,
+      expires_at: expiresAt
+    })
+    .eq('org_id', orgId);
+
+  if (updateError) {
+    console.warn('⚠️ Failed to update token in database:', updateError.message);
+    // Don't throw error here, we still have the token
+  } else {
+    console.log('✅ Token refreshed and updated in database');
+  }
+
+  return newAccessToken;
 }
 
 async function fetchZohoProducts(accessToken: string, page = 1, perPage = 50): Promise<ZohoProduct[]> {
