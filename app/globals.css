@@ -45,6 +45,25 @@
   letter-spacing: -0.02em;
 }
 
+/* 4. Search Bar Animated Glow */
+.search-bar-glow {
+  transition: all 0.3s ease;
+}
+
+.search-bar-glow:hover,
+.search-bar-glow:focus-within {
+  box-shadow: 0 0 0 3px rgba(250, 105, 52, 0.1),
+              0 0 20px rgba(250, 105, 52, 0.2),
+              0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.search-bar-glow:focus-within {
+  box-shadow: 0 0 0 3px rgba(250, 105, 52, 0.2),
+              0 0 30px rgba(250, 105, 52, 0.3),
+              0 15px 35px -5px rgba(0, 0, 0, 0.15);
+}
+
 @layer base {
   :root {
     /* DOPE CITY Color Scheme */
@@ -183,7 +202,7 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: none;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   }
 

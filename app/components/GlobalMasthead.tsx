@@ -20,14 +20,16 @@ export default function GlobalMasthead() {
     <header className="sticky top-0 z-50">
       <div>
         {/* Main Masthead - Match Home Page Exactly */}
-        <div className="bg-black text-white px-6 flex items-center justify-between gap-8" style={{ minHeight: '140px', height: '140px' }}>
-          {/* Left: HUGE DOPE CITY Logo */}
+        <div className="bg-black text-white px-2 flex items-center justify-between gap-4" style={{ minHeight: '140px', height: '140px' }}>
+          {/* Left: HUGE DOPE CITY Logo - Expanded to edges */}
           <div
             className="font-chalets font-black leading-none text-white flex-shrink-0"
             style={{
-              fontSize: 'clamp(4rem, 12vw, 7rem)',
-              lineHeight: '1.1',
-              letterSpacing: '0.01em'
+              fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+              fontSize: 'clamp(4rem, 14vw, 8rem)',
+              lineHeight: '1.0',
+              letterSpacing: '-0.1em',
+              fontWeight: 'normal'
             }}
           >
             <Link href="/">

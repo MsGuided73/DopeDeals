@@ -166,7 +166,7 @@ export default function EnhancedSearchBar() {
 
   return (
     <div className="relative max-w-4xl w-full mx-auto">
-      <form onSubmit={handleSearch} className="flex bg-white rounded-lg shadow-lg border border-gray-200 relative overflow-hidden">
+      <form onSubmit={handleSearch} className="flex bg-white rounded-lg shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl">
         {/* Category Dropdown */}
         <div className="relative z-20" ref={dropdownRef}>
           <button
@@ -177,7 +177,7 @@ export default function EnhancedSearchBar() {
               console.log('Dropdown clicked, current state:', isDropdownOpen);
               setIsDropdownOpen(!isDropdownOpen);
             }}
-            className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 transition-colors border-r border-gray-200 min-w-[140px] text-left relative z-10"
+            className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 transition-colors border-r border-gray-300 min-w-[140px] text-left relative z-10"
           >
             <span className="text-gray-700 font-medium truncate">
               {selectedCategory.label}
@@ -257,7 +257,7 @@ export default function EnhancedSearchBar() {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={currentPlaceholder}
-            className="w-full px-6 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dope-orange-500 focus:ring-inset transition-all duration-200"
+            className="w-full px-6 py-3 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200"
           />
         </div>
 
