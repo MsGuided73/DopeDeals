@@ -1,12 +1,11 @@
 /*
   Sync Airtable -> Supabase (products + product_media + Storage uploads)
   Usage (PowerShell):
-    $env:SUPABASE_URL = "https://<project>.supabase.co"
-    $env:SUPABASE_SERVICE_ROLE_KEY = "<service>"
-    $env:AIRTABLE_TOKEN = "pat..."
-    $env:AIRTABLE_BASE = "appXXXXXXXXXXXXXX"
-    $env:AIRTABLE_TABLE = "Products"
     pnpm tsx scripts/sync_airtable_to_supabase.ts --limit 50 --since "2024-01-01"
+
+  Uses environment variables from .env.local:
+    SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+    AIRTABLE_PERSONAL_ACCESS_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID
 */
 
 import fs from 'node:fs';
@@ -15,12 +14,19 @@ import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN!;
-const AIRTABLE_BASE = process.env.AIRTABLE_BASE!;
-const AIRTABLE_TABLE = process.env.AIRTABLE_TABLE || 'Products';
+
+// Use your existing environment variable names
+const AIRTABLE_TOKEN = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_TOKEN!;
+const AIRTABLE_BASE = process.env.AIRTABLE_BASE_ID || process.env.AIRTABLE_BASE!;
+const AIRTABLE_TABLE = process.env.AIRTABLE_TABLE_ID || process.env.AIRTABLE_TABLE || 'Products';
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !AIRTABLE_TOKEN || !AIRTABLE_BASE) {
-  console.error('Missing env. Required: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, AIRTABLE_TOKEN, AIRTABLE_BASE');
+  console.error('Missing env. Required: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, AIRTABLE_PERSONAL_ACCESS_TOKEN, AIRTABLE_BASE_ID');
+  console.error('Current values:');
+  console.error('  SUPABASE_URL:', SUPABASE_URL ? '✓' : '✗');
+  console.error('  SUPABASE_SERVICE_ROLE_KEY:', SUPABASE_SERVICE_ROLE_KEY ? '✓' : '✗');
+  console.error('  AIRTABLE_TOKEN:', AIRTABLE_TOKEN ? '✓' : '✗');
+  console.error('  AIRTABLE_BASE:', AIRTABLE_BASE ? '✓' : '✗');
   process.exit(1);
 }
 
