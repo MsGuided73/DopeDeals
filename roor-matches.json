@@ -1,0 +1,1134 @@
+[
+  {
+    "supabaseProduct": {
+      "id": "270a3329-3803-4ef2-8366-ea51a46d9211",
+      "name": "BEAKER 18' ROOR",
+      "description": "GLASS ROOR",
+      "sku": "BEAKER18'",
+      "brand_name": null,
+      "image_url": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+      "price": 190,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 52,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ beaker type match (+10)",
+      "✅ Common words: beaker, roor, glass, roor (+12)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "452c8e6b-7f4a-4032-81d7-631d208f2e7e",
+      "name": "R24BK507- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "R24BK507-MIX",
+      "brand_name": null,
+      "image_url": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+      "price": 360,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 49,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+10)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "4cb62dc9-784c-4678-b0b0-a68280a36d00",
+      "name": "R24ST509- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "R24ST509-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 345,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 49,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+10)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "31640229-4c06-47ba-abc8-0efd60b5920c",
+      "name": "ZEAKER 9MM ROOR",
+      "description": "GLASS ROOR",
+      "sku": "ZEAKER9MMROOR",
+      "brand_name": null,
+      "image_url": null,
+      "price": 337,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 49,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+10)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "e51053cc-8e24-4bd3-a29e-ab8402e7d5ff",
+      "name": "R24ST507- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "R24ST507-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 318.5,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 48,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+9)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "adec55c7-26a4-4970-b23b-e96fce4993be",
+      "name": "L181019- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "L181019-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 308,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 48,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+9)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "0804dfd0-d535-4f8b-a6c6-a7f01414122d",
+      "name": "L18B19- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "L18B19-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 308,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 48,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+9)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "fd4babcb-4de1-479c-8d15-719d5e5ce6b7",
+      "name": "R24BK509- ROOR",
+      "description": "GLASS ROOR",
+      "sku": "R24BK509",
+      "brand_name": null,
+      "image_url": null,
+      "price": 372.5,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 48,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+9)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "093f0f1d-5bef-4dc4-9bfa-acd301e103e9",
+      "name": "ZEAKER 5MM ROOR",
+      "description": "GLASS ROOR",
+      "sku": "ZEAKER5MMROOR",
+      "brand_name": null,
+      "image_url": null,
+      "price": 294,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 47,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+8)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "d45a9f08-dbf8-49be-a886-477653f99962",
+      "name": "L1817- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "L1817-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 270,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 47,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+8)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "f5fa1429-1480-41a3-bfec-71b4e6d76ae9",
+      "name": "R24ST505- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "R24ST505-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 248.5,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 46,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+7)",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "3afe0e46-6007-44a0-bee0-7a154fcb3eed",
+      "name": "ROAR CUSTOM KING PUB  ROOR",
+      "description": "GLASS ROOR",
+      "sku": "ROARCUSTOMKINGPUB",
+      "brand_name": null,
+      "image_url": null,
+      "price": 1437.5,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 42,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: king, roor, glass, roor (+12)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "83b3c6d5-9e04-42ab-8d53-417cb55edd6f",
+      "name": "R24BK505-MIX ROOR",
+      "description": "",
+      "sku": "R24BK505-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 271.5,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec0bU6MueQPH4JzJ",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15467,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "4TBU",
+        "Name": "Roor Tech Double 4-Arm Tree Bubble Base",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nCrafted from 45mm x 5mm German Duran Schott glass at the neck and base, ROOR Tech enhanced the original 17” Bubble Base with double the Classic ROOR Tech 4-Arm Tree Perc, adding a 25x1.5mm splash guard and ice-pinch to prevent splashing.\n\\n\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR Tech Double 4-Arm Tree Bubble Base</li>\n\\n \t<li>Low profile 19mm/14mm open-ended downstem</li>\n\\n \t<li>ROOR Tech Bowl 14.5mm</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 350,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-Tech-Double-4-Arm-Tree-Bubble-Base.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2115,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 41,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Price similarity (+8)",
+      "✅ Common words: roor (+3)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "e46bb4ab-e56b-42c0-b038-3deb75462e4f",
+      "name": "10A90  ROOR",
+      "description": "GLASS ROOR",
+      "sku": "10A90",
+      "brand_name": null,
+      "image_url": null,
+      "price": 123,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 39,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "b5a3bdbf-ad45-485c-acd6-0895849e800c",
+      "name": "R24ST455- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "R24ST455-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 215,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 39,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "2bdd1a22-3f15-4096-ab92-d76ee64dddc4",
+      "name": "BA90  ROOR",
+      "description": "GLASS ROOR",
+      "sku": "BA90",
+      "brand_name": null,
+      "image_url": null,
+      "price": 123,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 39,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "583ca96d-b5d8-4efb-9918-834f21e1f4c1",
+      "name": "DC 14/45 - ASH CATCH  ROOR",
+      "description": "GLASS ROOR",
+      "sku": "DC 14/45",
+      "brand_name": null,
+      "image_url": null,
+      "price": 86.25,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 39,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "86722ff3-66e2-4ae3-bcff-111f73ff2728",
+      "name": "DC19/45ASH CATCHER ROOR",
+      "description": "GLASS ROOR",
+      "sku": "DC 19/45",
+      "brand_name": null,
+      "image_url": null,
+      "price": 86.25,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 39,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "3f940acd-cf23-4af3-92a7-9128f422fd61",
+      "name": "R24BK455- MIX ROOR",
+      "description": "GLASS ROOR",
+      "sku": "R24BK455-MIX",
+      "brand_name": null,
+      "image_url": null,
+      "price": 240,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 39,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  },
+  {
+    "supabaseProduct": {
+      "id": "81a6682b-dd85-4352-a7aa-feced2d3d3f8",
+      "name": "STRAIGHT 18'  MIX COLOR ROOR",
+      "description": "GLASS ROOR",
+      "sku": "STRAIGHT18'",
+      "brand_name": null,
+      "image_url": null,
+      "price": 215,
+      "materials": [
+        "GLASS"
+      ]
+    },
+    "airtableProduct": {
+      "id": "rec05kTmOiiHN1jdk",
+      "createdTime": "2025-06-19T20:32:37.000Z",
+      "fields": {
+        "ID": 15596,
+        "Type": [
+          "simple"
+        ],
+        "SKU": "R1130BK",
+        "Name": "Roor X 1130 Beaker Green",
+        "Published": 1,
+        "Visibility in catalog": "visible",
+        "Short description": "<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-nxxvl-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-17\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"6a3e83e4-1da9-4446-8d2f-9445ae82b941\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-moyyf-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-113\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col lg:w-[calc(100%-115px)] agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"e484409d-dd7d-4791-9ccf-da726c73f856\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n<div class=\"flex-1 overflow-hidden\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-79elbk h-full\">\n\\n<div class=\"react-scroll-to-bottom--css-lhctx-1n7m0yu\">\n\\n<div class=\"flex flex-col pb-9 text-sm\">\n\\n<div class=\"w-full text-token-text-primary\" data-testid=\"conversation-turn-135\">\n\\n<div class=\"px-4 py-2 justify-center text-base md:gap-6 m-auto\">\n\\n<div class=\"flex flex-1 text-base mx-auto gap-3 md:px-5 lg:px-1 xl:px-5 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem] group final-completion\">\n\\n<div class=\"relative flex w-full flex-col agent-turn\">\n\\n<div class=\"flex-col gap-1 md:gap-3\">\n\\n<div class=\"flex flex-grow flex-col max-w-full\">\n\\n<div class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 overflow-x-auto\" data-message-author-role=\"assistant\" data-message-id=\"754fbb49-1718-4c4a-844e-03fc65b745a1\">\n\\n<div class=\"markdown prose w-full break-words dark:prose-invert light\">\n\\n\n\\nThe ROOR x Eleven30 Glass Beaker Collab is 16” tall and features a 50mm x 5mm wide base and mouthpiece, along with a 75mm middle section for a fully enclosed secondary chamber. It includes a 14.5mm female joint with built-in reclaim, an 18.8mm outer tube joint, and an 18.8mm – 14.5mm open-ended reducing ROOR downstem, making it an ideal piece for collectors.\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n&nbsp;\n\\n\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n</div>\n\\n<strong>Includes:</strong>\n\\n<ul>\n\\n \t<li>ROOR 1130 Beaker</li>\n\\n \t<li>ROOR Low profile 18.8mm/14.5mm open-ended downstem</li>\n\\n \t<li>ROOR Medium Funnel Bowl</li>\n\\n \t<li>ROOR Box and authentication</li>\n\\n</ul>",
+        "Description": "<span data-sheets-root=\"1\" data-sheets-value=\"{&quot;1&quot;:2,&quot;2&quot;:&quot;Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\\\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of our exceptional collection of glass water pipes.&quot;}\" data-sheets-userformat=\"{&quot;2&quot;:12993,&quot;3&quot;:{&quot;1&quot;:0},&quot;9&quot;:0,&quot;10&quot;:1,&quot;12&quot;:0,&quot;15&quot;:&quot;Calibri&quot;,&quot;16&quot;:11}\">Discover top-notch fixed stem glass on glass water pipes featuring colored accents and unique percolators.\n\\nExplore the next level of smoking satisfaction as you indulge in the craftsmanship and innovation of Roor exceptional collection of glass water pipes.</span>\n\\n\n\\nFor<strong> Roor Wholesale &amp; Distribution </strong>contact us at<strong> (617)-943-2040 </strong>or email us at <strong>info@sigdistro.com</strong>",
+        "Tax status": "taxable",
+        "In stock?": 1,
+        "Allow customer reviews?": 0,
+        "Regular price": 427,
+        "Categories": "Smoking Pipes > Glass Water Pipes, Smoking Pipes",
+        "Tags": "Water Pipes",
+        "Images": "https://sigdistro.com/wp-content/uploads/2024/02/Roor-X-1130-Beaker-Green.jpg",
+        "Position": 0,
+        "Brands": "Roor",
+        "Meta: rank_math_analytic_object_id": 2135,
+        "Meta: rank_math_internal_links_processed": 1,
+        "Attribute 3 value(s)": [],
+        "Attribute 4 value(s)": [],
+        "Attribute 8 value(s)": [],
+        "Attribute 9 value(s)": [],
+        "Attribute 10 value(s)": [],
+        "Title (Images)": {
+          "state": "empty",
+          "value": null,
+          "isStale": true
+        }
+      }
+    },
+    "score": 39,
+    "details": [
+      "✅ ROOR brand match",
+      "✅ Common words: roor, glass, roor (+9)"
+    ]
+  }
+]
