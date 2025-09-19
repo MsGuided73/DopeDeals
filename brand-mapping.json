@@ -1,0 +1,111 @@
+{
+  "timestamp": "2025-09-18T17:54:58.585Z",
+  "brands": [
+    {
+      "name": "ROOR",
+      "variations": [
+        "ROOR"
+      ],
+      "category": "glass",
+      "confidence": 100,
+      "examples": [
+        "10A90  ROOR | GLASS ROOR | 10A90"
+      ]
+    },
+    {
+      "name": "Millyz Diamond",
+      "variations": [
+        "Millyz Diamond"
+      ],
+      "category": "flower",
+      "confidence": 100,
+      "examples": [
+        "1.5G Millyz Diamond Blunt - Glass Tip - Purple Truffle | 1.5G Millyz Diamond Blunt - Glass Tip - Purple Truffle | 721750219961",
+        "1.5G Millyz Diamond Blunt - Glass Tip - Blackberry Diesel | 1.5G Millyz Diamond Blunt - Glass Tip - Blackberry Diesel | 721750291141",
+        "1.5G Millyz Diamond Blunt - Glass Tip -Rainbowlato 22 | 1.5G Millyz Diamond Blunt - Glass Tip -Rainbowlato 22 | 721750373397"
+      ]
+    },
+    {
+      "name": "21 Cannabis",
+      "variations": [
+        "21 Cannabis"
+      ],
+      "category": "flower",
+      "confidence": 100,
+      "examples": [
+        "21 CANNABIS .7G THCA PREROLL OG KUSH 5PC 6CT | 21 CANNABIS PREROLL .7G THCA | 21-PREROL-THCA-.7G-OGKSH-",
+        "21 CANNABIS 1GM THCA ICEY CONES PREROLL DEATH STAR 12CT | 21 CANNABIS ICEY PREROLL 1G THCA | 21-ICYPREROLL-THCA-1G-DETHSTR-",
+        "21 CANNABIS 2GM THCA DISPO 24K GOLD 6CT | 21 CANNABIS DISPO 2G THCA | 21-DISPO-THCA-2G-24KGLD-"
+      ]
+    },
+    {
+      "name": "Backwoods",
+      "variations": [
+        "Backwoods",
+        "BACKWOODS"
+      ],
+      "category": "accessories",
+      "confidence": 100,
+      "examples": [
+        "BACKWOODS - 1100MAH BATTERY SMART LED SCREEN  - GREEN - R&M | Backwoods 1100mah New Release Smart Battery W/ Led Screen Adjustable Volatage | BKWDS-1100BATT-SMART-GRN-RM-MIX",
+        "BACKWOODS - 1100MAH BATTERY SMART LED SCREEN  - R&M | Backwoods 1100mah New Release Smart Battery W/ Led Screen Adjustable Volatage | BKWDS-1100BATT-SMART-RM-MIX",
+        "BACKWOODS BACKPACK -LRG SIZE |  | BWKDSBACK-LRG-NDC"
+      ]
+    },
+    {
+      "name": "Bar Juice",
+      "variations": [
+        "Bar Juice",
+        "BAR JUICE"
+      ],
+      "category": "disposables",
+      "confidence": 100,
+      "examples": [
+        "BAR JUICE - E- LIQUID TOBACCO 3MG | Bar Juice - 100Ml E-Liquid | BARJUICE-TOBCO-3MG",
+        "BAR JUICE - E- LIQUID TOBACCO 25MG | Bar Juice - 30Ml E-Liquid | BARJUICE-TBCO-25"
+      ]
+    },
+    {
+      "name": "Airis",
+      "variations": [
+        "AIRIS"
+      ],
+      "category": "disposables",
+      "confidence": 100,
+      "examples": [
+        "AIRIS NEO 6K PUFFS BLUEBERRY ICE 5CT | WOOFR 15K DISPO 5CT | AIRISNEO-6K-BLBRICE-"
+      ]
+    },
+    {
+      "name": "Defender Xtreme",
+      "variations": [
+        "Defender xtreme"
+      ],
+      "category": "other",
+      "confidence": 100,
+      "examples": [
+        "Defender xtreme 9854 | Defender xtreme 9854 | 638361803369"
+      ]
+    }
+  ],
+  "patterns": {
+    "common_prefixes": [
+      "ROOR",
+      "Millyz Diamond",
+      "21 Cannabis",
+      "Backwoods",
+      "Bar Juice",
+      "Airis",
+      "Defender Xtreme"
+    ],
+    "sku_patterns": [
+      "10A90",
+      "721750219961",
+      "21-PREROL-THCA-.7G-OGKSH-",
+      "BKWDS-1100BATT-SMART-GRN-RM-MIX",
+      "BARJUICE-TOBCO-3MG",
+      "AIRISNEO-6K-BLBRICE-",
+      "638361803369"
+    ]
+  }
+}
