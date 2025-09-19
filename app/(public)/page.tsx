@@ -132,9 +132,11 @@ export default function HomePage() {
           <div
             className="font-chalets leading-none text-white flex-shrink-0"
             style={{
+              fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
               fontSize: 'clamp(4rem, 12vw, 7rem)',
               lineHeight: '1.1',
-              letterSpacing: '-0.02em'
+              letterSpacing: '-0.02em',
+              fontWeight: 'normal'
             }}
           >
             DOPE CITY
@@ -329,7 +331,7 @@ export default function HomePage() {
       <main className="w-full px-8 py-16">
         {/* Collections Header */}
         <div className="text-left mb-12">
-          <h2 className="text-5xl text-black mb-4 font-chalets uppercase" style={{ letterSpacing: '-0.02em' }}>Our Collections</h2>
+          <h2 className="text-5xl text-black mb-4 font-chalets uppercase" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", letterSpacing: '-0.02em', fontWeight: 'normal' }}>Our Collections</h2>
         </div>
 
         <div className="grid grid-cols-6 gap-6 h-[1200px] max-w-none">
