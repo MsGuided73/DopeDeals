@@ -1,6 +1,6 @@
-import ProductCard from '@/app/products/components/ProductCard';
-import { Hero } from '@/components/design/NikeIndustrial';
-import { supabaseServer } from '@/lib/supabase-server';
+import ProductCard from '../../products/components/ProductCard';
+import { Hero } from '../../components/design/NikeIndustrial';
+import { supabaseServer } from '../../../lib/supabase-server';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

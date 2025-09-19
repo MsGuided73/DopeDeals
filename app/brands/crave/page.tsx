@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { supabaseServer } from '../../lib/supabase-server';
-import GlobalMasthead from '../../../components/GlobalMasthead';
+import GlobalMasthead from '../../components/GlobalMasthead';
 import DopeCityFooter from '../../../components/DopeCityFooter';
 import Image from 'next/image';
 
