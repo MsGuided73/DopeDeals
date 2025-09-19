@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../lib/storage';
-import { requireAuth } from '@/lib/requireAuth';
+import { requireAuth } from '../../lib/requireAuth';
 import { z } from 'zod';
 
 const CheckoutSchema = z.object({
@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
 
     // Fire-and-forget: create ShipStation order after paid (placeholder until payment integration)
     try {
-      const { ShipstationService } = await import('@/server/shipstation/service');
-      const { storage: serverStorage } = await import('@/server/storage');
+      const { ShipstationService } = await import('../../../server/shipstation/service');
+      const { storage: serverStorage } = await import('../../../server/storage');
       const apiKey = process.env.SHIPSTATION_API_KEY;
       const apiSecret = process.env.SHIPSTATION_API_SECRET;
       if (apiKey && apiSecret) {

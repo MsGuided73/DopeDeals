@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { supabaseServer } from '../../lib/supabase-server';
 import GlobalMasthead from '../../../components/GlobalMasthead';
 import DopeCityFooter from '../../../components/DopeCityFooter';
 import Image from 'next/image';
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CravePage() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = supabaseServer;
 
   // Get Crave products (excluding nicotine products)
   const { data: products } = await supabase
