@@ -2,6 +2,8 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import { storage } from '@/../server/storage';
 import Link from 'next/link';
+import GlobalMasthead from '../components/GlobalMasthead';
+import AgeVerification from '../components/AgeVerification';
 
 export default async function OrdersPage() {
   const cookieStore = await cookies();
@@ -33,8 +35,15 @@ export default async function OrdersPage() {
   const orders = await storage.getUserOrders(user.id);
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-semibold mb-4">Your Orders</h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Age Verification Popup */}
+      <AgeVerification />
+
+      {/* Universal Layout Components */}
+      <GlobalMasthead />
+
+      <div className="p-6">
+        <h1 className="text-xl font-semibold mb-4">Your Orders</h1>
       <ul className="space-y-3">
         {orders.map((o) => (
           <li key={o.id} className="border rounded p-3">
@@ -51,6 +60,7 @@ export default async function OrdersPage() {
           <li className="text-sm text-muted-foreground">No orders yet.</li>
         )}
       </ul>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import GlobalMasthead from '../../components/GlobalMasthead';
+import AgeVerification from '../../components/AgeVerification';
 
 export default function OrderDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -14,8 +16,15 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Age Verification Popup */}
+      <AgeVerification />
+
+      {/* Universal Layout Components */}
+      <GlobalMasthead />
+
+      <div className="py-8 px-4">
+        <div className="max-w-4xl mx-auto space-y-6">
         <nav className="text-sm text-gray-600">
           <Link href="/orders" className="underline">Orders</Link>
           <span className="mx-1">/</span>
@@ -47,6 +56,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
             <Link href="/products" className="px-4 py-2 border rounded-md">Continue shopping</Link>
             <Link href="/orders" className="px-4 py-2 border rounded-md">Back to orders</Link>
           </div>
+        </div>
         </div>
       </div>
     </div>
