@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { supabaseBrowser } from '../lib/supabase-browser'
 import Link from 'next/link'
 import Image from 'next/image'
+import GlobalMasthead from '../components/GlobalMasthead'
+import AgeVerification from '../components/AgeVerification'
 
 interface Product {
   id: string
@@ -73,7 +75,13 @@ export default function PreRollsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Age Verification Popup */}
+      <AgeVerification />
+
+      {/* Universal Layout Components */}
+      <GlobalMasthead />
+
       {/* Header */}
       <div className="bg-gradient-to-r from-dope-orange-500 to-dope-orange-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-6">
