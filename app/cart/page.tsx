@@ -109,7 +109,7 @@ export default function CartPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-          {cart && cart.items.length > 0 && (
+          {cart && cart.items && cart.items.length > 0 && (
             <button
               onClick={clearCart}
               className="text-red-600 hover:text-red-700 text-sm font-medium"
@@ -125,7 +125,7 @@ export default function CartPage() {
           </div>
         )}
 
-        {!cart || cart.items.length === 0 ? (
+        {!cart || !cart.items || cart.items.length === 0 ? (
           /* Empty cart state */
           <div className="text-center py-16">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -145,7 +145,7 @@ export default function CartPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
-              {cart.items.map((item) => (
+              {cart.items && cart.items.map((item) => (
                 <div key={item.id} className="bg-gray-50 rounded-lg p-6">
                   <div className="flex gap-4">
                     {/* Product Image */}
@@ -244,32 +244,32 @@ export default function CartPage() {
 
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal ({cart.itemCount} items)</span>
-                    <span className="font-medium">${cart.subtotal.toFixed(2)}</span>
+                    <span className="text-gray-600">Subtotal ({cart.itemCount || 0} items)</span>
+                    <span className="font-medium">${(cart.subtotal || 0).toFixed(2)}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-gray-600">Tax</span>
-                    <span className="font-medium">${cart.taxAmount.toFixed(2)}</span>
+                    <span className="font-medium">${(cart.taxAmount || 0).toFixed(2)}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-medium">
-                      {cart.shippingAmount === 0 ? 'FREE' : `$${cart.shippingAmount.toFixed(2)}`}
+                      {(cart.shippingAmount || 0) === 0 ? 'FREE' : `$${(cart.shippingAmount || 0).toFixed(2)}`}
                     </span>
                   </div>
 
-                  {cart.shippingAmount === 0 && cart.subtotal < 75 && (
+                  {(cart.shippingAmount || 0) === 0 && (cart.subtotal || 0) < 75 && (
                     <p className="text-sm text-green-600">
-                      Add ${(75 - cart.subtotal).toFixed(2)} more for free shipping!
+                      Add ${(75 - (cart.subtotal || 0)).toFixed(2)} more for free shipping!
                     </p>
                   )}
 
                   <div className="border-t pt-3">
                     <div className="flex justify-between text-lg font-bold">
                       <span>Total</span>
-                      <span>${cart.total.toFixed(2)}</span>
+                      <span>${(cart.total || 0).toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

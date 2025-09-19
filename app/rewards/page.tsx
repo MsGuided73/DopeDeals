@@ -20,8 +20,8 @@ export default function RewardsPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="relative rounded-2xl overflow-hidden">
             <Image
-              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/DOPE%20CLUB%203.png"
-              alt="DOPE CLUB - Exclusive VIP Membership Program"
+              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/msguided1618_32857_DOPE_CITY_Website_Hero_photo_realistic_skyli_541173d6-7a18-4b44-bb80-8b203b18d126.png"
+              alt="DOPE CITY - Premium Cannabis Culture Hero Image"
               width={1200}
               height={300}
               className="w-full h-auto object-cover"
