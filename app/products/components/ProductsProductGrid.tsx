@@ -43,13 +43,22 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
             <div className="flex items-center space-x-6">
               {/* Product Image */}
               <div className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg overflow-hidden">
-                <Image
-                  src={product.imageUrl || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=400&fit=crop&auto=format'}
-                  alt={product.name}
-                  width={96}
-                  height={96}
-                  className="w-full h-full object-cover"
-                />
+                {product.imageUrl ? (
+                  <Image
+                    src={product.imageUrl}
+                    alt={product.name}
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <div className="text-center">
+                      <div className="text-lg">📦</div>
+                      <div className="text-xs">No Image</div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Product Info */}
@@ -115,12 +124,21 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
         <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
           {/* Product Image */}
           <div className="relative aspect-square bg-gray-100 overflow-hidden">
-            <Image
-              src={product.imageUrl || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=400&fit=crop&auto=format'}
-              alt={product.name}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+            {product.imageUrl ? (
+              <Image
+                src={product.imageUrl}
+                alt={product.name}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="text-center">
+                  <div className="text-3xl mb-2">📦</div>
+                  <div className="text-sm">No Image</div>
+                </div>
+              </div>
+            )}
             
             {/* Badges */}
             <div className="absolute top-3 left-3 flex flex-col space-y-1">

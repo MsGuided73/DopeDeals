@@ -147,7 +147,7 @@ export default function ProductDetailsPage({
     ...(product.image_urls || [])
   ].filter(Boolean);
 
-  const currentImage = allImages[selectedImageIndex] || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=800&h=800&fit=crop&auto=format';
+  const currentImage = allImages[selectedImageIndex] || null;
 
   const handleAddToCart = () => {
     // TODO: Implement cart functionality
@@ -175,14 +175,24 @@ export default function ProductDetailsPage({
         {/* Product Images */}
         <Panel className="p-4 md:p-6">
           <div className="aspect-square w-full bg-neutral-100 rounded-lg overflow-hidden mb-4">
-            <Image 
-              src={currentImage} 
-              alt={product.name} 
-              width={800} 
-              height={800} 
-              className="object-cover w-full h-full"
-              priority
-            />
+            {currentImage ? (
+              <Image
+                src={currentImage}
+                alt={product.name}
+                width={800}
+                height={800}
+                className="object-cover w-full h-full"
+                priority
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="text-center">
+                  <div className="text-6xl mb-4">📦</div>
+                  <div className="text-lg font-medium">No Image Available</div>
+                  <div className="text-sm">Product image coming soon</div>
+                </div>
+              </div>
+            )}
           </div>
           
           {/* Image Thumbnails */}
