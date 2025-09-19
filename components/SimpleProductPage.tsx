@@ -116,7 +116,7 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
     );
   }
 
-  const imageUrl = product.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=800&h=800&fit=crop&auto=format';
+  const imageUrl = product.image_url;
   const inStock = (product.stock_quantity || 0) > 0;
 
   return (
@@ -142,14 +142,24 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
           {/* Product Image */}
           <div className="space-y-4">
             <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden border">
-              <Image 
-                src={imageUrl} 
-                alt={product.name} 
-                width={600} 
-                height={600} 
-                className="object-cover w-full h-full"
-                priority
-              />
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  alt={product.name}
+                  width={600}
+                  height={600}
+                  className="object-cover w-full h-full"
+                  priority
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  <div className="text-center">
+                    <div className="text-6xl mb-4">📦</div>
+                    <div className="text-lg font-medium">No Image Available</div>
+                    <div className="text-sm">Product image coming soon</div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

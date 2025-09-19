@@ -87,7 +87,7 @@ export default function ProductsPageContent() {
             description: product.description || '',
             price: product.price,
             vipPrice: product.vip_price,
-            imageUrl: product.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=400&fit=crop&auto=format',
+            imageUrl: product.image_url || null,
             sku: product.sku,
             brand: product.brand_name || 'Unknown',
             category: product.category_id || 'Accessories',

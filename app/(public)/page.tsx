@@ -508,7 +508,10 @@ export default function HomePage() {
             {/* Product 01 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
               <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-gray-500 text-lg">Product Image</div>
+                <div className="text-center text-gray-500">
+                  <div className="text-4xl mb-2">📦</div>
+                  <div className="text-sm">No Image</div>
+                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-white font-medium mb-2 text-lg">Product 01</h3>
@@ -530,7 +533,10 @@ export default function HomePage() {
             {/* Product 02 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
               <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-gray-500 text-lg">Product Image</div>
+                <div className="text-center text-gray-500">
+                  <div className="text-4xl mb-2">📦</div>
+                  <div className="text-sm">No Image</div>
+                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-white font-medium mb-2 text-lg">Product 02</h3>
@@ -552,7 +558,10 @@ export default function HomePage() {
             {/* Product 03 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
               <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-gray-500 text-lg">Product Image</div>
+                <div className="text-center text-gray-500">
+                  <div className="text-4xl mb-2">📦</div>
+                  <div className="text-sm">No Image</div>
+                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-white font-medium mb-2 text-lg">Product 03</h3>
@@ -574,7 +583,10 @@ export default function HomePage() {
             {/* Product 04 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
               <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-gray-500 text-lg">Product Image</div>
+                <div className="text-center text-gray-500">
+                  <div className="text-4xl mb-2">📦</div>
+                  <div className="text-sm">No Image</div>
+                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-white font-medium mb-2 text-lg">Product 04</h3>

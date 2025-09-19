@@ -46,13 +46,22 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
           <div key={product.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
             <div className="flex">
               {/* Product Image */}
-              <div className="relative w-48 h-48 flex-shrink-0">
-                <Image
-                  src={product.image_url || '/images/placeholder-pipe.jpg'}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative w-48 h-48 flex-shrink-0 bg-gray-100">
+                {product.image_url ? (
+                  <Image
+                    src={product.image_url}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <div className="text-center">
+                      <div className="text-3xl mb-2">🚬</div>
+                      <div className="text-sm">No Image</div>
+                    </div>
+                  </div>
+                )}
                 {product.isNew && (
                   <span className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                     NEW
@@ -171,13 +180,22 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
       {products.map(product => (
         <div key={product.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 group">
           {/* Product Image */}
-          <div className="relative aspect-square overflow-hidden">
-            <Image
-              src={product.image_url || '/images/placeholder-pipe.jpg'}
-              alt={product.name}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+          <div className="relative aspect-square overflow-hidden bg-gray-100">
+            {product.image_url ? (
+              <Image
+                src={product.image_url}
+                alt={product.name}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="text-center">
+                  <div className="text-4xl mb-2">🚬</div>
+                  <div className="text-sm">No Image</div>
+                </div>
+              </div>
+            )}
 
             {/* Badges */}
             <div className="absolute top-2 left-2 flex flex-col gap-1">
