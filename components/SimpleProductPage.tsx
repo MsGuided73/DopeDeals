@@ -8,6 +8,8 @@ interface Product {
   id: string;
   name: string;
   description?: string;
+  description_md?: string;
+  short_description?: string;
   price: number;
   sku: string;
   image_url?: string;
@@ -195,10 +197,12 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
             </div>
 
             {/* Description */}
-            {product.description && (
+            {(product.description_md || product.description) && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-                <p className="text-gray-700 leading-relaxed">{product.description}</p>
+                <div className="text-gray-700 leading-relaxed">
+                  {product.description_md || product.description}
+                </div>
               </div>
             )}
 
