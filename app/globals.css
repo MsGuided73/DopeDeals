@@ -1,5 +1,15 @@
 /* DOPE CITY - Premium Cannabis Culture Styles */
-@import url('/fonts/chalets.css');
+
+/* Chalets Font - Inline Definition for Better Loading */
+@font-face {
+  font-family: 'Chalets';
+  src: url('/fonts/chalets-webfont.woff2') format('woff2'),
+       url('/fonts/chalets-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +19,7 @@
 .font-chalets,
 .font-chalets *,
 [class*="font-chalets"] {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.01em;
 }
@@ -16,6 +27,20 @@
 /* 2. DOPE CITY title specific styling */
 .dope-city-title,
 .dope-city-title * {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: -0.02em;
+}
+
+/* 3. Additional Chalets utility classes */
+.chalets-font {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: -0.01em;
+}
+
+.chalets-title {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.02em;
 }
