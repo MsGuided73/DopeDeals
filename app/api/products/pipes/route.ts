@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
         size,
         inStock: (product.stock_quantity || 0) > 0,
         isNew,
-        isSale
+        isSale,
         features: [
           'Premium Construction',
           'Smooth Airflow', 

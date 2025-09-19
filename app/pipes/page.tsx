@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import GlobalMasthead from '../components/GlobalMasthead';
 import PipesPageContent from './PipesPageContent';
+import AgeVerification from '../components/AgeVerification';
 
 export const metadata = {
   title: 'Glass Pipes & Hand Pipes | DOPE CITY - Premium Smoking Pipes Collection',
@@ -97,7 +99,13 @@ export default function PipesPage() {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Age Verification Popup */}
+      <AgeVerification />
+
+      {/* Universal Layout Components */}
+      <GlobalMasthead />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -109,6 +117,6 @@ export default function PipesPage() {
       }>
         <PipesPageContent />
       </Suspense>
-    </>
+    </div>
   );
 }

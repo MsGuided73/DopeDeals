@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import GlobalMasthead from '../components/GlobalMasthead';
 import ProductsPageContent from './ProductsPageContent';
+import AgeVerification from '../components/AgeVerification';
 
 export const metadata = {
   title: 'All Products | DOPE CITY - Water Bongs, Pipes, THCA Flower & More',
@@ -9,12 +11,20 @@ export const metadata = {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
-      </div>
-    }>
-      <ProductsPageContent />
-    </Suspense>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Age Verification Popup */}
+      <AgeVerification />
+
+      {/* Universal Layout Components */}
+      <GlobalMasthead />
+
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
+        </div>
+      }>
+        <ProductsPageContent />
+      </Suspense>
+    </div>
   );
 }

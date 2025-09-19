@@ -10,9 +10,7 @@ import BongsBreadcrumb from './components/BongsBreadcrumb';
 import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
 import BongsViewToggle from './components/BongsViewToggle';
-import EnhancedSearchBar from '../components/EnhancedSearchBar';
 import { supabaseBrowser } from '../lib/supabase-browser';
-import AgeVerification from '../components/AgeVerification';
 
 export interface BongProduct {
   id: string;
@@ -121,21 +119,50 @@ export default function BongsPageContent() {
   const loadBongProducts = async () => {
     try {
       setLoading(true);
+      console.log('🔍 Loading bong products...');
+
+      // Build bong keywords similar to the pipes API approach
+      const bongKeywords = [
+        'BONG',
+        'WATER PIPE',
+        'BEAKER',
+        'STRAIGHT TUBE',
+        'PERCOLATOR',
+        'BUBBLER',
+        'RIG',
+        'DAB RIG'
+      ];
+
+      // Create OR conditions for bong keywords in name and description
+      const nameConditions = bongKeywords.map(keyword => `name.ilike.%${keyword}%`).join(',');
+      const descConditions = bongKeywords.map(keyword => `description.ilike.%${keyword}%`).join(',');
+      const combinedConditions = `${nameConditions},${descConditions}`;
+
       const { data, error } = await supabaseBrowser
         .from('products')
         .select('*')
-        .or('name.ilike.%bong%, name.ilike.%water pipe%, description.ilike.%bong%, description.ilike.%water pipe%, category.ilike.%bong%')
+        .or(combinedConditions)
         .eq('is_active', true)
+        .eq('nicotine_product', false)
+        .eq('tobacco_product', false)
+        .order('featured', { ascending: false })
         .order('created_at', { ascending: false });
 
+      console.log('📊 Bong products response:', {
+        dataCount: data?.length || 0,
+        error: error ? JSON.stringify(error, null, 2) : null,
+        sampleData: data?.slice(0, 3)?.map(p => ({ id: p.id, name: p.name })) || []
+      });
+
       if (error) {
-        console.error('Error fetching bong products:', error);
+        console.error('❌ Error fetching bong products:', error);
         setProducts([]);
       } else {
+        console.log(`✅ Successfully loaded ${data?.length || 0} bong products`);
         setProducts(data || []);
       }
     } catch (error) {
-      console.error('Error loading bong products:', error);
+      console.error('💥 Catch block error:', error);
       setProducts([]);
     } finally {
       setLoading(false);
@@ -157,84 +184,7 @@ export default function BongsPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
-      {/* Masthead */}
-      <div className="bg-black text-white">
-        <div className="px-6 flex items-center justify-between gap-8" style={{ minHeight: '140px', height: '140px' }}>
-          {/* HUGE DOPE CITY Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="font-black" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '0.01em', fontSize: 'clamp(4rem, 12vw, 7rem)', lineHeight: '1.1' }}>
-              DOPE CITY
-            </Link>
-          </div>
-
-          {/* Enhanced Search Bar */}
-          <div className="flex-1 max-w-3xl mx-8">
-            <EnhancedSearchBar />
-          </div>
-
-          {/* Cart and Account Icons */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-              <Link href="/sitemap-page" className="p-2 hover:bg-gray-800 rounded-md" title="Site Map">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-              </Link>
-              <Link href="/auth" className="p-2 hover:bg-gray-800 rounded-md" title="Account">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </Link>
-              <Link href="/cart" className="p-2 hover:bg-gray-800 rounded-md relative" title="Shopping Cart">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
-                </svg>
-                <span className="absolute -top-1 -right-1 bg-dope-orange text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  0
-                </span>
-              </Link>
-          </div>
-        </div>
-
-        {/* DOPE Orange divider line */}
-        <div className="h-1 bg-dope-orange"></div>
-      </div>
-
-      {/* Navigation Bar */}
-      <nav className="bg-gray-100 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center space-x-8 h-14">
-            <Link href="/brands" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
-              Shop by Brand
-            </Link>
-            <Link href="/products?category=thca" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
-              THCA & More
-            </Link>
-            <Link href="/bongs" className="flex items-center px-3 py-2 text-lg font-bold text-dope-orange border-b-2 border-dope-orange leading-tight">
-              Bongs
-            </Link>
-            <Link href="/pipes" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
-              Pipes
-            </Link>
-            <Link href="/products?category=dab-rigs" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
-              Dab Rigs
-            </Link>
-            <Link href="/products?category=vaporizers" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
-              Vaporizers
-            </Link>
-            <Link href="/products?category=accessories" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
-              Accessories
-            </Link>
-            <Link href="/products?category=edibles" className="flex items-center px-3 py-2 text-lg font-bold text-gray-700 hover:text-dope-orange transition-colors leading-tight">
-              Munchies
-            </Link>
-          </div>
-        </div>
-      </nav>
-
+    <div>
       {/* Breadcrumb */}
       <BongsBreadcrumb />
 

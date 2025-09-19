@@ -44,6 +44,9 @@ export default function ProductsPageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
 
+  // Get search query from URL parameters
+  const searchQuery = searchParams.get('q') || '';
+
   // Filter states
   const [filters, setFilters] = useState({
     priceRange: [0, 500],
@@ -64,7 +67,7 @@ export default function ProductsPageContent() {
           .from('products')
           .select(`
             id, name, description, price, vip_price, image_url, sku,
-            stock_quantity, is_active, brand_id, category_id, materials,
+            stock_quantity, is_active, brand_id, brand_name, category_id, materials,
             featured, vip_exclusive, tags, created_at, updated_at, channels
           `)
           .eq('is_active', true)
@@ -86,7 +89,7 @@ export default function ProductsPageContent() {
             vipPrice: product.vip_price,
             imageUrl: product.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=400&fit=crop&auto=format',
             sku: product.sku,
-            brand: product.brand_id || 'Unknown',
+            brand: product.brand_name || 'Unknown',
             category: product.category_id || 'Accessories',
             material: Array.isArray(product.materials) ? product.materials[0] : 'Glass',
             size: 'Standard',
@@ -117,8 +120,21 @@ export default function ProductsPageContent() {
   useEffect(() => {
     let filtered = [...products];
 
+    // Search query filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query) ||
+        product.brand.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query) ||
+        product.sku.toLowerCase().includes(query) ||
+        product.tags.some(tag => tag.toLowerCase().includes(query))
+      );
+    }
+
     // Price filter
-    filtered = filtered.filter(product => 
+    filtered = filtered.filter(product =>
       product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1]
     );
 
@@ -174,7 +190,7 @@ export default function ProductsPageContent() {
 
     setFilteredProducts(filtered);
     setCurrentPage(1);
-  }, [products, filters, sortBy]);
+  }, [products, filters, sortBy, searchQuery]);
 
   // Pagination
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -191,7 +207,7 @@ export default function ProductsPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       {/* Hero Section */}
       <ProductsHero />
 
@@ -216,6 +232,18 @@ export default function ProductsPageContent() {
 
           {/* Products Section */}
           <div className="lg:w-3/4">
+            {/* Search Results Header */}
+            {searchQuery && (
+              <div className="mb-4 p-4 bg-dope-orange-50 border border-dope-orange-200 rounded-lg">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Search Results for "{searchQuery}"
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  Found {filteredProducts.length} products
+                </p>
+              </div>
+            )}
+
             {/* Sort Bar and View Toggle */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div className="flex items-center gap-4">
