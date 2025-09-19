@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../app/lib/utils";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
