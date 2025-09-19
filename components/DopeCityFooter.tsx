@@ -205,7 +205,7 @@ export default function DopeCityFooter() {
           {/* Large DOPE CITY Branding */}
           <div className="mb-8">
             <Link href="/" className="inline-block dope-hover hover:scale-105">
-              <h1 className="font-chalets text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl">
+              <h1 className="font-chalets text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal' }}>
                 <span className="text-white drop-shadow-2xl">DOPE</span>
                 <span className="text-dope-orange-500 ml-4 drop-shadow-2xl">CITY</span>
               </h1>
