@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chalets Font Test</title>
+    <link rel="stylesheet" href="/fonts/chalets.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+        }
+        
+        .test-chalets {
+            font-family: 'Chalets', 'Inter', system-ui, sans-serif;
+            font-size: 4rem;
+            font-weight: normal;
+            letter-spacing: -0.02em;
+            margin: 20px 0;
+        }
+        
+        .test-fallback {
+            font-family: Arial, sans-serif;
+            font-size: 4rem;
+            font-weight: normal;
+            letter-spacing: -0.02em;
+            margin: 20px 0;
+        }
+        
+        .debug-info {
+            background: #333;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chalets Font Loading Test</h1>
+    
+    <div class="debug-info">
+        <strong>Font Files Status:</strong><br>
+        <span id="font-status">Checking...</span>
+    </div>
+    
+    <div class="test-chalets">DOPE CITY</div>
+    <div style="font-size: 1rem; color: #888;">↑ Should be Chalets font</div>
+    
+    <div class="test-fallback">DOPE CITY</div>
+    <div style="font-size: 1rem; color: #888;">↑ Arial fallback for comparison</div>
+    
+    <div class="debug-info">
+        <strong>Computed Font Family:</strong><br>
+        <span id="computed-font">Checking...</span>
+    </div>
+    
+    <script>
+        // Check if font files are accessible
+        async function checkFontFiles() {
+            const fontFiles = [
+                '/fonts/chalets-webfont.woff2',
+                '/fonts/chalets-webfont.woff',
+                '/fonts/chalets.css'
+            ];
+            
+            const results = [];
+            
+            for (const file of fontFiles) {
+                try {
+                    const response = await fetch(file);
+                    results.push(`${file}: ${response.ok ? 'OK' : 'FAILED'} (${response.status})`);
+                } catch (error) {
+                    results.push(`${file}: ERROR - ${error.message}`);
+                }
+            }
+            
+            document.getElementById('font-status').innerHTML = results.join('<br>');
+        }
+        
+        // Check computed font family
+        function checkComputedFont() {
+            const element = document.querySelector('.test-chalets');
+            const computedStyle = window.getComputedStyle(element);
+            const fontFamily = computedStyle.fontFamily;
+            document.getElementById('computed-font').textContent = fontFamily;
+        }
+        
+        // Wait for fonts to load
+        document.fonts.ready.then(() => {
+            console.log('All fonts loaded');
+            checkComputedFont();
+        });
+        
+        // Run checks
+        checkFontFiles();
+        setTimeout(checkComputedFont, 1000);
+    </script>
+</body>
+</html>
