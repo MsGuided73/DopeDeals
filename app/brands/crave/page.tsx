@@ -61,7 +61,7 @@ export default async function CravePage() {
       <div className="relative bg-gradient-to-r from-gray-900 to-black text-white py-20">
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative max-w-6xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-6" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
+          <h1 className="text-5xl mb-6" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.02em' }}>
             CRAVE
           </h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">

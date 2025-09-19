@@ -130,11 +130,11 @@ export default function HomePage() {
         <div className="bg-black text-white px-6 flex items-center justify-between gap-8" style={{ minHeight: '140px', height: '140px' }}>
           {/* Left: HUGE DOPE CITY Logo */}
           <div
-            className="font-chalets font-black leading-none text-white flex-shrink-0"
+            className="font-chalets leading-none text-white flex-shrink-0"
             style={{
               fontSize: 'clamp(4rem, 12vw, 7rem)',
               lineHeight: '1.1',
-              letterSpacing: '0.01em'
+              letterSpacing: '-0.02em'
             }}
           >
             DOPE CITY
@@ -329,7 +329,7 @@ export default function HomePage() {
       <main className="w-full px-8 py-16">
         {/* Collections Header */}
         <div className="text-left mb-12">
-          <h2 className="text-5xl font-black text-black mb-4 font-chalets uppercase tracking-tight">Our Collections</h2>
+          <h2 className="text-5xl text-black mb-4 font-chalets uppercase" style={{ letterSpacing: '-0.02em' }}>Our Collections</h2>
         </div>
 
         <div className="grid grid-cols-6 gap-6 h-[1200px] max-w-none">
@@ -492,7 +492,7 @@ export default function HomePage() {
         {/* NEW ARRIVALS Section */}
         <section className="mt-24">
           <div className="flex items-center justify-between mb-12">
-            <h2 className="text-5xl font-chalets text-gray-900 dark:text-white">
+            <h2 className="text-5xl font-chalets text-gray-900 dark:text-white" style={{ letterSpacing: '-0.02em' }}>
               NEW ARRIVALS
             </h2>
             <Link
@@ -612,7 +612,7 @@ export default function HomePage() {
         {/* Customer Reviews Section */}
         <section className="mt-16">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white mb-4" style={{ letterSpacing: '-0.02em' }}>
               What Our Customers Say
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300">
@@ -788,7 +788,7 @@ export default function HomePage() {
         {/* Staff Picks Section */}
         <section className="mt-16">
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white mb-4" style={{ letterSpacing: '-0.02em' }}>
               🔥 STAFF PICKS 🔥
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
