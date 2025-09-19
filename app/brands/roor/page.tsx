@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { supabaseServer } from '../../lib/supabase-server';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import DopeCityFooter from '../../../components/DopeCityFooter';
+import QuickAddToCartButton from '../../components/QuickAddToCartButton';
+import Link from 'next/link';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
@@ -118,13 +120,27 @@ export default async function RoorPage() {
                     {product.short_description && (
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.short_description}</p>
                     )}
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-orange-600">
-                        ${Number(product.price).toFixed(2)}
-                      </span>
-                      <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded transition-colors">
-                        View Details
-                      </button>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-orange-600">
+                          ${Number(product.price).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <QuickAddToCartButton
+                          productId={product.id}
+                          productName={product.name}
+                          variant="secondary"
+                          size="sm"
+                          className="flex-1"
+                        />
+                        <Link
+                          href={`/product/${product.id}`}
+                          className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded text-sm font-semibold transition-colors text-center"
+                        >
+                          Quick View
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -166,13 +182,27 @@ export default async function RoorPage() {
                     {product.short_description && (
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.short_description}</p>
                     )}
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-orange-600">
-                        ${Number(product.price).toFixed(2)}
-                      </span>
-                      <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded transition-colors">
-                        View Details
-                      </button>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-orange-600">
+                          ${Number(product.price).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <QuickAddToCartButton
+                          productId={product.id}
+                          productName={product.name}
+                          variant="secondary"
+                          size="sm"
+                          className="flex-1"
+                        />
+                        <Link
+                          href={`/product/${product.id}`}
+                          className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded text-sm font-semibold transition-colors text-center"
+                        >
+                          Quick View
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -211,13 +241,30 @@ export default async function RoorPage() {
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-sm mb-2 line-clamp-2">{product.name}</h3>
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-orange-600">
-                        ${Number(product.price).toFixed(2)}
-                      </span>
-                      <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition-colors">
-                        View
-                      </button>
+                    {product.short_description && (
+                      <p className="text-gray-600 text-xs mb-3 line-clamp-2">{product.short_description}</p>
+                    )}
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg font-bold text-orange-600">
+                          ${Number(product.price).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex gap-1">
+                        <QuickAddToCartButton
+                          productId={product.id}
+                          productName={product.name}
+                          variant="secondary"
+                          size="sm"
+                          className="flex-1"
+                        />
+                        <Link
+                          href={`/product/${product.id}`}
+                          className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs font-semibold transition-colors text-center"
+                        >
+                          View
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -258,13 +305,27 @@ export default async function RoorPage() {
                     {product.short_description && (
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.short_description}</p>
                     )}
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-orange-600">
-                        ${Number(product.price).toFixed(2)}
-                      </span>
-                      <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded transition-colors">
-                        View Details
-                      </button>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-orange-600">
+                          ${Number(product.price).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <QuickAddToCartButton
+                          productId={product.id}
+                          productName={product.name}
+                          variant="secondary"
+                          size="sm"
+                          className="flex-1"
+                        />
+                        <Link
+                          href={`/product/${product.id}`}
+                          className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded text-sm font-semibold transition-colors text-center"
+                        >
+                          Quick View
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
