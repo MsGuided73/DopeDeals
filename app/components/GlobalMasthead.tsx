@@ -85,10 +85,10 @@ export default function GlobalMasthead() {
               {openDropdown === 'brands' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
-                    <Link href="/brands/raw" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
+                    <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
                     <Link href="/brands/puffco" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
                     <Link href="/brands/storz-bickel" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
-                    <Link href="/brands/roor" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
+                    <Link href="/brands/roor-glass" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
                     <Link href="/brands" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
                   </div>
                 </div>
@@ -110,7 +110,7 @@ export default function GlobalMasthead() {
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
                     <Link href="/products?q=thca" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Flower</Link>
-                    <Link href="/products?q=pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Pre-Rolls</Link>
+                    <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Pre-Rolls</Link>
                     <Link href="/products?q=concentrates" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Concentrates</Link>
                     <Link href="/products?q=edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
                     <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
@@ -174,6 +174,16 @@ export default function GlobalMasthead() {
                 className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
               >
                 Dab Rigs
+              </Link>
+            </li>
+
+            {/* E-Rigs */}
+            <li>
+              <Link
+                href="/category/e-rigs"
+                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
+              >
+                E-Rigs
               </Link>
             </li>
 

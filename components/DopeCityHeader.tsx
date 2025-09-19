@@ -29,10 +29,10 @@ export default function DopeCityHeader() {
             <Link href="/products?q=thca" className="text-white hover:text-yellow-400 font-medium transition-colors">
               THCA & More
             </Link>
-            <Link href="/products?category=bongs" className="text-white hover:text-yellow-400 font-medium transition-colors">
+            <Link href="/bongs" className="text-white hover:text-yellow-400 font-medium transition-colors">
               Bongs
             </Link>
-            <Link href="/products?category=pipes" className="text-white hover:text-yellow-400 font-medium transition-colors">
+            <Link href="/pipes" className="text-white hover:text-yellow-400 font-medium transition-colors">
               Pipes
             </Link>
             <Link href="/products?category=dab-rigs" className="text-white hover:text-yellow-400 font-medium transition-colors">
@@ -115,10 +115,10 @@ export default function DopeCityHeader() {
             <Link href="/products?q=thca" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
               THCA & More
             </Link>
-            <Link href="/products?category=bongs" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
+            <Link href="/bongs" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
               Bongs
             </Link>
-            <Link href="/products?category=pipes" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
+            <Link href="/pipes" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
               Pipes
             </Link>
             <Link href="/products?category=dab-rigs" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>

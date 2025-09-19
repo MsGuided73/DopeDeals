@@ -8,6 +8,7 @@ import AgeVerification from '../components/AgeVerification';
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -20,6 +21,12 @@ export default function HomePage() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Check age verification status
+  useEffect(() => {
+    const verified = localStorage.getItem('dope-city-age-verified');
+    setIsAgeVerified(!!verified);
   }, []);
 
   // Timer for Staff Picks - resets daily at midnight
@@ -62,11 +69,59 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Custom Styles for Ghost Glow Button */}
+      <style jsx>{`
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.4), 0 0 40px rgba(255, 140, 0, 0.2), 0 0 60px rgba(255, 140, 0, 0.1);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(255, 165, 0, 0.6), 0 0 60px rgba(255, 140, 0, 0.4), 0 0 90px rgba(255, 140, 0, 0.2);
+          }
+        }
+
+        .ghost-glow-button {
+          background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
+          backdrop-filter: blur(10px);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .ghost-glow-button:hover {
+          animation: pulse-glow 2s ease-in-out infinite;
+          background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 140, 0, 0.1) 100%);
+        }
+
+        .ghost-glow-button:active {
+          animation: none;
+          box-shadow: 0 0 25px rgba(255, 165, 0, 0.8), 0 0 50px rgba(255, 140, 0, 0.6), 0 0 75px rgba(255, 140, 0, 0.4);
+          background: linear-gradient(135deg, rgba(255, 165, 0, 0.2) 0%, rgba(255, 140, 0, 0.15) 100%);
+          transform: scale(0.98);
+        }
+
+        .ghost-glow-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+        }
+
+        .ghost-glow-button:hover::before {
+          left: 100%;
+        }
+      `}</style>
+
       {/* Age Verification Popup */}
       <AgeVerification />
 
-      {/* Masthead Section */}
-      <header
+      {/* Main Content - Blurred when age verification is showing */}
+      <div className={`${!isAgeVerified ? 'blur-lg pointer-events-none' : ''} transition-all duration-300`}>
+        {/* Masthead Section */}
+        <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ease-in-out ${
           scrolled ? "shadow-lg" : "shadow-none"
         }`}
@@ -135,10 +190,10 @@ export default function HomePage() {
               {openDropdown === 'brands' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
-                    <Link href="/brands/raw" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
+                    <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
                     <Link href="/brands/puffco" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
                     <Link href="/brands/storz-bickel" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
-                    <Link href="/brands/roor" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
+                    <Link href="/brands/roor-glass" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
                     <Link href="/brands" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
                   </div>
                 </div>
@@ -227,6 +282,16 @@ export default function HomePage() {
               </Link>
             </li>
 
+            {/* E-Rigs */}
+            <li>
+              <Link
+                href="/category/e-rigs"
+                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
+              >
+                E-Rigs
+              </Link>
+            </li>
+
             {/* Vaporizers */}
             <li>
               <Link
@@ -268,21 +333,25 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-6 gap-6 h-[1200px] max-w-none">
-          {/* Large Bongs Card - Takes up 2x3 space */}
+          {/* THCA Pre-Rolls Featured Card - Takes up 2x2 space */}
           <Link
-            href="/bongs"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/pre-rolls"
+            className="relative col-span-2 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Screenshot%202025-09-12%20162627.png'), linear-gradient(135deg, #1f2937 0%, #374151 100%)",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Pre-Roll%20Sample%204B.png')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
-            title="Click anywhere to explore our dope collection of bongs & water pipes!"
+            title="Click anywhere to discover our premium THCA pre-roll selection!"
           >
-
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-2xl mb-3">Bongs & Water Pipes</h3>
-              <p className="text-lg opacity-90">Premium glass pieces for everyone</p>
+            {/* Ghost Button with Animated Glow - Positioned at Bottom Edge */}
+            <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center pb-6">
+              <button
+                className="ghost-glow-button px-8 py-4 border border-white/0 rounded-lg font-bold text-white text-xl uppercase tracking-wide transition-all duration-300 hover:border-white/20 active:border-white/30"
+                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+              >
+                SHOP NOW
+              </button>
             </div>
           </Link>
 
@@ -778,6 +847,7 @@ export default function HomePage() {
 
 
       </main>
+      </div>
     </div>
   );
 }
