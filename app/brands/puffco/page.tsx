@@ -73,8 +73,7 @@ export default async function PuffcoPage() {
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&q=80')] bg-cover bg-center opacity-10"></div>
           <div className="relative max-w-7xl mx-auto px-6 text-center">
             <div className="mb-8">
-              <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-6" 
-                  style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
+              <h1 className="dope-city-title text-6xl md:text-8xl mb-6">
                 PUFFCO
               </h1>
               <div className="w-32 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto mb-8"></div>
@@ -108,8 +107,8 @@ export default async function PuffcoPage() {
           <section className="py-16 bg-gray-900">
             <div className="max-w-7xl mx-auto px-6">
               <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-bold mb-4" 
-                    style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
+                <h2 className="text-4xl md:text-5xl mb-4"
+                    style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '0.1em', fontWeight: 'normal' }}>
                   PEAK PRO COLLECTION
                 </h2>
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -131,8 +130,8 @@ export default async function PuffcoPage() {
           <section className="py-16 bg-black">
             <div className="max-w-7xl mx-auto px-6">
               <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-bold mb-4" 
-                    style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
+                <h2 className="text-4xl md:text-5xl mb-4"
+                    style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '0.1em', fontWeight: 'normal' }}>
                   PROXY COLLECTION
                 </h2>
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -176,8 +175,7 @@ export default async function PuffcoPage() {
         <section className="py-20 bg-gradient-to-br from-black via-gray-900 to-black">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6" 
-                  style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
+              <h2 className="dope-city-title text-4xl md:text-5xl mb-6">
                 WHY PUFFCO DOMINATES
               </h2>
             </div>
@@ -216,8 +214,8 @@ export default async function PuffcoPage() {
         {/* CTA Section */}
         <section className="py-16 bg-gradient-to-r from-orange-600 to-orange-500">
           <div className="max-w-4xl mx-auto text-center px-6">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white" 
-                style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
+            <h2 className="text-4xl md:text-5xl mb-6 text-white"
+                style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '0.1em', fontWeight: 'normal' }}>
               EXPERIENCE THE DIFFERENCE
             </h2>
             <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">

@@ -144,7 +144,7 @@ export default function AuthPage() {
           <div className="absolute -inset-1 bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange rounded-lg blur-sm opacity-30 animate-pulse"></div>
           <div className="relative bg-white rounded-lg p-8 -m-8">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-black text-black mb-2 uppercase" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '0.05em' }}>
+            <h1 className="dope-city-title text-4xl text-black mb-2 uppercase">
               {isSignUp ? 'Join DOPE CITY' : 'Welcome Back'}
             </h1>
             <p className="text-gray-600">

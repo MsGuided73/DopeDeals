@@ -51,16 +51,9 @@ export default function AgeVerification() {
       
       {/* Modal Content */}
       <div className="relative z-10 bg-black text-white p-12 rounded-2xl shadow-2xl max-w-2xl mx-4 border border-dope-orange/30">
-        {/* DOPE CITY Logo */}
+        {/* DOPE CITY Logo - PERFECT STYLING */}
         <div className="text-center mb-8">
-          <h1
-            className="text-7xl font-black mb-4"
-            style={{
-              fontFamily: 'Chalets, sans-serif',
-              letterSpacing: '0.01em',
-              lineHeight: '1.1'
-            }}
-          >
+          <h1 className="dope-city-title text-7xl mb-4" style={{ lineHeight: '1.1' }}>
             DOPE CITY
           </h1>
           <div className="w-20 h-1 bg-dope-orange mx-auto"></div>
