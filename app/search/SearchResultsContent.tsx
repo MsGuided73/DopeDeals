@@ -6,6 +6,7 @@ import GlobalMasthead from '../components/GlobalMasthead';
 import DopeCityFooter from '../../components/DopeCityFooter';
 import Image from 'next/image';
 import { PRODUCT_CATEGORIES, PRODUCT_BRANDS, PRICE_RANGES } from '../lib/product-categorization';
+import ProductCard from '../products/components/ProductCard';
 import { 
   Search, 
   Filter, 
@@ -434,101 +435,110 @@ export default function SearchResultsContent() {
           </div>
         ) : results.length > 0 ? (
           <div className={
-            viewMode === 'grid' 
+            viewMode === 'grid'
               ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
               : 'space-y-4'
           }>
-            {results.map((result) => (
-              <div
-                key={`${result.resultType}-${result.id}`}
-                className={`bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow ${
-                  viewMode === 'list' ? 'flex' : ''
-                }`}
-              >
-                {/* Image */}
-                <div className={`bg-gray-100 relative ${
-                  viewMode === 'list' ? 'w-32 h-32 flex-shrink-0' : 'aspect-square'
-                }`}>
-                  {result.image_url ? (
-                    <Image
-                      src={result.image_url}
-                      alt={result.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      {getResultTypeIcon(result.resultType)}
-                    </div>
-                  )}
-                  
-                  {/* Result Type Badge */}
-                  <div className="absolute top-2 left-2">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      result.resultType === 'brand' ? 'bg-blue-100 text-blue-800' :
-                      result.resultType === 'category' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {result.resultType}
-                    </span>
-                  </div>
+            {results.map((result) => {
+              // For products, use the enhanced ProductCard
+              if (result.resultType === 'product') {
+                return (
+                  <ProductCard
+                    key={`${result.resultType}-${result.id}`}
+                    product={result}
+                    viewMode={viewMode}
+                    showAddToCart={true}
+                  />
+                );
+              }
 
-                  {/* Featured Badge */}
-                  {result.featured && (
-                    <div className="absolute top-2 right-2">
-                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                    </div>
-                  )}
-                </div>
+              // For brands and categories, use the original display
+              return (
+                <div
+                  key={`${result.resultType}-${result.id}`}
+                  className={`bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow ${
+                    viewMode === 'list' ? 'flex' : ''
+                  }`}
+                >
+                  {/* Image */}
+                  <div className={`bg-gray-100 relative ${
+                    viewMode === 'list' ? 'w-32 h-32 flex-shrink-0' : 'aspect-square'
+                  }`}>
+                    {result.image_url ? (
+                      <Image
+                        src={result.image_url}
+                        alt={result.name}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        {getResultTypeIcon(result.resultType)}
+                      </div>
+                    )}
 
-                {/* Content */}
-                <div className={`p-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-lg line-clamp-2">{result.name}</h3>
-                    {result.resultType === 'product' && (
-                      <span className="text-xl font-bold text-dope-orange-600 ml-2">
-                        ${result.price.toFixed(2)}
+                    {/* Result Type Badge */}
+                    <div className="absolute top-2 left-2">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        result.resultType === 'brand' ? 'bg-blue-100 text-blue-800' :
+                        result.resultType === 'category' ? 'bg-green-100 text-green-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {result.resultType}
                       </span>
+                    </div>
+
+                    {/* Featured Badge */}
+                    {result.featured && (
+                      <div className="absolute top-2 right-2">
+                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                      </div>
                     )}
                   </div>
 
-                  {result.brand_name && (
-                    <p className="text-sm text-gray-600 mb-2">{result.brand_name}</p>
-                  )}
-
-                  {(result.short_description || result.description) && (
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {result.short_description || result.description}
-                    </p>
-                  )}
-
-                  {/* Tags */}
-                  {result.tags && result.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {result.tags.slice(0, 3).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                  {/* Content */}
+                  <div className={`p-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold text-lg line-clamp-2">{result.name}</h3>
                     </div>
-                  )}
 
-                  {/* Actions */}
-                  <div className="flex items-center justify-between">
-                    {result.sku && (
-                      <span className="text-xs text-gray-500">SKU: {result.sku}</span>
+                    {result.brand_name && (
+                      <p className="text-sm text-gray-600 mb-2">{result.brand_name}</p>
                     )}
-                    <Button size="sm" className="bg-dope-orange-500 hover:bg-dope-orange-600">
-                      {result.resultType === 'product' ? 'View Product' : 
-                       result.resultType === 'brand' ? 'View Brand' : 'View Category'}
-                    </Button>
+
+                    {(result.short_description || result.description) && (
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                        {result.short_description || result.description}
+                      </p>
+                    )}
+
+                    {/* Tags */}
+                    {result.tags && result.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {result.tags.slice(0, 3).map((tag, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-between">
+                      {result.sku && (
+                        <span className="text-xs text-gray-500">SKU: {result.sku}</span>
+                      )}
+                      <Button size="sm" className="bg-dope-orange-500 hover:bg-dope-orange-600">
+                        {result.resultType === 'brand' ? 'View Brand' : 'View Category'}
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : searchQuery ? (
           <div className="text-center py-12">
