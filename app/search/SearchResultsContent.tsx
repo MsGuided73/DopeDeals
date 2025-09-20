@@ -46,7 +46,7 @@ interface SearchFilters {
   brand: string;
   priceMin: string;
   priceMax: string;
-  inStock: boolean;
+  stockStatus: string; // 'all', 'in-stock', 'out-of-stock', 'low-stock'
   featured: boolean;
   materials: string[];
   tags: string[];
@@ -77,7 +77,7 @@ export default function SearchResultsContent() {
     brand: searchParams.get('brand') || 'all',
     priceMin: searchParams.get('priceMin') || '',
     priceMax: searchParams.get('priceMax') || '',
-    inStock: searchParams.get('inStock') === 'true',
+    stockStatus: searchParams.get('stockStatus') || 'all',
     featured: searchParams.get('featured') === 'true',
     materials: searchParams.get('materials')?.split(',').filter(Boolean) || [],
     tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
@@ -103,7 +103,7 @@ export default function SearchResultsContent() {
         ...(currentFilters.brand !== 'all' && { brand: currentFilters.brand }),
         ...(currentFilters.priceMin && { priceMin: currentFilters.priceMin }),
         ...(currentFilters.priceMax && { priceMax: currentFilters.priceMax }),
-        ...(currentFilters.inStock && { inStock: 'true' }),
+        ...(currentFilters.stockStatus !== 'all' && { stockStatus: currentFilters.stockStatus }),
         ...(currentFilters.featured && { featured: 'true' }),
         ...(currentFilters.materials.length > 0 && { materials: currentFilters.materials.join(',') }),
         ...(currentFilters.tags.length > 0 && { tags: currentFilters.tags.join(',') }),
@@ -163,7 +163,7 @@ export default function SearchResultsContent() {
     if (currentFilters.brand !== 'all') params.set('brand', currentFilters.brand);
     if (currentFilters.priceMin) params.set('priceMin', currentFilters.priceMin);
     if (currentFilters.priceMax) params.set('priceMax', currentFilters.priceMax);
-    if (currentFilters.inStock) params.set('inStock', 'true');
+    if (currentFilters.stockStatus !== 'all') params.set('stockStatus', currentFilters.stockStatus);
     if (currentFilters.featured) params.set('featured', 'true');
     if (currentFilters.materials.length > 0) params.set('materials', currentFilters.materials.join(','));
     if (currentFilters.tags.length > 0) params.set('tags', currentFilters.tags.join(','));
@@ -389,29 +389,34 @@ export default function SearchResultsContent() {
                 </div>
               </div>
 
-              {/* Quick Filters */}
+              {/* Stock Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Quick Filters</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={filters.inStock}
-                      onChange={(e) => handleFilterChange('inStock', e.target.checked)}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">In Stock Only</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={filters.featured}
-                      onChange={(e) => handleFilterChange('featured', e.target.checked)}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">Featured Products</span>
-                  </label>
-                </div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Stock Status</label>
+                <select
+                  value={filters.stockStatus}
+                  onChange={(e) => handleFilterChange('stockStatus', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange-500"
+                >
+                  <option value="all">All Products</option>
+                  <option value="in-stock">In Stock Only</option>
+                  <option value="out-of-stock">Out of Stock Only</option>
+                  <option value="low-stock">Low Stock (1-5)</option>
+                  <option value="high-stock">High Stock (20+)</option>
+                </select>
+              </div>
+
+              {/* Featured Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Featured</label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={filters.featured}
+                    onChange={(e) => handleFilterChange('featured', e.target.checked)}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">Featured Products Only</span>
+                </label>
               </div>
             </div>
           </div>
@@ -542,7 +547,7 @@ export default function SearchResultsContent() {
                   brand: 'all',
                   priceMin: '',
                   priceMax: '',
-                  inStock: false,
+                  stockStatus: 'all',
                   featured: false,
                   materials: [],
                   tags: [],
