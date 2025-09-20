@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import GlobalMasthead from '../components/GlobalMasthead';
 import DopeCityFooter from '../../components/DopeCityFooter';
 import Image from 'next/image';
+import { PRODUCT_CATEGORIES, PRODUCT_BRANDS, PRICE_RANGES } from '../lib/product-categorization';
 import { 
   Search, 
   Filter, 
@@ -326,11 +327,11 @@ export default function SearchResultsContent() {
                   onChange={(e) => handleFilterChange('category', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange-500"
                 >
-                  <option value="all">All Categories</option>
-                  <option value="disposables">Disposables</option>
-                  <option value="batteries">Batteries</option>
-                  <option value="accessories">Accessories</option>
-                  <option value="cannabis">Cannabis</option>
+                  {PRODUCT_CATEGORIES.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -342,31 +343,49 @@ export default function SearchResultsContent() {
                   onChange={(e) => handleFilterChange('brand', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange-500"
                 >
-                  <option value="all">All Brands</option>
-                  <option value="crave">Crave</option>
-                  <option value="elf bar">Elf Bar</option>
-                  <option value="geek bar">Geek Bar</option>
+                  {PRODUCT_BRANDS.map((brand) => (
+                    <option key={brand.value} value={brand.value}>
+                      {brand.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               {/* Price Range */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
-                <div className="flex gap-2">
-                  <Input
-                    type="number"
-                    placeholder="Min"
-                    value={filters.priceMin}
-                    onChange={(e) => handleFilterChange('priceMin', e.target.value)}
-                    className="w-full"
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Max"
-                    value={filters.priceMax}
-                    onChange={(e) => handleFilterChange('priceMax', e.target.value)}
-                    className="w-full"
-                  />
+                <div className="space-y-2">
+                  <select
+                    value={`${filters.priceMin || ''}-${filters.priceMax || ''}`}
+                    onChange={(e) => {
+                      const [min, max] = e.target.value.split('-');
+                      handleFilterChange('priceMin', min || '');
+                      handleFilterChange('priceMax', max || '');
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange-500"
+                  >
+                    {PRICE_RANGES.map((range) => (
+                      <option key={range.value} value={range.value === 'all' ? '' : `${range.min}-${range.max}`}>
+                        {range.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.priceMin}
+                      onChange={(e) => handleFilterChange('priceMin', e.target.value)}
+                      className="w-full text-sm"
+                    />
+                    <Input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.priceMax}
+                      onChange={(e) => handleFilterChange('priceMax', e.target.value)}
+                      className="w-full text-sm"
+                    />
+                  </div>
                 </div>
               </div>
 

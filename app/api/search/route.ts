@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { detectBrand, detectCategory, filterByBrand, filterByCategory } from '../../lib/product-categorization';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -118,23 +119,22 @@ function calculateRelevanceScore(item: any, searchTerm: string, searchType: 'pro
   return Math.max(0, score);
 }
 
-// Apply search filters
+// Apply search filters with enhanced categorization
 function applyFilters(products: any[], filters: SearchFilters): any[] {
-  return products.filter(product => {
-    // Category filter
-    if (filters.category && filters.category !== 'all') {
-      if (product.zoho_category_name?.toLowerCase() !== filters.category.toLowerCase()) {
-        return false;
-      }
-    }
+  let filteredProducts = [...products];
 
-    // Brand filter
-    if (filters.brand && filters.brand !== 'all') {
-      if (product.brand_name?.toLowerCase() !== filters.brand.toLowerCase()) {
-        return false;
-      }
-    }
+  // Category filter using name-based detection
+  if (filters.category && filters.category !== 'all') {
+    filteredProducts = filterByCategory(filteredProducts, filters.category);
+  }
 
+  // Brand filter using name-based detection
+  if (filters.brand && filters.brand !== 'all') {
+    filteredProducts = filterByBrand(filteredProducts, filters.brand);
+  }
+
+  // Apply remaining filters
+  return filteredProducts.filter(product => {
     // Price range filter
     if (filters.priceMin !== undefined && product.price < filters.priceMin) {
       return false;
