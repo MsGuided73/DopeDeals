@@ -292,11 +292,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Apply stock filter
-    if (filters.inStock) {
-      filteredProducts = filteredProducts.filter(product => 
-        (product.stock_quantity || 0) > 0
-      );
+    // Apply stock status filter
+    if (filters.stockStatus && filters.stockStatus !== 'all') {
+      filteredProducts = filteredProducts.filter(product => {
+        const stockQty = product.stock_quantity || 0;
+
+        switch (filters.stockStatus) {
+          case 'in-stock':
+            return stockQty > 0;
+          case 'out-of-stock':
+            return stockQty <= 0;
+          case 'low-stock':
+            return stockQty > 0 && stockQty <= 5;
+          case 'high-stock':
+            return stockQty >= 20;
+          default:
+            return true;
+        }
+      });
     }
 
     // Apply featured filter

@@ -34,7 +34,7 @@ export default function TestFiltersPage() {
     brand: 'all',
     priceMin: '',
     priceMax: '',
-    inStock: false,
+    stockStatus: 'all',
     featured: false
   });
   const [testQuery, setTestQuery] = useState('');
@@ -255,17 +255,24 @@ export default function TestFiltersPage() {
               />
             </div>
 
-            {/* Checkboxes */}
+            {/* Stock Status Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Stock Status</label>
+              <select
+                value={testFilters.stockStatus}
+                onChange={(e) => setTestFilters(prev => ({ ...prev, stockStatus: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              >
+                <option value="all">All Products</option>
+                <option value="in-stock">In Stock Only</option>
+                <option value="out-of-stock">Out of Stock Only</option>
+                <option value="low-stock">Low Stock (1-5)</option>
+                <option value="high-stock">High Stock (20+)</option>
+              </select>
+            </div>
+
+            {/* Featured Filter */}
             <div className="space-y-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={testFilters.inStock}
-                  onChange={(e) => setTestFilters(prev => ({ ...prev, inStock: e.target.checked }))}
-                  className="mr-2"
-                />
-                In Stock Only
-              </label>
               <label className="flex items-center">
                 <input
                   type="checkbox"

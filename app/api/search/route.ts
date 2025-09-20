@@ -31,7 +31,7 @@ interface SearchFilters {
   brand?: string;
   priceMin?: number;
   priceMax?: number;
-  inStock?: boolean;
+  stockStatus?: string; // 'all', 'in-stock', 'out-of-stock', 'low-stock', 'high-stock'
   featured?: boolean;
   materials?: string[];
   tags?: string[];
@@ -143,15 +143,8 @@ function applyFilters(products: any[], filters: SearchFilters): any[] {
       return false;
     }
 
-    // Stock filter
-    if (filters.inStock && (product.stock_quantity || 0) <= 0) {
-      return false;
-    }
-
-    // Featured filter
-    if (filters.featured && !product.featured) {
-      return false;
-    }
+    // Stock status and featured filters are now handled at database level
+    // Only client-side filters remain here
 
     // Materials filter
     if (filters.materials && filters.materials.length > 0) {
@@ -198,7 +191,7 @@ export async function GET(request: NextRequest) {
       brand: searchParams.get('brand') || undefined,
       priceMin: searchParams.get('priceMin') ? parseFloat(searchParams.get('priceMin')!) : undefined,
       priceMax: searchParams.get('priceMax') ? parseFloat(searchParams.get('priceMax')!) : undefined,
-      inStock: searchParams.get('inStock') === 'true',
+      stockStatus: searchParams.get('stockStatus') || 'all',
       featured: searchParams.get('featured') === 'true',
       materials: searchParams.get('materials')?.split(',').filter(Boolean) || [],
       tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
@@ -217,8 +210,8 @@ export async function GET(request: NextRequest) {
     const searchTerm = query.toLowerCase().trim();
     let allResults: SearchResult[] = [];
 
-    // Search products with comprehensive field coverage
-    const { data: products, error: productsError } = await supabase
+    // Build the base query
+    let query = supabase
       .from('products')
       .select(`
         id, name, brand_name, price, image_url, description, short_description,
@@ -237,8 +230,33 @@ export async function GET(request: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
-      .limit(limit * 3); // Get more for better ranking
+      .eq('tobacco_product', false);
+
+    // Apply stock filtering at database level for better performance
+    if (filters.stockStatus && filters.stockStatus !== 'all') {
+      switch (filters.stockStatus) {
+        case 'in-stock':
+          query = query.gt('stock_quantity', 0);
+          break;
+        case 'out-of-stock':
+          query = query.eq('stock_quantity', 0);
+          break;
+        case 'low-stock':
+          query = query.gt('stock_quantity', 0).lte('stock_quantity', 5);
+          break;
+        case 'high-stock':
+          query = query.gte('stock_quantity', 20);
+          break;
+      }
+    }
+
+    // Apply featured filter at database level
+    if (filters.featured) {
+      query = query.eq('featured', true);
+    }
+
+    // Execute the query
+    const { data: products, error: productsError } = await query.limit(limit * 3);
 
     if (productsError) {
       console.error('Error fetching products:', productsError);

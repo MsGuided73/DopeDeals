@@ -194,18 +194,65 @@ export function filterByPriceRange(products: any[], priceRangeValue: string): an
   });
 }
 
-// Get product statistics by category and brand
+// Filter products by stock status
+export function filterByStockStatus(products: any[], stockStatus: string): any[] {
+  if (stockStatus === 'all') return products;
+
+  return products.filter(product => {
+    const stockQty = product.stock_quantity || 0;
+
+    switch (stockStatus) {
+      case 'in-stock':
+        return stockQty > 0;
+      case 'out-of-stock':
+        return stockQty <= 0;
+      case 'low-stock':
+        return stockQty > 0 && stockQty <= 5;
+      case 'high-stock':
+        return stockQty >= 20;
+      default:
+        return true;
+    }
+  });
+}
+
+// Get stock level for a product
+export function getStockLevel(stockQuantity: number | null | undefined): string {
+  const qty = stockQuantity || 0;
+
+  if (qty <= 0) return 'out-of-stock';
+  if (qty <= 5) return 'low-stock';
+  if (qty <= 20) return 'medium-stock';
+  return 'high-stock';
+}
+
+// Get stock level display name
+export function getStockLevelDisplayName(stockLevel: string): string {
+  const stockLevelMap: { [key: string]: string } = {
+    'out-of-stock': 'Out of Stock',
+    'low-stock': 'Low Stock',
+    'medium-stock': 'Medium Stock',
+    'high-stock': 'High Stock'
+  };
+
+  return stockLevelMap[stockLevel] || stockLevel;
+}
+
+// Get product statistics by category, brand, and stock
 export function getProductStats(products: any[]) {
   const categoryStats: { [key: string]: number } = {};
   const brandStats: { [key: string]: number } = {};
-  
+  const stockStats: { [key: string]: number } = {};
+
   products.forEach(product => {
     const category = detectCategory(product.name);
     const brand = detectBrand(product.name);
-    
+    const stockLevel = getStockLevel(product.stock_quantity);
+
     categoryStats[category] = (categoryStats[category] || 0) + 1;
     brandStats[brand] = (brandStats[brand] || 0) + 1;
+    stockStats[stockLevel] = (stockStats[stockLevel] || 0) + 1;
   });
-  
-  return { categoryStats, brandStats };
+
+  return { categoryStats, brandStats, stockStats };
 }
