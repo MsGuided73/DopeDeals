@@ -1,14 +1,25 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Search, ChevronDown } from 'lucide-react'
+import { Search, ChevronDown, Clock, TrendingUp } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 interface SearchCategory {
   label: string
   value: string
   href: string
   type: 'product' | 'collection'
+}
+
+interface SearchSuggestion {
+  type: 'product' | 'brand' | 'category'
+  id: string
+  title: string
+  subtitle: string
+  price?: number
+  image?: string
+  url: string
 }
 
 const searchCategories: SearchCategory[] = [
@@ -57,8 +68,12 @@ export default function EnhancedSearchBar() {
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [displayText, setDisplayText] = useState(placeholderWords[0])
   const [isTyping, setIsTyping] = useState(false)
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false)
   const router = useRouter()
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const suggestionsRef = useRef<HTMLDivElement>(null)
 
   // Smooth typing animation for placeholder
   useEffect(() => {
@@ -97,11 +112,48 @@ export default function EnhancedSearchBar() {
     return () => clearInterval(interval)
   }, [currentPlaceholderIndex])
 
-  // Close dropdown when clicking outside
+  // Fetch search suggestions
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchQuery.length < 2) {
+        setSuggestions([])
+        setShowSuggestions(false)
+        return
+      }
+
+      setLoadingSuggestions(true)
+      try {
+        const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(searchQuery)}&limit=8`)
+        if (response.ok) {
+          const data = await response.json()
+          setSuggestions(data.suggestions || [])
+          setShowSuggestions(true)
+        }
+      } catch (error) {
+        console.error('Error fetching suggestions:', error)
+        setSuggestions([])
+      } finally {
+        setLoadingSuggestions(false)
+      }
+    }
+
+    const debounceTimer = setTimeout(fetchSuggestions, 300)
+    return () => clearTimeout(debounceTimer)
+  }, [searchQuery])
+
+  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+
+      // Close category dropdown if clicking outside
+      if (dropdownRef.current && !dropdownRef.current.contains(target)) {
         setIsDropdownOpen(false)
+      }
+
+      // Close suggestions dropdown if clicking outside
+      if (suggestionsRef.current && !suggestionsRef.current.contains(target)) {
+        setShowSuggestions(false)
       }
     }
 
@@ -112,11 +164,38 @@ export default function EnhancedSearchBar() {
   const handleCategorySelect = (category: SearchCategory) => {
     setSelectedCategory(category)
     setIsDropdownOpen(false)
-    
+
     // If user selects a category, navigate to that category page
     if (!searchQuery.trim()) {
       router.push(category.href)
     }
+  }
+
+  const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
+    setShowSuggestions(false)
+
+    // Record analytics for suggestion selection
+    try {
+      fetch('/api/search/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: searchQuery,
+          resultCount: suggestions.length,
+          selectedResult: {
+            type: suggestion.type,
+            title: suggestion.title,
+            url: suggestion.url
+          },
+          userAgent: navigator.userAgent
+        })
+      }).catch(() => {}); // Ignore analytics errors
+    } catch (error) {
+      // Ignore analytics errors
+    }
+
+    setSearchQuery('')
+    router.push(suggestion.url)
   }
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -128,37 +207,47 @@ export default function EnhancedSearchBar() {
       return
     }
 
-    // Build search URL based on selected category and query
-    let searchUrl = '/products'
-    const params = new URLSearchParams()
+    setShowSuggestions(false)
 
-    if (selectedCategory.value !== 'all') {
-      if (selectedCategory.value === 'brands') {
-        searchUrl = '/brands'
-        params.set('q', searchQuery)
-      } else if (selectedCategory.href.includes('category=')) {
-        // Extract category from href
-        const categoryMatch = selectedCategory.href.match(/category=([^&]+)/)
-        if (categoryMatch) {
-          params.set('category', categoryMatch[1])
-        }
-        params.set('q', searchQuery)
-      } else {
-        // Use query-based search
-        params.set('q', `${selectedCategory.value} ${searchQuery}`)
-      }
-    } else {
-      params.set('q', searchQuery)
+    // Record search analytics
+    try {
+      fetch('/api/search/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: searchQuery,
+          category: selectedCategory.value,
+          userAgent: navigator.userAgent
+        })
+      }).catch(() => {}) // Ignore analytics errors
+    } catch (error) {
+      // Ignore analytics errors
     }
 
-    const finalUrl = `${searchUrl}${params.toString() ? '?' + params.toString() : ''}`
-    router.push(finalUrl)
+    // Build search URL - redirect to dedicated search results page
+    const params = new URLSearchParams()
+    params.set('q', searchQuery.trim())
+
+    // Add category filter if not "all"
+    if (selectedCategory.value !== 'all') {
+      params.set('category', selectedCategory.value)
+    }
+
+    const searchUrl = `/search?${params.toString()}`
+    router.push(searchUrl)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleSearch()
+      if (showSuggestions && suggestions.length > 0) {
+        // If suggestions are showing, select the first one
+        handleSuggestionSelect(suggestions[0])
+      } else {
+        handleSearch()
+      }
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false)
     }
   }
 
@@ -174,7 +263,6 @@ export default function EnhancedSearchBar() {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              console.log('Dropdown clicked, current state:', isDropdownOpen);
               setIsDropdownOpen(!isDropdownOpen);
             }}
             className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 transition-colors border-r border-gray-300 min-w-[140px] text-left relative z-10"
@@ -190,23 +278,8 @@ export default function EnhancedSearchBar() {
           </button>
 
           {/* Dropdown Menu */}
-          {isDropdownOpen && (() => {
-            console.log('Rendering dropdown with', searchCategories.length, 'categories');
-            return (
-            <div
-              className="fixed bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] max-h-80 overflow-y-auto min-w-[280px] w-max"
-              style={{
-                position: 'fixed',
-                top: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().bottom + 4 : 0,
-                left: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().left : 0,
-                zIndex: 9999,
-                backgroundColor: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '0.5rem',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                minWidth: '280px'
-              }}
-            >
+          {isDropdownOpen && (
+            <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] max-h-80 overflow-y-auto min-w-[280px] w-max">
               {/* Product Types Section */}
               <div className="px-3 py-2 bg-gray-50 border-b border-gray-200">
                 <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Product Types</span>
@@ -227,7 +300,7 @@ export default function EnhancedSearchBar() {
               ))}
 
               {/* Collection Categories Section */}
-              <div className="px-3 py-2 bg-gray-50 border-b border-gray-200 border-t border-gray-200">
+              <div className="px-3 py-2 bg-gray-50 border-y border-gray-200">
                 <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Collection Categories</span>
               </div>
               {searchCategories.filter(cat => cat.type === 'collection').map((category) => (
@@ -245,8 +318,7 @@ export default function EnhancedSearchBar() {
                 </button>
               ))}
             </div>
-            );
-          })()}
+          )}
         </div>
 
         {/* Search Input */}
@@ -256,9 +328,74 @@ export default function EnhancedSearchBar() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
+            onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
             placeholder={currentPlaceholder}
             className="w-full px-6 py-3 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200"
           />
+
+          {/* Search Suggestions Dropdown */}
+          {showSuggestions && (searchQuery.length >= 2) && (
+            <div
+              ref={suggestionsRef}
+              className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-xl z-[9999] max-h-96 overflow-y-auto"
+              style={{ marginTop: '1px' }}
+            >
+              {loadingSuggestions ? (
+                <div className="p-4 text-center text-gray-500">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dope-orange-500 mx-auto"></div>
+                  <span className="text-sm mt-2 block">Searching...</span>
+                </div>
+              ) : suggestions.length > 0 ? (
+                <div className="py-2">
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={`${suggestion.type}-${suggestion.id}-${index}`}
+                      onClick={() => handleSuggestionSelect(suggestion)}
+                      className="w-full px-4 py-3 hover:bg-gray-50 transition-colors flex items-center gap-3 text-left"
+                    >
+                      {suggestion.type === 'product' && suggestion.image ? (
+                        <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                          <Image
+                            src={suggestion.image}
+                            alt={suggestion.title}
+                            width={40}
+                            height={40}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-10 h-10 bg-dope-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          {suggestion.type === 'brand' ? (
+                            <TrendingUp className="w-5 h-5 text-dope-orange-600" />
+                          ) : (
+                            <Search className="w-5 h-5 text-dope-orange-600" />
+                          )}
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-gray-900 truncate">
+                          {suggestion.title}
+                        </div>
+                        <div className="text-sm text-gray-500 truncate">
+                          {suggestion.subtitle}
+                          {suggestion.price && (
+                            <span className="ml-2 font-medium text-dope-orange-600">
+                              ${suggestion.price}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 text-center text-gray-500">
+                  <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                  <span className="text-sm">No results found for "{searchQuery}"</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Search Button */}
