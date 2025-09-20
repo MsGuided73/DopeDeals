@@ -6,6 +6,7 @@ import GlobalMasthead from '../../components/GlobalMasthead';
 import DopeCityFooter from '../../../components/DopeCityFooter';
 import Image from 'next/image';
 import { Search, Filter, Grid, List, SlidersHorizontal } from 'lucide-react';
+import { detectCategory, PRODUCT_CATEGORIES } from '../../lib/product-categorization';
 
 interface Product {
   id: string;
@@ -28,7 +29,7 @@ interface FilterState {
   featured: boolean;
 }
 
-const PRODUCT_CATEGORIES = [
+const CRAVE_CATEGORIES = [
   { value: 'all', label: 'All Products', icon: '🛍️' },
   { value: 'disposables', label: 'Disposables', icon: '💨' },
   { value: 'batteries', label: 'Batteries', icon: '🔋' },
@@ -87,27 +88,9 @@ export default function CraveBrandPageContent() {
     fetchProducts();
   }, []);
 
-  // Categorize product
+  // Categorize product using enhanced detection
   const categorizeProduct = (product: Product): string => {
-    const name = product.name.toLowerCase();
-    
-    if (name.includes('puff') || name.includes('disposable') || 
-        name.includes('bc7000') || name.includes('turbo') || 
-        name.includes('mega')) {
-      return 'disposables';
-    }
-    
-    if (name.includes('battery') || name.includes('mod') || 
-        name.includes('charger')) {
-      return 'batteries';
-    }
-    
-    if (name.includes('thca') || name.includes('preroll') || 
-        name.includes('cart') || name.includes('cbg')) {
-      return 'cannabis';
-    }
-    
-    return 'accessories';
+    return detectCategory(product.name);
   };
 
   // Apply filters and sorting
@@ -232,7 +215,7 @@ export default function CraveBrandPageContent() {
           
           {/* Category Stats */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
-            {PRODUCT_CATEGORIES.map((category) => (
+            {CRAVE_CATEGORIES.map((category) => (
               <div key={category.value} className="text-center">
                 <div className="text-2xl mb-1">{category.icon}</div>
                 <div className="text-2xl font-bold text-dope-orange-400">
@@ -252,7 +235,7 @@ export default function CraveBrandPageContent() {
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
             {/* Category Tabs */}
             <div className="flex flex-wrap gap-2">
-              {PRODUCT_CATEGORIES.map((category) => (
+              {CRAVE_CATEGORIES.map((category) => (
                 <button
                   key={category.value}
                   onClick={() => setFilters(prev => ({ ...prev, category: category.value }))}
