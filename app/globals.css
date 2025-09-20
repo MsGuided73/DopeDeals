@@ -84,6 +84,12 @@
     --radius-2xl: 1.5rem;     /* 24px - Hero sections, major components */
     --radius-full: 9999px;    /* Full rounded - Pills, avatars */
 
+    /* DOPE CITY Spacing Standards - Based on DAB RIGS Perfect Spacing */
+    --spacing-edge: 1.5rem;        /* 24px - Standard distance from edges (left-6/right-6) */
+    --spacing-bottom-close: 0.75rem; /* 12px - Close to bottom edge (bottom-3) */
+    --spacing-text-tight: -0.5rem;  /* -8px - Tight text line spacing (-mt-2) */
+    --spacing-bottom-standard: 1.5rem; /* 24px - Standard bottom spacing (bottom-6) */
+
     /* Shadcn UI Variables */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -255,6 +261,52 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* DOPE CITY Standard Spacing Utility Classes */
+  .dope-spacing-edge {
+    padding-left: var(--spacing-edge);
+    padding-right: var(--spacing-edge);
+  }
+
+  .dope-spacing-edge-left {
+    padding-left: var(--spacing-edge);
+  }
+
+  .dope-spacing-edge-right {
+    padding-right: var(--spacing-edge);
+  }
+
+  .dope-spacing-bottom-close {
+    padding-bottom: var(--spacing-bottom-close);
+  }
+
+  .dope-spacing-bottom-standard {
+    padding-bottom: var(--spacing-bottom-standard);
+  }
+
+  .dope-text-tight {
+    margin-top: var(--spacing-text-tight);
+  }
+
+  /* Collection Text Block Positioning - Standard Pattern */
+  .dope-collection-text-left {
+    position: absolute;
+    bottom: var(--spacing-bottom-close);
+    left: var(--spacing-edge);
+    color: white;
+  }
+
+  .dope-collection-text-right {
+    position: absolute;
+    bottom: var(--spacing-bottom-close);
+    right: var(--spacing-edge);
+    color: white;
+    text-align: right;
+  }
+
+  .dope-collection-subtext {
+    margin-top: var(--spacing-text-tight);
   }
 }
 

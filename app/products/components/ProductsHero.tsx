@@ -17,7 +17,7 @@ export default function ProductsHero() {
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="text-center">
-          <h1 className="text-4xl md:text-6xl font-chalets text-white mb-6 tracking-tighter" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em' }}>
+          <h1 className="text-4xl md:text-6xl font-chalets text-white mb-6 tracking-wider" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em' }}>
             ALL PRODUCTS
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">

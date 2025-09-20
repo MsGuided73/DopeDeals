@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { TrendingUp } from 'lucide-react';
 import { supabaseBrowser } from '../lib/supabase-browser';
 import ProductsFilters from './components/ProductsFilters';
 import ProductsProductGrid from './components/ProductsProductGrid';
@@ -46,6 +47,7 @@ export default function ProductsPageContent() {
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
+  const [detectedBrand, setDetectedBrand] = useState<any>(null);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -116,6 +118,32 @@ export default function ProductsPageContent() {
     fetchProducts();
   }, []);
 
+  // Detect if search query is a brand name
+  useEffect(() => {
+    async function detectBrand() {
+      if (searchQuery.length >= 3) {
+        try {
+          const { data: brand } = await supabaseBrowser
+            .from('brands')
+            .select('id, name, slug, description')
+            .ilike('name', `%${searchQuery}%`)
+            .single();
+
+          if (brand) {
+            setDetectedBrand(brand);
+          }
+        } catch (error) {
+          // Brand not found, that's okay
+          setDetectedBrand(null);
+        }
+      } else {
+        setDetectedBrand(null);
+      }
+    }
+
+    detectBrand();
+  }, [searchQuery]);
+
   // Apply filters
   useEffect(() => {
     let filtered = [...products];
@@ -126,10 +154,10 @@ export default function ProductsPageContent() {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(query) ||
         product.description.toLowerCase().includes(query) ||
-        product.brand.toLowerCase().includes(query) ||
+        (product.brand && product.brand.toLowerCase().includes(query)) ||
         product.category.toLowerCase().includes(query) ||
         product.sku.toLowerCase().includes(query) ||
-        product.tags.some(tag => tag.toLowerCase().includes(query))
+        (product.tags && product.tags.some(tag => tag.toLowerCase().includes(query)))
       );
     }
 
@@ -232,6 +260,29 @@ export default function ProductsPageContent() {
 
           {/* Products Section */}
           <div className="lg:w-3/4">
+            {/* Brand Detection Banner */}
+            {detectedBrand && (
+              <div className="mb-4 p-4 bg-gradient-to-r from-dope-orange-50 to-yellow-50 border border-dope-orange-200 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5 text-dope-orange-600" />
+                      {detectedBrand.name} Brand
+                    </h2>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {detectedBrand.description || `Explore all ${detectedBrand.name} products`}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/brands/${detectedBrand.slug || detectedBrand.id}`}
+                    className="px-4 py-2 bg-dope-orange-500 hover:bg-dope-orange-600 text-white rounded-lg transition-colors text-sm font-medium"
+                  >
+                    View Brand Page
+                  </Link>
+                </div>
+              </div>
+            )}
+
             {/* Search Results Header */}
             {searchQuery && (
               <div className="mb-4 p-4 bg-dope-orange-50 border border-dope-orange-200 rounded-lg">
@@ -240,6 +291,7 @@ export default function ProductsPageContent() {
                 </h2>
                 <p className="text-sm text-gray-600 mt-1">
                   Found {filteredProducts.length} products
+                  {detectedBrand && ` from ${detectedBrand.name} and other brands`}
                 </p>
               </div>
             )}

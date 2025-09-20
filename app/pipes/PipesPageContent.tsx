@@ -58,6 +58,9 @@ export default function PipesPageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
 
+  // Get search query from URL parameters
+  const searchQuery = searchParams.get('q') || '';
+
   // Filter states
   const [filters, setFilters] = useState({
     priceRange: [0, 100],
@@ -107,6 +110,28 @@ export default function PipesPageContent() {
   // Apply filters and sorting
   useEffect(() => {
     let filtered = [...products];
+
+    // Apply search query filter first
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(product => {
+        const searchableText = [
+          product.name,
+          product.description,
+          product.short_description,
+          product.brand,
+          product.category,
+          product.sku,
+          product.style,
+          product.material,
+          ...(product.materials || []),
+          ...(product.features || []),
+          ...(product.tags || [])
+        ].filter(Boolean).join(' ').toLowerCase();
+
+        return searchableText.includes(query);
+      });
+    }
 
     // Apply filters
     if (filters.priceRange[0] > 0 || filters.priceRange[1] < 100) {
@@ -174,7 +199,7 @@ export default function PipesPageContent() {
 
     setFilteredProducts(filtered);
     setCurrentPage(1);
-  }, [products, filters, sortBy]);
+  }, [products, filters, sortBy, searchQuery]);
 
   // Pagination
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -202,6 +227,20 @@ export default function PipesPageContent() {
         setFilters={setFilters}
         totalProducts={filteredProducts.length}
       />
+
+      {/* Search Results Header */}
+      {searchQuery && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="bg-dope-orange-50 border border-dope-orange-200 rounded-lg p-4">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Search Results for "{searchQuery}" in Hand Pipes
+            </h2>
+            <p className="text-sm text-gray-600 mt-1">
+              Found {filteredProducts.length} matching pipes
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">

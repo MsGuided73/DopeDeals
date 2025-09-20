@@ -22,26 +22,26 @@
 .font-chalets {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif;
   font-weight: normal; /* Never bold for Chalets */
-  letter-spacing: -0.01em; /* Tighter letter spacing */
+  letter-spacing: 0.1em; /* Proper letter spacing */
 }
 
 /* Deprecated - Chalets should never be bold */
 .font-chalets-bold {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif;
   font-weight: normal; /* Override to normal weight */
-  letter-spacing: -0.01em; /* Tighter letter spacing */
+  letter-spacing: 0.1em; /* Proper letter spacing */
 }
 
 /* DOPE CITY specific typography */
 .dope-city-title {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif;
   font-weight: normal; /* Never bold for Chalets */
-  letter-spacing: -0.02em; /* Tighter letter spacing */
+  letter-spacing: 0.1em; /* Proper letter spacing */
   text-transform: uppercase;
 }
 
 .dope-city-heading {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif;
   font-weight: normal;
-  letter-spacing: -0.01em; /* Tighter letter spacing */
+  letter-spacing: 0.1em; /* Proper letter spacing */
 }

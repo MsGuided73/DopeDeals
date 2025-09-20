@@ -334,11 +334,11 @@ export default function HomePage() {
           <h2 className="text-5xl text-black mb-4 font-chalets uppercase" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", letterSpacing: '-0.02em', fontWeight: 'normal' }}>Our Collections</h2>
         </div>
 
-        <div className="grid grid-cols-6 gap-6 h-[1200px] max-w-none">
-          {/* THCA Pre-Rolls Featured Card - Takes up 2x2 space */}
+        <div className="grid grid-cols-6 gap-6 h-[1400px] max-w-none">
+          {/* THCA Pre-Rolls Featured Card - Takes up 2x3 space */}
           <Link
             href="/pre-rolls"
-            className="relative col-span-2 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Pre-Roll%20Sample%204B.png')",
               backgroundSize: "cover",
@@ -357,104 +357,91 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* Pre-Rolls Card */}
+          {/* THCA Flower Card */}
           <Link
-            href="/pre-rolls"
-            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/products?category=flower"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Pre-Roll%20Sample%203.png')",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
-            title="Click anywhere to discover our fire pre-roll selection!"
+            title="Click anywhere to discover our premium THCA flower selection!"
           >
-          </Link>
-
-          {/* E-Rigs Card */}
-          <Link
-            href="/products?q=e-rig"
-            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
-            style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Screenshot%202025-09-12%20123511.png'), linear-gradient(135deg, #dc2626 0%, #ef4444 100%)",
-              backgroundSize: "cover",
-              backgroundPosition: "center"
-            }}
-            title="Click anywhere to check out our electric dabbing rigs!"
-          >
-
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-xl">E-Rigs</h3>
-              <p className="text-base opacity-90">Electric dabbing</p>
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.0em', fontSize: 'clamp(4rem, 16vw, 8rem)', lineHeight: '0.9' }}>THCA FLOWER</h3>
+              <p className="text-lg opacity-90 mt-2">Premium indoor cultivation</p>
             </div>
           </Link>
 
-          {/* Dab Rigs Card */}
+          {/* Hand Pipes*/}
           <Link
-            href="/products?category=dab-rigs"
-            className="relative col-span-1 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/products?q=DAB RIGS"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+            title="Click anywhere to check out our Dope Dab Rigs!"        >
+
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(4rem, 16vw, 8rem)', lineHeight: '0.9' }}>DAB RIGS</h3>
+              <p className="text-lg opacity-90 mt-2">Premium concentrate essentials</p>
+            </div>
+          </Link>
+
+          {/* Prerolls */}
+          <Link
+            href="/products?category=pre-rolls"
+            className="relative col-span-3 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            style={{
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/PRE-ROLLS.jpeg')",
               backgroundSize: "cover"
             }}
-            title="Click anywhere to explore our concentrate essentials!"
+            title="Click anywhere to explore our Pre-roll selection!"
           >
 
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-xl">Dab Rigs</h3>
-              <p className="text-base opacity-90">Concentrate essentials</p>
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(4rem, 16vw, 8rem)', lineHeight: '0.9' }}>THCA PRE-ROLLS</h3>
+              <p className="text-lg opacity-90 mt-2">Premium hand-rolled perfection</p>
             </div>
           </Link>
 
-          {/* Vaporizers Card - Large */}
+          {/* HOOKAH */}
           <Link
             href="/products?category=vaporizers"
-            className="relative col-span-1 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "linear-gradient(135deg, #ea580c 0%, #f97316 100%)",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg')",
               backgroundSize: "cover"
             }}
-            title="Click anywhere to discover our latest vaporizer technology!"
+            title="Click anywhere to discover our Hookahs!"
           >
 
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-2xl mb-3">Vaporizers</h3>
-              <p className="text-lg opacity-90">Latest technology</p>
+            <div className="absolute bottom-4 left-4 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(6rem, 20vw, 12rem)', lineHeight: '0.8' }}>HOOKAHS</h3>
+              <p className="text-xl opacity-90 mt-3">Traditional smoking culture</p>
             </div>
           </Link>
 
-          {/* Hand Pipes Card */}
+          {/* Bongs & Water Pipes Card */}
           <Link
-            href="/pipes"
-            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/products?category=bongs"
+            className="relative col-span-2 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooRBong_collection.png')",
               backgroundSize: "cover"
             }}
-            title="Click anywhere to browse our classic hand pipe collection!"
+            title="Click anywhere to browse our premium bongs and water pipes!"
           >
 
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-xl">Hand Pipes</h3>
-              <p className="text-base opacity-90">Classic pieces for everyone</p>
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9' }}>BONGS & WATER PIPES</h3>
+              <p className="text-lg opacity-90 mt-2">Premium glass artistry</p>
             </div>
           </Link>
 
-          {/* Dab Accessories Card */}
-          <Link
-            href="/products?q=dab"
-            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
-            style={{
-              backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
-              backgroundSize: "cover"
-            }}
-            title="Click anywhere to find all your dabbing tools & torches!"
-          >
-
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-xl">Dab Accessories</h3>
-              <p className="text-base opacity-90">Tools & torches</p>
-            </div>
-          </Link>
 
           {/* Storage & Cases Card */}
           <Link
@@ -467,9 +454,9 @@ export default function HomePage() {
             title="Click anywhere to keep your gear safe with our storage solutions!"
           >
 
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-xl">Storage & Cases</h3>
-              <p className="text-base opacity-90">Keep your gear safe</p>
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9' }}>STORAGE & CASES</h3>
+              <p className="text-lg opacity-90 mt-2">Keep your gear protected</p>
             </div>
           </Link>
 
@@ -484,9 +471,9 @@ export default function HomePage() {
             }}
           >
 
-            <div className="absolute bottom-6 left-6 text-white">
-              <h3 className="font-bold text-2xl">Rolling Accessories</h3>
-              <p className="text-lg opacity-90">Papers & pre-rolls for all</p>
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9' }}>ROLLING ACCESSORIES</h3>
+              <p className="text-lg opacity-90 mt-2">Papers, tips & essentials</p>
             </div>
           </Link>
         </div>
