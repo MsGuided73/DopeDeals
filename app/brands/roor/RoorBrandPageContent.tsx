@@ -7,6 +7,7 @@ import DopeCityFooter from '../../../components/DopeCityFooter';
 import Image from 'next/image';
 import { Search, Filter, Grid, List, SlidersHorizontal } from 'lucide-react';
 import { detectCategory } from '../../lib/product-categorization';
+import ProductCard from '../../products/components/ProductCard';
 
 interface Product {
   id: string;
@@ -349,81 +350,17 @@ export default function RoorBrandPageContent() {
         {/* Products Grid */}
         {filteredProducts.length > 0 ? (
           <div className={`grid gap-6 ${
-            viewMode === 'grid' 
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+            viewMode === 'grid'
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
               : 'grid-cols-1'
           }`}>
             {filteredProducts.map((product) => (
-              <div key={product.id} className={`bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group ${
-                viewMode === 'list' ? 'flex' : ''
-              }`}>
-                <div className={`bg-gray-50 relative ${
-                  viewMode === 'list' ? 'w-48 h-48 flex-shrink-0' : 'aspect-square'
-                }`}>
-                  {product.image_url ? (
-                    <Image
-                      src={product.image_url}
-                      alt={product.name}
-                      fill
-                      className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <div className="text-center">
-                        <div className="text-4xl mb-2">🏺</div>
-                        <div className="text-sm">No Image</div>
-                      </div>
-                    </div>
-                  )}
-                  {product.featured && (
-                    <div className="absolute top-2 left-2 bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                      Featured
-                    </div>
-                  )}
-                </div>
-                
-                <div className={`p-6 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                  <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-dope-orange-600 transition-colors">
-                    {product.name}
-                  </h3>
-                  
-                  {product.short_description && (
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {product.short_description}
-                    </p>
-                  )}
-                  
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-dope-orange-600">
-                        ${Number(product.price).toFixed(2)}
-                      </span>
-                      {product.stock_quantity !== undefined && (
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          product.stock_quantity > 0 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {product.stock_quantity > 0 ? 'In Stock' : 'Out of Stock'}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <div className="flex gap-2">
-                      <button className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
-                        Add to Cart
-                      </button>
-                      <a
-                        href={`/product/${product.id}`}
-                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold transition-colors text-center"
-                      >
-                        View Details
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ProductCard
+                key={product.id}
+                product={product}
+                viewMode={viewMode}
+                showAddToCart={true}
+              />
             ))}
           </div>
         ) : (
