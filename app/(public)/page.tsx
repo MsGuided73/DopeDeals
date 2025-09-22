@@ -2,18 +2,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, ShoppingCart, Search } from 'lucide-react';
-import EnhancedSearchBar from '../components/EnhancedSearchBar';
+import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
+
+import StaffPicksSection from '../components/StaffPicksSection';
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isAgeVerified, setIsAgeVerified] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  });
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,30 +27,7 @@ export default function HomePage() {
     setIsAgeVerified(!!verified);
   }, []);
 
-  // Timer for Staff Picks - resets daily at midnight
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date();
-      const tomorrow = new Date(now);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(0, 0, 0, 0);
 
-      const difference = tomorrow.getTime() - now.getTime();
-
-      if (difference > 0) {
-        const hours = Math.floor(difference / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        setTimeLeft({ hours, minutes, seconds });
-      }
-    };
-
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -120,240 +95,102 @@ export default function HomePage() {
 
       {/* Main Content - Blurred when age verification is showing */}
       <div className={`${!isAgeVerified ? 'blur-lg pointer-events-none' : ''} transition-all duration-300`}>
-        {/* Masthead Section */}
-        <header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ease-in-out ${
-          scrolled ? "shadow-lg" : "shadow-none"
-        }`}
-      >
-        {/* Black top bar */}
-        <div className="bg-black text-white px-6 flex items-center justify-between gap-8" style={{ minHeight: '140px', height: '140px' }}>
-          {/* Left: HUGE DOPE CITY Logo */}
-          <div
-            className="font-chalets leading-none text-white flex-shrink-0"
-            style={{
-              fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-              fontSize: 'clamp(4rem, 12vw, 7rem)',
-              lineHeight: '1.1',
-              letterSpacing: '-0.02em',
-              fontWeight: 'normal'
-            }}
-          >
-            DOPE CITY
-          </div>
+        {/* Global Masthead */}
+        <GlobalMasthead />
 
-          {/* Center: Search Bar */}
-          <div className="flex-1 max-w-3xl mx-8">
-            <EnhancedSearchBar />
-          </div>
-
-          {/* Right: User Actions */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <Link href="/sitemap-page" className="p-2 hover:text-yellow-400 transition-colors" title="Site Map">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-              </svg>
-            </Link>
-            <Link href="/auth" className="p-2 hover:text-yellow-400 transition-colors" title="Account">
-              <User className="w-6 h-6" />
-            </Link>
-            <Link href="/cart" className="p-2 hover:text-yellow-400 transition-colors relative" title="Shopping Cart">
-              <ShoppingCart className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                0
-              </span>
-            </Link>
-          </div>
-        </div>
-
-        {/* DOPE Orange divider line */}
-        <div className="h-1 bg-dope-orange"></div>
-
-        {/* Glassmorphic nav bar */}
-        <nav
-          className={`backdrop-blur-lg transition-all duration-300 ease-in-out ${
-            scrolled
-              ? "bg-white/80 dark:bg-gray-900/80 shadow-lg"
-              : "bg-white/70 dark:bg-gray-900/70 shadow-md"
-          }`}
-        >
-          <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
-            {/* Shop by Brand Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'brands' ? null : 'brands')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                Shop by Brand
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'brands' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
-                  <div className="py-2">
-                    <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
-                    <Link href="/brands/puffco" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
-                    <Link href="/brands/storz-bickel" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
-                    <Link href="/brands/roor-glass" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
-                    <Link href="/brands" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* THCA & More Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'thca' ? null : 'thca')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                THCA &amp; More
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'thca' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
-                  <div className="py-2">
-                    <Link href="/products?q=thca" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Flower</Link>
-                    <Link href="/products?q=pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Pre-Rolls</Link>
-                    <Link href="/products?q=concentrates" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Concentrates</Link>
-                    <Link href="/products?q=edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
-                    <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* Bongs Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'bongs' ? null : 'bongs')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                Bongs
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'bongs' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
-                  <div className="py-2">
-                    <Link href="/bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Bongs</Link>
-                    <Link href="/products?q=glass+bong" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Glass Bongs</Link>
-                    <Link href="/products?q=beaker+bong" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Beaker Bongs</Link>
-                    <Link href="/products?q=straight+tube" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Straight Tube</Link>
-                    <Link href="/products?q=percolator" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Percolator Bongs</Link>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* Pipes Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'pipes' ? null : 'pipes')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                Pipes
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'pipes' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
-                  <div className="py-2">
-                    <Link href="/products?category=pipes" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Pipes</Link>
-                    <Link href="/products?q=glass+pipe" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Glass Pipes</Link>
-                    <Link href="/products?q=spoon+pipe" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Spoon Pipes</Link>
-                    <Link href="/products?q=sherlock" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Sherlock Pipes</Link>
-                    <Link href="/products?q=chillum" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Chillums</Link>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* Dab Rigs */}
-            <li>
-              <Link
-                href="/products?category=dab-rigs"
-                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
-              >
-                Dab Rigs
-              </Link>
-            </li>
-
-            {/* E-Rigs */}
-            <li>
-              <Link
-                href="/category/e-rigs"
-                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
-              >
-                E-Rigs
-              </Link>
-            </li>
-
-            {/* Vaporizers */}
-            <li>
-              <Link
-                href="/products?category=vaporizers"
-                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
-              >
-                Vaporizers
-              </Link>
-            </li>
-
-            {/* Accessories */}
-            <li>
-              <a
-                href="#"
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
-              >
-                Accessories
-              </a>
-            </li>
-
-            {/* Munchies */}
-            <li>
-              <a
-                href="#"
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
-              >
-                Munchies
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </header>
-
-      {/* Collections Grid */}
-      <main className="w-full px-8 py-16">
-        {/* Collections Header */}
-        <div className="text-left mb-12">
-          <h2 className="text-5xl text-black mb-4 font-chalets uppercase" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", letterSpacing: '-0.02em', fontWeight: 'normal' }}>Our Collections</h2>
-        </div>
-
-        <div className="grid grid-cols-6 gap-6 h-[1400px] max-w-none">
-          {/* THCA Pre-Rolls Featured Card - Takes up 2x3 space */}
+        {/* DOPE CLUB Section - Top of Page */}
+        <div className="w-full px-4 pt-8 pb-4">
           <Link
-            href="/pre-rolls"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/products?q=rolling"
+            className="relative block w-full h-64 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Pre-Roll%20Sample%204B.png')",
+              backgroundImage: "url('/Images/pre-rolls_collection.png'), linear-gradient(135deg, #be185d 0%, #ec4899 100%)",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
-            title="Click anywhere to discover our premium THCA pre-roll selection!"
+            title="Click anywhere to explore DOPE CLUB essentials!"
           >
-            {/* Ghost Button with Animated Glow - Positioned at Bottom Edge */}
-            <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center pb-6">
-              <button
-                className="ghost-glow-button px-8 py-4 border border-white/0 rounded-lg font-bold text-white text-xl uppercase tracking-wide transition-all duration-300 hover:border-white/20 active:border-white/30"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-              >
-                SHOP NOW
-              </button>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/40 group-hover:from-black/70 group-hover:to-black/50 transition-all duration-300"></div>
+
+            <div className="absolute bottom-4 left-4 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DOPE CLUB</h3>
+              <p className="text-xl opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Papers, tips & rolling essentials</p>
+            </div>
+
+            {/* CTA Badge */}
+            <div className="absolute top-4 right-4">
+              <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:bg-white/30 transition-colors border border-white/30">
+                JOIN THE CLUB
+              </div>
+            </div>
+          </Link>
+        </div>
+
+      {/* Collections Grid */}
+      <main className="w-full px-4 py-16">
+        {/* Collections Header - Metallic Frame */}
+        <div className="text-center mb-12 px-4">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
+            <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
+              <h2 className="text-4xl text-white mb-0 font-chalets uppercase relative z-10" style={{
+                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                letterSpacing: '0.02em',
+                fontWeight: 'normal',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
+              }}>
+                OUR COLLECTIONS
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-6 gap-4 h-[1400px] w-full">
+          {/* BONGS - New lifestyle frame, same size as THCA Flower */}
+          <Link
+            href="/products?category=bongs"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            style={{
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Bongs.jpeg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
+            title="Click anywhere to explore our premium Bongs collection!"
+          >
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>BONGS</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium glass artistry</p>
+            </div>
+            {/* Sharp CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="bg-dope-orange/90 backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:bg-dope-orange transition-colors">
+                SHOP
+              </div>
+            </div>
+          </Link>
+
+          {/* DAB TOOLS - New collection with your specified image */}
+          <Link
+            href="/products?q=dab+tools"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            style={{
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Dab_Tools.jpeg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
+            title="Click anywhere to explore our premium Dab Tools collection!"
+          >
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB TOOLS</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Professional precision tools</p>
+            </div>
+            {/* Sharp CTA Badge */}
+            <div className="absolute top-3 right-3">
+              <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:bg-white/30 transition-colors border border-white/30">
+                DISCOVER
+              </div>
             </div>
           </Link>
 
@@ -369,8 +206,14 @@ export default function HomePage() {
             title="Click anywhere to discover our premium THCA flower selection!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.0em', fontSize: 'clamp(4rem, 16vw, 8rem)', lineHeight: '0.9' }}>THCA FLOWER</h3>
-              <p className="text-lg opacity-90 mt-2">Premium indoor cultivation</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA FLOWER</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium indoor cultivation</p>
+            </div>
+            {/* Sharp CTA Badge */}
+            <div className="absolute top-3 right-3">
+              <div className="bg-black/80 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:bg-black transition-colors border border-white/20">
+                EXPLORE
+              </div>
             </div>
           </Link>
 
@@ -386,8 +229,14 @@ export default function HomePage() {
             title="Click anywhere to check out our Dope Dab Rigs!"        >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(4rem, 16vw, 8rem)', lineHeight: '0.9' }}>DAB RIGS</h3>
-              <p className="text-lg opacity-90 mt-2">Premium concentrate essentials</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB RIGS</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium concentrate essentials</p>
+            </div>
+            {/* Sharp CTA Badge */}
+            <div className="absolute top-3 right-3">
+              <div className="bg-gradient-to-r from-dope-orange to-orange-600 px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:from-orange-600 hover:to-dope-orange transition-all shadow-lg">
+                BROWSE
+              </div>
             </div>
           </Link>
 
@@ -403,8 +252,8 @@ export default function HomePage() {
           >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(4rem, 16vw, 8rem)', lineHeight: '0.9' }}>THCA PRE-ROLLS</h3>
-              <p className="text-lg opacity-90 mt-2">Premium hand-rolled perfection</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA PRE-ROLLS</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium hand-rolled perfection</p>
             </div>
           </Link>
 
@@ -419,192 +268,70 @@ export default function HomePage() {
             title="Click anywhere to discover our Hookahs!"
           >
 
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(6rem, 20vw, 12rem)', lineHeight: '0.8' }}>HOOKAHS</h3>
-              <p className="text-xl opacity-90 mt-3">Traditional smoking culture</p>
-            </div>
-          </Link>
-
-          {/* Bongs & Water Pipes Card */}
-          <Link
-            href="/products?category=bongs"
-            className="relative col-span-2 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
-            style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooRBong_collection.png')",
-              backgroundSize: "cover"
-            }}
-            title="Click anywhere to browse our premium bongs and water pipes!"
-          >
-
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9' }}>BONGS & WATER PIPES</h3>
-              <p className="text-lg opacity-90 mt-2">Premium glass artistry</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>HOOKAHS</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Traditional smoking culture</p>
             </div>
           </Link>
 
-
-          {/* Storage & Cases Card */}
+          {/* E-RIGS - Fills the top-right empty space */}
           <Link
-            href="/products?q=storage"
-            className="relative col-span-2 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/category/e-rigs"
+            className="relative col-span-1 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-              backgroundSize: "cover"
-            }}
-            title="Click anywhere to keep your gear safe with our storage solutions!"
-          >
-
-            <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9' }}>STORAGE & CASES</h3>
-              <p className="text-lg opacity-90 mt-2">Keep your gear protected</p>
-            </div>
-          </Link>
-
-          {/* Rolling Accessories Card - Large */}
-          <Link
-            href="/products?q=rolling"
-            className="relative col-span-4 row-span-1 bg-cover bg-center rounded-xl overflow-hidden group"
-            style={{
-              backgroundImage: "url('/Images/pre-rolls_collection.png'), linear-gradient(135deg, #be185d 0%, #ec4899 100%)",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
+            title="Click anywhere to explore our premium E-Rigs!"
+          >
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 4rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>E-RIGS</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Electric precision</p>
+            </div>
+          </Link>
+
+
+
+
+          {/* Torches & Lighters Card - Extended to bottom */}
+          <Link
+            href="/products?q=torch"
+            className="relative col-span-3 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
+            style={{
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
+            title="Click anywhere to light up with our premium torches and lighters!"
           >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '-0.1em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9' }}>ROLLING ACCESSORIES</h3>
-              <p className="text-lg opacity-90 mt-2">Papers, tips & essentials</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 5rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>TORCHES & LIGHTERS</h3>
+              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium ignition tools</p>
             </div>
           </Link>
         </div>
 
-        {/* NEW ARRIVALS Section */}
-        <section className="mt-24">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-5xl font-chalets text-gray-900 dark:text-white" style={{ letterSpacing: '-0.02em' }}>
-              NEW ARRIVALS
-            </h2>
-            <Link
-              href="/products?filter=new"
-              className="text-dope-orange-500 hover:text-dope-orange-600 font-medium text-lg transition-colors"
-            >
-              Shop all →
-            </Link>
-          </div>
 
-          {/* New Arrivals Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
-            {/* Product 01 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-center text-gray-500">
-                  <div className="text-4xl mb-2">📦</div>
-                  <div className="text-sm">No Image</div>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-white font-medium mb-2 text-lg">Product 01</h3>
-                <p className="text-gray-400 text-base mb-4">Premium glass piece</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold text-xl">$29</span>
-                  <div className="flex gap-3">
-                    <button className="text-gray-400 hover:text-white text-base transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 02 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-center text-gray-500">
-                  <div className="text-4xl mb-2">📦</div>
-                  <div className="text-sm">No Image</div>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-white font-medium mb-2 text-lg">Product 02</h3>
-                <p className="text-gray-400 text-base mb-4">High-quality accessory</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold text-xl">$35</span>
-                  <div className="flex gap-3">
-                    <button className="text-gray-400 hover:text-white text-base transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 03 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-center text-gray-500">
-                  <div className="text-4xl mb-2">📦</div>
-                  <div className="text-sm">No Image</div>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-white font-medium mb-2 text-lg">Product 03</h3>
-                <p className="text-gray-400 text-base mb-4">Latest innovation</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold text-xl">$31</span>
-                  <div className="flex gap-3">
-                    <button className="text-gray-400 hover:text-white text-base transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Product 04 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden group hover:scale-105 transition-transform duration-300">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80">
-                <div className="text-center text-gray-500">
-                  <div className="text-4xl mb-2">📦</div>
-                  <div className="text-sm">No Image</div>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-white font-medium mb-2 text-lg">Product 04</h3>
-                <p className="text-gray-400 text-base mb-4">Premium quality</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-dope-orange-400 font-bold text-xl">$32</span>
-                  <div className="flex gap-3">
-                    <button className="text-gray-400 hover:text-white text-base transition-colors">
-                      View
-                    </button>
-                    <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-          </div>
-        </section>
 
         {/* Customer Reviews Section */}
         <section className="mt-16">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white mb-4" style={{ letterSpacing: '-0.02em' }}>
-              What Our Customers Say
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
+            <div className="relative inline-block">
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
+              <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
+                <h2 className="text-4xl font-chalets text-white mb-0 relative z-10" style={{
+                  letterSpacing: '-0.02em',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
+                }}>
+                  DOPE FEEDBACK
+                </h2>
+              </div>
+            </div>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mt-6">
               Real reviews from real customers
             </p>
           </div>
@@ -774,77 +501,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Staff Picks Section */}
-        <section className="mt-16">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-chalets text-gray-900 dark:text-white mb-4" style={{ letterSpacing: '-0.02em' }}>
-              🔥 STAFF PICKS 🔥
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-              Limited time deals - New picks every day!
-            </p>
-
-            {/* Countdown Timer */}
-            <div className="inline-flex items-center gap-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-8 py-4 rounded-xl shadow-lg">
-              <span className="text-sm font-medium">SALE ENDS IN:</span>
-              <div className="flex gap-2">
-                <div className="bg-black/20 px-3 py-2 rounded-lg text-center min-w-[60px]">
-                  <div className="text-2xl font-bold">{String(timeLeft.hours).padStart(2, '0')}</div>
-                  <div className="text-xs opacity-80">HOURS</div>
-                </div>
-                <div className="text-2xl font-bold">:</div>
-                <div className="bg-black/20 px-3 py-2 rounded-lg text-center min-w-[60px]">
-                  <div className="text-2xl font-bold">{String(timeLeft.minutes).padStart(2, '0')}</div>
-                  <div className="text-xs opacity-80">MINS</div>
-                </div>
-                <div className="text-2xl font-bold">:</div>
-                <div className="bg-black/20 px-3 py-2 rounded-lg text-center min-w-[60px]">
-                  <div className="text-2xl font-bold">{String(timeLeft.seconds).padStart(2, '0')}</div>
-                  <div className="text-xs opacity-80">SECS</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Staff Picks Products */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Staff Pick 1 */}
-            <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl p-6 text-white relative overflow-hidden">
-              <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                40% OFF
-              </div>
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold mb-2">Premium Glass Bong</h3>
-                <p className="text-lg opacity-90 mb-4">18" Beaker Base with Percolator</p>
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-3xl font-bold">$89.99</span>
-                  <span className="text-xl line-through opacity-70">$149.99</span>
-                </div>
-                <button className="bg-black text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors">
-                  GRAB THIS DEAL
-                </button>
-              </div>
-            </div>
-
-            {/* Staff Pick 2 */}
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-6 text-white relative overflow-hidden">
-              <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                50% OFF
-              </div>
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold mb-2">Electric Dab Rig</h3>
-                <p className="text-lg opacity-90 mb-4">Temperature Control + LED Display</p>
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-3xl font-bold">$199.99</span>
-                  <span className="text-xl line-through opacity-70">$399.99</span>
-                </div>
-                <button className="bg-black text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors">
-                  GRAB THIS DEAL
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Staff Picks Section - Dynamic */}
+        <StaffPicksSection />
 
 
       </main>

@@ -14,6 +14,13 @@ interface PageInfo {
 
 export default function SiteMapPage() {
   const [filter, setFilter] = useState<'all' | 'completed' | 'needs-work' | 'missing'>('all');
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+  const refreshSitemap = () => {
+    setLastUpdated(new Date());
+    // Force a re-render by updating the timestamp
+    window.location.reload();
+  };
 
   const pages: PageInfo[] = [
     // COMPLETED PAGES
@@ -36,29 +43,33 @@ export default function SiteMapPage() {
     { path: '/categories', name: 'Categories', status: 'needs-work', description: 'Category listing - needs masthead/nav', priority: 'medium' },
     { path: '/rewards', name: 'Loyalty Program', status: 'needs-work', description: 'Rewards/loyalty page - needs full implementation', priority: 'medium' },
 
-    // MISSING PAGES - HIGH PRIORITY
-    { path: '/account', name: 'User Account', status: 'missing', description: 'User profile, preferences, order history, payment methods', priority: 'high' },
-    { path: '/account/profile', name: 'Profile Settings', status: 'missing', description: 'Edit profile, preferences, age verification status', priority: 'high' },
-    { path: '/account/addresses', name: 'Address Book', status: 'missing', description: 'Manage shipping and billing addresses', priority: 'high' },
-    { path: '/account/payment-methods', name: 'Payment Methods', status: 'missing', description: 'Saved payment methods, KajaPay integration', priority: 'high' },
-    { path: '/search', name: 'Search Results', status: 'missing', description: 'Dedicated search results page with advanced filters', priority: 'high' },
-    { path: '/wishlist', name: 'Wishlist', status: 'missing', description: 'User wishlist/favorites functionality', priority: 'high' },
+    // COMPLETED PAGES - HIGH PRIORITY (Recently Created)
+    { path: '/account', name: 'User Account', status: 'completed', description: 'User profile, preferences, order history, payment methods', priority: 'high' },
+    { path: '/search', name: 'Search Results', status: 'completed', description: 'Dedicated search results page with advanced filters', priority: 'high' },
+    { path: '/wishlist', name: 'Wishlist', status: 'completed', description: 'User wishlist/favorites functionality', priority: 'high' },
+    { path: '/payment-methods', name: 'Payment Methods', status: 'completed', description: 'Payment options and security information', priority: 'high' },
 
-    // MISSING PAGES - MEDIUM PRIORITY  
-    { path: '/about', name: 'About Us', status: 'missing', description: 'Company story, mission, team information', priority: 'medium' },
-    { path: '/contact', name: 'Contact Us', status: 'missing', description: 'Contact form, store locations, customer service', priority: 'medium' },
-    { path: '/help', name: 'Help Center', status: 'missing', description: 'FAQ, support articles, troubleshooting', priority: 'medium' },
-    { path: '/shipping', name: 'Shipping Info', status: 'missing', description: 'Shipping policies, rates, tracking information', priority: 'medium' },
-    { path: '/returns', name: 'Returns Policy', status: 'missing', description: 'Return/refund policies and process', priority: 'medium' },
-    { path: '/privacy', name: 'Privacy Policy', status: 'missing', description: 'Privacy policy and data handling', priority: 'medium' },
-    { path: '/terms', name: 'Terms of Service', status: 'missing', description: 'Terms and conditions, user agreements', priority: 'medium' },
-    { path: '/age-verification', name: 'Age Verification', status: 'missing', description: 'Age verification process and compliance', priority: 'medium' },
+    // COMPLETED PAGES - MEDIUM PRIORITY (Recently Created)
+    { path: '/about', name: 'About Us', status: 'completed', description: 'Company story, mission, team information', priority: 'medium' },
+    { path: '/contact', name: 'Contact Us', status: 'completed', description: 'Contact form, store locations, customer service', priority: 'medium' },
+    { path: '/help', name: 'Help Center', status: 'completed', description: 'FAQ, support articles, troubleshooting', priority: 'medium' },
+    { path: '/shipping', name: 'Shipping Info', status: 'completed', description: 'Shipping policies, rates, tracking information', priority: 'medium' },
+    { path: '/returns', name: 'Returns Policy', status: 'completed', description: 'Return/refund policies and process', priority: 'medium' },
+    { path: '/privacy', name: 'Privacy Policy', status: 'completed', description: 'Privacy policy and data handling', priority: 'medium' },
+    { path: '/terms', name: 'Terms of Service', status: 'completed', description: 'Terms and conditions, user agreements', priority: 'medium' },
+    { path: '/age-verification', name: 'Age Verification', status: 'completed', description: 'Age verification process and compliance', priority: 'medium' },
+
+    // COMPLETED PAGES - LOW PRIORITY (Recently Created)
+    { path: '/gift-cards', name: 'Gift Cards', status: 'completed', description: 'Interactive gift card builder with customizable amounts', priority: 'low' },
+
+    // MISSING PAGES - MEDIUM PRIORITY
+    { path: '/account/profile', name: 'Profile Settings', status: 'missing', description: 'Edit profile, preferences, age verification status', priority: 'medium' },
+    { path: '/account/addresses', name: 'Address Book', status: 'missing', description: 'Manage shipping and billing addresses', priority: 'medium' },
     { path: '/compliance', name: 'Compliance Info', status: 'missing', description: 'Legal compliance, regulations, disclaimers', priority: 'medium' },
 
     // MISSING PAGES - LOW PRIORITY
     { path: '/blog', name: 'Blog/News', status: 'missing', description: 'Content marketing, product news, industry updates', priority: 'low' },
     { path: '/reviews', name: 'Customer Reviews', status: 'missing', description: 'Product reviews and ratings system', priority: 'low' },
-    { path: '/gift-cards', name: 'Gift Cards', status: 'missing', description: 'Purchase and redeem gift cards', priority: 'low' },
     { path: '/wholesale', name: 'Wholesale Portal', status: 'missing', description: 'B2B wholesale ordering and account management', priority: 'low' },
     { path: '/affiliate', name: 'Affiliate Program', status: 'missing', description: 'Affiliate/referral program signup and tracking', priority: 'low' },
     { path: '/careers', name: 'Careers', status: 'missing', description: 'Job listings and company culture', priority: 'low' },
@@ -134,12 +145,31 @@ export default function SiteMapPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-4xl font-normal text-gray-900 mb-4" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
-            DOPE CITY Site Map
-          </h1>
-          <p className="text-lg text-gray-600 mb-6">
-            Complete overview of all pages on the DOPE CITY platform - existing, in progress, and planned.
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-4xl font-normal text-gray-900" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
+              DOPE CITY Site Map
+            </h1>
+            <button
+              onClick={refreshSitemap}
+              className="flex items-center space-x-2 px-4 py-2 text-white rounded-md transition-colors"
+              style={{ backgroundColor: '#fa6934', hover: { backgroundColor: '#e55a2b' } }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e55a2b'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fa6934'}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Refresh</span>
+            </button>
+          </div>
+          <div className="mb-6">
+            <p className="text-lg text-gray-600 mb-2">
+              Complete overview of all pages on the DOPE CITY platform - existing, in progress, and planned.
+            </p>
+            <p className="text-sm text-gray-500">
+              Last updated: {lastUpdated.toLocaleString()}
+            </p>
+          </div>
 
           {/* Filter Buttons */}
           <div className="flex space-x-4 mb-6">

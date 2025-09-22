@@ -41,8 +41,8 @@ const searchCategories: SearchCategory[] = [
   { label: 'Hookahs', value: 'hookahs', href: '/products?q=hookah', type: 'product' },
 
   // Collection Categories
-  { label: 'Storage & Cases', value: 'storage', href: '/products?q=storage', type: 'collection' },
-  { label: 'Rolling Accessories', value: 'rolling', href: '/products?q=rolling', type: 'collection' },
+  { label: 'Torches & Lighters', value: 'torches', href: '/products?q=torch', type: 'collection' },
+  { label: 'DOPE CLUB', value: 'dope-club', href: '/products?q=rolling', type: 'collection' },
   { label: 'Brands', value: 'brands', href: '/brands', type: 'collection' },
 ]
 
@@ -265,7 +265,7 @@ export default function EnhancedSearchBar() {
               e.stopPropagation();
               setIsDropdownOpen(!isDropdownOpen);
             }}
-            className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 transition-colors border-r border-gray-300 min-w-[140px] text-left relative z-10"
+            className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 transition-colors border-r border-gray-300 min-w-[140px] text-left relative z-10 cursor-pointer"
           >
             <span className="text-gray-700 font-medium truncate">
               {selectedCategory.label}
@@ -279,7 +279,7 @@ export default function EnhancedSearchBar() {
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] max-h-80 overflow-y-auto min-w-[280px] w-max">
+            <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto min-w-[280px] w-max">
               {/* Product Types Section */}
               <div className="px-3 py-2 bg-gray-50 border-b border-gray-200">
                 <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Product Types</span>
@@ -337,7 +337,7 @@ export default function EnhancedSearchBar() {
           {showSuggestions && (searchQuery.length >= 2) && (
             <div
               ref={suggestionsRef}
-              className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-xl z-[9999] max-h-96 overflow-y-auto"
+              className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-xl z-50 max-h-96 overflow-y-auto"
               style={{ marginTop: '1px' }}
             >
               {loadingSuggestions ? (

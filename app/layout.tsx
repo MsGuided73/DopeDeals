@@ -11,8 +11,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* Font Preloading */}
         <link rel="preload" href="/fonts/chalets-webfont.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/chalets-webfont.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+
+        {/* DNS Prefetch for External Domains */}
+        <link rel="dns-prefetch" href="//qirbapivptotybspnbet.supabase.co" />
+        <link rel="dns-prefetch" href="//images.unsplash.com" />
+        <link rel="dns-prefetch" href="//sigdistro.com" />
+
+        {/* Preconnect to Critical External Resources */}
+        <link rel="preconnect" href="https://qirbapivptotybspnbet.supabase.co" />
+
+        {/* Viewport and Performance Meta Tags */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#000000" />
+
+        {/* Resource Hints */}
+        <link rel="prefetch" href="/api/products" />
       </head>
       <body className="bg-black">
         <AppProviders>

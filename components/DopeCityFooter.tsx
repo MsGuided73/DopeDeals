@@ -87,19 +87,19 @@ export default function DopeCityFooter() {
             <div>
               <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg">Help</h3>
               <ul className="space-y-3">
-                <li><Link href="/about" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">About Us</Link></li>
-                <li><Link href="/help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Help Center & FAQ</Link></li>
-                <li><Link href="/contact" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Contact Us</Link></li>
-                <li><Link href="/reviews" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Customer Reviews</Link></li>
-                <li><Link href="/price-guarantee" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Low Price Guarantee</Link></li>
-                <li><Link href="/returns" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Returns & Refund Policy</Link></li>
-                <li><Link href="/shipping" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Shipping Policy</Link></li>
-                <li><Link href="/privacy" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Terms and Conditions</Link></li>
-                <li><Link href="/hemp-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Hemp Disclaimer</Link></li>
-                <li><Link href="/fda-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">FDA Disclaimer</Link></li>
-                <li><Link href="/accessibility" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Accessibility Statement</Link></li>
-                <li><Link href="/accessibility-help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Accessibility</Link></li>
+                <li><Link href="/about" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">About Us</Link></li>
+                <li><Link href="/help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Help Center & FAQ</Link></li>
+                <li><Link href="/contact" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Contact Us</Link></li>
+                <li><Link href="/reviews" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Customer Reviews</Link></li>
+                <li><Link href="/price-guarantee" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Low Price Guarantee</Link></li>
+                <li><Link href="/returns" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Returns & Refund Policy</Link></li>
+                <li><Link href="/shipping" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shipping Policy</Link></li>
+                <li><Link href="/privacy" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Terms and Conditions</Link></li>
+                <li><Link href="/hemp-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Hemp Disclaimer</Link></li>
+                <li><Link href="/fda-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">FDA Disclaimer</Link></li>
+                <li><Link href="/accessibility" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessibility Statement</Link></li>
+                <li><Link href="/accessibility-help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessibility</Link></li>
               </ul>
             </div>
 
@@ -107,13 +107,13 @@ export default function DopeCityFooter() {
             <div>
               <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg">Useful Links</h3>
               <ul className="space-y-3">
-                <li><Link href="/sale" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">On Sale</Link></li>
-                <li><Link href="/products?filter=new" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Newest Products</Link></li>
-                <li><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Shop by Brand</Link></li>
-                <li><Link href="/gift-cards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Gift Cards</Link></li>
-                <li><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">DOPE CITY Rewards</Link></li>
-                <li><Link href="/glossary" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Glossary of Terms</Link></li>
-                <li><Link href="/knowledge-base" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Knowledge Base</Link></li>
+                <li><Link href="/sale" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">On Sale</Link></li>
+                <li><Link href="/products?filter=new" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Newest Products</Link></li>
+                <li><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shop by Brand</Link></li>
+                <li><Link href="/gift-cards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Gift Cards</Link></li>
+                <li><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">DOPE CITY Rewards</Link></li>
+                <li><Link href="/glossary" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Glossary of Terms</Link></li>
+                <li><Link href="/knowledge-base" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Knowledge Base</Link></li>
               </ul>
             </div>
 
@@ -121,16 +121,16 @@ export default function DopeCityFooter() {
             <div>
               <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg">SHOP NOW</h3>
               <ul className="space-y-3">
-                <li><Link href="/products" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">All Products</Link></li>
-                <li><Link href="/products?q=thca" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">THCA Flower</Link></li>
-                <li><Link href="/pre-rolls" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Pre-Rolls</Link></li>
-                <li><Link href="/bongs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Bongs</Link></li>
-                <li><Link href="/pipes" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Hand Pipes</Link></li>
-                <li><Link href="/products?category=dab-rigs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Dab Rigs</Link></li>
-                <li><Link href="/products?category=vaporizers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Vaporizers</Link></li>
-                <li><Link href="/products?q=e-rig" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">E-Rigs</Link></li>
-                <li><Link href="/products?category=accessories" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Accessories</Link></li>
-                <li><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-sm drop-shadow-md">Shop by Brand</Link></li>
+                <li><Link href="/products" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>All Products</Link></li>
+                <li><Link href="/products?q=thca" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>THCA Flower</Link></li>
+                <li><Link href="/pre-rolls" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Pre-Rolls</Link></li>
+                <li><Link href="/bongs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Bongs</Link></li>
+                <li><Link href="/pipes" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Hand Pipes</Link></li>
+                <li><Link href="/products?category=dab-rigs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Dab Rigs</Link></li>
+                <li><Link href="/products?category=vaporizers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Vaporizers</Link></li>
+                <li><Link href="/products?q=e-rig" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">E-Rigs</Link></li>
+                <li><Link href="/products?category=accessories" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessories</Link></li>
+                <li><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shop by Brand</Link></li>
               </ul>
             </div>
 
