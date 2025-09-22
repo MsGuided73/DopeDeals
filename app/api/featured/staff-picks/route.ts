@@ -1,0 +1,94 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const limit = parseInt(searchParams.get('limit') || '2');
+
+    // Get featured products with higher prices for staff picks
+    const { data: products, error } = await supabase
+      .from('products')
+      .select(`
+        id, name, description, short_description, price, vip_price, 
+        image_url, sku, stock_quantity, brand_name, materials,
+        featured, created_at
+      `)
+      .eq('is_active', true)
+      .eq('nicotine_product', false)
+      .eq('tobacco_product', false)
+      .eq('featured', true)
+      .gt('stock_quantity', 0)
+      .gte('price', 50) // Higher priced items for staff picks
+      .order('price', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error('Error fetching staff picks:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // If no featured products, get high-value products
+    if (!products || products.length < limit) {
+      const { data: fallbackProducts, error: fallbackError } = await supabase
+        .from('products')
+        .select(`
+          id, name, description, short_description, price, vip_price, 
+          image_url, sku, stock_quantity, brand_name, materials,
+          featured, created_at
+        `)
+        .eq('is_active', true)
+        .eq('nicotine_product', false)
+        .eq('tobacco_product', false)
+        .gt('stock_quantity', 0)
+        .gte('price', 30)
+        .order('price', { ascending: false })
+        .limit(limit);
+
+      if (fallbackError) {
+        console.error('Error fetching fallback staff picks:', fallbackError);
+        return NextResponse.json({ error: fallbackError.message }, { status: 500 });
+      }
+
+      // Add discount calculations for staff picks
+      const staffPicks = (fallbackProducts || []).map(product => ({
+        ...product,
+        original_price: product.price * 1.5, // Simulate original price
+        discount_percentage: Math.floor(Math.random() * 30) + 20, // 20-50% off
+        is_staff_pick: true
+      }));
+
+      return NextResponse.json({
+        products: staffPicks,
+        message: 'Staff picks with simulated discounts',
+        total: staffPicks.length
+      });
+    }
+
+    // Add discount calculations for featured products
+    const staffPicks = products.map(product => ({
+      ...product,
+      original_price: product.price * 1.4,
+      discount_percentage: Math.floor(Math.random() * 25) + 25, // 25-50% off
+      is_staff_pick: true
+    }));
+
+    return NextResponse.json({
+      products: staffPicks,
+      message: 'Featured staff picks fetched successfully',
+      total: staffPicks.length
+    });
+
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' }, 
+      { status: 500 }
+    );
+  }
+}

@@ -6,15 +6,18 @@ import { queryClient } from "@/lib/queryClient";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import ToastProvider from "./components/ToastProvider";
+import { CartProvider } from "./contexts/CartContext";
 
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        {children}
-        <Toaster />
-        <ToastProvider />
-      </TooltipProvider>
+      <CartProvider>
+        <TooltipProvider>
+          {children}
+          <Toaster />
+          <ToastProvider />
+        </TooltipProvider>
+      </CartProvider>
     </QueryClientProvider>
   );
 }

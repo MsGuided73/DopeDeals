@@ -52,8 +52,11 @@ export function detectCategory(productName: string): string {
   if (name.includes('pipe') || name.includes('bong') || name.includes('rig')) {
     return 'pipes-bongs';
   }
-  if (name.includes('joint') || name.includes('cone') || name.includes('paper') || name.includes('wrap')) {
-    return 'rolling-papers';
+  if (name.includes('joint') || name.includes('cone') || name.includes('paper') || name.includes('wrap') || name.includes('rolling')) {
+    return 'dope-club';
+  }
+  if (name.includes('torch') || name.includes('lighter') || name.includes('flame') || name.includes('ignit')) {
+    return 'torches-lighters';
   }
   if (name.includes('thca') || name.includes('cbg') || name.includes('cbd') || name.includes('preroll')) {
     return 'cannabis';
@@ -78,6 +81,8 @@ export function detectCategory(productName: string): string {
 export function getBrandDisplayName(brandValue: string): string {
   const brandMap: { [key: string]: string } = {
     'crave': 'Crave',
+    'cookies': 'Cookies',
+    'urth-farmacy': 'Urth Farmacy',
     'geek-bar': 'Geek Bar',
     'elf-bar': 'Elf Bar',
     'puffco': 'Puffco',
@@ -103,7 +108,8 @@ export function getCategoryDisplayName(categoryValue: string): string {
     'disposables': 'Disposables',
     'batteries': 'Batteries',
     'pipes-bongs': 'Pipes & Bongs',
-    'rolling-papers': 'Rolling Papers',
+    'dope-club': 'DOPE CLUB',
+    'torches-lighters': 'Torches & Lighters',
     'cannabis': 'Cannabis',
     'e-liquids': 'E-Liquids',
     'tools': 'Tools',
@@ -123,7 +129,8 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   { value: 'cannabis', label: 'Cannabis' },
   { value: 'pipes-bongs', label: 'Pipes & Bongs' },
   { value: 'batteries', label: 'Batteries' },
-  { value: 'rolling-papers', label: 'Rolling Papers' },
+  { value: 'dope-club', label: 'DOPE CLUB' },
+  { value: 'torches-lighters', label: 'Torches & Lighters' },
   { value: 'accessories', label: 'Accessories' },
   { value: 'tools', label: 'Tools' },
   { value: 'edibles', label: 'Edibles' },
@@ -133,7 +140,9 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
 // Available brands for filtering
 export const PRODUCT_BRANDS: ProductBrand[] = [
   { value: 'all', label: 'All Brands' },
+  { value: 'cookies', label: 'Cookies' },
   { value: 'crave', label: 'Crave' },
+  { value: 'urth-farmacy', label: 'Urth Farmacy' },
   { value: 'geek-bar', label: 'Geek Bar' },
   { value: 'elf-bar', label: 'Elf Bar' },
   { value: 'nu-e-liquid', label: 'NU E-Liquid' },

@@ -10,6 +10,16 @@
   font-display: swap;
 }
 
+/* Force Chalets font loading */
+@font-face {
+  font-family: 'Chalets-Fallback';
+  src: url('/fonts/chalets-webfont.woff2') format('woff2'),
+       url('/fonts/chalets-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,7 +31,7 @@
 [class*="font-chalets"] {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.01em !important;
 }
 
 /* 2. DOPE CITY title specific styling */
@@ -29,7 +39,7 @@
 .dope-city-title * {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.02em !important;
 }
 
 /* 3. Additional Chalets utility classes */
@@ -42,7 +52,15 @@
 .chalets-title {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.02em !important;
+}
+
+/* Debug: Force Chalets font with high specificity */
+html body .font-chalets,
+html body [style*="Chalets"],
+html body .dope-city-title {
+  font-family: 'Chalets', 'Chalets-Fallback', 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
 }
 
 /* 4. Search Bar Animated Glow */
@@ -308,5 +326,31 @@
   .dope-collection-subtext {
     margin-top: var(--spacing-text-tight);
   }
+}
+
+/* Metallic Shimmer Animation for Section Titles */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Metallic frame effects */
+.metallic-frame {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #404040 50%, #2d2d2d 75%, #1a1a1a 100%);
+  border: 2px solid;
+  border-image: linear-gradient(45deg, #666, #999, #ccc, #999, #666) 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 4px 8px rgba(0,0,0,0.3),
+    0 0 20px rgba(255,255,255,0.05);
 }
 

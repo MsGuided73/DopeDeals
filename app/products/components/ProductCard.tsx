@@ -1,7 +1,11 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
+import { ShoppingCart, Heart } from 'lucide-react';
+import { addToCart } from '../../lib/cart-utils';
 import { cleanProductDescription, extractProductDescription, isImageAppropriateForProduct, getProductPlaceholder, generateProductDescription } from '../../lib/product-utils';
+import toast from 'react-hot-toast';
 
 interface ProductCardProps {
   product: {
@@ -21,6 +25,9 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, viewMode = 'grid', showAddToCart = false }: ProductCardProps) {
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
   // Handle different image field names for compatibility
   const rawImageUrl = product.image_url || product.imageUrl || product.image;
 
@@ -39,6 +46,28 @@ export default function ProductCard({ product, viewMode = 'grid', showAddToCart 
 
   // Get appropriate placeholder for product type
   const placeholder = getProductPlaceholder(product.name);
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isInStock || isAddingToCart) return;
+
+    setIsAddingToCart(true);
+    const success = await addToCart(product.id, 1);
+    setIsAddingToCart(false);
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsFavorite(!isFavorite);
+    toast.success(isFavorite ? 'Removed from favorites' : 'Added to favorites', {
+      icon: isFavorite ? '💔' : '❤️',
+      duration: 2000,
+    });
+  };
 
   if (viewMode === 'list') {
     return (
