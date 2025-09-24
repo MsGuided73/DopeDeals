@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase-browser';
+import { supabaseBrowser } from '../../../lib/supabase-browser';
 
 interface DataSourcePanelProps {
   selectedComponent: string | null;
@@ -72,7 +72,7 @@ export default function DataSourcePanel({ selectedComponent, onDataSourceUpdate 
 
     try {
       setLoading(true);
-      let query = supabase.from(config.sourceType).select('*');
+      let query = supabaseBrowser.from(config.sourceType).select('*');
 
       // Apply filters
       config.filters.forEach(filter => {

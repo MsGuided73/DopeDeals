@@ -10,6 +10,9 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
 
+  // Enable standalone output for Docker deployment
+  output: 'standalone',
+
   // Configure external image domains with optimization
   images: {
     remotePatterns: [

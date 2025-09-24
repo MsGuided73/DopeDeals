@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase-browser';
+import { supabaseBrowser } from '../../../lib/supabase-browser';
 
 interface ComponentRendererProps {
   component: any;
@@ -25,7 +25,7 @@ export default function ComponentRenderer({ component, isSelected, onUpdate }: C
 
     try {
       setLoading(true);
-      let query = supabase.from(component.dataSource.sourceType).select('*');
+      let query = supabaseBrowser.from(component.dataSource.sourceType).select('*');
 
       // Apply filters
       if (component.dataSource.filters) {

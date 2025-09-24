@@ -211,7 +211,7 @@ export async function GET(request: NextRequest) {
     let allResults: SearchResult[] = [];
 
     // Build the base query
-    let query = supabase
+    let supabaseQuery = supabase
       .from('products')
       .select(`
         id, name, brand_name, price, image_url, description, short_description,
@@ -236,27 +236,27 @@ export async function GET(request: NextRequest) {
     if (filters.stockStatus && filters.stockStatus !== 'all') {
       switch (filters.stockStatus) {
         case 'in-stock':
-          query = query.gt('stock_quantity', 0);
+          supabaseQuery = supabaseQuery.gt('stock_quantity', 0);
           break;
         case 'out-of-stock':
-          query = query.eq('stock_quantity', 0);
+          supabaseQuery = supabaseQuery.eq('stock_quantity', 0);
           break;
         case 'low-stock':
-          query = query.gt('stock_quantity', 0).lte('stock_quantity', 5);
+          supabaseQuery = supabaseQuery.gt('stock_quantity', 0).lte('stock_quantity', 5);
           break;
         case 'high-stock':
-          query = query.gte('stock_quantity', 20);
+          supabaseQuery = supabaseQuery.gte('stock_quantity', 20);
           break;
       }
     }
 
     // Apply featured filter at database level
     if (filters.featured) {
-      query = query.eq('featured', true);
+      supabaseQuery = supabaseQuery.eq('featured', true);
     }
 
     // Execute the query
-    const { data: products, error: productsError } = await query.limit(limit * 3);
+    const { data: products, error: productsError } = await supabaseQuery.limit(limit * 3);
 
     if (productsError) {
       console.error('Error fetching products:', productsError);

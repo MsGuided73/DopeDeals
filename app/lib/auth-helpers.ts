@@ -8,7 +8,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 import { getSessionUser } from '@/lib/supabase-server-ssr';
-import { UserRole, type AuthenticatedUser } from './requireAuth';
+import { UserRole, type AuthenticatedUser } from '../types/auth';
 
 // Initialize Supabase client
 const supabase = createClient(
