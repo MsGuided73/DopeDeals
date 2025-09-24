@@ -138,6 +138,42 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Perform real-time inventory validation
+    try {
+      const inventoryValidation = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/inventory/validate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: items.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity
+          })),
+          userId: user.id
+        })
+      });
+
+      if (inventoryValidation.ok) {
+        const validationResult = await inventoryValidation.json();
+        if (!validationResult.valid) {
+          const invalidItems = validationResult.items.filter((item: any) => !item.isValid);
+          return NextResponse.json({
+            error: 'Insufficient inventory for order',
+            details: invalidItems.map((item: any) => ({
+              productName: item.productName,
+              error: item.error
+            }))
+          }, { status: 409 });
+        }
+      } else {
+        console.warn('[Order Creation] Inventory validation request failed');
+      }
+    } catch (error) {
+      console.error('[Order Creation] Inventory validation error:', error);
+      // Continue with order creation but log the error
+    }
+
     // Calculate tax and shipping
     const tax = calculateTax(subtotal, shippingAddress.state);
     const shipping = calculateShipping(subtotal, shippingAddress.state);

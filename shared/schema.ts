@@ -89,6 +89,63 @@ export const orderItems = pgTable("order_items", {
   priceAtPurchase: numeric("price_at_purchase", { precision: 10, scale: 2 }).notNull(),
 });
 
+export const inventory = pgTable("inventory", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id").references(() => products.id).notNull(),
+  warehouseId: text("warehouse_id").default("main"),
+
+  // Stock levels
+  available: integer("available").notNull().default(0),
+  reserved: integer("reserved").notNull().default(0),
+  committed: integer("committed").notNull().default(0),
+  onOrder: integer("on_order").notNull().default(0),
+
+  // Thresholds and alerts
+  lowStockThreshold: integer("low_stock_threshold").default(5),
+  reorderPoint: integer("reorder_point").default(10),
+  maxStockLevel: integer("max_stock_level"),
+
+  // Tracking and sync
+  sku: text("sku"),
+  name: text("name"),
+  description: text("description"),
+  shortDescription: text("short_description"),
+  categories: text("categories"),
+  lastSyncedAt: timestamp("last_synced_at", { withTimezone: true }).defaultNow(),
+  sourceVersion: text("source_version"),
+
+  // Metadata
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const inventoryReservations = pgTable("inventory_reservations", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id").references(() => products.id).notNull(),
+  warehouseId: text("warehouse_id").default("main"),
+  userId: uuid("user_id").references(() => users.id),
+  sessionId: text("session_id"),
+
+  // Reservation details
+  quantity: integer("quantity").notNull(),
+  reason: text("reason").notNull().default("checkout"),
+
+  // Timing
+  reservedAt: timestamp("reserved_at", { withTimezone: true }).defaultNow(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  releasedAt: timestamp("released_at", { withTimezone: true }),
+
+  // Status
+  status: text("status").notNull().default("active"), // active, expired, released, converted
+
+  // References
+  orderId: uuid("order_id").references(() => orders.id),
+  notes: text("notes"),
+
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
 export const memberships = pgTable("memberships", {
   id: uuid("id").defaultRandom().primaryKey(),
   tierName: text("tier_name").notNull(),
