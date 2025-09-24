@@ -95,13 +95,13 @@ export default function HomePage() {
       {/* Age Verification Popup */}
       <AgeVerification />
 
-      {/* Fullscreen Carousel - First thing users see */}
-      <FullscreenCarousel />
+      {/* Global Masthead - Always at the top */}
+      <GlobalMasthead />
 
       {/* Main Content - Blurred when age verification is showing */}
       <div className={`${!isAgeVerified ? 'blur-lg pointer-events-none' : ''} transition-all duration-300`}>
-        {/* Global Masthead */}
-        <GlobalMasthead />
+        {/* Fullscreen Carousel - Now beneath the masthead */}
+        <FullscreenCarousel />
 
         {/* VIP Membership Hero Section */}
         <div className="w-full px-6 pt-8 pb-4">
