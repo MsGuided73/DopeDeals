@@ -64,9 +64,13 @@ export interface IStorage {
   getUserOrders(userId: string): Promise<Order[]>;
   getOrder(id: string): Promise<Order | undefined>;
   createOrder(order: InsertOrder): Promise<Order>;
+  updateOrder(id: string, updates: Partial<Order>): Promise<Order | undefined>;
   // Order Items
   createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
   getOrderItemsByOrder(orderId: string): Promise<OrderItem[]>;
+  // Order Status History
+  createOrderStatusHistory?(entry: InsertOrderStatusHistory): Promise<OrderStatusHistory>;
+  getOrderStatusHistory?(orderId: string): Promise<OrderStatusHistory[]>;
 
   // Atomic checkout (preferred when backed by Supabase)
   checkoutAtomic?(params: {
@@ -747,6 +751,19 @@ export class MemStorage {
     } as any;
     this.orders.set(order.id, order);
     return order;
+  }
+
+  async updateOrder(id: string, updates: Partial<Order>): Promise<Order | undefined> {
+    const existing = this.orders.get(id);
+    if (!existing) return undefined;
+
+    const updated: Order = {
+      ...existing,
+      ...updates,
+      updatedAt: new Date(),
+    };
+    this.orders.set(id, updated);
+    return updated;
   }
 
 

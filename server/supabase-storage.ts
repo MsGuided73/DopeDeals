@@ -283,6 +283,18 @@ export class SupabaseStorage implements IStorage {
     return data as Order;
   }
 
+  async updateOrder(id: string, updates: Partial<Order>): Promise<Order | undefined> {
+    const { data, error } = await supabaseAdmin
+      .from('orders')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error || !data) return undefined;
+    return data as Order;
+  }
+
   // Atomic checkout via Postgres function
   async checkoutAtomic(params: { userId: string; items: Array<{ productId: string; quantity: number }>; shippingAddress?: unknown; billingAddress?: unknown; }): Promise<{ order: Order; items: OrderItem[] }> {
     const { data, error } = await supabaseAdmin!.rpc('checkout_atomic', {

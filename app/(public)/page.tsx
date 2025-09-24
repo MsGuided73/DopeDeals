@@ -6,6 +6,8 @@ import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 
 import StaffPicksSection from '../components/StaffPicksSection';
+import FullscreenCarousel from '../components/FullscreenCarousel';
+import FeaturedProductsSection from '../components/FeaturedProductsSection';
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
@@ -93,35 +95,75 @@ export default function HomePage() {
       {/* Age Verification Popup */}
       <AgeVerification />
 
+      {/* Fullscreen Carousel - First thing users see */}
+      <FullscreenCarousel />
+
       {/* Main Content - Blurred when age verification is showing */}
       <div className={`${!isAgeVerified ? 'blur-lg pointer-events-none' : ''} transition-all duration-300`}>
         {/* Global Masthead */}
         <GlobalMasthead />
 
-        {/* DOPE CLUB Section - Top of Page */}
-        <div className="w-full px-4 pt-8 pb-4">
+        {/* VIP Membership Hero Section */}
+        <div className="w-full px-6 pt-8 pb-4">
           <Link
-            href="/products?q=rolling"
-            className="relative block w-full h-64 bg-cover bg-center rounded-xl overflow-hidden group"
+            href="/rewards"
+            className="relative block w-full h-128 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('/Images/pre-rolls_collection.png'), linear-gradient(135deg, #be185d 0%, #ec4899 100%)",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/VIPClubblv1.jpeg')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
-            title="Click anywhere to explore DOPE CLUB essentials!"
+            title="Join DOPE CITY VIP Rewards for exclusive benefits!"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/40 group-hover:from-black/70 group-hover:to-black/50 transition-all duration-300"></div>
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent group-hover:from-black/80 group-hover:via-black/50 transition-all duration-300"></div>
 
-            <div className="absolute bottom-4 left-4 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DOPE CLUB</h3>
-              <p className="text-xl opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Papers, tips & rolling essentials</p>
-            </div>
+            {/* VIP Content */}
+            <div className="absolute left-8 top-1/2 transform -translate-y-1/2 text-white max-w-lg">
+              <h2 className="font-chalets tracking-wider leading-none mb-8" style={{
+                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                fontWeight: 'normal',
+                letterSpacing: '0.02em',
+                fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
+                lineHeight: '0.9',
+                textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'
+              }}>
+                GET A FREE<br />
+                VIP MEMBERSHIP
+              </h2>
 
-            {/* CTA Badge */}
-            <div className="absolute top-4 right-4">
-              <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:bg-white/30 transition-colors border border-white/30">
-                JOIN THE CLUB
-              </div>
+              {/* Benefits List */}
+              <ul className="space-y-3 text-lg font-medium mb-8">
+                <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
+                  <span className="text-dope-orange mr-3">•</span>
+                  Extra Discounts
+                </li>
+                <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
+                  <span className="text-dope-orange mr-3">•</span>
+                  Guaranteed Lowest Prices
+                </li>
+                <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
+                  <span className="text-dope-orange mr-3">•</span>
+                  Exclusive Offers and Drops
+                </li>
+                <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
+                  <span className="text-dope-orange mr-3">•</span>
+                  Free Gifts and Tester Products
+                </li>
+                <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
+                  <span className="text-dope-orange mr-3">•</span>
+                  Bonus Rewards Program
+                </li>
+                <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
+                  <span className="text-dope-orange mr-3">•</span>
+                  Private Sales, Events & More
+                </li>
+              </ul>
+
+              {/* CTA Button */}
+              <button className="bg-dope-orange hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                LEARN MORE
+              </button>
             </div>
           </Link>
         </div>
@@ -150,7 +192,7 @@ export default function HomePage() {
         <div className="grid grid-cols-6 gap-4 h-[1400px] w-full">
           {/* BONGS - New lifestyle frame, same size as THCA Flower */}
           <Link
-            href="/products?category=bongs"
+            href="/bongs"
             className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Bongs.jpeg')",
@@ -217,9 +259,9 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* Hand Pipes*/}
+          {/* Dab Rigs */}
           <Link
-            href="/products?q=DAB RIGS"
+            href="/dab-rigs"
             className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png')",
@@ -260,7 +302,7 @@ export default function HomePage() {
           {/* HOOKAH */}
           <Link
             href="/products?category=vaporizers"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-3 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg')",
               backgroundSize: "cover"
@@ -297,7 +339,7 @@ export default function HomePage() {
           {/* Torches & Lighters Card - Extended to bottom */}
           <Link
             href="/products?q=torch"
-            className="relative col-span-3 row-span-2 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg')",
               backgroundSize: "cover",
@@ -500,6 +542,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* Featured Products Section - Real Images Only */}
+        <FeaturedProductsSection />
 
         {/* Staff Picks Section - Dynamic */}
         <StaffPicksSection />

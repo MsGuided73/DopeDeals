@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabaseBrowser } from '../../lib/supabase-browser';
 import GlobalMasthead from '../../components/GlobalMasthead';
-import DopeCityFooter from '../../../components/DopeCityFooter';
+
 import Image from 'next/image';
 import { Search, Filter, Grid, List, SlidersHorizontal } from 'lucide-react';
 import { detectCategory } from '../../lib/product-categorization';
@@ -197,7 +197,7 @@ export default function RoorBrandPageContent() {
             <p className="text-gray-600">Loading ROOR products...</p>
           </div>
         </div>
-        <DopeCityFooter />
+
       </div>
     );
   }
@@ -383,7 +383,7 @@ export default function RoorBrandPageContent() {
         )}
       </div>
 
-      <DopeCityFooter />
+
     </div>
   );
 }
