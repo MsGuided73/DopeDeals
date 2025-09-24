@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server';
-import { getSessionUser } from '@/lib/supabase-server-ssr';
+// This file is deprecated - use requireAdmin from requireAuth.ts instead
+import { requireAdmin as newRequireAdmin } from './requireAuth';
 
+/**
+ * @deprecated Use requireAdmin from './requireAuth' instead
+ */
 export async function requireAdmin() {
-  const user = await getSessionUser();
-  if (!user || user.app_metadata?.role !== 'admin') {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
-  return { user };
+  return newRequireAdmin();
 }

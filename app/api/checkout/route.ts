@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../lib/storage';
-import { requireAuth } from '../../lib/requireAuth';
+import { requireAuth, requirePermission } from '../../lib/requireAuth';
 import { z } from 'zod';
 
 // Generate order number in format: DC-YYYYMMDD-XXXX
@@ -69,8 +69,8 @@ const CheckoutSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  // Require auth
-  const auth = await requireAuth();
+  // Require auth and create_orders permission
+  const auth = await requirePermission('create_orders');
   if (auth instanceof NextResponse) return auth;
   const { user } = auth;
 
@@ -82,14 +82,52 @@ export async function POST(req: NextRequest) {
 
   const { items, shippingAddress, billingAddress, paymentMethod, processPayment, savePaymentMethod } = parse.data;
 
-  // Validate inventory locally (Phase A)
+  // Validate inventory with real-time stock checking
   const storage = await getStorage();
+
+  // First validate products exist
   for (const line of items) {
     const product = await storage.getProduct(line.productId);
     if (!product) return NextResponse.json({ error: `Product not found: ${line.productId}` }, { status: 404 });
     if (product.inStock === false) {
       return NextResponse.json({ error: `Product out of stock: ${product.name}` }, { status: 409 });
     }
+  }
+
+  // Validate inventory availability using our inventory validation system
+  try {
+    const inventoryValidation = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/inventory/validate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        items: items.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity
+        })),
+        userId: user.id
+      })
+    });
+
+    if (!inventoryValidation.ok) {
+      return NextResponse.json({ error: 'Failed to validate inventory' }, { status: 500 });
+    }
+
+    const validationResult = await inventoryValidation.json();
+    if (!validationResult.valid) {
+      const invalidItems = validationResult.items.filter((item: any) => !item.isValid);
+      return NextResponse.json({
+        error: 'Insufficient inventory',
+        details: invalidItems.map((item: any) => ({
+          productName: item.productName,
+          error: item.error
+        }))
+      }, { status: 409 });
+    }
+  } catch (error) {
+    console.error('[Checkout] Inventory validation error:', error);
+    return NextResponse.json({ error: 'Inventory validation failed' }, { status: 500 });
   }
 
   // Compute totals (basic)
@@ -105,6 +143,45 @@ export async function POST(req: NextRequest) {
 
   // Generate order number
   const orderNumber = generateOrderNumber();
+
+  // Reserve inventory during payment processing (15-minute hold)
+  let reservationIds: string[] = [];
+  if (processPayment) {
+    try {
+      const reservationResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/inventory/reserve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${req.headers.get('authorization')?.replace('Bearer ', '')}`
+        },
+        body: JSON.stringify({
+          items: items.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity
+          })),
+          holdMinutes: 15,
+          reason: 'checkout'
+        })
+      });
+
+      if (reservationResponse.ok) {
+        const reservationResult = await reservationResponse.json();
+        if (reservationResult.success) {
+          reservationIds = reservationResult.reservations.map((r: any) => r.reservationId);
+          console.log(`[Checkout] Reserved inventory: ${reservationIds.length} items`);
+        } else {
+          console.warn('[Checkout] Inventory reservation failed:', reservationResult.errors);
+          return NextResponse.json({
+            error: 'Unable to reserve inventory for checkout',
+            details: reservationResult.errors
+          }, { status: 409 });
+        }
+      }
+    } catch (error) {
+      console.error('[Checkout] Inventory reservation error:', error);
+      return NextResponse.json({ error: 'Inventory reservation failed' }, { status: 500 });
+    }
+  }
 
   // Prefer atomic checkout when available (Supabase)
   if (typeof storage.checkoutAtomic === 'function') {
