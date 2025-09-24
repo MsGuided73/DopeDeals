@@ -85,7 +85,7 @@ export default function FullscreenCarousel() {
   const currentSlideData = slides[currentSlide];
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
