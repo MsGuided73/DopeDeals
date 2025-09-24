@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStorage } from '../../../../../lib/storage';
-import { requireAuth } from '../../../../lib/requireAuth';
+import { createClient } from '@supabase/supabase-js';
+import { requireAuth, requirePermission } from '../../../../lib/requireAuth';
 import { z } from 'zod';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 const UpdateStatusSchema = z.object({
   status: z.enum([
@@ -53,42 +58,84 @@ export async function GET(
 
     const { orderId } = params;
 
-    // Get storage instance
-    const storage = await getStorage();
+    // Get order with status history
+    const { data: order, error } = await supabase
+      .from('orders')
+      .select(`
+        id,
+        order_number,
+        user_id,
+        status,
+        payment_status,
+        fulfillment_status,
+        tracking_number,
+        carrier,
+        created_at,
+        updated_at,
+        shipped_at,
+        delivered_at,
+        order_status_history (
+          id,
+          from_status,
+          to_status,
+          changed_by,
+          notes,
+          created_at,
+          users!changed_by (
+            id,
+            first_name,
+            last_name,
+            email
+          )
+        )
+      `)
+      .eq('id', orderId)
+      .single();
 
-    // Get the order
-    const order = await storage.getOrder(orderId);
-    if (!order) {
-      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      }
+      console.error('[Order Status] Error fetching order:', error);
+      return NextResponse.json({ error: 'Failed to fetch order' }, { status: 500 });
     }
 
-    // Verify order belongs to user (unless admin)
-    // TODO: Add admin role check when role system is implemented
-    if (order.userId !== user.id) {
+    // Check if user can access this order
+    const canViewAllOrders = user.role === 'admin' || user.role === 'moderator' || user.role === 'support';
+
+    if (!canViewAllOrders && order.user_id !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Get order status history if available
-    let statusHistory = [];
-    try {
-      if (typeof storage.getOrderStatusHistory === 'function') {
-        statusHistory = await storage.getOrderStatusHistory(orderId);
-      }
-    } catch (error) {
-      console.warn('[Order Status] Could not fetch status history:', error);
-    }
+    // Format status history
+    const statusHistory = order.order_status_history?.map((entry: any) => ({
+      id: entry.id,
+      fromStatus: entry.from_status,
+      toStatus: entry.to_status,
+      changedBy: entry.users ? {
+        id: entry.users.id,
+        name: `${entry.users.first_name} ${entry.users.last_name}`.trim(),
+        email: entry.users.email
+      } : null,
+      notes: entry.notes,
+      createdAt: entry.created_at
+    })) || [];
 
     return NextResponse.json({
       orderId: order.id,
-      orderNumber: order.orderNumber,
+      orderNumber: order.order_number,
       status: order.status,
-      paymentStatus: order.paymentStatus,
-      fulfillmentStatus: order.fulfillmentStatus,
-      trackingNumber: order.trackingNumber,
+      paymentStatus: order.payment_status,
+      fulfillmentStatus: order.fulfillment_status,
+      trackingNumber: order.tracking_number,
       carrier: order.carrier,
       statusHistory,
-      updatedAt: order.updatedAt,
-      createdAt: order.createdAt
+      timestamps: {
+        createdAt: order.created_at,
+        updatedAt: order.updated_at,
+        shippedAt: order.shipped_at,
+        deliveredAt: order.delivered_at
+      }
     });
 
   } catch (error) {
@@ -104,8 +151,8 @@ export async function PATCH(
   { params }: { params: OrderStatusParams }
 ) {
   try {
-    // Require authentication
-    const auth = await requireAuth();
+    // Require permission to update order status
+    const auth = await requirePermission('update_order_status');
     if (auth instanceof NextResponse) return auth;
     const { user } = auth;
 
@@ -123,19 +170,18 @@ export async function PATCH(
 
     const { status, paymentStatus, fulfillmentStatus, notes, trackingNumber, carrier, notifyCustomer } = parse.data;
 
-    // Get storage instance
-    const storage = await getStorage();
+    // Get current order
+    const { data: currentOrder, error: fetchError } = await supabase
+      .from('orders')
+      .select('id, order_number, user_id, status, payment_status, fulfillment_status, tracking_number, carrier')
+      .eq('id', orderId)
+      .single();
 
-    // Get the order
-    const order = await storage.getOrder(orderId);
-    if (!order) {
-      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
-    }
-
-    // Verify order belongs to user (unless admin)
-    // TODO: Add admin role check when role system is implemented
-    if (order.userId !== user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    if (fetchError) {
+      if (fetchError.code === 'PGRST116') {
+        return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      }
+      return NextResponse.json({ error: 'Failed to fetch order' }, { status: 500 });
     }
 
     // Validate status transitions
