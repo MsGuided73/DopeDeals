@@ -125,6 +125,7 @@ export default function DopeCityFooter() {
                 <li><Link href="/products?q=thca" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>THCA Flower</Link></li>
                 <li><Link href="/pre-rolls" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Pre-Rolls</Link></li>
                 <li><Link href="/bongs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Bongs</Link></li>
+                <li><Link href="/bubblers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Bubblers</Link></li>
                 <li><Link href="/pipes" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Hand Pipes</Link></li>
                 <li><Link href="/products?category=dab-rigs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Dab Rigs</Link></li>
                 <li><Link href="/products?category=vaporizers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Vaporizers</Link></li>

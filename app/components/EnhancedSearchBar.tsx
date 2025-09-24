@@ -27,7 +27,7 @@ const searchCategories: SearchCategory[] = [
   { label: 'All Products', value: 'all', href: '/products', type: 'product' },
   { label: 'THCA Flower', value: 'thca', href: '/products?q=thca', type: 'product' },
   { label: 'Pre-Rolls', value: 'pre-rolls', href: '/pre-rolls', type: 'product' },
-  { label: 'Bongs', value: 'bongs', href: '/products?category=bongs', type: 'product' },
+  { label: 'Bongs', value: 'bongs', href: '/bongs', type: 'product' },
   { label: 'Hand Pipes', value: 'pipes', href: '/pipes', type: 'product' },
   { label: 'Dab Rigs', value: 'dab-rigs', href: '/products?category=dab-rigs', type: 'product' },
   { label: 'Vaporizers', value: 'vaporizers', href: '/products?category=vaporizers', type: 'product' },

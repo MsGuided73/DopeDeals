@@ -67,6 +67,7 @@ export const products = pgTable("products", {
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id),
+  orderNumber: text("order_number").unique(),
   status: text("status").notNull().default("processing"), // processing, shipped, completed, failed, review_needed
   paymentStatus: text("payment_status").notNull().default("pending"), // pending, processing, paid, failed, refunded
   paymentMethod: text("payment_method"), // card, ach, digital_wallet
