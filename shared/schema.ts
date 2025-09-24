@@ -68,25 +68,85 @@ export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id),
   orderNumber: text("order_number").unique(),
-  status: text("status").notNull().default("processing"), // processing, shipped, completed, failed, review_needed
-  paymentStatus: text("payment_status").notNull().default("pending"), // pending, processing, paid, failed, refunded
+
+  // Customer Information
+  customerEmail: text("customer_email").notNull(),
+  customerFirstName: text("customer_first_name").notNull(),
+  customerLastName: text("customer_last_name").notNull(),
+  customerPhone: text("customer_phone"),
+
+  // Order Status
+  status: text("status").notNull().default("pending"), // pending, confirmed, processing, shipped, delivered, cancelled, refunded, returned
+  paymentStatus: text("payment_status").notNull().default("pending"), // pending, processing, paid, failed, refunded, partially_refunded, voided
+  fulfillmentStatus: text("fulfillment_status").notNull().default("unfulfilled"), // unfulfilled, partial, fulfilled, shipped, delivered, returned
+
+  // Payment Information
   paymentMethod: text("payment_method"), // card, ach, digital_wallet
   transactionId: text("transaction_id"),
+
+  // Pricing
   subtotalAmount: numeric("subtotal_amount", { precision: 10, scale: 2 }).notNull(),
   taxAmount: numeric("tax_amount", { precision: 10, scale: 2 }).notNull().default('0'),
   shippingAmount: numeric("shipping_amount", { precision: 10, scale: 2 }).notNull().default('0'),
+  discountAmount: numeric("discount_amount", { precision: 10, scale: 2 }).notNull().default('0'),
   totalAmount: numeric("total_amount", { precision: 10, scale: 2 }).notNull(),
-  billingAddress: jsonb("billing_address"),
-  shippingAddress: jsonb("shipping_address"),
+
+  // Addresses
+  billingAddress: jsonb("billing_address").notNull(),
+  shippingAddress: jsonb("shipping_address").notNull(),
+
+  // Order Notes
+  customerNotes: text("customer_notes"),
+  adminNotes: text("admin_notes"),
+  giftMessage: text("gift_message"),
+  isGift: boolean("is_gift").default(false),
+
+  // Shipping Information
+  trackingNumber: text("tracking_number"),
+  carrier: text("carrier"),
+
+  // Timestamps
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  shippedAt: timestamp("shipped_at", { withTimezone: true }),
+  deliveredAt: timestamp("delivered_at", { withTimezone: true }),
 });
 
 export const orderItems = pgTable("order_items", {
   id: uuid("id").defaultRandom().primaryKey(),
-  orderId: uuid("order_id").references(() => orders.id),
-  productId: uuid("product_id").references(() => products.id),
+  orderId: uuid("order_id").references(() => orders.id, { onDelete: 'cascade' }),
+  productId: uuid("product_id").references(() => products.id, { onDelete: 'set null' }),
+
+  // Product Information (snapshot at time of order)
+  productName: text("product_name").notNull(),
+  productSku: text("product_sku").notNull(),
+  productImageUrl: text("product_image_url"),
+
+  // Pricing
+  unitPrice: numeric("unit_price", { precision: 10, scale: 2 }).notNull(),
   quantity: integer("quantity").notNull(),
-  priceAtPurchase: numeric("price_at_purchase", { precision: 10, scale: 2 }).notNull(),
+  totalPrice: numeric("total_price", { precision: 10, scale: 2 }).notNull(),
+
+  // Fulfillment
+  fulfillmentStatus: text("fulfillment_status").default("unfulfilled"), // unfulfilled, fulfilled, cancelled
+
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// Order Status History
+export const orderStatusHistory = pgTable("order_status_history", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orderId: uuid("order_id").references(() => orders.id, { onDelete: 'cascade' }),
+
+  // Status Change
+  fromStatus: text("from_status"),
+  toStatus: text("to_status").notNull(),
+  changedBy: uuid("changed_by").references(() => users.id, { onDelete: 'set null' }),
+
+  // Notes
+  notes: text("notes"),
+
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
 export const inventory = pgTable("inventory", {
