@@ -170,23 +170,42 @@ export default function HomePage() {
 
       {/* Collections Grid */}
       <main className="w-full px-8 py-16">
-        {/* Collections Header - Metallic Frame */}
-        <div className="text-center mb-24 px-8">
-          <div className="relative inline-block">
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1"></div>
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
-            <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
-              <h2 className="text-4xl text-white mb-0 font-chalets uppercase relative z-10" style={{
-                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                letterSpacing: '0.02em',
-                fontWeight: 'normal',
-                textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
-              }}>
-                OUR COLLECTIONS
-              </h2>
+        {/* Enhanced Metallic Section Divider */}
+        <div className="w-full mb-16">
+          {/* Top metallic line */}
+          <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent mb-8 shadow-lg"></div>
+          <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
+
+          {/* Collections Header - Enhanced Metallic Frame */}
+          <div className="text-center mb-16 px-8">
+            <div className="relative inline-block">
+              {/* Multiple metallic shadow layers */}
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1 blur-sm"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1 blur-sm"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black rounded-lg transform rotate-12 blur-sm"></div>
+
+              {/* Main metallic frame */}
+              <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-8 rounded-lg border-2 border-gray-500 shadow-2xl">
+                {/* Enhanced shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-lg animate-shimmer"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gray-300/10 to-transparent rounded-lg animate-pulse"></div>
+
+                {/* Larger title */}
+                <h2 className="text-6xl text-white mb-0 font-chalets uppercase relative z-10" style={{
+                  fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                  letterSpacing: '0.02em',
+                  fontWeight: 'normal',
+                  textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.2), 0 0 30px rgba(255,255,255,0.1)'
+                }}>
+                  SHOP OUR COLLECTIONS
+                </h2>
+              </div>
             </div>
           </div>
+
+          {/* Bottom metallic lines */}
+          <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-8"></div>
+          <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent shadow-lg"></div>
         </div>
 
         <div className="grid grid-cols-6 gap-4 h-[1400px] w-full">
@@ -195,7 +214,7 @@ export default function HomePage() {
             href="/bongs"
             className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Bongs.jpeg')",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/slide-us-0011-roortech.png')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
@@ -205,10 +224,14 @@ export default function HomePage() {
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>BONGS</h3>
               <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium glass artistry</p>
             </div>
-            {/* Sharp CTA Button */}
+            {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
-              <div className="bg-dope-orange/90 backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:bg-dope-orange transition-colors">
-                SHOP
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
               </div>
             </div>
           </Link>
@@ -228,10 +251,14 @@ export default function HomePage() {
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB TOOLS</h3>
               <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Professional precision tools</p>
             </div>
-            {/* Sharp CTA Badge */}
+            {/* Metallic CTA Badge */}
             <div className="absolute top-3 right-3">
-              <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:bg-white/30 transition-colors border border-white/30">
-                DISCOVER
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-600 to-gray-800 rounded-lg blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:from-gray-600 hover:to-gray-400 transition-all shadow-lg border border-gray-400/40">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-lg"></div>
+                  <span className="relative z-10">DISCOVER</span>
+                </div>
               </div>
             </div>
           </Link>
@@ -264,7 +291,7 @@ export default function HomePage() {
             href="/dab-rigs"
             className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png')",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco%20site.png')",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -359,20 +386,44 @@ export default function HomePage() {
 
         {/* Customer Reviews Section */}
         <section className="mt-16">
-          <div className="text-center mb-12">
-            <div className="relative inline-block">
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
-              <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
-                <h2 className="text-4xl font-chalets text-white mb-0 relative z-10" style={{
-                  letterSpacing: '-0.02em',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
-                }}>
-                  DOPE FEEDBACK
-                </h2>
+          {/* Enhanced Metallic Section Divider */}
+          <div className="w-full mb-16">
+            {/* Top metallic line */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent mb-8 shadow-lg"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
+
+            <div className="text-center mb-16">
+              <div className="relative inline-block">
+                {/* Multiple metallic shadow layers */}
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1 blur-sm"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1 blur-sm"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black rounded-lg transform rotate-12 blur-sm"></div>
+
+                {/* Main metallic frame */}
+                <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-8 rounded-lg border-2 border-gray-500 shadow-2xl">
+                  {/* Enhanced shimmer effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-lg animate-shimmer"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gray-300/10 to-transparent rounded-lg animate-pulse"></div>
+
+                  {/* Larger title */}
+                  <h2 className="text-6xl font-chalets text-white mb-0 relative z-10 uppercase" style={{
+                    fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                    letterSpacing: '0.02em',
+                    fontWeight: 'normal',
+                    textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.2), 0 0 30px rgba(255,255,255,0.1)'
+                  }}>
+                    DOPE FEEDBACK
+                  </h2>
+                </div>
               </div>
             </div>
+
+            {/* Bottom metallic lines */}
+            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-8"></div>
+            <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent shadow-lg"></div>
+          </div>
+
+          <div className="text-center mb-12">
             <p className="text-lg text-gray-600 dark:text-gray-300 mt-6">
               Real reviews from real customers
             </p>
