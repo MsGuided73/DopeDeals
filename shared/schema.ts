@@ -282,6 +282,24 @@ export const cartItems = pgTable("cart_items", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+export const carouselSlides = pgTable("carousel_slides", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  description: text("description"),
+  ctaText: text("cta_text").notNull().default("Learn More"),
+  ctaLink: text("cta_link").notNull().default("/"),
+  backgroundImageUrl: text("background_image_url").notNull(),
+  textColor: text("text_color").notNull().default("text-white"),
+  overlayOpacity: numeric("overlay_opacity", { precision: 3, scale: 2 }).default("0.4"),
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  displayDuration: integer("display_duration").notNull().default(5000),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  createdBy: uuid("created_by"),
+});
+
 // User behavior tracking for recommendations
 export const userBehavior = pgTable("user_behavior", {
   id: uuid("id").defaultRandom().primaryKey(),
