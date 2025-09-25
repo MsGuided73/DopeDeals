@@ -1,0 +1,507 @@
+"use client";
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+import { ShoppingCart, Heart, Eye, Star } from 'lucide-react';
+import { addToCart } from '../lib/cart-utils';
+import { 
+  cleanProductDescription, 
+  extractProductDescription, 
+  isImageAppropriateForProduct, 
+  getProductPlaceholder, 
+  generateProductDescription 
+} from '../lib/product-utils';
+import toast from 'react-hot-toast';
+
+interface UniversalProductCardProps {
+  product: {
+    id: string;
+    name: string;
+    price: string | number;
+    image_url?: string;
+    imageUrl?: string;
+    image?: string;
+    featured?: boolean;
+    stock_quantity?: number;
+    brand_name?: string;
+    short_description?: string;
+    description?: string;
+    rating?: number;
+    review_count?: number;
+    category?: string;
+    tags?: string[];
+    compare_at_price?: number;
+    discount_percentage?: number;
+  };
+  
+  // Layout Options
+  viewMode?: 'grid' | 'list' | 'compact' | 'featured';
+  size?: 'small' | 'medium' | 'large';
+  
+  // Feature Toggles
+  showAddToCart?: boolean;
+  showFavorite?: boolean;
+  showQuickView?: boolean;
+  showRating?: boolean;
+  showBrand?: boolean;
+  showDescription?: boolean;
+  showStock?: boolean;
+  showDiscount?: boolean;
+  
+  // Context-specific options
+  context?: 'search' | 'category' | 'brand' | 'homepage' | 'related' | 'cart';
+  priority?: 'high' | 'normal' | 'low'; // For image loading priority
+  
+  // Custom styling
+  className?: string;
+  imageClassName?: string;
+  
+  // Event handlers
+  onAddToCart?: (productId: string) => void;
+  onFavorite?: (productId: string, isFavorite: boolean) => void;
+  onQuickView?: (productId: string) => void;
+}
+
+export default function UniversalProductCard({
+  product,
+  viewMode = 'grid',
+  size = 'medium',
+  showAddToCart = true,
+  showFavorite = true,
+  showQuickView = false,
+  showRating = true,
+  showBrand = true,
+  showDescription = true,
+  showStock = true,
+  showDiscount = true,
+  context = 'category',
+  priority = 'normal',
+  className = '',
+  imageClassName = '',
+  onAddToCart,
+  onFavorite,
+  onQuickView
+}: UniversalProductCardProps) {
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Handle different image field names for compatibility
+  const rawImageUrl = product.image_url || product.imageUrl || product.image;
+  
+  // Check if the image is appropriate for this product type
+  const isImageAppropriate = isImageAppropriateForProduct(rawImageUrl, product.name);
+  const imageUrl = isImageAppropriate && !imageError ? rawImageUrl : null;
+  const hasImage = imageUrl && imageUrl.trim() !== '';
+
+  // Clean up product descriptions
+  const cleanShortDescription = product.short_description
+    ? extractProductDescription(product.short_description) || cleanProductDescription(product.short_description)
+    : generateProductDescription(product);
+
+  const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
+  const compareAtPrice = product.compare_at_price;
+  const hasDiscount = compareAtPrice && compareAtPrice > price;
+  const discountPercentage = hasDiscount 
+    ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100)
+    : product.discount_percentage;
+
+  const isInStock = (product.stock_quantity || 0) > 0;
+  const placeholder = getProductPlaceholder(product.name);
+
+  // Size configurations
+  const sizeConfig = {
+    small: {
+      container: 'w-full max-w-xs',
+      image: 'h-32',
+      title: 'text-sm',
+      price: 'text-lg',
+      button: 'px-2 py-1 text-xs'
+    },
+    medium: {
+      container: 'w-full max-w-sm',
+      image: 'h-48',
+      title: 'text-base',
+      price: 'text-xl',
+      button: 'px-3 py-2 text-sm'
+    },
+    large: {
+      container: 'w-full max-w-md',
+      image: 'h-64',
+      title: 'text-lg',
+      price: 'text-2xl',
+      button: 'px-4 py-2 text-base'
+    }
+  };
+
+  const config = sizeConfig[size];
+
+  // Event handlers
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isInStock || isAddingToCart) return;
+
+    setIsAddingToCart(true);
+    
+    try {
+      if (onAddToCart) {
+        onAddToCart(product.id);
+      } else {
+        await addToCart(product.id, 1);
+      }
+    } catch (error) {
+      console.error('Add to cart failed:', error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const newFavoriteState = !isFavorite;
+    setIsFavorite(newFavoriteState);
+    
+    if (onFavorite) {
+      onFavorite(product.id, newFavoriteState);
+    }
+    
+    toast.success(newFavoriteState ? 'Added to favorites' : 'Removed from favorites', {
+      icon: newFavoriteState ? '❤️' : '💔',
+      duration: 2000,
+    });
+  };
+
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (onQuickView) {
+      onQuickView(product.id);
+    }
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  // Compact view for search results or small spaces
+  if (viewMode === 'compact') {
+    return (
+      <Link 
+        href={`/product/${product.id}`} 
+        className={`group flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 ${className}`}
+      >
+        <div className="relative w-16 h-16 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
+          {hasImage ? (
+            <Image
+              src={imageUrl}
+              alt={product.name}
+              fill
+              className="object-contain p-1"
+              sizes="64px"
+              priority={priority === 'high'}
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <span className="text-lg">{placeholder.icon}</span>
+            </div>
+          )}
+        </div>
+        
+        <div className="flex-1 min-w-0">
+          <h3 className="font-medium text-sm line-clamp-1 group-hover:text-dope-orange-600 transition-colors">
+            {product.name}
+          </h3>
+          {showBrand && product.brand_name && (
+            <p className="text-xs text-gray-500">{product.brand_name}</p>
+          )}
+          <div className="flex items-center gap-2 mt-1">
+            <span className="font-bold text-dope-orange-600">${price.toFixed(2)}</span>
+            {hasDiscount && compareAtPrice && (
+              <span className="text-xs text-gray-400 line-through">${compareAtPrice.toFixed(2)}</span>
+            )}
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  // List view for category pages
+  if (viewMode === 'list') {
+    return (
+      <Link 
+        href={`/product/${product.id}`} 
+        className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${className}`}
+      >
+        <div className="flex">
+          {/* Product Image */}
+          <div className="relative w-48 h-48 flex-shrink-0 bg-gray-100">
+            {hasImage ? (
+              <Image
+                src={imageUrl}
+                alt={product.name}
+                fill
+                className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+                sizes="192px"
+                priority={priority === 'high'}
+                onError={handleImageError}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="text-center">
+                  <div className="text-4xl mb-2">{placeholder.icon}</div>
+                  <div className="text-sm">{placeholder.text}</div>
+                </div>
+              </div>
+            )}
+            
+            {/* Badges */}
+            <div className="absolute top-2 left-2 flex flex-col gap-1">
+              {product.featured && (
+                <div className="bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                  Featured
+                </div>
+              )}
+              {showDiscount && discountPercentage && (
+                <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                  -{discountPercentage}%
+                </div>
+              )}
+            </div>
+
+            {/* Action buttons */}
+            <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              {showFavorite && (
+                <button
+                  onClick={handleToggleFavorite}
+                  className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+                >
+                  <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+                </button>
+              )}
+              {showQuickView && (
+                <button
+                  onClick={handleQuickView}
+                  className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+                >
+                  <Eye className="w-4 h-4 text-gray-600" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Product Info */}
+          <div className="flex-1 p-6">
+            <div className="flex items-start justify-between mb-2">
+              <h3 className={`font-semibold ${config.title} line-clamp-2 group-hover:text-dope-orange-600 transition-colors`}>
+                {product.name}
+              </h3>
+            </div>
+
+            {showBrand && product.brand_name && (
+              <p className="text-sm text-gray-500 mb-2">{product.brand_name}</p>
+            )}
+
+            {showRating && product.rating && (
+              <div className="flex items-center gap-1 mb-2">
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(product.rating!) 
+                          ? 'fill-yellow-400 text-yellow-400' 
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                {product.review_count && (
+                  <span className="text-sm text-gray-500">({product.review_count})</span>
+                )}
+              </div>
+            )}
+
+            {showDescription && cleanShortDescription && (
+              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                {cleanShortDescription}
+              </p>
+            )}
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className={`font-bold text-dope-orange-600 ${config.price}`}>
+                  ${price.toFixed(2)}
+                </span>
+                {hasDiscount && compareAtPrice && (
+                  <span className="text-sm text-gray-400 line-through">
+                    ${compareAtPrice.toFixed(2)}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-3">
+                {showStock && product.stock_quantity !== undefined && (
+                  <span className={`text-xs px-2 py-1 rounded-full ${
+                    isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {isInStock ? 'In Stock' : 'Out of Stock'}
+                  </span>
+                )}
+
+                {showAddToCart && (
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={!isInStock || isAddingToCart}
+                    className={`bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                    {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  // Default grid view
+  return (
+    <Link 
+      href={`/product/${product.id}`} 
+      className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}
+    >
+      {/* Product Image */}
+      <div className={`relative ${config.image} bg-gray-100 overflow-hidden`}>
+        {hasImage ? (
+          <Image
+            src={imageUrl}
+            alt={product.name}
+            fill
+            className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+            sizes={size === 'small' ? '200px' : size === 'large' ? '400px' : '300px'}
+            priority={priority === 'high'}
+            onError={handleImageError}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-400">
+            <div className="text-center">
+              <div className="text-4xl mb-2">{placeholder.icon}</div>
+              <div className="text-sm">{placeholder.text}</div>
+            </div>
+          </div>
+        )}
+        
+        {/* Badges */}
+        <div className="absolute top-2 left-2 flex flex-col gap-1">
+          {product.featured && (
+            <div className="bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+              Featured
+            </div>
+          )}
+          {showDiscount && discountPercentage && (
+            <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+              -{discountPercentage}%
+            </div>
+          )}
+        </div>
+
+        {/* Action buttons */}
+        <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          {showFavorite && (
+            <button
+              onClick={handleToggleFavorite}
+              className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+            >
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+            </button>
+          )}
+          {showQuickView && (
+            <button
+              onClick={handleQuickView}
+              className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+            >
+              <Eye className="w-4 h-4 text-gray-600" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="p-4">
+        <h3 className={`font-semibold ${config.title} mb-2 line-clamp-2 group-hover:text-dope-orange-600 transition-colors`}>
+          {product.name}
+        </h3>
+
+        {showBrand && product.brand_name && (
+          <p className="text-sm text-gray-500 mb-2">{product.brand_name}</p>
+        )}
+
+        {showRating && product.rating && (
+          <div className="flex items-center gap-1 mb-2">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < Math.floor(product.rating!) 
+                      ? 'fill-yellow-400 text-yellow-400' 
+                      : 'text-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+            {product.review_count && (
+              <span className="text-sm text-gray-500">({product.review_count})</span>
+            )}
+          </div>
+        )}
+
+        {showDescription && cleanShortDescription && (
+          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+            {cleanShortDescription}
+          </p>
+        )}
+
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <span className={`font-bold text-dope-orange-600 ${config.price}`}>
+              ${price.toFixed(2)}
+            </span>
+            {hasDiscount && compareAtPrice && (
+              <span className="text-sm text-gray-400 line-through">
+                ${compareAtPrice.toFixed(2)}
+              </span>
+            )}
+          </div>
+
+          {showStock && product.stock_quantity !== undefined && (
+            <span className={`text-xs px-2 py-1 rounded-full ${
+              isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }`}>
+              {isInStock ? 'In Stock' : 'Out of Stock'}
+            </span>
+          )}
+        </div>
+
+        {showAddToCart && (
+          <button
+            onClick={handleAddToCart}
+            disabled={!isInStock || isAddingToCart}
+            className={`w-full bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`}
+          >
+            <ShoppingCart className="w-4 h-4" />
+            {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+          </button>
+        )}
+      </div>
+    </Link>
+  );
+}
