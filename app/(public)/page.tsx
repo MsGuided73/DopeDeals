@@ -169,9 +169,9 @@ export default function HomePage() {
         </div>
 
       {/* Collections Grid */}
-      <main className="w-full px-4 py-16">
+      <main className="w-full px-8 py-16">
         {/* Collections Header - Metallic Frame */}
-        <div className="text-center mb-12 px-4">
+        <div className="text-center mb-24 px-8">
           <div className="relative inline-block">
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1"></div>
             <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>

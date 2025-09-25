@@ -13,9 +13,12 @@ async function checkRoorProducts() {
   
   const { data, error } = await supabase
     .from('products')
-    .select('id, name, brand_name, sku, description')
+    .select('id, name, brand_name, sku, description, image_url, is_active')
     .or('name.ilike.%roor%,brand_name.ilike.%roor%,sku.ilike.%roor%')
-    .limit(50);
+    .eq('is_active', true)
+    .eq('nicotine_product', false)
+    .eq('tobacco_product', false)
+    .limit(15);
     
   if (error) {
     console.error('❌ Error:', error);
@@ -27,11 +30,26 @@ async function checkRoorProducts() {
     console.log(`${i + 1}. ${p.name}`);
     console.log(`   Brand: ${p.brand_name || 'N/A'}`);
     console.log(`   SKU: ${p.sku || 'N/A'}`);
-    console.log(`   Description: ${p.description ? (p.description.length > 100 ? 'Has description' : 'Short description') : 'No description'}`);
+    console.log(`   Image URL: ${p.image_url || 'None'}`);
+    console.log(`   Active: ${p.is_active}`);
     console.log('');
   });
-  
-  console.log(`\n📊 Total: ${data?.length || 0} RooR products found`);
+
+  // Check how many have images vs no images
+  const withImages = data?.filter(p => p.image_url) || [];
+  const withoutImages = data?.filter(p => !p.image_url) || [];
+
+  console.log(`📊 Summary:`);
+  console.log(`   Total RooR products: ${data?.length || 0}`);
+  console.log(`   Products with images: ${withImages.length}`);
+  console.log(`   Products without images: ${withoutImages.length}`);
+
+  if (withoutImages.length > 0) {
+    console.log(`\n❌ Products missing images:`);
+    withoutImages.forEach((product, i) => {
+      console.log(`   ${i + 1}. ${product.name} (${product.sku})`);
+    });
+  }
 }
 
 checkRoorProducts();
