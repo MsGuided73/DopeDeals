@@ -73,92 +73,127 @@ export default function GlobalMasthead() {
           }`}
         >
           <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
-            {/* Shop by Category */}
+            {/* Shop Dropdown - Consolidated Categories and Brands */}
             <li className="relative">
               <button
-                onClick={() => setOpenDropdown(openDropdown === 'categories' ? null : 'categories')}
+                onClick={() => setOpenDropdown(openDropdown === 'shop' ? null : 'shop')}
                 className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
               >
-                Shop by Category
+                Shop
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              {openDropdown === 'categories' && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
+              {openDropdown === 'shop' && (
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
                     <Link href="/products" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">All Products</Link>
                     <div className="border-t border-gray-200/20 my-1"></div>
 
-                    {/* THCA & More with Submenu */}
+                    {/* Categories Section */}
                     <div className="relative">
                       <button
-                        onMouseEnter={() => setOpenSubmenu('thca')}
+                        onMouseEnter={() => setOpenSubmenu('categories')}
                         onMouseLeave={() => setOpenSubmenu(null)}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
                       >
-                        THCA & More
+                        Shop by Category
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </button>
 
-                      {/* THCA Submenu */}
-                      {openSubmenu === 'thca' && (
+                      {/* Categories Submenu */}
+                      {openSubmenu === 'categories' && (
                         <div
-                          className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
-                          onMouseEnter={() => setOpenSubmenu('thca')}
+                          className="absolute left-full top-0 ml-1 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
+                          onMouseEnter={() => setOpenSubmenu('categories')}
                           onMouseLeave={() => setOpenSubmenu(null)}
                         >
                           <div className="py-2">
-                            <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
-                            <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Pre-Rolls</Link>
+                            {/* THCA & More with Nested Submenu */}
+                            <div className="relative">
+                              <button
+                                onMouseEnter={() => setOpenSubmenu('thca')}
+                                onMouseLeave={() => setOpenSubmenu(null)}
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
+                              >
+                                THCA & More
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </button>
+
+                              {/* THCA Nested Submenu */}
+                              {openSubmenu === 'thca' && (
+                                <div
+                                  className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-70"
+                                  onMouseEnter={() => setOpenSubmenu('thca')}
+                                  onMouseLeave={() => setOpenSubmenu(null)}
+                                >
+                                  <div className="py-2">
+                                    <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
+                                    <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Pre-Rolls</Link>
+                                    <div className="border-t border-gray-200/20 my-1"></div>
+                                    <Link href="/products?q=thca+concentrates" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Concentrates</Link>
+                                    <Link href="/products?q=thca+diamonds" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Diamonds</Link>
+                                    <Link href="/products?q=thca+sauce" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Sauce</Link>
+                                    <Link href="/products?q=thca+rosin" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
+                                    <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
+                                    <Link href="/products?q=delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
+                                    <Link href="/products?q=edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
                             <div className="border-t border-gray-200/20 my-1"></div>
-                            <Link href="/products?q=thca+concentrates" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Concentrates</Link>
-                            <Link href="/products?q=thca+diamonds" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Diamonds</Link>
-                            <Link href="/products?q=thca+sauce" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Sauce</Link>
-                            <Link href="/products?q=thca+rosin" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
-                            <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
-                            <Link href="/products?q=delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
-                            <Link href="/products?q=edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                            <Link href="/bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bongs & Water Pipes</Link>
+                            <Link href="/pipes" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Hand Pipes</Link>
+                            <Link href="/products?category=dab-rigs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Dab Rigs</Link>
+                            <Link href="/products?category=vaporizers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Vaporizers</Link>
+                            <Link href="/products?q=torch" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Torches & Lighters</Link>
+                            <Link href="/products?category=accessories" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Accessories</Link>
+                            <Link href="/products?q=grinder" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Grinders</Link>
+                            <Link href="/products?q=rolling" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Rolling Papers</Link>
                           </div>
                         </div>
                       )}
                     </div>
 
                     <div className="border-t border-gray-200/20 my-1"></div>
-                    <Link href="/bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bongs & Water Pipes</Link>
-                    <Link href="/pipes" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Hand Pipes</Link>
-                    <Link href="/products?category=dab-rigs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Dab Rigs</Link>
-                    <Link href="/products?category=vaporizers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Vaporizers</Link>
-                    <Link href="/products?q=torch" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Torches & Lighters</Link>
-                    <Link href="/products?category=accessories" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Accessories</Link>
-                    <Link href="/products?q=grinder" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Grinders</Link>
-                    <Link href="/products?q=rolling" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Rolling Papers</Link>
-                  </div>
-                </div>
-              )}
-            </li>
 
-            {/* Shop by Brand Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'brands' ? null : 'brands')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                Shop by Brand
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'brands' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
-                  <div className="py-2">
-                    <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
-                    <Link href="/brands/puffco" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
-                    <Link href="/brands/storz-bickel" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
-                    <Link href="/brands/roor" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
-                    <Link href="/brands" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
+                    {/* Brands Section */}
+                    <div className="relative">
+                      <button
+                        onMouseEnter={() => setOpenSubmenu('brands')}
+                        onMouseLeave={() => setOpenSubmenu(null)}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
+                      >
+                        Shop by Brand
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+
+                      {/* Brands Submenu */}
+                      {openSubmenu === 'brands' && (
+                        <div
+                          className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
+                          onMouseEnter={() => setOpenSubmenu('brands')}
+                          onMouseLeave={() => setOpenSubmenu(null)}
+                        >
+                          <div className="py-2">
+                            <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
+                            <Link href="/brands/puffco" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
+                            <Link href="/brands/storz-bickel" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
+                            <Link href="/brands/roor" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
+                            <div className="border-t border-gray-200/20 my-1"></div>
+                            <Link href="/brands" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

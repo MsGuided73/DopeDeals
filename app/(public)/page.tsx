@@ -11,9 +11,7 @@ import FeaturedProductsSection from '../components/FeaturedProductsSection';
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isAgeVerified, setIsAgeVerified] = useState(false);
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,21 +25,6 @@ export default function HomePage() {
   useEffect(() => {
     const verified = localStorage.getItem('dope-city-age-verified');
     setIsAgeVerified(!!verified);
-  }, []);
-
-
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (!target.closest('nav')) {
-        setOpenDropdown(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -176,29 +159,26 @@ export default function HomePage() {
           <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent mb-8 shadow-lg"></div>
           <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
 
-          {/* Collections Header - Enhanced Metallic Frame */}
-          <div className="text-center mb-16 px-8">
+          {/* Collections Header - Clean Metallic Frame */}
+          <div className="text-center mb-16 px-4 md:px-8">
             <div className="relative inline-block">
-              {/* Multiple metallic shadow layers */}
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1 blur-sm"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1 blur-sm"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black rounded-lg transform rotate-12 blur-sm"></div>
+              {/* 3D Metallic Frame Background */}
+              <div className="relative bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 p-1 rounded-lg shadow-lg">
+                {/* Inner gradient for 3D effect */}
+                <div className="bg-gradient-to-br from-gray-100 via-gray-300 to-gray-500 p-6 md:p-8 rounded-md">
+                  {/* Highlight for metallic shine */}
+                  <div className="absolute inset-2 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-md pointer-events-none"></div>
 
-              {/* Main metallic frame */}
-              <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-8 rounded-lg border-2 border-gray-500 shadow-2xl">
-                {/* Enhanced shimmer effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-lg animate-shimmer"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gray-300/10 to-transparent rounded-lg animate-pulse"></div>
-
-                {/* Larger title */}
-                <h2 className="text-6xl text-white mb-0 font-chalets uppercase relative z-10" style={{
-                  fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                  letterSpacing: '0.02em',
-                  fontWeight: 'normal',
-                  textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.2), 0 0 30px rgba(255,255,255,0.1)'
-                }}>
-                  SHOP OUR COLLECTIONS
-                </h2>
+                  {/* Title */}
+                  <h2 className="text-3xl md:text-6xl text-gray-800 mb-0 font-chalets uppercase relative z-10" style={{
+                    fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                    letterSpacing: '0.02em',
+                    fontWeight: 'normal',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                  }}>
+                    SHOP OUR COLLECTIONS
+                  </h2>
+                </div>
               </div>
             </div>
           </div>
@@ -208,11 +188,11 @@ export default function HomePage() {
           <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent shadow-lg"></div>
         </div>
 
-        <div className="grid grid-cols-6 gap-4 h-[1400px] w-full">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 h-auto md:h-[1400px] w-full">
           {/* BONGS - New lifestyle frame, same size as THCA Flower */}
           <Link
             href="/bongs"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/slide-us-0011-roortech.png')",
               backgroundSize: "cover",
@@ -221,8 +201,8 @@ export default function HomePage() {
             title="Click anywhere to explore our premium Bongs collection!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>BONGS</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium glass artistry</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>BONGS</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium glass artistry</p>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -239,7 +219,7 @@ export default function HomePage() {
           {/* DAB TOOLS - New collection with your specified image */}
           <Link
             href="/products?q=dab+tools"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Dab_Tools.jpeg')",
               backgroundSize: "cover",
@@ -248,8 +228,8 @@ export default function HomePage() {
             title="Click anywhere to explore our premium Dab Tools collection!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB TOOLS</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Professional precision tools</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB TOOLS</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Professional precision tools</p>
             </div>
             {/* Metallic CTA Badge */}
             <div className="absolute top-3 right-3">
@@ -266,7 +246,7 @@ export default function HomePage() {
           {/* THCA Flower Card */}
           <Link
             href="/products?category=flower"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg')",
               backgroundSize: "cover",
@@ -275,8 +255,8 @@ export default function HomePage() {
             title="Click anywhere to discover our premium THCA flower selection!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA FLOWER</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium indoor cultivation</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA FLOWER</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium indoor cultivation</p>
             </div>
             {/* Sharp CTA Badge */}
             <div className="absolute top-3 right-3">
@@ -289,7 +269,7 @@ export default function HomePage() {
           {/* Dab Rigs */}
           <Link
             href="/dab-rigs"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco%20site.png')",
               backgroundSize: "cover",
@@ -298,8 +278,8 @@ export default function HomePage() {
             title="Click anywhere to check out our Dope Dab Rigs!"        >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB RIGS</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium concentrate essentials</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB RIGS</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium concentrate essentials</p>
             </div>
             {/* Sharp CTA Badge */}
             <div className="absolute top-3 right-3">
@@ -312,7 +292,7 @@ export default function HomePage() {
           {/* Prerolls */}
           <Link
             href="/products?category=pre-rolls"
-            className="relative col-span-3 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-3 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/PRE-ROLLS.jpeg')",
               backgroundSize: "cover"
@@ -321,15 +301,32 @@ export default function HomePage() {
           >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA PRE-ROLLS</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium hand-rolled perfection</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA PRE-ROLLS</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium hand-rolled perfection</p>
+            </div>
+          </Link>
+
+          {/* ACCESSORIES - Duplicate of E-Rigs card for second row */}
+          <Link
+            href="/products?category=accessories"
+            className="relative col-span-1 md:col-span-1 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            style={{
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Grinder%20&%20Supplies.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
+            title="Click anywhere to explore our premium Accessories!"
+          >
+            <div className="absolute bottom-2 left-2 text-white">
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.5rem, 6vw, 4rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>ACCESSORIES</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Essential supplies</p>
             </div>
           </Link>
 
           {/* HOOKAH */}
           <Link
             href="/products?category=vaporizers"
-            className="relative col-span-3 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-3 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg')",
               backgroundSize: "cover"
@@ -338,15 +335,15 @@ export default function HomePage() {
           >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(3rem, 12vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>HOOKAHS</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Traditional smoking culture</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>HOOKAHS</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Traditional smoking culture</p>
             </div>
           </Link>
 
           {/* E-RIGS - Fills the top-right empty space */}
           <Link
             href="/category/e-rigs"
-            className="relative col-span-1 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-1 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png')",
               backgroundSize: "cover",
@@ -355,18 +352,15 @@ export default function HomePage() {
             title="Click anywhere to explore our premium E-Rigs!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 4rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>E-RIGS</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Electric precision</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.5rem, 6vw, 4rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>E-RIGS</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Electric precision</p>
             </div>
           </Link>
-
-
-
 
           {/* Torches & Lighters Card - Extended to bottom */}
           <Link
             href="/products?q=torch"
-            className="relative col-span-2 row-span-3 bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg')",
               backgroundSize: "cover",
@@ -376,8 +370,8 @@ export default function HomePage() {
           >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 5rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>TORCHES & LIGHTERS</h3>
-              <p className="text-lg opacity-90 mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium ignition tools</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.8rem, 7vw, 5rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>TORCHES & LIGHTERS</h3>
+              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium ignition tools</p>
             </div>
           </Link>
         </div>
@@ -392,28 +386,25 @@ export default function HomePage() {
             <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent mb-8 shadow-lg"></div>
             <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
 
-            <div className="text-center mb-16">
+            <div className="text-center mb-16 px-4 md:px-8">
               <div className="relative inline-block">
-                {/* Multiple metallic shadow layers */}
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1 blur-sm"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1 blur-sm"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black rounded-lg transform rotate-12 blur-sm"></div>
+                {/* 3D Metallic Frame Background */}
+                <div className="relative bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 p-1 rounded-lg shadow-lg">
+                  {/* Inner gradient for 3D effect */}
+                  <div className="bg-gradient-to-br from-gray-100 via-gray-300 to-gray-500 p-6 md:p-8 rounded-md">
+                    {/* Highlight for metallic shine */}
+                    <div className="absolute inset-2 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-md pointer-events-none"></div>
 
-                {/* Main metallic frame */}
-                <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-8 rounded-lg border-2 border-gray-500 shadow-2xl">
-                  {/* Enhanced shimmer effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-lg animate-shimmer"></div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gray-300/10 to-transparent rounded-lg animate-pulse"></div>
-
-                  {/* Larger title */}
-                  <h2 className="text-6xl font-chalets text-white mb-0 relative z-10 uppercase" style={{
-                    fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                    letterSpacing: '0.02em',
-                    fontWeight: 'normal',
-                    textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.2), 0 0 30px rgba(255,255,255,0.1)'
-                  }}>
-                    DOPE FEEDBACK
-                  </h2>
+                    {/* Title */}
+                    <h2 className="text-3xl md:text-6xl font-chalets text-gray-800 mb-0 relative z-10 uppercase" style={{
+                      fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                      letterSpacing: '0.02em',
+                      fontWeight: 'normal',
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                    }}>
+                      DOPE FEEDBACK
+                    </h2>
+                  </div>
                 </div>
               </div>
             </div>
