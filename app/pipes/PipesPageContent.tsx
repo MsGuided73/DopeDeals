@@ -63,7 +63,7 @@ export default function PipesPageContent() {
 
   // Filter states
   const [filters, setFilters] = useState({
-    priceRange: [0, 100],
+    priceRange: [0, 100] as [number, number],
     brands: [] as string[],
     materials: [] as string[],
     styles: [] as string[],

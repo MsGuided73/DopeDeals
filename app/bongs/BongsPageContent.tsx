@@ -18,6 +18,7 @@ export interface BongProduct {
   price: number;
   vip_price?: number;
   image_url?: string;
+  image?: string; // Add alias for compatibility
   description?: string;
   sku: string;
   stock_quantity: number;
@@ -27,9 +28,15 @@ export interface BongProduct {
   material?: string;
   height?: string;
   joint_size?: string;
+  jointSize?: string; // Add alias for compatibility
   percolator?: string;
   created_at: string;
   updated_at: string;
+  // Add missing properties that components expect
+  isNew?: boolean;
+  isSale?: boolean;
+  originalPrice?: number;
+  inStock?: boolean;
 }
 
 export default function BongsPageContent() {
@@ -44,7 +51,7 @@ export default function BongsPageContent() {
 
   // Filter states
   const [filters, setFilters] = useState({
-    priceRange: [0, 1000],
+    priceRange: [0, 1000] as [number, number],
     brands: [] as string[],
     materials: [] as string[],
     heights: [] as string[],
@@ -52,6 +59,8 @@ export default function BongsPageContent() {
     percolators: [] as string[],
     categories: [] as string[],
     inStock: false,
+    onSale: false,
+    isNew: false,
   });
 
   useEffect(() => {

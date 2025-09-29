@@ -21,7 +21,7 @@ export default function ProductsFilters({ filters, onFiltersChange, products }: 
   // Extract unique values from products
   const uniqueBrands = [...new Set(products.map(p => p.brand))].sort();
   const uniqueCategories = [...new Set(products.map(p => p.category))].sort();
-  const uniqueMaterials = [...new Set(products.map(p => p.material).filter(Boolean))].sort();
+  const uniqueMaterials = [...new Set(products.map(p => p.material).filter(Boolean) as string[])].sort();
 
   const handlePriceChange = (min: number, max: number) => {
     onFiltersChange({ ...filters, priceRange: [min, max] });

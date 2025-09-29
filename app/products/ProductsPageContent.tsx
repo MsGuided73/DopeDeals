@@ -19,13 +19,16 @@ export interface Product {
   price: number;
   originalPrice?: number;
   image: string;
+  imageUrl?: string; // Add alias for compatibility
   images?: string[];
   brand: string;
   category: string;
   subcategory?: string;
   material?: string;
   size?: string;
+  sku?: string; // Add sku property
   inStock: boolean;
+  featured?: boolean; // Add featured property
 
   isNew?: boolean;
   isSale?: boolean;
@@ -89,6 +92,7 @@ export default function ProductsPageContent() {
             description: product.description || '',
             price: product.price,
             vipPrice: product.vip_price,
+            image: product.image_url || '',
             imageUrl: product.image_url || null,
             sku: product.sku,
             brand: product.brand_name || 'Unknown',
@@ -100,7 +104,8 @@ export default function ProductsPageContent() {
             vipExclusive: product.vip_exclusive || false,
             onSale: product.vip_price && product.vip_price < product.price,
             newArrival: new Date(product.created_at).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000,
-            tags: Array.isArray(product.tags) ? product.tags : []
+            tags: Array.isArray(product.tags) ? product.tags : [],
+            features: Array.isArray(product.features) ? product.features : []
           }));
 
           setProducts(transformedProducts);

@@ -19,9 +19,9 @@ import {
   type EmojiRecommendations, type InsertEmojiRecommendations, type ProductEmojiAssociations, type InsertProductEmojiAssociations,
   type ConciergeConversation, type InsertConciergeConversation, type ConciergeMessage, type InsertConciergeMessage,
   type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics,
-  complianceRules, productCompliance, complianceAuditLog,
+  complianceRules, productCompliance, complianceAuditLog, labCertificates,
   type ComplianceRule, type InsertComplianceRule, type ProductCompliance, type InsertProductCompliance,
-  type ComplianceAuditLog, type InsertComplianceAuditLog
+  type ComplianceAuditLog, type InsertComplianceAuditLog, type LabCertificate, type InsertLabCertificate
 } from "@shared/schema";
 
 import {
@@ -763,5 +763,321 @@ export class SupabaseStorage implements IStorage {
       .select()
       .single();
     return data || undefined;
+  }
+
+  // User Behavior & Preferences - Missing methods
+  async getUserBehavior(userId: string, limit?: number): Promise<UserBehavior[]> {
+    const query = supabaseAdmin!
+      .from('user_behavior')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (limit) query.limit(limit);
+
+    const { data } = await query;
+    return data || [];
+  }
+
+  async updateRecommendationCache(userId: string, type: string, productIds: string[], score?: number): Promise<void> {
+    // Implementation for recommendation cache update
+    await supabaseAdmin!
+      .from('recommendation_cache')
+      .upsert({
+        user_id: userId,
+        type,
+        product_ids: productIds,
+        score: score || 1.0,
+        updated_at: new Date().toISOString()
+      });
+  }
+
+  // Payment Methods - Missing methods
+  async getPaymentMethod(id: string): Promise<PaymentMethod | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('payment_methods')
+      .select('*')
+      .eq('id', id)
+      .single();
+    return data || undefined;
+  }
+
+  async updatePaymentMethod(id: string, updates: Partial<PaymentMethod>): Promise<PaymentMethod | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('payment_methods')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    return data || undefined;
+  }
+
+  async deletePaymentMethod(id: string): Promise<boolean> {
+    const { error } = await supabaseAdmin!
+      .from('payment_methods')
+      .delete()
+      .eq('id', id);
+    return !error;
+  }
+
+  // Emoji System - Missing methods
+  async createEmojiUsage(usage: InsertEmojiUsage): Promise<EmojiUsage> {
+    const { data } = await supabaseAdmin!
+      .from('emoji_usage')
+      .insert(usage)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create emoji usage');
+    return data;
+  }
+
+  async getRecentEmojiUsage(userId: string, limit: number): Promise<EmojiUsage[]> {
+    const { data } = await supabaseAdmin!
+      .from('emoji_usage')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    return data || [];
+  }
+
+  async getAllEmojiUsage(userId: string): Promise<EmojiUsage[]> {
+    const { data } = await supabaseAdmin!
+      .from('emoji_usage')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+    return data || [];
+  }
+
+  async getUserEmojiPreferences(userId: string): Promise<UserEmojiPreferences | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('user_emoji_preferences')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
+    return data || undefined;
+  }
+
+  async createUserEmojiPreferences(preferences: InsertUserEmojiPreferences): Promise<UserEmojiPreferences> {
+    const { data } = await supabaseAdmin!
+      .from('user_emoji_preferences')
+      .insert(preferences)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create user emoji preferences');
+    return data;
+  }
+
+  async updateUserEmojiPreferences(userId: string, updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('user_emoji_preferences')
+      .update(updates)
+      .eq('user_id', userId)
+      .select()
+      .single();
+    return data || undefined;
+  }
+
+  async createEmojiRecommendations(recommendations: InsertEmojiRecommendations): Promise<EmojiRecommendations> {
+    const { data } = await supabaseAdmin!
+      .from('emoji_recommendations')
+      .insert(recommendations)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create emoji recommendations');
+    return data;
+  }
+
+  async getCachedEmojiRecommendations(userId: string, context: string, contextData: string): Promise<EmojiRecommendations | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('emoji_recommendations')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('context', context)
+      .eq('context_data', contextData)
+      .single();
+    return data || undefined;
+  }
+
+  async markEmojiRecommendationUsed(userId: string, context: string, usedEmoji: string): Promise<boolean> {
+    const { error } = await supabaseAdmin!
+      .from('emoji_recommendations')
+      .update({ used_emoji: usedEmoji, used_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .eq('context', context);
+    return !error;
+  }
+
+  async getProductEmojiAssociations(productId: string): Promise<Array<{emoji: string; emojiCode: string; usageCount: number; sentiment: string; associationStrength: number}>> {
+    const { data } = await supabaseAdmin!
+      .from('product_emoji_associations')
+      .select('*')
+      .eq('product_id', productId);
+    return data || [];
+  }
+
+  async upsertProductEmojiAssociation(association: InsertProductEmojiAssociations): Promise<ProductEmojiAssociations> {
+    const { data } = await supabaseAdmin!
+      .from('product_emoji_associations')
+      .upsert(association)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to upsert product emoji association');
+    return data;
+  }
+
+  // VIP Concierge - Missing methods
+  async createConciergeConversation(conversation: InsertConciergeConversation): Promise<ConciergeConversation> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_conversations')
+      .insert(conversation)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create concierge conversation');
+    return data;
+  }
+
+  async getConciergeConversation(conversationId: string): Promise<ConciergeConversation | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_conversations')
+      .select('*')
+      .eq('id', conversationId)
+      .single();
+    return data || undefined;
+  }
+
+  async updateConciergeConversation(conversationId: string, updates: Partial<InsertConciergeConversation>): Promise<ConciergeConversation | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_conversations')
+      .update(updates)
+      .eq('id', conversationId)
+      .select()
+      .single();
+    return data || undefined;
+  }
+
+  async createConciergeMessage(message: InsertConciergeMessage): Promise<ConciergeMessage> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_messages')
+      .insert(message)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create concierge message');
+    return data;
+  }
+
+  async getConciergeMessages(conversationId: string): Promise<ConciergeMessage[]> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_messages')
+      .select('*')
+      .eq('conversation_id', conversationId)
+      .order('created_at', { ascending: true });
+    return data || [];
+  }
+
+  async createConciergeRecommendation(recommendation: InsertConciergeRecommendation): Promise<ConciergeRecommendation> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_recommendations')
+      .insert(recommendation)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create concierge recommendation');
+    return data;
+  }
+
+  async updateConciergeRecommendation(recommendationId: string, updates: Partial<InsertConciergeRecommendation>): Promise<ConciergeRecommendation | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_recommendations')
+      .update(updates)
+      .eq('id', recommendationId)
+      .select()
+      .single();
+    return data || undefined;
+  }
+
+  async createConciergeAnalytics(analytics: InsertConciergeAnalytics): Promise<ConciergeAnalytics> {
+    const { data } = await supabaseAdmin!
+      .from('concierge_analytics')
+      .insert(analytics)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create concierge analytics');
+    return data;
+  }
+
+  async getConciergeAnalytics(conversationId?: string, dateRange?: { start: Date; end: Date }): Promise<ConciergeAnalytics[]> {
+    let query = supabaseAdmin!
+      .from('concierge_analytics')
+      .select('*');
+
+    if (conversationId) {
+      query = query.eq('conversation_id', conversationId);
+    }
+
+    if (dateRange) {
+      query = query
+        .gte('created_at', dateRange.start.toISOString())
+        .lte('created_at', dateRange.end.toISOString());
+    }
+
+    const { data } = await query.order('created_at', { ascending: false });
+    return data || [];
+  }
+
+  // Payment Transactions - Missing methods
+  async getTransaction(id: string): Promise<PaymentTransaction | undefined> {
+    const { data } = await supabaseAdmin!
+      .from('payment_transactions')
+      .select('*')
+      .eq('id', id)
+      .single();
+    return data || undefined;
+  }
+
+  async getUserTransactions(userId: string): Promise<PaymentTransaction[]> {
+    const { data } = await supabaseAdmin!
+      .from('payment_transactions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+    return data || [];
+  }
+
+  async getOrderTransactions(orderId: string): Promise<PaymentTransaction[]> {
+    const { data } = await supabaseAdmin!
+      .from('payment_transactions')
+      .select('*')
+      .eq('order_id', orderId)
+      .order('created_at', { ascending: false });
+    return data || [];
+  }
+
+  // Webhook Events - Missing methods
+  async createWebhookEvent(event: InsertKajaPayWebhookEvent): Promise<KajaPayWebhookEvent> {
+    const { data } = await supabaseAdmin!
+      .from('kajapay_webhook_events')
+      .insert(event)
+      .select()
+      .single();
+    if (!data) throw new Error('Failed to create webhook event');
+    return data;
+  }
+
+  async getUnprocessedWebhookEvents(): Promise<KajaPayWebhookEvent[]> {
+    const { data } = await supabaseAdmin!
+      .from('kajapay_webhook_events')
+      .select('*')
+      .is('processed_at', null)
+      .order('created_at', { ascending: true });
+    return data || [];
+  }
+
+  async markWebhookEventProcessed(id: string): Promise<boolean> {
+    const { error } = await supabaseAdmin!
+      .from('kajapay_webhook_events')
+      .update({ processed_at: new Date().toISOString() })
+      .eq('id', id);
+    return !error;
   }
 }

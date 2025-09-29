@@ -6,13 +6,14 @@ export const supabaseServer = createServerClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   {
     cookies: {
-      getAll() {
-        return cookies().getAll();
+      async getAll() {
+        return (await cookies()).getAll();
       },
-      setAll(cookiesToSet) {
+      async setAll(cookiesToSet) {
         try {
+          const cookieStore = await cookies();
           cookiesToSet.forEach(({ name, value, options }) =>
-            cookies().set(name, value, options)
+            cookieStore.set(name, value, options)
           );
         } catch {
           // The `setAll` method was called from a Server Component.

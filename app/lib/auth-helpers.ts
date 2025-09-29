@@ -232,9 +232,10 @@ export async function getVipMembershipStatus(userId: string): Promise<{
       .single();
 
     if (profile?.membershipTierId && profile.memberships) {
+      const membership = Array.isArray(profile.memberships) ? profile.memberships[0] : profile.memberships;
       return {
         isVip: true,
-        tier: profile.memberships.tierName,
+        tier: membership?.tierName || 'basic',
         membershipId: profile.membershipTierId
       };
     }
@@ -260,11 +261,17 @@ export async function canAccessVipProducts(userId: string): Promise<boolean> {
 export async function logUserActivity(userId: string, activity: string, metadata?: any): Promise<void> {
   try {
     // Update last login time
+    const { data: currentUser } = await supabase
+      .from('users')
+      .select('loginCount')
+      .eq('id', userId)
+      .single();
+
     await supabase
       .from('users')
-      .update({ 
+      .update({
         lastLoginAt: new Date().toISOString(),
-        loginCount: supabase.raw('login_count + 1')
+        loginCount: (currentUser?.loginCount || 0) + 1
       })
       .eq('id', userId);
 

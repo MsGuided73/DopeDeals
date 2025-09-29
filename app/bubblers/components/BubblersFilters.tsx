@@ -29,9 +29,9 @@ export default function BubblersFilters({ filters, setFilters, products }: Bubbl
   });
 
   // Extract unique values from products
-  const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
-  const uniqueMaterials = [...new Set(products.map(p => p.material).filter(Boolean))].sort();
-  const uniqueHeights = [...new Set(products.map(p => p.height).filter(Boolean))].sort();
+  const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
+  const uniqueMaterials = [...new Set(products.map(p => p.material).filter(Boolean) as string[])].sort();
+  const uniqueHeights = [...new Set(products.map(p => p.height).filter(Boolean) as string[])].sort();
   const uniqueJointSizes = [...new Set(products.map(p => p.joint_size).filter(Boolean))].sort();
   const uniquePercolators = [...new Set(products.map(p => p.percolator).filter(Boolean))].sort();
 

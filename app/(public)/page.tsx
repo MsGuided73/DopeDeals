@@ -92,11 +92,10 @@ export default function HomePage() {
             href="/rewards"
             className="relative block w-full h-128 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/VIPClubblv1.jpeg')",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/WhatsApp%20Image%202025-09-25%20at%2011.27.52_e3fa4258.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
-            title="Join DOPE CITY VIP Rewards for exclusive benefits!"
           >
             {/* Dark overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent group-hover:from-black/80 group-hover:via-black/50 transition-all duration-300"></div>
@@ -110,10 +109,7 @@ export default function HomePage() {
                 fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
                 lineHeight: '0.9',
                 textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'
-              }}>
-                GET A FREE<br />
-                VIP MEMBERSHIP
-              </h2>
+              }}
 
               {/* Benefits List */}
               <ul className="space-y-3 text-lg font-medium mb-8">

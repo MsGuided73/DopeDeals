@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabaseBrowser } from '../../lib/supabase-browser';
 import GlobalMasthead from '../../components/GlobalMasthead';
+import DopeCityFooter from '../../../components/DopeCityFooter';
 
 import Image from 'next/image';
 import { Search, Filter, Grid, List, SlidersHorizontal } from 'lucide-react';

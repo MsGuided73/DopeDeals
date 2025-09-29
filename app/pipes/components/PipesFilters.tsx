@@ -25,10 +25,10 @@ export default function PipesFilters({ filters, setFilters, products }: PipesFil
   const [isOpen, setIsOpen] = useState(false);
 
   // Extract unique values from products
-  const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
-  const uniqueMaterials = [...new Set(products.flatMap(p => p.materials || []).filter(Boolean))].sort();
-  const uniqueStyles = [...new Set(products.map(p => p.style).filter(Boolean))].sort();
-  const uniqueSizes = [...new Set(products.map(p => p.size).filter(Boolean))].sort();
+  const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
+  const uniqueMaterials = [...new Set(products.flatMap(p => p.materials || []).filter(Boolean) as string[])].sort();
+  const uniqueStyles = [...new Set(products.map(p => p.style).filter(Boolean) as string[])].sort();
+  const uniqueSizes = [...new Set(products.map(p => p.size).filter(Boolean) as string[])].sort();
 
   const updateFilter = (key: string, value: any) => {
     setFilters({ ...filters, [key]: value });

@@ -20,7 +20,7 @@ import {
   type ConciergeRecommendation, type InsertConciergeRecommendation, type ConciergeAnalytics, type InsertConciergeAnalytics,
   type ComplianceRule, type InsertComplianceRule, type ProductCompliance, type InsertProductCompliance,
   type ComplianceAuditLog, type InsertComplianceAuditLog,
-  type LabCertificate, type InsertLabCertificate
+  type LabCertificate, type InsertLabCertificate, type OrderStatusHistory, type InsertOrderStatusHistory
 } from "@shared/schema";
 
 import {
@@ -612,6 +612,11 @@ export class MemStorage {
       membershipTierId: insertUser.membershipTierId || null,
       ageVerificationStatus: insertUser.ageVerificationStatus || "not_verified",
       lastVerificationCheck: insertUser.lastVerificationCheck || null,
+      loginCount: insertUser.loginCount ?? null,
+      firstName: insertUser.firstName || null,
+      lastName: insertUser.lastName || null,
+      preferredGreeting: insertUser.preferredGreeting || null,
+      lastLoginAt: insertUser.lastLoginAt || null,
     };
     this.users.set(user.id, user);
     return user;
@@ -1530,7 +1535,16 @@ export class MemStorage {
       ...order,
       createdAt: new Date(),
       updatedAt: new Date(),
-      syncedAt: order.syncedAt || new Date()
+      syncedAt: order.syncedAt || new Date(),
+      userId: order.userId ?? null,
+      paymentMethod: order.paymentMethod ?? null,
+      taxAmount: order.taxAmount ?? null,
+      shippingAmount: order.shippingAmount ?? null,
+      customerNotes: order.customerNotes ?? null,
+      giftMessage: order.giftMessage ?? null,
+      shipstationOrderId: order.shipstationOrderId ?? null,
+      orderKey: order.orderKey ?? null,
+      billTo: order.billTo ?? null,
     };
     this.shipstationOrders.set(id, newOrder);
     return newOrder;
@@ -1564,7 +1578,15 @@ export class MemStorage {
       id,
       ...shipment,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      batchNumber: shipment.batchNumber ?? null,
+      userId: shipment.userId ?? null,
+      customerEmail: shipment.customerEmail ?? null,
+      trackingNumber: shipment.trackingNumber ?? null,
+      confirmation: shipment.confirmation ?? null,
+      weight: shipment.weight ?? null,
+      dimensions: shipment.dimensions ?? null,
+      shipmentId: shipment.shipmentId ?? null,
     };
     this.shipstationShipments.set(id, newShipment);
     return newShipment;
@@ -1593,7 +1615,11 @@ export class MemStorage {
     const newWebhook: ShipstationWebhook = {
       id,
       ...webhook,
-      createdAt: new Date()
+      createdAt: new Date(),
+      errorMessage: webhook.errorMessage ?? null,
+      processed: webhook.processed ?? null,
+      processedAt: webhook.processedAt ?? null,
+      retryCount: webhook.retryCount ?? null,
     };
     this.shipstationWebhooks.set(id, newWebhook);
     return newWebhook;
@@ -1623,7 +1649,15 @@ export class MemStorage {
       ...product,
       createdAt: new Date(),
       updatedAt: new Date(),
-      syncedAt: product.syncedAt || new Date()
+      syncedAt: product.syncedAt || new Date(),
+      length: product.length ?? null,
+      price: product.price ?? null,
+      active: product.active ?? null,
+      internalNotes: product.internalNotes ?? null,
+      createDate: product.createDate ?? null,
+      defaultCost: product.defaultCost ?? null,
+      width: product.width ?? null,
+      height: product.height ?? null,
     };
     this.shipstationProducts.set(id, newProduct);
     return newProduct;
@@ -1658,7 +1692,10 @@ export class MemStorage {
       ...warehouse,
       createdAt: new Date(),
       updatedAt: new Date(),
-      syncedAt: warehouse.syncedAt || new Date()
+      syncedAt: warehouse.syncedAt || new Date(),
+      isDefault: warehouse.isDefault ?? null,
+      createDate: warehouse.createDate ?? null,
+      returnAddress: warehouse.returnAddress ?? null,
     };
     this.shipstationWarehouses.set(id, newWarehouse);
     return newWarehouse;
@@ -1688,7 +1725,15 @@ export class MemStorage {
       id,
       ...status,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      metadata: status.metadata ?? {},
+      errorMessage: status.errorMessage ?? null,
+      lastSyncAt: status.lastSyncAt ?? null,
+      lastSuccessfulSyncAt: status.lastSuccessfulSyncAt ?? null,
+      recordsProcessed: status.recordsProcessed ?? null,
+      recordsUpdated: status.recordsUpdated ?? null,
+      recordsCreated: status.recordsCreated ?? null,
+      recordsErrored: status.recordsErrored ?? null,
     };
     this.shipstationSyncStatuses.set(id, newStatus);
     return newStatus;
@@ -1702,7 +1747,11 @@ export class MemStorage {
       filtered = statuses.filter(status => status.syncType === syncType);
     }
 
-    return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+    return filtered.sort((a, b) => {
+      const aDate = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bDate = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return bDate - aDate;
+    })[0];
   }
 }
 
