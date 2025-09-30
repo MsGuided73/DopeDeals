@@ -57,7 +57,7 @@ const fallbackSlides: CarouselSlide[] = [
     description: "",
     background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/Light-preroll.jpeg",
     cta_text: "",
-    cta_link: "/products?category=pre-rolls",
+    cta_link: "/pre-rolls",
     text_color: "text-white",
     overlay_opacity: 0,
     display_duration: 5000,

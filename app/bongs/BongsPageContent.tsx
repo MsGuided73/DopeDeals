@@ -130,16 +130,31 @@ export default function BongsPageContent() {
       setLoading(true);
       console.log('🔍 Loading bong products...');
 
-      // Build bong keywords similar to the pipes API approach
+      // Build bong keywords - more specific to avoid false matches
       const bongKeywords = [
         'BONG',
         'WATER PIPE',
         'BEAKER',
         'STRAIGHT TUBE',
-        'PERCOLATOR',
-        'BUBBLER',
-        'RIG',
-        'DAB RIG'
+        'PERCOLATOR'
+      ];
+
+      // Exclusion keywords to filter out non-bong items
+      const exclusionKeywords = [
+        'PAPER',
+        'ROLLING',
+        'CIGARETTE',
+        'CIG',
+        'WRAP',
+        'CONE',
+        'BLUNT',
+        'HEMP WRAP',
+        'TOBACCO',
+        'NICOTINE',
+        'VAPE',
+        'CARTRIDGE',
+        'POD',
+        'DISPOSABLE'
       ];
 
       // Create OR conditions for bong keywords in name and description
@@ -157,18 +172,26 @@ export default function BongsPageContent() {
         .order('featured', { ascending: false })
         .order('created_at', { ascending: false });
 
-      console.log('📊 Bong products response:', {
-        dataCount: data?.length || 0,
-        error: error ? JSON.stringify(error, null, 2) : null,
-        sampleData: data?.slice(0, 3)?.map(p => ({ id: p.id, name: p.name })) || []
-      });
-
       if (error) {
         console.error('❌ Error fetching bong products:', error);
         setProducts([]);
       } else {
-        console.log(`✅ Successfully loaded ${data?.length || 0} bong products`);
-        setProducts(data || []);
+        // Filter out products that match exclusion keywords
+        const filteredData = (data || []).filter(product => {
+          const searchText = `${product.name} ${product.description || ''}`.toLowerCase();
+
+          // Check if any exclusion keyword is present
+          const hasExcludedKeyword = exclusionKeywords.some(keyword =>
+            searchText.includes(keyword.toLowerCase())
+          );
+
+          return !hasExcludedKeyword;
+        });
+
+        console.log(`✅ Loaded ${data?.length || 0} products, filtered to ${filteredData.length} bongs`);
+        console.log('📊 First 3 products:', filteredData.slice(0, 3).map(p => ({ name: p.name, sku: p.sku })));
+
+        setProducts(filteredData);
       }
     } catch (error) {
       console.error('💥 Catch block error:', error);
