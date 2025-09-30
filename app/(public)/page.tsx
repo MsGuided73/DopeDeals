@@ -109,7 +109,9 @@ export default function HomePage() {
                 fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
                 lineHeight: '0.9',
                 textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'
-              }}
+              }}>
+                VIP REWARDS
+              </h2>
 
               {/* Benefits List */}
               <ul className="space-y-3 text-lg font-medium mb-8">
