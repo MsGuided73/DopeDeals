@@ -11,6 +11,7 @@ const nav = [
   { href: '/admin/orders', label: 'Orders', icon: '📋' },
   { href: '/admin/inventory', label: 'Inventory', icon: '📊' },
   { href: '/admin/customers', label: 'Customers', icon: '👥' },
+  { href: '/admin/assets', label: 'Asset Manager', icon: '🖼️' },
   { href: '/admin/compliance', label: 'Compliance', icon: '🔒' },
   { href: '/admin/shipping', label: 'Shipping', icon: '🚚' },
   { href: '/admin/payments', label: 'Payments', icon: '💳' },
