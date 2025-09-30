@@ -61,7 +61,7 @@ export interface IStorage {
   createBrand(brand: InsertBrand): Promise<Brand>;
 
   // Orders
-  getUserOrders(userId: string): Promise<Order[]>;
+  getUserOrders(userId: ((string): Promise<Order[]>; -ne $null ? string): Promise<Order[]>; : $null) -ne $null ? (string): Promise<Order[]>; -ne $null ? string): Promise<Order[]>; : $null) : $null)
   getOrder(id: string): Promise<Order | undefined>;
   createOrder(order: InsertOrder): Promise<Order>;
   updateOrder(id: string, updates: Partial<Order>): Promise<Order | undefined>;
@@ -74,35 +74,35 @@ export interface IStorage {
 
   // Atomic checkout (preferred when backed by Supabase)
   checkoutAtomic?(params: {
-    userId: string;
+    userId: ((string; -ne $null ? string; : $null) -ne $null ? (string; -ne $null ? string; : $null) : $null)
     items: Array<{ productId: string; quantity: number }>;
     shippingAddress?: unknown;
     billingAddress?: unknown;
   }): Promise<{ order: Order; items: OrderItem[] }>;
 
   // Cart
-  getUserCartItems(userId: string): Promise<CartItem[]>;
+  getUserCartItems(userId: ((string): Promise<CartItem[]>; -ne $null ? string): Promise<CartItem[]>; : $null) -ne $null ? (string): Promise<CartItem[]>; -ne $null ? string): Promise<CartItem[]>; : $null) : $null)
   addToCart(cartItem: InsertCartItem): Promise<CartItem>;
   updateCartItem(id: string, quantity: number): Promise<CartItem | undefined>;
   removeFromCart(id: string): Promise<boolean>;
-  clearCart(userId: string): Promise<boolean>;
+  clearCart(userId: ((string): Promise<boolean>; -ne $null ? string): Promise<boolean>; : $null) -ne $null ? (string): Promise<boolean>; -ne $null ? string): Promise<boolean>; : $null) : $null)
 
   // Memberships
   getMemberships(): Promise<Membership[]>;
 
   // User Behavior & Preferences
   trackUserBehavior(behavior: InsertUserBehavior): Promise<UserBehavior>;
-  getUserBehavior(userId: string, limit?: number): Promise<UserBehavior[]>;
-  getUserPreferences(userId: string): Promise<UserPreferences | undefined>;
-  updateUserPreferences(userId: string, preferences: Partial<InsertUserPreferences>): Promise<UserPreferences>;
+  getUserBehavior(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), limit?: number): Promise<UserBehavior[]>;
+  getUserPreferences(userId: ((string): Promise<UserPreferences | undefined>; -ne $null ? string): Promise<UserPreferences | undefined>; : $null) -ne $null ? (string): Promise<UserPreferences | undefined>; -ne $null ? string): Promise<UserPreferences | undefined>; : $null) : $null)
+  updateUserPreferences(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), preferences: Partial<InsertUserPreferences>): Promise<UserPreferences>;
 
   // Recommendations
-  getRecommendations(userId: string, type: 'trending' | 'personalized' | 'similar' | 'category_based', limit?: number): Promise<Product[]>;
+  getRecommendations(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), type: 'trending' | 'personalized' | 'similar' | 'category_based', limit?: number): Promise<Product[]>;
   getProductSimilarity(productId: string, limit?: number): Promise<ProductSimilarity[]>;
-  updateRecommendationCache(userId: string, type: string, productIds: string[], score?: number): Promise<void>;
+  updateRecommendationCache(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), type: string, productIds: string[], score?: number): Promise<void>;
 
   // Payment Methods
-  getUserPaymentMethods(userId: string): Promise<PaymentMethod[]>;
+  getUserPaymentMethods(userId: ((string): Promise<PaymentMethod[]>; -ne $null ? string): Promise<PaymentMethod[]>; : $null) -ne $null ? (string): Promise<PaymentMethod[]>; -ne $null ? string): Promise<PaymentMethod[]>; : $null) : $null)
   getPaymentMethod(id: string): Promise<PaymentMethod | undefined>;
   createPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod>;
   updatePaymentMethod(id: string, updates: Partial<PaymentMethod>): Promise<PaymentMethod | undefined>;
@@ -112,7 +112,7 @@ export interface IStorage {
   getTransaction(id: string): Promise<PaymentTransaction | undefined>;
   createTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction>;
   updateTransaction(id: string, updates: Partial<PaymentTransaction>): Promise<PaymentTransaction | undefined>;
-  getUserTransactions(userId: string): Promise<PaymentTransaction[]>;
+  getUserTransactions(userId: ((string): Promise<PaymentTransaction[]>; -ne $null ? string): Promise<PaymentTransaction[]>; : $null) -ne $null ? (string): Promise<PaymentTransaction[]>; -ne $null ? string): Promise<PaymentTransaction[]>; : $null) : $null)
   getOrderTransactions(orderId: string): Promise<PaymentTransaction[]>;
 
   // Webhook Events
@@ -122,14 +122,14 @@ export interface IStorage {
 
   // Emoji System
   createEmojiUsage(usage: InsertEmojiUsage): Promise<EmojiUsage>;
-  getRecentEmojiUsage(userId: string, limit: number): Promise<EmojiUsage[]>;
-  getAllEmojiUsage(userId: string): Promise<EmojiUsage[]>;
-  getUserEmojiPreferences(userId: string): Promise<UserEmojiPreferences | undefined>;
+  getRecentEmojiUsage(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), limit: number): Promise<EmojiUsage[]>;
+  getAllEmojiUsage(userId: ((string): Promise<EmojiUsage[]>; -ne $null ? string): Promise<EmojiUsage[]>; : $null) -ne $null ? (string): Promise<EmojiUsage[]>; -ne $null ? string): Promise<EmojiUsage[]>; : $null) : $null)
+  getUserEmojiPreferences(userId: ((string): Promise<UserEmojiPreferences | undefined>; -ne $null ? string): Promise<UserEmojiPreferences | undefined>; : $null) -ne $null ? (string): Promise<UserEmojiPreferences | undefined>; -ne $null ? string): Promise<UserEmojiPreferences | undefined>; : $null) : $null)
   createUserEmojiPreferences(preferences: InsertUserEmojiPreferences): Promise<UserEmojiPreferences>;
-  updateUserEmojiPreferences(userId: string, updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined>;
+  updateUserEmojiPreferences(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined>;
   createEmojiRecommendations(recommendations: InsertEmojiRecommendations): Promise<EmojiRecommendations>;
-  getCachedEmojiRecommendations(userId: string, context: string, contextData: string): Promise<EmojiRecommendations | undefined>;
-  markEmojiRecommendationUsed(userId: string, context: string, usedEmoji: string): Promise<boolean>;
+  getCachedEmojiRecommendations(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), context: string, contextData: string): Promise<EmojiRecommendations | undefined>;
+  markEmojiRecommendationUsed(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), context: string, usedEmoji: string): Promise<boolean>;
   getProductEmojiAssociations(productId: string): Promise<Array<{emoji: string; emojiCode: string; usageCount: number; sentiment: string; associationStrength: number}>>;
   upsertProductEmojiAssociation(association: InsertProductEmojiAssociations): Promise<ProductEmojiAssociations>;
 
@@ -729,7 +729,7 @@ export class MemStorage {
     return brand;
   }
 
-  async getUserOrders(userId: string): Promise<Order[]> {
+  async getUserOrders(userId: ((string): Promise<Order[]> { -ne $null ? string): Promise<Order[]> { : $null) -ne $null ? (string): Promise<Order[]> { -ne $null ? string): Promise<Order[]> { : $null) : $null)
     return Array.from(this.orders.values()).filter(order => order.userId === userId);
   }
 
@@ -742,7 +742,7 @@ export class MemStorage {
       ...insertOrder,
       id: this.generateId(),
       createdAt: new Date(),
-      userId: insertOrder.userId || null,
+      userId: ((insertOrder.userId || null -ne $null ? insertOrder.userId || null : $null) -ne $null ? (insertOrder.userId || null -ne $null ? insertOrder.userId || null : $null) : $null),
       status: insertOrder.status || "processing",
       paymentStatus: insertOrder.paymentStatus || "pending",
       paymentMethod: insertOrder.paymentMethod || null,
@@ -787,7 +787,7 @@ export class MemStorage {
     return Array.from(this.orderItems.values()).filter(oi => oi.orderId === orderId);
   }
 
-  async getUserCartItems(userId: string): Promise<CartItem[]> {
+  async getUserCartItems(userId: ((string): Promise<CartItem[]> { -ne $null ? string): Promise<CartItem[]> { : $null) -ne $null ? (string): Promise<CartItem[]> { -ne $null ? string): Promise<CartItem[]> { : $null) : $null)
     return Array.from(this.cartItems.values()).filter(item => item.userId === userId);
   }
 
@@ -796,7 +796,7 @@ export class MemStorage {
       ...insertCartItem,
       id: this.generateId(),
       createdAt: new Date(),
-      userId: insertCartItem.userId || null,
+      userId: ((insertCartItem.userId || null -ne $null ? insertCartItem.userId || null : $null) -ne $null ? (insertCartItem.userId || null -ne $null ? insertCartItem.userId || null : $null) : $null),
       productId: insertCartItem.productId || null,
     };
     this.cartItems.set(cartItem.id, cartItem);
@@ -817,7 +817,7 @@ export class MemStorage {
     return this.cartItems.delete(id);
   }
 
-  async clearCart(userId: string): Promise<boolean> {
+  async clearCart(userId: ((string): Promise<boolean> { -ne $null ? string): Promise<boolean> { : $null) -ne $null ? (string): Promise<boolean> { -ne $null ? string): Promise<boolean> { : $null) : $null)
     const userItems = Array.from(this.cartItems.entries()).filter(([_, item]) => item.userId === userId);
     userItems.forEach(([id, _]) => this.cartItems.delete(id));
     return true;
@@ -833,7 +833,7 @@ export class MemStorage {
       ...insertBehavior,
       id: this.generateId(),
       createdAt: new Date(),
-      userId: insertBehavior.userId || null,
+      userId: ((insertBehavior.userId || null -ne $null ? insertBehavior.userId || null : $null) -ne $null ? (insertBehavior.userId || null -ne $null ? insertBehavior.userId || null : $null) : $null),
       productId: insertBehavior.productId || null,
       sessionId: insertBehavior.sessionId || null,
       metadata: insertBehavior.metadata || null,
@@ -848,7 +848,7 @@ export class MemStorage {
     return behavior;
   }
 
-  async getUserBehavior(userId: string, limit: number = 50): Promise<UserBehavior[]> {
+  async getUserBehavior(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), limit: number = 50): Promise<UserBehavior[]> {
     const behaviors = Array.from(this.userBehaviors.values())
       .filter(b => b.userId === userId)
       .sort((a: any, b: any) => new Date(b.createdAt as any).getTime() - new Date(a.createdAt as any).getTime())
@@ -856,11 +856,11 @@ export class MemStorage {
     return behaviors;
   }
 
-  async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
+  async getUserPreferences(userId: ((string): Promise<UserPreferences | undefined> { -ne $null ? string): Promise<UserPreferences | undefined> { : $null) -ne $null ? (string): Promise<UserPreferences | undefined> { -ne $null ? string): Promise<UserPreferences | undefined> { : $null) : $null)
     return Array.from(this.userPreferences.values()).find(p => p.userId === userId);
   }
 
-  async updateUserPreferences(userId: string, preferences: Partial<InsertUserPreferences>): Promise<UserPreferences> {
+  async updateUserPreferences(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), preferences: Partial<InsertUserPreferences>): Promise<UserPreferences> {
     const existing = await this.getUserPreferences(userId);
     const userPrefs: UserPreferences = existing ? {
       ...existing,
@@ -882,7 +882,7 @@ export class MemStorage {
   }
 
   // Recommendations
-  async getRecommendations(userId: string, type: 'trending' | 'personalized' | 'similar' | 'category_based', limit: number = 8): Promise<Product[]> {
+  async getRecommendations(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), type: 'trending' | 'personalized' | 'similar' | 'category_based', limit: number = 8): Promise<Product[]> {
     // Check cache first
     const cached = this.getFromRecommendationCache(userId, type);
     if (cached.length > 0) {
@@ -921,7 +921,7 @@ export class MemStorage {
       .slice(0, limit);
   }
 
-  async updateRecommendationCache(userId: string, type: string, productIds: string[], score?: number): Promise<void> {
+  async updateRecommendationCache(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), type: string, productIds: string[], score?: number): Promise<void> {
     const cache: RecommendationCache = {
       id: this.generateId(),
       userId,
@@ -942,7 +942,7 @@ export class MemStorage {
     if (!product) return;
 
     const preferences = await this.getUserPreferences(behavior.userId!) || {
-      userId: behavior.userId!,
+      userId: ((behavior.userId! -ne $null ? behavior.userId! : $null) -ne $null ? (behavior.userId! -ne $null ? behavior.userId! : $null) : $null),
       preferredCategories: [] as string[],
       preferredBrands: [] as string[],
       preferredMaterials: [] as string[],
@@ -988,7 +988,7 @@ export class MemStorage {
     return products.filter(p => p !== undefined) as Product[];
   }
 
-  private async getPersonalizedRecommendations(userId: string, limit: number): Promise<Product[]> {
+  private async getPersonalizedRecommendations(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), limit: number): Promise<Product[]> {
     const preferences = await this.getUserPreferences(userId);
     const userBehavior = await this.getUserBehavior(userId, 100);
 
@@ -1004,7 +1004,7 @@ export class MemStorage {
       .map(sp => sp.product);
   }
 
-  private async getSimilarProducts(userId: string, limit: number): Promise<Product[]> {
+  private async getSimilarProducts(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), limit: number): Promise<Product[]> {
     const userBehavior = await this.getUserBehavior(userId, 20);
     const viewedProducts = userBehavior
       .filter(b => b.action === 'view' && b.productId)
@@ -1039,7 +1039,7 @@ export class MemStorage {
     return products.filter(p => p !== undefined) as Product[];
   }
 
-  private async getCategoryBasedRecommendations(userId: string, limit: number): Promise<Product[]> {
+  private async getCategoryBasedRecommendations(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), limit: number): Promise<Product[]> {
     const preferences = await this.getUserPreferences(userId);
     const userBehavior = await this.getUserBehavior(userId, 50);
 
@@ -1121,7 +1121,7 @@ export class MemStorage {
     return score;
   }
 
-  private getFromRecommendationCache(userId: string, type: string): Product[] {
+  private getFromRecommendationCache(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), type: string): Product[] {
     const cache = Array.from(this.recommendationCaches.values())
       .find(c => c.userId === userId && c.recommendationType === type && c.expiresAt > new Date());
 
@@ -1135,7 +1135,7 @@ export class MemStorage {
   }
 
   // Payment Methods
-  async getUserPaymentMethods(userId: string): Promise<PaymentMethod[]> {
+  async getUserPaymentMethods(userId: ((string): Promise<PaymentMethod[]> { -ne $null ? string): Promise<PaymentMethod[]> { : $null) -ne $null ? (string): Promise<PaymentMethod[]> { -ne $null ? string): Promise<PaymentMethod[]> { : $null) : $null)
     return Array.from(this.paymentMethods.values())
       .filter(pm => pm.userId === userId);
   }
@@ -1147,7 +1147,7 @@ export class MemStorage {
   async createPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
     const pm: PaymentMethod = {
       id: this.generateId(),
-      userId: paymentMethod.userId || null,
+      userId: ((paymentMethod.userId || null -ne $null ? paymentMethod.userId || null : $null) -ne $null ? (paymentMethod.userId || null -ne $null ? paymentMethod.userId || null : $null) : $null),
       kajaPayToken: paymentMethod.kajaPayToken,
       cardLast4: paymentMethod.cardLast4 || null,
       cardType: paymentMethod.cardType || null,
@@ -1220,7 +1220,7 @@ export class MemStorage {
     return updated;
   }
 
-  async getUserTransactions(userId: string): Promise<PaymentTransaction[]> {
+  async getUserTransactions(userId: ((string): Promise<PaymentTransaction[]> { -ne $null ? string): Promise<PaymentTransaction[]> { : $null) -ne $null ? (string): Promise<PaymentTransaction[]> { -ne $null ? string): Promise<PaymentTransaction[]> { : $null) : $null)
     // Note: In a real implementation, you'd need to join with orders table to get userId
     // For now, this is a simplified implementation
     return Array.from(this.paymentTransactions.values());
@@ -1268,7 +1268,7 @@ export class MemStorage {
   async createEmojiUsage(usage: InsertEmojiUsage): Promise<EmojiUsage> {
     const eu: EmojiUsage = {
       id: this.generateId(),
-      userId: usage.userId,
+      userId: ((usage.userId -ne $null ? usage.userId : $null) -ne $null ? (usage.userId -ne $null ? usage.userId : $null) : $null),
       emoji: usage.emoji,
       emojiCode: usage.emojiCode,
       context: usage.context,
@@ -1282,19 +1282,19 @@ export class MemStorage {
     return eu;
   }
 
-  async getRecentEmojiUsage(userId: string, limit: number): Promise<EmojiUsage[]> {
+  async getRecentEmojiUsage(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), limit: number): Promise<EmojiUsage[]> {
     return Array.from(this.emojiUsages.values())
       .filter(usage => usage.userId === userId)
       .sort((a, b) => b.lastUsed!.getTime() - a.lastUsed!.getTime())
       .slice(0, limit);
   }
 
-  async getAllEmojiUsage(userId: string): Promise<EmojiUsage[]> {
+  async getAllEmojiUsage(userId: ((string): Promise<EmojiUsage[]> { -ne $null ? string): Promise<EmojiUsage[]> { : $null) -ne $null ? (string): Promise<EmojiUsage[]> { -ne $null ? string): Promise<EmojiUsage[]> { : $null) : $null)
     return Array.from(this.emojiUsages.values())
       .filter(usage => usage.userId === userId);
   }
 
-  async getUserEmojiPreferences(userId: string): Promise<UserEmojiPreferences | undefined> {
+  async getUserEmojiPreferences(userId: ((string): Promise<UserEmojiPreferences | undefined> { -ne $null ? string): Promise<UserEmojiPreferences | undefined> { : $null) -ne $null ? (string): Promise<UserEmojiPreferences | undefined> { -ne $null ? string): Promise<UserEmojiPreferences | undefined> { : $null) : $null)
     return Array.from(this.userEmojiPrefs.values())
       .find(prefs => prefs.userId === userId);
   }
@@ -1302,7 +1302,7 @@ export class MemStorage {
   async createUserEmojiPreferences(preferences: InsertUserEmojiPreferences): Promise<UserEmojiPreferences> {
     const prefs: UserEmojiPreferences = {
       id: this.generateId(),
-      userId: preferences.userId,
+      userId: ((preferences.userId -ne $null ? preferences.userId : $null) -ne $null ? (preferences.userId -ne $null ? preferences.userId : $null) : $null),
       favoriteEmojis: (preferences as any).favoriteEmojis ?? null,
       preferredCategories: (preferences as any).preferredCategories ?? null,
       emojiPersonality: (preferences as any).emojiPersonality ?? null,
@@ -1314,7 +1314,7 @@ export class MemStorage {
     return prefs;
   }
 
-  async updateUserEmojiPreferences(userId: string, updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined> {
+  async updateUserEmojiPreferences(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), updates: Partial<UserEmojiPreferences>): Promise<UserEmojiPreferences | undefined> {
     const existing = Array.from(this.userEmojiPrefs.values())
       .find(prefs => prefs.userId === userId);
 
@@ -1332,7 +1332,7 @@ export class MemStorage {
   async createEmojiRecommendations(recommendations: InsertEmojiRecommendations): Promise<EmojiRecommendations> {
     const recs: EmojiRecommendations = {
       id: this.generateId(),
-      userId: recommendations.userId,
+      userId: ((recommendations.userId -ne $null ? recommendations.userId : $null) -ne $null ? (recommendations.userId -ne $null ? recommendations.userId : $null) : $null),
       context: recommendations.context,
       contextData: (recommendations as any).contextData ?? null,
       recommendedEmojis: (recommendations as any).recommendedEmojis as any,
@@ -1347,12 +1347,12 @@ export class MemStorage {
     return recs;
   }
 
-  async getCachedEmojiRecommendations(userId: string, context: string, contextData: string): Promise<EmojiRecommendations | undefined> {
+  async getCachedEmojiRecommendations(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), context: string, contextData: string): Promise<EmojiRecommendations | undefined> {
     return Array.from(this.emojiRecs.values())
       .find(rec => rec.userId === userId && rec.context === context && rec.expiresAt > new Date());
   }
 
-  async markEmojiRecommendationUsed(userId: string, context: string, usedEmoji: string): Promise<boolean> {
+  async markEmojiRecommendationUsed(userId: ((string -ne $null ? string : $null) -ne $null ? (string -ne $null ? string : $null) : $null), context: string, usedEmoji: string): Promise<boolean> {
     const rec = Array.from(this.emojiRecs.values())
       .find(r => r.userId === userId && r.context === context);
 
@@ -1414,7 +1414,7 @@ export class MemStorage {
     const newConversation: ConciergeConversation = {
       id: (conversation as any).id || this.generateId(),
       sessionId: conversation.sessionId,
-      userId: (conversation as any).userId ?? null,
+      userId: (((conversation as any).userId ?? null -ne $null ? (conversation as any).userId ?? null : $null) -ne $null ? ((conversation as any).userId ?? null -ne $null ? (conversation as any).userId ?? null : $null) : $null),
       status: (conversation as any).status ?? 'active',
       priority: (conversation as any).priority ?? 'normal',
       customerInfo: (conversation as any).customerInfo ?? null,
@@ -1536,7 +1536,7 @@ export class MemStorage {
       createdAt: new Date(),
       updatedAt: new Date(),
       syncedAt: order.syncedAt || new Date(),
-      userId: order.userId ?? null,
+      userId: ((order.userId ?? null -ne $null ? order.userId ?? null : $null) -ne $null ? (order.userId ?? null -ne $null ? order.userId ?? null : $null) : $null),
       paymentMethod: order.paymentMethod ?? null,
       taxAmount: order.taxAmount ?? null,
       shippingAmount: order.shippingAmount ?? null,
@@ -1580,7 +1580,7 @@ export class MemStorage {
       createdAt: new Date(),
       updatedAt: new Date(),
       batchNumber: shipment.batchNumber ?? null,
-      userId: shipment.userId ?? null,
+      userId: ((shipment.userId ?? null -ne $null ? shipment.userId ?? null : $null) -ne $null ? (shipment.userId ?? null -ne $null ? shipment.userId ?? null : $null) : $null),
       customerEmail: shipment.customerEmail ?? null,
       trackingNumber: shipment.trackingNumber ?? null,
       confirmation: shipment.confirmation ?? null,
