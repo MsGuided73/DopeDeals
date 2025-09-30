@@ -163,7 +163,7 @@ export default function FeaturedProductsSection() {
       {/* Products Grid - Only show products with real images */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
         {productsWithRealImages.slice(0, 4).map((product) => (
-          <div key={product.id} className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden group hover:scale-105 transition-all duration-300 border border-gray-700 hover:border-dope-orange-500/50 shadow-xl hover:shadow-2xl">
+          <div key={product.id} className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden group hover:scale-105 transition-all duration-300 border border-gray-700 hover:border-dope-orange-500/50 shadow-xl hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50">
             <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80 overflow-hidden relative">
               {/* Subtle frame overlay */}
               <div className="absolute inset-2 border border-gray-600/30 rounded-lg pointer-events-none"></div>

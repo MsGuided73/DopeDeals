@@ -190,7 +190,7 @@ export default function HomePage() {
           {/* BONGS - New lifestyle frame, same size as THCA Flower */}
           <Link
             href="/bongs"
-            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png')",
               backgroundSize: "cover",
@@ -217,7 +217,7 @@ export default function HomePage() {
           {/* DAB TOOLS - New collection with your specified image */}
           <Link
             href="/products?q=dab+tools"
-            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Dab_Tools.jpeg')",
               backgroundSize: "cover",
@@ -244,7 +244,7 @@ export default function HomePage() {
           {/* THCA Flower Card */}
           <Link
             href="/products?category=flower"
-            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg')",
               backgroundSize: "cover",
@@ -271,7 +271,7 @@ export default function HomePage() {
           {/* Dab Rigs */}
           <Link
             href="/dab-rigs"
-            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco%20site.png')",
               backgroundSize: "cover",
@@ -298,7 +298,7 @@ export default function HomePage() {
           {/* Prerolls */}
           <Link
             href="/products?category=pre-rolls"
-            className="relative col-span-1 md:col-span-3 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-3 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/PRE-ROLLS.jpeg')",
               backgroundSize: "cover"
@@ -325,7 +325,7 @@ export default function HomePage() {
           {/* ACCESSORIES - Duplicate of E-Rigs card for second row */}
           <Link
             href="/products?category=accessories"
-            className="relative col-span-1 md:col-span-1 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-1 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Grinder%20&%20Supplies.png')",
               backgroundSize: "cover",
@@ -352,7 +352,7 @@ export default function HomePage() {
           {/* HOOKAH */}
           <Link
             href="/products?category=vaporizers"
-            className="relative col-span-1 md:col-span-3 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-3 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg')",
               backgroundSize: "cover"
@@ -379,7 +379,7 @@ export default function HomePage() {
           {/* E-RIGS - Fills the top-right empty space */}
           <Link
             href="/category/e-rigs"
-            className="relative col-span-1 md:col-span-1 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-1 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png')",
               backgroundSize: "cover",
@@ -406,7 +406,7 @@ export default function HomePage() {
           {/* Torches & Lighters Card - Extended to bottom */}
           <Link
             href="/products?q=torch"
-            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
+            className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg')",
               backgroundSize: "cover",
