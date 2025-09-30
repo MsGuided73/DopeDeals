@@ -11,6 +11,7 @@ import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
 import BongsViewToggle from './components/BongsViewToggle';
 import { supabaseBrowser } from '../lib/supabase-browser';
+import { categorizeProduct, filterProductsByCategory } from '../../lib/product-categorization-enhanced';
 
 export interface BongProduct {
   id: string;
@@ -128,44 +129,12 @@ export default function BongsPageContent() {
   const loadBongProducts = async () => {
     try {
       setLoading(true);
-      console.log('🔍 Loading bong products...');
+      console.log('🔍 Loading bong products using enhanced categorization...');
 
-      // Build bong keywords - more specific to avoid false matches
-      const bongKeywords = [
-        'BONG',
-        'WATER PIPE',
-        'BEAKER',
-        'STRAIGHT TUBE',
-        'PERCOLATOR'
-      ];
-
-      // Exclusion keywords to filter out non-bong items
-      const exclusionKeywords = [
-        'PAPER',
-        'ROLLING',
-        'CIGARETTE',
-        'CIG',
-        'WRAP',
-        'CONE',
-        'BLUNT',
-        'HEMP WRAP',
-        'TOBACCO',
-        'NICOTINE',
-        'VAPE',
-        'CARTRIDGE',
-        'POD',
-        'DISPOSABLE'
-      ];
-
-      // Create OR conditions for bong keywords in name and description
-      const nameConditions = bongKeywords.map(keyword => `name.ilike.%${keyword}%`).join(',');
-      const descConditions = bongKeywords.map(keyword => `description.ilike.%${keyword}%`).join(',');
-      const combinedConditions = `${nameConditions},${descConditions}`;
-
+      // Fetch ALL active, non-nicotine, non-tobacco products
       const { data, error } = await supabaseBrowser
         .from('products')
         .select('*')
-        .or(combinedConditions)
         .eq('is_active', true)
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
@@ -173,25 +142,21 @@ export default function BongsPageContent() {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('❌ Error fetching bong products:', error);
+        console.error('❌ Error fetching products:', error);
         setProducts([]);
       } else {
-        // Filter out products that match exclusion keywords
-        const filteredData = (data || []).filter(product => {
-          const searchText = `${product.name} ${product.description || ''}`.toLowerCase();
+        // Use enhanced categorization to filter for bongs only
+        const bongProducts = filterProductsByCategory(data || [], 'bongs');
 
-          // Check if any exclusion keyword is present
-          const hasExcludedKeyword = exclusionKeywords.some(keyword =>
-            searchText.includes(keyword.toLowerCase())
-          );
+        console.log(`✅ Loaded ${data?.length || 0} total products`);
+        console.log(`🎯 Filtered to ${bongProducts.length} bongs using enhanced categorization`);
+        console.log('📊 First 3 bong products:', bongProducts.slice(0, 3).map(p => ({
+          name: p.name,
+          sku: p.sku,
+          category: categorizeProduct(p)
+        })));
 
-          return !hasExcludedKeyword;
-        });
-
-        console.log(`✅ Loaded ${data?.length || 0} products, filtered to ${filteredData.length} bongs`);
-        console.log('📊 First 3 products:', filteredData.slice(0, 3).map(p => ({ name: p.name, sku: p.sku })));
-
-        setProducts(filteredData);
+        setProducts(bongProducts);
       }
     } catch (error) {
       console.error('💥 Catch block error:', error);

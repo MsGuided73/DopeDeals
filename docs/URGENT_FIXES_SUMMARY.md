@@ -176,6 +176,17 @@ SELECT DISTINCT
 FROM products 
 WHERE brand_name IS NOT NULL 
   AND brand_name != ''
+ON CONFLICT (slug) DO NOTHING;*SQL to populate:**
+```sql
+INSERT INTO brands (name, slug, description, created_at)
+SELECT DISTINCT 
+  brand_name,
+  LOWER(REPLACE(brand_name, ' ', '-')),
+  'Premium ' || brand_name || ' products',
+  NOW()
+FROM products 
+WHERE brand_name IS NOT NULL 
+  AND brand_name != ''
 ON CONFLICT (slug) DO NOTHING;
 ```
 
