@@ -316,8 +316,8 @@ export default function HomePage() {
             title="Click anywhere to explore our premium Accessories!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.5rem, 6vw, 4rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>ACCESSORIES</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Essential supplies</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.2rem, 4.5vw, 3rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>ACCESSORIES</h3>
+              <p className="text-xs md:text-base opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Essential supplies</p>
             </div>
           </Link>
 
