@@ -72,6 +72,7 @@ export default function FullscreenCarousel() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   // Fetch slides from database
   const fetchSlides = async () => {
@@ -107,10 +108,17 @@ export default function FullscreenCarousel() {
     }
   };
 
+  // Set mounted state
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Fetch slides on component mount
   useEffect(() => {
-    fetchSlides();
-  }, []);
+    if (mounted) {
+      fetchSlides();
+    }
+  }, [mounted]);
 
   // Auto-advance slides based on current slide's display duration
   useEffect(() => {
@@ -144,6 +152,15 @@ export default function FullscreenCarousel() {
     setIsAutoPlaying(false);
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <div className="relative w-full overflow-hidden flex items-center justify-center" style={{ height: 'calc(100vh - 200px)' }}>
+        <div className="text-white text-xl">Loading carousel...</div>
+      </div>
+    );
+  }
 
   // Show loading state
   if (loading) {
