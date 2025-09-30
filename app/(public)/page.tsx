@@ -229,13 +229,13 @@ export default function HomePage() {
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB TOOLS</h3>
               <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Professional precision tools</p>
             </div>
-            {/* Metallic CTA Badge */}
-            <div className="absolute top-3 right-3">
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-600 to-gray-800 rounded-lg blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:from-gray-600 hover:to-gray-400 transition-all shadow-lg border border-gray-400/40">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-lg"></div>
-                  <span className="relative z-10">DISCOVER</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
                 </div>
               </div>
             </div>
@@ -256,10 +256,14 @@ export default function HomePage() {
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA FLOWER</h3>
               <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium indoor cultivation</p>
             </div>
-            {/* Sharp CTA Badge */}
-            <div className="absolute top-3 right-3">
-              <div className="bg-black/80 backdrop-blur-sm px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:bg-black transition-colors border border-white/20">
-                EXPLORE
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
               </div>
             </div>
           </Link>
@@ -279,10 +283,14 @@ export default function HomePage() {
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB RIGS</h3>
               <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium concentrate essentials</p>
             </div>
-            {/* Sharp CTA Badge */}
-            <div className="absolute top-3 right-3">
-              <div className="bg-gradient-to-r from-dope-orange to-orange-600 px-4 py-2 rounded-lg text-white text-sm font-bold uppercase tracking-wide hover:from-orange-600 hover:to-dope-orange transition-all shadow-lg">
-                BROWSE
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
               </div>
             </div>
           </Link>
@@ -302,6 +310,16 @@ export default function HomePage() {
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA PRE-ROLLS</h3>
               <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium hand-rolled perfection</p>
             </div>
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
+              </div>
+            </div>
           </Link>
 
           {/* ACCESSORIES - Duplicate of E-Rigs card for second row */}
@@ -318,6 +336,16 @@ export default function HomePage() {
             <div className="absolute bottom-2 left-2 text-white">
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.2rem, 4.5vw, 3rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>ACCESSORIES</h3>
               <p className="text-xs md:text-base opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Essential supplies</p>
+            </div>
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
+              </div>
             </div>
           </Link>
 
@@ -336,6 +364,16 @@ export default function HomePage() {
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>HOOKAHS</h3>
               <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Traditional smoking culture</p>
             </div>
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
+              </div>
+            </div>
           </Link>
 
           {/* E-RIGS - Fills the top-right empty space */}
@@ -352,6 +390,16 @@ export default function HomePage() {
             <div className="absolute bottom-2 left-2 text-white">
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.5rem, 6vw, 4rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>E-RIGS</h3>
               <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Electric precision</p>
+            </div>
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
+              </div>
             </div>
           </Link>
 
@@ -370,6 +418,16 @@ export default function HomePage() {
             <div className="absolute bottom-2 left-2 text-white">
               <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.8rem, 7vw, 5rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>TORCHES & LIGHTERS</h3>
               <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium ignition tools</p>
+            </div>
+            {/* Metallic CTA Button */}
+            <div className="absolute top-2 right-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
+                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
+                  <span className="relative z-10">SHOP</span>
+                </div>
+              </div>
             </div>
           </Link>
         </div>
