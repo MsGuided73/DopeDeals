@@ -24,42 +24,42 @@ interface CarouselSlide {
 const fallbackSlides: CarouselSlide[] = [
   {
     id: "fallback-1",
-    title: "VIP CLUB",
-    subtitle: "EXCLUSIVE REWARDS",
-    description: "Join our VIP Club and unlock exclusive rewards, early access to new products, and special member pricing.",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/VIPClubblv1.jpeg",
-    cta_text: "JOIN VIP CLUB",
+    title: "",
+    subtitle: "",
+    description: "",
+    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/PreWritten_DopeClub.jpg",
+    cta_text: "",
     cta_link: "/rewards",
     text_color: "text-white",
-    overlay_opacity: 0.15,
+    overlay_opacity: 0,
     display_duration: 5000,
     is_active: true,
     sort_order: 1
   },
   {
     id: "fallback-2",
-    title: "PREMIUM GLASS",
-    subtitle: "ARTISAN COLLECTION",
-    description: "Discover our curated collection of premium glass pieces from renowned artists and top brands.",
+    title: "",
+    subtitle: "",
+    description: "",
     background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/slide-us-0011-roortech.png",
-    cta_text: "SHOP GLASS",
+    cta_text: "",
     cta_link: "/bongs",
     text_color: "text-white",
-    overlay_opacity: 0.4,
+    overlay_opacity: 0,
     display_duration: 5000,
     is_active: true,
     sort_order: 2
   },
   {
     id: "fallback-3",
-    title: "THCA PRE-ROLLS",
-    subtitle: "PREMIUM QUALITY",
-    description: "Experience the finest THCA pre-rolls, hand-rolled to perfection for quality and potency.",
+    title: "",
+    subtitle: "",
+    description: "",
     background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/Light-preroll.jpeg",
-    cta_text: "SHOP PRE-ROLLS",
+    cta_text: "",
     cta_link: "/products?category=pre-rolls",
     text_color: "text-white",
-    overlay_opacity: 0.4,
+    overlay_opacity: 0,
     display_duration: 5000,
     is_active: true,
     sort_order: 3
@@ -189,8 +189,8 @@ export default function FullscreenCarousel() {
   // Check if this slide has text baked into the image (no overlay needed)
   const hasTextInImage = currentSlideData.background_image_url.includes('Screenshot%202025-09-24%20092028.png');
 
-  // Check if this is the VIP Club slide that needs custom layout
-  const isVipClubSlide = currentSlideData.background_image_url.includes('VIPClubblv1.jpeg') && currentSlideData.title === "VIP CLUB";
+  // Check if slide has any text content
+  const hasTextContent = currentSlideData.title || currentSlideData.subtitle || currentSlideData.description || currentSlideData.cta_text;
 
   return (
     <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
@@ -204,55 +204,63 @@ export default function FullscreenCarousel() {
         {/* Dynamic overlay opacity */}
         <div
           className="absolute inset-0 bg-black"
-          style={{ opacity: currentSlideData.overlay_opacity || 0.4 }}
+          style={{ opacity: currentSlideData.overlay_opacity || 0 }}
         ></div>
       </div>
 
-      {/* Content - Hide text overlay if image has text baked in */}
-      {!hasTextInImage && (
+      {/* Content - Hide text overlay if image has text baked in or no text content */}
+      {!hasTextInImage && hasTextContent && (
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-center max-w-4xl mx-auto px-6">
             {/* Subtitle */}
-            <div className="mb-4">
-              <span className={`inline-block px-4 py-2 rounded-full bg-dope-orange/20 backdrop-blur-sm border border-dope-orange/30 ${currentSlideData.text_color} text-sm font-medium uppercase tracking-wider`}>
-                {currentSlideData.subtitle}
-              </span>
-            </div>
+            {currentSlideData.subtitle && (
+              <div className="mb-4">
+                <span className={`inline-block px-4 py-2 rounded-full bg-dope-orange/20 backdrop-blur-sm border border-dope-orange/30 ${currentSlideData.text_color} text-sm font-medium uppercase tracking-wider`}>
+                  {currentSlideData.subtitle}
+                </span>
+              </div>
+            )}
 
             {/* Main Title */}
-            <h1
-              className={`font-chalets tracking-wider leading-none mb-6 ${currentSlideData.text_color}`}
-              style={{
-                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                fontSize: 'clamp(4rem, 12vw, 8rem)',
-                lineHeight: '0.9',
-                fontWeight: 'normal',
-                letterSpacing: '0.02em',
-                textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'
-              }}
-            >
-              {currentSlideData.title}
-            </h1>
+            {currentSlideData.title && (
+              <h1
+                className={`font-chalets tracking-wider leading-none mb-6 ${currentSlideData.text_color}`}
+                style={{
+                  fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                  fontSize: 'clamp(4rem, 12vw, 8rem)',
+                  lineHeight: '0.9',
+                  fontWeight: 'normal',
+                  letterSpacing: '0.02em',
+                  textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'
+                }}
+              >
+                {currentSlideData.title}
+              </h1>
+            )}
 
             {/* Description */}
-            <p className={`text-xl md:text-2xl mb-8 max-w-2xl mx-auto ${currentSlideData.text_color} opacity-90`}
-               style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-              {currentSlideData.description}
-            </p>
+            {currentSlideData.description && (
+              <p className={`text-xl md:text-2xl mb-8 max-w-2xl mx-auto ${currentSlideData.text_color} opacity-90`}
+                 style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
+                {currentSlideData.description}
+              </p>
+            )}
 
             {/* CTA Button */}
-            <Link
-              href={currentSlideData.cta_link}
-              className="inline-block bg-dope-orange hover:bg-dope-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg uppercase tracking-wide transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              {currentSlideData.cta_text}
-            </Link>
+            {currentSlideData.cta_text && (
+              <Link
+                href={currentSlideData.cta_link}
+                className="inline-block bg-dope-orange hover:bg-dope-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg uppercase tracking-wide transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                {currentSlideData.cta_text}
+              </Link>
+            )}
           </div>
         </div>
       )}
 
       {/* Show just the CTA button for images with baked-in text */}
-      {hasTextInImage && (
+      {hasTextInImage && currentSlideData.cta_text && (
         <div className="relative z-10 h-full flex items-end justify-center pb-20">
           <Link
             href={currentSlideData.cta_link}
