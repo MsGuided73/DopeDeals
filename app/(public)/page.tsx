@@ -192,7 +192,7 @@ export default function HomePage() {
             href="/bongs"
             className="relative col-span-1 md:col-span-2 row-span-1 md:row-span-3 h-64 md:h-auto bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/slide-us-0011-roortech.png')",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
