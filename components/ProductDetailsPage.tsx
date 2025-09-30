@@ -69,7 +69,7 @@ export default function ProductDetailsPage({
         setLoading(true);
         setError(null);
         
-        const storage = getStorage();
+        const storage = await getStorage();
         const productData = await storage.getProduct(productId);
         
         if (!productData) {
