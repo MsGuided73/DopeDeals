@@ -1,10 +1,10 @@
 import {
-  users, products, categories, brands, orders, orderItems,
+  users, products, categories, brands, orders, orderItems, orderStatusHistory,
   memberships, loyaltyPoints, cartItems, userBehavior, userPreferences,
   productSimilarity, recommendationCache, paymentMethods, paymentTransactions, kajaPayWebhookEvents,
   emojiUsage, userEmojiPreferences, emojiRecommendations, productEmojiAssociations,
   conciergeConversations, conciergeMessages, conciergeRecommendations, conciergeAnalytics,
-  complianceRules, productCompliance, complianceAuditLog,
+  complianceRules, productCompliance, complianceAuditLog, labCertificates,
   type User, type InsertUser, type Product, type InsertProduct,
   type Category, type InsertCategory, type Brand, type InsertBrand,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,

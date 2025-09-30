@@ -545,7 +545,7 @@ Analyze user preferences and suggest specific product types they would love base
     const topFlavors = Array.from(preferences.flavorProfiles.entries())
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([flavor]) => flavor);
+      .map((entry) => entry[0]);
 
     return `
 User Profile:
