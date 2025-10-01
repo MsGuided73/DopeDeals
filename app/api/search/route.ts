@@ -319,82 +319,109 @@ export async function GET(request: NextRequest) {
     // Build multiple search queries for comprehensive results
     const searchQueries: string[] = [];
 
-    // Primary search with original term
-    searchQueries.push(`
-      name.ilike.%${searchTerm}%,
-      brand_name.ilike.%${searchTerm}%,
-      sku.ilike.%${searchTerm}%,
-      description.ilike.%${searchTerm}%,
-      short_description.ilike.%${searchTerm}%,
-      manufacturer.ilike.%${searchTerm}%,
-      zoho_category_name.ilike.%${searchTerm}%,
-      dtc_description.ilike.%${searchTerm}%
-    `);
+    // Primary search with original term (remove newlines to fix PostgreSQL parsing)
+    searchQueries.push(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,short_description.ilike.%${searchTerm}%,manufacturer.ilike.%${searchTerm}%,zoho_category_name.ilike.%${searchTerm}%,dtc_description.ilike.%${searchTerm}%`);
 
     // Add expanded term searches
     for (const term of expandedTerms.slice(1, 6)) { // Limit to prevent query complexity
       if (term !== searchTerm && term.length > 2) {
-        searchQueries.push(`
-          name.ilike.%${term}%,
-          brand_name.ilike.%${term}%,
-          description.ilike.%${term}%,
-          short_description.ilike.%${term}%
-        `);
+        searchQueries.push(`name.ilike.%${term}%,brand_name.ilike.%${term}%,description.ilike.%${term}%,short_description.ilike.%${term}%`);
       }
     }
 
-    // Execute multiple search queries for comprehensive results
-    const allProductResults: any[] = [];
+    // Simplified single query approach to avoid PostgreSQL parsing issues
+    console.log(`🔍 Executing simplified search for: ${expandedTerms.join(', ')}`);
 
-    for (let i = 0; i < searchQueries.length; i++) {
-      const searchQuery = searchQueries[i];
-      console.log(`🔍 Executing search query ${i + 1}/${searchQueries.length}`);
+    try {
+      // Build a single comprehensive query with all expanded terms
+      const searchConditions = [];
 
+      for (const term of expandedTerms.slice(0, 5)) { // Limit to prevent query complexity
+        if (term.length > 1) {
+          searchConditions.push(`name.ilike.%${term}%`);
+          searchConditions.push(`brand_name.ilike.%${term}%`);
+          searchConditions.push(`sku.ilike.%${term}%`);
+          searchConditions.push(`description.ilike.%${term}%`);
+          searchConditions.push(`short_description.ilike.%${term}%`);
+          searchConditions.push(`manufacturer.ilike.%${term}%`);
+          searchConditions.push(`zoho_category_name.ilike.%${term}%`);
+        }
+      }
+
+      const searchQuery = searchConditions.join(',');
+      console.log(`📝 Search query: ${searchQuery.substring(0, 200)}...`);
+
+      let supabaseQuery = supabase
+        .from('products')
+        .select(`
+          id, name, brand_name, price, imageUrl, description, short_description,
+          sku, featured, stock_quantity, tags, materials, zoho_category_name,
+          manufacturer, specs, attributes, dtc_description, vip_price
+        `)
+        .or(searchQuery);
+
+      // Apply filters with error handling
       try {
-        let supabaseQuery = supabase
+        supabaseQuery = supabaseQuery
+          .eq('is_active', true)
+          .eq('nicotine_product', false)
+          .eq('tobacco_product', false);
+      } catch (error) {
+        console.warn('⚠️ Compliance filter columns may not exist, using basic filtering');
+        supabaseQuery = supabaseQuery.eq('is_active', true);
+      }
+
+      const { data: allProductResults, error: productsError } = await supabaseQuery.limit(100);
+
+      if (productsError) {
+        console.error('❌ Search query failed:', productsError);
+        // Fallback to basic search
+        console.log('🔄 Falling back to basic search...');
+        const { data: fallbackResults, error: fallbackError } = await supabase
           .from('products')
           .select(`
-            id, name, brand_name, price, image_url, description, short_description,
+            id, name, brand_name, price, imageUrl, description, short_description,
             sku, featured, stock_quantity, tags, materials, zoho_category_name,
-            manufacturer, specs, attributes, dtc_description, vip_price, is_active,
-            nicotine_product, tobacco_product
+            manufacturer, specs, attributes, dtc_description, vip_price
           `)
-          .or(searchQuery.trim());
+          .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%`)
+          .eq('is_active', true)
+          .limit(50);
 
-        // Apply filters - check if columns exist before filtering
-        try {
-          supabaseQuery = supabaseQuery
-            .eq('is_active', true)
-            .eq('nicotine_product', false)
-            .eq('tobacco_product', false);
-        } catch (error) {
-          console.warn('Some filter columns may not exist, continuing with basic search');
-          supabaseQuery = supabaseQuery.eq('is_active', true);
+        if (fallbackError) {
+          console.error('❌ Fallback search also failed:', fallbackError);
+          return NextResponse.json({
+            results: [],
+            total: 0,
+            query: query,
+            filters: filters,
+            message: 'Search temporarily unavailable'
+          });
         }
 
-        const { data: products, error: productsError } = await supabaseQuery.limit(50);
-
-        if (productsError) {
-          console.error(`Error in search query ${i + 1}:`, productsError);
-          continue;
-        }
-
-        if (products && products.length > 0) {
-          console.log(`✅ Query ${i + 1} found ${products.length} products`);
-          allProductResults.push(...products);
-        }
-      } catch (error) {
-        console.error(`Error executing search query ${i + 1}:`, error);
-        continue;
+        console.log(`🔄 Fallback search found ${fallbackResults?.length || 0} products`);
+        var finalResults = fallbackResults || [];
+      } else {
+        console.log(`✅ Main search found ${allProductResults?.length || 0} products`);
+        var finalResults = allProductResults || [];
       }
+    } catch (error) {
+      console.error('💥 Search execution error:', error);
+      return NextResponse.json({
+        results: [],
+        total: 0,
+        query: query,
+        filters: filters,
+        message: 'Search error occurred'
+      });
     }
 
     // Remove duplicates and process results
     const uniqueProducts = Array.from(
-      new Map(allProductResults.map(product => [product.id, product])).values()
+      new Map(finalResults.map(product => [product.id, product])).values()
     );
 
-    console.log(`📊 Found ${allProductResults.length} total results, ${uniqueProducts.length} unique products`);
+    console.log(`📊 Found ${finalResults.length} total results, ${uniqueProducts.length} unique products`);
 
     if (uniqueProducts.length > 0) {
       // Apply filters

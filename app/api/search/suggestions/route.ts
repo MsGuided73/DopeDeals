@@ -89,36 +89,27 @@ export async function GET(request: NextRequest) {
     const searchTerm = query.toLowerCase().trim();
 
     // Get product suggestions with comprehensive search across all relevant fields
-    let query = supabase
+    let supabaseQuery = supabase
       .from('products')
       .select(`
-        id, name, brand_name, price, image_url, featured, sku, description,
+        id, name, brand_name, price, imageUrl, featured, sku, description,
         short_description, manufacturer, zoho_category_name, tags, materials,
         stock_quantity, dtc_description, is_active, nicotine_product, tobacco_product
       `)
-      .or(`
-        name.ilike.%${searchTerm}%,
-        brand_name.ilike.%${searchTerm}%,
-        sku.ilike.%${searchTerm}%,
-        description.ilike.%${searchTerm}%,
-        short_description.ilike.%${searchTerm}%,
-        manufacturer.ilike.%${searchTerm}%,
-        zoho_category_name.ilike.%${searchTerm}%,
-        dtc_description.ilike.%${searchTerm}%
-      `);
+      .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,short_description.ilike.%${searchTerm}%,manufacturer.ilike.%${searchTerm}%,zoho_category_name.ilike.%${searchTerm}%,dtc_description.ilike.%${searchTerm}%`);
 
     // Apply filters with error handling
     try {
-      query = query
+      supabaseQuery = supabaseQuery
         .eq('is_active', true)
         .eq('nicotine_product', false)
         .eq('tobacco_product', false);
     } catch (error) {
       console.warn('Some filter columns may not exist, using basic filtering');
-      query = query.eq('is_active', true);
+      supabaseQuery = supabaseQuery.eq('is_active', true);
     }
 
-    const { data: products, error: productsError } = await query
+    const { data: products, error: productsError } = await supabaseQuery
       .limit(limit * 2); // Get more results for better ranking
 
     if (productsError) {
