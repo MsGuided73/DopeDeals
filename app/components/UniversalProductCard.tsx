@@ -86,7 +86,7 @@ export default function UniversalProductCard({
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Handle different image field names for compatibility
+  // Handle different image field names for maximum compatibility
   const rawImageUrl = product.image_url || product.imageUrl || product.image;
   
   // Check if the image is appropriate for this product type

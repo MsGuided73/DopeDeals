@@ -8,7 +8,8 @@ interface Product {
   description: string | null;
   short_description: string | null;
   price: number;
-  imageUrl: string | null;
+  image_url?: string | null;
+  imageUrl?: string | null;
   stock_quantity: number;
   is_active: boolean;
 }
@@ -17,6 +18,11 @@ interface FeaturedProductsResponse {
   products: Product[];
   total: number;
 }
+
+// Helper function to get image URL from either field name
+const getProductImageUrl = (product: Product): string | null => {
+  return product.image_url || product.imageUrl || null;
+};
 
 export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -130,15 +136,16 @@ export default function FeaturedProductsSection() {
   }
 
   // Filter products to only show those with real images
-  const productsWithRealImages = products.filter(product =>
-    product.imageUrl &&
-    !product.imageUrl.includes('placehold.co') &&
-    !product.imageUrl.includes('placeholder') &&
-    !product.imageUrl.includes('unsplash.com') &&
-    !product.imageUrl.includes('picsum.photos') &&
-    !product.imageUrl.includes('lorempixel.com') &&
-    !product.imageUrl.includes('dummyimage.com')
-  );
+  const productsWithRealImages = products.filter(product => {
+    const imageUrl = getProductImageUrl(product);
+    return imageUrl &&
+      !imageUrl.includes('placehold.co') &&
+      !imageUrl.includes('placeholder') &&
+      !imageUrl.includes('unsplash.com') &&
+      !imageUrl.includes('picsum.photos') &&
+      !imageUrl.includes('lorempixel.com') &&
+      !imageUrl.includes('dummyimage.com');
+  });
 
   return (
     <section className="mt-24">
@@ -176,7 +183,7 @@ export default function FeaturedProductsSection() {
               {/* Subtle frame overlay */}
               <div className="absolute inset-2 border border-gray-600/30 rounded-lg pointer-events-none"></div>
               <img
-                src={product.imageUrl}
+                src={getProductImageUrl(product) || ''}
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 onError={(e) => {

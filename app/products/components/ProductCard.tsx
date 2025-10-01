@@ -28,7 +28,7 @@ export default function ProductCard({ product, viewMode = 'grid', showAddToCart 
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Handle different image field names for compatibility
+  // Handle different image field names for maximum compatibility
   const rawImageUrl = product.image_url || product.imageUrl || product.image;
 
   // Check if the image is appropriate for this product type
