@@ -62,50 +62,51 @@ export default async function CookiesPage() {
       <GlobalMasthead />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-green-900 via-green-800 to-emerald-900 text-white py-20">
-          <div className="absolute inset-0 bg-black/40"></div>
-          <div className="relative max-w-6xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h1 className="dope-city-title text-6xl mb-6 tracking-wider">
+        {/* Compact Brand Header */}
+        <section className="relative bg-black text-white overflow-hidden">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <h1 className="font-chalets text-4xl md:text-5xl tracking-wider text-white">
                   COOKIES
                 </h1>
-                <p className="text-xl mb-8 leading-relaxed">
-                  Premium cannabis brand founded by Berner. Experience the finest genetics, 
-                  top-tier flower, and lifestyle products that have made Cookies a global phenomenon.
-                </p>
-                <div className="flex flex-wrap gap-4 mb-8">
-                  <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                    <span className="text-sm font-medium">{productCount} Products</span>
-                  </div>
-                  <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                    <span className="text-sm font-medium">Premium Quality</span>
-                  </div>
-                  <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                    <span className="text-sm font-medium">Founded by Berner</span>
-                  </div>
+                <div className="hidden md:block w-16 h-0.5 bg-dope-orange-500"></div>
+                <div className="hidden md:block text-sm text-gray-300">
+                  Founded by Berner • Premium Cannabis Culture
                 </div>
-                <Link 
-                  href="#products" 
-                  className="inline-block bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
-                >
-                  Shop Cookies Products
-                </Link>
               </div>
-              <div className="relative">
-                <div className="aspect-square bg-white/10 backdrop-blur-sm rounded-2xl p-8 flex items-center justify-center">
-                  <Image
-                    src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
-                    alt="Cookies Brand"
-                    width={300}
-                    height={300}
-                    className="rounded-xl object-cover"
-                  />
+
+              {/* Product Count - Compact */}
+              <div className="hidden lg:flex items-center space-x-4">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-dope-orange-500">{productCount}</div>
+                  <div className="text-xs text-gray-400">Products</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-dope-orange-500">★★★★★</div>
+                  <div className="text-xs text-gray-400">Premium</div>
                 </div>
               </div>
             </div>
+
+            {/* Compact Description */}
+            <p className="text-sm text-gray-300 mt-2 max-w-3xl">
+              Premium cannabis brand founded by Berner. Experience the finest genetics, top-tier flower, and lifestyle products that have made Cookies a global phenomenon in cannabis culture.
+            </p>
+
+            {/* Quick Action */}
+            <div className="mt-4">
+              <Link
+                href="#products"
+                className="inline-block px-4 py-2 bg-dope-orange-500 hover:bg-dope-orange-600 text-white text-sm rounded-lg font-medium transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,140,0,0.5)]"
+              >
+                Shop Cookies Products
+              </Link>
+            </div>
           </div>
+
+          {/* Subtle Orange Glow */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-dope-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
         </section>
 
         {/* Brand Story */}

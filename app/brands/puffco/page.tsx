@@ -68,38 +68,41 @@ export default async function PuffcoPage() {
       <GlobalMasthead />
 
       <div className="min-h-screen bg-black text-white">
-        {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-gray-900 via-black to-gray-800 py-20">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&q=80')] bg-cover bg-center opacity-10"></div>
-          <div className="relative max-w-7xl mx-auto px-6 text-center">
-            <div className="mb-8">
-              <h1 className="dope-city-title text-6xl md:text-8xl mb-6">
-                PUFFCO
-              </h1>
-              <div className="w-32 h-1 bg-gradient-to-r from-orange-500 to-orange-600 mx-auto mb-8"></div>
-              <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-                Revolutionary electronic dabbing technology that changed the game forever. 
-                From the legendary Peak Pro to the portable Proxy, Puffco delivers 
-                <span className="text-orange-500 font-bold"> precision-engineered perfection</span> 
-                for the ultimate concentrate experience.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-orange-500 mb-2">{products?.length || 0}</div>
-                <div className="text-gray-400">Premium Products</div>
+        {/* Compact Brand Header */}
+        <div className="relative bg-black text-white overflow-hidden">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <h1 className="font-chalets text-4xl md:text-5xl tracking-wider text-white">
+                  PUFFCO
+                </h1>
+                <div className="hidden md:block w-16 h-0.5 bg-dope-orange-500"></div>
+                <div className="hidden md:block text-sm text-gray-300">
+                  Revolutionary E-Rig Technology
+                </div>
               </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-orange-500 mb-2">2018</div>
-                <div className="text-gray-400">Peak Pro Launch</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-orange-500 mb-2">#1</div>
-                <div className="text-gray-400">E-Rig Brand</div>
+
+              {/* Stats - Compact */}
+              <div className="hidden lg:flex items-center space-x-4">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-dope-orange-500">{products?.length || 0}</div>
+                  <div className="text-xs text-gray-400">Products</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-dope-orange-500">#1</div>
+                  <div className="text-xs text-gray-400">E-Rig Brand</div>
+                </div>
               </div>
             </div>
+
+            {/* Compact Description */}
+            <p className="text-sm text-gray-300 mt-2 max-w-3xl">
+              Revolutionary electronic dabbing technology that changed the game forever. From the legendary Peak Pro to the portable Proxy, Puffco delivers precision-engineered perfection for the ultimate concentrate experience.
+            </p>
           </div>
+
+          {/* Subtle Orange Glow */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-dope-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
         </div>
 
         {/* Peak Pro Section */}

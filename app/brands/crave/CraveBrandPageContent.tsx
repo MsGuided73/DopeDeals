@@ -200,33 +200,41 @@ export default function CraveBrandPageContent() {
     <div className="min-h-screen bg-white">
       <GlobalMasthead />
       
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-900 to-black text-white py-16">
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="text-center mb-8">
-            <h1 className="dope-city-title text-6xl mb-4">
-              CRAVE
-            </h1>
-            <p className="text-xl max-w-3xl mx-auto">
-              Premium vaping products designed for quality, performance, and satisfaction. 
-              From cutting-edge disposables to reliable accessories.
-            </p>
-          </div>
-          
-          {/* Category Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
-            {CRAVE_CATEGORIES.map((category) => (
-              <div key={category.value} className="text-center">
-                <div className="text-2xl mb-1">{category.icon}</div>
-                <div className="text-2xl font-bold text-dope-orange-400">
-                  {categoryCounts[category.value]}
-                </div>
-                <div className="text-sm text-gray-300">{category.label}</div>
+      {/* Compact Brand Header */}
+      <div className="relative bg-black text-white overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <h1 className="font-chalets text-4xl md:text-5xl tracking-wider text-white">
+                CRAVE
+              </h1>
+              <div className="hidden md:block w-16 h-0.5 bg-dope-orange-500"></div>
+              <div className="hidden md:block text-sm text-gray-300">
+                Premium Vaping Excellence
               </div>
-            ))}
+            </div>
+
+            {/* Category Stats - Compact */}
+            <div className="hidden lg:flex items-center space-x-4">
+              {CRAVE_CATEGORIES.slice(0, 3).map((category) => (
+                <div key={category.value} className="text-center">
+                  <div className="text-lg font-bold text-dope-orange-500">
+                    {categoryCounts[category.value]}
+                  </div>
+                  <div className="text-xs text-gray-400">{category.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Compact Description */}
+          <p className="text-sm text-gray-300 mt-2 max-w-3xl">
+            Premium vaping products designed for quality, performance, and satisfaction. From cutting-edge disposables to reliable accessories that define modern vaping culture.
+          </p>
         </div>
+
+        {/* Subtle Orange Glow */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-dope-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
       </div>
 
       {/* Filters Section */}

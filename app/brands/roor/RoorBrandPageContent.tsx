@@ -206,37 +206,41 @@ export default function RoorBrandPageContent() {
     <div className="min-h-screen bg-white">
       <GlobalMasthead />
       
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-black/60"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-dope-orange-500/10 to-transparent"></div>
-        
-        <div className="relative max-w-6xl mx-auto px-6 text-center">
-          <div className="mb-8">
-            <h1 className="dope-city-title text-7xl md:text-8xl mb-6 text-white drop-shadow-2xl">
-              ROOR
-            </h1>
-            <div className="w-24 h-1 bg-dope-orange-500 mx-auto mb-6"></div>
-          </div>
-          
-          <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed text-gray-200">
-            The legendary German glass brand. Since 1995, ROOR has been crafting the world's finest 
-            borosilicate glass pieces using premium Schott glass and traditional German craftsmanship.
-          </p>
-          
-          {/* Category Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-            {ROOR_CATEGORIES.slice(1).map((category) => (
-              <div key={category.value} className="text-center bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-                <div className="text-3xl mb-2">{category.icon}</div>
-                <div className="text-3xl font-bold text-dope-orange-400 mb-1">
-                  {categoryCounts[category.value] || 0}
-                </div>
-                <div className="text-sm text-gray-300">{category.label}</div>
+      {/* Compact Brand Header */}
+      <div className="relative bg-black text-white overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <h1 className="font-chalets text-4xl md:text-5xl tracking-wider text-white">
+                ROOR
+              </h1>
+              <div className="hidden md:block w-16 h-0.5 bg-dope-orange-500"></div>
+              <div className="hidden md:block text-sm text-gray-300">
+                German Glass Excellence Since 1995
               </div>
-            ))}
+            </div>
+
+            {/* Category Stats - Compact */}
+            <div className="hidden lg:flex items-center space-x-4">
+              {ROOR_CATEGORIES.slice(1, 4).map((category) => (
+                <div key={category.value} className="text-center">
+                  <div className="text-lg font-bold text-dope-orange-500">
+                    {categoryCounts[category.value] || 0}
+                  </div>
+                  <div className="text-xs text-gray-400">{category.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Compact Description */}
+          <p className="text-sm text-gray-300 mt-2 max-w-3xl">
+            The legendary German glass brand crafting the world's finest borosilicate pieces using premium Schott glass and traditional German craftsmanship. Experience the pinnacle of smoking culture.
+          </p>
         </div>
+
+        {/* Subtle Orange Glow */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-dope-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
       </div>
 
       {/* Filters and Products */}
