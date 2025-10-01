@@ -27,7 +27,7 @@ const fallbackSlides: CarouselSlide[] = [
     title: "",
     subtitle: "",
     description: "",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/WhatsApp%20Image%202025-09-25%20at%2011.27.52_e3fa4258.jpg",
+    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/Screenshot%202025-09-24%20092028.png",
     cta_text: "",
     cta_link: "/rewards",
     text_color: "text-white",
@@ -316,3 +316,4 @@ export default function FullscreenCarousel() {
     </div>
   );
 }
+dev
