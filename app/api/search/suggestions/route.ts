@@ -89,12 +89,12 @@ export async function GET(request: NextRequest) {
     const searchTerm = query.toLowerCase().trim();
 
     // Get product suggestions with comprehensive search across all relevant fields
-    const { data: products, error: productsError } = await supabase
+    let query = supabase
       .from('products')
       .select(`
         id, name, brand_name, price, image_url, featured, sku, description,
         short_description, manufacturer, zoho_category_name, tags, materials,
-        stock_quantity, dtc_description
+        stock_quantity, dtc_description, is_active, nicotine_product, tobacco_product
       `)
       .or(`
         name.ilike.%${searchTerm}%,
@@ -105,10 +105,20 @@ export async function GET(request: NextRequest) {
         manufacturer.ilike.%${searchTerm}%,
         zoho_category_name.ilike.%${searchTerm}%,
         dtc_description.ilike.%${searchTerm}%
-      `)
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
+      `);
+
+    // Apply filters with error handling
+    try {
+      query = query
+        .eq('is_active', true)
+        .eq('nicotine_product', false)
+        .eq('tobacco_product', false);
+    } catch (error) {
+      console.warn('Some filter columns may not exist, using basic filtering');
+      query = query.eq('is_active', true);
+    }
+
+    const { data: products, error: productsError } = await query
       .limit(limit * 2); // Get more results for better ranking
 
     if (productsError) {

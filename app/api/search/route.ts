@@ -7,6 +7,108 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// Natural Language Search Enhancement
+const BRAND_SYNONYMS: Record<string, string[]> = {
+  'roor': ['roor', 'ror', 'roar', 'german glass', 'premium glass'],
+  'puffco': ['puffco', 'puff co', 'peak', 'proxy', 'e-rig'],
+  'cookies': ['cookies', 'berner', 'berners cookies'],
+  'raw': ['raw', 'raw papers', 'rolling papers'],
+  'storz': ['storz', 'bickel', 'storz & bickel', 'volcano', 'mighty'],
+  'grav': ['grav', 'grav labs', 'gravitron'],
+  'empire': ['empire', 'empire glassworks'],
+  'pulsar': ['pulsar', 'pulsar vapes']
+};
+
+const CATEGORY_SYNONYMS: Record<string, string[]> = {
+  'bongs': ['bong', 'bongs', 'water pipe', 'water pipes', 'bubbler', 'bubblers', 'glass pipe', 'smoking device'],
+  'pipes': ['pipe', 'pipes', 'hand pipe', 'hand pipes', 'bowl', 'bowls', 'spoon pipe'],
+  'dab-rigs': ['dab rig', 'dab rigs', 'oil rig', 'oil rigs', 'concentrate rig', 'wax rig', 'shatter rig'],
+  'e-rigs': ['e-rig', 'e-rigs', 'electric rig', 'electric rigs', 'electronic rig', 'enail', 'e-nail'],
+  'vaporizers': ['vaporizer', 'vaporizers', 'vape', 'vapes', 'dry herb vape', 'portable vape'],
+  'accessories': ['accessory', 'accessories', 'tool', 'tools', 'grinder', 'grinders', 'lighter', 'lighters'],
+  'flower': ['flower', 'bud', 'nugs', 'thca flower', 'hemp flower', 'cannabis flower'],
+  'pre-rolls': ['pre-roll', 'pre-rolls', 'joint', 'joints', 'preroll', 'prerolls']
+};
+
+const MATERIAL_SYNONYMS: Record<string, string[]> = {
+  'glass': ['glass', 'borosilicate', 'pyrex', 'scientific glass', 'thick glass'],
+  'silicone': ['silicone', 'rubber', 'flexible'],
+  'ceramic': ['ceramic', 'clay', 'porcelain'],
+  'metal': ['metal', 'aluminum', 'steel', 'titanium'],
+  'wood': ['wood', 'wooden', 'bamboo']
+};
+
+// Fuzzy matching function
+function fuzzyMatch(search: string, target: string, threshold: number = 0.6): boolean {
+  if (!search || !target) return false;
+
+  const searchLower = search.toLowerCase();
+  const targetLower = target.toLowerCase();
+
+  // Exact match
+  if (targetLower.includes(searchLower)) return true;
+
+  // Calculate similarity using Levenshtein distance
+  const distance = levenshteinDistance(searchLower, targetLower);
+  const maxLength = Math.max(searchLower.length, targetLower.length);
+  const similarity = 1 - (distance / maxLength);
+
+  return similarity >= threshold;
+}
+
+function levenshteinDistance(str1: string, str2: string): number {
+  const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+
+  for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
+  for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
+
+  for (let j = 1; j <= str2.length; j++) {
+    for (let i = 1; i <= str1.length; i++) {
+      const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+      matrix[j][i] = Math.min(
+        matrix[j][i - 1] + 1,
+        matrix[j - 1][i] + 1,
+        matrix[j - 1][i - 1] + indicator
+      );
+    }
+  }
+
+  return matrix[str2.length][str1.length];
+}
+
+// Enhanced search term expansion
+function expandSearchTerms(query: string): string[] {
+  const terms = [query.toLowerCase().trim()];
+  const words = query.toLowerCase().split(/\s+/);
+
+  // Add individual words
+  terms.push(...words);
+
+  // Add brand synonyms
+  for (const [brand, synonyms] of Object.entries(BRAND_SYNONYMS)) {
+    if (synonyms.some(synonym => query.toLowerCase().includes(synonym))) {
+      terms.push(brand, ...synonyms);
+    }
+  }
+
+  // Add category synonyms
+  for (const [category, synonyms] of Object.entries(CATEGORY_SYNONYMS)) {
+    if (synonyms.some(synonym => query.toLowerCase().includes(synonym))) {
+      terms.push(category, ...synonyms);
+    }
+  }
+
+  // Add material synonyms
+  for (const [material, synonyms] of Object.entries(MATERIAL_SYNONYMS)) {
+    if (synonyms.some(synonym => query.toLowerCase().includes(synonym))) {
+      terms.push(material, ...synonyms);
+    }
+  }
+
+  // Remove duplicates and empty terms
+  return [...new Set(terms.filter(term => term.length > 0))];
+}
+
 interface SearchResult {
   id: string;
   name: string;
@@ -208,101 +310,183 @@ export async function GET(request: NextRequest) {
     }
 
     const searchTerm = query.toLowerCase().trim();
+    const expandedTerms = expandSearchTerms(query);
     let allResults: SearchResult[] = [];
 
-    // Build the base query
-    let supabaseQuery = supabase
-      .from('products')
-      .select(`
-        id, name, brand_name, price, image_url, description, short_description,
-        sku, featured, stock_quantity, tags, materials, zoho_category_name,
-        manufacturer, specs, attributes, dtc_description, vip_price
-      `)
-      .or(`
-        name.ilike.%${searchTerm}%,
-        brand_name.ilike.%${searchTerm}%,
-        sku.ilike.%${searchTerm}%,
-        description.ilike.%${searchTerm}%,
-        short_description.ilike.%${searchTerm}%,
-        manufacturer.ilike.%${searchTerm}%,
-        zoho_category_name.ilike.%${searchTerm}%,
-        dtc_description.ilike.%${searchTerm}%
-      `)
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false);
+    console.log(`🔍 Natural Language Search: "${query}"`);
+    console.log(`📝 Expanded terms: ${expandedTerms.join(', ')}`);
 
-    // Apply stock filtering at database level for better performance
-    if (filters.stockStatus && filters.stockStatus !== 'all') {
-      switch (filters.stockStatus) {
-        case 'in-stock':
-          supabaseQuery = supabaseQuery.gt('stock_quantity', 0);
-          break;
-        case 'out-of-stock':
-          supabaseQuery = supabaseQuery.eq('stock_quantity', 0);
-          break;
-        case 'low-stock':
-          supabaseQuery = supabaseQuery.gt('stock_quantity', 0).lte('stock_quantity', 5);
-          break;
-        case 'high-stock':
-          supabaseQuery = supabaseQuery.gte('stock_quantity', 20);
-          break;
+    // Build multiple search queries for comprehensive results
+    const searchQueries: string[] = [];
+
+    // Primary search with original term
+    searchQueries.push(`
+      name.ilike.%${searchTerm}%,
+      brand_name.ilike.%${searchTerm}%,
+      sku.ilike.%${searchTerm}%,
+      description.ilike.%${searchTerm}%,
+      short_description.ilike.%${searchTerm}%,
+      manufacturer.ilike.%${searchTerm}%,
+      zoho_category_name.ilike.%${searchTerm}%,
+      dtc_description.ilike.%${searchTerm}%
+    `);
+
+    // Add expanded term searches
+    for (const term of expandedTerms.slice(1, 6)) { // Limit to prevent query complexity
+      if (term !== searchTerm && term.length > 2) {
+        searchQueries.push(`
+          name.ilike.%${term}%,
+          brand_name.ilike.%${term}%,
+          description.ilike.%${term}%,
+          short_description.ilike.%${term}%
+        `);
       }
     }
 
-    // Apply featured filter at database level
-    if (filters.featured) {
-      supabaseQuery = supabaseQuery.eq('featured', true);
+    // Execute multiple search queries for comprehensive results
+    const allProductResults: any[] = [];
+
+    for (let i = 0; i < searchQueries.length; i++) {
+      const searchQuery = searchQueries[i];
+      console.log(`🔍 Executing search query ${i + 1}/${searchQueries.length}`);
+
+      try {
+        let supabaseQuery = supabase
+          .from('products')
+          .select(`
+            id, name, brand_name, price, image_url, description, short_description,
+            sku, featured, stock_quantity, tags, materials, zoho_category_name,
+            manufacturer, specs, attributes, dtc_description, vip_price, is_active,
+            nicotine_product, tobacco_product
+          `)
+          .or(searchQuery.trim());
+
+        // Apply filters - check if columns exist before filtering
+        try {
+          supabaseQuery = supabaseQuery
+            .eq('is_active', true)
+            .eq('nicotine_product', false)
+            .eq('tobacco_product', false);
+        } catch (error) {
+          console.warn('Some filter columns may not exist, continuing with basic search');
+          supabaseQuery = supabaseQuery.eq('is_active', true);
+        }
+
+        const { data: products, error: productsError } = await supabaseQuery.limit(50);
+
+        if (productsError) {
+          console.error(`Error in search query ${i + 1}:`, productsError);
+          continue;
+        }
+
+        if (products && products.length > 0) {
+          console.log(`✅ Query ${i + 1} found ${products.length} products`);
+          allProductResults.push(...products);
+        }
+      } catch (error) {
+        console.error(`Error executing search query ${i + 1}:`, error);
+        continue;
+      }
     }
 
-    // Execute the query
-    const { data: products, error: productsError } = await supabaseQuery.limit(limit * 3);
+    // Remove duplicates and process results
+    const uniqueProducts = Array.from(
+      new Map(allProductResults.map(product => [product.id, product])).values()
+    );
 
-    if (productsError) {
-      console.error('Error fetching products:', productsError);
-    } else if (products) {
+    console.log(`📊 Found ${allProductResults.length} total results, ${uniqueProducts.length} unique products`);
+
+    if (uniqueProducts.length > 0) {
       // Apply filters
-      const filteredProducts = applyFilters(products, filters);
+      const filteredProducts = applyFilters(uniqueProducts, filters);
 
-      // Calculate relevance and format results
+      // Enhanced relevance scoring with natural language matching
       const productResults: SearchResult[] = filteredProducts
-        .map(product => ({
-          ...product,
-          relevanceScore: calculateRelevanceScore(product, searchTerm, 'product'),
-          resultType: 'product' as const
-        }))
+        .map(product => {
+          let relevanceScore = calculateRelevanceScore(product, searchTerm, 'product');
+
+          // Boost score for fuzzy matches
+          const productText = `${product.name} ${product.brand_name || ''} ${product.description || ''} ${product.sku || ''}`.toLowerCase();
+
+          for (const expandedTerm of expandedTerms) {
+            if (fuzzyMatch(expandedTerm, productText, 0.7)) {
+              relevanceScore += 50;
+            }
+          }
+
+          // Boost for exact brand matches
+          if (product.brand_name && expandedTerms.some(term =>
+            product.brand_name.toLowerCase().includes(term.toLowerCase())
+          )) {
+            relevanceScore += 100;
+          }
+
+          // Boost for category matches
+          if (product.zoho_category_name && expandedTerms.some(term =>
+            product.zoho_category_name.toLowerCase().includes(term.toLowerCase())
+          )) {
+            relevanceScore += 75;
+          }
+
+          return {
+            ...product,
+            relevanceScore,
+            resultType: 'product' as const
+          };
+        })
         .filter(product => product.relevanceScore > 0);
 
       allResults.push(...productResults);
+      console.log(`✅ Processed ${productResults.length} relevant product results`);
     }
 
-    // Search brands if requested
+    // Enhanced brand search with natural language matching
     if (includeBrands) {
+      console.log('🏷️ Searching brands with expanded terms...');
+
+      // Build brand search queries
+      const brandSearchQueries = expandedTerms.map(term => `name.ilike.%${term}%`);
+
       const { data: brands, error: brandsError } = await supabase
         .from('brands')
         .select('id, name, description, logo_url, slug')
-        .ilike('name', `%${searchTerm}%`)
-        .limit(10);
+        .or(brandSearchQueries.join(','))
+        .limit(20);
 
       if (!brandsError && brands) {
-        const brandResults: SearchResult[] = brands.map(brand => ({
-          id: brand.id,
-          name: brand.name,
-          brand_name: brand.name,
-          price: 0,
-          image_url: brand.logo_url,
-          description: brand.description,
-          short_description: brand.description,
-          sku: '',
-          featured: false,
-          stock_quantity: 0,
-          tags: [],
-          materials: [],
-          zoho_category_name: '',
-          manufacturer: '',
-          relevanceScore: calculateRelevanceScore(brand, searchTerm, 'brand'),
-          resultType: 'brand' as const
-        }));
+        console.log(`🏷️ Found ${brands.length} matching brands`);
+
+        const brandResults: SearchResult[] = brands
+          .map(brand => {
+            let relevanceScore = calculateRelevanceScore(brand, searchTerm, 'brand');
+
+            // Boost for fuzzy brand name matches
+            for (const expandedTerm of expandedTerms) {
+              if (fuzzyMatch(expandedTerm, brand.name, 0.8)) {
+                relevanceScore += 100;
+              }
+            }
+
+            return {
+              id: brand.id,
+              name: brand.name,
+              brand_name: brand.name,
+              price: 0,
+              image_url: brand.logo_url,
+              description: brand.description,
+              short_description: brand.description,
+              sku: '',
+              featured: false,
+              stock_quantity: 0,
+              tags: [],
+              materials: [],
+              zoho_category_name: '',
+              manufacturer: '',
+              relevanceScore,
+              resultType: 'brand' as const
+            };
+          })
+          .filter(brand => brand.relevanceScore > 0);
 
         allResults.push(...brandResults);
       }
