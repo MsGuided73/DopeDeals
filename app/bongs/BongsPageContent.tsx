@@ -18,12 +18,12 @@ export interface BongProduct {
   name: string;
   price: number;
   vip_price?: number;
-  image_url?: string;
+  imageUrl?: string; // Database uses camelCase
   image?: string; // Add alias for compatibility
   description?: string;
   sku: string;
-  stock_quantity: number;
-  is_active: boolean;
+  stock_quantity: number; // Database uses snake_case
+  is_active: boolean; // Database uses snake_case
   brand?: string;
   category?: string;
   material?: string;
@@ -31,8 +31,8 @@ export interface BongProduct {
   joint_size?: string;
   jointSize?: string; // Add alias for compatibility
   percolator?: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string; // Database uses camelCase
+  updated_at: string; // Database uses snake_case
   // Add missing properties that components expect
   isNew?: boolean;
   isSale?: boolean;
@@ -110,13 +110,13 @@ export default function BongsPageContent() {
         break;
 
       case 'newest':
-        filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         break;
       default: // featured
         // Sort by newest first, then by stock quantity
         filtered.sort((a, b) => {
-          const dateA = new Date(a.created_at).getTime();
-          const dateB = new Date(b.created_at).getTime();
+          const dateA = new Date(a.createdAt).getTime();
+          const dateB = new Date(b.createdAt).getTime();
           if (dateA !== dateB) return dateB - dateA;
           return b.stock_quantity - a.stock_quantity;
         });
@@ -139,7 +139,7 @@ export default function BongsPageContent() {
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
         .order('featured', { ascending: false })
-        .order('created_at', { ascending: false });
+        .order('createdAt', { ascending: false });
 
       if (error) {
         console.error('❌ Error fetching products:', error);
