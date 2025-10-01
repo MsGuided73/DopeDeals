@@ -21,8 +21,8 @@ export async function GET(req: NextRequest) {
       .from('products')
       .select(`
         id, name, description, short_description, price, vip_price,
-        imageUrl, sku, stockQuantity, stock_quantity, brandName, brand_name, materials,
-        featured, createdAt, created_at
+        imageUrl, sku, stock_quantity, brand_name, materials,
+        featured, createdAt
       `)
       .eq('is_active', true)
       .eq('nicotine_product', false)
@@ -44,8 +44,8 @@ export async function GET(req: NextRequest) {
         .from('products')
         .select(`
           id, name, description, short_description, price, vip_price,
-          imageUrl, sku, stockQuantity, stock_quantity, brandName, brand_name, materials,
-          featured, createdAt, created_at
+          imageUrl, sku, stock_quantity, brand_name, materials,
+          featured, createdAt
         `)
         .eq('is_active', true)
         .eq('nicotine_product', false)

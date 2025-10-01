@@ -59,13 +59,9 @@ export async function GET(req: NextRequest) {
         short_description,
         price,
         imageUrl,
-        image_url,
         stock_quantity,
-        stockQuantity,
         is_active,
-        isActive,
-        createdAt,
-        created_at
+        createdAt
       `)
       .eq('is_active', true)
       .eq('nicotine_product', false)
