@@ -61,13 +61,13 @@ export async function GET(req: NextRequest) {
         imageUrl,
         stock_quantity,
         is_active,
-        created_at
+        createdAt
       `)
       .eq('is_active', true)
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       .gt('stock_quantity', 0)
-      .order('created_at', { ascending: false })
+      .order('createdAt', { ascending: false })
       .limit(200); // Get more to filter from
 
     if (error) {
@@ -101,7 +101,7 @@ export async function GET(req: NextRequest) {
     }));
 
     // Sort by newest first
-    normalizedProducts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    normalizedProducts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return NextResponse.json({
       products: normalizedProducts,

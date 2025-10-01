@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
       .select(`
         id, name, description, short_description, price, vip_price,
         imageUrl, sku, stock_quantity, brand_name, materials,
-        featured, created_at
+        featured, createdAt
       `)
       .eq('is_active', true)
       .eq('nicotine_product', false)
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
         .select(`
           id, name, description, short_description, price, vip_price,
           imageUrl, sku, stock_quantity, brand_name, materials,
-          featured, created_at
+          featured, createdAt
         `)
         .eq('is_active', true)
         .eq('nicotine_product', false)
