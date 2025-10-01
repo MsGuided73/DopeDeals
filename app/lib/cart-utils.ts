@@ -164,10 +164,10 @@ export const removeFromCart = async (itemId: string): Promise<boolean> => {
 // Get cart with error handling
 export const getCart = async (): Promise<Cart | null> => {
   const sessionId = getSessionId();
-  
+
   try {
     const response = await fetch(`/api/cart?sessionId=${sessionId}`);
-    
+
     if (!response.ok) {
       if (response.status === 404) {
         // Empty cart is normal
@@ -180,10 +180,32 @@ export const getCart = async (): Promise<Cart | null> => {
           total: 0,
         };
       }
-      throw new Error('Failed to fetch cart');
+
+      // Get more detailed error information
+      let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+      } catch (e) {
+        // If we can't parse JSON, use the status text
+      }
+
+      console.error('Cart API Error:', errorMessage);
+      throw new Error(`Failed to fetch cart: ${errorMessage}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    // Check if the response has the expected structure
+    if (data.success && data.cart) {
+      return data.cart;
+    } else if (data.cart) {
+      return data.cart;
+    } else {
+      // Fallback for unexpected response structure
+      console.warn('Unexpected cart response structure:', data);
+      return data;
+    }
   } catch (error) {
     console.error('Error fetching cart:', error);
     toast.error('Failed to load cart');

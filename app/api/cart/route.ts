@@ -21,6 +21,37 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // First, let's check if the shopping_cart table exists
+    const { data: tableCheck, error: tableError } = await supabase
+      .from('shopping_cart')
+      .select('id')
+      .limit(1);
+
+    if (tableError) {
+      console.error('Shopping cart table error:', tableError);
+
+      // If table doesn't exist, return empty cart
+      if (tableError.code === 'PGRST116' || tableError.message?.includes('does not exist')) {
+        console.log('Shopping cart table does not exist, returning empty cart');
+        return NextResponse.json({
+          success: true,
+          cart: {
+            items: [],
+            itemCount: 0,
+            subtotal: 0,
+            taxAmount: 0,
+            shippingAmount: 0,
+            total: 0
+          }
+        });
+      }
+
+      return NextResponse.json(
+        { error: `Database error: ${tableError.message}` },
+        { status: 500 }
+      );
+    }
+
     // Build query based on user or session
     let query = supabase
       .from('shopping_cart')
@@ -55,7 +86,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       console.error('Error fetching cart:', error);
       return NextResponse.json(
-        { error: 'Failed to fetch cart' },
+        { error: `Failed to fetch cart: ${error.message}` },
         { status: 500 }
       );
     }
