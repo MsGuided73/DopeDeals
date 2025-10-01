@@ -131,35 +131,48 @@ export default function BongsPageContent() {
       setLoading(true);
       console.log('🔍 Loading bong products using enhanced categorization...');
 
-      // Fetch ALL active, non-nicotine, non-tobacco products
-      const { data, error } = await supabaseBrowser
-        .from('products')
-        .select('*')
-        .eq('is_active', true)
-        .eq('nicotine_product', false)
-        .eq('tobacco_product', false)
-        .order('featured', { ascending: false })
-        .order('createdAt', { ascending: false });
+      // Use the working API endpoint instead of direct Supabase query
+      console.log('🌐 Fetching products via API endpoint...');
+      const response = await fetch('/api/products?limit=100');
 
-      if (error) {
-        console.error('❌ Error fetching products:', error);
-        setProducts([]);
-      } else {
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+      }
+
+      const apiData = await response.json();
+      const products = apiData.products || [];
+
+      if (products && products.length > 0) {
         // Use enhanced categorization to filter for bongs only
-        const bongProducts = filterProductsByCategory(data || [], 'bongs');
+        const bongProducts = filterProductsByCategory(products, 'bongs');
 
-        console.log(`✅ Loaded ${data?.length || 0} total products`);
+        console.log(`✅ Loaded ${products.length} total products from API`);
         console.log(`🎯 Filtered to ${bongProducts.length} bongs using enhanced categorization`);
-        console.log('📊 First 3 bong products:', bongProducts.slice(0, 3).map(p => ({
-          name: p.name,
-          sku: p.sku,
-          category: categorizeProduct(p)
-        })));
+
+        if (bongProducts.length > 0) {
+          console.log('📊 First 3 bong products:', bongProducts.slice(0, 3).map(p => ({
+            name: p.name,
+            sku: p.sku,
+            category: categorizeProduct(p)
+          })));
+        } else {
+          console.log('⚠️ No bong products found after categorization');
+          console.log('📋 Sample products for debugging:', products.slice(0, 3).map(p => ({
+            name: p.name,
+            sku: p.sku,
+            zoho_category_name: p.zoho_category_name,
+            description: p.description?.substring(0, 100)
+          })));
+        }
 
         setProducts(bongProducts);
+      } else {
+        console.log('⚠️ No products returned from API');
+        setProducts([]);
       }
     } catch (error) {
       console.error('💥 Catch block error:', error);
+      console.error('💥 Error details:', JSON.stringify(error, null, 2));
       setProducts([]);
     } finally {
       setLoading(false);
