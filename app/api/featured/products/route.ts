@@ -59,6 +59,8 @@ export async function GET(req: NextRequest) {
         created_at
       `)
       .eq('is_active', true)
+      .eq('nicotine_product', false)
+      .eq('tobacco_product', false)
       .gt('stock_quantity', 0)
       .not('image_url', 'is', null)
       .order('created_at', { ascending: false })

@@ -27,6 +27,9 @@ export async function GET(req: NextRequest) {
     const { data: products, error } = await supabase
       .from('products')
       .select('*')
+      .eq('is_active', true)
+      .eq('nicotine_product', false)
+      .eq('tobacco_product', false)
       .limit(10);
 
     if (error) {

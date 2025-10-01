@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
           sku: item.products.sku,
           currentPrice: parseFloat(item.products.price),
           vipPrice: item.products.vip_price ? parseFloat(item.products.vip_price) : null,
-          imageUrl: item.products.image_url,
+          image_url: item.products.image_url,
           stockQuantity: item.products.stock_quantity,
           isActive: item.products.is_active,
           inStock: (item.products.stock_quantity || 0) > 0
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
     // Get product details and current price
     const { data: product, error: productError } = await supabase
       .from('products')
-      .select('id, name, price, vip_price, stock_quantity, is_active')
+      .select('id, name, price, vip_price, stock_quantity, is_active, nicotine_product, tobacco_product')
       .eq('id', productId)
       .single();
 
@@ -154,6 +154,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Product is not available' },
         { status: 400 }
+      );
+    }
+
+    // COMPLIANCE CHECK: Block nicotine/tobacco products
+    if (product.nicotine_product || product.tobacco_product) {
+      return NextResponse.json(
+        { error: 'This product is not available for purchase on this site' },
+        { status: 403 }
       );
     }
 
