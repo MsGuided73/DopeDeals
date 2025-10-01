@@ -39,15 +39,17 @@ export default function PersonalizedGreeting({
   }, []);
 
   useEffect(() => {
-    // Generate time-based greeting
-    const hour = new Date().getHours();
-    let timeGreeting = '';
-    
-    if (hour < 12) timeGreeting = 'Good morning';
-    else if (hour < 17) timeGreeting = 'Good afternoon';
-    else timeGreeting = 'Good evening';
+    // Generate time-based greeting - only on client side to avoid hydration mismatch
+    if (typeof window !== 'undefined') {
+      const hour = new Date().getHours();
+      let timeGreeting = '';
 
-    setGreeting(timeGreeting);
+      if (hour < 12) timeGreeting = 'Good morning';
+      else if (hour < 17) timeGreeting = 'Good afternoon';
+      else timeGreeting = 'Good evening';
+
+      setGreeting(timeGreeting);
+    }
   }, []);
 
   if (loading) {
@@ -151,9 +153,9 @@ function WelcomeBackMessage({ userId, firstName }: { userId: string, firstName: 
     );
   }
 
-  const daysSinceLastVisit = Math.floor(
-    (Date.now() - new Date(lastVisit).getTime()) / (1000 * 60 * 60 * 24)
-  );
+  const daysSinceLastVisit = typeof window !== 'undefined'
+    ? Math.floor((Date.now() - new Date(lastVisit).getTime()) / (1000 * 60 * 60 * 24))
+    : 0;
 
   if (daysSinceLastVisit === 0) {
     return (

@@ -66,11 +66,19 @@ export default function StaffPicksSection() {
       try {
         setLoading(true);
         const response = await fetch('/api/featured/staff-picks?limit=2');
-        
+
         if (!response.ok) {
-          throw new Error('Failed to fetch staff picks');
+          let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+          } catch (e) {
+            // If we can't parse JSON, use the status text
+          }
+          console.error('Staff picks API error:', errorMessage);
+          throw new Error(`Failed to fetch staff picks: ${errorMessage}`);
         }
-        
+
         const data: StaffPicksResponse = await response.json();
         setProducts(data.products || []);
       } catch (err) {

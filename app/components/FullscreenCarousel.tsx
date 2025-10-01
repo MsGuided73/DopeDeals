@@ -55,7 +55,7 @@ const fallbackSlides: CarouselSlide[] = [
     title: "",
     subtitle: "",
     description: "",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/website%20images/RawRollingPapers/wtf.png",
+    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/website%20images/RawRollingPapers/raw-rolling-papers-hero.jpg",
     cta_text: "",
     cta_link: "/pre-rolls",
     text_color: "text-white",

@@ -9,12 +9,14 @@ export default function AgeVerification() {
   const [showZipcodeStep, setShowZipcodeStep] = useState(false);
 
   useEffect(() => {
-    // Check if user has already been verified in this session
-    const verified = localStorage.getItem('dope-city-age-verified');
-    if (!verified) {
-      setShowModal(true);
-    } else {
-      setIsVerified(true);
+    // Check if user has already been verified in this session - only on client side
+    if (typeof window !== 'undefined') {
+      const verified = localStorage.getItem('dope-city-age-verified');
+      if (!verified) {
+        setShowModal(true);
+      } else {
+        setIsVerified(true);
+      }
     }
   }, []);
 

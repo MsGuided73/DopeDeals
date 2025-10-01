@@ -33,7 +33,15 @@ export default function FeaturedProductsSection() {
       const response = await fetch('/api/featured/products?limit=8');
 
       if (!response.ok) {
-        throw new Error('Failed to fetch featured products');
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          // If we can't parse JSON, use the status text
+        }
+        console.error('Featured products API error:', errorMessage);
+        throw new Error(`Failed to fetch featured products: ${errorMessage}`);
       }
 
       const data: FeaturedProductsResponse = await response.json();
