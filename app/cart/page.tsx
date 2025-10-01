@@ -150,9 +150,9 @@ export default function CartPage() {
                   <div className="flex gap-4">
                     {/* Product Image */}
                     <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                      {item.product?.imageUrl ? (
+                      {item.product?.image_url ? (
                         <Image
-                          src={item.product.imageUrl}
+                          src={item.product.image_url}
                           alt={item.product.name}
                           width={96}
                           height={96}
