@@ -49,18 +49,18 @@ This document provides a comprehensive overview of all database tables in the VI
 **Purpose**: Primary product catalog for CBD/hemp products
 **Key Fields**:
 - `id` (UUID, PK)
-- `name`, `description`, `short_description` - Product info
-- `price`, `vip_price`, `compare_at_price` - Pricing
+- `name`, `description`, `shortDescription` - Product info
+- `price`, `vipPrice`, `compareAtPrice` - Pricing
 - `sku` (TEXT, UNIQUE) - Stock keeping unit
-- `category_id`, `brand_id` - Organization
-- `image_url`, `material` - Product details
-- `in_stock`, `featured`, `vip_exclusive` - Status flags
-- `nicotine_product` (BOOLEAN) - Compliance flag
-- `visible_on_main_site`, `visible_on_tobacco_site` - Site visibility
-- `requires_lab_test`, `lab_test_url` - Compliance requirements
-- `batch_number`, `expiration_date` - Tracking fields
+- `categoryId`, `brandId` - Organization
+- `imageUrl`, `material` - Product details
+- `inStock`, `featured`, `vipExclusive` - Status flags
+- `nicotineProduct` (BOOLEAN) - Compliance flag
+- `visibleOnMainSite`, `visibleOnTobaccoSite` - Site visibility
+- `requiresLabTest`, `labTestUrl` - Compliance requirements
+- `batchNumber`, `expirationDate` - Tracking fields
 
-**Compliance Notes**: Products with `nicotine_product = true` should be migrated to VIP Smoke
+**Compliance Notes**: Products with `nicotineProduct = true` should be migrated to VIP Smoke
 
 ### `categories`
 **Purpose**: Product categorization system
@@ -84,25 +84,25 @@ This document provides a comprehensive overview of all database tables in the VI
 **Purpose**: Separate product catalog for nicotine/tobacco products
 **Key Fields**:
 - `id` (UUID, PK)
-- `name`, `description`, `short_description` - Product info
-- `price`, `vip_price`, `compare_at_price`, `cost_price` - Pricing
+- `name`, `description`, `shortDescription` - Product info
+- `price`, `vipPrice`, `compareAtPrice`, `costPrice` - Pricing
 - `sku` (TEXT, UNIQUE) - Stock keeping unit
-- `brand_id`, `category_id`, `supplier_id` - Organization
-- `stock_quantity`, `low_stock_threshold` - Inventory
+- `brandId`, `categoryId`, `supplierId` - Organization
+- `stockQuantity`, `lowStockThreshold` - Inventory
 - `weight`, `dimensions`, `materials` - Physical attributes
-- `image_url`, `image_urls`, `video_urls` - Media
+- `imageUrl`, `imageUrls`, `videoUrls` - Media
 - `attributes`, `specs`, `tags` - Product metadata
 - **VIP Smoke Specific Fields**:
-  - `nicotine_content` (DECIMAL) - mg/ml or percentage
-  - `nicotine_type` - freebase, salt, synthetic
-  - `tobacco_type` - cigarette, cigar, pipe, chewing
-  - `age_restriction` (INTEGER, DEFAULT 21)
-  - `requires_id_verification` (BOOLEAN, DEFAULT true)
+  - `nicotineContent` (DECIMAL) - mg/ml or percentage
+  - `nicotineType` - freebase, salt, synthetic
+  - `tobaccoType` - cigarette, cigar, pipe, chewing
+  - `ageRestriction` (INTEGER, DEFAULT 21)
+  - `requiresIdVerification` (BOOLEAN, DEFAULT true)
 - **Compliance Fields**:
-  - `restricted_states` (TEXT[]) - Banned states
-  - `restricted_zipcodes` (TEXT[]) - Banned zip codes
-  - `compliance_notes`, `warning_labels` (TEXT[])
-- `is_active`, `featured`, `vip_exclusive` - Status
+  - `restrictedStates` (TEXT[]) - Banned states
+  - `restrictedZipcodes` (TEXT[]) - Banned zip codes
+  - `complianceNotes`, `warningLabels` (TEXT[])
+- `isActive`, `featured`, `vipExclusive` - Status
 - `zoho_item_id`, `zoho_last_sync` - Integration
 
 **Critical**: This table has RLS policies requiring authentication

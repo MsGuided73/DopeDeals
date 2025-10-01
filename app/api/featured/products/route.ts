@@ -59,14 +59,14 @@ export async function GET(req: NextRequest) {
         short_description,
         price,
         imageUrl,
-        stock_quantity,
-        is_active,
+        stockQuantity,
+        isActive,
         createdAt
       `)
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
-      .gt('stock_quantity', 0)
+      .eq('isActive', true)
+      .eq('nicotineProduct', false)
+      .eq('tobaccoProduct', false)
+      .gt('stockQuantity', 0)
       .order('createdAt', { ascending: false })
       .limit(200); // Get more to filter from
 

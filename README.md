@@ -171,24 +171,24 @@ products (
   description TEXT,
   price NUMERIC(10,2) NOT NULL,
   sku TEXT UNIQUE NOT NULL,
-  category_id UUID REFERENCES categories(id),
-  brand_id UUID REFERENCES brands(id),
-  image_url TEXT,
+  categoryId UUID REFERENCES categories(id),
+  brandId UUID REFERENCES brands(id),
+  imageUrl TEXT,
   material TEXT,
-  in_stock BOOLEAN DEFAULT true,
+  inStock BOOLEAN DEFAULT true,
   featured BOOLEAN DEFAULT false,
-  vip_exclusive BOOLEAN DEFAULT false,
+  vipExclusive BOOLEAN DEFAULT false,
 
   -- Compliance fields
-  nicotine_product BOOLEAN DEFAULT false,
-  visible_on_main_site BOOLEAN DEFAULT true,
-  visible_on_tobacco_site BOOLEAN DEFAULT false,
-  requires_lab_test BOOLEAN DEFAULT false,
-  lab_test_url TEXT,
-  batch_number TEXT,
-  expiration_date TIMESTAMP,
+  nicotineProduct BOOLEAN DEFAULT false,
+  visibleOnMainSite BOOLEAN DEFAULT true,
+  visibleOnTobaccoSite BOOLEAN DEFAULT false,
+  requiresLabTest BOOLEAN DEFAULT false,
+  labTestUrl TEXT,
+  batchNumber TEXT,
+  expirationDate TIMESTAMP,
 
-  created_at TIMESTAMP DEFAULT NOW()
+  createdAt TIMESTAMP DEFAULT NOW()
 )
 ```
 

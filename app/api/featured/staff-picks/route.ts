@@ -21,14 +21,14 @@ export async function GET(req: NextRequest) {
       .from('products')
       .select(`
         id, name, description, short_description, price, vip_price,
-        imageUrl, sku, stock_quantity, brand_name, materials,
+        imageUrl, sku, stockQuantity, brandName, materials,
         featured, createdAt
       `)
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
+      .eq('isActive', true)
+      .eq('nicotineProduct', false)
+      .eq('tobaccoProduct', false)
       .eq('featured', true)
-      .gt('stock_quantity', 0)
+      .gt('stockQuantity', 0)
       .gte('price', 50) // Higher priced items for staff picks
       .order('price', { ascending: false })
       .limit(limit);
@@ -44,13 +44,13 @@ export async function GET(req: NextRequest) {
         .from('products')
         .select(`
           id, name, description, short_description, price, vip_price,
-          imageUrl, sku, stock_quantity, brand_name, materials,
+          imageUrl, sku, stockQuantity, brandName, materials,
           featured, createdAt
         `)
-        .eq('is_active', true)
-        .eq('nicotine_product', false)
-        .eq('tobacco_product', false)
-        .gt('stock_quantity', 0)
+        .eq('isActive', true)
+        .eq('nicotineProduct', false)
+        .eq('tobaccoProduct', false)
+        .gt('stockQuantity', 0)
         .gte('price', 30)
         .order('price', { ascending: false })
         .limit(limit);
