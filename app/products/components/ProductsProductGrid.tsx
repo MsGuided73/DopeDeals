@@ -43,9 +43,9 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
             <div className="flex items-center space-x-6">
               {/* Product Image */}
               <div className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg overflow-hidden">
-                {product.image_url ? (
+                {product.imageUrl ? (
                   <Image
-                    src={product.image_url}
+                    src={product.imageUrl}
                     alt={product.name}
                     width={96}
                     height={96}
@@ -124,9 +124,9 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
         <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
           {/* Product Image */}
           <div className="relative aspect-square bg-gray-100 overflow-hidden">
-            {product.image_url ? (
+            {product.imageUrl ? (
               <Image
-                src={product.image_url}
+                src={product.imageUrl}
                 alt={product.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"

@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
           sku,
           price,
           vip_price,
-          image_url,
+          imageUrl,
           stock_quantity,
           is_active
         )

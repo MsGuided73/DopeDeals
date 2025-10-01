@@ -141,9 +141,9 @@ export default function ProductDetailsPage({
     );
   }
 
-  // Get all available images - only use image_url since image_urls doesn't exist in main products table
+  // Get all available images - use imageUrl from products table
   const allImages = [
-    product.image_url
+    product.imageUrl
   ].filter(Boolean);
 
   const currentImage = allImages[selectedImageIndex] || null;

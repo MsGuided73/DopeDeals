@@ -10,7 +10,7 @@ interface StaffPickProduct {
   original_price: number;
   discount_percentage: number;
   vip_price?: number;
-  image_url?: string;
+  imageUrl?: string;
   sku: string;
   stock_quantity: number;
   brand_name?: string;

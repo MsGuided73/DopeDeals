@@ -8,7 +8,7 @@ interface Product {
   description: string | null;
   short_description: string | null;
   price: number;
-  image_url: string | null;
+  imageUrl: string | null;
   stock_quantity: number;
   is_active: boolean;
 }
@@ -130,14 +130,14 @@ export default function FeaturedProductsSection() {
   }
 
   // Filter products to only show those with real images
-  const productsWithRealImages = products.filter(product => 
-    product.image_url && 
-    !product.image_url.includes('placehold.co') && 
-    !product.image_url.includes('placeholder') && 
-    !product.image_url.includes('unsplash.com') &&
-    !product.image_url.includes('picsum.photos') &&
-    !product.image_url.includes('lorempixel.com') &&
-    !product.image_url.includes('dummyimage.com')
+  const productsWithRealImages = products.filter(product =>
+    product.imageUrl &&
+    !product.imageUrl.includes('placehold.co') &&
+    !product.imageUrl.includes('placeholder') &&
+    !product.imageUrl.includes('unsplash.com') &&
+    !product.imageUrl.includes('picsum.photos') &&
+    !product.imageUrl.includes('lorempixel.com') &&
+    !product.imageUrl.includes('dummyimage.com')
   );
 
   return (
@@ -176,7 +176,7 @@ export default function FeaturedProductsSection() {
               {/* Subtle frame overlay */}
               <div className="absolute inset-2 border border-gray-600/30 rounded-lg pointer-events-none"></div>
               <img
-                src={product.image_url}
+                src={product.imageUrl}
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 onError={(e) => {

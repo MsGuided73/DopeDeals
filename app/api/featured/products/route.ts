@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
         description,
         short_description,
         price,
-        image_url,
+        imageUrl,
         stock_quantity,
         is_active,
         created_at
@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       .gt('stock_quantity', 0)
-      .not('image_url', 'is', null)
+      .not('imageUrl', 'is', null)
       .order('created_at', { ascending: false })
       .limit(200); // Get more to filter from
 
@@ -73,19 +73,19 @@ export async function GET(req: NextRequest) {
 
     // Filter for products with real, valid images
     let featuredProducts = (allProducts || [])
-      .filter(product => hasRealProductImage(product.image_url))
-      .filter(product => isValidImageUrl(product.image_url))
+      .filter(product => hasRealProductImage(product.imageUrl))
+      .filter(product => isValidImageUrl(product.imageUrl))
       .filter(product => product.price > 0) // Ensure valid pricing
       .slice(0, limit);
 
     // If we still don't have enough products, get any products with non-null images
     if (featuredProducts.length < 4) {
       const additionalProducts = (allProducts || [])
-        .filter(product => product.image_url && product.image_url.trim() !== '')
+        .filter(product => product.imageUrl && product.imageUrl.trim() !== '')
         .filter(product => !featuredProducts.some(fp => fp.id === product.id))
         .filter(product => product.price > 0)
         .slice(0, Math.max(4, limit) - featuredProducts.length);
-      
+
       featuredProducts = [...featuredProducts, ...additionalProducts];
     }
 

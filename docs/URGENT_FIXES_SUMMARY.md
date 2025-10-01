@@ -176,17 +176,6 @@ SELECT DISTINCT
 FROM products 
 WHERE brand_name IS NOT NULL 
   AND brand_name != ''
-ON CONFLICT (slug) DO NOTHING;*SQL to populate:**
-```sql
-INSERT INTO brands (name, slug, description, created_at)
-SELECT DISTINCT 
-  brand_name,
-  LOWER(REPLACE(brand_name, ' ', '-')),
-  'Premium ' || brand_name || ' products',
-  NOW()
-FROM products 
-WHERE brand_name IS NOT NULL 
-  AND brand_name != ''
 ON CONFLICT (slug) DO NOTHING;
 ```
 
@@ -271,8 +260,8 @@ node scripts/[script-name].mjs
 - [x] Brand pages working
 - [x] ZigZag papers filtered
 - [x] Categorization system created
-- [ ] **Storage RLS policy applied** ← DO THIS NOW!
-- [ ] **Nicotine products flagged** ← DO THIS NOW!
+- [x] **Storage RLS policy applied** ← DO THIS NOW!
+- [x] **Nicotine products flagged** ← DO THIS NOW!
 - [ ] Test all pages
 - [ ] Verify images display
 - [ ] Check mobile responsiveness

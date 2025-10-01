@@ -8,8 +8,8 @@ export default function ProductDetail({ product }: { product: any }) {
     <div className="grid gap-8 md:grid-cols-2">
       <Panel className="p-4 md:p-6">
         <div className="aspect-square w-full bg-neutral-100 rounded-lg overflow-hidden">
-          {product?.image_url ? (
-            <Image src={product.image_url} alt={product.name} width={800} height={800} className="object-cover w-full h-full" />
+          {product?.imageUrl ? (
+            <Image src={product.imageUrl} alt={product.name} width={800} height={800} className="object-cover w-full h-full" />
           ) : (
             <div className="w-full h-full grid place-items-center text-neutral-500">No image</div>
           )}

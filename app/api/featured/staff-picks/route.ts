@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
       .from('products')
       .select(`
         id, name, description, short_description, price, vip_price, 
-        image_url, sku, stock_quantity, brand_name, materials,
+        imageUrl, sku, stock_quantity, brand_name, materials,
         featured, created_at
       `)
       .eq('is_active', true)
@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
         .from('products')
         .select(`
           id, name, description, short_description, price, vip_price, 
-          image_url, sku, stock_quantity, brand_name, materials,
+          imageUrl, sku, stock_quantity, brand_name, materials,
           featured, created_at
         `)
         .eq('is_active', true)

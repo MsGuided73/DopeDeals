@@ -16,13 +16,13 @@ export async function GET(req: NextRequest) {
       .from('products')
       .select(`
         id, name, description, short_description, price, vip_price, 
-        image_url, sku, stock_quantity, brand_name, materials,
+        imageUrl, sku, stock_quantity, brand_name, materials,
         featured, created_at
       `)
       .eq('is_active', true)
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
-      .not('image_url', 'is', null)
+      .not('imageUrl', 'is', null)
       .gt('stock_quantity', 0)
       .order('created_at', { ascending: false })
       .limit(limit);
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
         .from('products')
         .select(`
           id, name, description, short_description, price, vip_price, 
-          image_url, sku, stock_quantity, brand_name, materials,
+          imageUrl, sku, stock_quantity, brand_name, materials,
           featured, created_at
         `)
         .eq('is_active', true)
