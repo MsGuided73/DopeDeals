@@ -41,7 +41,7 @@ function isValidImageUrl(imageUrl: string | null): boolean {
 
 function getImageUrl(product: any): string | null {
   // Try both field names for maximum compatibility
-  return product.image_url || product.imageUrl || null;
+  return product.imageUrl || product.image_url || null;
 }
 
 export async function GET(req: NextRequest) {
@@ -58,7 +58,6 @@ export async function GET(req: NextRequest) {
         description,
         short_description,
         price,
-        image_url,
         imageUrl,
         stock_quantity,
         is_active,
@@ -68,7 +67,6 @@ export async function GET(req: NextRequest) {
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       .gt('stock_quantity', 0)
-      .or('image_url.not.is.null,imageUrl.not.is.null')
       .order('created_at', { ascending: false })
       .limit(200); // Get more to filter from
 
@@ -77,22 +75,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Filter for products with real, valid images using helper function
+    // Filter for products with real, valid images
     let featuredProducts = (allProducts || [])
-      .filter(product => {
-        const imageUrl = getImageUrl(product);
-        return hasRealProductImage(imageUrl) && isValidImageUrl(imageUrl);
-      })
+      .filter(product => product.imageUrl) // Only products with images
+      .filter(product => hasRealProductImage(product.imageUrl))
+      .filter(product => isValidImageUrl(product.imageUrl))
       .filter(product => product.price > 0) // Ensure valid pricing
       .slice(0, limit);
 
     // If we still don't have enough products, get any products with non-null images
     if (featuredProducts.length < 4) {
       const additionalProducts = (allProducts || [])
-        .filter(product => {
-          const imageUrl = getImageUrl(product);
-          return imageUrl && imageUrl.trim() !== '';
-        })
+        .filter(product => product.imageUrl && product.imageUrl.trim() !== '')
         .filter(product => !featuredProducts.some(fp => fp.id === product.id))
         .filter(product => product.price > 0)
         .slice(0, Math.max(4, limit) - featuredProducts.length);
@@ -100,11 +94,10 @@ export async function GET(req: NextRequest) {
       featuredProducts = [...featuredProducts, ...additionalProducts];
     }
 
-    // Normalize the response to always include both field names for compatibility
+    // Normalize the response to include both field names for component compatibility
     const normalizedProducts = featuredProducts.map(product => ({
       ...product,
-      image_url: getImageUrl(product),
-      imageUrl: getImageUrl(product)
+      image_url: product.imageUrl // Add snake_case version for legacy compatibility
     }));
 
     // Sort by newest first

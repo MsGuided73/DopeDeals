@@ -6,6 +6,11 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// Helper function to get image URL from either field name
+function getImageUrl(product: any): string | null {
+  return product.imageUrl || product.image_url || null;
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -15,7 +20,7 @@ export async function GET(req: NextRequest) {
     const { data: products, error } = await supabase
       .from('products')
       .select(`
-        id, name, description, short_description, price, vip_price, 
+        id, name, description, short_description, price, vip_price,
         imageUrl, sku, stock_quantity, brand_name, materials,
         featured, created_at
       `)
@@ -38,7 +43,7 @@ export async function GET(req: NextRequest) {
       const { data: fallbackProducts, error: fallbackError } = await supabase
         .from('products')
         .select(`
-          id, name, description, short_description, price, vip_price, 
+          id, name, description, short_description, price, vip_price,
           imageUrl, sku, stock_quantity, brand_name, materials,
           featured, created_at
         `)
@@ -58,6 +63,7 @@ export async function GET(req: NextRequest) {
       // Add discount calculations for staff picks
       const staffPicks = (fallbackProducts || []).map(product => ({
         ...product,
+        image_url: product.imageUrl, // Add snake_case version for legacy compatibility
         original_price: product.price * 1.5, // Simulate original price
         discount_percentage: Math.floor(Math.random() * 30) + 20, // 20-50% off
         is_staff_pick: true
@@ -73,6 +79,7 @@ export async function GET(req: NextRequest) {
     // Add discount calculations for featured products
     const staffPicks = products.map(product => ({
       ...product,
+      image_url: product.imageUrl, // Add snake_case version for legacy compatibility
       original_price: product.price * 1.4,
       discount_percentage: Math.floor(Math.random() * 25) + 25, // 25-50% off
       is_staff_pick: true
