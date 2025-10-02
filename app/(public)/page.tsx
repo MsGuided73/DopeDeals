@@ -92,7 +92,7 @@ export default function HomePage() {
             href="/rewards"
             className="relative block w-full h-128 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/WhatsApp%20Image%202025-09-25%20at%2011.27.52_e3fa4258.jpg')",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/PreWritten_DopeClub.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
