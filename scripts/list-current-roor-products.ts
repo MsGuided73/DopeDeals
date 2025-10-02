@@ -25,7 +25,7 @@ async function listCurrentRoorProducts() {
         description_md,
         short_description,
         price,
-        image_url,
+        imageUrl,
         image_urls,
         brand_name,
         zoho_category_name,
@@ -60,7 +60,7 @@ async function listCurrentRoorProducts() {
       console.log(`   🏭 Manufacturer: ${product.manufacturer || 'N/A'}`);
       
       // Check content status
-      const hasImage = !!(product.image_url || (product.image_urls && product.image_urls.length > 0));
+      const hasImage = !!(product.imageUrl || (product.image_urls && product.image_urls.length > 0));
       const hasDescription = !!(product.description_md && product.description_md.length > 50);
       const hasShortDescription = !!(product.short_description && product.short_description.length > 20);
       

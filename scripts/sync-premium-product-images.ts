@@ -80,8 +80,8 @@ async function syncPremiumProductImages() {
     // Get products that need better images
     const { data: products, error } = await supabase
       .from('products')
-      .select('id, name, sku, image_url, brand_name, price')
-      .or('image_url.is.null,image_url.eq.,image_url.like.%placehold%,image_url.like.%Lost-Mary%')
+      .select('id, name, sku, imageUrl, brand_name, price')
+      .or('imageUrl.is.null,imageUrl.eq.,imageUrl.like.%placehold%,imageUrl.like.%Lost-Mary%')
       .eq('is_active', true)
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)

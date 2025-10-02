@@ -10,7 +10,7 @@ console.log('🔍 Auditing ROOR Product Images...\n');
 // Fetch ROOR products
 const { data: products, error } = await supabase
   .from('products')
-  .select('id, name, price, image_url, sku')
+  .select('id, name, price, imageUrl, sku')
   .or('name.ilike.%ROOR%,brand_name.ilike.%ROOR%')
   .eq('is_active', true)
   .order('price', { ascending: false });

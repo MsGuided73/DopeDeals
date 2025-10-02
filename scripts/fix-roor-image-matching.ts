@@ -80,7 +80,7 @@ async function fixRoorImageMatching() {
     // Get all RooR products
     const { data: products, error } = await supabase
       .from('products')
-      .select('id, name, sku, image_url')
+      .select('id, name, sku, imageUrl')
       .or('name.ilike.%roor%,brand_name.ilike.%roor%,sku.ilike.%roor%')
       .eq('is_active', true)
       .eq('nicotine_product', false)
@@ -133,7 +133,7 @@ async function fixRoorImageMatching() {
     for (const update of updates) {
       const { error: updateError } = await supabase
         .from('products')
-        .update({ image_url: update.newImage })
+        .update({ imageUrl: update.newImage })
         .eq('id', update.id);
 
       if (updateError) {

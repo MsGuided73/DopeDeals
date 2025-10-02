@@ -156,7 +156,7 @@ async function matchRoorImagesToProducts() {
       if (match.score >= 8) {
         const { error: updateError } = await supabase
           .from('products')
-          .update({ image_url: match.image.url })
+          .update({ imageUrl: match.image.url })
           .eq('id', match.product.id);
           
         if (updateError) {
