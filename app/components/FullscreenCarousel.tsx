@@ -27,7 +27,7 @@ const fallbackSlides: CarouselSlide[] = [
     title: "",
     subtitle: "",
     description: "",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/Screenshot%202025-09-24%20092028.png",
+    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/slider1.png",
     cta_text: "",
     cta_link: "/rewards",
     text_color: "text-white",
@@ -155,17 +155,13 @@ export default function FullscreenCarousel() {
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
-    return (
-      <div className="relative w-full overflow-hidden flex items-center justify-center" style={{ height: 'calc(100vh - 200px)' }}>
-        <div className="text-white text-xl">Loading carousel...</div>
-      </div>
-    );
+    return null;
   }
 
   // Show loading state
   if (loading) {
     return (
-      <div className="relative w-full overflow-hidden flex items-center justify-center" style={{ height: 'calc(100vh - 200px)' }}>
+      <div className="relative w-full overflow-hidden flex items-center justify-center bg-gray-900" style={{ height: 'calc(100vh - 200px)' }}>
         <div className="text-white text-xl">Loading carousel...</div>
       </div>
     );

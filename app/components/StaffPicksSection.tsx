@@ -120,7 +120,7 @@ export default function StaffPicksSection() {
           <div className="absolute inset-0 bg-black/60"></div>
           <div className="relative z-10 text-center">
             <h2 className="text-5xl font-chalets text-white mb-2" style={{ letterSpacing: '-0.02em', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8)' }}>
-              🔥 DOPE DEALS 🔥
+              DOPE DEALS
             </h2>
             <p className="text-xl text-white/90" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
               Limited time deals - New picks every day!

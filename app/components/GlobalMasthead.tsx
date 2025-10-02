@@ -8,6 +8,7 @@ export default function GlobalMasthead() {
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +17,34 @@ export default function GlobalMasthead() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Handle delayed closing of dropdowns
+  const handleMouseLeaveWithDelay = (dropdownType: string) => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    const timeout = setTimeout(() => {
+      if (dropdownType === 'main') {
+        setOpenDropdown(null);
+        setOpenSubmenu(null);
+      } else if (dropdownType === 'submenu') {
+        setOpenSubmenu(null);
+      }
+    }, 150); // 150ms delay
+    setHoverTimeout(timeout);
+  };
+
+  const handleMouseEnter = (type: string, value: string) => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+    if (type === 'dropdown') {
+      setOpenDropdown(value);
+    } else if (type === 'submenu') {
+      setOpenSubmenu(value);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50">
@@ -74,7 +103,11 @@ export default function GlobalMasthead() {
         >
           <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
             {/* Shop Dropdown - Consolidated Categories and Brands */}
-            <li className="relative">
+            <li
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('dropdown', 'shop')}
+              onMouseLeave={() => handleMouseLeaveWithDelay('main')}
+            >
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'shop' ? null : 'shop')}
                 className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
@@ -93,8 +126,8 @@ export default function GlobalMasthead() {
                     {/* Categories Section */}
                     <div className="relative">
                       <button
-                        onMouseEnter={() => setOpenSubmenu('categories')}
-                        onMouseLeave={() => setOpenSubmenu(null)}
+                        onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
+                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
                       >
                         Shop by Category
@@ -104,18 +137,18 @@ export default function GlobalMasthead() {
                       </button>
 
                       {/* Categories Submenu */}
-                      {openSubmenu === 'categories' && (
+                      {openSubmenu === 'thca-nested' && (
                         <div
                           className="absolute left-full top-0 ml-1 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
-                          onMouseEnter={() => setOpenSubmenu('categories')}
-                          onMouseLeave={() => setOpenSubmenu(null)}
+                          onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
+                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         >
                           <div className="py-2">
                             {/* THCA & More with Nested Submenu */}
                             <div className="relative">
                               <button
-                                onMouseEnter={() => setOpenSubmenu('thca')}
-                                onMouseLeave={() => setOpenSubmenu(null)}
+                                onMouseEnter={() => handleMouseEnter('submenu', 'thca-nested')}
+                                onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
                               >
                                 THCA & More
@@ -125,11 +158,11 @@ export default function GlobalMasthead() {
                               </button>
 
                               {/* THCA Nested Submenu */}
-                              {openSubmenu === 'thca' && (
+                              {openSubmenu === 'thca-nested' && (
                                 <div
                                   className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-70"
-                                  onMouseEnter={() => setOpenSubmenu('thca')}
-                                  onMouseLeave={() => setOpenSubmenu(null)}
+                                  onMouseEnter={() => handleMouseEnter('submenu', 'thca-nested')}
+                                  onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                                 >
                                   <div className="py-2">
                                     <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
@@ -166,8 +199,8 @@ export default function GlobalMasthead() {
                     {/* Brands Section */}
                     <div className="relative">
                       <button
-                        onMouseEnter={() => setOpenSubmenu('brands')}
-                        onMouseLeave={() => setOpenSubmenu(null)}
+                        onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
+                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
                       >
                         Shop by Brand
@@ -180,8 +213,8 @@ export default function GlobalMasthead() {
                       {openSubmenu === 'brands' && (
                         <div
                           className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
-                          onMouseEnter={() => setOpenSubmenu('brands')}
-                          onMouseLeave={() => setOpenSubmenu(null)}
+                          onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
+                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         >
                           <div className="py-2">
                             <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
@@ -211,7 +244,7 @@ export default function GlobalMasthead() {
                 </svg>
               </button>
               {openDropdown === 'thca' && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
                     <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Flower</Link>
                     <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Pre-Rolls</Link>
@@ -224,6 +257,11 @@ export default function GlobalMasthead() {
                     <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
                     <Link href="/products?q=delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
                     <Link href="/products?q=edible" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                    <div className="border-t border-gray-200/20 my-1"></div>
+                    {/* New Product Types */}
+                    <Link href="/mushrooms" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Mushrooms</Link>
+                    <Link href="/nitrous-oxide" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Nitrous Oxide</Link>
+                    <Link href="/7-hydroxymitragynine" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">7-Hydroxymitragynine</Link>
                   </div>
                 </div>
               )}
