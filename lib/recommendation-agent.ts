@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { getStorage } from './storage';
+import { validateRecommendationCompliance, filterCompliantProducts } from './compliance-guard';
 
 interface RecommendationContext {
   userId: string;
@@ -101,7 +102,7 @@ export class RecommendationAgent {
       // If no recommendations found, return basic fallback
       if (allRecommendations.length === 0) {
         console.log('🔄 No recommendations found, using basic fallback');
-        return this.getBasicFallbackRecommendations(limit);
+        return this.getBasicFallbackRecommendations(context.limit || 8);
       }
 
       // Remove duplicates and current product
@@ -110,14 +111,23 @@ export class RecommendationAgent {
         currentProductId
       );
 
+      // CRITICAL COMPLIANCE: Validate all recommendations are nicotine-free
+      console.log('🔒 COMPLIANCE: Validating recommendations for nicotine compliance');
+      const compliantRecommendations = validateRecommendationCompliance(uniqueRecommendations);
+
+      if (compliantRecommendations.length === 0) {
+        console.warn('🚨 COMPLIANCE: All recommendations filtered out - using emergency fallback');
+        return this.getBasicFallbackRecommendations(context.limit || 8);
+      }
+
       // Sort by score and return top results
-      return uniqueRecommendations
+      return compliantRecommendations
         .sort((a, b) => b.score - a.score)
-        .slice(0, limit);
+        .slice(0, context.limit || 8);
     } catch (error) {
       console.error('❌ Recommendation system error:', error);
       // Return basic fallback recommendations
-      return this.getBasicFallbackRecommendations(limit);
+      return this.getBasicFallbackRecommendations(context.limit || 8);
     }
   }
 

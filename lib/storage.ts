@@ -155,9 +155,11 @@ export async function getStorage() {
       }
     },
 
-    // Get all products for recommendations
+    // Get all products for recommendations (COMPLIANCE: Excludes nicotine products)
     async getAllProducts() {
       try {
+        console.log('🔒 COMPLIANCE: Fetching only non-nicotine products for recommendations');
+
         const { data, error } = await supabase
           .from('products')
           .select('*')
@@ -167,7 +169,11 @@ export async function getStorage() {
           .limit(100);
 
         if (error) throw error;
-        return data || [];
+
+        const products = data || [];
+        console.log(`✅ COMPLIANCE: Filtered ${products.length} non-nicotine products for recommendations`);
+
+        return products;
       } catch (error) {
         console.warn('⚠️ Error fetching all products:', error);
         return [];
