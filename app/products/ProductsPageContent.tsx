@@ -71,9 +71,9 @@ export default function ProductsPageContent() {
         const { data, error } = await supabaseBrowser
           .from('products')
           .select(`
-            id, name, description, price, vip_price, image_url, sku,
+            id, name, description, price, vip_price, imageUrl, sku,
             stock_quantity, is_active, brand_id, brand_name, category_id, materials,
-            featured, vip_exclusive, tags, created_at, updated_at, channels
+            featured, vip_exclusive, tags, created_at, updated_at
           `)
           .eq('is_active', true)
           .eq('nicotine_product', false)
@@ -82,37 +82,71 @@ export default function ProductsPageContent() {
 
         if (error) {
           console.error('Error fetching products:', error);
+          throw new Error(error.message || 'Failed to fetch products from database');
+        }
+
+        if (!data) {
+          console.warn('No products data received');
           setProducts([]);
           setFilteredProducts([]);
-        } else {
-          // Transform Supabase data to match our Product interface
-          const transformedProducts = (data || []).map(product => ({
-            id: product.id,
-            name: product.name,
-            description: product.description || '',
-            price: product.price,
-            vipPrice: product.vip_price,
-            image: product.image_url || '',
-            imageUrl: product.image_url || null,
-            sku: product.sku,
-            brand: product.brand_name || 'Unknown',
-            category: product.category_id || 'Accessories',
-            material: Array.isArray(product.materials) ? product.materials[0] : 'Glass',
-            size: 'Standard',
-            inStock: (product.stock_quantity || 0) > 0,
-            featured: product.featured || false,
-            vipExclusive: product.vip_exclusive || false,
-            onSale: product.vip_price && product.vip_price < product.price,
-            newArrival: new Date(product.created_at).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000,
-            tags: Array.isArray(product.tags) ? product.tags : [],
-            features: Array.isArray(product.features) ? product.features : []
-          }));
-
-          setProducts(transformedProducts);
-          setFilteredProducts(transformedProducts);
+          return;
         }
+
+        // Transform Supabase data to match our Product interface
+        const transformedProducts = data.map(product => {
+          try {
+            return {
+              id: product.id,
+              name: product.name || 'Unnamed Product',
+              description: product.description || '',
+              price: Number(product.price) || 0,
+              vipPrice: product.vip_price ? Number(product.vip_price) : undefined,
+              image: product.imageUrl || '',
+              imageUrl: product.imageUrl || null,
+              sku: product.sku || '',
+              brand: product.brand_name || 'Unknown',
+              category: product.category_id || 'Accessories',
+              material: Array.isArray(product.materials) && product.materials.length > 0 ? product.materials[0] : 'Glass',
+              size: 'Standard',
+              inStock: (product.stock_quantity || 0) > 0,
+              featured: Boolean(product.featured),
+              vipExclusive: Boolean(product.vip_exclusive),
+              onSale: Boolean(product.vip_price && product.vip_price < product.price),
+              newArrival: product.created_at ? new Date(product.created_at).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000 : false,
+              tags: Array.isArray(product.tags) ? product.tags : [],
+              features: []
+            };
+          } catch (transformError) {
+            console.error('Error transforming product:', product.id, transformError);
+            // Return a minimal valid product object
+            return {
+              id: product.id || 'unknown',
+              name: product.name || 'Unnamed Product',
+              description: product.description || '',
+              price: Number(product.price) || 0,
+              image: product.imageUrl || '',
+              imageUrl: product.imageUrl || null,
+              sku: product.sku || '',
+              brand: product.brand_name || 'Unknown',
+              category: product.category_id || 'Accessories',
+              material: 'Glass',
+              size: 'Standard',
+              inStock: (product.stock_quantity || 0) > 0,
+              featured: false,
+              onSale: false,
+              newArrival: false,
+              tags: [],
+              features: []
+            };
+          }
+        });
+
+        setProducts(transformedProducts);
+        setFilteredProducts(transformedProducts);
       } catch (err) {
         console.error('Error fetching products:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred while fetching products';
+        console.error('Error details:', errorMessage);
         setProducts([]);
         setFilteredProducts([]);
       } finally {
@@ -361,5 +395,3 @@ export default function ProductsPageContent() {
     </div>
   );
 }
-
-

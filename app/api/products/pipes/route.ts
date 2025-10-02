@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
         price,
         vip_price,
         compare_at_price,
-        image_url,
+        imageUrl,
         brand_id,
         category_id,
         sku,

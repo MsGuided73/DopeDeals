@@ -136,10 +136,13 @@ export default function BongsPageContent() {
       const response = await fetch('/api/products?limit=100');
 
       if (!response.ok) {
-        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        const errorText = await response.text();
+        throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
       const apiData = await response.json();
+
+      // Handle both old and new API response formats
       const products = apiData.products || [];
 
       if (products && products.length > 0) {
@@ -171,7 +174,7 @@ export default function BongsPageContent() {
         setProducts([]);
       }
     } catch (error) {
-      console.error('💥 Catch block error:', error);
+      console.error('❌ Error fetching products:', error);
       console.error('💥 Error details:', JSON.stringify(error, null, 2));
       setProducts([]);
     } finally {
@@ -245,7 +248,7 @@ export default function BongsPageContent() {
                   Previous
                 </button>
                 
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                {Array.from({ length: Math.min(5, totalPages) }, (_: number, i: number) => {
                   const pageNum = i + 1;
                   return (
                     <button
