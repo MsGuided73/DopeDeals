@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Font Preloading */}
         <link rel="preload" href="/fonts/chalets-webfont.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-black">
         <AppProviders>
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen flex flex-col" suppressHydrationWarning>
             <main className="flex-1">
               {children}
             </main>

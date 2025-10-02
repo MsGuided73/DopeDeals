@@ -29,51 +29,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Custom Styles for Ghost Glow Button */}
-      <style jsx>{`
-        @keyframes pulse-glow {
-          0%, 100% {
-            box-shadow: 0 0 20px rgba(255, 165, 0, 0.4), 0 0 40px rgba(255, 140, 0, 0.2), 0 0 60px rgba(255, 140, 0, 0.1);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(255, 165, 0, 0.6), 0 0 60px rgba(255, 140, 0, 0.4), 0 0 90px rgba(255, 140, 0, 0.2);
-          }
-        }
 
-        .ghost-glow-button {
-          background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
-          backdrop-filter: blur(10px);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .ghost-glow-button:hover {
-          animation: pulse-glow 2s ease-in-out infinite;
-          background: linear-gradient(135deg, rgba(255, 165, 0, 0.15) 0%, rgba(255, 140, 0, 0.1) 100%);
-        }
-
-        .ghost-glow-button:active {
-          animation: none;
-          box-shadow: 0 0 25px rgba(255, 165, 0, 0.8), 0 0 50px rgba(255, 140, 0, 0.6), 0 0 75px rgba(255, 140, 0, 0.4);
-          background: linear-gradient(135deg, rgba(255, 165, 0, 0.2) 0%, rgba(255, 140, 0, 0.15) 100%);
-          transform: scale(0.98);
-        }
-
-        .ghost-glow-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s;
-        }
-
-        .ghost-glow-button:hover::before {
-          left: 100%;
-        }
-      `}</style>
 
       {/* Age Verification Popup */}
       <AgeVerification />
@@ -653,4 +609,3 @@ export default function HomePage() {
     </div>
   );
 }
-
