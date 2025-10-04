@@ -123,3 +123,7 @@ playwright/.cache/
 # Local development files
 .local/
 local/
+
+# MCP configuration files with secrets
+cline_mcp_settings.json
+mcp_settings.json
