@@ -12,7 +12,11 @@ export default function AgeVerification() {
     // Check if user has already been verified in this session - only on client side
     if (typeof window !== 'undefined') {
       const verified = localStorage.getItem('dope-city-age-verified');
-      if (!verified) {
+      const lastVerification = localStorage.getItem('dope-city-last-verification');
+      const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000); // 24 hours ago
+
+      // Show modal if not verified OR if last verification was more than 24 hours ago
+      if (!verified || (lastVerification && parseInt(lastVerification) < oneDayAgo)) {
         setShowModal(true);
       } else {
         setIsVerified(true);
@@ -34,6 +38,7 @@ export default function AgeVerification() {
     if (zipcode.trim().length >= 5) {
       localStorage.setItem('dope-city-age-verified', 'true');
       localStorage.setItem('dope-city-zipcode', zipcode);
+      localStorage.setItem('dope-city-last-verification', Date.now().toString());
       setIsVerified(true);
       setShowModal(false);
     }
