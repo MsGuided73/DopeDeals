@@ -73,10 +73,10 @@ export default function AgeVerification() {
             {/* Edgy Message */}
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold mb-4 text-dope-orange">
-                HOLD UP, PLAYER
+                WELCOME TO DOPE CITY
               </h2>
               <p className="text-lg mb-4 leading-relaxed">
-                This ain't your average smoke shop. We're dealing with the
+                This is not your average smoke shop. We're dealing with the
                 <span className="text-dope-orange font-bold"> DOPEST </span>
                 products in the game.
               </p>
