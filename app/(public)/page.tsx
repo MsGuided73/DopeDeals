@@ -48,7 +48,7 @@ export default function HomePage() {
             href="/rewards"
             className="relative block w-full h-128 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
-              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/PreWritten_DopeClub.jpg')",
+              backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/slider1.png')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}
