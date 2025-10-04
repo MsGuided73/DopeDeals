@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, numeric, timestamp, uuid, jsonb, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, numeric, timestamp, uuid, jsonb, unique, primaryKey } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -36,6 +36,48 @@ export const brands = pgTable("brands", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+export const productTypes = pgTable("product_types", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  slug: text("slug").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  description: text("description"),
+  complianceProfileId: uuid("compliance_profile_id"),
+  defaultSort: text("default_sort").default("popularity"),
+  facetConfig: jsonb("facet_config"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productTypeRelationships = pgTable(
+  "product_type_relationships",
+  {
+    productTypeId: uuid("product_type_id")
+      .references(() => productTypes.id, { onDelete: "cascade" })
+      .notNull(),
+    parentId: uuid("parent_id")
+      .references(() => productTypes.id, { onDelete: "cascade" })
+      .notNull(),
+    depth: integer("depth").default(1).notNull(),
+    breadcrumb: text("breadcrumb").array(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.productTypeId, table.parentId] }),
+  })
+);
+
+export const productSources = pgTable("product_sources", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  systemName: text("system_name").notNull().unique(),
+  syncFrequency: text("sync_frequency"),
+  credentialsRef: text("credentials_ref"),
+  lastSuccess: timestamp("last_success", { withTimezone: true }),
+  lastError: timestamp("last_error", { withTimezone: true }),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
 export const products = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
@@ -44,6 +86,13 @@ export const products = pgTable("products", {
   sku: text("sku").notNull().unique(),
   categoryId: uuid("category_id").references(() => categories.id),
   brandId: uuid("brand_id").references(() => brands.id),
+  productTypeId: uuid("product_type_id").references(() => productTypes.id),
+  status: text("status").notNull().default("draft"),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
+  defaultVariantId: uuid("default_variant_id"),
+  dataSourceId: uuid("data_source_id").references(() => productSources.id),
+  searchVector: text("search_vector"),
+  merchandisingTags: text("merchandising_tags").array(),
   imageUrl: text("image_url"),
   material: text("material"),
   inStock: boolean("in_stock").default(true),
@@ -60,8 +109,234 @@ export const products = pgTable("products", {
   expirationDate: timestamp("expiration_date", { withTimezone: true }),
   hiddenReason: text("hidden_reason"),
   overrideRestrictions: jsonb("override_restrictions"),
-  
+
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productVariants = pgTable("product_variants", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .references(() => products.id, { onDelete: "cascade" })
+    .notNull(),
+  sku: text("sku"),
+  optionHash: text("option_hash"),
+  barcode: text("barcode"),
+  price: numeric("price", { precision: 10, scale: 2 }),
+  compareAtPrice: numeric("compare_at_price", { precision: 10, scale: 2 }),
+  cost: numeric("cost", { precision: 10, scale: 2 }),
+  weightG: integer("weight_g"),
+  dimsMm: jsonb("dims_mm"),
+  inventoryPolicy: text("inventory_policy").default("deny"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const variantInventory = pgTable("variant_inventory", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  variantId: uuid("variant_id")
+    .references(() => productVariants.id, { onDelete: "cascade" })
+    .notNull(),
+  warehouseId: text("warehouse_id").default("main").notNull(),
+  available: integer("available").default(0).notNull(),
+  reserved: integer("reserved").default(0).notNull(),
+  incoming: integer("incoming").default(0).notNull(),
+  safetyStock: integer("safety_stock").default(0).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productMedia = pgTable("product_media", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .references(() => products.id, { onDelete: "cascade" })
+    .notNull(),
+  type: text("type").notNull(),
+  path: text("path").notNull(),
+  alt: text("alt"),
+  role: text("role"),
+  sort: integer("sort").default(0),
+  width: integer("width"),
+  height: integer("height"),
+  variantKey: text("variant_key"),
+  mediaKind: text("media_kind"),
+  storageBucket: text("storage_bucket"),
+  transformPreset: text("transform_preset"),
+  colorway: text("colorway"),
+  isPrimary: boolean("is_primary"),
+  tags: text("tags").array(),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productOptionDefinitions = pgTable("product_option_definitions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productTypeId: uuid("product_type_id").references(() => productTypes.id, { onDelete: "set null" }),
+  productId: uuid("product_id").references(() => products.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  inputType: text("input_type").default("select").notNull(),
+  filterBehavior: text("filter_behavior").default("match_any").notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productOptionValues = pgTable("product_option_values", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  optionDefinitionId: uuid("option_definition_id")
+    .references(() => productOptionDefinitions.id, { onDelete: "cascade" })
+    .notNull(),
+  value: text("value").notNull(),
+  valueKey: text("value_key"),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  swatchMediaId: uuid("swatch_media_id").references(() => productMedia.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const variantOptionValues = pgTable(
+  "variant_option_values",
+  {
+    variantId: uuid("variant_id")
+      .references(() => productVariants.id, { onDelete: "cascade" })
+      .notNull(),
+    optionDefinitionId: uuid("option_definition_id")
+      .references(() => productOptionDefinitions.id, { onDelete: "cascade" })
+      .notNull(),
+    optionValueId: uuid("option_value_id")
+      .references(() => productOptionValues.id, { onDelete: "cascade" })
+      .notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.variantId, table.optionDefinitionId] }),
+  })
+);
+
+export const attributeDefinitions = pgTable("attribute_definitions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  scope: text("scope").notNull(),
+  code: text("code").notNull().unique(),
+  label: text("label").notNull(),
+  datatype: text("datatype").notNull(),
+  units: text("units"),
+  searchable: boolean("searchable").default(false),
+  facetable: boolean("facetable").default(false),
+  complianceTag: text("compliance_tag"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const attributeValues = pgTable("attribute_values", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  definitionId: uuid("definition_id")
+    .references(() => attributeDefinitions.id, { onDelete: "cascade" })
+    .notNull(),
+  productId: uuid("product_id").references(() => products.id, { onDelete: "cascade" }),
+  variantId: uuid("variant_id").references(() => productVariants.id, { onDelete: "cascade" }),
+  valueText: text("value_text"),
+  valueNumber: numeric("value_number", { precision: 18, scale: 6 }),
+  valueBoolean: boolean("value_boolean"),
+  valueJson: jsonb("value_json"),
+  valueDate: timestamp("value_date", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const assetCollections = pgTable("asset_collections", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  rules: jsonb("rules"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const assetCollectionMembers = pgTable(
+  "asset_collection_members",
+  {
+    collectionId: uuid("collection_id")
+      .references(() => assetCollections.id, { onDelete: "cascade" })
+      .notNull(),
+    mediaId: uuid("media_id")
+      .references(() => productMedia.id, { onDelete: "cascade" })
+      .notNull(),
+    sortOrder: integer("sort_order").default(0).notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.collectionId, table.mediaId] }),
+  })
+);
+
+export const variantMedia = pgTable(
+  "variant_media",
+  {
+    variantId: uuid("variant_id")
+      .references(() => productVariants.id, { onDelete: "cascade" })
+      .notNull(),
+    mediaId: uuid("media_id")
+      .references(() => productMedia.id, { onDelete: "cascade" })
+      .notNull(),
+    role: text("role"),
+    sortOrder: integer("sort_order").default(0).notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.variantId, table.mediaId] }),
+  })
+);
+
+export const productBadges = pgTable("product_badges", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  code: text("code").notNull().unique(),
+  label: text("label").notNull(),
+  description: text("description"),
+  badgeType: text("badge_type").default("marketing"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productBadgeAssignments = pgTable("product_badge_assignments", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  badgeId: uuid("badge_id")
+    .references(() => productBadges.id, { onDelete: "cascade" })
+    .notNull(),
+  productId: uuid("product_id").references(() => products.id, { onDelete: "cascade" }),
+  variantId: uuid("variant_id").references(() => productVariants.id, { onDelete: "cascade" }),
+  startAt: timestamp("start_at", { withTimezone: true }),
+  endAt: timestamp("end_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productSearchIndex = pgTable("product_search_index", {
+  productId: uuid("product_id")
+    .references(() => products.id, { onDelete: "cascade" })
+    .primaryKey(),
+  searchVector: text("search_vector"),
+  popularityScore: numeric("popularity_score", { precision: 10, scale: 4 }).default("0"),
+  lastSynced: timestamp("last_synced", { withTimezone: true }),
+});
+
+export const productFacets = pgTable("product_facets", {
+  productId: uuid("product_id")
+    .references(() => products.id, { onDelete: "cascade" })
+    .primaryKey(),
+  facets: jsonb("facets").notNull(),
+  availabilitySummary: jsonb("availability_summary"),
+  priceBand: text("price_band"),
+  mediaCounts: jsonb("media_counts"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+export const productSourceItems = pgTable("product_source_items", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sourceId: uuid("source_id")
+    .references(() => productSources.id, { onDelete: "cascade" })
+    .notNull(),
+  externalId: text("external_id").notNull(),
+  productId: uuid("product_id").references(() => products.id, { onDelete: "set null" }),
+  variantId: uuid("variant_id").references(() => productVariants.id, { onDelete: "set null" }),
+  payload: jsonb("payload"),
+  checksum: text("checksum"),
+  syncedAt: timestamp("synced_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 export const orders = pgTable("orders", {
