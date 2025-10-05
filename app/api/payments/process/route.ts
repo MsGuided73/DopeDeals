@@ -1,235 +1,213 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStorage } from '../../../../lib/storage';
-import { requireAuth } from '../../../lib/requireAuth';
-import { z } from 'zod';
+import { createClient } from '@supabase/supabase-js';
 
-// Import KajaPay client and types
-import { kajaPayClient } from '../../../../server/kajapay/client';
-import { ProcessPaymentRequest, PaymentResult } from '../../../../server/kajapay/types';
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
-const PaymentSchema = z.object({
-  orderId: z.string().uuid(),
-  paymentMethod: z.object({
-    type: z.enum(['card', 'ach', 'saved_card']),
-    cardNumber: z.string().optional(),
-    expiryMonth: z.string().optional(),
-    expiryYear: z.string().optional(),
-    cvv: z.string().optional(),
-    customerToken: z.string().optional(),
-    paymentAccountDataToken: z.string().optional()
-  }),
-  billingAddress: z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    address1: z.string(),
-    city: z.string(),
-    state: z.string(),
-    postalCode: z.string(),
-    country: z.string().default('US'),
-    email: z.string().email().optional(),
-    phone: z.string().optional()
-  }),
-  savePaymentMethod: z.boolean().default(false)
-});
-
-export async function POST(req: NextRequest) {
+// Process payment for an order
+export async function POST(request: NextRequest) {
   try {
-    // Require authentication
-    const auth = await requireAuth();
-    if (auth instanceof NextResponse) return auth;
-    const { user } = auth;
+    const body = await request.json();
+    const { orderId, paymentMethod, paymentToken, amount } = body;
 
-    // Parse and validate request body
-    const body = await req.json().catch(() => ({}));
-    const parse = PaymentSchema.safeParse(body);
-    if (!parse.success) {
-      return NextResponse.json({ 
-        error: 'Invalid payment data', 
-        issues: parse.error.issues 
-      }, { status: 400 });
+    if (!orderId || !paymentMethod || !amount) {
+      return NextResponse.json(
+        { error: 'Order ID, payment method, and amount are required' },
+        { status: 400 }
+      );
     }
 
-    const { orderId, paymentMethod, billingAddress, savePaymentMethod } = parse.data;
+    // Get order details
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
+      .single();
 
-    // Get storage instance
-    const storage = await getStorage();
-
-    // Fetch the order to process
-    const order = await storage.getOrder(orderId);
-    if (!order) {
-      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    if (orderError || !order) {
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      );
     }
 
-    // Verify order belongs to authenticated user
-    if (order.userId !== user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    // Check if payment already exists
+    const { data: existingPayment } = await supabase
+      .from('payments')
+      .select('*')
+      .eq('order_id', orderId)
+      .single();
+
+    let paymentId = existingPayment?.id;
+
+    // Simulate payment processing based on method
+    let paymentStatus = 'pending';
+    let paymentResponse = {};
+
+    switch (paymentMethod) {
+      case 'kajapay':
+        // Simulate Kajapay processing
+        paymentStatus = Math.random() > 0.1 ? 'paid' : 'failed'; // 90% success rate for testing
+        paymentResponse = {
+          transactionId: `kaja_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          processor: 'kajapay',
+          timestamp: new Date().toISOString()
+        };
+        break;
+
+      case 'card':
+        // Simulate credit card processing
+        paymentStatus = Math.random() > 0.05 ? 'paid' : 'failed'; // 95% success rate for testing
+        paymentResponse = {
+          transactionId: `card_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          processor: 'stripe',
+          last4: paymentToken ? paymentToken.slice(-4) : '1234',
+          cardType: 'visa',
+          timestamp: new Date().toISOString()
+        };
+        break;
+
+      case 'test':
+        // Always succeed for testing
+        paymentStatus = 'paid';
+        paymentResponse = {
+          transactionId: `test_${Date.now()}`,
+          processor: 'test_mode',
+          timestamp: new Date().toISOString()
+        };
+        break;
+
+      default:
+        return NextResponse.json(
+          { error: 'Unsupported payment method' },
+          { status: 400 }
+        );
     }
 
-    // Check if order is already paid
-    if (order.paymentStatus === 'paid') {
-      return NextResponse.json({ error: 'Order already paid' }, { status: 409 });
-    }
-
-    // Get order items for payment description
-    const orderItems = await storage.getOrderItemsByOrder(orderId);
-    const itemDescriptions = orderItems.map(item => `${item.quantity}x ${item.productName || 'Item'}`).join(', ');
-
-    // Prepare KajaPay payment request
-    const paymentRequest: ProcessPaymentRequest = {
-      amount: Number(order.totalAmount),
+    // Update or create payment record
+    const paymentData = {
+      order_id: orderId,
+      payment_method: paymentMethod,
+      amount: parseFloat(amount),
       currency: 'USD',
-      paymentMethod: {
-        type: paymentMethod.type,
-        cardNumber: paymentMethod.cardNumber,
-        expiryMonth: paymentMethod.expiryMonth,
-        expiryYear: paymentMethod.expiryYear,
-        cvv: paymentMethod.cvv,
-        customerToken: paymentMethod.customerToken,
-        paymentAccountDataToken: paymentMethod.paymentAccountDataToken
-      },
-      billingAddress,
-      orderData: {
-        orderNumber: order.orderNumber || order.id,
-        orderDescription: `DOPE CITY Order: ${itemDescriptions}`,
-        lineItems: orderItems.map(item => ({
-          name: item.productName || 'Item',
-          description: item.productDescription || '',
-          quantity: item.quantity,
-          unitPrice: Number(item.priceAtPurchase),
-          totalPrice: Number(item.priceAtPurchase) * item.quantity
-        }))
-      },
-      taxAmount: Number(order.taxAmount || 0),
-      shippingAmount: Number(order.shippingAmount || 0)
+      status: paymentStatus,
+      payment_metadata: paymentResponse,
+      processed_at: paymentStatus === 'paid' ? new Date().toISOString() : null
     };
 
-    // Create payment transaction record (pending)
-    const transaction = await storage.createTransaction({
-      orderId: order.id,
-      transactionType: 'charge',
-      amount: order.totalAmount,
-      currency: 'USD',
-      status: 'pending',
-      paymentMethodData: {
-        type: paymentMethod.type,
-        maskedCardNumber: paymentMethod.cardNumber ? `****${paymentMethod.cardNumber.slice(-4)}` : undefined
+    if (existingPayment) {
+      // Update existing payment
+      const { error: updateError } = await supabase
+        .from('payments')
+        .update(paymentData)
+        .eq('id', existingPayment.id);
+
+      if (updateError) {
+        console.error('Error updating payment:', updateError);
+        return NextResponse.json(
+          { error: 'Failed to update payment' },
+          { status: 500 }
+        );
       }
-    });
-
-    // Process payment with KajaPay
-    const paymentResult: PaymentResult = await kajaPayClient.processPayment(paymentRequest);
-
-    // Update transaction with result
-    await storage.updateTransaction(transaction.id, {
-      kajaPayTransactionId: paymentResult.transactionId,
-      kajaPayReferenceNumber: paymentResult.referenceNumber,
-      status: paymentResult.success ? 'approved' : 'declined',
-      kajaPayStatusCode: paymentResult.responseCode,
-      authCode: paymentResult.authCode,
-      errorMessage: paymentResult.errorMessage,
-      paymentMethodData: {
-        ...transaction.paymentMethodData,
-        maskedCardNumber: paymentResult.maskedCardNumber,
-        cardType: paymentResult.cardType,
-        customerToken: paymentResult.customerToken,
-        paymentAccountDataToken: paymentResult.paymentAccountDataToken
-      }
-    });
-
-    if (paymentResult.success) {
-      // Update order status to paid
-      await storage.updateOrder(order.id, {
-        paymentStatus: 'paid',
-        transactionId: paymentResult.transactionId?.toString(),
-        status: 'processing'
-      });
-
-      // Save payment method if requested and we got tokens
-      if (savePaymentMethod && paymentResult.customerToken && paymentResult.paymentAccountDataToken) {
-        try {
-          await storage.createPaymentMethod({
-            userId: user.id,
-            kajaPayToken: paymentResult.paymentAccountDataToken,
-            cardLast4: paymentResult.maskedCardNumber?.slice(-4),
-            cardType: paymentResult.cardType,
-            billingName: `${billingAddress.firstName} ${billingAddress.lastName}`,
-            billingAddress: billingAddress,
-            isDefault: false
-          });
-        } catch (error) {
-          console.error('[Payment] Failed to save payment method:', error);
-          // Don't fail the payment if saving payment method fails
-        }
-      }
-
-      // Fire-and-forget: Create ShipStation order for fulfillment
-      try {
-        const { ShipstationService } = await import('../../../../server/shipstation/service');
-        const { storage: serverStorage } = await import('../../../../server/storage');
-        const apiKey = process.env.SHIPSTATION_API_KEY;
-        const apiSecret = process.env.SHIPSTATION_API_SECRET;
-        
-        if (apiKey && apiSecret) {
-          const svc = new ShipstationService({ 
-            apiKey, 
-            apiSecret, 
-            webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL 
-          }, serverStorage);
-          
-          const shipstationOrder = {
-            orderNumber: order.orderNumber || order.id,
-            orderDate: new Date().toISOString(),
-            orderStatus: 'awaiting_shipment',
-            billTo: billingAddress,
-            shipTo: order.shippingAddress || billingAddress,
-            items: orderItems.map(item => ({
-              name: item.productName || 'Item',
-              sku: item.productSku || item.productId,
-              quantity: item.quantity,
-              unitPrice: Number(item.priceAtPurchase)
-            })),
-            orderTotal: Number(order.totalAmount),
-            amountPaid: Number(order.totalAmount)
-          };
-          
-          svc.createShipstationOrder(shipstationOrder).catch(error => {
-            console.error('[Payment] Failed to create ShipStation order:', error);
-          });
-        }
-      } catch (error) {
-        console.error('[Payment] ShipStation integration error:', error);
-      }
-
-      return NextResponse.json({
-        success: true,
-        transactionId: paymentResult.transactionId,
-        referenceNumber: paymentResult.referenceNumber,
-        authCode: paymentResult.authCode,
-        order: {
-          id: order.id,
-          status: 'processing',
-          paymentStatus: 'paid'
-        }
-      });
+      paymentId = existingPayment.id;
     } else {
-      // Payment failed - update order status
-      await storage.updateOrder(order.id, {
-        paymentStatus: 'failed',
-        status: 'payment_failed'
-      });
+      // Create new payment record
+      const { data: newPayment, error: createError } = await supabase
+        .from('payments')
+        .insert(paymentData)
+        .select()
+        .single();
 
-      return NextResponse.json({
-        success: false,
-        error: paymentResult.responseText || 'Payment failed',
-        responseCode: paymentResult.responseCode
-      }, { status: 402 });
+      if (createError) {
+        console.error('Error creating payment:', createError);
+        return NextResponse.json(
+          { error: 'Failed to create payment' },
+          { status: 500 }
+        );
+      }
+      paymentId = newPayment.id;
+    }
+
+    // If payment succeeded, update order status
+    if (paymentStatus === 'paid') {
+      // Update order payment status
+      await supabase
+        .from('orders')
+        .update({
+          payment_status: 'paid',
+          status: 'confirmed',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', orderId);
+
+      // Create order status history
+      await supabase
+        .from('order_status_history')
+        .insert({
+          order_id: orderId,
+          from_status: order.status,
+          to_status: 'confirmed',
+          notes: `Payment processed successfully via ${paymentMethod}`
+        });
+
+      // Send confirmation notification
+      await sendOrderConfirmation(order, paymentResponse);
+    }
+
+    return NextResponse.json({
+      success: true,
+      paymentId,
+      status: paymentStatus,
+      orderId,
+      amount: parseFloat(amount),
+      paymentMethod,
+      transaction: paymentResponse,
+      message: paymentStatus === 'paid' ? 'Payment processed successfully' : 'Payment failed'
+    });
+
+  } catch (error) {
+    console.error('Payment processing error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+// Send order confirmation email
+async function sendOrderConfirmation(order: any, paymentInfo: any) {
+  try {
+    console.log('🔔 SENDING ORDER CONFIRMATION EMAIL:', {
+      orderId: order.id,
+      orderNumber: order.order_number,
+      customerEmail: order.customer_email,
+      total: order.total_amount,
+      paymentMethod: paymentInfo.processor,
+      transactionId: paymentInfo.transactionId
+    });
+
+    // Call the email API to send confirmation
+    const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/rpc/send_order_confirmation`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY!
+      },
+      body: JSON.stringify({
+        order_id: order.id,
+        recipient_email: order.customer_email
+      })
+    });
+
+    if (emailResponse.ok) {
+      console.log('✅ Order confirmation email sent successfully');
+    } else {
+      console.error('❌ Failed to send confirmation email:', await emailResponse.text());
     }
 
   } catch (error) {
-    console.error('[Payment] Processing error:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'Payment processing failed'
-    }, { status: 500 });
+    console.error('Error sending confirmation:', error);
   }
 }

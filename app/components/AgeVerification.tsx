@@ -1,14 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export default function AgeVerification() {
   const [showModal, setShowModal] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [zipcode, setZipcode] = useState('');
   const [showZipcodeStep, setShowZipcodeStep] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showAdminBypass, setShowAdminBypass] = useState(false);
 
   useEffect(() => {
+    checkAdminStatus();
+
     // Check if user has already been verified in this session - only on client side
     if (typeof window !== 'undefined') {
       const verified = localStorage.getItem('dope-city-age-verified');
@@ -23,6 +34,36 @@ export default function AgeVerification() {
       }
     }
   }, []);
+
+  const checkAdminStatus = async () => {
+    try {
+      // Check if user is authenticated and is an admin
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        if (profile?.role === 'admin') {
+          setIsAdmin(true);
+          setShowAdminBypass(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+    }
+  };
+
+  const handleAdminBypass = () => {
+    localStorage.setItem('dope-city-age-verified', 'true');
+    localStorage.setItem('dope-city-zipcode', 'ADMIN_BYPASS');
+    localStorage.setItem('dope-city-last-verification', Date.now().toString());
+    setIsVerified(true);
+    setShowModal(false);
+  };
 
   const handleVerify = (isOfAge: boolean) => {
     if (isOfAge) {
@@ -105,6 +146,17 @@ export default function AgeVerification() {
               >
                 NAH, I'M TOO YOUNG
               </button>
+
+              {/* Admin Bypass Button */}
+              {showAdminBypass && (
+                <button
+                  onClick={handleAdminBypass}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm uppercase tracking-wide border-2 border-purple-500"
+                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+                >
+                  🔑 ADMIN BYPASS
+                </button>
+              )}
             </div>
           </>
         ) : (
@@ -146,6 +198,17 @@ export default function AgeVerification() {
               >
                 {zipcode.length < 5 ? 'ENTER ZIP CODE' : 'ENTER THE DOPE ZONE'}
               </button>
+
+              {/* Admin Bypass Button in ZIP Code Step */}
+              {showAdminBypass && (
+                <button
+                  onClick={handleAdminBypass}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm uppercase tracking-wide border-2 border-purple-500"
+                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+                >
+                  🔑 ADMIN BYPASS - SKIP ZIP CODE
+                </button>
+              )}
 
               <button
                 onClick={() => setShowZipcodeStep(false)}
