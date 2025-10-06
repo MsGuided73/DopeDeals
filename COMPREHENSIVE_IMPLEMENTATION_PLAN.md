@@ -19,7 +19,46 @@
 
 ---
 
-## **📋 PHASE 1: COMPLIANCE & INFRASTRUCTURE (Week 1-2)**
+## **📋 PHASE 0: DATABASE RESTRUCTURE (IMMEDIATE - Week 0)**
+*Priority: CRITICAL BLOCKER - Fixes Search/Filter Issues*
+
+### **0.1 Database Schema Restructure** ⏱️ 3 weeks
+**Problem**: Current inherited SigDistro schema is fundamentally broken
+- Search returns no results for customers
+- Categories table empty (0 records) despite 4,579 products
+- Products not properly classified or discoverable
+
+**Solution**: Build purpose-designed schema for Dope City's business model
+
+#### **Week 1: Foundation** 🎯 Database Schema
+- **Day 1**: Database cleanup (remove 8 unused tables)
+- **Day 2-3**: Build hierarchical category structure:
+  ```
+  📂 Glass Pieces → Bongs, Dab Rigs, Hand Pipes
+  📂 Consumables → THCA Flower, THCA Vapes, THCA Pre-Rolls, etc.
+  📂 Accessories → Papers, Grinders, Storage
+  ```
+- **Day 4**: Organize brands by tier (Premium/Mid-Range/Budget)
+- **Day 5**: Update product relationships and test basic search
+
+#### **Week 2: Security & Integration** 🔒 RLS & APIs
+- **Day 6-7**: Implement Row Level Security policies
+- **Day 8**: Set up returns workflow for eligible products
+- **Day 9-10**: Configure ShipStation integration structure
+
+#### **Week 3: Testing & Launch Prep** ✅ Validation
+- **Day 11-12**: Comprehensive testing of all functionality
+- **Day 13-14**: ShipStation launch configuration
+- **Day 15**: Performance optimization and documentation
+
+**Success Metrics**:
+- [ ] **Search Success Rate**: >95% of searches return relevant results
+- [ ] **Category Accuracy**: >98% of products properly categorized
+- [ ] **Performance**: <500ms search response, <2s page loads
+
+---
+
+## **📋 PHASE 1: COMPLIANCE & INFRASTRUCTURE (Week 4-5)**
 *Priority: CRITICAL - Legal Compliance*
 
 ### **1.1 Database Architecture Setup**
