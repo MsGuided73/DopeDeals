@@ -30,7 +30,7 @@ interface Order {
 
 export default function OrderConfirmationPage() {
   const params = useParams();
-  const orderId = params.orderId as string;
+  const orderId = params.id as string;
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);

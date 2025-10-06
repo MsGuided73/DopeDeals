@@ -107,6 +107,9 @@ importers:
       '@types/multer':
         specifier: ^2.0.0
         version: 2.0.0
+      '@types/papaparse':
+        specifier: ^5.3.16
+        version: 5.3.16
       '@types/pdf-parse':
         specifier: ^1.1.5
         version: 1.1.5
@@ -167,6 +170,9 @@ importers:
       openai:
         specifier: ^5.10.1
         version: 5.12.2(ws@8.18.3(bufferutil@4.0.9))(zod@3.25.76)
+      papaparse:
+        specifier: ^5.5.3
+        version: 5.5.3
       pdf-parse:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1826,6 +1832,9 @@ packages:
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
+
+  '@types/papaparse@5.3.16':
+    resolution: {integrity: sha512-T3VuKMC2H0lgsjI9buTB3uuKj3EMD2eap1MOuEQuBQ44EnDx/IkGhU6EwiTf9zG3za4SKlmwKAImdDKdNnCsXg==}
 
   '@types/passport-local@1.0.38':
     resolution: {integrity: sha512-nsrW4A963lYE7lNTv9cr5WmiUD1ibYJvWrpE13oxApFsRt77b0RdtZvKbCdNIY4v/QZ6TRQWaDDEwV1kCTmcXg==}
@@ -3659,6 +3668,9 @@ packages:
 
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
+
+  papaparse@5.5.3:
+    resolution: {integrity: sha512-5QvjGxYVjxO59MGU2lHVYpRWBBtKHnlIAcSe1uNFCkkptUh63NFRj0FJQm7nR67puEruUci/ZkjmEFrjCAyP4A==}
 
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
@@ -5995,6 +6007,10 @@ snapshots:
   '@types/normalize-package-data@2.4.4':
     optional: true
 
+  '@types/papaparse@5.3.16':
+    dependencies:
+      '@types/node': 20.16.11
+
   '@types/passport-local@1.0.38':
     dependencies:
       '@types/express': 4.17.21
@@ -8009,6 +8025,8 @@ snapshots:
       p-limit: 3.1.0
 
   package-json-from-dist@1.0.1: {}
+
+  papaparse@5.5.3: {}
 
   parent-module@1.0.1:
     dependencies:

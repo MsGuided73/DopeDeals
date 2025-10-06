@@ -9,10 +9,10 @@ const supabase = createClient(
 // Get order details by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { orderId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const orderId = params.orderId;
+    const orderId = params.id;
 
     if (!orderId) {
       return NextResponse.json(
