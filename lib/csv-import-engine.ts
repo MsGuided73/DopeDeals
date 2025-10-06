@@ -136,212 +136,7 @@ export async function findMatchingProduct(
   return { matchType: 'none' };
 }
 
-/**
- * Import a batch of products with progress tracking
- */
-export async function importProductsBatch(
-  csvProducts: any[],
-  supabase: any,
-  batchSize: number = 25
-): Promise<ImportResults> {
-  const results: ImportResults = {
-    total: csvProducts.length,
-    processed: 0,
-    imported: 0,
-    updated: 0,
-    failed: 0,
-    errors: []
-  };
 
-  for (const csvProduct of csvProducts) {
-    try {
-      // Check if this is a nicotine product that should be excluded from main site
-      const isNicotineProduct = detectNicotineProduct(
-        csvProduct.name || '',
-        csvProduct.categories || '',
-        csvProduct.tags || ''
-      );
-
-      if (isNicotineProduct) {
-        console.log(`[CSV Import] Skipping nicotine product: ${csvProduct.name}`);
-        results.processed++;
-        continue; // Skip nicotine products for main site
-      }
-
-      // Transform CSV data to our schema
-      const transformedProduct = transformCSVProduct(csvProduct);
-
-      // Find existing product or prepare for new import
-      const match = await findMatchingProduct(transformedProduct, supabase);
-
-      if (match.productId) {
-        // Update existing product
-        await updateExistingProduct(match.productId, transformedProduct, supabase);
-        results.updated++;
-      } else {
-        // Create new product
-        await createNewProduct(transformedProduct, supabase);
-        results.imported++;
-      }
-
-      results.processed++;
-    } catch (error) {
-      results.failed++;
-      results.errors.push(`Product ${csvProduct.name}: ${error}`);
-      console.error(`[CSV Import] Failed to process product ${csvProduct.name}:`, error);
-    }
-  }
-
-  return results;
-}
-
-/**
- * Update existing product with CSV data
- */
-async function updateExistingProduct(
-  productId: string,
-  transformedProduct: TransformedProduct,
-  supabase: any
-) {
-  const updateData = {
-    name: transformedProduct.name,
-    description: transformedProduct.description,
-    price: transformedProduct.price,
-    compare_at_price: transformedProduct.compare_at_price,
-    image_urls: transformedProduct.image_urls,
-    short_description: transformedProduct.short_description,
-    specs: transformedProduct.specs,
-    attributes: transformedProduct.attributes,
-    tags: transformedProduct.tags,
-    weight_g: transformedProduct.weight_g,
-    dim_mm: transformedProduct.dimensions,
-    seo_title: transformedProduct.seo_title,
-    updated_at: new Date().toISOString()
-  };
-
-  const { error } = await supabase
-    .from('products')
-    .update(updateData)
-    .eq('id', productId);
-
-  if (error) {
-    throw new Error(`Update failed: ${error.message}`);
-  }
-
-  console.log(`[CSV Import] Updated product: ${transformedProduct.name}`);
-}
-
-/**
- * Create new product from CSV data
- */
-async function createNewProduct(
-  transformedProduct: TransformedProduct,
-  supabase: any
-) {
-  // First, ensure category exists or create it
-  const categoryId = await ensureCategoryExists(transformedProduct.category_name, supabase);
-
-  // First, ensure brand exists or create it
-  const brandId = await ensureBrandExists(transformedProduct.brand_name || 'SIG DISTRO', supabase);
-
-  const productData = {
-    name: transformedProduct.name,
-    sku: transformedProduct.sku,
-    description: transformedProduct.description,
-    price: transformedProduct.price,
-    compare_at_price: transformedProduct.compare_at_price,
-    image_urls: transformedProduct.image_urls,
-    category_id: categoryId,
-    brand_id: brandId,
-    short_description: transformedProduct.short_description,
-    specs: transformedProduct.specs,
-    attributes: transformedProduct.attributes,
-    tags: transformedProduct.tags,
-    weight_g: transformedProduct.weight_g,
-    dim_mm: transformedProduct.dimensions,
-    seo_title: transformedProduct.seo_title,
-    is_active: true,
-    in_stock: true, // Assume in stock if in CSV
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  };
-
-  const { error } = await supabase
-    .from('products')
-    .insert(productData);
-
-  if (error) {
-    throw new Error(`Insert failed: ${error.message}`);
-  }
-
-  console.log(`[CSV Import] Created product: ${transformedProduct.name}`);
-}
-
-/**
- * Ensure category exists, create if not
- */
-async function ensureCategoryExists(categoryName: string, supabase: any): Promise<string> {
-  // First try to find existing category
-  const { data: existingCategory } = await supabase
-    .from('categories')
-    .select('id')
-    .ilike('name', categoryName)
-    .single();
-
-  if (existingCategory) {
-    return existingCategory.id;
-  }
-
-  // Create new category
-  const { data: newCategory, error } = await supabase
-    .from('categories')
-    .insert({
-      name: categoryName,
-      slug: categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      is_active: true
-    })
-    .select('id')
-    .single();
-
-  if (error) {
-    throw new Error(`Category creation failed: ${error.message}`);
-  }
-
-  return newCategory.id;
-}
-
-/**
- * Ensure brand exists, create if not
- */
-async function ensureBrandExists(brandName: string, supabase: any): Promise<string> {
-  // First try to find existing brand
-  const { data: existingBrand } = await supabase
-    .from('brands')
-    .select('id')
-    .ilike('name', brandName)
-    .single();
-
-  if (existingBrand) {
-    return existingBrand.id;
-  }
-
-  // Create new brand
-  const { data: newBrand, error } = await supabase
-    .from('brands')
-    .insert({
-      name: brandName,
-      slug: brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      is_active: true
-    })
-    .select('id')
-    .single();
-
-  if (error) {
-    throw new Error(`Brand creation failed: ${error.message}`);
-  }
-
-  return newBrand.id;
-}
 
 /**
  * UTILITY FUNCTIONS
@@ -760,4 +555,316 @@ function formatBrandName(brandKey: string): string {
   };
 
   return brandFormatting[brandKey] || brandKey.charAt(0).toUpperCase() + brandKey.slice(1);
+}
+
+/**
+ * Analyze products for review without importing to database
+ */
+export async function analyzeProductsForReview(csvProducts: any[], supabase: any) {
+  const results = {
+    total: csvProducts.length,
+    analyzed: 0,
+    main_site_products: 0,
+    nicotine_products: 0,
+    review_items: [] as any[]
+  };
+
+  // Filter out non-product rows (like headers or invalid data)
+  const validProducts = csvProducts.filter(product =>
+    product.name &&
+    product.name.trim().length > 0 &&
+    product.type // Must have a type field
+  );
+
+  console.log(`[CSV Analysis] Found ${validProducts.length} valid products out of ${csvProducts.length} total rows`);
+
+  for (const csvProduct of validProducts) {
+    try {
+      // Check if this is a nicotine product that should be excluded from main site
+      const isNicotineProduct = detectNicotineProduct(
+        csvProduct.name || '',
+        csvProduct.categories || '',
+        csvProduct.tags || ''
+      );
+
+      if (isNicotineProduct) {
+        results.nicotine_products++;
+        results.review_items.push({
+          csvProduct: {
+            name: csvProduct.name,
+            sku: csvProduct.sku,
+            price: csvProduct.regular_price,
+            category: csvProduct.categories,
+            tags: csvProduct.tags
+          },
+          analysis: {
+            isNicotineProduct: true,
+            detectedBrand: 'NICOTINE_PRODUCT',
+            recommendedAction: '❌ EXCLUDE_FROM_MAIN_SITE',
+            reason: 'Detected as nicotine/vape product'
+          }
+        });
+        results.analyzed++;
+        continue;
+      }
+
+      // Transform CSV data to our schema
+      const transformedProduct = transformCSVProduct(csvProduct);
+
+      // Find existing product or prepare for new import
+      const match = await findMatchingProduct(transformedProduct, supabase);
+
+      // Extract brand using comprehensive brand detection
+      const detectedBrand = extractBrandName(csvProduct.name || '', csvProduct.categories || '');
+
+      results.main_site_products++;
+      results.review_items.push({
+        csvProduct: {
+          name: csvProduct.name,
+          sku: csvProduct.sku,
+          price: csvProduct.regular_price,
+          category: csvProduct.categories,
+          tags: csvProduct.tags,
+          image: csvProduct.images
+        },
+        analysis: {
+          proposedMatch: match.productId ? 'Existing Product' : 'New Product',
+          matchType: match.matchType,
+          confidence: match.matchType === 'exact' ? '100%' : match.matchType === 'similar' ? '75%' : '0%',
+          detectedBrand: detectedBrand,
+          detectedCategory: transformedProduct.category_name,
+          isNicotineProduct: false,
+          recommendedAction: match.matchType === 'exact' ? '✅ AUTO_APPROVE' :
+                           match.matchType === 'similar' ? '⚠️ REVIEW_NEEDED' : '❌ MANUAL_REVIEW'
+        },
+        transformedData: transformedProduct
+      });
+
+      results.analyzed++;
+    } catch (error) {
+      console.error(`[CSV Analysis] Failed to analyze product ${csvProduct.name}:`, error);
+      results.review_items.push({
+        csvProduct: {
+          name: csvProduct.name,
+          sku: csvProduct.sku,
+          price: csvProduct.regular_price
+        },
+        analysis: {
+          error: error instanceof Error ? error.message : 'Analysis failed',
+          recommendedAction: '❌ ERROR_REVIEW_NEEDED'
+        }
+      });
+      results.analyzed++;
+    }
+  }
+
+  console.log(`[CSV Analysis] Analysis completed:`, results);
+  return results;
+}
+
+/**
+ * Import a batch of products with progress tracking
+ */
+export async function importProductsBatch(
+  csvProducts: any[],
+  supabase: any,
+  batchSize: number = 25
+): Promise<ImportResults> {
+  const results: ImportResults = {
+    total: csvProducts.length,
+    processed: 0,
+    imported: 0,
+    updated: 0,
+    failed: 0,
+    errors: []
+  };
+
+  for (const csvProduct of csvProducts) {
+    try {
+      // Check if this is a nicotine product that should be excluded from main site
+      const isNicotineProduct = detectNicotineProduct(
+        csvProduct.name || '',
+        csvProduct.categories || '',
+        csvProduct.tags || ''
+      );
+
+      if (isNicotineProduct) {
+        console.log(`[CSV Import] Skipping nicotine product: ${csvProduct.name}`);
+        results.processed++;
+        continue; // Skip nicotine products for main site
+      }
+
+      // Transform CSV data to our schema
+      const transformedProduct = transformCSVProduct(csvProduct);
+
+      // Find existing product or prepare for new import
+      const match = await findMatchingProduct(transformedProduct, supabase);
+
+      if (match.productId) {
+        // Update existing product
+        await updateExistingProduct(match.productId, transformedProduct, supabase);
+        results.updated++;
+      } else {
+        // Create new product
+        await createNewProduct(transformedProduct, supabase);
+        results.imported++;
+      }
+
+      results.processed++;
+    } catch (error) {
+      results.failed++;
+      results.errors.push(`Product ${csvProduct.name}: ${error}`);
+      console.error(`[CSV Import] Failed to process product ${csvProduct.name}:`, error);
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Update existing product with CSV data
+ */
+async function updateExistingProduct(
+  productId: string,
+  transformedProduct: TransformedProduct,
+  supabase: any
+) {
+  const updateData = {
+    name: transformedProduct.name,
+    description: transformedProduct.description,
+    price: transformedProduct.price,
+    compare_at_price: transformedProduct.compare_at_price,
+    image_urls: transformedProduct.image_urls,
+    short_description: transformedProduct.short_description,
+    specs: transformedProduct.specs,
+    attributes: transformedProduct.attributes,
+    tags: transformedProduct.tags,
+    weight_g: transformedProduct.weight_g,
+    dim_mm: transformedProduct.dimensions,
+    seo_title: transformedProduct.seo_title,
+    updated_at: new Date().toISOString()
+  };
+
+  const { error } = await supabase
+    .from('products')
+    .update(updateData)
+    .eq('id', productId);
+
+  if (error) {
+    throw new Error(`Update failed: ${error.message}`);
+  }
+
+  console.log(`[CSV Import] Updated product: ${transformedProduct.name}`);
+}
+
+/**
+ * Create new product from CSV data
+ */
+async function createNewProduct(
+  transformedProduct: TransformedProduct,
+  supabase: any
+) {
+  // First, ensure category exists or create it
+  const categoryId = await ensureCategoryExists(transformedProduct.category_name, supabase);
+
+  // First, ensure brand exists or create it
+  const brandId = await ensureBrandExists(transformedProduct.brand_name || 'SIG DISTRO', supabase);
+
+  const productData = {
+    name: transformedProduct.name,
+    sku: transformedProduct.sku,
+    description: transformedProduct.description,
+    price: transformedProduct.price,
+    compare_at_price: transformedProduct.compare_at_price,
+    image_urls: transformedProduct.image_urls,
+    category_id: categoryId,
+    brand_id: brandId,
+    short_description: transformedProduct.short_description,
+    specs: transformedProduct.specs,
+    attributes: transformedProduct.attributes,
+    tags: transformedProduct.tags,
+    weight_g: transformedProduct.weight_g,
+    dim_mm: transformedProduct.dimensions,
+    seo_title: transformedProduct.seo_title,
+    is_active: true,
+    in_stock: true, // Assume in stock if in CSV
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
+  const { error } = await supabase
+    .from('products')
+    .insert(productData);
+
+  if (error) {
+    throw new Error(`Insert failed: ${error.message}`);
+  }
+
+  console.log(`[CSV Import] Created product: ${transformedProduct.name}`);
+}
+
+/**
+ * Ensure category exists, create if not
+ */
+async function ensureCategoryExists(categoryName: string, supabase: any): Promise<string> {
+  // First try to find existing category
+  const { data: existingCategory } = await supabase
+    .from('categories')
+    .select('id')
+    .ilike('name', categoryName)
+    .single();
+
+  if (existingCategory) {
+    return existingCategory.id;
+  }
+
+  // Create new category
+  const { data: newCategory, error } = await supabase
+    .from('categories')
+    .insert({
+      name: categoryName,
+      slug: categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      is_active: true
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    throw new Error(`Category creation failed: ${error.message}`);
+  }
+
+  return newCategory.id;
+}
+
+/**
+ * Ensure brand exists, create if not
+ */
+async function ensureBrandExists(brandName: string, supabase: any): Promise<string> {
+  // First try to find existing brand
+  const { data: existingBrand } = await supabase
+    .from('brands')
+    .select('id')
+    .ilike('name', brandName)
+    .single();
+
+  if (existingBrand) {
+    return existingBrand.id;
+  }
+
+  // Create new brand
+  const { data: newBrand, error } = await supabase
+    .from('brands')
+    .insert({
+      name: brandName,
+      slug: brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      is_active: true
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    throw new Error(`Brand creation failed: ${error.message}`);
+  }
+
+  return newBrand.id;
 }

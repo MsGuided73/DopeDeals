@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import Papa from 'papaparse';
-import { transformCSVProduct, findMatchingProduct, importProductsBatch } from '../../../lib/csv-import-engine';
+import { transformCSVProduct, findMatchingProduct, detectNicotineProduct, extractBrandName, importProductsBatch } from '../../../lib/csv-import-engine';
 
 /**
  * CSV PRODUCT IMPORT ENDPOINT
- * Imports products from sigdistro CSV with rich data including images, descriptions, pricing
+ * Supports both analysis (review) and import modes
  */
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('csvFile') as File;
+    const mode = formData.get('mode') as string || 'import'; // 'analyze' or 'import'
 
     if (!file) {
       return NextResponse.json({
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    console.log(`[CSV Import] Starting import of file: ${file.name} (${file.size} bytes)`);
+    console.log(`[CSV ${mode.toUpperCase()}] Starting ${mode} of file: ${file.name} (${file.size} bytes)`);
 
     // Parse CSV file
     const csvText = await file.text();
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (parseResult.errors.length > 0) {
-      console.error('[CSV Import] CSV parsing errors:', parseResult.errors);
+      console.error(`[CSV ${mode.toUpperCase()}] CSV parsing errors:`, parseResult.errors);
       return NextResponse.json({
         error: 'CSV parsing errors',
         details: parseResult.errors.slice(0, 10) // Limit error details
@@ -49,27 +50,41 @@ export async function POST(request: NextRequest) {
     }
 
     const csvProducts = parseResult.data;
-    console.log(`[CSV Import] Parsed ${csvProducts.length} products from CSV`);
+    console.log(`[CSV ${mode.toUpperCase()}] Parsed ${csvProducts.length} products from CSV`);
 
     // Initialize Supabase client
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Process and import products
-    const importResults = await processAndImportProducts(csvProducts, supabase);
+    if (mode === 'analyze') {
+      // Analysis mode - generate review report without importing
+      const analysisResults = await analyzeProductsForReview(csvProducts, supabase);
 
-    return NextResponse.json({
-      success: true,
-      message: 'CSV import completed successfully',
-      results: importResults,
-      timestamp: new Date().toISOString()
-    });
+      return NextResponse.json({
+        success: true,
+        message: 'CSV analysis completed successfully',
+        mode: 'analyze',
+        results: analysisResults,
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      // Import mode - process and import products
+      const importResults = await processAndImportProducts(csvProducts, supabase);
+
+      return NextResponse.json({
+        success: true,
+        message: 'CSV import completed successfully',
+        mode: 'import',
+        results: importResults,
+        timestamp: new Date().toISOString()
+      });
+    }
 
   } catch (error) {
-    console.error('[CSV Import] Error:', error);
+    console.error('[CSV PROCESSING] Error:', error);
     return NextResponse.json({
-      error: error instanceof Error ? error.message : 'Import failed',
+      error: error instanceof Error ? error.message : 'Processing failed',
       timestamp: new Date().toISOString()
     }, { status: 500 });
   }
@@ -134,6 +149,10 @@ export async function GET() {
   return NextResponse.json({
     message: 'CSV Product Import API',
     usage: 'POST with CSV file in "csvFile" form field',
+    modes: {
+      analyze: 'Generate detailed review report without importing',
+      import: 'Process and import products to database'
+    },
     features: [
       'Automatic product matching with Zoho data',
       'Image URL extraction and storage',
@@ -141,7 +160,11 @@ export async function GET() {
       'Category and tag mapping',
       'Attribute extraction',
       'SEO data generation',
-      'Batch processing with progress tracking'
+      'Batch processing with progress tracking',
+      'Intelligent brand detection (46+ brands)',
+      'Nicotine product filtering for compliance',
+      'HTML description cleaning',
+      'Manual review workflow support'
     ],
     expectedFormat: {
       columns: [
