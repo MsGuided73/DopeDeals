@@ -6,6 +6,7 @@ import ImageUploadModal from './ImageUploadModal';
 
 const nav = [
   { href: '/admin', label: 'Dashboard', icon: '📊' },
+  { href: '/admin/csv-upload', label: 'CSV Import', icon: '📁' },
   { href: '/admin/products', label: 'Products', icon: '📦' },
   { href: '/admin/categories', label: 'Categories & Brands', icon: '🏷️' },
   { href: '/admin/orders', label: 'Orders', icon: '📋' },
@@ -81,4 +82,3 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-

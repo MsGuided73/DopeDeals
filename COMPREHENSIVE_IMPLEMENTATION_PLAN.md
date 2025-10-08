@@ -22,39 +22,89 @@
 ## **📋 PHASE 0: DATABASE RESTRUCTURE (IMMEDIATE - Week 0)**
 *Priority: CRITICAL BLOCKER - Fixes Search/Filter Issues*
 
-### **0.1 Database Schema Restructure** ⏱️ 3 weeks
+### **0.1 Database Schema Restructure** ⏱️ 10 days
 **Problem**: Current inherited SigDistro schema is fundamentally broken
 - Search returns no results for customers
 - Categories table empty (0 records) despite 4,579 products
 - Products not properly classified or discoverable
+- No separation between nicotine and non-nicotine products
 
-**Solution**: Build purpose-designed schema for Dope City's business model
+**Solution**: Complete dual-table architecture with bulletproof compliance enforcement
 
-#### **Week 1: Foundation** 🎯 Database Schema
-- **Day 1**: Database cleanup (remove 8 unused tables)
-- **Day 2-3**: Build hierarchical category structure:
-  ```
-  📂 Glass Pieces → Bongs, Dab Rigs, Hand Pipes
-  📂 Consumables → THCA Flower, THCA Vapes, THCA Pre-Rolls, etc.
-  📂 Accessories → Papers, Grinders, Storage
-  ```
-- **Day 4**: Organize brands by tier (Premium/Mid-Range/Budget)
-- **Day 5**: Update product relationships and test basic search
+#### **Week 1: Foundation & Schema Setup**
 
-#### **Week 2: Security & Integration** 🔒 RLS & APIs
-- **Day 6-7**: Implement Row Level Security policies
-- **Day 8**: Set up returns workflow for eligible products
-- **Day 9-10**: Configure ShipStation integration structure
+##### **Day 1: Database Schema Foundation** 🎯
+**Tasks**:
+- [ ] Create `main_site_products` table (non-nicotine only)
+- [ ] Create `tobacco_site_products` table (nicotine only)
+- [ ] Create compatibility views (`main_site_products_view`, `all_products_view`)
+- [ ] Set up compliance constraints and indexes
 
-#### **Week 3: Testing & Launch Prep** ✅ Validation
-- **Day 11-12**: Comprehensive testing of all functionality
-- **Day 13-14**: ShipStation launch configuration
-- **Day 15**: Performance optimization and documentation
+##### **Day 2: Category & Brand System** 📂
+**Tasks**:
+- [ ] Create `categories_new` table with hierarchical structure
+- [ ] Insert comprehensive categories (Glass, Consumables, CBD, Kratom, Mushrooms, N2O, etc.)
+- [ ] Create `brands_new` table with tier system (Premium/Mid-Range/Budget)
+- [ ] Map existing products to new categories and brands
+
+##### **Day 3: Compliance & Detection Systems** 🔒
+**Tasks**:
+- [ ] Create `compliance_rules` table for all product types
+- [ ] Implement automated nicotine detection system
+- [ ] Set up Row Level Security policies for both tables
+- [ ] Create compliance monitoring dashboard
+
+#### **Week 2: Data Migration & Validation**
+
+##### **Day 4: Data Migration Execution** 🔄
+**Tasks**:
+- [ ] Pre-migration validation and testing
+- [ ] Migrate non-nicotine products to main site table
+- [ ] Migrate nicotine products to tobacco site table
+- [ ] Post-migration cleanup and validation
+
+##### **Day 5: Search & Filtering System** 🔍
+**Tasks**:
+- [ ] Implement full-text search indexes
+- [ ] Set up category navigation system
+- [ ] Implement brand filtering system
+- [ ] Test search functionality across all products
+
+##### **Day 6: Testing & Quality Assurance** ✅
+**Tasks**:
+- [ ] Comprehensive functionality testing
+- [ ] Performance testing and optimization
+- [ ] Compliance testing (zero nicotine on main site)
+- [ ] Integration testing with existing systems
+
+#### **Week 3: Optimization & Launch**
+
+##### **Day 7: Performance Optimization** ⚡
+**Tasks**:
+- [ ] Index optimization and query tuning
+- [ ] Set up database monitoring
+- [ ] Create maintenance procedures
+- [ ] Performance benchmarking
+
+##### **Day 8: Documentation & Training** 📚
+**Tasks**:
+- [ ] Update technical documentation
+- [ ] Create user guides and training materials
+- [ ] Document migration procedures
+- [ ] Create troubleshooting guides
+
+##### **Day 9-10: Launch Preparation** 🚀
+**Tasks**:
+- [ ] Final validation and testing
+- [ ] Backup and rollback setup
+- [ ] Launch configuration
+- [ ] Post-launch monitoring setup
 
 **Success Metrics**:
 - [ ] **Search Success Rate**: >95% of searches return relevant results
 - [ ] **Category Accuracy**: >98% of products properly categorized
 - [ ] **Performance**: <500ms search response, <2s page loads
+- [ ] **Compliance**: Zero nicotine products on main site, 100% Farm Bill compliance
 
 ---
 

@@ -30,22 +30,22 @@ interface Order {
 
 export default function OrderConfirmationPage() {
   const params = useParams();
-  const orderId = params.id as string;
+  const id = params.id as string;
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (orderId) {
+    if (id) {
       fetchOrderDetails();
     }
-  }, [orderId]);
+  }, [id]);
 
   const fetchOrderDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/orders/${orderId}`);
+      const response = await fetch(`/api/orders/${id}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch order details');
