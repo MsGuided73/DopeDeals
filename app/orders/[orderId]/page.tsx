@@ -2,16 +2,16 @@ import Link from 'next/link';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import AgeVerification from '../../components/AgeVerification';
 
-export default function OrderDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function OrderDetailPage({ params }: { params: { orderId: string } }) {
+  const { orderId } = params;
   // Mock order data for now - wire to real orders API later
   const order = {
-    id,
+    id: orderId,
     status: 'processing',
     total: 134.16,
     items: [
       { id: '1', name: 'Premium Glass Bong', qty: 1, price: 89.99 },
-      { id: '2', name: 'THCA Pre-Roll Pack', qty: 2, price: 24.99 },
+      { id: '2', name: 'THCA Pre-Roll Pack', qty: 2, price: 24.99 }, // cspell:disable-line
     ],
   };
 
