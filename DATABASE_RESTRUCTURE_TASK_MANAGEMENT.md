@@ -20,6 +20,91 @@ This document outlines the comprehensive task management plan for restructuring 
 - [x] **Inventory alert system** - Staging mode ready for activation
 - [x] **Search & filtering** - Advanced capabilities with performance optimization
 
+### 🧬 JSONB IMPLEMENTATION FOR CANNABINOID & EFFECTS DATA
+
+#### **Cannabinoid Profile Structure (JSONB)**
+```json
+{
+  "thc_variants": {
+    "delta9_thc": 0.0,
+    "delta8_thc": 0.0,
+    "thca": 0.0,
+    "thcp": 0.0,
+    "thcv": 0.0
+  },
+  "other_cannabinoids": {
+    "cbd": 0.0,
+    "cbg": 0.0,
+    "cbn": 0.0,
+    "cbc": 0.0
+  },
+  "total_cannabinoids": 0.0,
+  "dominant_cannabinoid": "delta9_thc",
+  "profile_type": "full_spectrum"
+}
+```
+
+#### **Effects Profile Structure (JSONB)**
+```json
+{
+  "primary_effects": ["relaxed", "euphoric", "creative"],
+  "secondary_effects": ["focused", "uplifted", "energetic"],
+  "medicinal_benefits": ["pain_relief", "stress_reduction", "appetite_stimulation"],
+  "best_for": ["evening_use", "creative_work", "social_gathering"],
+  "avoid_if": ["operating_heavy_machinery", "first_time_users"]
+}
+```
+
+#### **Terpene Profile Structure (JSONB)**
+```json
+{
+  "primary_terpenes": ["myrcene", "limonene", "caryophyllene"],
+  "aroma_notes": ["earthy", "citrus", "spicy"],
+  "effects_influence": ["relaxing", "uplifting", "anti_inflammatory"]
+}
+```
+
+#### **Psychoactive Profile Structure (JSONB)**
+```json
+{
+  "thc_variants": {
+    "delta9_thc": 0.0,
+    "delta8_thc": 0.0,
+    "thca": 0.0,
+    "thcp": 0.0,
+    "thcv": 0.0
+  },
+  "other_psychoactive": {
+    "7_hydroxy_mitragynine": 0.0,
+    "mitragynine": 0.0
+  }
+}
+```
+
+#### **Database Indexes for JSONB Performance**
+- `idx_main_site_cannabinoid_profile` - GIN index for cannabinoid queries
+- `idx_main_site_terpene_profile` - GIN index for terpene searches
+- `idx_main_site_effects_profile` - GIN index for effects filtering
+- `idx_main_site_psychoactive_profile` - GIN index for psychoactive compound queries
+
+#### **Query Examples**
+```sql
+-- Find products by THC content
+SELECT name, cannabinoid_profile->'thc_variants'->>'delta9_thc' as thc_level
+FROM main_site_products
+WHERE (cannabinoid_profile->'thc_variants'->>'delta9_thc')::float > 20;
+
+-- Filter by effects
+SELECT name, effects_profile->'primary_effects' as effects
+FROM main_site_products
+WHERE effects_profile->'primary_effects' ? 'relaxed';
+
+-- Search by cannabinoid profile type
+SELECT name, cannabinoid_profile->>'profile_type' as profile
+FROM main_site_products
+WHERE cannabinoid_profile->>'profile_type' = 'full_spectrum';
+```
+
 ### 📋 PENDING: Implementation Tasks
 
 ## 🚨 WEEK 1: CRITICAL COMPLIANCE IMPLEMENTATION
