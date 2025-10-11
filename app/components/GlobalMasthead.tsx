@@ -52,19 +52,21 @@ export default function GlobalMasthead() {
       <div>
         {/* Main Masthead - Match Home Page Exactly */}
         <div className="bg-black text-white px-1 flex items-center justify-between gap-2" style={{ minHeight: '140px', height: '140px' }}>
-          {/* Left: HUGE DOPE CITY Logo - Expanded to edges with minimal spacing */}
-          <div
-            className="font-chalets font-black leading-none text-white flex-shrink-0 tracking-wider"
-            style={{
-              fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-              fontSize: 'clamp(4rem, 16vw, 9rem)',
-              lineHeight: '0.9',
-              fontWeight: 'normal'
-            }}
-          >
-            <Link href="/">
-              DOPE CITY
-            </Link>
+          {/* Left: HUGE DOPE CITY Logo - Centered */}
+          <div className="flex-1 flex justify-center">
+            <div
+              className="font-chalets font-black leading-none text-white flex-shrink-0 tracking-wider"
+              style={{
+                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                fontSize: 'clamp(4rem, 16vw, 9rem)',
+                lineHeight: '0.9',
+                fontWeight: 'normal'
+              }}
+            >
+              <Link href="/">
+                DOPE CITY
+              </Link>
+            </div>
           </div>
 
           {/* Center: Search Bar */}
@@ -72,31 +74,31 @@ export default function GlobalMasthead() {
             <EnhancedSearchBar />
           </div>
 
-          {/* Right: User Actions */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <Link href="/sitemap-page" className="p-2 hover:text-yellow-400 transition-colors" title="Site Map">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          {/* Right: User Actions - Enhanced with 20px spacing and 2x larger 3D icons */}
+          <div className="flex items-center gap-6 flex-shrink-0 mr-5">
+            <Link href="/sitemap-page" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110" title="Site Map">
+              <svg className="w-12 h-12 drop-shadow-lg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
             </Link>
             <button
               onClick={() => setShowProfileModal(true)}
-              className="p-2 hover:text-yellow-400 transition-colors"
+              className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110"
               title="Profile & Recommendations"
             >
-              <User className="w-6 h-6" />
+              <User className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
             </button>
-            <Link href="/cart" className="p-2 hover:text-yellow-400 transition-colors relative" title="Shopping Cart">
-              <ShoppingCart className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <Link href="/cart" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 relative" title="Shopping Cart">
+              <ShoppingCart className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
+              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
                 0
               </span>
             </Link>
           </div>
         </div>
 
-        {/* DOPE Orange divider line */}
-        <div className="h-1 bg-dope-orange"></div>
+        {/* DOPE Orange divider line - THICK */}
+        <div className="h-2 bg-dope-orange"></div>
 
         {/* Glassmorphic nav bar */}
         <nav
@@ -152,7 +154,7 @@ export default function GlobalMasthead() {
                             {/* THCA & More with Nested Submenu */}
                             <div className="relative">
                               <button
-                                onMouseEnter={() => handleMouseEnter('submenu', 'thca-categories')}
+                                onMouseEnter={() => handleMouseEnter('submenu', 'thca-nested-categories')}
                                 onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
                               >
@@ -163,7 +165,7 @@ export default function GlobalMasthead() {
                               </button>
 
                               {/* THCA Nested Submenu */}
-                              {openSubmenu === 'thca-categories' && (
+                              {openSubmenu === 'thca-nested-categories' && (
                                 <div
                                   className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-70"
                                   onMouseEnter={() => handleMouseEnter('submenu', 'thca-nested-categories')}

@@ -13,33 +13,19 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Search for pipe-related products using multiple criteria
-    const pipeKeywords = [
-      'HAND PIPE',
-      'GLASS PIPE',
-      'SPOON PIPE',
-      'CHILLUM',
-      'ONE HITTER',
-      'SHERLOCK',
-      'STEAMROLLER',
-      'GANDALF',
-      'BOWL',
-      'PIPE'
-    ];
-
-    // Build the query to find pipe products
+    // Get products from main_site_products table using new categories JSONB field
     let query = supabase
-      .from('products')
+      .from('main_site_products')
       .select(`
         id,
         name,
         description,
-        price,
-        vip_price,
-        compare_at_price,
-        imageUrl,
-        brand_id,
-        category_id,
+        short_description,
+        our_price,
+        sale_price,
+        fire_price,
+        image_url,
+        image_urls,
         sku,
         stock_quantity,
         materials,
@@ -47,23 +33,43 @@ export async function GET(req: NextRequest) {
         featured,
         channels,
         is_active,
-        short_description,
         specs,
         attributes,
+        brand_id,
+        category_id,
+        categories,
+        seo_keywords,
         created_at
       `)
       .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false);
+      .not('name', 'ilike', '%test%')
+      .not('name', 'ilike', '%sample%'); // Exclude sample products
 
-    // Create OR conditions for pipe keywords
-    const orConditions = pipeKeywords.map(keyword => `name.ilike.%${keyword}%`).join(',');
-    query = query.or(orConditions);
+    // Filter using new categories JSONB field for pipe-related terms
+    const pipeCategories = [
+      'pipe', 'pipes', 'hand pipe', 'glass pipe', 'spoon pipe',
+      'chillum', 'one hitter', 'sherlock', 'steamroller',
+      'bowl', 'hand pipes', 'glass pipes', 'smoking pipes'
+    ];
 
-    const { data: products, error } = await query
+    // Create OR condition for categories array containing pipe terms
+    const categoryConditions = pipeCategories.map(category =>
+      `categories.cs.{"${category}"}`
+    ).join(',');
+
+    if (categoryConditions) {
+      query = query.or(categoryConditions);
+    }
+
+    // Also include products with pipe-related category_id (backward compatibility)
+    query = query.or('category_id.ilike.%pipe%,category_id.ilike.%chillum%,category_id.ilike.%spoon%,category_id.ilike.%sherlock%');
+
+    query = query
       .order('featured', { ascending: false })
       .order('created_at', { ascending: false })
-      .limit(200);
+      .limit(48); // Show first 48 pipe products
+
+    const { data: products, error } = await query;
 
     if (error) {
       console.error('Supabase query error:', error);
@@ -94,7 +100,7 @@ export async function GET(req: NextRequest) {
       else if (name.includes('xl') || name.includes('extra large')) size = 'XL';
 
       // Determine if it's on sale
-      const isSale = product.compare_at_price && product.compare_at_price > product.price;
+      const isSale = product.sale_price && product.sale_price > product.our_price;
       
       // Determine if it's new (created within last 30 days)
       const isNew = product.created_at && 
@@ -103,11 +109,11 @@ export async function GET(req: NextRequest) {
       return {
         id: product.id,
         name: product.name,
-        price: parseFloat(product.price),
-        vip_price: product.vip_price ? parseFloat(product.vip_price) : undefined,
-        compare_at_price: product.compare_at_price ? parseFloat(product.compare_at_price) : undefined,
+        price: parseFloat(product.our_price),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         image_url: product.image_url,
-        image_urls: product.image_url ? [product.image_url] : [],
+        image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
         brand_id: product.brand_id,
         category_id: product.category_id,
         sku: product.sku,
@@ -122,7 +128,7 @@ export async function GET(req: NextRequest) {
         short_description: product.short_description,
         specs: product.specs,
         attributes: product.attributes,
-        
+
         // Computed fields
         style,
         size,
@@ -131,7 +137,7 @@ export async function GET(req: NextRequest) {
         isSale,
         features: [
           'Premium Construction',
-          'Smooth Airflow', 
+          'Smooth Airflow',
           'Easy to Clean',
           'Portable Design'
         ],
@@ -139,21 +145,10 @@ export async function GET(req: NextRequest) {
       };
     }) || [];
 
-    // Filter out products that don't seem to be actual pipes
-    const filteredProducts = transformedProducts.filter(product => {
-      const name = product.name.toLowerCase();
-      // Exclude display cases, accessories, etc.
-      return !name.includes('display') && 
-             !name.includes('case') && 
-             !name.includes('tray') &&
-             !name.includes('grinder') &&
-             !name.includes('lighter');
-    });
-
     return NextResponse.json({
-      message: 'Pipe products loaded successfully',
-      totalCount: filteredProducts.length,
-      products: filteredProducts
+      message: 'Products loaded successfully',
+      totalCount: transformedProducts.length,
+      products: transformedProducts
     });
 
   } catch (error) {

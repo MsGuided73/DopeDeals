@@ -109,7 +109,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   {
     id: 'concentrates',
     name: 'Concentrates',
-    keywords: ['concentrate', 'wax', 'shatter', 'crumble', 'live resin', 'rosin', 'budder', 'sauce', 'diamonds'],
+    keywords: ['concentrate', 'wax', 'shatter', 'crumble', 'live resin', 'rosin', 'budder', 'sauce', 'diamonds', 'badder', 'sugar', 'distillate', 'thca concentrate', 'cbd concentrate', 'delta 8 concentrate'],
     exclusions: [],
     priority: 68
   },
@@ -233,4 +233,3 @@ export function filterProductsByCategory(
     return productCategory === categoryId;
   });
 }
-

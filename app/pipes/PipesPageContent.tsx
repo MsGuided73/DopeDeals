@@ -84,24 +84,109 @@ export default function PipesPageContent() {
   const loadPipeProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/products/pipes');
-      if (response.ok) {
-        const data = await response.json();
-        setProducts(data.products || []);
-        setFilteredProducts(data.products || []);
-      } else {
-        console.error('Failed to load pipe products');
-        // Fallback to mock data for development
-        const mockProducts = generateMockPipes();
-        setProducts(mockProducts);
-        setFilteredProducts(mockProducts);
+
+      // Use the same approach as FeaturedProductsSection - direct Supabase query
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase credentials not configured');
       }
-    } catch (error) {
-      console.error('Error loading pipe products:', error);
-      // Fallback to mock data
-      const mockProducts = generateMockPipes();
-      setProducts(mockProducts);
-      setFilteredProducts(mockProducts);
+
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      // Get products from main_site_products table (excluding water pipes)
+      const { data: products, error } = await supabase
+        .from('main_site_products')
+        .select(`
+          id, name, description, short_description, our_price, sale_price, fire_price,
+          image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
+          created_at, updated_at
+        `)
+        .eq('is_active', true)
+        .not('name', 'ilike', '%test%')
+        .not('name', 'ilike', '%sample%')
+        .not('name', 'ilike', '%water pipe%')
+        .not('name', 'ilike', '%waterpipe%')
+        .not('name', 'ilike', '%bong%')
+        .not('name', 'ilike', '%hookah%')
+        .not('name', 'ilike', '%rig%')
+        .not('name', 'ilike', '%dab rig%')
+        .not('name', 'ilike', '%dabrigs%')
+        .not('name', 'ilike', '%dabrig%')
+        .not('name', 'ilike', '%vape%')
+        .not('name', 'ilike', '%cartridge%')
+        .not('name', 'ilike', '%cart%')
+        .not('name', 'ilike', '%concentrate%')
+        .not('name', 'ilike', '%wax%')
+        .not('name', 'ilike', '%shatter%')
+        .not('name', 'ilike', '%crumble%')
+        .not('name', 'ilike', '%rosin%')
+        .not('name', 'ilike', '%extract%')
+        .not('name', 'ilike', '%distillate%')
+        .not('name', 'ilike', '%live resin%')
+        .not('name', 'ilike', '%sauce%')
+        .not('name', 'ilike', '%budder%')
+        .not('name', 'ilike', '%badder%')
+        .not('name', 'ilike', '%diamond%')
+        .not('name', 'ilike', '%terp%')
+        .not('name', 'ilike', '%710%')
+        .not('name', 'ilike', '%concentrates%')
+        // POSITIVE FILTER: Only include products that contain pipe-related terms
+        .or('name.ilike.%pipe%,name.ilike.%chillum%,name.ilike.%spoon%,name.ilike.%sherlock%,name.ilike.%one hitter%,name.ilike.%steamroller%,name.ilike.%bowl%,name.ilike.%hand pipe%')
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(48);
+
+      if (error) {
+        console.error('Error fetching products:', error);
+        throw new Error(error.message || 'Failed to fetch products from database');
+      }
+
+      if (!products) {
+        console.warn('No products data received');
+        setProducts([]);
+        setFilteredProducts([]);
+        return;
+      }
+
+      // Transform products to match our interface
+      const transformedProducts = products.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: parseFloat(product.our_price),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        image_url: product.image_url,
+        image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
+        brand_id: product.brand_id,
+        category_id: product.category_id,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        materials: [],
+        material: 'Glass',
+        vip_exclusive: false,
+        featured: product.featured || false,
+        channels: [],
+        is_active: product.is_active,
+        description: product.description,
+        short_description: product.short_description,
+        style: 'Hand Pipe',
+        size: 'Medium',
+        inStock: (product.stock_quantity || 0) > 0,
+        isNew: false,
+        isSale: product.sale_price && product.sale_price > product.our_price,
+        features: ['Premium Construction', 'Smooth Airflow', 'Easy to Clean', 'Portable Design'],
+        tags: ['pipe', 'glass', 'smoking']
+      }));
+
+      setProducts(transformedProducts);
+      setFilteredProducts(transformedProducts);
+    } catch (err) {
+      console.error('Error loading pipe products:', err);
+      setProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }
@@ -216,7 +301,7 @@ export default function PipesPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       <PipesBreadcrumb />
       <PipesHero />
       <PipesInfoSection />
@@ -261,7 +346,7 @@ export default function PipesPageContent() {
                 <PipesSortBar sortBy={sortBy} setSortBy={setSortBy} />
                 <PipesViewToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm text-gray-600">
                 Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
               </div>
             </div>
@@ -276,7 +361,7 @@ export default function PipesPageContent() {
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Previous
                   </button>
@@ -290,7 +375,7 @@ export default function PipesPageContent() {
                         className={`px-3 py-2 text-sm font-medium rounded-md ${
                           currentPage === pageNum
                             ? 'bg-dope-orange-500 text-white'
-                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700'
+                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
                         }`}
                       >
                         {pageNum}
@@ -301,7 +386,7 @@ export default function PipesPageContent() {
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Next
                   </button>

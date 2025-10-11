@@ -518,10 +518,7 @@ export default function UniversalProductCard({
 
   // Default grid view
   return (
-    <Link 
-      href={`/product/${product.id}`} 
-      className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}
-    >
+    <div className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}>
       {/* Product Image */}
       <div className={`relative ${config.image} bg-gray-100 overflow-hidden`}>
         {hasImage ? (
@@ -562,7 +559,7 @@ export default function UniversalProductCard({
           {showFavorite && (
             <button
               onClick={handleToggleFavorite}
-              className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+              className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-50 transition-colors"
             >
               <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
             </button>
@@ -570,7 +567,7 @@ export default function UniversalProductCard({
           {showQuickView && (
             <button
               onClick={handleQuickView}
-              className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+              className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-50 transition-colors"
             >
               <Eye className="w-4 h-4 text-gray-600" />
             </button>
@@ -582,7 +579,7 @@ export default function UniversalProductCard({
       <div className="p-4 flex flex-col h-full">
         {/* Content Section - Flexible height */}
         <div className="flex-grow">
-          <h3 className={`font-semibold ${config.title} mb-2 line-clamp-2 group-hover:text-dope-orange-600 transition-colors`}>
+          <h3 className={`font-semibold ${config.title} mb-2 line-clamp-2 text-gray-900 group-hover:text-dope-orange-600 transition-colors`}>
             {product.name}
           </h3>
 
@@ -652,6 +649,6 @@ export default function UniversalProductCard({
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }

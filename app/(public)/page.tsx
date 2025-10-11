@@ -597,6 +597,8 @@ export default function HomePage() {
           </div>
         </section>
 
+
+
         {/* Featured Products Section - Real Images Only */}
         <FeaturedProductsSection />
 

@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import LoadingState, { useLoadingState } from '../../components/LoadingState';
 import BongsFilters from './components/BongsFilters';
 import BongsProductGrid from './components/BongsProductGrid';
 import BongsBreadcrumb from './components/BongsBreadcrumb';
 import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
 import BongsViewToggle from './components/BongsViewToggle';
-import { supabaseBrowser } from '../lib/supabase-browser';
-import { categorizeProduct, filterProductsByCategory } from '../../lib/product-categorization-enhanced';
 
 export interface BongProduct {
   id: string;
@@ -127,54 +127,54 @@ export default function BongsPageContent() {
   const loadBongProducts = async () => {
     try {
       setLoading(true);
-      console.log('🔍 Loading bong products using enhanced categorization...');
 
-      // Use the working API endpoint instead of direct Supabase query
-      console.log('🌐 Fetching products via API endpoint...');
-      const response = await fetch('/api/products?limit=100');
+      // Use the dedicated bongs API endpoint
+      const response = await fetch('/api/products/bongs');
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
-      }
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`✅ Loaded ${data.products?.length || 0} bong products from API`);
 
-      const apiData = await response.json();
+        // Transform to match our interface
+        const transformedProducts = (data.products || []).map((product: any) => ({
+          id: product.id,
+          name: product.name,
+          our_price: product.price || product.our_price,
+          sale_price: product.compare_at_price,
+          image_url: product.image_url,
+          imageUrl: product.image_url,
+          image: product.image_url,
+          description: product.description,
+          short_description: product.short_description,
+          sku: product.sku,
+          stock_quantity: product.stock_quantity || 0,
+          is_active: product.is_active,
+          featured: product.featured || false,
+          brand_id: product.brand_id,
+          category_id: product.category_id,
+          created_at: product.created_at,
+          updated_at: product.updated_at,
+          // Add compatibility fields
+          price: product.price || product.our_price,
+          isNew: product.isNew || false,
+          isSale: product.isSale || false,
+          originalPrice: product.compare_at_price,
+          inStock: product.inStock || (product.stock_quantity > 0),
+          brand: product.brand || product.brand_id || 'Unknown Brand',
+          category: 'Bongs'
+        }));
 
-      // Handle both old and new API response formats
-      const products = apiData.products || [];
-
-      if (products && products.length > 0) {
-        // Use enhanced categorization to filter for bongs only
-        const bongProducts = filterProductsByCategory(products, 'bongs');
-
-        console.log(`✅ Loaded ${products.length} total products from API`);
-        console.log(`🎯 Filtered to ${bongProducts.length} bongs using enhanced categorization`);
-
-        if (bongProducts.length > 0) {
-          console.log('📊 First 3 bong products:', bongProducts.slice(0, 3).map((p: any) => ({
-            name: p.name,
-            sku: p.sku,
-            category: categorizeProduct(p)
-          })));
-        } else {
-          console.log('⚠️ No bong products found after categorization');
-          console.log('📋 Sample products for debugging:', products.slice(0, 3).map((p: any) => ({
-            name: p.name,
-            sku: p.sku,
-            zoho_category_name: p.zoho_category_name,
-            description: p.description?.substring(0, 100)
-          })));
-        }
-
-        setProducts(bongProducts);
+        setProducts(transformedProducts);
+        setFilteredProducts(transformedProducts);
       } else {
-        console.log('⚠️ No products returned from API');
+        console.error('Failed to load bong products from API');
         setProducts([]);
+        setFilteredProducts([]);
       }
     } catch (error) {
-      console.error('❌ Error fetching products:', error);
-      console.error('💥 Error details:', JSON.stringify(error, null, 2));
+      console.error('Error loading bong products:', error);
       setProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }
@@ -188,14 +188,19 @@ export default function BongsPageContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
-      </div>
+      <LoadingState
+        loading={loading}
+        onRetry={loadBongProducts}
+        timeout={15000}
+      >
+        <div>Bongs Page Content</div>
+      </LoadingState>
     );
   }
 
   return (
-    <div>
+    <ErrorBoundary>
+      <div>
       {/* Breadcrumb */}
       <BongsBreadcrumb />
 
@@ -275,7 +280,8 @@ export default function BongsPageContent() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
 

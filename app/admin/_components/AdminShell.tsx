@@ -20,7 +20,7 @@ const nav = [
   { href: '/admin/seo', label: 'SEO/Content', icon: '🔍' },
   { href: '/admin/ai', label: 'AI Console', icon: '🤖' },
   { href: '/admin/page-builder', label: 'Page Builder', icon: '🎨' },
-  { href: '/admin/monitoring', label: 'Monitoring', icon: '📈' },
+  { href: '/admin/monitoring', label: 'Site Monitor', icon: '�' },
 ];
 
 export default function AdminShell({ children }: { children: ReactNode }) {

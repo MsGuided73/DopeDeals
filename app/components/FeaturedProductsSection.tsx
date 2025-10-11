@@ -36,15 +36,16 @@ export default function FeaturedProductsSection() {
     try {
       setLoading(true);
 
-      // Query main_site_products table directly - less strict filtering for now
+      // Query main_site_products table - prioritize featured products, fallback to recent
       const { data, error } = await supabaseBrowser
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price, sale_price, fire_price,
-          image_url, sku, stock_quantity, is_active, featured, brand_id, category_id,
+          image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
           created_at, updated_at
         `)
         .eq('is_active', true)
+        .order('featured', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(8);
 
@@ -125,14 +126,14 @@ export default function FeaturedProductsSection() {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-gray-900 rounded-xl overflow-hidden animate-pulse">
-              <div className="aspect-square bg-gray-800 h-80"></div>
+            <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse">
+              <div className="aspect-square bg-muted h-80"></div>
               <div className="p-6">
-                <div className="h-6 bg-gray-700 rounded mb-2"></div>
-                <div className="h-4 bg-gray-700 rounded mb-4"></div>
+                <div className="h-6 bg-muted-foreground/30 rounded mb-2"></div>
+                <div className="h-4 bg-muted-foreground/20 rounded mb-4"></div>
                 <div className="flex items-center justify-between">
-                  <div className="h-6 bg-gray-700 rounded w-16"></div>
-                  <div className="h-8 bg-gray-700 rounded w-20"></div>
+                  <div className="h-6 bg-muted-foreground/20 rounded w-16"></div>
+                  <div className="h-8 bg-muted-foreground/30 rounded w-20"></div>
                 </div>
               </div>
             </div>
@@ -224,6 +225,7 @@ export default function FeaturedProductsSection() {
               showDiscount={true}
               context="homepage"
               priority="high"
+              className="!bg-white !border-gray-200"
             />
           ))
         ) : (
