@@ -43,7 +43,7 @@ export default function ProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'sidebar'>('grid');
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
@@ -69,15 +69,13 @@ export default function ProductsPageContent() {
       try {
         setLoading(true);
         const { data, error } = await supabaseBrowser
-          .from('products')
+          .from('main_site_products')
           .select(`
-            id, name, description, price, vip_price, imageUrl, sku,
-            stock_quantity, is_active, brand_id, brand_name, category_id, materials,
-            featured, vip_exclusive, tags, created_at, updated_at
+            id, name, description, short_description, our_price, sale_price, fire_price,
+            image_url, sku, stock_quantity, is_active, featured, brand_id, category_id,
+            created_at, updated_at
           `)
           .eq('is_active', true)
-          .eq('nicotine_product', false)
-          .eq('tobacco_product', false)
           .order('created_at', { ascending: false });
 
         if (error) {
@@ -93,28 +91,31 @@ export default function ProductsPageContent() {
         }
 
         // Transform Supabase data to match our Product interface
-        const transformedProducts = data.map(product => {
+        const transformedProducts = data.map((product: any) => {
           try {
+            const price = Number(product.our_price) || 0;
+            const salePrice = product.sale_price ? Number(product.sale_price) : null;
+            const isOnSale = salePrice && salePrice < price;
+
             return {
               id: product.id,
               name: product.name || 'Unnamed Product',
-              description: product.description || '',
-              price: Number(product.price) || 0,
-              vipPrice: product.vip_price ? Number(product.vip_price) : undefined,
-              image: product.imageUrl || '',
-              imageUrl: product.imageUrl || null,
+              description: product.description || product.short_description || '',
+              price: price,
+              originalPrice: isOnSale ? price : undefined,
+              image: product.image_url || '',
+              imageUrl: product.image_url || null,
               sku: product.sku || '',
-              brand: product.brand_name || 'Unknown',
+              brand: product.brand_id || 'Unknown',
               category: product.category_id || 'Accessories',
-              material: Array.isArray(product.materials) && product.materials.length > 0 ? product.materials[0] : 'Glass',
+              material: 'Glass', // Default for now
               size: 'Standard',
               inStock: (product.stock_quantity || 0) > 0,
               featured: Boolean(product.featured),
-              vipExclusive: Boolean(product.vip_exclusive),
-              onSale: Boolean(product.vip_price && product.vip_price < product.price),
-              newArrival: product.created_at ? new Date(product.created_at).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000 : false,
-              tags: Array.isArray(product.tags) ? product.tags : [],
-              features: []
+              isNew: product.created_at ? new Date(product.created_at).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000 : false,
+              isSale: isOnSale || false,
+              features: [],
+              tags: []
             };
           } catch (transformError) {
             console.error('Error transforming product:', product.id, transformError);
@@ -122,22 +123,22 @@ export default function ProductsPageContent() {
             return {
               id: product.id || 'unknown',
               name: product.name || 'Unnamed Product',
-              description: product.description || '',
-              price: Number(product.price) || 0,
-              image: product.imageUrl || '',
-              imageUrl: product.imageUrl || null,
+              description: product.description || product.short_description || '',
+              price: Number(product.our_price) || 0,
+              image: product.image_url || '',
+              imageUrl: product.image_url || null,
               sku: product.sku || '',
-              brand: product.brand_name || 'Unknown',
+              brand: product.brand_id || 'Unknown',
               category: product.category_id || 'Accessories',
               material: 'Glass',
               size: 'Standard',
               inStock: (product.stock_quantity || 0) > 0,
               featured: false,
-              onSale: false,
-              newArrival: false,
-              tags: [],
-              features: []
-            };
+              isNew: false,
+              isSale: false,
+              features: [],
+              tags: []
+            } as Product;
           }
         });
 
@@ -195,7 +196,7 @@ export default function ProductsPageContent() {
         product.description.toLowerCase().includes(query) ||
         (product.brand && product.brand.toLowerCase().includes(query)) ||
         product.category.toLowerCase().includes(query) ||
-        product.sku.toLowerCase().includes(query) ||
+        (product.sku || '').toLowerCase().includes(query) ||
         (product.tags && product.tags.some(tag => tag.toLowerCase().includes(query)))
       );
     }

@@ -117,18 +117,18 @@ export default function HomePage() {
           <div className="text-center mb-16 px-4 md:px-8">
             <div className="relative inline-block">
               {/* 3D Metallic Frame Background */}
-              <div className="relative bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 p-1 rounded-lg shadow-lg">
+              <div className="relative bg-gradient-to-br from-gray-900 via-gray-700 to-gray-900 p-1 rounded-lg shadow-lg">
                 {/* Inner gradient for 3D effect */}
-                <div className="bg-gradient-to-br from-gray-100 via-gray-300 to-gray-500 p-6 md:p-8 rounded-md">
+                <div className="bg-gradient-to-br from-black via-gray-800 to-black p-6 md:p-8 rounded-md">
                   {/* Highlight for metallic shine */}
-                  <div className="absolute inset-2 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-md pointer-events-none"></div>
+                  <div className="absolute inset-2 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-md pointer-events-none"></div>
 
                   {/* Title */}
-                  <h2 className="text-3xl md:text-6xl text-gray-800 mb-0 font-chalets uppercase relative z-10" style={{
+                  <h2 className="text-3xl md:text-6xl text-white mb-0 font-chalets uppercase relative z-10" style={{
                     fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                     letterSpacing: '0.02em',
                     fontWeight: 'normal',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
                   }}>
                     SHOP OUR COLLECTIONS
                   </h2>
@@ -401,18 +401,18 @@ export default function HomePage() {
             <div className="text-center mb-16 px-4 md:px-8">
               <div className="relative inline-block">
                 {/* 3D Metallic Frame Background */}
-                <div className="relative bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 p-1 rounded-lg shadow-lg">
+                <div className="relative bg-gradient-to-br from-gray-900 via-gray-700 to-gray-900 p-1 rounded-lg shadow-lg">
                   {/* Inner gradient for 3D effect */}
-                  <div className="bg-gradient-to-br from-gray-100 via-gray-300 to-gray-500 p-6 md:p-8 rounded-md">
+                  <div className="bg-gradient-to-br from-black via-gray-800 to-black p-6 md:p-8 rounded-md">
                     {/* Highlight for metallic shine */}
-                    <div className="absolute inset-2 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-md pointer-events-none"></div>
+                    <div className="absolute inset-2 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-md pointer-events-none"></div>
 
                     {/* Title */}
-                    <h2 className="text-3xl md:text-6xl font-chalets text-gray-800 mb-0 relative z-10 uppercase" style={{
+                    <h2 className="text-3xl md:text-6xl font-chalets text-white mb-0 relative z-10 uppercase" style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       letterSpacing: '0.02em',
                       fontWeight: 'normal',
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
                     }}>
                       DOPE FEEDBACK
                     </h2>

@@ -6,7 +6,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Page Templates - Predefined layouts and designs
 CREATE TABLE page_templates (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     description TEXT,
     category TEXT NOT NULL CHECK (category IN ('landing', 'product', 'collection', 'content', 'custom')),
@@ -20,7 +20,7 @@ CREATE TABLE page_templates (
 
 -- User Created Pages - Pages built using the visual editor
 CREATE TABLE user_pages (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
     slug TEXT NOT NULL UNIQUE,
     description TEXT,
@@ -53,7 +53,7 @@ CREATE TABLE user_pages (
 
 -- Component Library - Reusable UI components
 CREATE TABLE component_library (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     category TEXT NOT NULL CHECK (category IN ('layout', 'content', 'form', 'media', 'navigation', 'ecommerce')),
     description TEXT,
@@ -78,7 +78,7 @@ CREATE TABLE component_library (
 
 -- Design Themes - Color schemes, fonts, and styling presets
 CREATE TABLE design_themes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     description TEXT,
     
@@ -115,7 +115,7 @@ CREATE TABLE design_themes (
 
 -- Page Analytics - Track page performance
 CREATE TABLE page_analytics (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     page_id UUID NOT NULL REFERENCES user_pages(id) ON DELETE CASCADE,
     
     -- Traffic Data
@@ -141,7 +141,7 @@ CREATE TABLE page_analytics (
 
 -- Media Assets - Images, videos, and other media for the page builder
 CREATE TABLE media_assets (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     filename TEXT NOT NULL,
     original_name TEXT NOT NULL,
     mime_type TEXT NOT NULL,

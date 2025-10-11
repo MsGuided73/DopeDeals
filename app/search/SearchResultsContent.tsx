@@ -518,7 +518,7 @@ export default function SearchResultsContent() {
                         {result.tags.slice(0, 3).map((tag, index) => (
                           <span
                             key={index}
-                            className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
+                            className="px-2 py-1 bg-gray-900 text-white text-xs rounded-full"
                           >
                             {tag}
                           </span>

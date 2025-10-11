@@ -1,28 +1,27 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import UniversalProductCard from './UniversalProductCard';
+import { supabaseBrowser } from '../lib/supabase-browser';
 
 interface Product {
   id: string;
   name: string;
   description: string | null;
   short_description: string | null;
-  price: number;
-  image_url?: string | null;
-  imageUrl?: string | null;
+  our_price: number;
+  sale_price?: number | null;
+  fire_price?: number | null;
+  image_url: string | null;
+  sku: string | null;
   stock_quantity: number;
   is_active: boolean;
+  featured: boolean;
+  brand_id: string | null;
+  category_id: string | null;
+  created_at: string;
+  updated_at: string;
 }
-
-interface FeaturedProductsResponse {
-  products: Product[];
-  total: number;
-}
-
-// Helper function to get image URL from either field name
-const getProductImageUrl = (product: Product): string | null => {
-  return product.image_url || product.imageUrl || null;
-};
 
 export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -36,22 +35,31 @@ export default function FeaturedProductsSection() {
   const fetchFeaturedProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/featured/products?limit=8');
 
-      if (!response.ok) {
-        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch (e) {
-          // If we can't parse JSON, use the status text
-        }
-        console.error('Featured products API error:', errorMessage);
-        throw new Error(`Failed to fetch featured products: ${errorMessage}`);
+      // Query main_site_products table directly - less strict filtering for now
+      const { data, error } = await supabaseBrowser
+        .from('main_site_products')
+        .select(`
+          id, name, description, short_description, our_price, sale_price, fire_price,
+          image_url, sku, stock_quantity, is_active, featured, brand_id, category_id,
+          created_at, updated_at
+        `)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(8);
+
+      if (error) {
+        console.error('Error fetching featured products:', error);
+        throw new Error(error.message || 'Failed to fetch featured products from database');
       }
 
-      const data: FeaturedProductsResponse = await response.json();
-      setProducts(data.products || []);
+      if (!data) {
+        console.warn('No featured products data received');
+        setProducts([]);
+        return;
+      }
+
+      setProducts(data);
     } catch (err) {
       console.error('Error fetching featured products:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -62,6 +70,28 @@ export default function FeaturedProductsSection() {
 
   const getProductDescription = (product: Product): string => {
     return product.short_description || product.description || 'Premium quality product';
+  };
+
+  // Transform product data for UniversalProductCard
+  const transformProductForCard = (product: Product) => {
+    return {
+      id: product.id,
+      name: product.name,
+      price: product.our_price.toString(),
+      image_url: product.image_url || undefined,
+      imageUrl: product.image_url || undefined,
+      image: product.image_url || undefined,
+      featured: product.featured,
+      stock_quantity: product.stock_quantity,
+      brand_name: product.brand_id || 'Unknown Brand',
+      short_description: getProductDescription(product),
+      description: getProductDescription(product),
+      sku: product.sku || '',
+      compare_at_price: product.sale_price && product.sale_price < product.our_price ? product.sale_price : undefined,
+      discount_percentage: product.sale_price && product.sale_price < product.our_price
+        ? Math.round(((product.our_price - product.sale_price) / product.our_price) * 100)
+        : undefined,
+    };
   };
 
   if (loading) {
@@ -135,17 +165,17 @@ export default function FeaturedProductsSection() {
     );
   }
 
-  // Filter products to only show those with real images
+  // Filter products to only show those with real images - relaxed filtering for now
   const productsWithRealImages = products.filter(product => {
-    const imageUrl = getProductImageUrl(product);
-    return imageUrl &&
-      !imageUrl.includes('placehold.co') &&
-      !imageUrl.includes('placeholder') &&
-      !imageUrl.includes('unsplash.com') &&
-      !imageUrl.includes('picsum.photos') &&
-      !imageUrl.includes('lorempixel.com') &&
-      !imageUrl.includes('dummyimage.com');
+    return product.image_url &&
+      !product.image_url.includes('placehold.co') &&
+      !product.image_url.includes('placeholder');
   });
+
+  // Debug logging
+  console.log('All products:', products.length);
+  console.log('Products with images:', productsWithRealImages.length);
+  console.log('Sample product data:', products[0]);
 
   return (
     <section className="mt-24">
@@ -175,49 +205,54 @@ export default function FeaturedProductsSection() {
         </Link>
       </div>
 
-      {/* Products Grid - Only show products with real images */}
+      {/* Products Grid - Using UniversalProductCard for larger images */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
-        {productsWithRealImages.slice(0, 4).map((product) => (
-          <div key={product.id} className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden group hover:scale-105 transition-all duration-300 border border-gray-700 hover:border-dope-orange-500/50 shadow-xl hover:shadow-[0_0_30px_rgba(255,140,0,0.6)] hover:ring-2 hover:ring-dope-orange/50">
-            <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center h-80 overflow-hidden relative">
-              {/* Subtle frame overlay */}
-              <div className="absolute inset-2 border border-gray-600/30 rounded-lg pointer-events-none"></div>
-              <img
-                src={getProductImageUrl(product) || ''}
-                alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                onError={(e) => {
-                  // Hide products with broken images
-                  (e.target as HTMLImageElement).closest('.bg-gradient-to-br')?.style.setProperty('display', 'none');
-                }}
-              />
-            </div>
-            <div className="p-6 bg-gradient-to-b from-gray-900/50 to-black/80">
-              <h3 className="text-white font-semibold mb-2 text-lg line-clamp-2 group-hover:text-dope-orange-400 transition-colors">{product.name}</h3>
-              <p className="text-gray-300 text-base mb-4 line-clamp-2">{getProductDescription(product)}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-dope-orange-500 font-bold text-xl">${product.price.toFixed(2)}</span>
-                <div className="flex gap-2">
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded text-sm transition-colors"
-                  >
-                    View
-                  </Link>
-                  <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded text-base transition-colors">
-                    Add
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-        
-        {/* Show message if no products with real images */}
-        {productsWithRealImages.length === 0 && (
+        {productsWithRealImages.length > 0 ? (
+          productsWithRealImages.slice(0, 4).map((product) => (
+            <UniversalProductCard
+              key={product.id}
+              product={transformProductForCard(product)}
+              viewMode="grid"
+              size="large"
+              showAddToCart={true}
+              showFavorite={true}
+              showQuickView={true}
+              showRating={true}
+              showBrand={true}
+              showDescription={true}
+              showStock={true}
+              showDiscount={true}
+              context="homepage"
+              priority="high"
+            />
+          ))
+        ) : (
+          // Fallback: Show first 4 products even without "verified" images for testing
+          products.slice(0, 4).map((product) => (
+            <UniversalProductCard
+              key={product.id}
+              product={transformProductForCard(product)}
+              viewMode="grid"
+              size="large"
+              showAddToCart={true}
+              showFavorite={true}
+              showQuickView={true}
+              showRating={true}
+              showBrand={true}
+              showDescription={true}
+              showStock={true}
+              showDiscount={true}
+              context="homepage"
+              priority="high"
+            />
+          ))
+        )}
+
+        {/* Show message if no products at all */}
+        {products.length === 0 && (
           <div className="col-span-full text-center py-12">
-            <p className="text-gray-400 text-lg">No products with verified images available at the moment.</p>
-            <p className="text-gray-500 text-sm mt-2">Check back soon for new arrivals!</p>
+            <p className="text-gray-400 text-lg">No products available at the moment.</p>
+            <p className="text-gray-500 text-sm mt-2">Please check back soon!</p>
           </div>
         )}
       </div>

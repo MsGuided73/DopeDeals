@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import UniversalProductCard from '../../components/UniversalProductCard';
 import { Product } from '../ProductsPageContent';
 
 interface ProductsProductGridProps {
   products: Product[];
-  viewMode: 'grid' | 'list';
+  viewMode: 'grid' | 'list' | 'sidebar';
 }
 
 export default function ProductsProductGrid({ products, viewMode }: ProductsProductGridProps) {
@@ -73,7 +74,7 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
                     <p className="text-sm text-gray-500 mt-1">{product.brand}</p>
                     <p className="text-sm text-gray-600 mt-2 line-clamp-2">{product.description}</p>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2 ml-4">
                     <button
                       onClick={() => toggleFavorite(product.id)}
@@ -97,7 +98,7 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
                       <span className="text-sm text-gray-500 line-through">${product.originalPrice}</span>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     <span className={`text-sm ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
                       {product.inStock ? 'In Stock' : 'Out of Stock'}
@@ -113,6 +114,40 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
               </div>
             </div>
           </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Sidebar view - Image on left, content on right (your requested layout)
+  if (viewMode === 'sidebar') {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {products.map((product) => (
+          <UniversalProductCard
+            key={product.id}
+            product={{
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image_url: product.imageUrl,
+              brand_name: product.brand,
+              short_description: product.description,
+              stock_quantity: product.inStock ? 10 : 0, // Mock stock data
+              featured: product.featured,
+            }}
+            viewMode="sidebar"
+            size="medium"
+            showAddToCart={true}
+            showFavorite={true}
+            showQuickView={true}
+            showRating={true}
+            showBrand={true}
+            showDescription={true}
+            showStock={true}
+            showDiscount={true}
+            onFavorite={toggleFavorite}
+          />
         ))}
       </div>
     );

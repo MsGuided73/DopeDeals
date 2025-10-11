@@ -1,14 +1,17 @@
 # Test Supabase Connection Script
 Write-Host "🔄 Testing Supabase connection..." -ForegroundColor Yellow
 
-# Check if .env file exists
-if (-not (Test-Path .env)) {
-    Write-Host "❌ .env file not found" -ForegroundColor Red
+# Check if .env.local file exists (preferred)
+if (Test-Path .env.local) {
+    $envContent = Get-Content .env.local -Raw
+    Write-Host "📄 Using .env.local file" -ForegroundColor Cyan
+} elseif (Test-Path .env) {
+    $envContent = Get-Content .env -Raw
+    Write-Host "📄 Using .env file" -ForegroundColor Cyan
+} else {
+    Write-Host "❌ No .env or .env.local file found" -ForegroundColor Red
     exit 1
 }
-
-# Load environment variables from .env file
-$envContent = Get-Content .env -Raw
 $supabaseUrl = $null
 $supabaseKey = $null
 

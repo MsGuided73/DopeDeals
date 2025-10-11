@@ -16,28 +16,29 @@ import { categorizeProduct, filterProductsByCategory } from '../../lib/product-c
 export interface BongProduct {
   id: string;
   name: string;
-  price: number;
-  vip_price?: number;
-  imageUrl?: string; // Database uses camelCase
+  our_price: number;
+  sale_price?: number;
+  image_url: string | null;
+  imageUrl?: string; // Add alias for compatibility
   image?: string; // Add alias for compatibility
-  description?: string;
-  sku: string;
-  stock_quantity: number; // Database uses snake_case
-  is_active: boolean; // Database uses snake_case
-  brand?: string;
-  category?: string;
-  material?: string;
-  height?: string;
-  joint_size?: string;
-  jointSize?: string; // Add alias for compatibility
-  percolator?: string;
-  createdAt: string; // Database uses camelCase
-  updated_at: string; // Database uses snake_case
+  description?: string | null;
+  short_description?: string | null;
+  sku: string | null;
+  stock_quantity: number;
+  is_active: boolean;
+  featured: boolean;
+  brand_id: string | null;
+  category_id: string | null;
+  created_at: string;
+  updated_at: string;
   // Add missing properties that components expect
+  price?: number; // For compatibility
   isNew?: boolean;
   isSale?: boolean;
   originalPrice?: number;
   inStock?: boolean;
+  brand?: string; // For compatibility
+  category?: string; // For compatibility
 }
 
 export default function BongsPageContent() {
@@ -73,50 +74,47 @@ export default function BongsPageContent() {
     // Apply filters and sorting
     let filtered = [...products];
 
-    // Apply filters
+    // Apply filters - using available fields from main_site_products
     if (filters.brands.length > 0) {
-      filtered = filtered.filter(p => p.brand && filters.brands.includes(p.brand));
-    }
-    if (filters.materials.length > 0) {
-      filtered = filtered.filter(p => p.material && filters.materials.includes(p.material));
-    }
-    if (filters.heights.length > 0) {
-      filtered = filtered.filter(p => p.height && filters.heights.includes(p.height));
-    }
-    if (filters.jointSizes.length > 0) {
-      filtered = filtered.filter(p => p.joint_size && filters.jointSizes.includes(p.joint_size));
-    }
-    if (filters.percolators.length > 0) {
-      filtered = filtered.filter(p => p.percolator && filters.percolators.includes(p.percolator));
+      filtered = filtered.filter((p: BongProduct) => p.brand_id && filters.brands.includes(p.brand_id));
     }
     if (filters.inStock) {
-      filtered = filtered.filter(p => p.stock_quantity > 0);
+      filtered = filtered.filter((p: BongProduct) => p.stock_quantity > 0);
     }
-    // Note: onSale and isNew filters removed since we're using real data without these fields
 
-    // Price range filter
-    filtered = filtered.filter(p => p.price >= filters.priceRange[0] && p.price <= filters.priceRange[1]);
+    // Price range filter - use our_price field
+    filtered = filtered.filter((p: BongProduct) => {
+      const price = p.our_price || p.price || 0;
+      return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+    });
 
     // Apply sorting
     switch (sortBy) {
       case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort((a: BongProduct, b: BongProduct) => {
+          const priceA = a.our_price || a.price || 0;
+          const priceB = b.our_price || b.price || 0;
+          return priceA - priceB;
+        });
         break;
       case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
+        filtered.sort((a: BongProduct, b: BongProduct) => {
+          const priceA = a.our_price || a.price || 0;
+          const priceB = b.our_price || b.price || 0;
+          return priceB - priceA;
+        });
         break;
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a: BongProduct, b: BongProduct) => a.name.localeCompare(b.name));
         break;
-
       case 'newest':
-        filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        filtered.sort((a: BongProduct, b: BongProduct) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         break;
       default: // featured
         // Sort by newest first, then by stock quantity
-        filtered.sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime();
-          const dateB = new Date(b.createdAt).getTime();
+        filtered.sort((a: BongProduct, b: BongProduct) => {
+          const dateA = new Date(a.created_at).getTime();
+          const dateB = new Date(b.created_at).getTime();
           if (dateA !== dateB) return dateB - dateA;
           return b.stock_quantity - a.stock_quantity;
         });
@@ -153,14 +151,14 @@ export default function BongsPageContent() {
         console.log(`🎯 Filtered to ${bongProducts.length} bongs using enhanced categorization`);
 
         if (bongProducts.length > 0) {
-          console.log('📊 First 3 bong products:', bongProducts.slice(0, 3).map(p => ({
+          console.log('📊 First 3 bong products:', bongProducts.slice(0, 3).map((p: any) => ({
             name: p.name,
             sku: p.sku,
             category: categorizeProduct(p)
           })));
         } else {
           console.log('⚠️ No bong products found after categorization');
-          console.log('📋 Sample products for debugging:', products.slice(0, 3).map(p => ({
+          console.log('📋 Sample products for debugging:', products.slice(0, 3).map((p: any) => ({
             name: p.name,
             sku: p.sku,
             zoho_category_name: p.zoho_category_name,

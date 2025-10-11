@@ -13,7 +13,7 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
 }
 
 const CSV_URL =
-  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/product_csv/10-08-25_inventory_list/CSV1-First%201500%20Lines%20-%20Columns%20Reduced.csv';
+  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/product_csv/Inventory_list/100925-Updated%20CSV%20for%20Rebuild-v5150.csv';
 
 const BATCH_SIZE = 500;
 
