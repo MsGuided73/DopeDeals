@@ -89,20 +89,12 @@ export const addToCart = async (productId: string, quantity: number = 1): Promis
 // Update cart item quantity with toast notification
 export const updateCartQuantity = async (itemId: string, quantity: number): Promise<boolean> => {
   const sessionId = getSessionId();
-  
+
   const loadingToast = toast.loading('Updating cart...');
-  
+
   try {
-    const response = await fetch('/api/cart', {
+    const response = await fetch(`/api/cart?cartItemId=${itemId}&sessionId=${sessionId}&quantity=${quantity}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sessionId,
-        itemId,
-        quantity,
-      }),
     });
 
     if (!response.ok) {
@@ -115,7 +107,10 @@ export const updateCartQuantity = async (itemId: string, quantity: number): Prom
       duration: 2000,
       icon: '✅',
     });
-    
+
+    // Trigger cart refresh event for global state
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+
     return true;
   } catch (error) {
     toast.dismiss(loadingToast);
@@ -127,19 +122,12 @@ export const updateCartQuantity = async (itemId: string, quantity: number): Prom
 // Remove item from cart with toast notification
 export const removeFromCart = async (itemId: string): Promise<boolean> => {
   const sessionId = getSessionId();
-  
+
   const loadingToast = toast.loading('Removing from cart...');
-  
+
   try {
-    const response = await fetch('/api/cart', {
+    const response = await fetch(`/api/cart?cartItemId=${itemId}&sessionId=${sessionId}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sessionId,
-        itemId,
-      }),
     });
 
     if (!response.ok) {
@@ -152,7 +140,10 @@ export const removeFromCart = async (itemId: string): Promise<boolean> => {
       duration: 2000,
       icon: '🗑️',
     });
-    
+
+    // Trigger cart refresh event for global state
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+
     return true;
   } catch (error) {
     toast.dismiss(loadingToast);
@@ -216,20 +207,17 @@ export const getCart = async (): Promise<Cart | null> => {
 // Clear entire cart
 export const clearCart = async (): Promise<boolean> => {
   const sessionId = getSessionId();
-  
+
   const loadingToast = toast.loading('Clearing cart...');
-  
+
   try {
-    const response = await fetch('/api/cart/clear', {
+    const response = await fetch(`/api/cart?sessionId=${sessionId}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ sessionId }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to clear cart');
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to clear cart');
     }
 
     toast.dismiss(loadingToast);
@@ -237,11 +225,14 @@ export const clearCart = async (): Promise<boolean> => {
       duration: 2000,
       icon: '🧹',
     });
-    
+
+    // Trigger cart refresh event for global state
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+
     return true;
   } catch (error) {
     toast.dismiss(loadingToast);
-    toast.error('Failed to clear cart');
+    toast.error(error instanceof Error ? error.message : 'Failed to clear cart');
     return false;
   }
 };

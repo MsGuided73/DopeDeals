@@ -8,6 +8,7 @@ import AgeVerification from '../components/AgeVerification';
 import StaffPicksSection from '../components/StaffPicksSection';
 import FullscreenCarousel from '../components/FullscreenCarousel';
 import FeaturedProductsSection from '../components/FeaturedProductsSection';
+import RecentlyViewedProducts from '../components/RecentlyViewedProducts';
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
@@ -43,14 +44,14 @@ export default function HomePage() {
         <FullscreenCarousel />
 
         {/* VIP Membership Hero Section */}
-        <div className="w-full px-6 pt-8 pb-4">
+        <div className="w-full px-6 pt-1 pb-1">
           <Link
             href="/rewards"
             className="relative block w-full h-128 bg-cover bg-center rounded-xl overflow-hidden group"
             style={{
               backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/slider1.png')",
               backgroundSize: "cover",
-              backgroundPosition: "center"
+              backgroundPosition: "bottom"
             }}
           >
             {/* Dark overlay for text readability */}
@@ -106,40 +107,35 @@ export default function HomePage() {
         </div>
 
       {/* Collections Grid */}
-      <main className="w-full px-8 py-16">
+      <main className="w-full px-0 py-0">
         {/* Enhanced Metallic Section Divider */}
-        <div className="w-full mb-16">
+        <div className="w-full -mt-0 mb-0">
           {/* Top metallic line */}
-          <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent mb-8 shadow-lg"></div>
+          <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent mb-8 shadow-lg"></div>
           <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
 
           {/* Collections Header - Clean Metallic Frame */}
-          <div className="text-center mb-16 px-4 md:px-8">
+          <div className="text-center mb-6 px-4 md:px-8">
             <div className="relative inline-block">
-              {/* 3D Metallic Frame Background */}
-              <div className="relative bg-gradient-to-br from-gray-900 via-gray-700 to-gray-900 p-1 rounded-lg shadow-lg">
-                {/* Inner gradient for 3D effect */}
-                <div className="bg-gradient-to-br from-black via-gray-800 to-black p-6 md:p-8 rounded-md">
-                  {/* Highlight for metallic shine */}
-                  <div className="absolute inset-2 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-md pointer-events-none"></div>
-
-                  {/* Title */}
-                  <h2 className="text-3xl md:text-6xl text-white mb-0 font-chalets uppercase relative z-10" style={{
-                    fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                    letterSpacing: '0.02em',
-                    fontWeight: 'normal',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                  }}>
-                    SHOP OUR COLLECTIONS
-                  </h2>
-                </div>
-              </div>
+              {/* Title */}
+              <h2 className="text-4xl md:text-7xl text-black font-chalets uppercase" style={{
+                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                letterSpacing: '0.02em',
+                fontWeight: 'normal',
+                background: 'linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 25%, #2a2a2a 50%, #4a4a4a 75%, #1a1a1a 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                textShadow: 'none'
+              }}>
+                SHOP OUR COLLECTIONS
+              </h2>
             </div>
           </div>
 
           {/* Bottom metallic lines */}
           <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-8"></div>
-          <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent shadow-lg"></div>
+          <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 h-auto md:h-[1400px] w-full">
@@ -155,8 +151,7 @@ export default function HomePage() {
             title="Click anywhere to explore our premium Bongs collection!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>BONGS</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium glass artistry</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>BONGS</h3>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -182,8 +177,7 @@ export default function HomePage() {
             title="Click anywhere to explore our premium Dab Tools collection!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB TOOLS</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Professional precision tools</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB TOOLS</h3>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -209,8 +203,7 @@ export default function HomePage() {
             title="Click anywhere to discover our premium THCA flower selection!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA FLOWER</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium indoor cultivation</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA FLOWER</h3>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -236,8 +229,7 @@ export default function HomePage() {
             title="Click anywhere to check out our Dope Dab Rigs!"        >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB RIGS</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium concentrate essentials</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>DAB RIGS</h3>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -263,8 +255,7 @@ export default function HomePage() {
           >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA PRE-ROLLS</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Premium hand-rolled perfection</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>THCA PRE-ROLLS</h3>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -317,8 +308,7 @@ export default function HomePage() {
           >
 
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2rem, 8vw, 6rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>HOOKAHS</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Traditional smoking culture</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>HOOKAHS</h3>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -344,8 +334,7 @@ export default function HomePage() {
             title="Click anywhere to explore our premium E-Rigs!"
           >
             <div className="absolute bottom-2 left-2 text-white">
-              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(1.5rem, 6vw, 4rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>E-RIGS</h3>
-              <p className="text-sm md:text-lg opacity-90 mt-1 md:mt-2" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6)' }}>Electric precision</p>
+              <h3 className="font-chalets tracking-wider leading-none" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal', letterSpacing: '0.02em', fontSize: 'clamp(2.5rem, 10vw, 7rem)', lineHeight: '0.9', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)' }}>E-RIGS</h3>
             </div>
             {/* Metallic CTA Button */}
             <div className="absolute top-2 right-2">
@@ -395,7 +384,7 @@ export default function HomePage() {
           {/* Enhanced Metallic Section Divider */}
           <div className="w-full mb-16">
             {/* Top metallic line */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent mb-8 shadow-lg"></div>
+            <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent mb-8 shadow-lg"></div>
             <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
 
             <div className="text-center mb-16 px-4 md:px-8">
@@ -408,7 +397,7 @@ export default function HomePage() {
                     <div className="absolute inset-2 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-md pointer-events-none"></div>
 
                     {/* Title */}
-                    <h2 className="text-3xl md:text-6xl font-chalets text-white mb-0 relative z-10 uppercase" style={{
+                    <h2 className="text-2xl md:text-5xl font-chalets text-white mb-0 relative z-10 uppercase" style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       letterSpacing: '0.02em',
                       fontWeight: 'normal',
@@ -423,7 +412,7 @@ export default function HomePage() {
 
             {/* Bottom metallic lines */}
             <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-8"></div>
-            <div className="h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent shadow-lg"></div>
+            <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg"></div>
           </div>
 
           <div className="text-center mb-12">
@@ -599,11 +588,8 @@ export default function HomePage() {
 
 
 
-        {/* Featured Products Section - Real Images Only */}
-        <FeaturedProductsSection />
-
-        {/* Staff Picks Section - Dynamic */}
-        <StaffPicksSection />
+        {/* Recently Viewed Products - Just above footer */}
+        <RecentlyViewedProducts />
 
 
       </main>

@@ -35,7 +35,7 @@ interface UniversalProductCardProps {
   };
   
   // Layout Options
-  viewMode?: 'grid' | 'list' | 'compact' | 'featured' | 'sidebar';
+  viewMode?: 'grid' | 'list' | 'compact' | 'featured' | 'sidebar' | 'homepage-featured';
   size?: 'small' | 'medium' | 'large';
   
   // Feature Toggles
@@ -516,6 +516,147 @@ export default function UniversalProductCard({
     );
   }
 
+  // Homepage featured view - Image on left, content on right with full height image
+  if (viewMode === 'homepage-featured') {
+    return (
+      <div className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}>
+        {/* Large Product Image - Left Side - Full Height */}
+        <div className="relative w-64 h-80 flex-shrink-0 bg-gray-100 overflow-hidden">
+          {hasImage ? (
+            <Image
+              src={imageUrl}
+              alt={product.name}
+              fill
+              className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+              sizes="256px"
+              priority={priority === 'high'}
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="text-center">
+                <div className="text-5xl mb-2">{placeholder.icon}</div>
+                <div className="text-sm">{placeholder.text}</div>
+              </div>
+            </div>
+          )}
+
+          {/* Badges */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1">
+            {product.featured && (
+              <div className="bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                Featured
+              </div>
+            )}
+            {showDiscount && discountPercentage && (
+              <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                -{discountPercentage}%
+              </div>
+            )}
+          </div>
+
+          {/* Action buttons */}
+          <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            {showFavorite && (
+              <button
+                onClick={handleToggleFavorite}
+                className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-50 transition-colors"
+              >
+                <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+              </button>
+            )}
+            {showQuickView && (
+              <button
+                onClick={handleQuickView}
+                className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-50 transition-colors"
+              >
+                <Eye className="w-4 h-4 text-gray-600" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Product Info - Right Side */}
+        <div className="flex-1 p-4 flex flex-col justify-between">
+          {/* Top section - Title and brand */}
+          <div className="mb-3">
+            <h3 className={`font-semibold ${config.title} mb-1 line-clamp-2 group-hover:text-dope-orange-600 transition-colors`}>
+              {product.name}
+            </h3>
+
+            {showBrand && product.brand_name && (
+              <p className="text-sm text-gray-500 mb-2">{product.brand_name}</p>
+            )}
+
+            {showRating && product.rating && (
+              <div className="flex items-center gap-1 mb-2">
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(product.rating!)
+                          ? 'fill-yellow-400 text-yellow-400'
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                {product.review_count && (
+                  <span className="text-sm text-gray-500">({product.review_count})</span>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Middle section - Description */}
+          {showDescription && cleanShortDescription && (
+            <div className="flex-1 mb-3">
+              <p className="text-gray-600 text-sm line-clamp-3">
+                {cleanShortDescription}
+              </p>
+            </div>
+          )}
+
+          {/* Bottom section - Price and actions */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className={`font-bold text-dope-orange-600 ${config.price}`}>
+                ${price.toFixed(2)}
+              </span>
+              {hasDiscount && compareAtPrice && (
+                <span className="text-sm text-gray-400 line-through">
+                  ${compareAtPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              {showStock && product.stock_quantity !== undefined && (
+                <span className={`text-xs px-2 py-1 rounded-full ${
+                  isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  {isInStock ? 'In Stock' : 'Out of Stock'}
+                </span>
+              )}
+
+              {showAddToCart && (
+                <button
+                  onClick={handleAddToCart}
+                  disabled={!isInStock || isAddingToCart}
+                  className="glassmorphic-medium hover:bg-dope-orange-500 hover:text-white text-dope-orange-600 border border-dope-orange-400 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-dope-orange-500/30 flex items-center gap-2"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Default grid view
   return (
     <div className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}>
@@ -539,7 +680,7 @@ export default function UniversalProductCard({
             </div>
           </div>
         )}
-        
+
         {/* Badges */}
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {product.featured && (

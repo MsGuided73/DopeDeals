@@ -207,13 +207,13 @@ export default function FeaturedProductsSection() {
       </div>
 
       {/* Products Grid - Using UniversalProductCard for larger images */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-24">
         {productsWithRealImages.length > 0 ? (
-          productsWithRealImages.slice(0, 4).map((product) => (
+          productsWithRealImages.slice(0, 3).map((product) => (
             <UniversalProductCard
               key={product.id}
               product={transformProductForCard(product)}
-              viewMode="grid"
+              viewMode="homepage-featured"
               size="large"
               showAddToCart={true}
               showFavorite={true}
@@ -234,7 +234,7 @@ export default function FeaturedProductsSection() {
             <UniversalProductCard
               key={product.id}
               product={transformProductForCard(product)}
-              viewMode="grid"
+              viewMode="homepage-featured"
               size="large"
               showAddToCart={true}
               showFavorite={true}

@@ -1,14 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { config } from 'dotenv';
+import * as path from 'path';
+
+// Load .env.local explicitly in development
+if (process.env.NODE_ENV === 'development') {
+  const envPath = path.resolve(process.cwd(), '.env.local');
+  config({ path: envPath });
+}
 
 export async function GET(req: NextRequest) {
   try {
-    // Direct Supabase connection
+    // Ensure environment variables are loaded in development
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+    // Debug logging for development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Pipes API - Environment check:', {
+        hasUrl: !!supabaseUrl,
+        hasKey: !!supabaseKey,
+        urlPrefix: supabaseUrl?.substring(0, 20) + '...',
+        keyPrefix: supabaseKey?.substring(0, 20) + '...'
+      });
+    }
+
     if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ message: 'Supabase credentials not configured' }, { status: 500 });
+      console.error('Pipes API - Missing credentials:', {
+        supabaseUrl: !!supabaseUrl,
+        supabaseKey: !!supabaseKey
+      });
+      return NextResponse.json({
+        message: 'Supabase credentials not configured',
+        debug: process.env.NODE_ENV === 'development' ? {
+          supabaseUrl: !!supabaseUrl,
+          supabaseKey: !!supabaseKey
+        } : undefined
+      }, { status: 500 });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);

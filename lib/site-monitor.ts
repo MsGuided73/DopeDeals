@@ -175,13 +175,19 @@ class SiteMonitor {
    * Report and handle errors
    */
   async reportError(errorData: Partial<ErrorReport>): Promise<void> {
+    // Validate error data
+    if (!errorData || typeof errorData !== 'object') {
+      console.warn('Site Monitor: Invalid error data provided');
+      return;
+    }
+
     const errorReport: ErrorReport = {
       id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date(),
       error: errorData.error || 'Unknown error',
       stack: errorData.stack,
-      userAgent: navigator.userAgent,
-      url: errorData.url || window.location.href,
+      userAgent: typeof window !== 'undefined' ? window.navigator?.userAgent : 'Server-side',
+      url: errorData.url || (typeof window !== 'undefined' ? window.location?.href : 'Unknown'),
       severity: errorData.severity || 'medium',
       resolved: false,
       autoFixable: this.isAutoFixable(errorData.error || '')

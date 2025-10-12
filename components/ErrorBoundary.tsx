@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { siteMonitor } from '../lib/site-monitor';
+// import { siteMonitor } from '../lib/site-monitor'; // DISABLED - causing console errors
 
 interface Props {
   children: ReactNode;
@@ -26,13 +26,13 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log error to our monitoring system
-    siteMonitor.reportError({
-      error: error.message,
-      stack: error.stack,
-      severity: 'high',
-      url: window.location.href
-    });
+    // DISABLED: Log error to our monitoring system
+    // siteMonitor.reportError({
+    //   error: error.message,
+    //   stack: error.stack,
+    //   severity: 'high',
+    //   url: window.location.href
+    // });
 
     this.setState({
       error,
@@ -110,12 +110,13 @@ export default class ErrorBoundary extends Component<Props, State> {
 // Hook version for functional components
 export function useErrorHandler() {
   return (error: Error, errorInfo?: { componentStack?: string }) => {
-    siteMonitor.reportError({
-      error: error.message,
-      stack: error.stack,
-      severity: 'high',
-      url: window.location.href
-    });
+    // DISABLED: siteMonitor.reportError({
+    //   error: error.message,
+    //   stack: error.stack,
+    //   severity: 'high',
+    //   url: window.location.href
+    // });
+    console.error('Error Handler caught error:', error);
   };
 }
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { siteMonitor } from '../lib/site-monitor';
+// import { siteMonitor } from '../lib/site-monitor'; // DISABLED - causing console errors
 
 interface LoadingStateProps {
   loading: boolean;
@@ -27,11 +27,12 @@ export default function LoadingState({
     if (loading && timeout > 0) {
       timeoutId = setTimeout(() => {
         setShowTimeout(true);
-        siteMonitor.reportError({
-          error: `Loading timeout after ${timeout}ms`,
-          severity: 'medium',
-          url: window.location.href
-        });
+        // DISABLED: siteMonitor.reportError({
+        //   error: `Loading timeout after ${timeout}ms`,
+        //   severity: 'medium',
+        //   url: window.location.href
+        // });
+        console.log(`Loading timeout after ${timeout}ms`);
       }, timeout);
     }
 
@@ -155,12 +156,13 @@ export function useLoadingState(initialLoading = false) {
     setLoading(false);
     setError(errorMessage);
 
-    // Report to monitoring system
-    siteMonitor.reportError({
-      error: errorMessage,
-      severity: 'medium',
-      url: window.location.href
-    });
+    // DISABLED: Report to monitoring system
+    // siteMonitor.reportError({
+    //   error: errorMessage,
+    //   severity: 'medium',
+    //   url: window.location.href
+    // });
+    console.log('Loading error:', errorMessage);
   };
 
   return {

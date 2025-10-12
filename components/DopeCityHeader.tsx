@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { User, ShoppingCart, Search, Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { useCart } from './contexts/CartContext';
 
 export default function DopeCityHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,6 +10,9 @@ export default function DopeCityHeader() {
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const shopDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get cart context
+  const { cartCount } = useCart();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -241,7 +245,7 @@ export default function DopeCityHeader() {
             <Link href="/cart" className="text-white hover:text-yellow-400 transition-colors relative" aria-label="Cart">
               <ShoppingCart className="w-6 h-6" />
               <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                0
+                {cartCount > 99 ? '99+' : cartCount}
               </span>
             </Link>
 

@@ -52,36 +52,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Build query based on user or session
-    let query = supabase
+    // Get cart items first
+    let cartQuery = supabase
       .from('shopping_cart')
-      .select(`
-        id,
-        product_id,
-        quantity,
-        price_at_time,
-        created_at,
-        updated_at,
-        products (
-          id,
-          name,
-          description,
-          sku,
-          price,
-          vip_price,
-          imageUrl,
-          stock_quantity,
-          is_active
-        )
-      `);
+      .select('id, product_id, quantity, price_at_time, created_at, updated_at')
+      .order('created_at', { ascending: false });
 
     if (userId) {
-      query = query.eq('user_id', userId);
+      cartQuery = cartQuery.eq('user_id', userId);
     } else {
-      query = query.eq('session_id', sessionId);
+      cartQuery = cartQuery.eq('session_id', sessionId);
     }
 
-    const { data: cartItems, error } = await query.order('created_at', { ascending: false });
+    const { data: cartItems, error } = await cartQuery;
 
     if (error) {
       console.error('Error fetching cart:', error);
@@ -91,11 +74,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Calculate cart totals
-    let subtotal = 0;
-    const items = cartItems?.map(item => {
+    // Get product details for each cart item
+    const items = await Promise.all((cartItems || []).map(async (item) => {
+      const { data: product } = await supabase
+        .from('main_site_products')
+        .select('id, name, description, short_description, our_price, fire_price, image_url, sku, stock_quantity, is_active')
+        .eq('id', item.product_id)
+        .single();
+
       const itemTotal = parseFloat(item.price_at_time) * item.quantity;
-      subtotal += itemTotal;
 
       return {
         id: item.id,
@@ -105,20 +92,23 @@ export async function GET(request: NextRequest) {
         itemTotal,
         createdAt: item.created_at,
         updatedAt: item.updated_at,
-        product: item.products ? {
-          id: item.products.id,
-          name: item.products.name,
-          description: item.products.description,
-          sku: item.products.sku,
-          currentPrice: parseFloat(item.products.price),
-          vipPrice: item.products.vip_price ? parseFloat(item.products.vip_price) : null,
-          image_url: item.products.image_url,
-          stockQuantity: item.products.stock_quantity,
-          isActive: item.products.is_active,
-          inStock: (item.products.stock_quantity || 0) > 0
+        product: product ? {
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          sku: product.sku,
+          currentPrice: parseFloat(product.our_price),
+          vipPrice: product.fire_price ? parseFloat(product.fire_price) : null,
+          image_url: product.image_url,
+          stockQuantity: product.stock_quantity,
+          isActive: product.is_active,
+          inStock: (product.stock_quantity || 0) > 0
         } : null
       };
-    }) || [];
+    }));
+
+    // Calculate cart totals
+    const subtotal = items.reduce((sum, item) => sum + item.itemTotal, 0);
 
     // Calculate tax and shipping (basic logic - customize as needed)
     const taxRate = 0.08; // 8% tax
@@ -169,8 +159,8 @@ export async function POST(request: NextRequest) {
 
     // Get product details and current price
     const { data: product, error: productError } = await supabase
-      .from('products')
-      .select('id, name, price, vip_price, stock_quantity, is_active, nicotine_product, tobacco_product')
+      .from('main_site_products')
+      .select('id, name, our_price, fire_price, stock_quantity, is_active, nicotine_product, tobacco_product')
       .eq('id', productId)
       .single();
 
@@ -196,9 +186,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if ((product.stock_quantity || 0) < quantity) {
+    // INVENTORY VALIDATION: Check against external inventory system
+    const currentStock = product.stock_quantity || 0;
+
+    // If stock is 0 or negative, try to get real-time inventory from external system
+    if (currentStock <= 0) {
+      console.log(`[Cart API] Product ${productId} has ${currentStock} stock, checking external inventory...`);
+
+      // TODO: Add real-time inventory check from Zoho or external system
+      // For now, block the purchase if local stock is 0
+      if (currentStock < quantity) {
+        return NextResponse.json(
+          {
+            error: 'Product is currently out of stock',
+            details: 'Please check back later or contact support for availability'
+          },
+          { status: 400 }
+        );
+      }
+    } else if (currentStock < quantity) {
       return NextResponse.json(
-        { error: 'Insufficient stock' },
+        {
+          error: `Only ${currentStock} items available in stock`,
+          requested: quantity,
+          available: currentStock
+        },
         { status: 400 }
       );
     }
@@ -217,7 +229,7 @@ export async function POST(request: NextRequest) {
 
     const { data: existingItem } = await existingQuery.single();
 
-    const currentPrice = parseFloat(product.price);
+    const currentPrice = parseFloat(product.our_price);
 
     if (existingItem) {
       // Update existing item
@@ -308,6 +320,60 @@ export async function PUT(request: NextRequest) {
     if (quantity < 0) {
       return NextResponse.json(
         { error: 'Quantity must be positive' },
+        { status: 400 }
+      );
+    }
+
+    // Get current cart item and product details for validation
+    let cartItemQuery = supabase
+      .from('shopping_cart')
+      .select('product_id, quantity')
+      .eq('id', cartItemId);
+
+    if (userId) {
+      cartItemQuery = cartItemQuery.eq('user_id', userId);
+    } else if (sessionId) {
+      cartItemQuery = cartItemQuery.eq('session_id', sessionId);
+    }
+
+    const { data: cartItemData } = await cartItemQuery.single();
+
+    if (!cartItemData) {
+      return NextResponse.json(
+        { error: 'Cart item not found' },
+        { status: 404 }
+      );
+    }
+
+    // Get current product stock
+    const { data: product } = await supabase
+      .from('main_site_products')
+      .select('stock_quantity, is_active')
+      .eq('id', cartItemData.product_id)
+      .single();
+
+    if (!product) {
+      return NextResponse.json(
+        { error: 'Product not found' },
+        { status: 404 }
+      );
+    }
+
+    if (!product.is_active) {
+      return NextResponse.json(
+        { error: 'Product is not available' },
+        { status: 400 }
+      );
+    }
+
+    // Validate stock availability
+    if ((product.stock_quantity || 0) < quantity) {
+      return NextResponse.json(
+        {
+          error: `Only ${product.stock_quantity} items available in stock`,
+          requested: quantity,
+          available: product.stock_quantity
+        },
         { status: 400 }
       );
     }

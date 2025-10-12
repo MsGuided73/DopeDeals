@@ -1,15 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { User, ShoppingCart, X, Star, TrendingUp, Gift } from 'lucide-react';
+import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu } from 'lucide-react';
 import EnhancedSearchBar from './EnhancedSearchBar';
+import { useCart } from '../contexts/CartContext';
 
 export default function GlobalMasthead() {
   const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
+
+  // Get cart context
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,64 +55,58 @@ export default function GlobalMasthead() {
   return (
     <header className="sticky top-0 z-50">
       <div>
-        {/* Main Masthead - Match Home Page Exactly */}
-        <div className="bg-black text-white px-1 flex items-center justify-between gap-2" style={{ minHeight: '140px', height: '140px' }}>
-          {/* Left: HUGE DOPE CITY Logo - Centered */}
-          <div className="flex-1 flex justify-center">
-            <div
-              className="font-chalets font-black leading-none text-white flex-shrink-0 tracking-wider"
-              style={{
-                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                fontSize: 'clamp(4rem, 16vw, 9rem)',
-                lineHeight: '0.9',
-                fontWeight: 'normal'
-              }}
-            >
-              <Link href="/">
-                DOPE CITY
+        {/* Main Masthead - Mobile Optimized */}
+        <div className="bg-black text-white">
+          {/* Top Row: Logo, Icons */}
+          <div className="flex items-center justify-between px-4 py-3">
+            {/* Left: DOPE CITY Logo - Smaller on mobile */}
+            <div className="flex-1 min-w-0">
+              <Link href="/" className="block">
+                <h1 className="font-chalets text-xl md:text-4xl font-black text-white tracking-wider truncate" style={{
+                  fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                  fontWeight: 'normal'
+                }}>
+                  DOPE CITY
+                </h1>
               </Link>
+            </div>
+
+            {/* Right: Compact Icons */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <button
+                onClick={() => setShowProfileModal(true)}
+                className="p-1.5 hover:text-yellow-400 transition-colors"
+                title="Profile & Recommendations"
+              >
+                <User className="w-5 h-5 md:w-6 md:h-6" />
+              </button>
+              <Link href="/cart" className="p-1.5 hover:text-yellow-400 transition-colors relative" title="Shopping Cart">
+                <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
+                <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              </Link>
+              <button
+                className="p-1.5 hover:text-yellow-400 transition-colors md:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                title="Menu"
+              >
+                {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
 
-          {/* Center: Search Bar */}
-          <div className="flex-1 max-w-3xl mx-8">
+          {/* Search Bar - Below masthead */}
+          <div className="px-4 pb-3">
             <EnhancedSearchBar />
-          </div>
-
-          {/* Right: User Actions - Enhanced with 20px spacing and 2x larger 3D icons */}
-          <div className="flex items-center gap-6 flex-shrink-0 mr-5">
-            <Link href="/sitemap-page" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110" title="Site Map">
-              <svg className="w-12 h-12 drop-shadow-lg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-              </svg>
-            </Link>
-            <button
-              onClick={() => setShowProfileModal(true)}
-              className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110"
-              title="Profile & Recommendations"
-            >
-              <User className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
-            </button>
-            <Link href="/cart" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 relative" title="Shopping Cart">
-              <ShoppingCart className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
-              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
-                0
-              </span>
-            </Link>
           </div>
         </div>
 
         {/* DOPE Orange divider line - THICK */}
         <div className="h-2 bg-dope-orange"></div>
 
-        {/* Glassmorphic nav bar */}
-        <nav
-          className={`backdrop-blur-lg transition-all duration-300 ease-in-out ${
-            scrolled
-              ? "bg-white/80 dark:bg-gray-900/80 shadow-lg"
-              : "bg-white/70 dark:bg-gray-900/70 shadow-md"
-          }`}
-        >
+        {/* Glassmorphic nav bar - Desktop Only */}
+        <nav className="hidden md:block bg-white/90 backdrop-blur-md">
           <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
             {/* Shop Dropdown - Consolidated Categories and Brands */}
             <li

@@ -79,13 +79,13 @@ export default function RoorBrandPageContent() {
       setLoading(true);
       try {
         const { data, error } = await supabaseBrowser
-          .from('products')
+          .from('main_site_products')
           .select('*')
-          .or('brand_name.ilike.%ROOR%,name.ilike.%ROOR%,sku.ilike.%ROOR%')
+          .or('name.ilike.%ROOR%,sku.ilike.%ROOR%')
           .eq('is_active', true)
           .eq('nicotine_product', false)
           .eq('tobacco_product', false)
-          .order('price', { ascending: false });
+          .order('our_price', { ascending: false });
 
         if (error) {
           console.error('Error fetching ROOR products:', error);
@@ -163,7 +163,7 @@ export default function RoorBrandPageContent() {
     if (filters.priceRange !== 'all') {
       const [min, max] = filters.priceRange.split('-').map(p => p === '+' ? Infinity : parseInt(p));
       filtered = filtered.filter(product => {
-        const price = parseFloat(product.price);
+        const price = parseFloat(product.price || '0');
         return price >= min && (max === undefined || price <= max);
       });
     }
@@ -172,9 +172,9 @@ export default function RoorBrandPageContent() {
     filtered.sort((a, b) => {
       switch (filters.sortBy) {
         case 'price-low':
-          return parseFloat(a.price) - parseFloat(b.price);
+          return parseFloat(a.price || '0') - parseFloat(b.price || '0');
         case 'price-high':
-          return parseFloat(b.price) - parseFloat(a.price);
+          return parseFloat(b.price || '0') - parseFloat(a.price || '0');
         case 'name':
           return a.name.localeCompare(b.name);
         case 'featured':

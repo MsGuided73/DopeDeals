@@ -29,6 +29,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     refreshCart();
+
+    // Listen for cart updates from other components
+    const handleCartUpdate = () => {
+      refreshCart();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
   }, []);
 
   const cartCount = cart?.itemCount || 0;
