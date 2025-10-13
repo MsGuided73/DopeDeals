@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get products from main_site_products table using new categories JSONB field
+    // Optimized query - get products from main_site_products table
     let query = supabase
       .from('main_site_products')
       .select(`
@@ -74,29 +74,14 @@ export async function GET(req: NextRequest) {
       .not('name', 'ilike', '%test%')
       .not('name', 'ilike', '%sample%'); // Exclude sample products
 
-    // Filter using new categories JSONB field for pipe-related terms
-    const pipeCategories = [
-      'pipe', 'pipes', 'hand pipe', 'glass pipe', 'spoon pipe',
-      'chillum', 'one hitter', 'sherlock', 'steamroller',
-      'bowl', 'hand pipes', 'glass pipes', 'smoking pipes'
-    ];
+    // Simplified filtering - use category_id for better performance
+    query = query.or('category_id.ilike.%pipe%,category_id.ilike.%chillum%,category_id.ilike.%spoon%,category_id.ilike.%sherlock%,category_id.ilike.%bowl%');
 
-    // Create OR condition for categories array containing pipe terms
-    const categoryConditions = pipeCategories.map(category =>
-      `categories.cs.{"${category}"}`
-    ).join(',');
-
-    if (categoryConditions) {
-      query = query.or(categoryConditions);
-    }
-
-    // Also include products with pipe-related category_id (backward compatibility)
-    query = query.or('category_id.ilike.%pipe%,category_id.ilike.%chillum%,category_id.ilike.%spoon%,category_id.ilike.%sherlock%');
-
+    // Optimize ordering and limit for better performance
     query = query
       .order('featured', { ascending: false })
       .order('created_at', { ascending: false })
-      .limit(48); // Show first 48 pipe products
+      .limit(100); // Increased limit but still reasonable for performance
 
     const { data: products, error } = await query;
 

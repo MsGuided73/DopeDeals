@@ -212,10 +212,10 @@ USING gin((compliance_info->'minimum_age'));
 -- Enable Row Level Security
 ALTER TABLE main_site_products ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies
+-- RLS Policies - TEMPORARILY DISABLED is_active filtering for manual inventory phase
 CREATE POLICY "main_site_products_visible" ON main_site_products
   FOR SELECT USING (
-    is_active = true AND
+    -- is_active = true AND  -- TEMPORARILY DISABLED during manual inventory phase
     farm_bill_compliant = true AND
     thc_compliant = true
   );

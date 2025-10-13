@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '2');
 
-    // Get featured products with higher prices for staff picks
+    // Get featured products with higher prices for staff picks - NO stock filtering
     const { data: products, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -25,11 +25,11 @@ export async function GET(req: NextRequest) {
         featured, created_at
       `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
       // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       .eq('featured', true)
-      .gt('stock_quantity', 0)
       .gte('our_price', 50) // Higher priced items for staff picks
       .order('our_price', { ascending: false })
       .limit(limit);
@@ -49,10 +49,10 @@ export async function GET(req: NextRequest) {
           featured, created_at
         `)
         // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
         // Add back when connecting to Zoho Inventory for automated product management
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
-        .gt('stock_quantity', 0)
         .gte('our_price', 30)
         .order('our_price', { ascending: false })
         .limit(limit);

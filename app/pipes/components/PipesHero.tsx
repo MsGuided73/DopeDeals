@@ -39,7 +39,7 @@ export default function PipesHero() {
             </div>
             <div className="text-center">
               <div className="text-xl font-bold text-dope-orange-500">FREE</div>
-              <div className="text-sm text-gray-600 font-medium">Shipping $50+</div>
+              <div className="text-sm text-gray-600 font-medium">Shipping $75+</div>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default function PipesHero() {
             onClick={() => setActiveCategory('spoon-pipes')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,140,0,0.4)] ${
               activeCategory === 'spoon-pipes'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-black shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400 hover:text-dope-orange-600'
             }`}
           >

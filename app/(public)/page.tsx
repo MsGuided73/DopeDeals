@@ -8,6 +8,7 @@ import AgeVerification from '../components/AgeVerification';
 import StaffPicksSection from '../components/StaffPicksSection';
 import FullscreenCarousel from '../components/FullscreenCarousel';
 import FeaturedProductsSection from '../components/FeaturedProductsSection';
+import ScrollingBanner from '../components/ScrollingBanner';
 import RecentlyViewedProducts from '../components/RecentlyViewedProducts';
 
 export default function HomePage() {
@@ -110,8 +111,8 @@ export default function HomePage() {
       <main className="w-full px-0 py-0">
         {/* Enhanced Metallic Section Divider */}
         <div className="w-full -mt-0 mb-0">
-          {/* Top metallic line */}
-          <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent mb-8 shadow-lg"></div>
+          {/* Top metallic line - Increased size by 9x (from h-1 to h-9) */}
+          <div className="h-9 bg-gradient-to-r from-transparent via-white to-transparent mb-8 shadow-lg"></div>
           <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
 
           {/* Collections Header - Clean Metallic Frame */}
@@ -381,6 +382,11 @@ export default function HomePage() {
 
         {/* Featured Products Section - Real Images Only */}
         <FeaturedProductsSection />
+
+        {/* Scrolling Banner with Metallic Gradient */}
+        <div className="mt-16 mb-16">
+          <ScrollingBanner />
+        </div>
 
         {/* Customer Reviews Section - Moved above footer */}
         <section className="mt-24 mb-16">

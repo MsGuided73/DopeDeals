@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '4');
 
-    // Get newest products with available stock and images
+    // Get newest products with images - NO stock filtering during manual phase
     const { data: products, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -20,11 +20,11 @@ export async function GET(req: NextRequest) {
         featured, created_at
       `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
       // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       .not('image_url', 'is', null)
-      .gt('stock_quantity', 0)
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -43,10 +43,10 @@ export async function GET(req: NextRequest) {
           featured, created_at
         `)
         // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
         // Add back when connecting to Zoho Inventory for automated product management
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
-        .gt('stock_quantity', 0)
         .order('created_at', { ascending: false })
         .limit(limit);
 

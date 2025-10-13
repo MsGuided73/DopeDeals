@@ -66,6 +66,19 @@ export default function FeaturedProductsSection() {
       }
 
       setProducts(data);
+
+      // Debug: Check for Ryan Fitt product specifically
+      const ryanFittProduct = data.find(p => p.name.toLowerCase().includes('ryan') && p.name.toLowerCase().includes('fitt'));
+      if (ryanFittProduct) {
+        console.log('🎯 Ryan Fitt product found in database:');
+        console.log('Name:', ryanFittProduct.name);
+        console.log('Image URL:', ryanFittProduct.image_url);
+        console.log('Image URLs array:', ryanFittProduct.image_urls);
+        console.log('Hardcoded URL in component: https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/puffco-ryan-fitt-recycler.jpg');
+      } else {
+        console.log('❌ Ryan Fitt product NOT found in database query results');
+        console.log('Available products with "fitt":', data.filter(p => p.name.toLowerCase().includes('fitt')).map(p => p.name));
+      }
     } catch (err) {
       console.error('Error fetching featured products:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -132,8 +145,8 @@ export default function FeaturedProductsSection() {
             Shop all →
           </Link>
         </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse">
               <div className="aspect-square bg-muted h-80"></div>
@@ -175,12 +188,8 @@ export default function FeaturedProductsSection() {
     );
   }
 
-  // Show all products with stock - prioritize those with images
+  // Show all products - prioritize those with images, remove stock restrictions
   const productsWithImages = products.filter(product => {
-    // Note: Removed is_active filter for current manual inventory phase
-    // Add back when connecting to Zoho Inventory for automated product management
-    if (product.stock_quantity <= 0) return false;
-
     // Check if product has a valid image_url
     const hasValidImageUrl = product.image_url &&
                            product.image_url.trim() !== '' &&
@@ -201,10 +210,6 @@ export default function FeaturedProductsSection() {
   });
 
   const productsWithoutImages = products.filter(product => {
-    // Note: Removed is_active filter for current manual inventory phase
-    // Add back when connecting to Zoho Inventory for automated product management
-    if (product.stock_quantity <= 0) return false;
-
     // Product doesn't have valid image_url or image_urls
     const hasValidImageUrl = product.image_url &&
                            product.image_url.trim() !== '' &&
@@ -235,20 +240,10 @@ export default function FeaturedProductsSection() {
 
   return (
     <section className="mt-24">
-      <div className="flex items-center justify-center mb-12">
-        <div className="relative inline-block">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 rounded-lg transform rotate-1"></div>
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
-          <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
-            <h2 className="text-5xl font-chalets text-white mb-0 relative z-10" style={{
-              letterSpacing: '-0.02em',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
-            }}>
-              FEATURED PRODUCTS
-            </h2>
-          </div>
-        </div>
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
+          FEATURED PRODUCTS
+        </h2>
       </div>
 
       {/* Shop All Link - Centered Below Title */}
@@ -261,8 +256,8 @@ export default function FeaturedProductsSection() {
         </Link>
       </div>
 
-      {/* Products Grid - Large White Cards with Dark Text */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
+      {/* Products Grid - 3 Column Portrait Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
         {/* Special Puffco Ryan Fitt Recycler - Featured Product */}
         <div className="group bg-white rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-gray-200 hover:border-dope-orange-300">
           <div className="flex">
@@ -272,6 +267,14 @@ export default function FeaturedProductsSection() {
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/puffco-ryan-fitt-recycler.jpg"
                 alt="Puffco Ryan Fitt Recycler Glass Attachment"
                 className="w-full h-full object-contain max-h-80"
+                onError={(e) => {
+                  console.error('Ryan Fitt image failed to load:', e);
+                  console.log('Image URL:', (e.target as HTMLImageElement).src);
+                }}
+                onLoad={(e) => {
+                  console.log('Ryan Fitt image loaded successfully');
+                  console.log('Image natural size:', (e.target as HTMLImageElement).naturalWidth, 'x', (e.target as HTMLImageElement).naturalHeight);
+                }}
               />
 
               {/* Badges */}
@@ -294,7 +297,7 @@ export default function FeaturedProductsSection() {
                 </h3>
                 <p className="text-base text-gray-600 mb-3 font-semibold">Puffco</p>
                 <p className="text-base text-gray-700 leading-relaxed">
-                  Premium recycler glass attachment designed by Ryan Fitt for the Puffco Peak Pro.
+                  Premium recycler glass attachment designed by Ryan Fitt for the Puffco Peak Pro.f
                   Enhanced vapor cooling and superior filtration for the ultimate dabbing experience.
                 </p>
               </div>
@@ -446,21 +449,7 @@ export default function FeaturedProductsSection() {
               </div>
             );
           })
-        ) : (
-          // Show message if no products available
-          <div className="col-span-full text-center py-12">
-            <p className="text-gray-400 text-lg">No products available at the moment.</p>
-            <p className="text-gray-500 text-sm mt-2">Please check back soon!</p>
-          </div>
-        )}
-
-        {/* Show message if no products at all */}
-        {products.length === 0 && (
-          <div className="col-span-full text-center py-12">
-            <p className="text-gray-400 text-lg">No products available at the moment.</p>
-            <p className="text-gray-500 text-sm mt-2">Please check back soon!</p>
-          </div>
-        )}
+        ) : null}
       </div>
     </section>
   );

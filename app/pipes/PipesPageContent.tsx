@@ -77,7 +77,7 @@ export default function PipesPageContent() {
   });
 
   useEffect(() => {
-    // Load products from Supabase with error handling - NO CART DEPENDENCY
+    // Load products from optimized API route - much faster!
     const loadProducts = async () => {
       try {
         await loadPipeProducts();
@@ -95,75 +95,24 @@ export default function PipesPageContent() {
     try {
       setLoading(true);
 
-      // Use the same approach as FeaturedProductsSection - direct Supabase query
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      // Use the optimized API route instead of direct database query
+      const response = await fetch('/api/products/pipes');
 
-      if (!supabaseUrl || !supabaseKey) {
-        throw new Error('Supabase credentials not configured');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const supabase = createClient(supabaseUrl, supabaseKey);
+      const data = await response.json();
 
-      // Get products from main_site_products table - show recent products first
-      const { data: products, error } = await supabase
-        .from('main_site_products')
-        .select(`
-          id, name, description, short_description, our_price, sale_price, fire_price,
-          image_url, image_urls, sku, stock_quantity, featured, brand_id, category_id,
-          is_active, created_at, updated_at
-        `)
-        // Simplified query - just get recent products
-        .not('name', 'ilike', '%test%')
-        .not('name', 'ilike', '%sample%')
-        .order('created_at', { ascending: false })
-        .limit(50); // Get more products to work with
-
-      if (error) {
-        console.error('Error fetching products:', error);
-        throw new Error(error.message || 'Failed to fetch products from database');
-      }
-
-      if (!products) {
+      if (!data.products) {
         console.warn('No products data received');
         setProducts([]);
         setFilteredProducts([]);
         return;
       }
 
-      // Transform products to match our interface
-      const transformedProducts = products.map(product => ({
-        id: product.id,
-        name: product.name,
-        price: parseFloat(product.our_price),
-        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
-        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-        image_url: product.image_url,
-        image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
-        brand_id: product.brand_id,
-        category_id: product.category_id,
-        sku: product.sku,
-        stock_quantity: product.stock_quantity || 0,
-        materials: [],
-        material: 'Glass',
-        vip_exclusive: false,
-        featured: product.featured || false,
-        channels: [],
-        is_active: product.is_active,
-        description: product.description,
-        short_description: product.short_description,
-        style: 'Hand Pipe',
-        size: 'Medium',
-        inStock: (product.stock_quantity || 0) > 0,
-        isNew: false,
-        isSale: product.sale_price && product.sale_price > product.our_price,
-        features: ['Premium Construction', 'Smooth Airflow', 'Easy to Clean', 'Portable Design'],
-        tags: ['pipe', 'glass', 'smoking']
-      }));
-
-      setProducts(transformedProducts);
-      setFilteredProducts(transformedProducts);
+      setProducts(data.products);
+      setFilteredProducts(data.products);
     } catch (err) {
       console.error('Error loading pipe products:', err);
       setProducts([]);

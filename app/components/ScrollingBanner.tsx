@@ -1,96 +1,124 @@
-'use client';
+"use client";
+import { useEffect, useState, useCallback } from 'react';
+import Link from 'next/link';
 
-import { useState, useEffect } from 'react';
+interface BannerItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  background_image_url: string;
+  cta_text?: string;
+  cta_link?: string;
+}
 
-const messages = [
+// Move banner messages outside component to prevent recreation
+const BANNER_MESSAGES = [
   {
-    id: 1,
-    text: "🌟 Free VIP Membership — Extra Discounts • Guaranteed Lowest Prices • Exclusive Offers • Free Gifts",
-    cta: "Join Now →",
-    href: "/rewards"
+    id: "1",
+    title: "Free VIP Membership - Join today, and get 15% off your first purchase.",
+    cta_text: "JOIN NOW",
+    cta_link: "/rewards"
   },
   {
-    id: 2,
-    text: "🎉 Thank you to our amazing customers! Your support keeps DOPE CITY growing strong 💪",
-    cta: "Shop Now →",
-    href: "/products"
-  },
-  {
-    id: 3,
-    text: "🍂 October Special — 15% Off All Glass Pipes • Use code OCTOBER15 at checkout",
-    cta: "Shop Glass →",
-    href: "/pipes"
+    id: "2",
+    title: "October 2025 Contest - DOPE CITY Roll Call - Submit a photo and short description of why you believe you live in a DOPE CITY. Prizes will be announced shortly.",
+    cta_text: "ENTER NOW",
+    cta_link: "/contact"
   }
 ];
 
 export default function ScrollingBanner() {
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [animationPhase, setAnimationPhase] = useState<'typing' | 'paused' | 'deleting'>('typing');
 
+  // Handle animation phase transitions
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentMessageIndex((prev) => (prev + 1) % messages.length);
-    }, 5000); // Change message every 5 seconds
+    if (animationPhase === 'paused') {
+      // Wait 1 second then start deleting
+      const timeout = setTimeout(() => {
+        setAnimationPhase('deleting');
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [animationPhase]);
 
-    return () => clearInterval(interval);
-  }, []);
+  // Typing animation effect - Simplified and robust
+  useEffect(() => {
+    const currentMessage = BANNER_MESSAGES[currentIndex];
+    const fullText = currentMessage.title;
 
-  if (!isVisible) return null;
+    if (animationPhase === 'typing') {
+      // Typing in effect
+      let charIndex = 0;
+      const typeInterval = setInterval(() => {
+        if (charIndex <= fullText.length) {
+          setDisplayText(fullText.slice(0, charIndex));
+          charIndex++;
+        } else {
+          clearInterval(typeInterval);
+          // Animation will transition via the other useEffect
+        }
+      }, 80);
 
-  const currentMessage = messages[currentMessageIndex];
+      return () => clearInterval(typeInterval);
+    } else if (animationPhase === 'deleting') {
+      // Deleting effect
+      let charIndex = fullText.length;
+      const deleteInterval = setInterval(() => {
+        if (charIndex >= 0) {
+          setDisplayText(fullText.slice(0, charIndex));
+          charIndex--;
+        } else {
+          clearInterval(deleteInterval);
+          // Move to next message after a brief pause
+          setTimeout(() => {
+            setCurrentIndex((prev) => (prev + 1) % BANNER_MESSAGES.length);
+            setAnimationPhase('typing');
+          }, 500);
+        }
+      }, 40);
+
+      return () => clearInterval(deleteInterval);
+    }
+  }, [currentIndex, animationPhase]);
+
+  const currentItem = BANNER_MESSAGES[currentIndex];
 
   return (
-    <div className="relative bg-gradient-to-r from-dope-orange-600 via-dope-orange-500 to-dope-orange-600 text-white overflow-hidden">
-      {/* Animated background glow */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
+    <div className="relative w-full overflow-hidden">
+      {/* Metallic gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-600 via-gray-400 via-gray-600 to-gray-400"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
-      {/* Subtle star-like sparkles */}
-      <div className="absolute inset-0">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white/30 rounded-full animate-ping"
-            style={{
-              left: `${15 + i * 15}%`,
-              top: `${20 + (i % 2) * 60}%`,
-              animationDelay: `${i * 0.5}s`,
-              animationDuration: '3s'
-            }}
-          />
-        ))}
-      </div>
+      {/* Animated shimmer effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3">
-          {/* Main message */}
-          <div className="flex-1 text-center">
-            <p
-              className="text-sm md:text-base font-bold tracking-wide"
-              style={{
-                textShadow: '0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.2)'
-              }}
-            >
-              {currentMessage.text}
-            </p>
-          </div>
-
-          {/* CTA Button */}
-          <div className="ml-4">
-            <a
-              href={currentMessage.href}
-              className="inline-flex items-center px-3 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-300 hover:shadow-lg border border-white/30"
-              style={{
-                textShadow: '0 0 5px rgba(255,255,255,0.5)'
-              }}
-            >
-              {currentMessage.cta}
-            </a>
+      {/* Content */}
+      <div className="relative flex items-center justify-between px-8 py-4">
+        {/* Left side - Animated typing text */}
+        <div className="flex-1">
+          <div className="text-white font-medium text-base md:text-lg leading-relaxed min-h-[3rem] flex items-center">
+            {displayText}
+            <span className="w-0.5 h-6 bg-white ml-1 animate-pulse"></span>
           </div>
         </div>
+
+        {/* Right side - CTA Button */}
+        {currentItem.cta_text && currentItem.cta_link && (
+          <div className="ml-6">
+            <Link
+              href={currentItem.cta_link}
+              className="inline-block bg-dope-orange hover:bg-dope-orange-600 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-orange-300/30"
+            >
+              {currentItem.cta_text}
+            </Link>
+          </div>
+        )}
       </div>
 
-      {/* Bottom fade effect */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      {/* Shadow below the banner */}
+      <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-t from-black/20 to-transparent"></div>
     </div>
   );
 }

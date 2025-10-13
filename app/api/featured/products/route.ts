@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '8');
 
-    // Fetch products from Supabase
+    // Fetch products from Supabase - NO stock filtering during manual inventory phase
     const { data: allProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -64,10 +64,10 @@ export async function GET(req: NextRequest) {
         created_at
       `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
       // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
-      .gt('stock_quantity', 0)
       .order('created_at', { ascending: false })
       .limit(200); // Get more to filter from
 

@@ -120,8 +120,8 @@ export default function GlobalMasthead() {
           <EnhancedSearchBar />
         </div>
 
-        {/* DOPE Orange divider line - THICK */}
-        <div className="h-2 bg-dope-orange"></div>
+        {/* DOPE Orange divider line - THICK (Increased by 3x) */}
+        <div className="h-6 bg-dope-orange"></div>
 
         {/* Glassmorphic nav bar - Desktop Only */}
         <nav className="hidden md:block bg-white/90 backdrop-blur-md">
