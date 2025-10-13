@@ -150,7 +150,7 @@ export default function BongsPageContent() {
         .not('name', 'ilike', '%test%')
         .not('name', 'ilike', '%sample%')
         .order('created_at', { ascending: false })
-        .limit(200); // Get more products from your 2200 product database
+        .limit(50); // Get products to work with
 
       // Filter for bong-related products using broader criteria
       let filteredProducts: any[] = [];

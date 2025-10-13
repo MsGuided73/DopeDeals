@@ -34,8 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-white">
         <AppProviders>
           <div className="min-h-screen flex flex-col" suppressHydrationWarning>
-            {/* Scrolling Banner - Above everything else */}
-            <ScrollingBanner />
+            {/* Scrolling Banner - DISABLED for now */}
+            {/* <ScrollingBanner /> */}
 
             <main className="flex-1">
               {children}

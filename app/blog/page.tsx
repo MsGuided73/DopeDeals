@@ -26,6 +26,17 @@ export default function BlogPage() {
 
   const blogPosts: BlogPost[] = [
     {
+      id: 'cannabis-history-global',
+      title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
+      excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
+      author: 'DOPE CITY Crew',
+      date: '2024-01-15',
+      category: 'Culture',
+      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
+      readTime: '10 min read',
+      featured: true
+    },
+    {
       id: 'ultimate-bong-guide',
       title: 'The Ultimate Guide to Picking the Perfect Bong',
       excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',

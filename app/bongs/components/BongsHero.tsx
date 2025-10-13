@@ -7,21 +7,9 @@ export default function BongsHero() {
   const [activeCategory, setActiveCategory] = useState('all-bongs');
 
   return (
-    <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-100 text-black overflow-hidden min-h-[200px]">
-      {/* Large Bong Icon - Left Side - Full Hero Height */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 md:w-40 lg:w-48 bg-dope-orange z-10 flex items-center justify-center">
-        <Image
-          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/icons/bong%201.png"
-          alt="Bong Icon"
-          width={120}
-          height={120}
-          className="w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 xl:w-40 xl:h-40 object-contain"
-          priority
-        />
-      </div>
-
+    <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-100 text-black overflow-hidden">
       {/* Compact Header Bar */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ml-32 md:ml-40 lg:ml-48">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
             {/* Title and Accent Line */}

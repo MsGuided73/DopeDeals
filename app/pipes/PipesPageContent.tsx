@@ -106,22 +106,19 @@ export default function PipesPageContent() {
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // Get products from main_site_products table - FIXED QUERY (no JSON filtering)
+      // Get products from main_site_products table - show recent products first
       const { data: products, error } = await supabase
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price, sale_price, fire_price,
           image_url, image_urls, sku, stock_quantity, featured, brand_id, category_id,
-          created_at, updated_at
+          is_active, created_at, updated_at
         `)
-        // Simplified query for better performance - remove is_active filter for current phase
+        // Simplified query - just get recent products
         .not('name', 'ilike', '%test%')
         .not('name', 'ilike', '%sample%')
-        // Filter by name containing pipe-related keywords (simpler than JSON)
-        .or('name.ilike.%pipe%,name.ilike.%chillum%,name.ilike.%spoon%,name.ilike.%sherlock%,name.ilike.%hand pipe%')
-        .order('featured', { ascending: false })
         .order('created_at', { ascending: false })
-        .limit(24); // Reduced from 48 for better performance
+        .limit(50); // Get more products to work with
 
       if (error) {
         console.error('Error fetching products:', error);

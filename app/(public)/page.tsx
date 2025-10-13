@@ -379,217 +379,145 @@ export default function HomePage() {
 
 
 
-        {/* Customer Reviews Section */}
-        <section className="mt-16">
-          {/* Enhanced Metallic Section Divider */}
-          <div className="w-full mb-16">
-            {/* Top metallic line */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent mb-8 shadow-lg"></div>
-            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-12"></div>
+        {/* Featured Products Section - Real Images Only */}
+        <FeaturedProductsSection />
 
-            <div className="text-center mb-16 px-4 md:px-8">
-              <div className="relative inline-block">
-                {/* 3D Metallic Frame Background */}
-                <div className="relative bg-gradient-to-br from-gray-900 via-gray-700 to-gray-900 p-1 rounded-lg shadow-lg">
-                  {/* Inner gradient for 3D effect */}
-                  <div className="bg-gradient-to-br from-black via-gray-800 to-black p-6 md:p-8 rounded-md">
-                    {/* Highlight for metallic shine */}
-                    <div className="absolute inset-2 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-md pointer-events-none"></div>
-
-                    {/* Title */}
-                    <h2 className="text-2xl md:text-5xl font-chalets text-white mb-0 relative z-10 uppercase" style={{
-                      fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                      letterSpacing: '0.02em',
-                      fontWeight: 'normal',
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                    }}>
-                      DOPE FEEDBACK
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom metallic lines */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-8"></div>
-            <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg"></div>
-          </div>
-
+        {/* Customer Reviews Section - Moved above footer */}
+        <section className="mt-24 mb-16">
           <div className="text-center mb-12">
-            <p className="text-lg text-gray-600 dark:text-gray-300 mt-6">
+            <h2 className="text-4xl md:text-5xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
+              DOPE FEEDBACK
+            </h2>
+            <p className="text-xl text-gray-600">
               Real reviews from real customers
             </p>
           </div>
 
-          {/* Reviews Carousel */}
-          <div className="relative overflow-hidden">
+          {/* Reviews Carousel - Enhanced Cards */}
+          <div className="relative overflow-hidden px-4">
             <div className="flex animate-scroll-reviews">
-              {/* Review 1 */}
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
+              {/* Review 1 - Larger Cards */}
+              <div className="flex-shrink-0 w-96 mx-6 bg-white rounded-2xl p-8 shadow-2xl border border-gray-200 hover:shadow-3xl transition-all duration-300">
+                <div className="flex items-center mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
                     alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Mike Johnson</h4>
-                    <div className="flex text-yellow-400">
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Mike Johnson</h4>
+                    <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-lg text-gray-700 leading-relaxed">
                   "Amazing quality! The glass is thick and the design is perfect. Fast shipping too. Will definitely order again!"
                 </p>
               </div>
 
               {/* Review 2 */}
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
+              <div className="flex-shrink-0 w-96 mx-6 bg-white rounded-2xl p-8 shadow-2xl border border-gray-200 hover:shadow-3xl transition-all duration-300">
+                <div className="flex items-center mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face"
+                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=80&h=80&fit=crop&crop=face"
                     alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Sarah Chen</h4>
-                    <div className="flex text-yellow-400">
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Sarah Chen</h4>
+                    <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-lg text-gray-700 leading-relaxed">
                   "Best smoke shop online! Great prices and the customer service is top notch. Highly recommend DOPE CITY!"
                 </p>
               </div>
 
               {/* Review 3 */}
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
+              <div className="flex-shrink-0 w-96 mx-6 bg-white rounded-2xl p-8 shadow-2xl border border-gray-200 hover:shadow-3xl transition-all duration-300">
+                <div className="flex items-center mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face"
                     alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Alex Rodriguez</h4>
-                    <div className="flex text-yellow-400">
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Alex Rodriguez</h4>
+                    <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-lg text-gray-700 leading-relaxed">
                   "The vaporizer I bought works perfectly. Great build quality and arrived exactly as described. 5 stars!"
                 </p>
               </div>
 
               {/* Review 4 */}
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
+              <div className="flex-shrink-0 w-96 mx-6 bg-white rounded-2xl p-8 shadow-2xl border border-gray-200 hover:shadow-3xl transition-all duration-300">
+                <div className="flex items-center mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face"
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face"
                     alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Emma Wilson</h4>
-                    <div className="flex text-yellow-400">
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Emma Wilson</h4>
+                    <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-lg text-gray-700 leading-relaxed">
                   "Love the selection and quality. The packaging was discreet and professional. Will be a repeat customer!"
                 </p>
               </div>
 
               {/* Review 5 */}
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
+              <div className="flex-shrink-0 w-96 mx-6 bg-white rounded-2xl p-8 shadow-2xl border border-gray-200 hover:shadow-3xl transition-all duration-300">
+                <div className="flex items-center mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop&crop=face"
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face"
                     alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">David Kim</h4>
-                    <div className="flex text-yellow-400">
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">David Kim</h4>
+                    <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-lg text-gray-700 leading-relaxed">
                   "Excellent products and fast delivery. The grinder I ordered is solid and works great. Highly recommended!"
                 </p>
               </div>
 
               {/* Review 6 */}
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
+              <div className="flex-shrink-0 w-96 mx-6 bg-white rounded-2xl p-8 shadow-2xl border border-gray-200 hover:shadow-3xl transition-all duration-300">
+                <div className="flex items-center mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=60&h=60&fit=crop&crop=face"
+                    src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=80&h=80&fit=crop&crop=face"
                     alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Jessica Taylor</h4>
-                    <div className="flex text-yellow-400">
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Jessica Taylor</h4>
+                    <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-lg text-gray-700 leading-relaxed">
                   "Perfect experience from start to finish. Quality products, fair prices, and excellent customer support!"
-                </p>
-              </div>
-
-              {/* Duplicate reviews for seamless loop */}
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
-                  <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
-                    alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Mike Johnson</h4>
-                    <div className="flex text-yellow-400">
-                      ★★★★★
-                    </div>
-                  </div>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  "Amazing quality! The glass is thick and the design is perfect. Fast shipping too. Will definitely order again!"
-                </p>
-              </div>
-
-              <div className="flex-shrink-0 w-80 mx-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <div className="flex items-center mb-4">
-                  <img
-                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face"
-                    alt="Customer"
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">Sarah Chen</h4>
-                    <div className="flex text-yellow-400">
-                      ★★★★★
-                    </div>
-                  </div>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  "Best smoke shop online! Great prices and the customer service is top notch. Highly recommend DOPE CITY!"
                 </p>
               </div>
             </div>
           </div>
         </section>
-
-
-
-        {/* Featured Products Section - Real Images Only */}
-        <FeaturedProductsSection />
 
         {/* Recently Viewed Products - Just above footer */}
         <RecentlyViewedProducts />

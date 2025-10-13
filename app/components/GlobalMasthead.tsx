@@ -68,7 +68,7 @@ export default function GlobalMasthead() {
   return (
     <header className="sticky top-0 z-50">
       <div>
-        {/* Main Masthead - Desktop Layout (Original) */}
+        {/* Main Masthead - Desktop Layout (Original) - Scrolling Banner Removed */}
         <div className="bg-black text-white px-1 flex items-center justify-between gap-2" style={{ minHeight: '140px', height: '140px' }}>
           {/* Left: HUGE DOPE CITY Logo - Centered */}
           <div className="flex-1 flex justify-center">
@@ -120,8 +120,8 @@ export default function GlobalMasthead() {
           <EnhancedSearchBar />
         </div>
 
-        {/* DOPE Orange divider line - 3X THICKER */}
-        <div className="h-6 bg-dope-orange"></div>
+        {/* DOPE Orange divider line - THICK */}
+        <div className="h-2 bg-dope-orange"></div>
 
         {/* Glassmorphic nav bar - Desktop Only */}
         <nav className="hidden md:block bg-white/90 backdrop-blur-md">
