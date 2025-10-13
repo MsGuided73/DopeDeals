@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { getSessionId } from '../lib/cart-utils';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -26,12 +27,31 @@ export default function AgeVerification() {
       const lastVerification = localStorage.getItem('dope-city-last-verification');
       const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000); // 24 hours ago
 
-      // Show modal if not verified OR if last verification was more than 24 hours ago
-      if (!verified || (lastVerification && parseInt(lastVerification) < oneDayAgo)) {
+      // Check for force show parameter (for testing)
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceShow = urlParams.get('force-age-verification') === 'true';
+
+      console.log('[AgeVerification] Debug info:', {
+        verified,
+        lastVerification,
+        oneDayAgo,
+        currentTime: Date.now(),
+        forceShow,
+        shouldShow: !verified || (lastVerification && parseInt(lastVerification) < oneDayAgo) || forceShow
+      });
+
+      // Show modal if not verified OR if last verification was more than 24 hours ago OR if force show is requested
+      if (!verified || (lastVerification && parseInt(lastVerification) < oneDayAgo) || forceShow) {
+        console.log('[AgeVerification] Showing modal - not verified, expired, or force show requested');
         setShowModal(true);
       } else {
+        console.log('[AgeVerification] User already verified');
         setIsVerified(true);
       }
+    } else {
+      // Fallback for server-side rendering - always show modal
+      console.log('[AgeVerification] Server-side rendering - showing modal');
+      setShowModal(true);
     }
   }, []);
 
@@ -75,19 +95,71 @@ export default function AgeVerification() {
     }
   };
 
-  const handleZipcodeSubmit = () => {
+  const handleZipcodeSubmit = async () => {
     if (zipcode.trim().length >= 5) {
       localStorage.setItem('dope-city-age-verified', 'true');
       localStorage.setItem('dope-city-zipcode', zipcode);
       localStorage.setItem('dope-city-last-verification', Date.now().toString());
+
+      // Record age verification in audit table
+      try {
+        const sessionId = getSessionId();
+        await supabase
+          .from('age_verification_audit')
+          .insert({
+            session_id: sessionId,
+            verification_status: 'approved',
+            verification_method: 'zipcode',
+            zipcode: zipcode,
+            user_agent: navigator.userAgent,
+            ip_address: null,
+            // cart_id will be linked when cart is created
+          });
+
+        // Try to link age verification to existing cart
+        try {
+          const response = await fetch('/api/cart', {
+            method: 'GET',
+            headers: {
+              'x-session-id': sessionId,
+            },
+          });
+
+          if (response.ok) {
+            const cartData = await response.json();
+            if (cartData.success && cartData.cart) {
+              // Link age verification to cart
+              await supabase.rpc('link_age_verification_to_cart', {
+                p_session_id: sessionId,
+                p_user_id: null,
+                p_age_verified: true,
+                p_verification_level: 'strict',
+                p_minimum_age: 21
+              });
+            }
+          }
+        } catch (cartError) {
+          console.error('Error linking age verification to cart:', cartError);
+          // Don't fail verification if cart linking fails
+        }
+      } catch (error) {
+        console.error('Error recording age verification:', error);
+        // Don't fail the verification process if audit logging fails
+      }
+
       setIsVerified(true);
       setShowModal(false);
     }
   };
 
-  if (!showModal || isVerified) {
+  // Force show modal if verification is required but not completed
+  const shouldShowModal = showModal && !isVerified;
+
+  if (!shouldShowModal) {
     return null;
   }
+
+  console.log('[AgeVerification] Rendering modal - blocking content until verification complete');
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">

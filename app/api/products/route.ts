@@ -22,8 +22,7 @@ export async function GET(req: NextRequest) {
     // Build query - Use main_site_products table
     let query = supabase
       .from('main_site_products')
-      .select('*')
-      .eq('is_active', true);
+      .select('*');
 
     // Apply category filter if provided
     if (category) {
@@ -48,8 +47,7 @@ export async function GET(req: NextRequest) {
     // Get total count for pagination info
     const { count } = await supabase
       .from('main_site_products')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true);
+      .select('*', { count: 'exact', head: true });
 
     return NextResponse.json({
       products: products || [],

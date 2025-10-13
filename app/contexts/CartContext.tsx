@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getCart, type Cart } from '../lib/cart-utils';
+import { getCart, getSessionId, ensureSessionId, type Cart } from '../lib/cart-utils';
 
 interface CartContextType {
   cart: Cart | null;
@@ -18,16 +18,60 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const refreshCart = async () => {
     setIsLoading(true);
     try {
-      const cartData = await getCart();
-      setCart(cartData);
+      if (typeof window !== 'undefined') {
+        // Only try to load cart if we have a session
+        // This prevents the "User ID or session ID required" error on page load
+        const sessionId = getSessionId();
+        if (sessionId && sessionId !== '') {
+          try {
+            const cartData = await getCart();
+            setCart(cartData);
+          } catch (cartError) {
+            console.error('Cart loading error:', cartError);
+            // Set empty cart if cart loading fails
+            setCart({
+              items: [],
+              itemCount: 0,
+              subtotal: 0,
+              taxAmount: 0,
+              shippingAmount: 0,
+              total: 0
+            });
+          }
+        } else {
+          // No session yet, set empty cart
+          setCart({
+            items: [],
+            itemCount: 0,
+            subtotal: 0,
+            taxAmount: 0,
+            shippingAmount: 0,
+            total: 0
+          });
+        }
+      }
     } catch (error) {
-      console.error('Error refreshing cart:', error);
+      console.error('Error in refreshCart:', error);
+      // Set empty cart on any error to prevent app breaking
+      setCart({
+        items: [],
+        itemCount: 0,
+        subtotal: 0,
+        taxAmount: 0,
+        shippingAmount: 0,
+        total: 0
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    // Ensure session ID exists before trying to load cart
+    if (typeof window !== 'undefined') {
+      ensureSessionId();
+    }
+
     refreshCart();
 
     // Listen for cart updates from other components

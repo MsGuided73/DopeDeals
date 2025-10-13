@@ -51,23 +51,24 @@ export async function GET(req: NextRequest) {
 
     // Fetch products from Supabase
     const { data: allProducts, error } = await supabase
-      .from('products')
+      .from('main_site_products')
       .select(`
         id,
         name,
         description,
         short_description,
-        price,
-        imageUrl,
+        our_price,
+        image_url,
         stock_quantity,
         is_active,
-        createdAt
+        created_at
       `)
-      .eq('is_active', true)
+      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       .gt('stock_quantity', 0)
-      .order('createdAt', { ascending: false })
+      .order('created_at', { ascending: false })
       .limit(200); // Get more to filter from
 
     if (error) {
@@ -77,18 +78,18 @@ export async function GET(req: NextRequest) {
 
     // Filter for products with real, valid images
     let featuredProducts = (allProducts || [])
-      .filter(product => product.imageUrl) // Only products with images
-      .filter(product => hasRealProductImage(product.imageUrl))
-      .filter(product => isValidImageUrl(product.imageUrl))
-      .filter(product => product.price > 0) // Ensure valid pricing
+      .filter(product => product.image_url) // Only products with images
+      .filter(product => hasRealProductImage(product.image_url))
+      .filter(product => isValidImageUrl(product.image_url))
+      .filter(product => product.our_price > 0) // Ensure valid pricing
       .slice(0, limit);
 
     // If we still don't have enough products, get any products with non-null images
     if (featuredProducts.length < 4) {
       const additionalProducts = (allProducts || [])
-        .filter(product => product.imageUrl && product.imageUrl.trim() !== '')
+        .filter(product => product.image_url && product.image_url.trim() !== '')
         .filter(product => !featuredProducts.some(fp => fp.id === product.id))
-        .filter(product => product.price > 0)
+        .filter(product => product.our_price > 0)
         .slice(0, Math.max(4, limit) - featuredProducts.length);
 
       featuredProducts = [...featuredProducts, ...additionalProducts];
@@ -97,11 +98,11 @@ export async function GET(req: NextRequest) {
     // Normalize the response to include both field names for component compatibility
     const normalizedProducts = featuredProducts.map(product => ({
       ...product,
-      image_url: product.imageUrl // Add snake_case version for legacy compatibility
+      image_url: product.image_url // Add snake_case version for legacy compatibility
     }));
 
     // Sort by newest first
-    normalizedProducts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    normalizedProducts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
     return NextResponse.json({
       products: normalizedProducts,

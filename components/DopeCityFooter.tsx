@@ -113,7 +113,7 @@ export default function DopeCityFooter() {
                 <li><Link href="/gift-cards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Gift Cards</Link></li>
                 <li><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">DOPE CITY Rewards</Link></li>
                 <li><Link href="/glossary" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Glossary of Terms</Link></li>
-                <li><Link href="/knowledge-base" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Knowledge Base</Link></li>
+                <li><Link href="/blog" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">DOPE Dispatches</Link></li>
               </ul>
             </div>
 

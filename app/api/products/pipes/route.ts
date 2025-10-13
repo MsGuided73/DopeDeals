@@ -69,7 +69,8 @@ export async function GET(req: NextRequest) {
         seo_keywords,
         created_at
       `)
-      .eq('is_active', true)
+      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Add back when connecting to Zoho Inventory for automated product management
       .not('name', 'ilike', '%test%')
       .not('name', 'ilike', '%sample%'); // Exclude sample products
 

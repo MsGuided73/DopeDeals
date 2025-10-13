@@ -588,6 +588,9 @@ export default function HomePage() {
 
 
 
+        {/* Featured Products Section - Real Images Only */}
+        <FeaturedProductsSection />
+
         {/* Recently Viewed Products - Just above footer */}
         <RecentlyViewedProducts />
 

@@ -190,12 +190,12 @@ function calculateRelevanceScore(item: any, searchTerm: string, searchType: 'pro
   if (category.includes(term)) score += 50;
 
   // Array field matches
-  tags.forEach(tag => {
+  tags.forEach((tag: string) => {
     if (tag === term) score += 200;
     if (tag.includes(term)) score += 100;
   });
 
-  materials.forEach(material => {
+  materials.forEach((material: string) => {
     if (material === term) score += 150;
     if (material.includes(term)) score += 75;
   });
@@ -352,9 +352,9 @@ export async function GET(request: NextRequest) {
       console.log(`📝 Search query: ${searchQuery.substring(0, 200)}...`);
 
       let supabaseQuery = supabase
-        .from('products')
+        .from('main_site_products')
         .select(`
-          id, name, brand_name, price, imageUrl, description, short_description,
+          id, name, brand_name, price, image_url, description, short_description,
           sku, featured, stock_quantity, tags, materials, zoho_category_name,
           manufacturer, specs, attributes, dtc_description, vip_price
         `)
@@ -363,12 +363,14 @@ export async function GET(request: NextRequest) {
       // Apply filters with error handling
       try {
         supabaseQuery = supabaseQuery
-          .eq('is_active', true)
+          // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+          // Add back when connecting to Zoho Inventory for automated product management
           .eq('nicotine_product', false)
           .eq('tobacco_product', false);
       } catch (error) {
         console.warn('⚠️ Compliance filter columns may not exist, using basic filtering');
-        supabaseQuery = supabaseQuery.eq('is_active', true);
+        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Add back when connecting to Zoho Inventory for automated product management
       }
 
       const { data: allProductResults, error: productsError } = await supabaseQuery.limit(100);
@@ -378,14 +380,15 @@ export async function GET(request: NextRequest) {
         // Fallback to basic search
         console.log('🔄 Falling back to basic search...');
         const { data: fallbackResults, error: fallbackError } = await supabase
-          .from('products')
+          .from('main_site_products')
           .select(`
-            id, name, brand_name, price, imageUrl, description, short_description,
+            id, name, brand_name, price, image_url, description, short_description,
             sku, featured, stock_quantity, tags, materials, zoho_category_name,
             manufacturer, specs, attributes, dtc_description, vip_price
           `)
           .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%`)
-          .eq('is_active', true)
+          // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+          // Add back when connecting to Zoho Inventory for automated product management
           .limit(50);
 
         if (fallbackError) {

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import UniversalProductCard from '../../components/UniversalProductCard';
 import type { PipeProduct } from '../PipesPageContent';
+import { addToCart } from '../../lib/cart-utils';
 
 interface PipesProductGridProps {
   products: PipeProduct[];
@@ -158,7 +159,16 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                 {/* Add to Cart Button at bottom */}
                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
                   <button
-                    className="w-full px-4 py-2 bg-dope-orange-500 hover:bg-dope-orange-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    onClick={async () => {
+                      if (product.inStock) {
+                        try {
+                          await addToCart(product.id, 1);
+                        } catch (error) {
+                          console.error('Failed to add to cart:', error);
+                        }
+                      }
+                    }}
+                    className="w-full px-4 py-2 bg-dope-orange-500 hover:bg-dope-orange-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={!product.inStock}
                   >
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -18,19 +18,20 @@ export async function GET(req: NextRequest) {
 
     // Get featured products with higher prices for staff picks
     const { data: products, error } = await supabase
-      .from('products')
+      .from('main_site_products')
       .select(`
-        id, name, description, short_description, price, vip_price,
-        imageUrl, sku, stock_quantity, brand_name, materials,
-        featured, createdAt
+        id, name, description, short_description, our_price, fire_price,
+        image_url, sku, stock_quantity, brand_name, materials,
+        featured, created_at
       `)
-      .eq('is_active', true)
+      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       .eq('featured', true)
       .gt('stock_quantity', 0)
-      .gte('price', 50) // Higher priced items for staff picks
-      .order('price', { ascending: false })
+      .gte('our_price', 50) // Higher priced items for staff picks
+      .order('our_price', { ascending: false })
       .limit(limit);
 
     if (error) {
@@ -41,18 +42,19 @@ export async function GET(req: NextRequest) {
     // If no featured products, get high-value products
     if (!products || products.length < limit) {
       const { data: fallbackProducts, error: fallbackError } = await supabase
-        .from('products')
+        .from('main_site_products')
         .select(`
-          id, name, description, short_description, price, vip_price,
-          imageUrl, sku, stock_quantity, brand_name, materials,
-          featured, createdAt
+          id, name, description, short_description, our_price, fire_price,
+          image_url, sku, stock_quantity, brand_name, materials,
+          featured, created_at
         `)
-        .eq('is_active', true)
+        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Add back when connecting to Zoho Inventory for automated product management
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
         .gt('stock_quantity', 0)
-        .gte('price', 30)
-        .order('price', { ascending: false })
+        .gte('our_price', 30)
+        .order('our_price', { ascending: false })
         .limit(limit);
 
       if (fallbackError) {
@@ -63,8 +65,8 @@ export async function GET(req: NextRequest) {
       // Add discount calculations for staff picks
       const staffPicks = (fallbackProducts || []).map(product => ({
         ...product,
-        image_url: product.imageUrl, // Add snake_case version for legacy compatibility
-        original_price: product.price * 1.5, // Simulate original price
+        image_url: product.image_url, // Add snake_case version for legacy compatibility
+        original_price: product.our_price * 1.5, // Simulate original price
         discount_percentage: Math.floor(Math.random() * 30) + 20, // 20-50% off
         is_staff_pick: true
       }));
@@ -79,8 +81,8 @@ export async function GET(req: NextRequest) {
     // Add discount calculations for featured products
     const staffPicks = products.map(product => ({
       ...product,
-      image_url: product.imageUrl, // Add snake_case version for legacy compatibility
-      original_price: product.price * 1.4,
+      image_url: product.image_url, // Add snake_case version for legacy compatibility
+      original_price: product.our_price * 1.4,
       discount_percentage: Math.floor(Math.random() * 25) + 25, // 25-50% off
       is_staff_pick: true
     }));

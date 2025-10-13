@@ -41,8 +41,8 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get products from main_site_products table using new categories JSONB field for bongs
-    let query = supabase
+    // Get products from main_site_products table - show recent products first to test
+    const query = supabase
       .from('main_site_products')
       .select(`
         id,
@@ -70,17 +70,12 @@ export async function GET(req: NextRequest) {
         created_at,
         updated_at
       `)
-      .eq('is_active', true)
+      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Add back when connecting to Zoho Inventory for automated product management
       .not('name', 'ilike', '%test%')
-      .not('name', 'ilike', '%sample%'); // Exclude sample products
-
-    // Filter for bong-related products using simple name search
-    query = query.or('name.ilike.%bong%,name.ilike.%water pipe%,name.ilike.%hookah%,name.ilike.%beaker%,name.ilike.%percolator%');
-
-    query = query
-      .order('featured', { ascending: false })
+      .not('name', 'ilike', '%sample%') // Exclude sample products
       .order('created_at', { ascending: false })
-      .limit(48); // Show first 48 bong products
+      .limit(24); // Show first 24 products for testing
 
     const { data: products, error } = await query;
 

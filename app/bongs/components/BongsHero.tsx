@@ -5,37 +5,53 @@ import { useState } from 'react';
 export default function BongsHero() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all-bongs');
+
   return (
-    <div className="relative bg-black text-white overflow-hidden">
+    <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-100 text-black overflow-hidden min-h-[200px]">
+      {/* Large Bong Icon - Left Side - Full Hero Height */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 md:w-40 lg:w-48 bg-dope-orange z-10 flex items-center justify-center">
+        <Image
+          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/icons/bong%201.png"
+          alt="Bong Icon"
+          width={120}
+          height={120}
+          className="w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 xl:w-40 xl:h-40 object-contain"
+          priority
+        />
+      </div>
+
       {/* Compact Header Bar */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ml-32 md:ml-40 lg:ml-48">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h1 className="font-chalets text-4xl md:text-5xl lg:text-6xl tracking-wider text-white leading-tight">
-              BONGS & WATER PIPES
-            </h1>
-            <div className="hidden md:block w-16 h-0.5 bg-dope-orange-500"></div>
+          <div className="flex items-center space-x-6">
+            {/* Title and Accent Line */}
+            <div className="flex items-center space-x-4">
+              <h1 className="font-chalets text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-wider text-gray-900 leading-tight font-bold">
+                BONGS & WATER PIPES
+              </h1>
+              <div className="hidden md:block w-16 h-1 bg-dope-orange-500"></div>
+            </div>
           </div>
 
           {/* Quick Stats - Compact */}
-          <div className="hidden lg:flex items-center space-x-6 text-sm">
+          <div className="hidden lg:flex items-center space-x-8 text-base">
             <div className="text-center">
-              <div className="text-lg font-bold text-dope-orange-500">500+</div>
-              <div className="text-xs text-gray-400">Products</div>
+              <div className="text-xl font-bold text-dope-orange-500">500+</div>
+              <div className="text-sm text-gray-700 font-medium">Products</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-dope-orange-500">50+</div>
-              <div className="text-xs text-gray-400">Brands</div>
+              <div className="text-xl font-bold text-dope-orange-500">50+</div>
+              <div className="text-sm text-gray-700 font-medium">Brands</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-dope-orange-500">FREE</div>
-              <div className="text-xs text-gray-400">Shipping $50+</div>
+              <div className="text-xl font-bold text-dope-orange-500">FREE</div>
+              <div className="text-sm text-gray-700 font-medium">Shipping $50+</div>
             </div>
           </div>
         </div>
 
-        {/* Compact Description */}
-        <p className="text-sm text-gray-300 mt-2 max-w-2xl">
+        {/* Enhanced Description */}
+        <p className="text-base md:text-lg text-gray-800 mt-3 max-w-3xl font-medium leading-relaxed">
           💨 From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).
         </p>
 
@@ -58,45 +74,45 @@ export default function BongsHero() {
 
           {/* Expandable Content */}
           <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-screen opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-              <h4 className="text-lg font-semibold text-white mb-3">🧊 Why Bongs Hit Different</h4>
-              <p className="text-gray-300 text-sm mb-3">
+            <div className="bg-white/90 backdrop-blur-sm rounded-lg p-6 border border-gray-200 shadow-lg">
+              <h4 className="text-xl font-semibold text-black mb-4">🧊 Why Bongs Hit Different</h4>
+              <p className="text-gray-700 text-base mb-4 leading-relaxed">
                 Bongs aren't just bigger pipes — they're a whole different smoking experience. While pipes give you quick hits and joints burn fast,
                 bongs deliver massive, cool, filtered hits that let you savor every flavor molecule.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-                <div className="bg-dope-orange-500/20 rounded-lg p-3 text-center">
-                  <div className="text-xl mb-1">🌊</div>
-                  <h6 className="font-semibold text-white text-xs">Water Filtration</h6>
-                  <p className="text-xs text-gray-300">Removes tar & cools smoke</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-dope-orange-500/10 rounded-lg p-4 text-center border border-dope-orange-200">
+                  <div className="text-2xl mb-2">🌊</div>
+                  <h6 className="font-semibold text-black text-sm mb-1">Water Filtration</h6>
+                  <p className="text-xs text-gray-600">Removes tar & cools smoke</p>
                 </div>
-                <div className="bg-dope-orange-500/20 rounded-lg p-3 text-center">
-                  <div className="text-xl mb-1">💨</div>
-                  <h6 className="font-semibold text-white text-xs">Bigger Hits</h6>
-                  <p className="text-xs text-gray-300">More capacity, less effort</p>
+                <div className="bg-dope-orange-500/10 rounded-lg p-4 text-center border border-dope-orange-200">
+                  <div className="text-2xl mb-2">💨</div>
+                  <h6 className="font-semibold text-black text-sm mb-1">Bigger Hits</h6>
+                  <p className="text-xs text-gray-600">More capacity, less effort</p>
                 </div>
-                <div className="bg-dope-orange-500/20 rounded-lg p-3 text-center">
-                  <div className="text-xl mb-1">🎨</div>
-                  <h6 className="font-semibold text-white text-xs">Art Pieces</h6>
-                  <p className="text-xs text-gray-300">Functional glass art</p>
+                <div className="bg-dope-orange-500/10 rounded-lg p-4 text-center border border-dope-orange-200">
+                  <div className="text-2xl mb-2">🎨</div>
+                  <h6 className="font-semibold text-black text-sm mb-1">Art Pieces</h6>
+                  <p className="text-xs text-gray-600">Functional glass art</p>
                 </div>
               </div>
 
-              <div className="bg-white/10 rounded-lg p-3">
-                <h6 className="font-semibold text-white text-sm mb-2">🎯 Bong vs Pipe vs Joint</h6>
-                <div className="space-y-1 text-xs">
-                  <div className="flex justify-between">
-                    <span>Pipes:</span>
-                    <span className="text-dope-orange-400">Quick, portable, direct hits</span>
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <h6 className="font-semibold text-black text-base mb-3">🎯 Bong vs Pipe vs Joint</h6>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center py-1">
+                    <span className="font-medium text-gray-700">Pipes:</span>
+                    <span className="text-dope-orange-600 font-medium">Quick, portable, direct hits</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Joints:</span>
-                    <span className="text-dope-orange-400">Social, burn fast, paper taste</span>
+                  <div className="flex justify-between items-center py-1">
+                    <span className="font-medium text-gray-700">Joints:</span>
+                    <span className="text-dope-orange-600 font-medium">Social, burn fast, paper taste</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Bongs:</span>
-                    <span className="text-dope-orange-400">Massive, cool, filtered perfection</span>
+                  <div className="flex justify-between items-center py-1">
+                    <span className="font-medium text-gray-700">Bongs:</span>
+                    <span className="text-dope-orange-600 font-medium">Massive, cool, filtered perfection</span>
                   </div>
                 </div>
               </div>
@@ -105,53 +121,53 @@ export default function BongsHero() {
         </div>
 
         {/* Enhanced Category Navigation */}
-        <div className="flex flex-wrap gap-2 mt-6">
+        <div className="flex flex-wrap gap-3 mt-8">
           <button
             onClick={() => setActiveCategory('all-bongs')}
-            className={`px-4 py-2 text-sm rounded-lg font-medium transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,140,0,0.5)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'all-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_20px_rgba(255,140,0,0.6)]'
-                : 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             All Bongs
           </button>
           <button
             onClick={() => setActiveCategory('beaker-bongs')}
-            className={`px-4 py-2 text-sm rounded-lg font-medium transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,140,0,0.5)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'beaker-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_20px_rgba(255,140,0,0.6)]'
-                : 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             Beaker Bongs
           </button>
           <button
             onClick={() => setActiveCategory('straight-tubes')}
-            className={`px-4 py-2 text-sm rounded-lg font-medium transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,140,0,0.5)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'straight-tubes'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_20px_rgba(255,140,0,0.6)]'
-                : 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             Straight Tubes
           </button>
           <button
             onClick={() => setActiveCategory('percolator-bongs')}
-            className={`px-4 py-2 text-sm rounded-lg font-medium transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,140,0,0.5)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'percolator-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_20px_rgba(255,140,0,0.6)]'
-                : 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             Percolator Bongs
           </button>
           <button
             onClick={() => setActiveCategory('mini-bongs')}
-            className={`px-4 py-2 text-sm rounded-lg font-medium transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,140,0,0.5)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'mini-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_20px_rgba(255,140,0,0.6)]'
-                : 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             Mini Bongs

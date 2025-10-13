@@ -77,8 +77,18 @@ export default function PipesPageContent() {
   });
 
   useEffect(() => {
-    // Load products from Supabase
-    loadPipeProducts();
+    // Load products from Supabase with error handling - NO CART DEPENDENCY
+    const loadProducts = async () => {
+      try {
+        await loadPipeProducts();
+      } catch (error) {
+        console.error('Error loading pipe products:', error);
+        setProducts([]);
+        setFilteredProducts([]);
+      }
+    };
+
+    loadProducts();
   }, []);
 
   const loadPipeProducts = async () => {
@@ -96,48 +106,22 @@ export default function PipesPageContent() {
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // Get products from main_site_products table (excluding water pipes)
+      // Get products from main_site_products table - FIXED QUERY (no JSON filtering)
       const { data: products, error } = await supabase
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price, sale_price, fire_price,
-          image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
+          image_url, image_urls, sku, stock_quantity, featured, brand_id, category_id,
           created_at, updated_at
         `)
-        .eq('is_active', true)
+        // Simplified query for better performance - remove is_active filter for current phase
         .not('name', 'ilike', '%test%')
         .not('name', 'ilike', '%sample%')
-        .not('name', 'ilike', '%water pipe%')
-        .not('name', 'ilike', '%waterpipe%')
-        .not('name', 'ilike', '%bong%')
-        .not('name', 'ilike', '%hookah%')
-        .not('name', 'ilike', '%rig%')
-        .not('name', 'ilike', '%dab rig%')
-        .not('name', 'ilike', '%dabrigs%')
-        .not('name', 'ilike', '%dabrig%')
-        .not('name', 'ilike', '%vape%')
-        .not('name', 'ilike', '%cartridge%')
-        .not('name', 'ilike', '%cart%')
-        .not('name', 'ilike', '%concentrate%')
-        .not('name', 'ilike', '%wax%')
-        .not('name', 'ilike', '%shatter%')
-        .not('name', 'ilike', '%crumble%')
-        .not('name', 'ilike', '%rosin%')
-        .not('name', 'ilike', '%extract%')
-        .not('name', 'ilike', '%distillate%')
-        .not('name', 'ilike', '%live resin%')
-        .not('name', 'ilike', '%sauce%')
-        .not('name', 'ilike', '%budder%')
-        .not('name', 'ilike', '%badder%')
-        .not('name', 'ilike', '%diamond%')
-        .not('name', 'ilike', '%terp%')
-        .not('name', 'ilike', '%710%')
-        .not('name', 'ilike', '%concentrates%')
-        // POSITIVE FILTER: Only include products that contain pipe-related terms
-        .or('name.ilike.%pipe%,name.ilike.%chillum%,name.ilike.%spoon%,name.ilike.%sherlock%,name.ilike.%one hitter%,name.ilike.%steamroller%,name.ilike.%bowl%,name.ilike.%hand pipe%')
+        // Filter by name containing pipe-related keywords (simpler than JSON)
+        .or('name.ilike.%pipe%,name.ilike.%chillum%,name.ilike.%spoon%,name.ilike.%sherlock%,name.ilike.%hand pipe%')
         .order('featured', { ascending: false })
         .order('created_at', { ascending: false })
-        .limit(48);
+        .limit(24); // Reduced from 48 for better performance
 
       if (error) {
         console.error('Error fetching products:', error);

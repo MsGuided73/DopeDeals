@@ -13,6 +13,7 @@ interface Product {
   sale_price?: number | null;
   fire_price?: number | null;
   image_url: string | null;
+  image_urls?: string[] | null;
   sku: string | null;
   stock_quantity: number;
   is_active: boolean;
@@ -44,7 +45,8 @@ export default function FeaturedProductsSection() {
           image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
           created_at, updated_at
         `)
-        .eq('is_active', true)
+        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Add back when connecting to Zoho Inventory for automated product management
         .order('featured', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(8);
@@ -75,13 +77,17 @@ export default function FeaturedProductsSection() {
 
   // Transform product data for UniversalProductCard
   const transformProductForCard = (product: Product) => {
+    // Handle both image_url and image_urls fields
+    const primaryImageUrl = product.image_url ||
+                           (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
+
     return {
       id: product.id,
       name: product.name,
       price: product.our_price.toString(),
-      image_url: product.image_url || undefined,
-      imageUrl: product.image_url || undefined,
-      image: product.image_url || undefined,
+      image_url: primaryImageUrl || undefined,
+      imageUrl: primaryImageUrl || undefined,
+      image: primaryImageUrl || undefined,
       featured: product.featured,
       stock_quantity: product.stock_quantity,
       brand_name: product.brand_id || 'Unknown Brand',
@@ -166,17 +172,63 @@ export default function FeaturedProductsSection() {
     );
   }
 
-  // Filter products to only show those with real images - relaxed filtering for now
-  const productsWithRealImages = products.filter(product => {
-    return product.image_url &&
-      !product.image_url.includes('placehold.co') &&
-      !product.image_url.includes('placeholder');
+  // Show all products with stock - prioritize those with images
+  const productsWithImages = products.filter(product => {
+    // Note: Removed is_active filter for current manual inventory phase
+    // Add back when connecting to Zoho Inventory for automated product management
+    if (product.stock_quantity <= 0) return false;
+
+    // Check if product has a valid image_url
+    const hasValidImageUrl = product.image_url &&
+                           product.image_url.trim() !== '' &&
+                           !product.image_url.includes('placehold.co') &&
+                           !product.image_url.includes('placeholder');
+
+    // Check if product has valid images in image_urls array
+    const hasValidImageUrls = product.image_urls &&
+                            Array.isArray(product.image_urls) &&
+                            product.image_urls.length > 0 &&
+                            product.image_urls.some(url =>
+                              url && url.trim() !== '' &&
+                              !url.includes('placehold.co') &&
+                              !url.includes('placeholder')
+                            );
+
+    return hasValidImageUrl || hasValidImageUrls;
   });
+
+  const productsWithoutImages = products.filter(product => {
+    // Note: Removed is_active filter for current manual inventory phase
+    // Add back when connecting to Zoho Inventory for automated product management
+    if (product.stock_quantity <= 0) return false;
+
+    // Product doesn't have valid image_url or image_urls
+    const hasValidImageUrl = product.image_url &&
+                           product.image_url.trim() !== '' &&
+                           !product.image_url.includes('placehold.co') &&
+                           !product.image_url.includes('placeholder');
+
+    const hasValidImageUrls = product.image_urls &&
+                            Array.isArray(product.image_urls) &&
+                            product.image_urls.length > 0 &&
+                            product.image_urls.some(url =>
+                              url && url.trim() !== '' &&
+                              !url.includes('placehold.co') &&
+                              !url.includes('placeholder')
+                            );
+
+    return !hasValidImageUrl && !hasValidImageUrls;
+  });
+
+  // Combine: products with images first, then products without images
+  const productsToShow = [...productsWithImages, ...productsWithoutImages];
 
   // Debug logging
   console.log('All products:', products.length);
-  console.log('Products with images:', productsWithRealImages.length);
-  console.log('Sample product data:', products[0]);
+  console.log('Products with images:', productsWithImages.length);
+  console.log('Products without images:', productsWithoutImages.length);
+  console.log('Sample product with image:', productsWithImages[0]);
+  console.log('Sample product without image:', productsWithoutImages[0]);
 
   return (
     <section className="mt-24">
@@ -208,8 +260,8 @@ export default function FeaturedProductsSection() {
 
       {/* Products Grid - Using UniversalProductCard for larger images */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-24">
-        {productsWithRealImages.length > 0 ? (
-          productsWithRealImages.slice(0, 3).map((product) => (
+        {productsToShow.length > 0 ? (
+          productsToShow.slice(0, 6).map((product) => (
             <UniversalProductCard
               key={product.id}
               product={transformProductForCard(product)}
@@ -229,25 +281,11 @@ export default function FeaturedProductsSection() {
             />
           ))
         ) : (
-          // Fallback: Show first 4 products even without "verified" images for testing
-          products.slice(0, 4).map((product) => (
-            <UniversalProductCard
-              key={product.id}
-              product={transformProductForCard(product)}
-              viewMode="homepage-featured"
-              size="large"
-              showAddToCart={true}
-              showFavorite={true}
-              showQuickView={true}
-              showRating={true}
-              showBrand={true}
-              showDescription={true}
-              showStock={true}
-              showDiscount={true}
-              context="homepage"
-              priority="high"
-            />
-          ))
+          // Show message if no products available
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-400 text-lg">No products available at the moment.</p>
+            <p className="text-gray-500 text-sm mt-2">Please check back soon!</p>
+          </div>
         )}
 
         {/* Show message if no products at all */}

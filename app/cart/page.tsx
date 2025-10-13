@@ -26,14 +26,19 @@ export default function CartPage() {
     setLoading(true);
     setError(null);
 
-    const cartData = await getCart();
-    if (cartData) {
-      setCart(cartData);
-    } else {
+    try {
+      const cartData = await getCart();
+      if (cartData) {
+        setCart(cartData);
+      } else {
+        setError('Failed to load cart');
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
       setError('Failed to load cart');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const updateQuantity = async (cartItemId: string, newQuantity: number) => {
@@ -56,8 +61,11 @@ export default function CartPage() {
     try {
       const sessionId = getSessionId();
 
-      const response = await fetch(`/api/cart?sessionId=${sessionId}`, {
-        method: 'DELETE'
+      const response = await fetch('/api/cart', {
+        method: 'DELETE',
+        headers: {
+          'x-session-id': sessionId,
+        },
       });
 
       const data = await response.json();

@@ -34,10 +34,22 @@ export interface Cart {
 // Get session ID for guest users
 export const getSessionId = (): string => {
   if (typeof window === 'undefined') return '';
-  
+
   let sessionId = localStorage.getItem('cart_session_id');
   if (!sessionId) {
-    sessionId = 'guest_' + Math.random().toString(36).substr(2, 9);
+    sessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('cart_session_id', sessionId);
+  }
+  return sessionId;
+};
+
+// Ensure session ID exists (call this on app initialization)
+export const ensureSessionId = (): string => {
+  if (typeof window === 'undefined') return '';
+
+  let sessionId = localStorage.getItem('cart_session_id');
+  if (!sessionId) {
+    sessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('cart_session_id', sessionId);
   }
   return sessionId;
@@ -50,13 +62,14 @@ export const addToCart = async (productId: string, quantity: number = 1): Promis
   const loadingToast = toast.loading('Adding to cart...');
 
   try {
+    // Use the new cart API structure
     const response = await fetch('/api/cart', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-session-id': sessionId,
       },
       body: JSON.stringify({
-        sessionId,
         productId,
         quantity,
       }),
@@ -93,8 +106,17 @@ export const updateCartQuantity = async (itemId: string, quantity: number): Prom
   const loadingToast = toast.loading('Updating cart...');
 
   try {
-    const response = await fetch(`/api/cart?cartItemId=${itemId}&sessionId=${sessionId}&quantity=${quantity}`, {
+    // Use the new cart API structure
+    const response = await fetch('/api/cart', {
       method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-session-id': sessionId,
+      },
+      body: JSON.stringify({
+        cartItemId: itemId,
+        quantity,
+      }),
     });
 
     if (!response.ok) {
@@ -126,8 +148,12 @@ export const removeFromCart = async (itemId: string): Promise<boolean> => {
   const loadingToast = toast.loading('Removing from cart...');
 
   try {
-    const response = await fetch(`/api/cart?cartItemId=${itemId}&sessionId=${sessionId}`, {
+    // Use the new cart API structure
+    const response = await fetch('/api/cart', {
       method: 'DELETE',
+      headers: {
+        'x-session-id': sessionId,
+      },
     });
 
     if (!response.ok) {
@@ -157,7 +183,11 @@ export const getCart = async (): Promise<Cart | null> => {
   const sessionId = getSessionId();
 
   try {
-    const response = await fetch(`/api/cart?sessionId=${sessionId}`);
+    const response = await fetch(`/api/cart?sessionId=${sessionId}`, {
+      headers: {
+        'x-session-id': sessionId, // Add session ID to headers for RLS
+      },
+    });
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -199,8 +229,15 @@ export const getCart = async (): Promise<Cart | null> => {
     }
   } catch (error) {
     console.error('Error fetching cart:', error);
-    toast.error('Failed to load cart');
-    return null;
+    // Return empty cart instead of null to prevent app crashes
+    return {
+      items: [],
+      itemCount: 0,
+      subtotal: 0,
+      taxAmount: 0,
+      shippingAmount: 0,
+      total: 0,
+    };
   }
 };
 
@@ -211,8 +248,12 @@ export const clearCart = async (): Promise<boolean> => {
   const loadingToast = toast.loading('Clearing cart...');
 
   try {
-    const response = await fetch(`/api/cart?sessionId=${sessionId}`, {
+    // Use the new cart API structure
+    const response = await fetch('/api/cart', {
       method: 'DELETE',
+      headers: {
+        'x-session-id': sessionId,
+      },
     });
 
     if (!response.ok) {
