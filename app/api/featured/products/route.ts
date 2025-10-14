@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+/**
+ * Featured Products API Route
+ *
+ * IMPORTANT: Database Implementation Pattern
+ * - Uses "main_site_products" table (CORRECT)
+ * - Filters by featured: true for primary results
+ * - Has fallback mechanism for when few featured products exist
+ * - Validates images to ensure only products with valid images are returned
+ *
+ * PATTERN COMPARISON:
+ * ✅ CORRECT: This API route (uses proper table, filtering, fallbacks)
+ * ❌ WRONG: Direct supabaseBrowser queries in components
+ * ✅ CORRECT: Staff Picks API (same pattern as this)
+ */
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -49,64 +64,90 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '8');
 
-    // Fetch products from Supabase - NO stock filtering during manual inventory phase
-    const { data: allProducts, error } = await supabase
+    // Fetch FEATURED products first (like Staff Picks does)
+    const { data: featuredProducts, error } = await supabase
       .from('main_site_products')
       .select(`
-        id,
-        name,
-        description,
-        short_description,
-        our_price,
-        image_url,
-        stock_quantity,
-        is_active,
-        created_at
+        id, name, description, short_description, our_price, sale_price, fire_price,
+        image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
+        created_at, updated_at
       `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
       // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
       // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
+      .eq('featured', true) // ADD THIS: Only get featured products
       .order('created_at', { ascending: false })
-      .limit(200); // Get more to filter from
+      .limit(limit);
 
     if (error) {
       console.error('Error fetching featured products:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Filter for products with real, valid images
-    let featuredProducts = (allProducts || [])
-      .filter(product => product.image_url) // Only products with images
-      .filter(product => hasRealProductImage(product.image_url))
-      .filter(product => isValidImageUrl(product.image_url))
-      .filter(product => product.our_price > 0) // Ensure valid pricing
-      .slice(0, limit);
+    // If we don't have enough featured products, get fallback products (like Staff Picks)
+    let productsToReturn = featuredProducts || [];
 
-    // If we still don't have enough products, get any products with non-null images
-    if (featuredProducts.length < 4) {
-      const additionalProducts = (allProducts || [])
-        .filter(product => product.image_url && product.image_url.trim() !== '')
-        .filter(product => !featuredProducts.some(fp => fp.id === product.id))
-        .filter(product => product.our_price > 0)
-        .slice(0, Math.max(4, limit) - featuredProducts.length);
+    if (productsToReturn.length < Math.max(4, limit)) {
+      console.log(`⚠️ Only found ${productsToReturn.length} featured products, getting fallback products`);
 
-      featuredProducts = [...featuredProducts, ...additionalProducts];
+      const { data: fallbackProducts, error: fallbackError } = await supabase
+        .from('main_site_products')
+        .select(`
+          id, name, description, short_description, our_price, sale_price, fire_price,
+          image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
+          created_at, updated_at
+        `)
+        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
+        // Add back when connecting to Zoho Inventory for automated product management
+        .eq('nicotine_product', false)
+        .eq('tobacco_product', false)
+        .neq('featured', true) // Exclude already featured products
+        .not('image_url', 'is', null) // Must have image_url
+        .gt('our_price', 0) // Must have valid price
+        .order('created_at', { ascending: false })
+        .limit(Math.max(4, limit) - productsToReturn.length);
+
+      if (fallbackError) {
+        console.error('Error fetching fallback products:', fallbackError);
+        // Continue with what we have
+      } else if (fallbackProducts) {
+        productsToReturn = [...productsToReturn, ...fallbackProducts];
+        console.log(`✅ Added ${fallbackProducts.length} fallback products, total: ${productsToReturn.length}`);
+      }
     }
 
-    // Normalize the response to include both field names for component compatibility
-    const normalizedProducts = featuredProducts.map(product => ({
-      ...product,
-      image_url: product.image_url // Add snake_case version for legacy compatibility
-    }));
+    // Filter for products with valid images (simplified logic like bongs implementation)
+    const validProducts = productsToReturn.filter(product => {
+      // Check if product has a valid image_url
+      const hasValidImageUrl = product.image_url &&
+                             product.image_url.trim() !== '' &&
+                             !product.image_url.includes('placehold.co') &&
+                             !product.image_url.includes('placeholder');
+
+      // Check if product has valid images in image_urls array
+      const hasValidImageUrls = product.image_urls &&
+                              Array.isArray(product.image_urls) &&
+                              product.image_urls.length > 0 &&
+                              product.image_urls.some(url =>
+                                url && url.trim() !== '' &&
+                                !url.includes('placehold.co') &&
+                                !url.includes('placeholder')
+                              );
+
+      return hasValidImageUrl || hasValidImageUrls;
+    });
+
+    console.log(`🎯 Featured Products API: ${validProducts.length} products with valid images from ${productsToReturn.length} total`);
 
     // Sort by newest first
-    normalizedProducts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    validProducts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
     return NextResponse.json({
-      products: normalizedProducts,
-      total: normalizedProducts.length
+      products: validProducts,
+      total: validProducts.length
     });
 
   } catch (error) {

@@ -38,46 +38,41 @@ export default function FeaturedProductsSection() {
     try {
       setLoading(true);
 
-      // Query main_site_products table - prioritize featured products, fallback to recent
-      const { data, error } = await supabaseBrowser
-        .from('main_site_products')
-        .select(`
-          id, name, description, short_description, our_price, sale_price, fire_price,
-          image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
-          created_at, updated_at
-        `)
-        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-        // Add back when connecting to Zoho Inventory for automated product management
-        .not('short_description', 'is', null)
-        .not('brand_id', 'is', null)
-        .order('featured', { ascending: false })
-        .order('created_at', { ascending: false })
-        .limit(12);
+      // Use API route like StaffPicksSection.tsx does (WORKING PATTERN)
+      const response = await fetch('/api/featured/products?limit=12');
 
-      if (error) {
-        console.error('Error fetching featured products:', error);
-        throw new Error(error.message || 'Failed to fetch featured products from database');
+      if (!response.ok) {
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          // If we can't parse JSON, use the status text
+        }
+        console.error('Featured products API error:', errorMessage);
+        throw new Error(`Failed to fetch featured products: ${errorMessage}`);
       }
 
-      if (!data) {
+      const data = await response.json();
+
+      if (!data.products) {
         console.warn('No featured products data received');
         setProducts([]);
         return;
       }
 
-      setProducts(data);
+      setProducts(data.products);
 
       // Debug: Check for Ryan Fitt product specifically
-      const ryanFittProduct = data.find(p => p.name.toLowerCase().includes('ryan') && p.name.toLowerCase().includes('fitt'));
+      const ryanFittProduct = data.products.find((p: Product) => p.name.toLowerCase().includes('ryan') && p.name.toLowerCase().includes('fitt'));
       if (ryanFittProduct) {
-        console.log('🎯 Ryan Fitt product found in database:');
+        console.log('🎯 Ryan Fitt product found in API response:');
         console.log('Name:', ryanFittProduct.name);
         console.log('Image URL:', ryanFittProduct.image_url);
         console.log('Image URLs array:', ryanFittProduct.image_urls);
-        console.log('Hardcoded URL in component: https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/puffco-ryan-fitt-recycler.jpg');
       } else {
-        console.log('❌ Ryan Fitt product NOT found in database query results');
-        console.log('Available products with "fitt":', data.filter(p => p.name.toLowerCase().includes('fitt')).map(p => p.name));
+        console.log('❌ Ryan Fitt product NOT found in API response');
+        console.log('Available products with "fitt":', data.products.filter((p: Product) => p.name.toLowerCase().includes('fitt')).map((p: Product) => p.name));
       }
     } catch (err) {
       console.error('Error fetching featured products:', err);
@@ -134,6 +129,89 @@ export default function FeaturedProductsSection() {
               </h2>
             </div>
           </div>
+
+          {/* Special Puffco Proxy - Featured Product */}
+          <div className="group bg-white rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-gray-200 hover:border-dope-orange-300">
+            <div className="flex">
+              {/* Product Image - Left Side */}
+              <div className="relative w-1/2 bg-gray-50 flex items-center justify-center p-8">
+                <img
+                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/puffco-proxy.jpg"
+                  alt="Puffco Proxy Vaporizer"
+                  className="w-full h-full object-contain max-h-80"
+                  onError={(e) => {
+                    console.error('Puffco Proxy image failed to load:', e);
+                    console.log('Image URL:', (e.target as HTMLImageElement).src);
+                  }}
+                  onLoad={(e) => {
+                    console.log('Puffco Proxy image loaded successfully');
+                    console.log('Image natural size:', (e.target as HTMLImageElement).naturalWidth, 'x', (e.target as HTMLImageElement).naturalHeight);
+                  }}
+                />
+
+                {/* Badges */}
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  <div className="bg-purple-600 text-white px-3 py-1 rounded-lg text-sm font-bold">
+                    🚀 Latest Innovation
+                  </div>
+                  <div className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm font-bold">
+                    3D Chamber
+                  </div>
+                </div>
+              </div>
+
+              {/* Product Info - Right Side */}
+              <div className="flex-1 p-8 flex flex-col justify-between">
+                {/* Header */}
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-dope-orange-600 transition-colors">
+                    Puffco Proxy Vaporizer
+                  </h3>
+                  <p className="text-base text-gray-600 mb-3 font-semibold">Puffco</p>
+                  <p className="text-base text-gray-700 leading-relaxed">
+                    The Puffco Proxy is a portable, modular vaporizer that delivers premium vapor quality.
+                    Features the revolutionary 3D Chamber technology for unmatched flavor and efficiency.
+                  </p>
+                </div>
+
+                {/* Special Pricing Display */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-base text-gray-600 font-medium">Our Price</span>
+                    <span className="text-3xl font-bold text-dope-orange-500">
+                      $299.99
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>Premium modular vaporizer with 3D chamber technology</span>
+                    <div className="flex-1 h-0.5 bg-dope-orange-500"></div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4">
+                  <Link
+                    href="/product/puffco-proxy"
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-bold transition-all duration-300 text-center text-base hover:scale-105"
+                  >
+                    View Details
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      try {
+                        await addToCart('puffco-proxy', 1);
+                      } catch (error) {
+                        console.error('Failed to add to cart:', error);
+                      }
+                    }}
+                    className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base hover:scale-105 hover:shadow-lg"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         
         {/* Shop All Link - Centered Below Title */}
@@ -188,55 +266,13 @@ export default function FeaturedProductsSection() {
     );
   }
 
-  // Show all products - prioritize those with images, remove stock restrictions
-  const productsWithImages = products.filter(product => {
-    // Check if product has a valid image_url
-    const hasValidImageUrl = product.image_url &&
-                           product.image_url.trim() !== '' &&
-                           !product.image_url.includes('placehold.co') &&
-                           !product.image_url.includes('placeholder');
-
-    // Check if product has valid images in image_urls array
-    const hasValidImageUrls = product.image_urls &&
-                            Array.isArray(product.image_urls) &&
-                            product.image_urls.length > 0 &&
-                            product.image_urls.some(url =>
-                              url && url.trim() !== '' &&
-                              !url.includes('placehold.co') &&
-                              !url.includes('placeholder')
-                            );
-
-    return hasValidImageUrl || hasValidImageUrls;
-  });
-
-  const productsWithoutImages = products.filter(product => {
-    // Product doesn't have valid image_url or image_urls
-    const hasValidImageUrl = product.image_url &&
-                           product.image_url.trim() !== '' &&
-                           !product.image_url.includes('placehold.co') &&
-                           !product.image_url.includes('placeholder');
-
-    const hasValidImageUrls = product.image_urls &&
-                            Array.isArray(product.image_urls) &&
-                            product.image_urls.length > 0 &&
-                            product.image_urls.some(url =>
-                              url && url.trim() !== '' &&
-                              !url.includes('placehold.co') &&
-                              !url.includes('placeholder')
-                            );
-
-    return !hasValidImageUrl && !hasValidImageUrls;
-  });
-
-  // Combine: products with images first, then products without images
-  const productsToShow = [...productsWithImages, ...productsWithoutImages];
+  // Simplified image handling - API already filtered for valid images
+  // Just use the products directly since API handles image validation
+  const productsToShow = products;
 
   // Debug logging
-  console.log('All products:', products.length);
-  console.log('Products with images:', productsWithImages.length);
-  console.log('Products without images:', productsWithoutImages.length);
-  console.log('Sample product with image:', productsWithImages[0]);
-  console.log('Sample product without image:', productsWithoutImages[0]);
+  console.log('Featured products loaded:', products.length);
+  console.log('Sample product:', products[0]);
 
   return (
     <section className="mt-24">
@@ -256,91 +292,175 @@ export default function FeaturedProductsSection() {
         </Link>
       </div>
 
-      {/* Products Grid - 3 Column Portrait Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-        {/* Special Puffco Ryan Fitt Recycler - Featured Product */}
-        <div className="group bg-white rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-gray-200 hover:border-dope-orange-300">
-          <div className="flex">
-            {/* Product Image - Left Side */}
-            <div className="relative w-1/2 bg-gray-50 flex items-center justify-center p-8">
-              <img
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/puffco-ryan-fitt-recycler.jpg"
-                alt="Puffco Ryan Fitt Recycler Glass Attachment"
-                className="w-full h-full object-contain max-h-80"
-                onError={(e) => {
-                  console.error('Ryan Fitt image failed to load:', e);
-                  console.log('Image URL:', (e.target as HTMLImageElement).src);
-                }}
-                onLoad={(e) => {
-                  console.log('Ryan Fitt image loaded successfully');
-                  console.log('Image natural size:', (e.target as HTMLImageElement).naturalWidth, 'x', (e.target as HTMLImageElement).naturalHeight);
-                }}
-              />
+      {/* Special Featured Products Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {/* Special Puffco Ryan Fitt Recycler - Featured Product */}
+          <div className="group bg-white rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-gray-200 hover:border-dope-orange-300">
+            <div className="flex">
+              {/* Product Image - Left Side */}
+              <div className="relative w-1/2 bg-gray-50 flex items-center justify-center p-8">
+                <img
+                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/puffco-ryan-fitt-recycler.jpg"
+                  alt="Puffco Ryan Fitt Recycler Glass Attachment"
+                  className="w-full h-full object-contain max-h-80"
+                  onError={(e) => {
+                    console.error('Ryan Fitt image failed to load:', e);
+                    console.log('Image URL:', (e.target as HTMLImageElement).src);
+                  }}
+                  onLoad={(e) => {
+                    console.log('Ryan Fitt image loaded successfully');
+                    console.log('Image natural size:', (e.target as HTMLImageElement).naturalWidth, 'x', (e.target as HTMLImageElement).naturalHeight);
+                  }}
+                />
 
-              {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                <div className="bg-dope-orange-500 text-white px-3 py-1 rounded-lg text-sm font-bold">
-                  🔥 Staff Pick
+                {/* Badges */}
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  <div className="bg-dope-orange-500 text-white px-3 py-1 rounded-lg text-sm font-bold">
+                    🔥 Staff Pick
+                  </div>
+                  <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-bold">
+                    -25% OFF
+                  </div>
                 </div>
-                <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-bold">
-                  -25% OFF
+              </div>
+
+              {/* Product Info - Right Side */}
+              <div className="flex-1 p-8 flex flex-col justify-between">
+                {/* Header */}
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-dope-orange-600 transition-colors">
+                    Puffco Ryan Fitt Recycler Glass
+                  </h3>
+                  <p className="text-base text-gray-600 mb-3 font-semibold">Puffco</p>
+                  <p className="text-base text-gray-700 leading-relaxed">
+                    Premium recycler glass attachment designed by Ryan Fitt for the Puffco Peak Pro.
+                    Enhanced vapor cooling and superior filtration for the ultimate dabbing experience.
+                  </p>
+                </div>
+
+                {/* Special Pricing Display */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-base text-gray-600 font-medium">Their Price</span>
+                    <span className="text-xl text-gray-500 line-through decoration-red-500 decoration-4">
+                      $249.99
+                    </span>
+                    <span className="text-base text-gray-600 font-medium">-</span>
+                    <span className="text-base text-gray-600 font-medium">Our Price</span>
+                    <span className="text-3xl font-bold text-dope-orange-500">
+                      $199.99
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>You Save $50!</span>
+                    <div className="flex-1 h-0.5 bg-dope-orange-500"></div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4">
+                  <Link
+                    href="/product/puffco-ryan-fitt-recycler"
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-bold transition-all duration-300 text-center text-base hover:scale-105"
+                  >
+                    View Details
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      try {
+                        await addToCart('puffco-ryan-fitt-recycler', 1);
+                      } catch (error) {
+                        console.error('Failed to add to cart:', error);
+                      }
+                    }}
+                    className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base hover:scale-105 hover:shadow-lg"
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Product Info - Right Side */}
-            <div className="flex-1 p-8 flex flex-col justify-between">
-              {/* Header */}
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-dope-orange-600 transition-colors">
-                  Puffco Ryan Fitt Recycler Glass
-                </h3>
-                <p className="text-base text-gray-600 mb-3 font-semibold">Puffco</p>
-                <p className="text-base text-gray-700 leading-relaxed">
-                  Premium recycler glass attachment designed by Ryan Fitt for the Puffco Peak Pro.f
-                  Enhanced vapor cooling and superior filtration for the ultimate dabbing experience.
-                </p>
-              </div>
-
-              {/* Special Pricing Display */}
-              <div className="mb-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-base text-gray-600 font-medium">Their Price</span>
-                  <span className="text-xl text-gray-500 line-through decoration-red-500 decoration-4">
-                    $249.99
-                  </span>
-                  <span className="text-base text-gray-600 font-medium">-</span>
-                  <span className="text-base text-gray-600 font-medium">Our Price</span>
-                  <span className="text-3xl font-bold text-dope-orange-500">
-                    $199.99
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span>You Save $50!</span>
-                  <div className="flex-1 h-0.5 bg-dope-orange-500"></div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-4">
-                <Link
-                  href="/product/puffco-ryan-fitt-recycler"
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-bold transition-all duration-300 text-center text-base hover:scale-105"
-                >
-                  View Details
-                </Link>
-                <button
-                  onClick={async () => {
-                    try {
-                      await addToCart('puffco-ryan-fitt-recycler', 1);
-                    } catch (error) {
-                      console.error('Failed to add to cart:', error);
-                    }
+          {/* Special Truemoola Delta 8 Gummies - Featured Product */}
+          <div className="group bg-white rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-gray-200 hover:border-dope-orange-300">
+            <div className="flex">
+              {/* Product Image - Left Side */}
+              <div className="relative w-1/2 bg-gray-50 flex items-center justify-center p-8">
+                <img
+                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/truemoola-delta8-gummies.jpg"
+                  alt="Truemoola Delta 8 Gummies 600mg"
+                  className="w-full h-full object-contain max-h-80"
+                  onError={(e) => {
+                    console.error('Truemoola gummies image failed to load:', e);
+                    console.log('Image URL:', (e.target as HTMLImageElement).src);
                   }}
-                  className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base hover:scale-105 hover:shadow-lg"
-                >
-                  Add to Cart
-                </button>
+                  onLoad={(e) => {
+                    console.log('Truemoola gummies image loaded successfully');
+                    console.log('Image natural size:', (e.target as HTMLImageElement).naturalWidth, 'x', (e.target as HTMLImageElement).naturalHeight);
+                  }}
+                />
+
+                {/* Badges */}
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  <div className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm font-bold">
+                    🌿 Premium Delta 8
+                  </div>
+                  <div className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm font-bold">
+                    10 Flavors
+                  </div>
+                </div>
+              </div>
+
+              {/* Product Info - Right Side */}
+              <div className="flex-1 p-8 flex flex-col justify-between">
+                {/* Header */}
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-dope-orange-600 transition-colors">
+                    Truemoola Delta 8 Gummies
+                  </h3>
+                  <p className="text-base text-gray-600 mb-3 font-semibold">Truemoola</p>
+                  <p className="text-base text-gray-700 leading-relaxed">
+                    Premium Delta 8 THC gummies in 10 delicious flavors. Each pack contains 10 gummies
+                    with 60mg of pure Delta 8 per piece. Vegan-friendly, gluten-free, and made in the USA.
+                  </p>
+                </div>
+
+                {/* Special Pricing Display */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-base text-gray-600 font-medium">Pack Price</span>
+                    <span className="text-3xl font-bold text-dope-orange-500">
+                      $39.99
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>600mg Total • 60mg per gummy</span>
+                    <div className="flex-1 h-0.5 bg-dope-orange-500"></div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4">
+                  <Link
+                    href="/product/truemoola-delta8-gummies"
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-bold transition-all duration-300 text-center text-base hover:scale-105"
+                  >
+                    View Details
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      try {
+                        await addToCart('truemoola-delta8-gummies', 1);
+                      } catch (error) {
+                        console.error('Failed to add to cart:', error);
+                      }
+                    }}
+                    className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base hover:scale-105 hover:shadow-lg"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -450,7 +570,8 @@ export default function FeaturedProductsSection() {
             );
           })
         ) : null}
-      </div>
+
+      {/* Pagination would go here if needed */}
     </section>
   );
 }
