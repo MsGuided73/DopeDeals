@@ -292,283 +292,109 @@ export default function FeaturedProductsSection() {
         </Link>
       </div>
 
-      {/* Special Featured Products Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {/* Special Puffco Ryan Fitt Recycler - Featured Product */}
-          <div className="group bg-white rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-gray-200 hover:border-dope-orange-300">
-            <div className="flex">
-              {/* Product Image - Left Side */}
-              <div className="relative w-1/2 bg-gray-50 flex items-center justify-center p-8">
-                <img
-                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/puffco-ryan-fitt-recycler.jpg"
-                  alt="Puffco Ryan Fitt Recycler Glass Attachment"
-                  className="w-full h-full object-contain max-h-80"
-                  onError={(e) => {
-                    console.error('Ryan Fitt image failed to load:', e);
-                    console.log('Image URL:', (e.target as HTMLImageElement).src);
-                  }}
-                  onLoad={(e) => {
-                    console.log('Ryan Fitt image loaded successfully');
-                    console.log('Image natural size:', (e.target as HTMLImageElement).naturalWidth, 'x', (e.target as HTMLImageElement).naturalHeight);
-                  }}
-                />
+      {/* Clean Product Grid - No oversized cards */}
 
-                {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
-                  <div className="bg-dope-orange-500 text-white px-3 py-1 rounded-lg text-sm font-bold">
-                    🔥 Staff Pick
-                  </div>
-                  <div className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-bold">
-                    -25% OFF
-                  </div>
-                </div>
-              </div>
-
-              {/* Product Info - Right Side */}
-              <div className="flex-1 p-8 flex flex-col justify-between">
-                {/* Header */}
-                <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-dope-orange-600 transition-colors">
-                    Puffco Ryan Fitt Recycler Glass
-                  </h3>
-                  <p className="text-base text-gray-600 mb-3 font-semibold">Puffco</p>
-                  <p className="text-base text-gray-700 leading-relaxed">
-                    Premium recycler glass attachment designed by Ryan Fitt for the Puffco Peak Pro.
-                    Enhanced vapor cooling and superior filtration for the ultimate dabbing experience.
-                  </p>
-                </div>
-
-                {/* Special Pricing Display */}
-                <div className="mb-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-base text-gray-600 font-medium">Their Price</span>
-                    <span className="text-xl text-gray-500 line-through decoration-red-500 decoration-4">
-                      $249.99
-                    </span>
-                    <span className="text-base text-gray-600 font-medium">-</span>
-                    <span className="text-base text-gray-600 font-medium">Our Price</span>
-                    <span className="text-3xl font-bold text-dope-orange-500">
-                      $199.99
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span>You Save $50!</span>
-                    <div className="flex-1 h-0.5 bg-dope-orange-500"></div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-4">
-                  <Link
-                    href="/product/puffco-ryan-fitt-recycler"
-                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-bold transition-all duration-300 text-center text-base hover:scale-105"
-                  >
-                    View Details
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      try {
-                        await addToCart('puffco-ryan-fitt-recycler', 1);
-                      } catch (error) {
-                        console.error('Failed to add to cart:', error);
-                      }
-                    }}
-                    className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base hover:scale-105 hover:shadow-lg"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Special Truemoola Delta 8 Gummies - Featured Product */}
-          <div className="group bg-white rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-gray-200 hover:border-dope-orange-300">
-            <div className="flex">
-              {/* Product Image - Left Side */}
-              <div className="relative w-1/2 bg-gray-50 flex items-center justify-center p-8">
-                <img
-                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/products/truemoola-delta8-gummies.jpg"
-                  alt="Truemoola Delta 8 Gummies 600mg"
-                  className="w-full h-full object-contain max-h-80"
-                  onError={(e) => {
-                    console.error('Truemoola gummies image failed to load:', e);
-                    console.log('Image URL:', (e.target as HTMLImageElement).src);
-                  }}
-                  onLoad={(e) => {
-                    console.log('Truemoola gummies image loaded successfully');
-                    console.log('Image natural size:', (e.target as HTMLImageElement).naturalWidth, 'x', (e.target as HTMLImageElement).naturalHeight);
-                  }}
-                />
-
-                {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
-                  <div className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm font-bold">
-                    🌿 Premium Delta 8
-                  </div>
-                  <div className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm font-bold">
-                    10 Flavors
-                  </div>
-                </div>
-              </div>
-
-              {/* Product Info - Right Side */}
-              <div className="flex-1 p-8 flex flex-col justify-between">
-                {/* Header */}
-                <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-dope-orange-600 transition-colors">
-                    Truemoola Delta 8 Gummies
-                  </h3>
-                  <p className="text-base text-gray-600 mb-3 font-semibold">Truemoola</p>
-                  <p className="text-base text-gray-700 leading-relaxed">
-                    Premium Delta 8 THC gummies in 10 delicious flavors. Each pack contains 10 gummies
-                    with 60mg of pure Delta 8 per piece. Vegan-friendly, gluten-free, and made in the USA.
-                  </p>
-                </div>
-
-                {/* Special Pricing Display */}
-                <div className="mb-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-base text-gray-600 font-medium">Pack Price</span>
-                    <span className="text-3xl font-bold text-dope-orange-500">
-                      $39.99
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span>600mg Total • 60mg per gummy</span>
-                    <div className="flex-1 h-0.5 bg-dope-orange-500"></div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-4">
-                  <Link
-                    href="/product/truemoola-delta8-gummies"
-                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-bold transition-all duration-300 text-center text-base hover:scale-105"
-                  >
-                    View Details
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      try {
-                        await addToCart('truemoola-delta8-gummies', 1);
-                      } catch (error) {
-                        console.error('Failed to add to cart:', error);
-                      }
-                    }}
-                    className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base hover:scale-105 hover:shadow-lg"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Other Featured Products */}
+        {/* Compact Featured Products - Smaller, more compact cards */}
         {productsToShow.length > 0 ? (
-          productsToShow.slice(0, 5).map((product) => {
-            const transformedProduct = transformProductForCard(product);
-            return (
-              <div key={product.id} className="group bg-white rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-2xl border border-gray-200">
-                {/* Product Image - Top */}
-                <div className="relative aspect-square bg-gray-50 flex items-center justify-center p-6">
-                  {transformedProduct.image_url ? (
-                    <img
-                      src={transformedProduct.image_url}
-                      alt={transformedProduct.name}
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <div className="text-center">
-                        <div className="text-4xl mb-2">📦</div>
-                        <div className="text-sm">No Image</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {productsToShow.slice(0, 8).map((product) => {
+              const transformedProduct = transformProductForCard(product);
+              return (
+                <div key={product.id} className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-sm transition-shadow">
+                  {/* Product Image - Smaller aspect ratio */}
+                  <div className="relative aspect-[4/3] bg-gray-50 rounded-md mb-3 overflow-hidden">
+                    {transformedProduct.image_url ? (
+                      <img
+                        src={transformedProduct.image_url}
+                        alt={transformedProduct.name}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <div className="text-center">
+                          <div className="text-xl mb-1">📦</div>
+                          <div className="text-xs">No Image</div>
+                        </div>
                       </div>
+                    )}
+
+                    {/* Badges - Smaller and more compact */}
+                    <div className="absolute top-1 left-1 flex flex-col gap-1">
+                      {transformedProduct.featured && (
+                        <div className="bg-orange-500 text-white px-1.5 py-0.5 rounded text-xs font-medium">
+                          Featured
+                        </div>
+                      )}
+                      {transformedProduct.discount_percentage && (
+                        <div className="bg-red-500 text-white px-1.5 py-0.5 rounded text-xs font-medium">
+                          -{transformedProduct.discount_percentage}%
+                        </div>
+                      )}
                     </div>
-                  )}
-
-                  {/* Badges */}
-                  <div className="absolute top-3 left-3 flex flex-col gap-2">
-                    {transformedProduct.featured && (
-                      <div className="bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                        Featured
-                      </div>
-                    )}
-                    {transformedProduct.discount_percentage && (
-                      <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                        -{transformedProduct.discount_percentage}%
-                      </div>
-                    )}
                   </div>
-                </div>
 
-                {/* Product Info - Bottom */}
-                <div className="p-6">
-                  {/* Header */}
-                  <div className="mb-4">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-dope-orange-600 transition-colors line-clamp-2">
+                  {/* Product Info - More compact */}
+                  <div className="space-y-1.5">
+                    {/* Product Name - Smaller text */}
+                    <h3 className="font-medium text-gray-900 text-sm line-clamp-2 leading-tight min-h-[2.5rem]">
                       {transformedProduct.name}
                     </h3>
 
+                    {/* Brand - Smaller */}
                     {transformedProduct.brand_name && (
-                      <p className="text-sm text-gray-600 mb-2 font-medium">{transformedProduct.brand_name}</p>
+                      <p className="text-xs text-gray-600 font-medium">{transformedProduct.brand_name}</p>
                     )}
 
-                    {transformedProduct.short_description && (
-                      <p className="text-sm text-gray-600 line-clamp-2">
-                        {transformedProduct.short_description}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Special Pricing Display */}
-                  <div className="mb-4">
-                    {transformedProduct.compare_at_price ? (
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm text-gray-600">Their Price</span>
-                        <span className="text-lg text-gray-500 line-through">
-                          ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
-                        </span>
-                        <span className="text-sm text-gray-600">-</span>
-                        <span className="text-sm text-gray-600">Our Price</span>
-                        <span className="text-2xl font-bold text-dope-orange-500">
+                    {/* Pricing - More compact */}
+                    <div className="pt-1">
+                      {transformedProduct.compare_at_price ? (
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-gray-600">Was</span>
+                            <span className="text-xs text-gray-500 line-through">
+                              ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-gray-600">Now</span>
+                            <span className="text-sm font-bold text-orange-500">
+                              ${parseFloat(transformedProduct.price).toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-sm font-bold text-orange-500">
                           ${parseFloat(transformedProduct.price).toFixed(2)}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="text-2xl font-bold text-dope-orange-500 mb-2">
-                        ${parseFloat(transformedProduct.price).toFixed(2)}
-                      </div>
-                    )}
-                  </div>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-3">
-                    <Link
-                      href={`/product/${product.id}`}
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-lg font-semibold transition-colors text-center text-sm"
-                    >
-                      View
-                    </Link>
-                    <button
-                      onClick={async () => {
-                        try {
-                          await addToCart(product.id, 1);
-                        } catch (error) {
-                          console.error('Failed to add to cart:', error);
-                        }
-                      }}
-                      className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors text-sm"
-                    >
-                      Add
-                    </button>
+                    {/* Actions - More compact buttons */}
+                    <div className="flex gap-1.5 pt-1">
+                      <Link
+                        href={`/product/${product.id}`}
+                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-2 py-1.5 rounded text-xs font-medium transition-colors text-center"
+                      >
+                        View
+                      </Link>
+                      <button
+                        onClick={async () => {
+                          try {
+                            await addToCart(product.id, 1);
+                          } catch (error) {
+                            console.error('Failed to add to cart:', error);
+                          }
+                        }}
+                        className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })
+              );
+            })}
+          </div>
         ) : null}
 
       {/* Pagination would go here if needed */}

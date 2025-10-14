@@ -1,5 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 
+/**
+ * IMPORTANT: Database Table Usage Guide for DOPE CITY
+ *
+ * CORRECT TABLE: Use "main_site_products" for all product operations
+ * - This is the primary products table with proper schema
+ * - Contains: id, name, description, our_price, image_url, image_urls, etc.
+ * - Supports both single image_url and image_urls array
+ *
+ * DEPRECATED TABLES: DO NOT USE
+ * - "brands_new" - Legacy brands table, not for products
+ * - "products" - Old products table, replaced by main_site_products
+ *
+ * IMAGE HANDLING:
+ * - Primary image: Use image_url field
+ * - Gallery images: Use image_urls array field
+ * - Both fields are text type, image_urls supports arrays
+ */
+
 // Storage abstraction layer for Next.js
 export async function getStorage() {
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -72,10 +90,10 @@ export async function getStorage() {
     // Brands
     async getBrands() {
       const { data, error } = await supabase
-        .from('brands')
+        .from('brands_new')
         .select('*')
         .order('name');
-      
+
       if (error) throw error;
       return data || [];
     },

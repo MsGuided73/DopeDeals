@@ -47,7 +47,7 @@ export default function GlobalMasthead() {
       } else if (dropdownType === 'nested') {
         setOpenNestedSubmenu(null);
       }
-    }, 150); // 150ms delay
+    }, 300); // 300ms delay - increased for better submenu navigation
     setHoverTimeout(timeout);
   };
 
@@ -120,8 +120,14 @@ export default function GlobalMasthead() {
           <EnhancedSearchBar />
         </div>
 
-        {/* DOPE Orange divider line - THICK (Increased by 3x) */}
-        <div className="h-6 bg-dope-orange"></div>
+        {/* Metallic Orange Gradient divider line - THICK (Increased by 3x) */}
+        <div
+          className="h-6"
+          style={{
+            background: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 25%, #ff8c42 50%, #f7931e 75%, #ff6b35 100%)',
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1), inset 0 -2px 4px rgba(0,0,0,0.1)'
+          }}
+        ></div>
 
         {/* Glassmorphic nav bar - Desktop Only */}
         <nav className="hidden md:block bg-white/90 backdrop-blur-md">

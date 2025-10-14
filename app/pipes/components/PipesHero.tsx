@@ -53,9 +53,9 @@ export default function PipesHero() {
         <div className="flex flex-wrap gap-3 mt-8">
           <button
             onClick={() => setActiveCategory('all-pipes')}
-            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,140,0,0.4)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'all-pipes'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400 hover:text-dope-orange-600'
             }`}
           >
@@ -63,9 +63,9 @@ export default function PipesHero() {
           </button>
           <button
             onClick={() => setActiveCategory('spoon-pipes')}
-            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,140,0,0.4)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'spoon-pipes'
-                ? 'bg-dope-orange-500 text-black shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-black transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400 hover:text-dope-orange-600'
             }`}
           >
@@ -73,9 +73,9 @@ export default function PipesHero() {
           </button>
           <button
             onClick={() => setActiveCategory('chillums')}
-            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,140,0,0.4)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'chillums'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400 hover:text-dope-orange-600'
             }`}
           >
@@ -83,9 +83,9 @@ export default function PipesHero() {
           </button>
           <button
             onClick={() => setActiveCategory('sherlock-pipes')}
-            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,140,0,0.4)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'sherlock-pipes'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400 hover:text-dope-orange-600'
             }`}
           >
@@ -93,9 +93,9 @@ export default function PipesHero() {
           </button>
           <button
             onClick={() => setActiveCategory('one-hitters')}
-            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,140,0,0.4)] ${
+            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'one-hitters'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400 hover:text-dope-orange-600'
             }`}
           >

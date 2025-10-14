@@ -99,24 +99,37 @@ FROM products
 WHERE "Categories" IS NOT NULL AND "Categories" != ''
 ON CONFLICT (id) DO NOTHING;
 
--- 5. Create brands table from your Brand data
-CREATE TABLE IF NOT EXISTS brands (
-  id TEXT PRIMARY KEY,
+-- 5. Create brands_new table from your Brand data (using the new brands table structure)
+CREATE TABLE IF NOT EXISTS brands_new (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   slug TEXT UNIQUE,
   description TEXT,
+  tier TEXT DEFAULT 'mid-range',
+  logo_url TEXT,
+  website_url TEXT,
   is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  sort_order INTEGER DEFAULT 0,
+  seo_title TEXT,
+  seo_description TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Insert brands from your enriched data
-INSERT INTO brands (id, name, slug)
+INSERT INTO brands_new (name, slug, tier, sort_order)
 SELECT DISTINCT
   TRIM("Brand") as brand_name,
-  LOWER(REPLACE(TRIM("Brand"), ' ', '-')) as brand_slug
+  LOWER(REPLACE(TRIM("Brand"), ' ', '-')) as brand_slug,
+  CASE
+    WHEN TRIM("Brand") IN ('Puffco', 'ROOR', 'GRAV', 'Higher Standards', 'Storz & Bickel', 'Empire Glassworks') THEN 'premium'
+    WHEN TRIM("Brand") IN ('RAW', 'Elements', 'Santa Cruz Shredder', 'Pulsar', 'Cookies', 'Crave') THEN 'mid-range'
+    ELSE 'budget'
+  END as tier,
+  ROW_NUMBER() OVER (ORDER BY TRIM("Brand")) as sort_order
 FROM products
 WHERE "Brand" IS NOT NULL AND "Brand" != ''
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (slug) DO NOTHING;
 
 -- 6. Update main_site_products with proper brand_id and category_id references
 UPDATE main_site_products SET

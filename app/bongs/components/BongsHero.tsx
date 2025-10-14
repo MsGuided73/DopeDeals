@@ -114,7 +114,7 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('all-bongs')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'all-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
@@ -124,7 +124,7 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('beaker-bongs')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'beaker-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
@@ -134,7 +134,7 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('straight-tubes')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'straight-tubes'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
@@ -144,7 +144,7 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('percolator-bongs')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'percolator-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
@@ -154,7 +154,7 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('mini-bongs')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'mini-bongs'
-                ? 'bg-dope-orange-500 text-white shadow-[0_0_25px_rgba(255,140,0,0.6)] transform scale-105'
+                ? 'bg-dope-orange-500 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >

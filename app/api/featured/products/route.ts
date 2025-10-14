@@ -74,10 +74,9 @@ export async function GET(req: NextRequest) {
       `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
       // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
+      // Note: Removed nicotine/tobacco filters as columns don't exist in main_site_products
       // Add back when connecting to Zoho Inventory for automated product management
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
-      .eq('featured', true) // ADD THIS: Only get featured products
+      .eq('featured', true) // Only get featured products
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -101,11 +100,9 @@ export async function GET(req: NextRequest) {
         `)
         // Note: Removed .eq('is_active', true) filter for current manual inventory phase
         // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
+        // Note: Removed nicotine/tobacco filters as columns don't exist in main_site_products
         // Add back when connecting to Zoho Inventory for automated product management
-        .eq('nicotine_product', false)
-        .eq('tobacco_product', false)
         .neq('featured', true) // Exclude already featured products
-        .not('image_url', 'is', null) // Must have image_url
         .gt('our_price', 0) // Must have valid price
         .order('created_at', { ascending: false })
         .limit(Math.max(4, limit) - productsToReturn.length);
@@ -119,25 +116,18 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Filter for products with valid images (simplified logic like bongs implementation)
+    // Filter for products with ANY images (less restrictive to ensure display)
     const validProducts = productsToReturn.filter(product => {
-      // Check if product has a valid image_url
-      const hasValidImageUrl = product.image_url &&
-                             product.image_url.trim() !== '' &&
-                             !product.image_url.includes('placehold.co') &&
-                             !product.image_url.includes('placeholder');
+      // Accept any non-null, non-empty image_url
+      const hasImageUrl = product.image_url && product.image_url.trim() !== '';
 
-      // Check if product has valid images in image_urls array
-      const hasValidImageUrls = product.image_urls &&
-                              Array.isArray(product.image_urls) &&
-                              product.image_urls.length > 0 &&
-                              product.image_urls.some(url =>
-                                url && url.trim() !== '' &&
-                                !url.includes('placehold.co') &&
-                                !url.includes('placeholder')
-                              );
+      // Accept any image_urls array with at least one non-empty URL
+      const hasImageUrls = product.image_urls &&
+                          Array.isArray(product.image_urls) &&
+                          product.image_urls.length > 0 &&
+                          product.image_urls.some(url => url && url.trim() !== '');
 
-      return hasValidImageUrl || hasValidImageUrls;
+      return hasImageUrl || hasImageUrls;
     });
 
     console.log(`🎯 Featured Products API: ${validProducts.length} products with valid images from ${productsToReturn.length} total`);
