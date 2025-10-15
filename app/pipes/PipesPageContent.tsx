@@ -28,7 +28,7 @@ export interface PipeProduct {
   materials?: string[];
   vip_exclusive?: boolean;
   featured?: boolean;
-  channels: string[];
+
   is_active?: boolean;
   description?: string;
   short_description?: string;

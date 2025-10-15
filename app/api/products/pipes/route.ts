@@ -57,9 +57,7 @@ export async function GET(req: NextRequest) {
         sku,
         stock_quantity,
         materials,
-        vip_exclusive,
         featured,
-        channels,
         is_active,
         specs,
         attributes,
@@ -74,14 +72,18 @@ export async function GET(req: NextRequest) {
       .not('name', 'ilike', '%test%')
       .not('name', 'ilike', '%sample%'); // Exclude sample products
 
-    // Simplified filtering - use category_id for better performance
-    query = query.or('category_id.ilike.%pipe%,category_id.ilike.%chillum%,category_id.ilike.%spoon%,category_id.ilike.%sherlock%,category_id.ilike.%bowl%');
+    // Filter by product name - this captures all pipe products including the 256 categorized ones
+    // Exclude bowls (bong bowls) and water pipes as requested
+    query = query
+      .or('name.ilike.%pipe%,name.ilike.%chillum%,name.ilike.%spoon%,name.ilike.%sherlock%,name.ilike.%one hitter%,name.ilike.%hand pipe%')
+      .not('name', 'ilike', '%bowl%')
+      .not('name', 'ilike', '%water pipe%')
+      .not('name', 'ilike', '%water pipes%');
 
-    // Optimize ordering and limit for better performance
+    // Optimize ordering - no artificial limit to show all pipe products
     query = query
       .order('featured', { ascending: false })
-      .order('created_at', { ascending: false })
-      .limit(100); // Increased limit but still reasonable for performance
+      .order('created_at', { ascending: false });
 
     const { data: products, error } = await query;
 
@@ -134,9 +136,9 @@ export async function GET(req: NextRequest) {
         stock_quantity: product.stock_quantity || 0,
         materials: product.materials || [],
         material: product.materials?.[0] || 'Glass',
-        vip_exclusive: product.vip_exclusive || false,
+        vip_exclusive: false, // Default to false since column doesn't exist
         featured: product.featured || false,
-        channels: product.channels || [],
+
         is_active: product.is_active,
         description: product.description,
         short_description: product.short_description,

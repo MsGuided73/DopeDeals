@@ -18,7 +18,7 @@ export default function PipesHero() {
       </div>
 
       {/* Compact Header Bar */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="relative w-full max-w-none mx-0 px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h1 className="font-chalets text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider text-black leading-tight font-bold">
