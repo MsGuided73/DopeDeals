@@ -12,52 +12,46 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-      {/* Animated Metallic Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 py-20">
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 via-transparent to-gray-800/20 animate-pulse"></div>
-
-        {/* Metallic shine effect */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent animate-pulse"></div>
-
-        <div className="relative max-w-6xl mx-auto px-6 text-center">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 py-20">
+        <div className="relative w-full max-w-none mx-0 px-6 text-center">
           <div className="mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-gray-600 to-gray-800 rounded-full mb-6 shadow-2xl border-2 border-gray-500/30">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-dope-orange-400 to-dope-orange-600 rounded-full mb-6 shadow-2xl">
               <User className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-chalets font-bold text-white mb-6 leading-tight tracking-wide drop-shadow-2xl">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-chalets font-bold text-gray-900 mb-6 leading-tight tracking-wide">
               MY ACCOUNT
             </h1>
-            <div className="w-32 h-1 bg-gradient-to-r from-dope-orange-400 to-dope-orange-600 mx-auto mb-8 rounded-full shadow-lg"></div>
-            <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-medium">
+            <div className="w-32 h-1 bg-dope-orange-500 mx-auto mb-8 rounded-full"></div>
+            <p className="text-xl md:text-2xl text-gray-800 max-w-3xl mx-auto leading-relaxed font-medium">
               Manage your account, track orders, and access exclusive member benefits
             </p>
           </div>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <div className="text-3xl font-bold text-dope-orange-400 mb-2">12</div>
-              <div className="text-gray-300 text-sm font-medium">Total Orders</div>
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">12</div>
+              <div className="text-gray-700 text-sm font-medium">Total Orders</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <div className="text-3xl font-bold text-dope-orange-400 mb-2">$2,450</div>
-              <div className="text-gray-300 text-sm font-medium">Total Spent</div>
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">$2,450</div>
+              <div className="text-gray-700 text-sm font-medium">Total Spent</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <div className="text-3xl font-bold text-dope-orange-400 mb-2">VIP</div>
-              <div className="text-gray-300 text-sm font-medium">Member Status</div>
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">VIP</div>
+              <div className="text-gray-700 text-sm font-medium">Member Status</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <div className="text-3xl font-bold text-dope-orange-400 mb-2">5</div>
-              <div className="text-gray-300 text-sm font-medium">Saved Items</div>
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">5</div>
+              <div className="text-gray-700 text-sm font-medium">Saved Items</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Account Dashboard */}
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="w-full max-w-none mx-0 px-6 py-12">
         {/* Tab Navigation */}
         <div className="flex flex-wrap justify-center mb-8 bg-white rounded-xl shadow-lg p-2">
           {[
