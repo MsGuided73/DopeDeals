@@ -74,8 +74,9 @@ export async function GET(req: NextRequest) {
       `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
       // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-      // Note: Removed nicotine/tobacco filters as columns don't exist in main_site_products
-      // Add back when connecting to Zoho Inventory for automated product management
+      // COMPLIANCE: Filter out nicotine and tobacco products for main site compliance
+      .eq('nicotine_product', false)
+      .eq('tobacco_product', false)
       .eq('featured', true) // Get featured products first (priority)
       .order('created_at', { ascending: false })
       .limit(Math.min(limit, Math.ceil(limit * 0.7))); // Take up to 70% from featured products
@@ -100,8 +101,9 @@ export async function GET(req: NextRequest) {
         `)
         // Note: Removed .eq('is_active', true) filter for current manual inventory phase
         // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-        // Note: Removed nicotine/tobacco filters as columns don't exist in main_site_products
-        // Add back when connecting to Zoho Inventory for automated product management
+        // COMPLIANCE: Filter out nicotine and tobacco products for main site compliance
+        .eq('nicotine_product', false)
+        .eq('tobacco_product', false)
         .neq('featured', true) // Exclude already featured products
         .gt('our_price', 0) // Must have valid price
         .order('created_at', { ascending: false })
