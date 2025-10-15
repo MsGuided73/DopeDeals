@@ -64,8 +64,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '8');
 
-    // Fetch FEATURED products first (like Staff Picks does)
-    const { data: featuredProducts, error } = await supabase
+    // Fetch FEATURED products first (give priority to featured products)
+    const { data: priorityProducts, error } = await supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price, fire_price,
@@ -76,9 +76,9 @@ export async function GET(req: NextRequest) {
       // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
       // Note: Removed nicotine/tobacco filters as columns don't exist in main_site_products
       // Add back when connecting to Zoho Inventory for automated product management
-      .eq('featured', true) // Only get featured products
+      .eq('featured', true) // Get featured products first (priority)
       .order('created_at', { ascending: false })
-      .limit(limit);
+      .limit(Math.min(limit, Math.ceil(limit * 0.7))); // Take up to 70% from featured products
 
     if (error) {
       console.error('Error fetching featured products:', error);
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
     }
 
     // If we don't have enough featured products, get fallback products (like Staff Picks)
-    let productsToReturn = featuredProducts || [];
+    let productsToReturn = priorityProducts || [];
 
     if (productsToReturn.length < Math.max(4, limit)) {
       console.log(`⚠️ Only found ${productsToReturn.length} featured products, getting fallback products`);
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Filter for products with ANY images (less restrictive to ensure display)
-    const validProducts = productsToReturn.filter(product => {
+    const validProducts = productsToReturn.filter((product: any) => {
       // Accept any non-null, non-empty image_url
       const hasImageUrl = product.image_url && product.image_url.trim() !== '';
 
@@ -125,7 +125,7 @@ export async function GET(req: NextRequest) {
       const hasImageUrls = product.image_urls &&
                           Array.isArray(product.image_urls) &&
                           product.image_urls.length > 0 &&
-                          product.image_urls.some(url => url && url.trim() !== '');
+                          product.image_urls.some((url: string) => url && url.trim() !== '');
 
       return hasImageUrl || hasImageUrls;
     });
