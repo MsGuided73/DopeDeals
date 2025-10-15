@@ -41,13 +41,17 @@ export default function DopeCityFooter() {
         {/* Service Features */}
         <div className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Get loyalty rewards and rocket up the ladder in the DOPE CLUB */}
+            {/* Discreet Shipping - Nothing to see here */}
             <div className="text-center">
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-dope-orange-400" />
+                <img
+                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/icons/discreet%20icon%201.png"
+                  alt="Discreet Shipping"
+                  className="w-8 h-8 object-contain"
+                />
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">GET LOYALTY REWARDS</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md">Rocket up the ladder in the DOPE CLUB and reap the benefits for years to come</p>
+              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">DISCREET SHIPPING</h3>
+              <p className="text-gray-200 text-xs drop-shadow-md">Nothing to see here</p>
             </div>
 
             {/* Low Price Guarantee */}
