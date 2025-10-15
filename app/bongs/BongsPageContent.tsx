@@ -139,25 +139,33 @@ export default function BongsPageContent() {
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // Get products from main_site_products table - ensure image_url is properly selected
+      // Get products from main_site_products table using category_slug for better performance
       const { data: products, error } = await supabase
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price, sale_price, fire_price,
           image_url, image_urls, sku, stock_quantity, featured, brand_id, category_id,
-          categories, created_at, updated_at
+          categories, category_slug, created_at, updated_at
         `)
         .not('name', 'ilike', '%test%')
         .not('name', 'ilike', '%sample%')
-        .order('created_at', { ascending: false })
-        .limit(50); // Get products to work with
+        .or('category_slug.ilike.%bong%,category_slug.ilike.%water%,category_slug.ilike.%pipe%')
+        .order('created_at', { ascending: false });
 
-      // Filter for bong-related products using broader criteria
+      // Additional filtering for products that might not have category_slug set but are bongs
       let filteredProducts: any[] = [];
 
       if (products && products.length > 0) {
         filteredProducts = products.filter((product: any) => {
-          // First priority: Check categories JSONB field
+          // If category_slug matches, include it
+          if (product.category_slug &&
+              (product.category_slug.toLowerCase().includes('bong') ||
+               product.category_slug.toLowerCase().includes('water') ||
+               product.category_slug.toLowerCase().includes('pipe'))) {
+            return true;
+          }
+
+          // Fallback: Check categories JSONB field
           if (product.categories) {
             try {
               const categories = Array.isArray(product.categories) ? product.categories : [product.categories];
@@ -177,24 +185,18 @@ export default function BongsPageContent() {
             }
           }
 
-          // Second priority: Check product name/description for BONG-SPECIFIC keywords only
+          // Final fallback: Check product name for bong-specific keywords
           const name = (product.name || '').toLowerCase();
-          const description = (product.description || '').toLowerCase();
-          const searchText = `${name} ${description}`;
-
-          return searchText.includes('bong') ||
-                 searchText.includes('water pipe') ||
-                 searchText.includes('beaker bong') ||
-                 searchText.includes('percolator bong') ||
-                 searchText.includes('scientific bong') ||
-                 searchText.includes('waterpipe') ||
-                 searchText.includes('hookah') ||
-                 (name.includes('beaker') && name.includes('bong')) ||
-                 (name.includes('percolator') && name.includes('bong')) ||
-                 (name.includes('scientific') && name.includes('bong'));
+          return name.includes('bong') ||
+                 name.includes('water pipe') ||
+                 name.includes('beaker bong') ||
+                 name.includes('percolator bong') ||
+                 name.includes('scientific bong') ||
+                 name.includes('waterpipe') ||
+                 name.includes('hookah');
         });
 
-        console.log(`✅ Found ${filteredProducts.length} potential bongs from ${products.length} total products`);
+        console.log(`✅ Found ${filteredProducts.length} bongs using category_slug from ${products.length} total products`);
       }
 
       if (error) {

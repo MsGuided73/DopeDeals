@@ -9,7 +9,7 @@ export default function BongsHero() {
   return (
     <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-100 text-black overflow-hidden">
       {/* Compact Header Bar */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="relative w-full max-w-none mx-0 px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
             {/* Title and Accent Line */}
