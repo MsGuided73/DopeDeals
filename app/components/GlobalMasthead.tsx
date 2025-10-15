@@ -120,12 +120,13 @@ export default function GlobalMasthead() {
           <EnhancedSearchBar />
         </div>
 
-        {/* Metallic Orange Gradient divider line - THICK (Increased by 3x) */}
+        {/* Orange divider line - Reduced thickness by 2/3 */}
         <div
-          className="h-6"
+          className="h-2 bg-dope-orange-500"
           style={{
-            background: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 25%, #ff8c42 50%, #f7931e 75%, #ff6b35 100%)',
-            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1), inset 0 -2px 4px rgba(0,0,0,0.1)'
+            backgroundColor: '#ff6b35 !important',
+            backgroundImage: 'none !important',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1), inset 0 -1px 2px rgba(0,0,0,0.1)'
           }}
         ></div>
 

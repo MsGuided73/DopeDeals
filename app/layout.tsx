@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Resource Hints */}
         <link rel="prefetch" href="/api/products" />
       </head>
-      <body className="bg-white">
+      <body className="bg-white" suppressHydrationWarning>
         <AppProviders>
           <div className="min-h-screen flex flex-col" suppressHydrationWarning>
             {/* Scrolling Banner - DISABLED for now */}

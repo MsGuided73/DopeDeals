@@ -87,18 +87,18 @@ export default function ScrollingBanner() {
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Metallic gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-gray-600 via-gray-400 via-gray-600 to-gray-400"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      {/* Orange gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-dope-orange-600 via-dope-orange-500 to-dope-orange-600"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
-      {/* Animated shimmer effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+      {/* Subtle shimmer effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
       {/* Content */}
       <div className="relative flex items-center justify-between px-8 py-4">
         {/* Left side - Animated typing text */}
         <div className="flex-1">
-          <div className="text-white font-medium text-base md:text-lg leading-relaxed min-h-[3rem] flex items-center">
+          <div className="text-white font-bold text-base md:text-lg leading-relaxed min-h-[3rem] flex items-center">
             {displayText}
             <span className="w-0.5 h-6 bg-white ml-1 animate-pulse"></span>
           </div>
