@@ -20,6 +20,7 @@ interface Product {
   is_active: boolean;
   featured: boolean;
   brand_id: string | null;
+  brand_name: string | null;
   category_id: string | null;
   created_at: string;
   updated_at: string;
@@ -38,7 +39,7 @@ export default function FeaturedProductsSection() {
     try {
       setLoading(true);
 
-      // Use API route like StaffPicksSection.tsx does (WORKING PATTERN)
+      // Use API route lil StaffPicksSection.tsx does (WORKING PATTERN)
       const response = await fetch('/api/featured/products?limit=12');
 
       if (!response.ok) {
@@ -63,17 +64,10 @@ export default function FeaturedProductsSection() {
 
       setProducts(data.products);
 
-      // Debug: Check for Ryan Fitt product specifically
-      const ryanFittProduct = data.products.find((p: Product) => p.name.toLowerCase().includes('ryan') && p.name.toLowerCase().includes('fitt'));
-      if (ryanFittProduct) {
-        console.log('🎯 Ryan Fitt product found in API response:');
-        console.log('Name:', ryanFittProduct.name);
-        console.log('Image URL:', ryanFittProduct.image_url);
-        console.log('Image URLs array:', ryanFittProduct.image_urls);
-      } else {
-        console.log('❌ Ryan Fitt product NOT found in API response');
-        console.log('Available products with "fitt":', data.products.filter((p: Product) => p.name.toLowerCase().includes('fitt')).map((p: Product) => p.name));
-      }
+      // Log featured products for debugging
+      console.log('🎯 Featured products loaded:', data.products.length);
+      console.log('Featured count from API:', data.featuredCount);
+      console.log('Fallback count from API:', data.fallbackCount);
     } catch (err) {
       console.error('Error fetching featured products:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -101,7 +95,7 @@ export default function FeaturedProductsSection() {
       image: primaryImageUrl || undefined,
       featured: product.featured,
       stock_quantity: product.stock_quantity,
-      brand_name: product.brand_id || 'Unknown Brand',
+      brand_name: product.brand_name || 'Unknown Brand',
       short_description: getProductDescription(product),
       description: getProductDescription(product),
       sku: product.sku || '',
@@ -292,110 +286,130 @@ export default function FeaturedProductsSection() {
         </Link>
       </div>
 
-      {/* Clean Product Grid - No oversized cards */}
+      {/* Professional Product Grid */}
+      {productsToShow.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {productsToShow.slice(0, 4).map((product) => {
+            const transformedProduct = transformProductForCard(product);
+            return (
+              <div key={product.id} className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-dope-orange-300 transition-all duration-300 hover:-translate-y-1">
+                {/* Product Image - Better aspect ratio */}
+                <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                  {transformedProduct.image_url ? (
+                    <img
+                      src={transformedProduct.image_url}
+                      alt={transformedProduct.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                      <div className="text-center">
+                        <div className="text-4xl mb-2">📦</div>
+                        <div className="text-sm font-medium">No Image</div>
+                      </div>
+                    </div>
+                  )}
 
-        {/* Compact Featured Products - Smaller, more compact cards */}
-        {productsToShow.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {productsToShow.slice(0, 8).map((product) => {
-              const transformedProduct = transformProductForCard(product);
-              return (
-                <div key={product.id} className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-sm transition-shadow">
-                  {/* Product Image - Smaller aspect ratio */}
-                  <div className="relative aspect-[4/3] bg-gray-50 rounded-md mb-3 overflow-hidden">
-                    {transformedProduct.image_url ? (
-                      <img
-                        src={transformedProduct.image_url}
-                        alt={transformedProduct.name}
-                        className="w-full h-full object-contain"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <div className="text-center">
-                          <div className="text-xl mb-1">📦</div>
-                          <div className="text-xs">No Image</div>
-                        </div>
+                  {/* Badges - Better positioned and styled */}
+                  <div className="absolute top-3 left-3 flex flex-col gap-2">
+                    {transformedProduct.featured && (
+                      <div className="bg-gradient-to-r from-dope-orange-500 to-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        ⭐ Featured
                       </div>
                     )}
-
-                    {/* Badges - Smaller and more compact */}
-                    <div className="absolute top-1 left-1 flex flex-col gap-1">
-                      {transformedProduct.featured && (
-                        <div className="bg-orange-500 text-white px-1.5 py-0.5 rounded text-xs font-medium">
-                          Featured
-                        </div>
-                      )}
-                      {transformedProduct.discount_percentage && (
-                        <div className="bg-red-500 text-white px-1.5 py-0.5 rounded text-xs font-medium">
-                          -{transformedProduct.discount_percentage}%
-                        </div>
-                      )}
-                    </div>
+                    {transformedProduct.discount_percentage && (
+                      <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        -{transformedProduct.discount_percentage}% OFF
+                      </div>
+                    )}
                   </div>
 
-                  {/* Product Info - More compact */}
-                  <div className="space-y-1.5">
-                    {/* Product Name - Smaller text */}
-                    <h3 className="font-medium text-gray-900 text-sm line-clamp-2 leading-tight min-h-[2.5rem]">
-                      {transformedProduct.name}
-                    </h3>
-
-                    {/* Brand - Smaller */}
-                    {transformedProduct.brand_name && (
-                      <p className="text-xs text-gray-600 font-medium">{transformedProduct.brand_name}</p>
-                    )}
-
-                    {/* Pricing - More compact */}
-                    <div className="pt-1">
-                      {transformedProduct.compare_at_price ? (
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-gray-600">Was</span>
-                            <span className="text-xs text-gray-500 line-through">
-                              ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-gray-600">Now</span>
-                            <span className="text-sm font-bold text-orange-500">
-                              ${parseFloat(transformedProduct.price).toFixed(2)}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-sm font-bold text-orange-500">
-                          ${parseFloat(transformedProduct.price).toFixed(2)}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Actions - More compact buttons */}
-                    <div className="flex gap-1.5 pt-1">
-                      <Link
-                        href={`/product/${product.id}`}
-                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-2 py-1.5 rounded text-xs font-medium transition-colors text-center"
-                      >
-                        View
-                      </Link>
-                      <button
-                        onClick={async () => {
-                          try {
-                            await addToCart(product.id, 1);
-                          } catch (error) {
-                            console.error('Failed to add to cart:', error);
-                          }
-                        }}
-                        className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors"
-                      >
-                        Add
-                      </button>
-                    </div>
+                  {/* Quick Actions - Top right */}
+                  <div className="absolute top-3 right-3">
+                    <button className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : null}
+
+                {/* Product Info - Better spacing and typography */}
+                <div className="p-4">
+                  {/* Brand - More prominent */}
+                  {transformedProduct.brand_name && (
+                    <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                      {transformedProduct.brand_name}
+                    </p>
+                  )}
+
+                  {/* Product Name - Better typography */}
+                  <h3 className="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                    {transformedProduct.name}
+                  </h3>
+
+                  {/* Description - If available */}
+                  {transformedProduct.short_description && (
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                      {transformedProduct.short_description}
+                    </p>
+                  )}
+
+                  {/* Pricing - Better layout */}
+                  <div className="mb-4">
+                    {transformedProduct.compare_at_price ? (
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-500 line-through">
+                            ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
+                          </span>
+                          <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
+                            Save {transformedProduct.discount_percentage}%
+                          </span>
+                        </div>
+                        <div className="text-2xl font-bold text-green-600">
+                          ${parseFloat(transformedProduct.price).toFixed(2)}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-2xl font-bold text-gray-900">
+                        ${parseFloat(transformedProduct.price).toFixed(2)}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Actions - Better styled buttons */}
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/product/${product.id}`}
+                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-center text-sm hover:scale-105"
+                    >
+                      View Details
+                    </Link>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await addToCart(product.id, 1);
+                        } catch (error) {
+                          console.error('Failed to add to cart:', error);
+                        }
+                      }}
+                      className="flex-1 bg-gradient-to-r from-dope-orange-500 to-orange-600 hover:from-dope-orange-600 hover:to-orange-700 text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-sm hover:scale-105 hover:shadow-lg"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <div className="text-gray-500 text-lg mb-2">No featured products available</div>
+          <p className="text-gray-400">Check back soon for new products with images!</p>
+        </div>
+      )}
 
       {/* Pagination would go here if needed */}
     </section>

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+ppnpm keimport { createClient } from '@supabase/supabase-js';
 import { config } from 'dotenv';
 
 config({ path: '.env.local' });

@@ -139,7 +139,7 @@ export default function BongsPageContent() {
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // Get products from main_site_products table using category_slug for better performance
+      // Get ALL products from main_site_products table - NO LIMIT to ensure all 4600+ products
       const { data: products, error } = await supabase
         .from('main_site_products')
         .select(`
@@ -149,7 +149,6 @@ export default function BongsPageContent() {
         `)
         .not('name', 'ilike', '%test%')
         .not('name', 'ilike', '%sample%')
-        .or('category_slug.ilike.%bong%,category_slug.ilike.%water%,category_slug.ilike.%pipe%')
         .order('created_at', { ascending: false });
 
       // Additional filtering for products that might not have category_slug set but are bongs
@@ -157,24 +156,42 @@ export default function BongsPageContent() {
 
       if (products && products.length > 0) {
         filteredProducts = products.filter((product: any) => {
-          // If category_slug matches, include it
-          if (product.category_slug &&
-              (product.category_slug.toLowerCase().includes('bong') ||
-               product.category_slug.toLowerCase().includes('water') ||
-               product.category_slug.toLowerCase().includes('pipe'))) {
+          const name = (product.name || '').toLowerCase();
+          const categorySlug = product.category_slug || '';
+          const categories = product.categories || [];
+
+          // EXCLUDE accessories first
+          const excludeKeywords = [
+            'ashtray', 'grinder', 'dab rig', 'dab-rig', 'torch', 'lighter',
+            'scale', 'tray', 'clipper', 'papers', 'rolling', 'filter',
+            'cartridge', 'battery', 'charger', 'case', 'pouch', 'storage',
+            'cleaner', 'solution', 'brush', 'tool', 'stand', 'holder',
+            'accessory', 'dab'  // Explicitly exclude these terms from product names
+          ];
+
+          const hasExcludeKeyword = excludeKeywords.some(keyword => name.includes(keyword));
+          if (hasExcludeKeyword) {
+            return false;
+          }
+
+          // If category_slug matches "bongs" exactly, include it
+          if (categorySlug === 'bongs') {
             return true;
           }
 
-          // Fallback: Check categories JSONB field
-          if (product.categories) {
+          // Check categories JSONB field for bong-specific terms only
+          if (categories) {
             try {
-              const categories = Array.isArray(product.categories) ? product.categories : [product.categories];
-              const hasBongCategory = categories.some((cat: any) => {
+              const categoriesArray = Array.isArray(categories) ? categories : [categories];
+              const hasBongCategory = categoriesArray.some((cat: any) => {
                 if (typeof cat === 'string') {
-                  return cat.toLowerCase().includes('bong') ||
-                         cat.toLowerCase().includes('water') ||
-                         cat.toLowerCase().includes('glass') ||
-                         cat.toLowerCase().includes('pipe');
+                  const catLower = cat.toLowerCase();
+                  return (catLower.includes('bong') || catLower.includes('water pipe')) &&
+                         !catLower.includes('dab') &&
+                         !catLower.includes('accessory') &&
+                         !catLower.includes('dab-rig') &&
+                         !catLower.includes('grinder') &&
+                         !catLower.includes('ashtray');
                 }
                 return false;
               });
@@ -185,15 +202,27 @@ export default function BongsPageContent() {
             }
           }
 
-          // Final fallback: Check product name for bong-specific keywords
-          const name = (product.name || '').toLowerCase();
-          return name.includes('bong') ||
-                 name.includes('water pipe') ||
-                 name.includes('beaker bong') ||
-                 name.includes('percolator bong') ||
-                 name.includes('scientific bong') ||
-                 name.includes('waterpipe') ||
-                 name.includes('hookah');
+          // Check product name for BONG-SPECIFIC keywords only
+          const bongKeywords = [
+            'bong', 'water pipe', 'waterpipe', 'beaker bong', 'beaker',
+            'scientific bong', 'straight bong', 'percolator bong', 'percolator',
+            'showerhead', 'recycler', 'inline perc', 'honeycomb perc',
+            'tree perc', 'matrix perc', 'diffused downstem', 'ice catcher',
+            'glass bong', 'water bong', 'hookah', 'shisha'
+          ];
+
+          const hasBongKeyword = bongKeywords.some(keyword => name.includes(keyword));
+
+          // Must have bong keyword AND contain glass/water-related terms AND have an image
+          if (hasBongKeyword && (name.includes('glass') || name.includes('water') || name.includes('beaker'))) {
+            // Only include products that have an image_url
+            const hasImage = product.image_url && product.image_url.trim() !== '';
+            if (hasImage) {
+              return true;
+            }
+          }
+
+          return false;
         });
 
         console.log(`✅ Found ${filteredProducts.length} bongs using category_slug from ${products.length} total products`);
@@ -249,7 +278,7 @@ export default function BongsPageContent() {
           isSale: product.sale_price && product.sale_price > product.our_price,
           originalPrice: product.sale_price && product.sale_price > product.our_price ? parseFloat(product.sale_price) : undefined,
           inStock: (product.stock_quantity || 0) > 0,
-          brand: product.brand_id || 'Unknown Brand',
+          brand: extractBrandFromName(product.name) || 'Unknown Brand',
           category: 'Bongs'
         };
       });
@@ -368,6 +397,45 @@ export default function BongsPageContent() {
       </div>
     </ErrorBoundary>
   );
+}
+
+// Helper function to extract brand names from product names
+function extractBrandFromName(productName: string): string | null {
+  if (!productName) return null;
+
+  // Pattern 1: "Brand Name Product Description |REF: CODE|"
+  const refPattern = /(.+?)\s+(?:bong|pipe|rig|water)\s*\|REF:\s*([^|]+)\|/i;
+  const refMatch = productName.match(refPattern);
+  if (refMatch) {
+    return refMatch[1].trim();
+  }
+
+  // Pattern 2: "Brand Product |REF: CODE|"
+  const simpleRefPattern = /(.+?)\|REF:\s*([^|]+)\|/i;
+  const simpleMatch = productName.match(simpleRefPattern);
+  if (simpleMatch) {
+    return simpleMatch[1].trim();
+  }
+
+  // Pattern 3: Common brand names that appear at the start
+  const commonBrands = ['Diamond Glass', 'Crave', 'Puffco', 'Urth Farmacy', 'Twenty One Cannabis', 'Special Blue'];
+  for (const brand of commonBrands) {
+    if (productName.toLowerCase().includes(brand.toLowerCase())) {
+      return brand;
+    }
+  }
+
+  // Pattern 4: Extract first word or two as potential brand
+  const words = productName.split(' ');
+  if (words.length >= 2) {
+    const potentialBrand = words.slice(0, 2).join(' ');
+    // Don't return generic words as brands
+    if (!['The', 'A', 'An', 'Beaker', 'Water', 'Glass', 'Mini', 'Large'].includes(potentialBrand)) {
+      return potentialBrand;
+    }
+  }
+
+  return null;
 }
 
 // Mock data generator removed - now using real Supabase data

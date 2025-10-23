@@ -41,8 +41,8 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Optimized query - get products from main_site_products table
-    let query = supabase
+    // Search ALL products first, then filter for pipes with images
+    const { data: allProducts, error: allError } = await supabase
       .from('main_site_products')
       .select(`
         id,
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
         is_active,
         specs,
         attributes,
-        brand_id,
+        brand_name,
         category_id,
         categories,
         seo_keywords,
@@ -72,31 +72,62 @@ export async function GET(req: NextRequest) {
       .not('name', 'ilike', '%test%')
       .not('name', 'ilike', '%sample%'); // Exclude sample products
 
-    // Filter by product name - this captures all pipe products including the 256 categorized ones
-    // Exclude bowls (bong bowls) and water pipes as requested
-    query = query
-      .or('name.ilike.%pipe%,name.ilike.%chillum%,name.ilike.%spoon%,name.ilike.%sherlock%,name.ilike.%one hitter%,name.ilike.%hand pipe%')
-      .not('name', 'ilike', '%bowl%')
-      .not('name', 'ilike', '%water pipe%')
-      .not('name', 'ilike', '%water pipes%');
-
-    // Optimize ordering - no artificial limit to show all pipe products
-    query = query
-      .order('featured', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    const { data: products, error } = await query;
-
-    if (error) {
-      console.error('Supabase query error:', error);
-      return NextResponse.json({ 
-        message: 'Failed to fetch pipe products', 
-        error: error.message 
+    if (allError) {
+      console.error('Error fetching all products:', allError);
+      return NextResponse.json({
+        message: 'Failed to fetch products',
+        error: allError.message
       }, { status: 500 });
     }
 
+    console.log(`🔍 Searching through ${allProducts?.length || 0} total products for pipes with images...`);
+
+    // Filter for pipe products that have valid images
+    const pipeProducts = allProducts?.filter(product => {
+      const name = product.name.toLowerCase();
+
+      // Check if it's a pipe product (excluding water pipes, perc pipes, and recyclers)
+      const isPipeProduct = (name.includes('pipe') ||
+                           name.includes('chillum') ||
+                           name.includes('spoon') ||
+                           name.includes('sherlock') ||
+                           name.includes('one hitter') ||
+                           name.includes('hand pipe')) &&
+                           !name.includes('water pipe') &&
+                           !name.includes('water pipes') &&
+                           !name.includes('perc') &&
+                           !name.includes('percolator') &&
+                           !name.includes('percolators') &&
+                           !name.includes('recycler');
+
+      // Check if it has a valid image URL (strict validation)
+      const hasValidImage = product.image_url &&
+                           product.image_url.trim() !== '' &&
+                           product.image_url.trim() !== 'NULL' &&
+                           product.image_url.trim() !== 'null' &&
+                           !product.image_url.includes('placehold') &&
+                           !product.image_url.includes('placeholder') &&
+                           !product.image_url.includes('example.com') &&
+                           !product.image_url.includes('test.com') &&
+                           (product.image_url.startsWith('http://') || product.image_url.startsWith('https://')) &&
+                           (product.image_url.includes('.jpg') ||
+                            product.image_url.includes('.jpeg') ||
+                            product.image_url.includes('.png') ||
+                            product.image_url.includes('.webp') ||
+                            product.image_url.includes('sigdistro.com') ||
+                            product.image_url.includes('supabase.co'));
+
+      // Exclude straight pipes that reference percolators/percs
+      const isStraightPipeWithPerc = name.includes('straight pipe') &&
+                                   (name.includes('percolator') || name.includes('perc'));
+
+      return isPipeProduct && hasValidImage && !isStraightPipeWithPerc;
+    }) || [];
+
+    console.log(`🎯 Found ${pipeProducts.length} pipe products with valid images!`);
+
     // Transform products to match our interface
-    const transformedProducts = products?.map(product => {
+    const transformedProducts = pipeProducts.map((product: any) => {
       // Determine pipe style from name
       const name = product.name.toLowerCase();
       let style = 'Hand Pipe';
@@ -130,7 +161,8 @@ export async function GET(req: NextRequest) {
         compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         image_url: product.image_url,
         image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
-        brand_id: product.brand_id,
+        brand_id: product.brand_name, // Keep for backward compatibility
+        brand: product.brand_name, // Add the brand name field
         category_id: product.category_id,
         sku: product.sku,
         stock_quantity: product.stock_quantity || 0,

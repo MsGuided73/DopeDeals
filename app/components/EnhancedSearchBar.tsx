@@ -75,6 +75,15 @@ export default function EnhancedSearchBar() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
 
+  // Handle case where router might not be available
+  const safeRouter = router || {
+    push: (href: string) => {
+      if (typeof window !== 'undefined') {
+        window.location.href = href
+      }
+    }
+  }
+
   // Smooth typing animation for placeholder
   useEffect(() => {
     const interval = setInterval(() => {
@@ -167,7 +176,7 @@ export default function EnhancedSearchBar() {
 
     // If user selects a category, navigate to that category page
     if (!searchQuery.trim()) {
-      router.push(category.href)
+      safeRouter.push(category.href)
     }
   }
 
