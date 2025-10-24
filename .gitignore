@@ -120,6 +120,13 @@ test-results/
 playwright-report/
 playwright/.cache/
 
+# Development test and check scripts
+test-*.js
+check-*.js
+*-test.js
+*-check.js
+*.json
+
 # Local development files
 .local/
 local/

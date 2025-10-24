@@ -41,8 +41,8 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get products from main_site_products table - show recent products first to test
-    const query = supabase
+    // Search ALL products first, then filter for bongs with images
+    const { data: allProducts, error: allError } = await supabase
       .from('main_site_products')
       .select(`
         id,
@@ -57,38 +57,68 @@ export async function GET(req: NextRequest) {
         sku,
         stock_quantity,
         materials,
-        vip_exclusive,
         featured,
-        channels,
         is_active,
         specs,
         attributes,
-        brand_id,
+        brand_name,
         category_id,
         categories,
+        category_slug,
+        subcategory_slug,
         seo_keywords,
-        created_at,
-        updated_at
+        created_at
       `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
       // Add back when connecting to Zoho Inventory for automated product management
       .not('name', 'ilike', '%test%')
-      .not('name', 'ilike', '%sample%') // Exclude sample products
-      .order('created_at', { ascending: false })
-      .limit(24); // Show first 24 products for testing
+      .not('name', 'ilike', '%sample%'); // Exclude sample products
 
-    const { data: products, error } = await query;
-
-    if (error) {
-      console.error('Supabase query error:', error);
+    if (allError) {
+      console.error('Error fetching all products:', allError);
       return NextResponse.json({
-        message: 'Failed to fetch bong products',
-        error: error.message
+        message: 'Failed to fetch products',
+        error: allError.message
       }, { status: 500 });
     }
 
+    console.log(`🔍 Searching through ${allProducts?.length || 0} total products for bongs with images...`);
+
+    // Filter for bong products that have valid images
+    const bongProducts = allProducts?.filter(product => {
+      // Check if it's a bong product using category_slug (more reliable than name matching)
+      const isBongProduct = product.category_slug === 'bongs' ||
+                           product.subcategory_slug?.includes('bong') ||
+                           (Array.isArray(product.categories) &&
+                            product.categories.some(cat =>
+                              cat?.toLowerCase().includes('bong') ||
+                              cat?.toLowerCase().includes('water')
+                            ));
+
+      // Check if it has a valid image URL (strict validation like pipes)
+      const hasValidImage = product.image_url &&
+                           product.image_url.trim() !== '' &&
+                           product.image_url.trim() !== 'NULL' &&
+                           product.image_url.trim() !== 'null' &&
+                           !product.image_url.includes('placehold') &&
+                           !product.image_url.includes('placeholder') &&
+                           !product.image_url.includes('example.com') &&
+                           !product.image_url.includes('test.com') &&
+                           (product.image_url.startsWith('http://') || product.image_url.startsWith('https://')) &&
+                           (product.image_url.includes('.jpg') ||
+                            product.image_url.includes('.jpeg') ||
+                            product.image_url.includes('.png') ||
+                            product.image_url.includes('.webp') ||
+                            product.image_url.includes('sigdistro.com') ||
+                            product.image_url.includes('supabase.co'));
+
+      return isBongProduct && hasValidImage;
+    }) || [];
+
+    console.log(`🎯 Found ${bongProducts.length} bong products with valid images!`);
+
     // Transform products to match our interface
-    const transformedProducts = products?.map(product => {
+    const transformedProducts = bongProducts.map((product: any) => {
       // Determine bong style from name
       const name = product.name.toLowerCase();
       let style = 'Water Bong';
@@ -116,28 +146,40 @@ export async function GET(req: NextRequest) {
       return {
         id: product.id,
         name: product.name,
-        our_price: parseFloat(product.our_price),
-        sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        price: parseFloat(product.our_price),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         image_url: product.image_url,
-        imageUrl: product.image_url,
-        image: product.image_url,
-        description: product.description,
-        short_description: product.short_description,
+        image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
+        brand_id: product.brand_name, // Keep for backward compatibility
+        brand: product.brand_name, // Add the brand name field
+        category_id: product.category_id,
         sku: product.sku,
         stock_quantity: product.stock_quantity || 0,
-        is_active: product.is_active,
+        materials: product.materials || [],
+        material: product.materials?.[0] || 'Glass',
+        vip_exclusive: false, // Default to false since column doesn't exist
         featured: product.featured || false,
-        brand_id: product.brand_id,
-        category_id: product.category_id,
-        created_at: product.created_at,
-        updated_at: product.updated_at,
-        // Add compatibility fields
-        price: parseFloat(product.our_price),
+
+        is_active: product.is_active,
+        description: product.description,
+        short_description: product.short_description,
+        specs: product.specs,
+        attributes: product.attributes,
+
+        // Computed fields
+        style,
+        size,
+        inStock: (product.stock_quantity || 0) > 0,
         isNew,
         isSale,
-        originalPrice: product.sale_price && product.sale_price > product.our_price ? parseFloat(product.sale_price) : undefined,
-        inStock: (product.stock_quantity || 0) > 0,
-        brand: product.brand_id || 'Unknown Brand',
+        features: [
+          'Premium Construction',
+          'Smooth Airflow',
+          'Easy to Clean',
+          'Durable Design'
+        ],
+        tags: ['bong', 'glass', 'water pipe', style.toLowerCase().replace(' ', '-')],
         category: 'Bongs'
       };
     }) || [];

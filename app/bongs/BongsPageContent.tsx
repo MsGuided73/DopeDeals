@@ -74,9 +74,9 @@ export default function BongsPageContent() {
     // Apply filters and sorting
     let filtered = [...products];
 
-    // Apply filters - using available fields from main_site_products
+    // Apply filters - using available fields from API
     if (filters.brands.length > 0) {
-      filtered = filtered.filter((p: BongProduct) => p.brand_id && filters.brands.includes(p.brand_id));
+      filtered = filtered.filter((p: BongProduct) => p.brand && filters.brands.includes(p.brand));
     }
     if (filters.inStock) {
       filtered = filtered.filter((p: BongProduct) => p.stock_quantity > 0);
@@ -128,160 +128,54 @@ export default function BongsPageContent() {
     try {
       setLoading(true);
 
-      // Use direct Supabase query instead of API endpoint to avoid API issues
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      // Use the API endpoint instead of direct database queries
+      const response = await fetch('/api/products/bongs');
 
-      if (!supabaseUrl || !supabaseKey) {
-        throw new Error('Supabase credentials not configured');
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
 
-      const supabase = createClient(supabaseUrl, supabaseKey);
+      const data = await response.json();
 
-      // Get ALL products from main_site_products table - NO LIMIT to ensure all 4600+ products
-      const { data: products, error } = await supabase
-        .from('main_site_products')
-        .select(`
-          id, name, description, short_description, our_price, sale_price, fire_price,
-          image_url, image_urls, sku, stock_quantity, featured, brand_id, category_id,
-          categories, category_slug, created_at, updated_at
-        `)
-        .not('name', 'ilike', '%test%')
-        .not('name', 'ilike', '%sample%')
-        .order('created_at', { ascending: false });
-
-      // Additional filtering for products that might not have category_slug set but are bongs
-      let filteredProducts: any[] = [];
-
-      if (products && products.length > 0) {
-        filteredProducts = products.filter((product: any) => {
-          const name = (product.name || '').toLowerCase();
-          const categorySlug = product.category_slug || '';
-          const categories = product.categories || [];
-
-          // EXCLUDE accessories first
-          const excludeKeywords = [
-            'ashtray', 'grinder', 'dab rig', 'dab-rig', 'torch', 'lighter',
-            'scale', 'tray', 'clipper', 'papers', 'rolling', 'filter',
-            'cartridge', 'battery', 'charger', 'case', 'pouch', 'storage',
-            'cleaner', 'solution', 'brush', 'tool', 'stand', 'holder',
-            'accessory', 'dab'  // Explicitly exclude these terms from product names
-          ];
-
-          const hasExcludeKeyword = excludeKeywords.some(keyword => name.includes(keyword));
-          if (hasExcludeKeyword) {
-            return false;
-          }
-
-          // If category_slug matches "bongs" exactly, include it
-          if (categorySlug === 'bongs') {
-            return true;
-          }
-
-          // Check categories JSONB field for bong-specific terms only
-          if (categories) {
-            try {
-              const categoriesArray = Array.isArray(categories) ? categories : [categories];
-              const hasBongCategory = categoriesArray.some((cat: any) => {
-                if (typeof cat === 'string') {
-                  const catLower = cat.toLowerCase();
-                  return (catLower.includes('bong') || catLower.includes('water pipe')) &&
-                         !catLower.includes('dab') &&
-                         !catLower.includes('accessory') &&
-                         !catLower.includes('dab-rig') &&
-                         !catLower.includes('grinder') &&
-                         !catLower.includes('ashtray');
-                }
-                return false;
-              });
-
-              if (hasBongCategory) return true;
-            } catch (error) {
-              console.warn('JSON parsing failed for product:', product.id);
-            }
-          }
-
-          // Check product name for BONG-SPECIFIC keywords only
-          const bongKeywords = [
-            'bong', 'water pipe', 'waterpipe', 'beaker bong', 'beaker',
-            'scientific bong', 'straight bong', 'percolator bong', 'percolator',
-            'showerhead', 'recycler', 'inline perc', 'honeycomb perc',
-            'tree perc', 'matrix perc', 'diffused downstem', 'ice catcher',
-            'glass bong', 'water bong', 'hookah', 'shisha'
-          ];
-
-          const hasBongKeyword = bongKeywords.some(keyword => name.includes(keyword));
-
-          // Must have bong keyword AND contain glass/water-related terms AND have an image
-          if (hasBongKeyword && (name.includes('glass') || name.includes('water') || name.includes('beaker'))) {
-            // Only include products that have an image_url
-            const hasImage = product.image_url && product.image_url.trim() !== '';
-            if (hasImage) {
-              return true;
-            }
-          }
-
-          return false;
-        });
-
-        console.log(`✅ Found ${filteredProducts.length} bongs using category_slug from ${products.length} total products`);
+      if (data.error) {
+        throw new Error(data.error);
       }
 
-      if (error) {
-        console.error('Error fetching bong products:', error);
-        throw new Error(error.message || 'Failed to fetch bong products from database');
-      }
+      console.log(`✅ API returned ${data.totalCount} bong products`);
 
-      if (!products) {
-        console.warn('No bong products data received');
-        setProducts([]);
-        setFilteredProducts([]);
-        return;
-      }
-
-      console.log(`✅ Loaded ${products.length} raw products, filtered to ${filteredProducts.length} bongs`);
-
-      // Transform filtered products to match our interface - ensure image_url is properly handled
-      const transformedProducts = filteredProducts.map((product: any) => {
-        // Handle image URL selection with fallback logic
-        let primaryImageUrl = product.image_url;
-
-        // If no primary image_url, try to get first image from image_urls array
-        if (!primaryImageUrl && product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
-          primaryImageUrl = product.image_urls[0];
-        }
-
-        console.log(`Product ${product.id}: image_url=${product.image_url}, using=${primaryImageUrl}`);
-
-        return {
-          id: product.id,
-          name: product.name,
-          our_price: parseFloat(product.our_price),
-          sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-          image_url: primaryImageUrl, // Use the determined primary image URL
-          imageUrl: primaryImageUrl, // Compatibility alias
-          image: primaryImageUrl, // Compatibility alias
-          description: product.description,
-          short_description: product.short_description,
-          sku: product.sku,
-          stock_quantity: product.stock_quantity || 0,
-          is_active: product.is_active,
-          featured: product.featured || false,
-          brand_id: product.brand_id,
-          category_id: product.category_id,
-          created_at: product.created_at,
-          updated_at: product.updated_at,
-          // Add compatibility fields
-          price: parseFloat(product.our_price),
-          isNew: false,
-          isSale: product.sale_price && product.sale_price > product.our_price,
-          originalPrice: product.sale_price && product.sale_price > product.our_price ? parseFloat(product.sale_price) : undefined,
-          inStock: (product.stock_quantity || 0) > 0,
-          brand: extractBrandFromName(product.name) || 'Unknown Brand',
-          category: 'Bongs'
-        };
-      });
+      // The API already returns properly formatted products with valid images
+      const transformedProducts = data.products.map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        our_price: product.price,
+        sale_price: product.compare_at_price,
+        image_url: product.image_url,
+        imageUrl: product.image_url, // Compatibility alias
+        image: product.image_url, // Compatibility alias
+        description: product.description,
+        short_description: product.short_description,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        is_active: product.is_active,
+        featured: product.featured || false,
+        brand_id: product.brand_id,
+        category_id: product.category_id,
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+        // Add compatibility fields
+        price: product.price,
+        isNew: product.isNew,
+        isSale: product.isSale,
+        originalPrice: product.compare_at_price,
+        inStock: product.inStock,
+        brand: product.brand,
+        category: 'Bongs',
+        // Add additional fields that the grid expects
+        height: product.specs?.height || 'N/A',
+        jointSize: product.specs?.jointSize || 'N/A',
+        material: product.material || 'Glass',
+        percolator: product.specs?.percolator || null
+      }));
 
       setProducts(transformedProducts);
       setFilteredProducts(transformedProducts);

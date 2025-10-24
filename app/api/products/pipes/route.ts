@@ -64,6 +64,8 @@ export async function GET(req: NextRequest) {
         brand_name,
         category_id,
         categories,
+        category_slug,
+        subcategory_slug,
         seo_keywords,
         created_at
       `)
@@ -84,21 +86,16 @@ export async function GET(req: NextRequest) {
 
     // Filter for pipe products that have valid images
     const pipeProducts = allProducts?.filter(product => {
-      const name = product.name.toLowerCase();
-
-      // Check if it's a pipe product (excluding water pipes, perc pipes, and recyclers)
-      const isPipeProduct = (name.includes('pipe') ||
-                           name.includes('chillum') ||
-                           name.includes('spoon') ||
-                           name.includes('sherlock') ||
-                           name.includes('one hitter') ||
-                           name.includes('hand pipe')) &&
-                           !name.includes('water pipe') &&
-                           !name.includes('water pipes') &&
-                           !name.includes('perc') &&
-                           !name.includes('percolator') &&
-                           !name.includes('percolators') &&
-                           !name.includes('recycler');
+      // Check if it's a pipe product using category_slug (more reliable than name matching)
+      const isPipeProduct = product.category_slug === 'pipes' ||
+                           product.category_slug === 'hand-pipes' ||
+                           product.subcategory_slug === 'pipes' ||
+                           (Array.isArray(product.categories) &&
+                            product.categories.some(cat =>
+                              cat?.toLowerCase().includes('pipe') &&
+                              !cat?.toLowerCase().includes('water') &&
+                              !cat?.toLowerCase().includes('bong')
+                            ));
 
       // Check if it has a valid image URL (strict validation)
       const hasValidImage = product.image_url &&
@@ -117,11 +114,7 @@ export async function GET(req: NextRequest) {
                             product.image_url.includes('sigdistro.com') ||
                             product.image_url.includes('supabase.co'));
 
-      // Exclude straight pipes that reference percolators/percs
-      const isStraightPipeWithPerc = name.includes('straight pipe') &&
-                                   (name.includes('percolator') || name.includes('perc'));
-
-      return isPipeProduct && hasValidImage && !isStraightPipeWithPerc;
+      return isPipeProduct && hasValidImage;
     }) || [];
 
     console.log(`🎯 Found ${pipeProducts.length} pipe products with valid images!`);
