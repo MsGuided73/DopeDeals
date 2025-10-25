@@ -11,19 +11,20 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '4');
 
-    // Get newest products with available stock and images
+    // Get newest products with images - NO stock filtering during manual phase
     const { data: products, error } = await supabase
-      .from('products')
+      .from('main_site_products')
       .select(`
-        id, name, description, short_description, price, vip_price, 
+        id, name, description, short_description, our_price, fire_price,
         image_url, sku, stock_quantity, brand_name, materials,
         featured, created_at
       `)
-      .eq('is_active', true)
+      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
+      // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
-      .not('imageUrl', 'is', null)
-      .gt('stock_quantity', 0)
+      .not('image_url', 'is', null)
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -35,16 +36,17 @@ export async function GET(req: NextRequest) {
     // If we don't have enough products with images, get some without images as fallback
     if (!products || products.length < limit) {
       const { data: fallbackProducts, error: fallbackError } = await supabase
-        .from('products')
+        .from('main_site_products')
         .select(`
-          id, name, description, short_description, price, vip_price, 
-          imageUrl, sku, stock_quantity, brand_name, materials,
+          id, name, description, short_description, our_price, fire_price,
+          image_url, sku, stock_quantity, brand_name, materials,
           featured, created_at
         `)
-        .eq('is_active', true)
+        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
+        // Add back when connecting to Zoho Inventory for automated product management
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
-        .gt('stock_quantity', 0)
         .order('created_at', { ascending: false })
         .limit(limit);
 

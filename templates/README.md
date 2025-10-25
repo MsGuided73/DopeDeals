@@ -119,7 +119,7 @@ const [products, setProducts] = useState<Product[]>([]);
 useEffect(() => {
   async function fetchProducts() {
     const { data } = await supabaseBrowser
-      .from('products')
+      .from('main_site_products')
       .select('*')
       .eq('is_active', true);
     setProducts(data || []);

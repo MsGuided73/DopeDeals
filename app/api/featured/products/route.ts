@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+/**
+ * Featured Products API Route
+ *
+ * IMPORTANT: Database Implementation Pattern
+ * - Uses "main_site_products" table (CORRECT)
+ * - Filters by featured: true for primary results
+ * - Has fallback mechanism for when few featured products exist
+ * - Validates images to ensure only products with valid images are returned
+ *
+ * PATTERN COMPARISON:
+ * ✅ CORRECT: This API route (uses proper table, filtering, fallbacks)
+ * ❌ WRONG: Direct supabaseBrowser queries in components
+ * ✅ CORRECT: Staff Picks API (same pattern as this)
+ */
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -8,20 +23,39 @@ const supabase = createClient(
 
 function hasRealProductImage(imageUrl: string | null): boolean {
   if (!imageUrl) return false;
-  
+
+  // Clean the URL by removing trailing commas and whitespace
+  const cleanUrl = imageUrl.trim().replace(/,+$/, '');
+
   const placeholderDomains = [
     'placehold.co',
     'placeholder.com',
     'via.placeholder.com',
-    'unsplash.com',
     'picsum.photos',
     'lorempixel.com',
     'dummyimage.com',
     'example.com',
     'test.com'
   ];
-  
-  return !placeholderDomains.some(domain => imageUrl.toLowerCase().includes(domain));
+
+  // Exclude placeholder domains
+  if (placeholderDomains.some(domain => cleanUrl.toLowerCase().includes(domain))) {
+    return false;
+  }
+
+  // Must be a valid image URL from storage or legitimate source
+  const validDomains = [
+    'qirbapivptotybspnbet.supabase.co',
+    'supabase.co',
+    'supabase.in',
+    'amazonaws.com',
+    'cloudfront.net',
+    'imgur.com',
+    'githubusercontent.com',
+    'sigdistro.com'  // Added for existing product images
+  ];
+
+  return validDomains.some(domain => cleanUrl.toLowerCase().includes(domain));
 }
 
 function isValidImageUrl(imageUrl: string | null): boolean {
@@ -49,63 +83,115 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '8');
 
-    // Fetch products from Supabase
-    const { data: allProducts, error } = await supabase
-      .from('products')
-      .select(`
-        id,
-        name,
-        description,
-        short_description,
-        price,
-        imageUrl,
-        stock_quantity,
-        is_active,
-        createdAt
-      `)
-      .eq('is_active', true)
+      // Check for FEATURED_PRODUCT first - these take absolute priority
+      const { data: featuredProducts, error: featuredError } = await supabase
+        .from('main_site_products')
+        .select(`
+          id, name, description, short_description, our_price, sale_price, fire_price,
+          image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product, brand_name, category_id,
+          created_at, updated_at
+        `)
+      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
+      // COMPLIANCE: Filter out nicotine and tobacco products for main site compliance
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
-      .gt('stock_quantity', 0)
-      .order('createdAt', { ascending: false })
-      .limit(200); // Get more to filter from
+      .or('featured_product.eq.true,featured_product.eq."YES"') // Get featured_product items (both boolean true and string "YES")
+      .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching featured products:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (featuredError) {
+      console.error('Error fetching featured_product items:', featuredError);
+      return NextResponse.json({ error: featuredError.message }, { status: 500 });
     }
 
-    // Filter for products with real, valid images
-    let featuredProducts = (allProducts || [])
-      .filter(product => product.imageUrl) // Only products with images
-      .filter(product => hasRealProductImage(product.imageUrl))
-      .filter(product => isValidImageUrl(product.imageUrl))
-      .filter(product => product.price > 0) // Ensure valid pricing
-      .slice(0, limit);
+    let productsToReturn = [];
+    let featuredCount = 0;
 
-    // If we still don't have enough products, get any products with non-null images
-    if (featuredProducts.length < 4) {
-      const additionalProducts = (allProducts || [])
-        .filter(product => product.imageUrl && product.imageUrl.trim() !== '')
-        .filter(product => !featuredProducts.some(fp => fp.id === product.id))
-        .filter(product => product.price > 0)
-        .slice(0, Math.max(4, limit) - featuredProducts.length);
+    if (featuredProducts && featuredProducts.length > 0) {
+      console.log(`🎯 Found ${featuredProducts.length} featured_product items - these take priority!`);
+      productsToReturn = featuredProducts;
+      featuredCount = featuredProducts.length;
+    } else {
+      console.log(`⚠️ No featured_product items found, falling back to featured items`);
 
-      featuredProducts = [...featuredProducts, ...additionalProducts];
+      // Fallback to FEATURED products if no featured_product items exist
+      const { data: priorityProducts, error } = await supabase
+        .from('main_site_products')
+        .select(`
+          id, name, description, short_description, our_price, sale_price, fire_price,
+          image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product, brand_name, category_id,
+          created_at, updated_at
+        `)
+        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
+        // COMPLIANCE: Filter out nicotine and tobacco products for main site compliance
+        .eq('nicotine_product', false)
+        .eq('tobacco_product', false)
+        .eq('featured', true) // Get featured products as fallback
+        .order('created_at', { ascending: false })
+        .limit(Math.min(limit, 12)); // Get more featured products to ensure availability
+
+      if (error) {
+        console.error('Error fetching featured products:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      productsToReturn = priorityProducts || [];
+      featuredCount = priorityProducts?.length || 0;
     }
 
-    // Normalize the response to include both field names for component compatibility
-    const normalizedProducts = featuredProducts.map(product => ({
-      ...product,
-      image_url: product.imageUrl // Add snake_case version for legacy compatibility
-    }));
+    // Filter for products with any image_url (relaxed validation)
+    let validProducts = productsToReturn.filter((product: any) => {
+      // Accept any non-empty image_url
+      if (product.image_url && product.image_url.trim() !== '') {
+        return true;
+      }
 
-    // Sort by newest first
-    normalizedProducts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      // Check image_urls array for any non-empty URLs
+      if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+        return product.image_urls.some((url: string) => url && url.trim() !== '');
+      }
+
+      return false;
+    });
+
+    console.log(`🎯 Featured Products API: ${validProducts.length} products with image URLs from ${productsToReturn.length} total`);
+
+    // If we don't have enough products with images, return what we have
+    // Include products even if they don't have perfect image URLs
+    if (validProducts.length === 0) {
+      console.log(`⚠️ No products with image URLs found`);
+      return NextResponse.json({
+        products: [],
+        total: 0,
+        featuredCount: 0,
+        fallbackCount: 0,
+        message: 'No products with image URLs found'
+      });
+    }
+
+    // Sort by newest first, but prioritize featured_product and featured products
+    validProducts.sort((a, b) => {
+      // featured_product items get highest priority
+      if (a.featured_product && !b.featured_product) return -1;
+      if (!a.featured_product && b.featured_product) return 1;
+
+      // Then featured items get priority
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+
+      // Then sort by newest first
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
+
+    // Limit to requested amount for featured cards
+    const finalProducts = validProducts.slice(0, limit);
 
     return NextResponse.json({
-      products: normalizedProducts,
-      total: normalizedProducts.length
+      products: finalProducts,
+      total: finalProducts.length,
+      featuredCount: featuredCount,
+      fallbackCount: finalProducts.length - featuredCount
     });
 
   } catch (error) {

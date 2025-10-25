@@ -1,6 +1,9 @@
+'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
+import { MessageCircle, Sparkles, Clock, User, Search, Filter } from 'lucide-react';
 
 interface BlogPost {
   id: string;
@@ -15,7 +18,35 @@ interface BlogPost {
 }
 
 export default function BlogPage() {
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
+  const [aiQuery, setAiQuery] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
   const blogPosts: BlogPost[] = [
+    {
+      id: 'cannabis-history-global',
+      title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
+      excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
+      author: 'DOPE CITY Crew',
+      date: '2024-01-15',
+      category: 'Culture',
+      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
+      readTime: '10 min read',
+      featured: true
+    },
+    {
+      id: 'ultimate-bong-guide',
+      title: 'The Ultimate Guide to Picking the Perfect Bong',
+      excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
+      author: 'DOPE CITY Team',
+      date: '2024-01-15',
+      category: 'Education',
+      image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
+      readTime: '12 min read',
+      featured: true
+    },
     {
       id: '1',
       title: 'The Ultimate Guide to Choosing Your First Dab Rig',
@@ -84,6 +115,17 @@ export default function BlogPage() {
     }
   ];
 
+  const handleAIQuery = async () => {
+    if (!aiQuery.trim()) return;
+
+    setIsAiLoading(true);
+    // Simulate AI processing
+    setTimeout(() => {
+      setAiResponse(`Based on our blog articles, here's what I found about "${aiQuery}":\n\n• From "The Ultimate Guide to Picking the Perfect Bong": ${aiQuery.toLowerCase().includes('bong') ? 'We recommend starting with a basic beaker bong for beginners, or a percolator bong for smoother hits.' : 'Check our comprehensive guides for detailed information.'}\n\n• General advice: Always prioritize quality over aesthetics and consider your experience level when making purchases.\n\n• For more specific information, I recommend reading our detailed buying guides!`);
+      setIsAiLoading(false);
+    }, 1500);
+  };
+
   const categories = ['All', 'Education', 'Science', 'Product News', 'Maintenance', 'Technology', 'Culture'];
   const featuredPosts = blogPosts.filter(post => post.featured);
   const regularPosts = blogPosts.filter(post => !post.featured);
@@ -104,16 +146,65 @@ export default function BlogPage() {
           </p>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category) => (
-            <button
-              key={category}
-              className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:border-dope-orange hover:text-dope-orange transition-colors"
-            >
-              {category}
-            </button>
-          ))}
+        {/* AI Assistant & Category Filter */}
+        <div className="flex flex-col md:flex-row gap-6 mb-12">
+          {/* AI Assistant */}
+          <div className="flex-1 max-w-md">
+            <div className="bg-gradient-to-br from-dope-orange to-orange-600 text-white rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">DOPE AI Assistant</h3>
+                  <p className="text-orange-100 text-sm">Ask me anything about our articles!</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={aiQuery}
+                  onChange={(e) => setAiQuery(e.target.value)}
+                  placeholder="e.g., 'best bong for beginners'"
+                  className="w-full px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                  onKeyPress={(e) => e.key === 'Enter' && handleAIQuery()}
+                />
+                <button
+                  onClick={handleAIQuery}
+                  disabled={isAiLoading || !aiQuery.trim()}
+                  className="w-full bg-white text-dope-orange font-semibold py-3 px-4 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+                >
+                  {isAiLoading ? '🤔 Thinking...' : '✨ Ask AI'}
+                </button>
+              </div>
+
+              {aiResponse && (
+                <div className="mt-4 p-4 bg-white/10 rounded-lg">
+                  <p className="text-sm text-orange-100 whitespace-pre-line">{aiResponse}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Category Filter */}
+          <div className="flex-1">
+            <div className="flex flex-wrap justify-center gap-3">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full border transition-colors ${
+                    selectedCategory === category
+                      ? 'bg-dope-orange text-white border-dope-orange'
+                      : 'border-gray-300 text-gray-700 hover:border-dope-orange hover:text-dope-orange'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Featured Posts */}

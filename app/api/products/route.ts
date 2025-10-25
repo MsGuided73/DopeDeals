@@ -19,17 +19,14 @@ export async function GET(req: NextRequest) {
     const offset = parseInt(url.searchParams.get('offset') || '0');
     const category = url.searchParams.get('category');
 
-    // Build query
+    // Build query - Use main_site_products table
     let query = supabase
-      .from('products')
-      .select('*')
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false);
+      .from('main_site_products')
+      .select('*');
 
     // Apply category filter if provided
     if (category) {
-      query = query.eq('category', category);
+      query = query.eq('category_id', category);
     }
 
     // Apply pagination
@@ -49,11 +46,8 @@ export async function GET(req: NextRequest) {
 
     // Get total count for pagination info
     const { count } = await supabase
-      .from('products')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false);
+      .from('main_site_products')
+      .select('*', { count: 'exact', head: true });
 
     return NextResponse.json({
       products: products || [],

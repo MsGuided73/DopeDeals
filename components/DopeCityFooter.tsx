@@ -41,13 +41,17 @@ export default function DopeCityFooter() {
         {/* Service Features */}
         <div className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Get loyalty rewards and rocket up the ladder in the DOPE CLUB */}
+            {/* Discreet Shipping - Nothing to see here */}
             <div className="text-center">
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-dope-orange-400" />
+                <img
+                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/icons/discreet%20icon%201.png"
+                  alt="Discreet Shipping"
+                  className="w-8 h-8 object-contain"
+                />
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">GET LOYALTY REWARDS</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md">Rocket up the ladder in the DOPE CLUB and reap the benefits for years to come</p>
+              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">DISCREET SHIPPING</h3>
+              <p className="text-gray-200 text-xs drop-shadow-md">Nothing to see here</p>
             </div>
 
             {/* Low Price Guarantee */}
@@ -113,7 +117,7 @@ export default function DopeCityFooter() {
                 <li><Link href="/gift-cards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Gift Cards</Link></li>
                 <li><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">DOPE CITY Rewards</Link></li>
                 <li><Link href="/glossary" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Glossary of Terms</Link></li>
-                <li><Link href="/knowledge-base" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Knowledge Base</Link></li>
+                <li><Link href="/blog" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">DOPE Dispatches</Link></li>
               </ul>
             </div>
 
@@ -208,7 +212,7 @@ export default function DopeCityFooter() {
             <Link href="/" className="inline-block dope-hover hover:scale-105">
               <h1 className="font-chalets text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal' }}>
                 <span className="text-white drop-shadow-2xl">DOPE</span>
-                <span className="text-dope-orange-500 ml-4 drop-shadow-2xl">CITY</span>
+                <span className="text-white ml-4 drop-shadow-2xl">CITY</span>
               </h1>
             </Link>
           </div>

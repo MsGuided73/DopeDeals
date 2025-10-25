@@ -1,6 +1,7 @@
 import "./globals.css";
 import AppProviders from "./providers";
 import DopeCityFooter from "../components/DopeCityFooter";
+import ScrollingBanner from "./components/ScrollingBanner";
 
 export const metadata = {
   title: "DOPE CITY - Premium Cannabis Culture & Smoke Shop",
@@ -30,9 +31,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Resource Hints */}
         <link rel="prefetch" href="/api/products" />
       </head>
-      <body className="bg-black">
+      <body className="bg-white" suppressHydrationWarning>
         <AppProviders>
           <div className="min-h-screen flex flex-col" suppressHydrationWarning>
+            {/* Scrolling Banner - DISABLED for now */}
+            {/* <ScrollingBanner /> */}
+
             <main className="flex-1">
               {children}
             </main>

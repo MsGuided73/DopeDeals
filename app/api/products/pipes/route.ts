@@ -1,80 +1,126 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { config } from 'dotenv';
+import * as path from 'path';
+
+// Load .env.local explicitly in development
+if (process.env.NODE_ENV === 'development') {
+  const envPath = path.resolve(process.cwd(), '.env.local');
+  config({ path: envPath });
+}
 
 export async function GET(req: NextRequest) {
   try {
-    // Direct Supabase connection
+    // Ensure environment variables are loaded in development
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+    // Debug logging for development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Pipes API - Environment check:', {
+        hasUrl: !!supabaseUrl,
+        hasKey: !!supabaseKey,
+        urlPrefix: supabaseUrl?.substring(0, 20) + '...',
+        keyPrefix: supabaseKey?.substring(0, 20) + '...'
+      });
+    }
+
     if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ message: 'Supabase credentials not configured' }, { status: 500 });
+      console.error('Pipes API - Missing credentials:', {
+        supabaseUrl: !!supabaseUrl,
+        supabaseKey: !!supabaseKey
+      });
+      return NextResponse.json({
+        message: 'Supabase credentials not configured',
+        debug: process.env.NODE_ENV === 'development' ? {
+          supabaseUrl: !!supabaseUrl,
+          supabaseKey: !!supabaseKey
+        } : undefined
+      }, { status: 500 });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Search for pipe-related products using multiple criteria
-    const pipeKeywords = [
-      'HAND PIPE',
-      'GLASS PIPE',
-      'SPOON PIPE',
-      'CHILLUM',
-      'ONE HITTER',
-      'SHERLOCK',
-      'STEAMROLLER',
-      'GANDALF',
-      'BOWL',
-      'PIPE'
-    ];
-
-    // Build the query to find pipe products
-    let query = supabase
-      .from('products')
+    // Search ALL products first, then filter for pipes with images
+    const { data: allProducts, error: allError } = await supabase
+      .from('main_site_products')
       .select(`
         id,
         name,
         description,
-        price,
-        vip_price,
-        compare_at_price,
-        imageUrl,
-        brand_id,
-        category_id,
+        short_description,
+        our_price,
+        sale_price,
+        fire_price,
+        image_url,
+        image_urls,
         sku,
         stock_quantity,
         materials,
-        vip_exclusive,
         featured,
-        channels,
         is_active,
-        short_description,
         specs,
         attributes,
+        brand_name,
+        category_id,
+        categories,
+        category_slug,
+        subcategory_slug,
+        seo_keywords,
         created_at
       `)
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false);
+      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+      // Add back when connecting to Zoho Inventory for automated product management
+      .not('name', 'ilike', '%test%')
+      .not('name', 'ilike', '%sample%'); // Exclude sample products
 
-    // Create OR conditions for pipe keywords
-    const orConditions = pipeKeywords.map(keyword => `name.ilike.%${keyword}%`).join(',');
-    query = query.or(orConditions);
-
-    const { data: products, error } = await query
-      .order('featured', { ascending: false })
-      .order('created_at', { ascending: false })
-      .limit(200);
-
-    if (error) {
-      console.error('Supabase query error:', error);
-      return NextResponse.json({ 
-        message: 'Failed to fetch pipe products', 
-        error: error.message 
+    if (allError) {
+      console.error('Error fetching all products:', allError);
+      return NextResponse.json({
+        message: 'Failed to fetch products',
+        error: allError.message
       }, { status: 500 });
     }
 
+    console.log(`🔍 Searching through ${allProducts?.length || 0} total products for pipes with images...`);
+
+    // Filter for pipe products that have valid images
+    const pipeProducts = allProducts?.filter(product => {
+      // Check if it's a pipe product using category_slug (more reliable than name matching)
+      const isPipeProduct = product.category_slug === 'pipes' ||
+                           product.category_slug === 'hand-pipes' ||
+                           product.subcategory_slug === 'pipes' ||
+                           (Array.isArray(product.categories) &&
+                            product.categories.some(cat =>
+                              cat?.toLowerCase().includes('pipe') &&
+                              !cat?.toLowerCase().includes('water') &&
+                              !cat?.toLowerCase().includes('bong')
+                            ));
+
+      // Check if it has a valid image URL (strict validation)
+      const hasValidImage = product.image_url &&
+                           product.image_url.trim() !== '' &&
+                           product.image_url.trim() !== 'NULL' &&
+                           product.image_url.trim() !== 'null' &&
+                           !product.image_url.includes('placehold') &&
+                           !product.image_url.includes('placeholder') &&
+                           !product.image_url.includes('example.com') &&
+                           !product.image_url.includes('test.com') &&
+                           (product.image_url.startsWith('http://') || product.image_url.startsWith('https://')) &&
+                           (product.image_url.includes('.jpg') ||
+                            product.image_url.includes('.jpeg') ||
+                            product.image_url.includes('.png') ||
+                            product.image_url.includes('.webp') ||
+                            product.image_url.includes('sigdistro.com') ||
+                            product.image_url.includes('supabase.co'));
+
+      return isPipeProduct && hasValidImage;
+    }) || [];
+
+    console.log(`🎯 Found ${pipeProducts.length} pipe products with valid images!`);
+
     // Transform products to match our interface
-    const transformedProducts = products?.map(product => {
+    const transformedProducts = pipeProducts.map((product: any) => {
       // Determine pipe style from name
       const name = product.name.toLowerCase();
       let style = 'Hand Pipe';
@@ -94,7 +140,7 @@ export async function GET(req: NextRequest) {
       else if (name.includes('xl') || name.includes('extra large')) size = 'XL';
 
       // Determine if it's on sale
-      const isSale = product.compare_at_price && product.compare_at_price > product.price;
+      const isSale = product.sale_price && product.sale_price > product.our_price;
       
       // Determine if it's new (created within last 30 days)
       const isNew = product.created_at && 
@@ -103,26 +149,27 @@ export async function GET(req: NextRequest) {
       return {
         id: product.id,
         name: product.name,
-        price: parseFloat(product.price),
-        vip_price: product.vip_price ? parseFloat(product.vip_price) : undefined,
-        compare_at_price: product.compare_at_price ? parseFloat(product.compare_at_price) : undefined,
+        price: parseFloat(product.our_price),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         image_url: product.image_url,
-        image_urls: product.image_url ? [product.image_url] : [],
-        brand_id: product.brand_id,
+        image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
+        brand_id: product.brand_name, // Keep for backward compatibility
+        brand: product.brand_name, // Add the brand name field
         category_id: product.category_id,
         sku: product.sku,
         stock_quantity: product.stock_quantity || 0,
         materials: product.materials || [],
         material: product.materials?.[0] || 'Glass',
-        vip_exclusive: product.vip_exclusive || false,
+        vip_exclusive: false, // Default to false since column doesn't exist
         featured: product.featured || false,
-        channels: product.channels || [],
+
         is_active: product.is_active,
         description: product.description,
         short_description: product.short_description,
         specs: product.specs,
         attributes: product.attributes,
-        
+
         // Computed fields
         style,
         size,
@@ -131,7 +178,7 @@ export async function GET(req: NextRequest) {
         isSale,
         features: [
           'Premium Construction',
-          'Smooth Airflow', 
+          'Smooth Airflow',
           'Easy to Clean',
           'Portable Design'
         ],
@@ -139,21 +186,10 @@ export async function GET(req: NextRequest) {
       };
     }) || [];
 
-    // Filter out products that don't seem to be actual pipes
-    const filteredProducts = transformedProducts.filter(product => {
-      const name = product.name.toLowerCase();
-      // Exclude display cases, accessories, etc.
-      return !name.includes('display') && 
-             !name.includes('case') && 
-             !name.includes('tray') &&
-             !name.includes('grinder') &&
-             !name.includes('lighter');
-    });
-
     return NextResponse.json({
-      message: 'Pipe products loaded successfully',
-      totalCount: filteredProducts.length,
-      products: filteredProducts
+      message: 'Products loaded successfully',
+      totalCount: transformedProducts.length,
+      products: transformedProducts
     });
 
   } catch (error) {

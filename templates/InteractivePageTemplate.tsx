@@ -33,7 +33,7 @@ export default function InteractivePageTemplate({
   
   // State management
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     category: 'all',
@@ -54,7 +54,8 @@ export default function InteractivePageTemplate({
       const { data: results, error } = await supabaseBrowser
         .from('your_table') // Update table name
         .select('*')
-        .eq('is_active', true)
+        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
+        // Add back when connecting to Zoho Inventory for automated product management
         .order('created_at', { ascending: false });
 
       if (error) throw error;

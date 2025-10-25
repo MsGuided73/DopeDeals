@@ -27,7 +27,7 @@ const fallbackSlides: CarouselSlide[] = [
     title: "",
     subtitle: "",
     description: "",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/Screenshot%202025-09-24%20092028.png",
+    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/slider1.png",
     cta_text: "",
     cta_link: "/rewards",
     text_color: "text-white",
@@ -155,17 +155,13 @@ export default function FullscreenCarousel() {
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
-    return (
-      <div className="relative w-full overflow-hidden flex items-center justify-center" style={{ height: 'calc(100vh - 200px)' }}>
-        <div className="text-white text-xl">Loading carousel...</div>
-      </div>
-    );
+    return null;
   }
 
   // Show loading state
   if (loading) {
     return (
-      <div className="relative w-full overflow-hidden flex items-center justify-center" style={{ height: 'calc(100vh - 200px)' }}>
+      <div className="relative w-full overflow-hidden flex items-center justify-center bg-gray-900" style={{ height: 'calc(100vh - 40px)' }}>
         <div className="text-white text-xl">Loading carousel...</div>
       </div>
     );
@@ -174,7 +170,7 @@ export default function FullscreenCarousel() {
   // Show error state with fallback
   if (error && slides.length === 0) {
     return (
-      <div className="relative w-full overflow-hidden flex items-center justify-center bg-gray-900" style={{ height: 'calc(100vh - 200px)' }}>
+      <div className="relative w-full overflow-hidden flex items-center justify-center bg-gray-900" style={{ height: 'calc(100vh - 40px)' }}>
         <div className="text-white text-center">
           <div className="text-xl mb-2">Unable to load carousel</div>
           <div className="text-sm text-gray-400">Using default content</div>
@@ -193,10 +189,10 @@ export default function FullscreenCarousel() {
   const hasTextContent = currentSlideData.title || currentSlideData.subtitle || currentSlideData.description || currentSlideData.cta_text;
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
+    <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 40px)' }}>
       {/* Background Image with Overlay */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
+        className="absolute inset-0 bg-contain bg-bottom bg-no-repeat transition-all duration-1000 ease-in-out"
         style={{
           backgroundImage: `url('${currentSlideData.background_image_url}')`,
         }}

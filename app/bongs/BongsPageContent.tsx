@@ -4,40 +4,41 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import LoadingState, { useLoadingState } from '../../components/LoadingState';
 import BongsFilters from './components/BongsFilters';
 import BongsProductGrid from './components/BongsProductGrid';
 import BongsBreadcrumb from './components/BongsBreadcrumb';
 import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
 import BongsViewToggle from './components/BongsViewToggle';
-import { supabaseBrowser } from '../lib/supabase-browser';
-import { categorizeProduct, filterProductsByCategory } from '../../lib/product-categorization-enhanced';
 
 export interface BongProduct {
   id: string;
   name: string;
-  price: number;
-  vip_price?: number;
-  imageUrl?: string; // Database uses camelCase
+  our_price: number;
+  sale_price?: number;
+  image_url: string | null;
+  imageUrl?: string; // Add alias for compatibility
   image?: string; // Add alias for compatibility
-  description?: string;
-  sku: string;
-  stock_quantity: number; // Database uses snake_case
-  is_active: boolean; // Database uses snake_case
-  brand?: string;
-  category?: string;
-  material?: string;
-  height?: string;
-  joint_size?: string;
-  jointSize?: string; // Add alias for compatibility
-  percolator?: string;
-  createdAt: string; // Database uses camelCase
-  updated_at: string; // Database uses snake_case
+  description?: string | null;
+  short_description?: string | null;
+  sku: string | null;
+  stock_quantity: number;
+  is_active: boolean;
+  featured: boolean;
+  brand_id: string | null;
+  category_id: string | null;
+  created_at: string;
+  updated_at: string;
   // Add missing properties that components expect
+  price?: number; // For compatibility
   isNew?: boolean;
   isSale?: boolean;
   originalPrice?: number;
   inStock?: boolean;
+  brand?: string; // For compatibility
+  category?: string; // For compatibility
 }
 
 export default function BongsPageContent() {
@@ -73,50 +74,47 @@ export default function BongsPageContent() {
     // Apply filters and sorting
     let filtered = [...products];
 
-    // Apply filters
+    // Apply filters - using available fields from API
     if (filters.brands.length > 0) {
-      filtered = filtered.filter(p => p.brand && filters.brands.includes(p.brand));
-    }
-    if (filters.materials.length > 0) {
-      filtered = filtered.filter(p => p.material && filters.materials.includes(p.material));
-    }
-    if (filters.heights.length > 0) {
-      filtered = filtered.filter(p => p.height && filters.heights.includes(p.height));
-    }
-    if (filters.jointSizes.length > 0) {
-      filtered = filtered.filter(p => p.joint_size && filters.jointSizes.includes(p.joint_size));
-    }
-    if (filters.percolators.length > 0) {
-      filtered = filtered.filter(p => p.percolator && filters.percolators.includes(p.percolator));
+      filtered = filtered.filter((p: BongProduct) => p.brand && filters.brands.includes(p.brand));
     }
     if (filters.inStock) {
-      filtered = filtered.filter(p => p.stock_quantity > 0);
+      filtered = filtered.filter((p: BongProduct) => p.stock_quantity > 0);
     }
-    // Note: onSale and isNew filters removed since we're using real data without these fields
 
-    // Price range filter
-    filtered = filtered.filter(p => p.price >= filters.priceRange[0] && p.price <= filters.priceRange[1]);
+    // Price range filter - use our_price field
+    filtered = filtered.filter((p: BongProduct) => {
+      const price = p.our_price || p.price || 0;
+      return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+    });
 
     // Apply sorting
     switch (sortBy) {
       case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort((a: BongProduct, b: BongProduct) => {
+          const priceA = a.our_price || a.price || 0;
+          const priceB = b.our_price || b.price || 0;
+          return priceA - priceB;
+        });
         break;
       case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
+        filtered.sort((a: BongProduct, b: BongProduct) => {
+          const priceA = a.our_price || a.price || 0;
+          const priceB = b.our_price || b.price || 0;
+          return priceB - priceA;
+        });
         break;
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a: BongProduct, b: BongProduct) => a.name.localeCompare(b.name));
         break;
-
       case 'newest':
-        filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        filtered.sort((a: BongProduct, b: BongProduct) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         break;
       default: // featured
         // Sort by newest first, then by stock quantity
-        filtered.sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime();
-          const dateB = new Date(b.createdAt).getTime();
+        filtered.sort((a: BongProduct, b: BongProduct) => {
+          const dateA = new Date(a.created_at).getTime();
+          const dateB = new Date(b.created_at).getTime();
           if (dateA !== dateB) return dateB - dateA;
           return b.stock_quantity - a.stock_quantity;
         });
@@ -129,54 +127,62 @@ export default function BongsPageContent() {
   const loadBongProducts = async () => {
     try {
       setLoading(true);
-      console.log('🔍 Loading bong products using enhanced categorization...');
 
-      // Use the working API endpoint instead of direct Supabase query
-      console.log('🌐 Fetching products via API endpoint...');
-      const response = await fetch('/api/products?limit=100');
+      // Use the API endpoint instead of direct database queries
+      const response = await fetch('/api/products/bongs');
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
 
-      const apiData = await response.json();
+      const data = await response.json();
 
-      // Handle both old and new API response formats
-      const products = apiData.products || [];
-
-      if (products && products.length > 0) {
-        // Use enhanced categorization to filter for bongs only
-        const bongProducts = filterProductsByCategory(products, 'bongs');
-
-        console.log(`✅ Loaded ${products.length} total products from API`);
-        console.log(`🎯 Filtered to ${bongProducts.length} bongs using enhanced categorization`);
-
-        if (bongProducts.length > 0) {
-          console.log('📊 First 3 bong products:', bongProducts.slice(0, 3).map(p => ({
-            name: p.name,
-            sku: p.sku,
-            category: categorizeProduct(p)
-          })));
-        } else {
-          console.log('⚠️ No bong products found after categorization');
-          console.log('📋 Sample products for debugging:', products.slice(0, 3).map(p => ({
-            name: p.name,
-            sku: p.sku,
-            zoho_category_name: p.zoho_category_name,
-            description: p.description?.substring(0, 100)
-          })));
-        }
-
-        setProducts(bongProducts);
-      } else {
-        console.log('⚠️ No products returned from API');
-        setProducts([]);
+      if (data.error) {
+        throw new Error(data.error);
       }
+
+      console.log(`✅ API returned ${data.totalCount} bong products`);
+
+      // The API already returns properly formatted products with valid images
+      const transformedProducts = data.products.map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        our_price: product.price,
+        sale_price: product.compare_at_price,
+        image_url: product.image_url,
+        imageUrl: product.image_url, // Compatibility alias
+        image: product.image_url, // Compatibility alias
+        description: product.description,
+        short_description: product.short_description,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        is_active: product.is_active,
+        featured: product.featured || false,
+        brand_id: product.brand_id,
+        category_id: product.category_id,
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+        // Add compatibility fields
+        price: product.price,
+        isNew: product.isNew,
+        isSale: product.isSale,
+        originalPrice: product.compare_at_price,
+        inStock: product.inStock,
+        brand: product.brand,
+        category: 'Bongs',
+        // Add additional fields that the grid expects
+        height: product.specs?.height || 'N/A',
+        jointSize: product.specs?.jointSize || 'N/A',
+        material: product.material || 'Glass',
+        percolator: product.specs?.percolator || null
+      }));
+
+      setProducts(transformedProducts);
+      setFilteredProducts(transformedProducts);
     } catch (error) {
-      console.error('❌ Error fetching products:', error);
-      console.error('💥 Error details:', JSON.stringify(error, null, 2));
+      console.error('Error loading bong products:', error);
       setProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }
@@ -190,14 +196,19 @@ export default function BongsPageContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
-      </div>
+      <LoadingState
+        loading={loading}
+        onRetry={loadBongProducts}
+        timeout={15000}
+      >
+        <div>Bongs Page Content</div>
+      </LoadingState>
     );
   }
 
   return (
-    <div>
+    <ErrorBoundary>
+      <div>
       {/* Breadcrumb */}
       <BongsBreadcrumb />
 
@@ -208,7 +219,7 @@ export default function BongsPageContent() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
           <div className="lg:w-1/4">
-            <BongsFilters 
+            <BongsFilters
               filters={filters}
               setFilters={setFilters}
               products={products}
@@ -224,7 +235,7 @@ export default function BongsPageContent() {
                   Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-4">
                 <BongsSortBar sortBy={sortBy} setSortBy={setSortBy} />
                 <BongsViewToggle viewMode={viewMode} setViewMode={setViewMode} />
@@ -232,7 +243,7 @@ export default function BongsPageContent() {
             </div>
 
             {/* Product Grid */}
-            <BongsProductGrid 
+            <BongsProductGrid
               products={currentProducts}
               viewMode={viewMode}
             />
@@ -247,7 +258,7 @@ export default function BongsPageContent() {
                 >
                   Previous
                 </button>
-                
+
                 {Array.from({ length: Math.min(5, totalPages) }, (_: number, i: number) => {
                   const pageNum = i + 1;
                   return (
@@ -264,7 +275,7 @@ export default function BongsPageContent() {
                     </button>
                   );
                 })}
-                
+
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
@@ -277,8 +288,48 @@ export default function BongsPageContent() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
+}
+
+// Helper function to extract brand names from product names
+function extractBrandFromName(productName: string): string | null {
+  if (!productName) return null;
+
+  // Pattern 1: "Brand Name Product Description |REF: CODE|"
+  const refPattern = /(.+?)\s+(?:bong|pipe|rig|water)\s*\|REF:\s*([^|]+)\|/i;
+  const refMatch = productName.match(refPattern);
+  if (refMatch) {
+    return refMatch[1].trim();
+  }
+
+  // Pattern 2: "Brand Product |REF: CODE|"
+  const simpleRefPattern = /(.+?)\|REF:\s*([^|]+)\|/i;
+  const simpleMatch = productName.match(simpleRefPattern);
+  if (simpleMatch) {
+    return simpleMatch[1].trim();
+  }
+
+  // Pattern 3: Common brand names that appear at the start
+  const commonBrands = ['Diamond Glass', 'Crave', 'Puffco', 'Urth Farmacy', 'Twenty One Cannabis', 'Special Blue'];
+  for (const brand of commonBrands) {
+    if (productName.toLowerCase().includes(brand.toLowerCase())) {
+      return brand;
+    }
+  }
+
+  // Pattern 4: Extract first word or two as potential brand
+  const words = productName.split(' ');
+  if (words.length >= 2) {
+    const potentialBrand = words.slice(0, 2).join(' ');
+    // Don't return generic words as brands
+    if (!['The', 'A', 'An', 'Beaker', 'Water', 'Glass', 'Mini', 'Large'].includes(potentialBrand)) {
+      return potentialBrand;
+    }
+  }
+
+  return null;
 }
 
 // Mock data generator removed - now using real Supabase data

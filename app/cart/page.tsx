@@ -26,14 +26,19 @@ export default function CartPage() {
     setLoading(true);
     setError(null);
 
-    const cartData = await getCart();
-    if (cartData) {
-      setCart(cartData);
-    } else {
+    try {
+      const cartData = await getCart();
+      if (cartData) {
+        setCart(cartData);
+      } else {
+        setError('Failed to load cart');
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
       setError('Failed to load cart');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const updateQuantity = async (cartItemId: string, newQuantity: number) => {
@@ -56,8 +61,11 @@ export default function CartPage() {
     try {
       const sessionId = getSessionId();
 
-      const response = await fetch(`/api/cart?sessionId=${sessionId}`, {
-        method: 'DELETE'
+      const response = await fetch('/api/cart', {
+        method: 'DELETE',
+        headers: {
+          'x-session-id': sessionId,
+        },
       });
 
       const data = await response.json();
@@ -87,7 +95,7 @@ export default function CartPage() {
             <div className="space-y-4">
               {[1, 2, 3].map(i => (
                 <div key={i} className="flex gap-4 p-6 bg-gray-50 rounded-lg">
-                  <div className="w-24 h-24 bg-gray-200 rounded"></div>
+                  <div className="w-32 h-32 md:w-40 md:h-40 bg-gray-200 rounded"></div>
                   <div className="flex-1 space-y-2">
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2"></div>
@@ -148,19 +156,19 @@ export default function CartPage() {
               {cart.items && cart.items.map((item) => (
                 <div key={item.id} className="bg-gray-50 rounded-lg p-6">
                   <div className="flex gap-4">
-                    {/* Product Image */}
-                    <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                    {/* Product Image - Much Larger */}
+                    <div className="w-32 h-32 md:w-40 md:h-40 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                       {item.product?.imageUrl ? (
                         <Image
                           src={item.product.imageUrl}
                           alt={item.product.name}
-                          width={96}
-                          height={96}
-                          className="w-full h-full object-cover"
+                          width={160}
+                          height={160}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-400">
-                          <ShoppingBag className="w-8 h-8" />
+                          <ShoppingBag className="w-12 h-12" />
                         </div>
                       )}
                     </div>

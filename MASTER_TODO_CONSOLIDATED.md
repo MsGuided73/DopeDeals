@@ -43,7 +43,37 @@
 
 ## **📋 PHASE-BY-PHASE IMPLEMENTATION PLAN**
 
-## **PHASE 1: CRITICAL ECOMMERCE FLOW (Week 1-2)**
+## **PHASE 0: DATABASE RESTRUCTURE (Week 0 - IMMEDIATE)**
+*Priority: CRITICAL - Fixes Search/Filter Issues*
+
+### **0.1 Database Schema Restructure** ⏱️ 3 weeks
+**Problem**: Search returns no results, categories empty, products not properly classified
+**Solution**: Build purpose-designed schema for our business model
+
+#### **Week 1: Foundation** 🎯 Database Schema
+- **Day 1**: Database cleanup (remove 8 unused tables)
+- **Day 2-3**: Build hierarchical category structure (Glass Pieces → Consumables → THCA Products)
+- **Day 4**: Organize brands by tier system (Premium/Mid-Range/Budget)
+- **Day 5**: Update product relationships and test basic search
+
+#### **Week 2: Security & Integration** 🔒 RLS & APIs
+- **Day 6-7**: Implement Row Level Security policies
+- **Day 8**: Set up returns workflow for eligible products
+- **Day 9-10**: Configure ShipStation integration structure
+
+#### **Week 3: Testing & Launch Prep** ✅ Validation
+- **Day 11-12**: Comprehensive testing of all functionality
+- **Day 13-14**: ShipStation launch configuration
+- **Day 15**: Performance optimization and documentation
+
+**Success Metrics**:
+- [ ] **Search Success Rate**: >95% of searches return relevant results
+- [ ] **Category Accuracy**: >98% of products properly categorized
+- [ ] **Performance**: <500ms search response, <2s page loads
+
+---
+
+## **PHASE 1: CRITICAL ECOMMERCE FLOW (Week 4-5)**
 *Priority: HIGHEST - Revenue Generation*
 
 ### **1.1 Integrate KajaPay Payment Processing** ⏱️ 2-3 days

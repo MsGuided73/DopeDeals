@@ -1,24 +1,89 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+import { getSessionId } from '../lib/cart-utils';
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export default function AgeVerification() {
   const [showModal, setShowModal] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [zipcode, setZipcode] = useState('');
   const [showZipcodeStep, setShowZipcodeStep] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showAdminBypass, setShowAdminBypass] = useState(false);
 
   useEffect(() => {
+    checkAdminStatus();
+
     // Check if user has already been verified in this session - only on client side
     if (typeof window !== 'undefined') {
       const verified = localStorage.getItem('dope-city-age-verified');
-      if (!verified) {
+      const lastVerification = localStorage.getItem('dope-city-last-verification');
+      const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000); // 24 hours ago
+
+      // Check for force show parameter (for testing)
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceShow = urlParams.get('force-age-verification') === 'true';
+
+      console.log('[AgeVerification] Debug info:', {
+        verified,
+        lastVerification,
+        oneDayAgo,
+        currentTime: Date.now(),
+        forceShow,
+        shouldShow: !verified || (lastVerification && parseInt(lastVerification) < oneDayAgo) || forceShow
+      });
+
+      // Show modal if not verified OR if last verification was more than 24 hours ago OR if force show is requested
+      if (!verified || (lastVerification && parseInt(lastVerification) < oneDayAgo) || forceShow) {
+        console.log('[AgeVerification] Showing modal - not verified, expired, or force show requested');
         setShowModal(true);
       } else {
+        console.log('[AgeVerification] User already verified');
         setIsVerified(true);
       }
+    } else {
+      // Fallback for server-side rendering - always show modal
+      console.log('[AgeVerification] Server-side rendering - showing modal');
+      setShowModal(true);
     }
   }, []);
+
+  const checkAdminStatus = async () => {
+    try {
+      // Check if user is authenticated and is an admin
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        if (profile?.role === 'admin') {
+          setIsAdmin(true);
+          setShowAdminBypass(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+    }
+  };
+
+  const handleAdminBypass = () => {
+    localStorage.setItem('dope-city-age-verified', 'true');
+    localStorage.setItem('dope-city-zipcode', 'ADMIN_BYPASS');
+    localStorage.setItem('dope-city-last-verification', Date.now().toString());
+    setIsVerified(true);
+    setShowModal(false);
+  };
 
   const handleVerify = (isOfAge: boolean) => {
     if (isOfAge) {
@@ -30,18 +95,71 @@ export default function AgeVerification() {
     }
   };
 
-  const handleZipcodeSubmit = () => {
+  const handleZipcodeSubmit = async () => {
     if (zipcode.trim().length >= 5) {
       localStorage.setItem('dope-city-age-verified', 'true');
       localStorage.setItem('dope-city-zipcode', zipcode);
+      localStorage.setItem('dope-city-last-verification', Date.now().toString());
+
+      // Record age verification in audit table
+      try {
+        const sessionId = getSessionId();
+        await supabase
+          .from('age_verification_audit')
+          .insert({
+            session_id: sessionId,
+            verification_status: 'approved',
+            verification_method: 'zipcode',
+            zipcode: zipcode,
+            user_agent: navigator.userAgent,
+            ip_address: null,
+            // cart_id will be linked when cart is created
+          });
+
+        // Try to link age verification to existing cart
+        try {
+          const response = await fetch('/api/cart', {
+            method: 'GET',
+            headers: {
+              'x-session-id': sessionId,
+            },
+          });
+
+          if (response.ok) {
+            const cartData = await response.json();
+            if (cartData.success && cartData.cart) {
+              // Link age verification to cart
+              await supabase.rpc('link_age_verification_to_cart', {
+                p_session_id: sessionId,
+                p_user_id: null,
+                p_age_verified: true,
+                p_verification_level: 'strict',
+                p_minimum_age: 21
+              });
+            }
+          }
+        } catch (cartError) {
+          console.error('Error linking age verification to cart:', cartError);
+          // Don't fail verification if cart linking fails
+        }
+      } catch (error) {
+        console.error('Error recording age verification:', error);
+        // Don't fail the verification process if audit logging fails
+      }
+
       setIsVerified(true);
       setShowModal(false);
     }
   };
 
-  if (!showModal || isVerified) {
+  // Force show modal if verification is required but not completed
+  const shouldShowModal = showModal && !isVerified;
+
+  if (!shouldShowModal) {
     return null;
   }
+
+  console.log('[AgeVerification] Rendering modal - blocking content until verification complete');
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
@@ -68,10 +186,10 @@ export default function AgeVerification() {
             {/* Edgy Message */}
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold mb-4 text-dope-orange">
-                HOLD UP, PLAYER
+                WELCOME TO DOPE CITY
               </h2>
               <p className="text-lg mb-4 leading-relaxed">
-                This ain't your average smoke shop. We're dealing with the
+                This is not your average smoke shop. We're dealing with the
                 <span className="text-dope-orange font-bold"> DOPEST </span>
                 products in the game.
               </p>
@@ -100,6 +218,17 @@ export default function AgeVerification() {
               >
                 NAH, I'M TOO YOUNG
               </button>
+
+              {/* Admin Bypass Button */}
+              {showAdminBypass && (
+                <button
+                  onClick={handleAdminBypass}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm uppercase tracking-wide border-2 border-purple-500"
+                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+                >
+                  🔑 ADMIN BYPASS
+                </button>
+              )}
             </div>
           </>
         ) : (
@@ -141,6 +270,17 @@ export default function AgeVerification() {
               >
                 {zipcode.length < 5 ? 'ENTER ZIP CODE' : 'ENTER THE DOPE ZONE'}
               </button>
+
+              {/* Admin Bypass Button in ZIP Code Step */}
+              {showAdminBypass && (
+                <button
+                  onClick={handleAdminBypass}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm uppercase tracking-wide border-2 border-purple-500"
+                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+                >
+                  🔑 ADMIN BYPASS - SKIP ZIP CODE
+                </button>
+              )}
 
               <button
                 onClick={() => setShowZipcodeStep(false)}

@@ -1,13 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { User, ShoppingCart } from 'lucide-react';
+import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu } from 'lucide-react';
 import EnhancedSearchBar from './EnhancedSearchBar';
+import { useCart } from '../contexts/CartContext';
 
 export default function GlobalMasthead() {
-  const [scrolled, setScrolled] = useState(false);
+  // Fix hydration mismatch by properly initializing scrolled state
+  const [scrolled, setScrolled] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.scrollY > 0;
+    }
+    return false;
+  });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  // Get cart context
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,64 +31,114 @@ export default function GlobalMasthead() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle delayed closing of dropdowns
+  const handleMouseLeaveWithDelay = (dropdownType: string) => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    const timeout = setTimeout(() => {
+      if (dropdownType === 'main') {
+        setOpenDropdown(null);
+        setOpenSubmenu(null);
+        setOpenNestedSubmenu(null);
+      } else if (dropdownType === 'submenu') {
+        setOpenSubmenu(null);
+        setOpenNestedSubmenu(null);
+      } else if (dropdownType === 'nested') {
+        setOpenNestedSubmenu(null);
+      }
+    }, 300); // 300ms delay - increased for better submenu navigation
+    setHoverTimeout(timeout);
+  };
+
+  const handleMouseEnter = (type: string, value: string) => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+    if (type === 'dropdown') {
+      setOpenDropdown(value);
+    } else if (type === 'submenu') {
+      setOpenSubmenu(value);
+    } else if (type === 'nested') {
+      setOpenNestedSubmenu(value);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50">
       <div>
-        {/* Main Masthead - Match Home Page Exactly */}
+        {/* Main Masthead - Desktop Layout (Original) - Scrolling Banner Removed */}
         <div className="bg-black text-white px-1 flex items-center justify-between gap-2" style={{ minHeight: '140px', height: '140px' }}>
-          {/* Left: HUGE DOPE CITY Logo - Expanded to edges with minimal spacing */}
-          <div
-            className="font-chalets font-black leading-none text-white flex-shrink-0 tracking-wider"
-            style={{
-              fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-              fontSize: 'clamp(4rem, 16vw, 9rem)',
-              lineHeight: '0.9',
-              fontWeight: 'normal'
-            }}
-          >
-            <Link href="/">
-              DOPE CITY
-            </Link>
+          {/* Left: HUGE DOPE CITY Logo - Centered */}
+          <div className="flex-1 flex justify-center">
+            <div
+              className="font-chalets font-black leading-none text-white flex-shrink-0 tracking-wider"
+              style={{
+                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                fontSize: 'clamp(4rem, 16vw, 9rem)',
+                lineHeight: '0.9',
+                fontWeight: 'normal'
+              }}
+            >
+              <Link href="/">
+                DOPE CITY
+              </Link>
+            </div>
           </div>
 
           {/* Center: Search Bar */}
-          <div className="flex-1 max-w-3xl mx-8">
+          <div className="flex-1 max-w-3xl mx-8 hidden md:block">
             <EnhancedSearchBar />
           </div>
 
-          {/* Right: User Actions */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <Link href="/sitemap-page" className="p-2 hover:text-yellow-400 transition-colors" title="Site Map">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          {/* Right: User Actions - Enhanced with 20px spacing and 2x larger 3D icons */}
+          <div className="flex items-center gap-6 flex-shrink-0 mr-5">
+            <Link href="/sitemap-page" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110" title="Site Map">
+              <svg className="w-12 h-12 drop-shadow-lg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
             </Link>
-            <Link href="/auth" className="p-2 hover:text-yellow-400 transition-colors" title="Account">
-              <User className="w-6 h-6" />
-            </Link>
-            <Link href="/cart" className="p-2 hover:text-yellow-400 transition-colors relative" title="Shopping Cart">
-              <ShoppingCart className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                0
+            <button
+              onClick={() => setShowProfileModal(true)}
+              className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110"
+              title="Profile & Recommendations"
+            >
+              <User className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
+            </button>
+            <Link href="/cart" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 relative" title="Shopping Cart">
+              <ShoppingCart className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
+              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
+                {cartCount > 99 ? '99+' : cartCount}
               </span>
             </Link>
           </div>
         </div>
 
-        {/* DOPE Orange divider line */}
-        <div className="h-1 bg-dope-orange"></div>
+        {/* Mobile Search Bar - Only on mobile */}
+        <div className="md:hidden bg-black text-white px-4 pb-4">
+          <EnhancedSearchBar />
+        </div>
 
-        {/* Glassmorphic nav bar */}
-        <nav
-          className={`backdrop-blur-lg transition-all duration-300 ease-in-out ${
-            scrolled
-              ? "bg-white/80 dark:bg-gray-900/80 shadow-lg"
-              : "bg-white/70 dark:bg-gray-900/70 shadow-md"
-          }`}
-        >
+        {/* Orange divider line - Reduced thickness by 2/3 */}
+        <div
+          className="h-2 bg-dope-orange-500"
+          style={{
+            backgroundColor: '#ff6b35 !important',
+            backgroundImage: 'none !important',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1), inset 0 -1px 2px rgba(0,0,0,0.1)'
+          }}
+        ></div>
+
+        {/* Glassmorphic nav bar - Desktop Only */}
+        <nav className="hidden md:block bg-white/90 backdrop-blur-md">
           <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
             {/* Shop Dropdown - Consolidated Categories and Brands */}
-            <li className="relative">
+            <li
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('dropdown', 'shop')}
+              onMouseLeave={() => handleMouseLeaveWithDelay('main')}
+            >
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'shop' ? null : 'shop')}
                 className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
@@ -93,8 +157,8 @@ export default function GlobalMasthead() {
                     {/* Categories Section */}
                     <div className="relative">
                       <button
-                        onMouseEnter={() => setOpenSubmenu('categories')}
-                        onMouseLeave={() => setOpenSubmenu(null)}
+                        onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
+                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
                       >
                         Shop by Category
@@ -107,15 +171,15 @@ export default function GlobalMasthead() {
                       {openSubmenu === 'categories' && (
                         <div
                           className="absolute left-full top-0 ml-1 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
-                          onMouseEnter={() => setOpenSubmenu('categories')}
-                          onMouseLeave={() => setOpenSubmenu(null)}
+                          onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
+                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         >
                           <div className="py-2">
                             {/* THCA & More with Nested Submenu */}
                             <div className="relative">
                               <button
-                                onMouseEnter={() => setOpenSubmenu('thca')}
-                                onMouseLeave={() => setOpenSubmenu(null)}
+                                onMouseEnter={() => handleMouseEnter('nested', 'thca-nested-categories')}
+                                onMouseLeave={() => handleMouseLeaveWithDelay('nested')}
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
                               >
                                 THCA & More
@@ -125,11 +189,11 @@ export default function GlobalMasthead() {
                               </button>
 
                               {/* THCA Nested Submenu */}
-                              {openSubmenu === 'thca' && (
+                              {openNestedSubmenu === 'thca-nested-categories' && (
                                 <div
                                   className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-70"
-                                  onMouseEnter={() => setOpenSubmenu('thca')}
-                                  onMouseLeave={() => setOpenSubmenu(null)}
+                                  onMouseEnter={() => handleMouseEnter('nested', 'thca-nested-categories')}
+                                  onMouseLeave={() => handleMouseLeaveWithDelay('nested')}
                                 >
                                   <div className="py-2">
                                     <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
@@ -166,8 +230,8 @@ export default function GlobalMasthead() {
                     {/* Brands Section */}
                     <div className="relative">
                       <button
-                        onMouseEnter={() => setOpenSubmenu('brands')}
-                        onMouseLeave={() => setOpenSubmenu(null)}
+                        onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
+                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
                       >
                         Shop by Brand
@@ -180,8 +244,8 @@ export default function GlobalMasthead() {
                       {openSubmenu === 'brands' && (
                         <div
                           className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
-                          onMouseEnter={() => setOpenSubmenu('brands')}
-                          onMouseLeave={() => setOpenSubmenu(null)}
+                          onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
+                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
                         >
                           <div className="py-2">
                             <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
@@ -205,13 +269,13 @@ export default function GlobalMasthead() {
                 onClick={() => setOpenDropdown(openDropdown === 'thca' ? null : 'thca')}
                 className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
               >
-                THCA &amp; More
+                THCA & More
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               {openDropdown === 'thca' && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
                   <div className="py-2">
                     <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Flower</Link>
                     <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Pre-Rolls</Link>
@@ -224,6 +288,11 @@ export default function GlobalMasthead() {
                     <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
                     <Link href="/products?q=delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
                     <Link href="/products?q=edible" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                    <div className="border-t border-gray-200/20 my-1"></div>
+                    {/* New Product Types at bottom */}
+                    <Link href="/mushrooms" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">🍄 Mushrooms</Link>
+                    <Link href="/nitrous-oxide" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Nitrous Oxide</Link>
+                    <Link href="/7-hydroxymitragynine" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">7-Hydroxymitragynine</Link>
                   </div>
                 </div>
               )}
@@ -330,6 +399,135 @@ export default function GlobalMasthead() {
           </ul>
         </nav>
       </div>
+
+      {/* Profile Modal with Guest Recommendations */}
+      {showProfileModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-dope-orange to-orange-600 rounded-full flex items-center justify-center">
+                  <User className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Welcome to DOPE CITY</h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Guest Mode - Sign in for personalized recommendations</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowProfileModal(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              {/* Guest Recommendations */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <Star className="w-5 h-5 text-yellow-500" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recommended for You</h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Trending Products */}
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <TrendingUp className="w-4 h-4 text-blue-600" />
+                      <h4 className="font-medium text-gray-900 dark:text-white">Trending Now</h4>
+                    </div>
+                    <div className="space-y-2">
+                      <Link href="/bongs" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                        🔥 Premium Glass Bongs
+                      </Link>
+                      <Link href="/products?q=puffco" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                        🔥 Puffco Peak Pro
+                      </Link>
+                      <Link href="/products?q=thca+flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                        🔥 THCA Flower Collection
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Staff Picks */}
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Gift className="w-4 h-4 text-green-600" />
+                      <h4 className="font-medium text-gray-900 dark:text-white">Staff Favorites</h4>
+                    </div>
+                    <div className="space-y-2">
+                      <Link href="/products?q=raw+papers" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
+                        🌟 RAW Rolling Papers
+                      </Link>
+                      <Link href="/products?q=roor" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
+                        🌟 ROOR Glass Pieces
+                      </Link>
+                      <Link href="/products?q=grinder" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
+                        🌟 Premium Grinders
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Link
+                    href="/account"
+                    className="flex items-center justify-center gap-2 bg-dope-orange hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    Sign In / Sign Up
+                  </Link>
+                  <Link
+                    href="/rewards"
+                    className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-6 rounded-lg transition-colors"
+                  >
+                    <Gift className="w-4 h-4" />
+                    VIP Rewards
+                  </Link>
+                </div>
+              </div>
+
+              {/* Featured Categories */}
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Popular Categories</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <Link href="/bongs" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">🚬</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Bongs</div>
+                  </Link>
+                  <Link href="/products?q=thca+flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">🌿</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">THCA Flower</div>
+                  </Link>
+                  <Link href="/products?category=vaporizers" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">💨</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Vaporizers</div>
+                  </Link>
+                  <Link href="/products?category=dab-rigs" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">⚗️</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Dab Rigs</div>
+                  </Link>
+                  <Link href="/products?category=accessories" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">🔧</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Accessories</div>
+                  </Link>
+                  <Link href="/mushrooms" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">🍄</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Mushrooms</div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

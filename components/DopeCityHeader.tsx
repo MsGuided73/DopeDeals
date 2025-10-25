@@ -1,10 +1,56 @@
 "use client";
-import { useState } from 'react';
-import { User, ShoppingCart, Search, Menu, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { User, ShoppingCart, Search, Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { useCart } from './contexts/CartContext';
 
 export default function DopeCityHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isThcaDropdownOpen, setIsThcaDropdownOpen] = useState(false);
+  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const shopDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get cart context
+  const { cartCount } = useCart();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsThcaDropdownOpen(false);
+      }
+      if (shopDropdownRef.current && !shopDropdownRef.current.contains(event.target as Node)) {
+        setIsShopDropdownOpen(false);
+      }
+    }
+
+    if (isThcaDropdownOpen || isShopDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isThcaDropdownOpen, isShopDropdownOpen]);
+
+  // Close dropdown on ESC key
+  useEffect(() => {
+    function handleEscKey(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsThcaDropdownOpen(false);
+        setIsShopDropdownOpen(false);
+      }
+    }
+
+    if (isThcaDropdownOpen || isShopDropdownOpen) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isThcaDropdownOpen, isShopDropdownOpen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
@@ -23,30 +69,154 @@ export default function DopeCityHeader() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <Link href="/brands" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              Shop by Brand
-            </Link>
-            <Link href="/products?q=thca" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              THCA & More
-            </Link>
-            <Link href="/bongs" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              Bongs
-            </Link>
-            <Link href="/pipes" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              Pipes
-            </Link>
-            <Link href="/products?category=dab-rigs" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              Dab Rigs
-            </Link>
-            <Link href="/products?category=dry-herb-vaporizers" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              Dry Herb Vaporizers
-            </Link>
-            <Link href="/products?category=accessories" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              Accessories
-            </Link>
-            <Link href="/products?category=munchies" className="text-white hover:text-yellow-400 font-medium transition-colors">
-              Munchies
-            </Link>
+            {/* Shop Dropdown */}
+            <div
+              className="relative"
+              ref={shopDropdownRef}
+              onMouseEnter={() => setIsShopDropdownOpen(true)}
+              onMouseLeave={() => setIsShopDropdownOpen(false)}
+            >
+              <button
+                className="flex items-center text-white hover:text-yellow-400 font-medium transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsShopDropdownOpen(!isShopDropdownOpen);
+                }}
+              >
+                Shop
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
+
+              {isShopDropdownOpen && (
+                <div className="absolute top-full left-0 mt-1 w-56 bg-black/98 backdrop-blur-md border border-white/20 rounded-lg shadow-2xl z-[100]">
+                  <div className="py-3">
+                    <div className="px-4 py-2 text-yellow-400 font-semibold text-sm uppercase tracking-wide">
+                      Shop by Category
+                    </div>
+                    <Link
+                      href="/bongs"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      🥛 Bongs
+                    </Link>
+                    <Link
+                      href="/pipes"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      🚬 Pipes
+                    </Link>
+                    <Link
+                      href="/products?category=dab-rigs"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      ⚗️ Dab Rigs
+                    </Link>
+                    <Link
+                      href="/products?category=dry-herb-vaporizers"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      🌿 Dry Herb Vaporizers
+                    </Link>
+                    <Link
+                      href="/products?category=accessories"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      🔧 Accessories
+                    </Link>
+                    <Link
+                      href="/products?category=munchies"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      🍪 Munchies
+                    </Link>
+                    <div className="border-t border-white/20 my-2"></div>
+                    <div className="px-4 py-2 text-yellow-400 font-semibold text-sm uppercase tracking-wide">
+                      Shop by Brand
+                    </div>
+                    <Link
+                      href="/brands"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      🏪 All Brands
+                    </Link>
+                    <Link
+                      href="/brands/roor"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      👑 RooR
+                    </Link>
+                    <Link
+                      href="/brands/puffco"
+                      className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsShopDropdownOpen(false)}
+                    >
+                      🅿️ Puffco
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* THCA & More Dropdown */}
+            <div
+              className="relative"
+              ref={dropdownRef}
+              onMouseEnter={() => setIsThcaDropdownOpen(true)}
+              onMouseLeave={() => setIsThcaDropdownOpen(false)}
+            >
+              <button
+                className="flex items-center text-white hover:text-yellow-400 font-medium transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsThcaDropdownOpen(!isThcaDropdownOpen);
+                }}
+              >
+                THCA & More
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </button>
+
+              {isThcaDropdownOpen && (
+                <div className="absolute top-full left-0 mt-1 w-64 bg-black/98 backdrop-blur-md border border-white/20 rounded-lg shadow-2xl z-[100]">
+                  <div className="py-3">
+                    <Link
+                      href="/products?q=thca"
+                      className="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsThcaDropdownOpen(false)}
+                    >
+                      THCA Products
+                    </Link>
+                    <Link
+                      href="/products?q=mushrooms"
+                      className="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsThcaDropdownOpen(false)}
+                    >
+                      🍄 Mushrooms
+                    </Link>
+                    <Link
+                      href="/products?q=nitrous-oxide"
+                      className="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsThcaDropdownOpen(false)}
+                    >
+                      ⚡ Nitrous Oxide
+                    </Link>
+                    <Link
+                      href="/products?q=7-hydroxymitragynine"
+                      className="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
+                      onClick={() => setIsThcaDropdownOpen(false)}
+                    >
+                      🌿 7-Hydroxymitragynine
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Search Bar */}
@@ -75,7 +245,7 @@ export default function DopeCityHeader() {
             <Link href="/cart" className="text-white hover:text-yellow-400 transition-colors relative" aria-label="Cart">
               <ShoppingCart className="w-6 h-6" />
               <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                0
+                {cartCount > 99 ? '99+' : cartCount}
               </span>
             </Link>
 
@@ -109,30 +279,71 @@ export default function DopeCityHeader() {
       {isMenuOpen && (
         <div className="lg:hidden bg-black/95 backdrop-blur-md border-t border-white/10">
           <nav className="max-w-7xl mx-auto px-4 py-4 space-y-4">
-            <Link href="/brands" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Shop by Brand
-            </Link>
-            <Link href="/products?q=thca" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              THCA & More
-            </Link>
-            <Link href="/bongs" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Bongs
-            </Link>
-            <Link href="/pipes" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Pipes
-            </Link>
-            <Link href="/products?category=dab-rigs" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Dab Rigs
-            </Link>
-            <Link href="/products?category=dry-herb-vaporizers" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Dry Herb Vaporizers
-            </Link>
-            <Link href="/products?category=accessories" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Accessories
-            </Link>
-            <Link href="/products?category=munchies" className="block text-white hover:text-yellow-400 font-medium transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Munchies
-            </Link>
+            {/* Shop Section */}
+            <div className="py-2">
+              <div className="text-yellow-400 font-semibold py-2 mb-3 text-sm uppercase tracking-wide">
+                Shop by Category
+              </div>
+              <div className="space-y-2">
+                <Link href="/bongs" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🥛 Bongs
+                </Link>
+                <Link href="/pipes" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🚬 Pipes
+                </Link>
+                <Link href="/products?category=dab-rigs" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  ⚗️ Dab Rigs
+                </Link>
+                <Link href="/products?category=dry-herb-vaporizers" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🌿 Dry Herb Vaporizers
+                </Link>
+                <Link href="/products?category=accessories" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🔧 Accessories
+                </Link>
+                <Link href="/products?category=munchies" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🍪 Munchies
+                </Link>
+              </div>
+            </div>
+
+            {/* Shop by Brand Section */}
+            <div className="py-2">
+              <div className="text-yellow-400 font-semibold py-2 mb-3 text-sm uppercase tracking-wide border-t border-gray-600 pt-4">
+                Shop by Brand
+              </div>
+              <div className="space-y-2">
+                <Link href="/brands" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🏪 All Brands
+                </Link>
+                <Link href="/brands/roor" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  👑 RooR
+                </Link>
+                <Link href="/brands/puffco" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🅿️ Puffco
+                </Link>
+              </div>
+            </div>
+
+            {/* THCA & More Section */}
+            <div className="py-2">
+              <div className="text-yellow-400 font-semibold py-2 mb-3 text-sm uppercase tracking-wide border-t border-gray-600 pt-4">
+                THCA & More
+              </div>
+              <div className="space-y-2">
+                <Link href="/products?q=thca" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  THCA Products
+                </Link>
+                <Link href="/products?q=mushrooms" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🍄 Mushrooms
+                </Link>
+                <Link href="/products?q=nitrous-oxide" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  ⚡ Nitrous Oxide
+                </Link>
+                <Link href="/products?q=7-hydroxymitragynine" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                  🌿 7-Hydroxymitragynine
+                </Link>
+              </div>
+            </div>
           </nav>
         </div>
       )}

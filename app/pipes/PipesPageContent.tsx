@@ -28,7 +28,7 @@ export interface PipeProduct {
   materials?: string[];
   vip_exclusive?: boolean;
   featured?: boolean;
-  channels: string[];
+
   is_active?: boolean;
   description?: string;
   short_description?: string;
@@ -77,31 +77,46 @@ export default function PipesPageContent() {
   });
 
   useEffect(() => {
-    // Load products from Supabase
-    loadPipeProducts();
+    // Load products from optimized API route - much faster!
+    const loadProducts = async () => {
+      try {
+        await loadPipeProducts();
+      } catch (error) {
+        console.error('Error loading pipe products:', error);
+        setProducts([]);
+        setFilteredProducts([]);
+      }
+    };
+
+    loadProducts();
   }, []);
 
   const loadPipeProducts = async () => {
     try {
       setLoading(true);
+
+      // Use the optimized API route instead of direct database query
       const response = await fetch('/api/products/pipes');
-      if (response.ok) {
-        const data = await response.json();
-        setProducts(data.products || []);
-        setFilteredProducts(data.products || []);
-      } else {
-        console.error('Failed to load pipe products');
-        // Fallback to mock data for development
-        const mockProducts = generateMockPipes();
-        setProducts(mockProducts);
-        setFilteredProducts(mockProducts);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    } catch (error) {
-      console.error('Error loading pipe products:', error);
-      // Fallback to mock data
-      const mockProducts = generateMockPipes();
-      setProducts(mockProducts);
-      setFilteredProducts(mockProducts);
+
+      const data = await response.json();
+
+      if (!data.products) {
+        console.warn('No products data received');
+        setProducts([]);
+        setFilteredProducts([]);
+        return;
+      }
+
+      setProducts(data.products);
+      setFilteredProducts(data.products);
+    } catch (err) {
+      console.error('Error loading pipe products:', err);
+      setProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }
@@ -216,7 +231,7 @@ export default function PipesPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       <PipesBreadcrumb />
       <PipesHero />
       <PipesInfoSection />
@@ -261,7 +276,7 @@ export default function PipesPageContent() {
                 <PipesSortBar sortBy={sortBy} setSortBy={setSortBy} />
                 <PipesViewToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm text-gray-600">
                 Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
               </div>
             </div>
@@ -276,7 +291,7 @@ export default function PipesPageContent() {
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Previous
                   </button>
@@ -290,7 +305,7 @@ export default function PipesPageContent() {
                         className={`px-3 py-2 text-sm font-medium rounded-md ${
                           currentPage === pageNum
                             ? 'bg-dope-orange-500 text-white'
-                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700'
+                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
                         }`}
                       >
                         {pageNum}
@@ -301,7 +316,7 @@ export default function PipesPageContent() {
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Next
                   </button>

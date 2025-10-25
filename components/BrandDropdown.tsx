@@ -23,12 +23,12 @@ export function BrandDropdown({ isOpen, onClose }: BrandDropdownProps) {
   useEffect(() => {
     async function fetchBrands() {
       try {
-        const response = await fetch('/api/zoho/sync-brands');
-        const data = await response.json();
-        
-        if (data.success && data.brands) {
+        const response = await fetch('/api/brands');
+        const brands = await response.json();
+
+        if (Array.isArray(brands)) {
           // Sort brands by product count (descending) and then by name
-          const sortedBrands = data.brands
+          const sortedBrands = brands
             .sort((a: Brand, b: Brand) => {
               if (b.product_count !== a.product_count) {
                 return (b.product_count || 0) - (a.product_count || 0);
@@ -36,7 +36,7 @@ export function BrandDropdown({ isOpen, onClose }: BrandDropdownProps) {
               return a.name.localeCompare(b.name);
             })
             .slice(0, 10); // Show top 10 brands
-          
+
           setBrands(sortedBrands);
         } else {
           setError('Failed to load brands');

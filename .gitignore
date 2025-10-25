@@ -120,6 +120,17 @@ test-results/
 playwright-report/
 playwright/.cache/
 
+# Development test and check scripts
+test-*.js
+check-*.js
+*-test.js
+*-check.js
+*.json
+
 # Local development files
 .local/
 local/
+
+# MCP configuration files with secrets
+cline_mcp_settings.json
+mcp_settings.json
