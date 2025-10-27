@@ -5,13 +5,6 @@ import { Search, ChevronDown, Clock, TrendingUp } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
-interface SearchCategory {
-  label: string
-  value: string
-  href: string
-  type: 'product' | 'collection'
-}
-
 interface SearchSuggestion {
   type: 'product' | 'brand' | 'category'
   id: string
@@ -22,29 +15,7 @@ interface SearchSuggestion {
   url: string
 }
 
-const searchCategories: SearchCategory[] = [
-  // Product Types
-  { label: 'All Products', value: 'all', href: '/products', type: 'product' },
-  { label: 'THCA Flower', value: 'thca', href: '/products?q=thca', type: 'product' },
-  { label: 'Pre-Rolls', value: 'pre-rolls', href: '/pre-rolls', type: 'product' },
-  { label: 'Bongs', value: 'bongs', href: '/bongs', type: 'product' },
-  { label: 'Hand Pipes', value: 'pipes', href: '/pipes', type: 'product' },
-  { label: 'Dab Rigs', value: 'dab-rigs', href: '/products?category=dab-rigs', type: 'product' },
-  { label: 'Vaporizers', value: 'vaporizers', href: '/products?category=vaporizers', type: 'product' },
-  { label: 'E-Rigs', value: 'e-rigs', href: '/products?q=e-rig', type: 'product' },
-  { label: 'Dab Accessories', value: 'dab-accessories', href: '/products?q=dab', type: 'product' },
-  { label: 'Torches', value: 'torches', href: '/products?q=torch', type: 'product' },
-  { label: 'Edibles', value: 'edibles', href: '/products?q=edibles', type: 'product' },
-  { label: 'CBD Products', value: 'cbd', href: '/products?q=cbd', type: 'product' },
-  { label: 'Concentrates', value: 'concentrates', href: '/products?q=concentrates', type: 'product' },
-  { label: 'THCA Vapes', value: 'thca-vapes', href: '/products?q=thca+vape', type: 'product' },
-  { label: 'Hookahs', value: 'hookahs', href: '/products?q=hookah', type: 'product' },
 
-  // Collection Categories
-  { label: 'Torches & Lighters', value: 'torches', href: '/products?q=torch', type: 'collection' },
-  { label: 'DOPE CLUB', value: 'dope-club', href: '/products?q=rolling', type: 'collection' },
-  { label: 'Brands', value: 'brands', href: '/brands', type: 'collection' },
-]
 
 const placeholderWords = [
   'products',
@@ -62,8 +33,6 @@ const placeholderWords = [
 ]
 
 export default function EnhancedSearchBar() {
-  const [selectedCategory, setSelectedCategory] = useState<SearchCategory>(searchCategories[0])
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [displayText, setDisplayText] = useState(placeholderWords[0])
@@ -72,17 +41,7 @@ export default function EnhancedSearchBar() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [loadingSuggestions, setLoadingSuggestions] = useState(false)
   const router = useRouter()
-  const dropdownRef = useRef<HTMLDivElement>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
-
-  // Handle case where router might not be available
-  const safeRouter = router || {
-    push: (href: string) => {
-      if (typeof window !== 'undefined') {
-        window.location.href = href
-      }
-    }
-  }
 
   // Smooth typing animation for placeholder
   useEffect(() => {
@@ -150,15 +109,10 @@ export default function EnhancedSearchBar() {
     return () => clearTimeout(debounceTimer)
   }, [searchQuery])
 
-  // Close dropdowns when clicking outside
+  // Close suggestions dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
-
-      // Close category dropdown if clicking outside
-      if (dropdownRef.current && !dropdownRef.current.contains(target)) {
-        setIsDropdownOpen(false)
-      }
 
       // Close suggestions dropdown if clicking outside
       if (suggestionsRef.current && !suggestionsRef.current.contains(target)) {
@@ -169,16 +123,6 @@ export default function EnhancedSearchBar() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
-
-  const handleCategorySelect = (category: SearchCategory) => {
-    setSelectedCategory(category)
-    setIsDropdownOpen(false)
-
-    // If user selects a category, navigate to that category page
-    if (!searchQuery.trim()) {
-      safeRouter.push(category.href)
-    }
-  }
 
   const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
     setShowSuggestions(false)
@@ -211,8 +155,8 @@ export default function EnhancedSearchBar() {
     if (e) e.preventDefault()
 
     if (!searchQuery.trim()) {
-      // No search query, just go to selected category
-      router.push(selectedCategory.href)
+      // No search query, go to products page
+      router.push('/products')
       return
     }
 
@@ -225,7 +169,6 @@ export default function EnhancedSearchBar() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           query: searchQuery,
-          category: selectedCategory.value,
           userAgent: navigator.userAgent
         })
       }).catch(() => {}) // Ignore analytics errors
@@ -236,11 +179,6 @@ export default function EnhancedSearchBar() {
     // Build search URL - redirect to dedicated search results page
     const params = new URLSearchParams()
     params.set('q', searchQuery.trim())
-
-    // Add category filter if not "all"
-    if (selectedCategory.value !== 'all') {
-      params.set('category', selectedCategory.value)
-    }
 
     const searchUrl = `/search?${params.toString()}`
     router.push(searchUrl)
@@ -260,76 +198,11 @@ export default function EnhancedSearchBar() {
     }
   }
 
-  const currentPlaceholder = `Search for dope ${displayText}`
+  const currentPlaceholder = `Search Highway 420 for ${displayText}`
 
   return (
     <div className="relative max-w-4xl w-full mx-auto">
       <form onSubmit={handleSearch} className="flex bg-white rounded-lg shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl">
-        {/* Category Dropdown */}
-        <div className="relative z-20" ref={dropdownRef}>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsDropdownOpen(!isDropdownOpen);
-            }}
-            className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 transition-colors border-r border-gray-300 min-w-[140px] text-left relative z-10 cursor-pointer"
-          >
-            <span className="text-gray-700 font-medium truncate">
-              {selectedCategory.label}
-            </span>
-            <ChevronDown
-              className={`w-4 h-4 text-gray-500 transition-transform ${
-                isDropdownOpen ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto min-w-[280px] w-max">
-              {/* Product Types Section */}
-              <div className="px-3 py-2 bg-gray-50 border-b border-gray-200">
-                <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Product Types</span>
-              </div>
-              {searchCategories.filter(cat => cat.type === 'product').map((category) => (
-                <button
-                  key={category.value}
-                  type="button"
-                  onClick={() => handleCategorySelect(category)}
-                  className={`w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors ${
-                    selectedCategory.value === category.value
-                      ? 'bg-dope-orange-50 text-dope-orange-600 font-medium'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {category.label}
-                </button>
-              ))}
-
-              {/* Collection Categories Section */}
-              <div className="px-3 py-2 bg-gray-50 border-y border-gray-200">
-                <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Collection Categories</span>
-              </div>
-              {searchCategories.filter(cat => cat.type === 'collection').map((category) => (
-                <button
-                  key={category.value}
-                  type="button"
-                  onClick={() => handleCategorySelect(category)}
-                  className={`w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors ${
-                    selectedCategory.value === category.value
-                      ? 'bg-dope-orange-50 text-dope-orange-600 font-medium'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {category.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
         {/* Search Input */}
         <div className="flex-1 relative">
           <input
@@ -351,7 +224,7 @@ export default function EnhancedSearchBar() {
             >
               {loadingSuggestions ? (
                 <div className="p-4 text-center text-gray-500">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-dope-orange-500 mx-auto"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 mx-auto" style={{ borderColor: '#2d8f47' }}></div>
                   <span className="text-sm mt-2 block">Searching...</span>
                 </div>
               ) : suggestions.length > 0 ? (
@@ -373,11 +246,11 @@ export default function EnhancedSearchBar() {
                           />
                         </div>
                       ) : (
-                        <div className="w-10 h-10 bg-dope-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#dcfce7' }}>
                           {suggestion.type === 'brand' ? (
-                            <TrendingUp className="w-5 h-5 text-dope-orange-600" />
+                            <TrendingUp className="w-5 h-5" style={{ color: '#2d8f47' }} />
                           ) : (
-                            <Search className="w-5 h-5 text-dope-orange-600" />
+                            <Search className="w-5 h-5" style={{ color: '#2d8f47' }} />
                           )}
                         </div>
                       )}
@@ -388,7 +261,7 @@ export default function EnhancedSearchBar() {
                         <div className="text-sm text-gray-500 truncate">
                           {suggestion.subtitle}
                           {suggestion.price && (
-                            <span className="ml-2 font-medium text-dope-orange-600">
+                            <span className="ml-2 font-medium" style={{ color: '#2d8f47' }}>
                               ${suggestion.price}
                             </span>
                           )}
@@ -411,7 +284,8 @@ export default function EnhancedSearchBar() {
         <button
           type="submit"
           onClick={() => handleSearch()}
-          className="px-6 py-3 bg-dope-orange-500 hover:bg-dope-orange-600 text-white transition-colors flex items-center gap-2 font-medium"
+          className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white transition-colors flex items-center gap-2 font-medium"
+          style={{ backgroundColor: '#2d8f47' }}
         >
           <Search className="w-5 h-5" />
           <span className="hidden sm:inline">Search</span>

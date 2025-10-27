@@ -1,8 +1,8 @@
 /**
- * DOPE CITY Universal Page Template
- * 
+ * HIGHWAY 420 Universal Page Template
+ *
  * This template imports all global components and provides a standardized
- * structure for creating new pages on the DOPE CITY website.
+ * structure for creating new pages on the HIGHWAY 420 website.
  * 
  * Usage:
  * 1. Copy this template to your new page location
@@ -19,8 +19,8 @@ import { Metadata } from 'next';
 
 // === GLOBAL LAYOUT COMPONENTS ===
 import GlobalMasthead from '../app/components/GlobalMasthead';
-import DopeCityHeader from '../components/DopeCityHeader';
-import DopeCityFooter from '../components/DopeCityFooter';
+import Highway420Header from '../components/DopeCityHeader';
+import Highway420Footer from '../components/Highway420Footer';
 
 // === NAVIGATION & SEARCH ===
 import EnhancedSearchBar from '../app/components/EnhancedSearchBar';
@@ -112,11 +112,11 @@ interface Product {
 
 // === METADATA (Update for your page) ===
 export const metadata: Metadata = {
-  title: 'Page Title | DOPE CITY',
+  title: 'Page Title | HIGHWAY 420',
   description: 'Page description for SEO',
   keywords: 'keywords, separated, by, commas',
   openGraph: {
-    title: 'Page Title | DOPE CITY',
+    title: 'Page Title | HIGHWAY 420',
     description: 'Page description for social sharing',
     type: 'website',
     images: [
@@ -124,7 +124,7 @@ export const metadata: Metadata = {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'DOPE CITY'
+        alt: 'HIGHWAY 420'
       }
     ]
   }
@@ -187,7 +187,7 @@ export default function PageTemplate({
             <p className="text-gray-600">Loading...</p>
           </div>
         </div>
-        <DopeCityFooter />
+        <Highway420Footer />
       </div>
     );
   }
@@ -204,7 +204,7 @@ export default function PageTemplate({
         <GlobalMasthead />
         
         {/* Alternative Header (choose one) */}
-        {/* <DopeCityHeader /> */}
+        {/* <Highway420Header /> */}
         
         {/* Enhanced Search Bar (if needed separately) */}
         {showSearch && (
@@ -306,7 +306,7 @@ export default function PageTemplate({
         )}
 
         {/* Global Footer */}
-        <DopeCityFooter />
+        <Highway420Footer />
 
         {/* Toast Notifications */}
         <Toaster />

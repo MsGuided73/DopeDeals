@@ -1,20 +1,19 @@
 import "./globals.css";
 import AppProviders from "./providers";
-import DopeCityFooter from "../components/DopeCityFooter";
+import Highway420Footer from "../components/Highway420Footer";
 import ScrollingBanner from "./components/ScrollingBanner";
 
 export const metadata = {
-  title: "DOPE CITY - Premium Cannabis Culture & Smoke Shop",
-  description: "Welcome to DOPE CITY - Where premium meets street. Discover the finest smoking accessories, CBD products, and cannabis culture essentials.",
+  title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
+  description: "Welcome to HIGHWAY 420 - Where premium meets street. Discover the finest smoking accessories, CBD products, and cannabis culture essentials.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Font Preloading */}
-        <link rel="preload" href="/fonts/chalets-webfont.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/chalets-webfont.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+        {/* Font Preloading - Highway Gothic */}
+        <link rel="preload" href="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/gothic_highway/HWYGOTH.TTF" as="font" type="font/ttf" crossOrigin="anonymous" />
 
         {/* DNS Prefetch for External Domains */}
         <link rel="dns-prefetch" href="//qirbapivptotybspnbet.supabase.co" />
@@ -40,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="flex-1">
               {children}
             </main>
-            <DopeCityFooter />
+            <Highway420Footer />
           </div>
         </AppProviders>
       </body>

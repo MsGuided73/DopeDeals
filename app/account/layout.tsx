@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { requireAuthWithRedirect } from '../lib/auth-helpers';
 import GlobalMasthead from '../components/GlobalMasthead';
-import DopeCityFooter from '../../components/DopeCityFooter';
+import Highway420Footer from '../../components/DopeCityFooter';
 import Link from 'next/link';
 
 export default async function AccountLayout({ children }: { children: ReactNode }) {
@@ -84,7 +84,7 @@ export default async function AccountLayout({ children }: { children: ReactNode 
         </div>
       </div>
       
-      <DopeCityFooter />
+      <Highway420Footer />
     </div>
   );
 }

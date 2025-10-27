@@ -4,7 +4,7 @@ import { User, ShoppingCart, Search, Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useCart } from './contexts/CartContext';
 
-export default function DopeCityHeader() {
+export default function Highway420Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThcaDropdownOpen, setIsThcaDropdownOpen] = useState(false);
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
@@ -61,8 +61,8 @@ export default function DopeCityHeader() {
           <div className="flex items-center">
             <Link href="/" aria-label="Go to home" className="inline-block">
               <h1 className="text-2xl lg:text-3xl font-black text-white tracking-wider">
-                <span className="text-white">DOPE</span>
-                <span className="text-yellow-400 ml-2">CITY</span>
+                <span className="text-white">HIGHWAY</span>
+                <span className="text-yellow-400 ml-2">420</span>
               </h1>
             </Link>
           </div>
@@ -225,7 +225,7 @@ export default function DopeCityHeader() {
               <input
                 type="text"
                 name="q"
-                placeholder="Search For Dope Things"
+                placeholder="Search Highway 420"
                 className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               />
               <button type="submit" aria-label="Search" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -265,7 +265,7 @@ export default function DopeCityHeader() {
             <input
               type="text"
               name="q"
-              placeholder="Search For Dope Things"
+              placeholder="Search Highway 420"
               className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
             />
             <button type="submit" aria-label="Search" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">

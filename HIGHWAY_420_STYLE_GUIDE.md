@@ -1,4 +1,4 @@
-# DOPE CITY - Brand Style Guide & Design System
+# HIGHWAY 420 - Brand Style Guide & Design System
 
 **Premium Cannabis Culture | Street Aesthetic | Luxury Experience**
 
@@ -8,10 +8,10 @@
 
 ### **MANDATORY RULES - NEVER VIOLATE**
 
-#### **1. Chalets Font Rules**
-- **NEVER BOLD**: Chalets font must NEVER be bold-faced (`font-weight: normal` always)
+#### **1. Highway Gothic Font Rules**
+- **NEVER BOLD**: Highway Gothic font must NEVER be bold-faced (`font-weight: normal` always)
 - **TIGHT SPACING**: Use `letter-spacing: -0.01em` or `-0.02em` for tighter letter spacing
-- **NO OVERRIDES**: Never apply `font-weight: bold` or `font-weight: 600+` to Chalets
+- **NO OVERRIDES**: Never apply `font-weight: bold` or `font-weight: 600+` to Highway Gothic
 
 #### **2. Product Grid Layout Rules**
 - **MAXIMUM 3 COLUMNS**: Never more than 3 images per row on any screen size
@@ -45,7 +45,7 @@
 ### **Brand Voice & Tone**
 - **Authentic**: Real, genuine, no corporate BS
 - **Confident**: We know what's good, we're the experts
-- **Inclusive**: Everyone's welcome in DOPE CITY
+- **Inclusive**: Everyone's welcome in HIGHWAY 420
 - **Premium**: Quality over quantity, always
 - **Street Smart**: Urban culture, hip-hop influence, street credibility
 
@@ -57,10 +57,10 @@
 
 #### **Primary Logo**
 ```
-DOPE CITY
+HIGHWAY 420
 ```
-- **Font**: Chalets (custom premium font)
-- **Treatment**: "DOPE" in white, "CITY" in orange (#ff6b35)
+- **Font**: Highway Gothic (custom premium font)
+- **Treatment**: "HIGHWAY" in white, "420" in orange (#ff6b35)
 - **Spacing**: 1-character space between words
 - **Weight**: Normal (400) - NEVER BOLD
 - **Tracking**: Tighter (-0.02em) - LESS SPACE BETWEEN LETTERS
@@ -68,7 +68,7 @@ DOPE CITY
 #### **Typography Hierarchy**
 
 **Headlines (H1-H2)**
-- **Font**: Chalets (NEVER BOLD)
+- **Font**: Highway Gothic (NEVER BOLD)
 - **Weight**: Normal (400) - CRITICAL: Never use bold
 - **Sizes**:
   - H1: 3xl-6xl (mobile-desktop)
@@ -77,7 +77,7 @@ DOPE CITY
 - **Treatment**: All caps, tight tracking (-0.02em)
 
 **Subheadings (H3-H4)**
-- **Font**: Chalets (NEVER BOLD)
+- **Font**: Highway Gothic (NEVER BOLD)
 - **Weight**: Normal (400) - CRITICAL: Never use bold
 - **Sizes**: xl-2xl
 - **Color**: White, Gray-100, or Gold
@@ -269,7 +269,7 @@ DOPE CITY
 - **Background**: bg-black/90 backdrop-blur-md
 - **Border**: border-b border-white/10
 - **Height**: h-16 lg:h-20
-- **Logo**: Chalets font, DOPE (white) CITY (white or orange)
+- **Logo**: Highway Gothic font, HIGHWAY (white) 420 (white or orange)
 - **Links**: White text, gold to orange gradient hover
 
 #### **Mobile Menu**
@@ -374,7 +374,7 @@ DOPE CITY
 
 ### **Performance Optimization**
 - **Critical CSS**: Inline above-the-fold styles
-- **Font Loading**: Preload Chalets font
+- **Font Loading**: Preload Highway Gothic font
 - **Image Optimization**: WebP format, proper sizing
 - **Bundle Splitting**: Code splitting for better loading
 
@@ -536,12 +536,12 @@ DOPE CITY
 <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black">
   <div className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-20"></div>
   <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-    <h1 className="font-chalets text-6xl lg:text-8xl font-black text-white mb-6 dope-text-shadow">
-      WELCOME TO <span className="text-yellow-400">DOPE CITY</span>
+    <h1 className="font-highway text-6xl lg:text-8xl font-normal text-white mb-6 dope-text-shadow">
+      WELCOME TO <span className="text-yellow-400">HIGHWAY 420</span>
     </h1>
     <p className="text-xl lg:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
       Premium cannabis culture meets street authenticity.
-      Discover the dopest products in the game.
+      Discover the finest products in the game.
     </p>
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
       <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 hover:scale-105">

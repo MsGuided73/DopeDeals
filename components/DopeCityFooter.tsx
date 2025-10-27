@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Instagram, Twitter, Facebook, Youtube } from 'lucide-react';
 
-export default function DopeCityFooter() {
+export default function Highway420Footer() {
   const [email, setEmail] = useState('');
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
@@ -15,7 +15,7 @@ export default function DopeCityFooter() {
       console.log('Newsletter signup:', email);
 
       // Show success message (you can replace with toast notification)
-      alert('Thanks for joining the DOPE CITY community! 🔥');
+      alert('Thanks for joining the HIGHWAY 420 community! 🔥');
       setEmail('');
     } catch (error) {
       console.error('Newsletter signup error:', error);
@@ -25,13 +25,13 @@ export default function DopeCityFooter() {
 
   return (
     <footer className="relative bg-black">
-      {/* DOPE CITY Skyline Background */}
+      {/* HIGHWAY 420 Skyline Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Skyline Background Image */}
         <div
           className="absolute inset-0 opacity-45 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/background/footer/DopeCity%20Skyline%20-%20Dk1.png')"
+            backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/background/footer/Highway420%20Skyline%20-%20Dk1.png')"
           }}
         ></div>
       </div>
@@ -115,9 +115,9 @@ export default function DopeCityFooter() {
                 <li><Link href="/products?filter=new" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Newest Products</Link></li>
                 <li><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shop by Brand</Link></li>
                 <li><Link href="/gift-cards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Gift Cards</Link></li>
-                <li><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">DOPE CITY Rewards</Link></li>
+                <li><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">HIGHWAY 420 Rewards</Link></li>
                 <li><Link href="/glossary" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Glossary of Terms</Link></li>
-                <li><Link href="/blog" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">DOPE Dispatches</Link></li>
+                <li><Link href="/blog" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">HIGHWAY 420 Dispatches</Link></li>
               </ul>
             </div>
 
@@ -197,22 +197,22 @@ export default function DopeCityFooter() {
           </div>
         </div>
 
-        {/* Bottom Copyright with DOPE CITY Branding */}
+        {/* Bottom Copyright with HIGHWAY 420 Branding */}
         <div className="mt-12 text-center">
           <div className="mb-8">
-            <p className="text-gray-200 text-sm mb-2 drop-shadow-lg">
-              © 2025 DOPE CITY. All rights reserved. | Designed with
+              <p className="text-gray-200 text-sm mb-2 drop-shadow-lg">
+              © 2025 HIGHWAY 420. All rights reserved. | Designed with
               <span className="text-dope-orange-400 mx-1">♥</span>
               for better shopping experience.
             </p>
           </div>
 
-          {/* Large DOPE CITY Branding */}
+          {/* Large HIGHWAY 420 Branding */}
           <div className="mb-8">
             <Link href="/" className="inline-block dope-hover hover:scale-105">
               <h1 className="font-chalets text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal' }}>
-                <span className="text-white drop-shadow-2xl">DOPE</span>
-                <span className="text-white ml-4 drop-shadow-2xl">CITY</span>
+                <span className="text-white drop-shadow-2xl">HIGHWAY</span>
+                <span className="text-white ml-4 drop-shadow-2xl">420</span>
               </h1>
             </Link>
           </div>

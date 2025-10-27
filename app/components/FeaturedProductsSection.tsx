@@ -186,7 +186,7 @@ export default function FeaturedProductsSection() {
                 <div className="flex gap-4">
                   <Link
                     href="/product/puffco-proxy"
-                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-bold transition-all duration-300 text-center text-base hover:scale-105"
+                    className="flex-1 px-6 py-3 text-green-600 border-2 border-green-600 font-bold rounded-xl transition-all duration-300 text-center text-base hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                   >
                     View Details
                   </Link>
@@ -198,7 +198,7 @@ export default function FeaturedProductsSection() {
                         console.error('Failed to add to cart:', error);
                       }
                     }}
-                    className="flex-1 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 text-base hover:scale-105 hover:shadow-lg"
+                    className="flex-1 px-6 py-3 text-green-600 border-2 border-green-600 font-bold rounded-xl transition-all duration-300 text-center text-base hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                   >
                     Add to Cart
                   </button>
@@ -212,7 +212,7 @@ export default function FeaturedProductsSection() {
         <div className="text-center mb-8">
           <Link
             href="/products"
-            className="text-dope-orange-500 hover:text-dope-orange-600 font-medium text-lg transition-colors"
+            className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
           >
             Shop all →
           </Link>
@@ -280,7 +280,7 @@ export default function FeaturedProductsSection() {
       <div className="text-center mb-8">
         <Link
           href="/products"
-          className="text-dope-orange-500 hover:text-dope-orange-600 font-medium text-lg transition-colors"
+          className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
         >
           Shop all →
         </Link>
@@ -378,11 +378,11 @@ export default function FeaturedProductsSection() {
                     )}
                   </div>
 
-                  {/* Actions - Better styled buttons */}
+                  {/* Actions - Ghost buttons with green theme */}
                   <div className="flex gap-2">
                     <Link
                       href={`/product/${product.id}`}
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-center text-sm hover:scale-105"
+                      className="flex-1 px-4 py-2.5 text-green-600 border-2 border-green-600 font-bold rounded-lg transition-all duration-300 text-center text-sm hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                     >
                       View Details
                     </Link>
@@ -394,7 +394,7 @@ export default function FeaturedProductsSection() {
                           console.error('Failed to add to cart:', error);
                         }
                       }}
-                      className="flex-1 bg-gradient-to-r from-dope-orange-500 to-orange-600 hover:from-dope-orange-600 hover:to-orange-700 text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-sm hover:scale-105 hover:shadow-lg"
+                      className="flex-1 px-4 py-2.5 text-green-600 border-2 border-green-600 font-bold rounded-lg transition-all duration-300 text-center text-sm hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                     >
                       Add to Cart
                     </button>

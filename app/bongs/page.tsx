@@ -4,8 +4,8 @@ import BongsPageContent from './BongsPageContent';
 import AgeVerification from '../components/AgeVerification';
 
 export const metadata = {
-  title: 'Bongs & Water Pipes | DOPE CITY - Premium Glass Collection',
-  description: 'Shop premium glass bongs and water pipes at DOPE CITY. Beaker bongs, straight tubes, percolator bongs, and more. Free shipping on orders over $50.',
+  title: 'Bongs & Water Pipes | HIGHWAY 420 - Premium Glass Collection',
+  description: 'Shop premium glass bongs and water pipes at HIGHWAY 420. Beaker bongs, straight tubes, percolator bongs, and more. Free shipping on orders over $50.',
   keywords: 'bongs, water pipes, glass bongs, beaker bongs, straight tube bongs, percolator bongs, premium glass',
 };
 

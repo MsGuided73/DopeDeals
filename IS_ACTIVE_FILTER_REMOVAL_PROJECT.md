@@ -1,10 +1,10 @@
-# 🚀 IS_ACTIVE FILTER REMOVAL PROJECT - DOPE CITY E-COMMERCE
+# 🚀 IS_ACTIVE FILTER REMOVAL PROJECT - HIGHWAY 420 E-COMMERCE
 
 ## 📋 PROJECT OVERVIEW
 
 **Project Status**: ✅ PLANNING PHASE | ⏳ READY FOR IMPLEMENTATION
 
-**Business Context**: Pre-launch e-commerce site build-out for Dope City (smoking accessories & cannabis products)
+**Business Context**: Pre-launch e-commerce site build-out for Highway 420 (smoking accessories & cannabis products)
 
 ---
 

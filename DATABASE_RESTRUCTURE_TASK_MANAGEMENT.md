@@ -1,7 +1,7 @@
 # Database Restructuring Task Management Plan
 
 ## Overview
-This document outlines the comprehensive task management plan for restructuring the Dope City database schema to support advanced e-commerce functionality, regulatory compliance, and business intelligence for a highly regulated cannabis/hemp business.
+This document outlines the comprehensive task management plan for restructuring the Highway 420 database schema to support advanced e-commerce functionality, regulatory compliance, and business intelligence for a highly regulated cannabis/hemp business.
 
 ## Current Status
 - **Problem**: Schema design complete, need implementation of compliance-critical features

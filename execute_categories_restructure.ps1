@@ -1,13 +1,22 @@
-# Execute Dope City Categories Restructure
+# Execute Highway 420 Categories Restructure
 # This script helps you execute the categories restructure SQL against Supabase
 
-Write-Host "🚀 Starting Dope City Categories Restructure..." -ForegroundColor Green
+Write-Host "🚀 Starting Highway 420 Categories Restructure..." -ForegroundColor Green
 
 # Check if we're in the right directory
 $currentDir = Get-Location
 if (-not (Test-Path "clear_and_recreate_categories.sql")) {
     Write-Host "❌ clear_and_recreate_categories.sql not found in current directory" -ForegroundColor Red
-    Write-Host "   Make sure you're running this from the DopeDeals directory" -ForegroundColor Yellow
+    Write-Host "   Make sure you're running this from the correct directory" -ForegroundColor Yellow
++++++++ REPLACE  # Fixed duplicate -ForegroundColor Yellow
+</diff  2
+</replace_in  2
+<replace_in_file  2
+<path  2
+<replace_in_file>
+<path  2
+<replace_in_file>
+<path  2
     exit 1
 }
 

@@ -30,7 +30,7 @@ export default function PipesInfoSection() {
               <p className="text-lg">
                 From the thinkers to the tokers — some of history's brightest minds sparked their best ideas through a pipe.
                 Around here, that tradition's alive and well. Whether you're after a clean glass spoon, a wild piece of hand-blown art,
-                or a no-nonsense one-hitter for the road, Dope City's got your back.
+                or a no-nonsense one-hitter for the road, Highway 420's got your back.
               </p>
             </div>
 
@@ -209,7 +209,7 @@ export default function PipesInfoSection() {
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">📍 Where to Find the Good Stuff</h2>
                     <p className="text-lg">
-                      We're not hiding — Dope City's got all the spoons, one-hitters, and art pieces you could dream of.
+                      We're not hiding — Highway 420's got all the spoons, one-hitters, and art pieces you could dream of.
                       Order online, kick back, and we'll bring the smoke gear to your door. No guessing, no gatekeeping — just good glass and good times.
                     </p>
                   </div>

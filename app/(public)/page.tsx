@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, ShoppingCart, Search } from 'lucide-react';
 import GlobalMasthead from '../components/GlobalMasthead';
-import AgeVerification from '../components/AgeVerification';
+
 
 import StaffPicksSection from '../components/StaffPicksSection';
 import FullscreenCarousel from '../components/FullscreenCarousel';
@@ -34,15 +34,14 @@ export default function HomePage() {
 
 
       {/* Age Verification Popup */}
-      <AgeVerification />
+      {/* <AgeVerification /> */}
 
       {/* Global Masthead - Always at the top */}
       <GlobalMasthead />
 
-      {/* Main Content - Blurred when age verification is showing */}
-      <div className={`${!isAgeVerified ? 'blur-lg pointer-events-none' : ''} transition-all duration-300`}>
-        {/* Fullscreen Carousel - Now beneath the masthead */}
-        <FullscreenCarousel />
+      {/* Main Content */}
+      <div>
+
 
         {/* VIP Membership Hero Section */}
         <div className="w-full px-6 pt-1 pb-1">
@@ -71,37 +70,37 @@ export default function HomePage() {
                 VIP REWARDS
               </h2>
 
-              {/* Benefits List */}
+              {/* Benefits List - Highway 420 Brand Voice */}
               <ul className="space-y-3 text-lg font-medium mb-8">
                 <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-                  <span className="text-dope-orange mr-3">•</span>
-                  Extra Discounts
+                  <span className="mr-3" style={{ color: '#2d8f47' }}>•</span>
+                  Extra Scenic Route Savings
                 </li>
                 <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-                  <span className="text-dope-orange mr-3">•</span>
-                  Guaranteed Lowest Prices
+                  <span className="mr-3" style={{ color: '#2d8f47' }}>•</span>
+                  Best Fuel Economy Guaranteed
                 </li>
                 <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-                  <span className="text-dope-orange mr-3">•</span>
-                  Exclusive Offers and Drops
+                  <span className="mr-3" style={{ color: '#2d8f47' }}>•</span>
+                  Exclusive Roadside Attractions
                 </li>
                 <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-                  <span className="text-dope-orange mr-3">•</span>
-                  Free Gifts and Tester Products
+                  <span className="mr-3" style={{ color: '#2d8f47' }}>•</span>
+                  Free Test Drive Products
                 </li>
                 <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-                  <span className="text-dope-orange mr-3">•</span>
-                  Bonus Rewards Program
+                  <span className="mr-3" style={{ color: '#2d8f47' }}>•</span>
+                  VIP Fast Lane Program
                 </li>
                 <li className="flex items-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-                  <span className="text-dope-orange mr-3">•</span>
-                  Private Sales, Events & More
+                  <span className="mr-3" style={{ color: '#2d8f47' }}>•</span>
+                  Members-Only Pit Stops
                 </li>
               </ul>
 
               {/* CTA Button */}
-              <button className="bg-dope-orange hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                LEARN MORE
+              <button className="px-8 py-3 text-green-600 border-2 border-green-600 font-bold uppercase tracking-wide rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25">
+                TAKE THE FAST LANE
               </button>
             </div>
           </Link>
@@ -158,7 +157,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -184,7 +183,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -210,7 +209,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -236,7 +235,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -262,7 +261,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -289,7 +288,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -315,7 +314,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -341,7 +340,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -369,7 +368,7 @@ export default function HomePage() {
             <div className="absolute top-2 right-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-md blur-sm"></div>
-                <div className="relative bg-gradient-to-r from-dope-orange via-orange-400 to-dope-orange backdrop-blur-sm px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide hover:from-orange-400 hover:to-orange-600 transition-all shadow-lg border border-orange-300/30">
+                <div className="relative px-3 py-1 rounded-md text-white text-xs font-bold uppercase tracking-wide transition-all shadow-lg border border-green-600/30" style={{ background: 'linear-gradient(to right, #2d8f47, #1a5c32)' }}>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-md"></div>
                   <span className="relative z-10">SHOP</span>
                 </div>
@@ -392,10 +391,10 @@ export default function HomePage() {
         <section className="mt-24 mb-16">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
-              DOPE FEEDBACK
+              TRAVELER REVIEWS
             </h2>
             <p className="text-xl text-gray-600">
-              Real reviews from real customers
+              Real reviews from fellow travelers on the Highway 420 journey
             </p>
           </div>
 
@@ -411,7 +410,7 @@ export default function HomePage() {
                     className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">Mike Johnson</h4>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Mike J.</h4>
                     <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
@@ -431,7 +430,7 @@ export default function HomePage() {
                     className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">Sarah Chen</h4>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Sarah C.</h4>
                     <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
@@ -451,7 +450,7 @@ export default function HomePage() {
                     className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">Alex Rodriguez</h4>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Alex R.</h4>
                     <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
@@ -471,7 +470,7 @@ export default function HomePage() {
                     className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">Emma Wilson</h4>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Emma W.</h4>
                     <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
@@ -491,7 +490,7 @@ export default function HomePage() {
                     className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">David Kim</h4>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">David K.</h4>
                     <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
@@ -511,7 +510,7 @@ export default function HomePage() {
                     className="w-16 h-16 rounded-full mr-6"
                   />
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">Jessica Taylor</h4>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">Jessica T.</h4>
                     <div className="flex text-yellow-400 text-lg">
                       ★★★★★
                     </div>
@@ -527,7 +526,6 @@ export default function HomePage() {
 
         {/* Recently Viewed Products - Just above footer */}
         <RecentlyViewedProducts />
-
 
       </main>
       </div>

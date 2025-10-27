@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu } from 'lucide-react';
 import EnhancedSearchBar from './EnhancedSearchBar';
 import { useCart } from '../contexts/CartContext';
@@ -68,24 +69,35 @@ export default function GlobalMasthead() {
   return (
     <header className="sticky top-0 z-50">
       <div>
-        {/* Main Masthead - Desktop Layout (Original) - Scrolling Banner Removed */}
-        <div className="bg-black text-white px-1 flex items-center justify-between gap-2" style={{ minHeight: '140px', height: '140px' }}>
-          {/* Left: HUGE DOPE CITY Logo - Centered */}
-          <div className="flex-1 flex justify-center">
-            <div
-              className="font-chalets font-black leading-none text-white flex-shrink-0 tracking-wider"
-              style={{
-                fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                fontSize: 'clamp(4rem, 16vw, 9rem)',
-                lineHeight: '0.9',
-                fontWeight: 'normal'
-              }}
-            >
-              <Link href="/">
-                DOPE CITY
-              </Link>
-            </div>
+        {/* Promotional Banner - Highway Sign Style */}
+        <div className="bg-green-600 text-white px-4 py-2 text-center relative overflow-hidden" style={{ backgroundColor: '#2d8f47' }}>
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-2xl">🔥</span>
+            <span className="font-bold text-lg tracking-wide">SPECIAL: Free Gift for New Customers</span>
           </div>
+          {/* Highway sign decorative elements */}
+          <div className="absolute left-0 top-0 bottom-0 w-2 bg-green-700" style={{ backgroundColor: '#1a5c32' }}></div>
+          <div className="absolute right-0 top-0 bottom-0 w-2 bg-green-700" style={{ backgroundColor: '#1a5c32' }}></div>
+        </div>
+
+        {/* Main Masthead - Black Titlebar */}
+        <div className="bg-black text-white px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '140px', height: '140px' }}>
+          {/* Logo extending from top of black titlebar to down below nav */}
+          <div className="absolute top-0 left-0 z-10" style={{ top: '0px', left: '0', height: '290px', width: 'auto', overflow: 'visible' }}>
+            <Link href="/">
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+                alt="HIGHWAY 420 Logo"
+                width={200}
+                height={290}
+                className="object-contain"
+                style={{ height: '290px', width: 'auto', display: 'block' }}
+              />
+            </Link>
+          </div>
+
+          {/* Left: Space for logo */}
+          <div className="flex-1"></div>
 
           {/* Center: Search Bar */}
           <div className="flex-1 max-w-3xl mx-8 hidden md:block">
@@ -120,18 +132,17 @@ export default function GlobalMasthead() {
           <EnhancedSearchBar />
         </div>
 
-        {/* Orange divider line - Reduced thickness by 2/3 */}
+        {/* Highway sign divider line */}
         <div
-          className="h-2 bg-dope-orange-500"
+          className="h-1"
           style={{
-            backgroundColor: '#ff6b35 !important',
-            backgroundImage: 'none !important',
-            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1), inset 0 -1px 2px rgba(0,0,0,0.1)'
+            backgroundColor: '#1a5c32 !important',
+            backgroundImage: 'none !important'
           }}
         ></div>
 
-        {/* Glassmorphic nav bar - Desktop Only */}
-        <nav className="hidden md:block bg-white/90 backdrop-blur-md">
+        {/* Highway Sign Navigation Bar - Desktop Only */}
+        <nav className="hidden md:block shadow-lg" style={{ backgroundColor: '#f4f1e8' }}>
           <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
             {/* Shop Dropdown - Consolidated Categories and Brands */}
             <li
@@ -149,7 +160,7 @@ export default function GlobalMasthead() {
                 </svg>
               </button>
               {openDropdown === 'shop' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
                   <div className="py-2">
                     <Link href="/products" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">All Products</Link>
                     <div className="border-t border-gray-200/20 my-1"></div>
@@ -275,7 +286,7 @@ export default function GlobalMasthead() {
                 </svg>
               </button>
               {openDropdown === 'thca' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
                   <div className="py-2">
                     <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Flower</Link>
                     <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Pre-Rolls</Link>
@@ -310,7 +321,7 @@ export default function GlobalMasthead() {
                 </svg>
               </button>
               {openDropdown === 'bongs' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
                   <div className="py-2">
                     <Link href="/bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Bongs</Link>
                     <Link href="/bubblers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bubblers</Link>
@@ -335,7 +346,7 @@ export default function GlobalMasthead() {
                 </svg>
               </button>
               {openDropdown === 'pipes' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-50">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
                   <div className="py-2">
                     <Link href="/pipes" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Pipes</Link>
                     <Link href="/products?q=spoon+pipe" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Spoon Pipes</Link>
@@ -411,7 +422,7 @@ export default function GlobalMasthead() {
                   <User className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Welcome to DOPE CITY</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Welcome to HIGHWAY 420</h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Guest Mode - Sign in for personalized recommendations</p>
                 </div>
               </div>
