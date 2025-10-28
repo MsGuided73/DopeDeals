@@ -10,6 +10,7 @@ import {
   removeFromCart,
   formatPrice,
   getSessionId,
+  getShopReferer,
   type Cart,
   type CartItem
 } from '../lib/cart-utils';
@@ -113,6 +114,17 @@ export default function CartPage() {
     <div className="min-h-screen bg-white">
       <GlobalMasthead />
 
+      {/* Cart Breadcrumbs */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <nav className="text-sm">
+            <a href="/" className="text-gray-600 hover:text-black">Home</a>
+            <span className="mx-2 text-gray-400">›</span>
+            <span className="text-black font-medium">Shopping Cart</span>
+          </nav>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -142,7 +154,7 @@ export default function CartPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
             <p className="text-gray-600 mb-8">Add some products to get started!</p>
             <Link
-              href="/products"
+              href={getShopReferer()}
               className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
             >
               Continue Shopping
@@ -291,18 +303,50 @@ export default function CartPage() {
                   </Link>
 
                   <Link
-                    href="/products"
+                    href={getShopReferer()}
                     className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors text-center block"
                   >
                     Continue Shopping
                   </Link>
                 </div>
 
-                {/* Compliance Notice */}
-                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <p className="text-sm text-yellow-800">
-                    <strong>Note:</strong> Age verification and zipcode eligibility will be verified at checkout.
-                  </p>
+                {/* Age Verification & Compliance Notice */}
+                <div className="mt-6 space-y-3">
+                  <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0">
+                        <svg className="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-yellow-800">Age Verification Required</h4>
+                        <div className="mt-1 text-sm text-yellow-700">
+                          <p className="mb-1">All customers must be 21+ years old.</p>
+                          <p className="mb-1"><strong>United States:</strong> Age verification and delivery address eligibility will be confirmed at checkout.</p>
+                          <p className="text-xs text-yellow-600 mt-2">Ages vary by jurisdiction - federal law requires 21+ for tobacco/nicotine products.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Shopping Cart Savings */}
+                  {(cart.subtotal || 0) < 75 && (
+                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                          <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-sm text-green-700">
+                            Add <span className="font-semibold">${(75 - (cart.subtotal || 0)).toFixed(2)}</span> more for FREE shipping!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

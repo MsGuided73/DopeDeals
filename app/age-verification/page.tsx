@@ -11,10 +11,23 @@ export default function AgeVerificationPage() {
   return (
     <>
       <GlobalMasthead />
-      
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
+
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 relative">
+        {/* Logo Background Watermark */}
+        <div
+          className="absolute inset-0 opacity-20 z-0 pointer-events-none"
+          style={{
+            backgroundImage: `url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png")`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            minHeight: '100vh'
+          }}
+        ></div>
+
+        <div className="relative z-10">
+          {/* Hero Section */}
+          <div className="bg-gradient-to-r from-gray-900/95 via-black/95 to-gray-900/95 text-white py-16 backdrop-blur-sm">
           <div className="max-w-6xl mx-auto px-6 text-center">
             <h1 className="dope-city-title text-5xl md:text-6xl mb-4">
               AGE VERIFICATION

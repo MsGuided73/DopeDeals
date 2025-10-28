@@ -38,7 +38,7 @@ export default function Highway420Footer() {
         <div
           className="absolute inset-0"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            backgroundColor: 'rgba(255, 255, 255, 0.25)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)'
           }}
@@ -52,7 +52,7 @@ export default function Highway420Footer() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Discreet Shipping - Nothing to see here */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
+              <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <img
                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/icons/discreet%20icon%201.png"
                   alt="Discreet Shipping"
@@ -65,7 +65,7 @@ export default function Highway420Footer() {
 
             {/* Low Price Guarantee */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
+              <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <span className="text-green-600 font-black text-2xl">$</span>
               </div>
               <h3 className="text-black font-black text-base mb-2">LOW PRICE</h3>
@@ -74,7 +74,7 @@ export default function Highway420Footer() {
 
             {/* Easy, Hassle Free Returns */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
+              <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <Phone className="w-10 h-10 text-green-600" />
               </div>
               <h3 className="text-black font-black text-base mb-2">EASY, HASSLE FREE</h3>
@@ -83,7 +83,7 @@ export default function Highway420Footer() {
 
             {/* Get 10% Back in Rewards */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
+              <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <MapPin className="w-10 h-10 text-green-600" />
               </div>
               <h3 className="text-black font-black text-base mb-2">GET 10% BACK IN</h3>
@@ -93,7 +93,7 @@ export default function Highway420Footer() {
         </div>
 
         {/* Glassmorphic Main Footer */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+        <div className="bg-white/50 backdrop-blur-md rounded-2xl p-8 border border-white/20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
             {/* Help Section */}
@@ -135,15 +135,14 @@ export default function Highway420Footer() {
               <h3 className="text-black font-black text-xl mb-6">SHOP NOW</h3>
               <ul className="space-y-3">
                 <li><Link href="/products" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>All Products</Link></li>
-                <li><Link href="/products?q=thca" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>THCA Flower</Link></li>
+                <li><Link href="/thca" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>THCA & More</Link></li>
                 <li><Link href="/pre-rolls" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Pre-Rolls</Link></li>
                 <li><Link href="/bongs" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Bongs</Link></li>
                 <li><Link href="/bubblers" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Bubblers</Link></li>
-                <li><Link href="/pipes" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Hand Pipes</Link></li>
-                <li><Link href="/products?category=dab-rigs" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Dab Rigs</Link></li>
-                <li><Link href="/products?category=vaporizers" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Vaporizers</Link></li>
-                <li><Link href="/products?q=e-rig" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">E-Rigs</Link></li>
-                <li><Link href="/products?category=accessories" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Accessories</Link></li>
+                <li><Link href="/pipes" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Pipes</Link></li>
+                <li><Link href="/dab-rigs" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Dab Rigs</Link></li>
+                <li><Link href="/vaporizers" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Vaporizers</Link></li>
+                <li><Link href="/accessories" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Accessories</Link></li>
                 <li><Link href="/brands" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Shop by Brand</Link></li>
               </ul>
             </div>
@@ -222,7 +221,7 @@ export default function Highway420Footer() {
           </div>
 
           {/* HIGHWAY 420 Logo */}
-          <div className="mb-8">
+          <div className="mb-12">
             <Link href="/" className="inline-block transition-transform hover:scale-105">
               <img
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"

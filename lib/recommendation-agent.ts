@@ -46,6 +46,223 @@ export class RecommendationAgent {
   }
 
   /**
+   * Accessory and ecosystem detection logic
+   */
+  private detectAccessoryRelationships(currentProduct: any): {
+    accessoryType: string;
+    relatedCategories: string[];
+    isPrimaryProduct: boolean;
+  } {
+
+    // Define accessory relationships by category and keywords
+    const accessoryPatterns = {
+      pipes: {
+        accessories: ['bowl', 'stem', 'screen', 'glass adapter', 'carb cap'],
+        relatedCategories: ['pipes', 'bongs', 'bowls-stems', 'screens'],
+        brand: 'pipe accessories'
+      },
+      bongs: {
+        accessories: ['bowl', 'downstem', 'ice catcher', 'percolator', 'carb cap', 'water adapter'],
+        relatedCategories: ['bongs', 'bowls-stems', 'percolators', 'downstems'],
+        brand: 'bong accessories'
+      },
+      vaporizers: {
+        accessories: ['cartridge', 'battery', 'coil', 'wick', 'screen'],
+        relatedCategories: ['vapes', 'vape-accessories', 'cartridges', 'batteries'],
+        brand: 'vape accessories'
+      },
+      dab_rigs: {
+        accessories: ['dabber', 'domeless nail', 'e-nail', 'carb cap', 'water tool'],
+        relatedCategories: ['dab-rigs', 'nails', 'carbcaps', 'tools'],
+        brand: 'dab rig accessories'
+      },
+      grinders: {
+        accessories: ['screen', 'magnetic lid', 'storage', 'pollen press'],
+        relatedCategories: ['grinders', 'screens', 'storage'],
+        brand: 'grinder accessories'
+      }
+    };
+
+    const productText = `${currentProduct.name} ${currentProduct.description || ''}`.toLowerCase();
+
+    // Detect if this is an accessory product
+    for (const [primaryCategory, pattern] of Object.entries(accessoryPatterns)) {
+      for (const accessory of pattern.accessories) {
+        if (productText.includes(accessory)) {
+          return {
+            accessoryType: accessory,
+            relatedCategories: [primaryCategory, ...pattern.relatedCategories],
+            isPrimaryProduct: false // This is an accessory
+          };
+        }
+      }
+
+      // Check if it's the primary product
+      if (productText.includes(primaryCategory) || currentProduct.category_id === primaryCategory) {
+        return {
+          accessoryType: 'primary',
+          relatedCategories: pattern.relatedCategories,
+          isPrimaryProduct: true // This is the main product
+        };
+      }
+    }
+
+    // Default fallback
+    return {
+      accessoryType: 'unknown',
+      relatedCategories: [],
+      isPrimaryProduct: true
+    };
+  }
+
+  /**
+   * Get complete setup recommendations
+   */
+  async getEcosystemRecommendations(currentProduct: any, limit: number = 4): Promise<ProductRecommendation[]> {
+    const recommendations: ProductRecommendation[] = [];
+    const accessoryInfo = this.detectAccessoryRelationships(currentProduct);
+
+    if (accessoryInfo.relatedCategories.length === 0) {
+      return recommendations;
+    }
+
+    // Get all products in related categories
+    const relatedProducts = [];
+    for (const categoryId of accessoryInfo.relatedCategories) {
+      try {
+        const categoryProducts = await this.storage.getProducts({ categoryId });
+        relatedProducts.push(...categoryProducts);
+      } catch (error) {
+        console.warn(`Error fetching ${categoryId} products:`, error);
+      }
+    }
+
+    if (relatedProducts.length === 0) {
+      return recommendations;
+    }
+
+    // Brand matching boost
+    const brandMatchBoost = (product: any) =>
+      product.brand_id === currentProduct.brand_id ? 0.3 : 0;
+
+    // Score products by relevance
+    const scoredProducts = relatedProducts
+      .filter(product => product.id !== currentProduct.id)
+      .map(product => {
+        let score = 0.5;
+        let reason = 'Complements your setup';
+
+        // Primary product recommendations (needs accessories)
+        if (accessoryInfo.isPrimaryProduct) {
+          const productText = `${product.name} ${product.description || ''}`.toLowerCase();
+
+          // Check if this is a common accessory for the primary product
+          const accessoryKeywords = {
+            pipes: ['bowl', 'stem', 'carb cap'],
+            bongs: ['downstem', 'ice catcher', 'bowl', 'banger'],
+            vaporizers: ['cartridge', 'battery'],
+            dab_rigs: ['dabber', 'nail', 'domeless']
+          };
+
+          const categoryKey = Object.keys(accessoryKeywords).find(key =>
+            currentProduct.category_id?.includes(key) ||
+            `${currentProduct.name}`.toLowerCase().includes(key)
+          );
+
+          if (categoryKey && accessoryKeywords[categoryKey as keyof typeof accessoryKeywords]
+            .some(keyword => productText.includes(keyword))) {
+            score = 0.9 + brandMatchBoost(product);
+            reason = `Essential accessory for your ${categoryKey}`;
+          }
+        }
+
+        // Accessory product recommendations (suggest related accessories or primary products)
+        else {
+          score = 0.7 + brandMatchBoost(product);
+          reason = `Perfect companion to your ${accessoryInfo.accessoryType}`;
+        }
+
+        return {
+          productId: product.id,
+          product,
+          score,
+          reason,
+          category: 'personalized' as const
+        };
+      })
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit);
+
+    return scoredProducts;
+  }
+
+  /**
+   * Enhanced brand and category matching
+   */
+  async getBrandCategoryRecommendations(
+    userPreferences: any,
+    currentProduct: any,
+    excludeProductIds: string[] = []
+  ): Promise<ProductRecommendation[]> {
+
+    const recommendations: ProductRecommendation[] = [];
+
+    // Get brand match products (same brand, different categories)
+    if (currentProduct?.brand_id) {
+      try {
+        const brandProducts = await this.storage.getProducts({ brandId: currentProduct.brand_id });
+
+        brandProducts.forEach(product => {
+          if (product.id !== currentProduct.id && !excludeProductIds.includes(product.id)) {
+            const categoryMatch = product.category_id === currentProduct.category_id ? 1 : 0.5;
+            const score = 0.8 * categoryMatch;
+
+            recommendations.push({
+              productId: product.id,
+              product,
+              score,
+              reason: categoryMatch === 1
+                ? 'More from the same brand and category'
+                : 'Another great product from this brand',
+              category: 'same_brand'
+            });
+          }
+        });
+      } catch (error) {
+        console.warn('Error fetching brand match products:', error);
+      }
+    }
+
+    // Get category match products (same category, different brands)
+    if (currentProduct?.category_id) {
+      try {
+        const categoryProducts = await this.storage.getProducts({ categoryId: currentProduct.category_id });
+
+        categoryProducts.forEach(product => {
+          if (product.id !== currentProduct.id && !excludeProductIds.includes(product.id)) {
+            const brandMatchBoost = userPreferences.favoriteBrands.get(product.brand_id) ? 0.2 : 0;
+            const score = 0.6 + brandMatchBoost;
+
+            recommendations.push({
+              productId: product.id,
+              product,
+              score,
+              reason: brandMatchBoost > 0
+                ? 'Similar style from a brand you love'
+                : 'Similar style option',
+              category: 'similar_flavor'
+            });
+          }
+        });
+      } catch (error) {
+        console.warn('Error fetching category match products:', error);
+      }
+    }
+
+    return recommendations;
+  }
+
+  /**
    * Get personalized product recommendations for a user
    */
   async getPersonalizedRecommendations(context: RecommendationContext): Promise<ProductRecommendation[]> {

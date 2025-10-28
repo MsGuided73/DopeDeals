@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import GlobalMasthead from '../app/components/GlobalMasthead';
+import ProductGallery from '../app/components/ProductGallery';
 import { addToCart } from '../app/lib/cart-utils';
 
 interface Product {
@@ -13,6 +14,7 @@ interface Product {
   price: number;
   sku: string;
   image_url?: string;
+  image_urls?: string[]; // Added for variant support
   stock_quantity?: number;
   materials?: string[];
   brand_id?: string;
@@ -141,28 +143,15 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid gap-12 md:grid-cols-2">
           
-          {/* Product Image */}
+          {/* Product Gallery */}
           <div className="space-y-4">
-            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden border">
-              {imageUrl ? (
-                <Image
-                  src={imageUrl}
-                  alt={product.name}
-                  width={600}
-                  height={600}
-                  className="object-cover w-full h-full"
-                  priority
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">📦</div>
-                    <div className="text-lg font-medium">No Image Available</div>
-                    <div className="text-sm">Product image coming soon</div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <ProductGallery
+              image_url={product.image_url}
+              image_urls={product.image_urls || []}
+              productName={product.name}
+              productId={product.id}
+              viewMode="detail"
+            />
           </div>
 
           {/* Product Details */}

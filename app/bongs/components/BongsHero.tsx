@@ -40,7 +40,7 @@ export default function BongsHero() {
 
         {/* Enhanced Description */}
         <p className="text-base md:text-lg text-gray-800 mt-3 max-w-3xl font-medium leading-relaxed">
-          💨 From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).
+          Enjoy next-level filtration with our premium bongs and bubblers. Designed for flavor and airflow, these glass pieces make every pull smoother than the last. Shop bongs and bubblers online for a cleaner, cooler smoke every time.
         </p>
 
         {/* Expandable Bong Info */}
@@ -162,9 +162,6 @@ export default function BongsHero() {
           </button>
         </div>
       </div>
-
-      {/* Subtle Orange Glow */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-dope-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
     </div>
   );
 }

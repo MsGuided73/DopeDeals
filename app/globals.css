@@ -1,4 +1,11 @@
-/* HIGHWAY 420 - Premium Cannabis Culture Styles */
+/* HIGHWAY 420 - Premium Cannabis Culture Styles
+ * Brand Identity: Premium Cannabis Culture | Street Aesthetic | Luxury Experience
+ * Updated: 2025-01 - Transformed from Dope City to HIGHWAY 420 branding
+ */
+
+/* Swiper Carousel Styles */
+@import 'swiper/css';
+@import 'swiper/css/autoplay';
 
 /* Highway Gothic Font - Primary Brand Font */
 @font-face {
@@ -64,15 +71,15 @@
 
 .search-bar-glow:hover,
 .search-bar-glow:focus-within {
-  box-shadow: 0 0 0 3px rgba(250, 105, 52, 0.1),
-              0 0 20px rgba(250, 105, 52, 0.2),
+  box-shadow: 0 0 0 3px rgba(94, 180, 153, 0.1),
+              0 0 20px rgba(94, 180, 153, 0.2),
               0 10px 25px -5px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
 }
 
 .search-bar-glow:focus-within {
-  box-shadow: 0 0 0 3px rgba(250, 105, 52, 0.2),
-              0 0 30px rgba(250, 105, 52, 0.3),
+  box-shadow: 0 0 0 3px rgba(94, 180, 153, 0.2),
+              0 0 30px rgba(94, 180, 153, 0.3),
               0 15px 35px -5px rgba(0, 0, 0, 0.15);
 }
 
@@ -85,10 +92,10 @@
     --highway-yellow: #FFB43C; /* Highlight color */
     --highway-gray: #374151; /* Neutral gray */
 
-    /* Legacy DOPE CITY colors for backward compatibility */
-    --dope-orange: #fa6934f6; /* Primary accent color - glowing orange */
-    --dope-orange-dark: #e55a2b; /* Hover states, darker orange */
-    --dope-orange-light: #ff8c5a; /* Light orange for subtle accents */
+    /* Legacy DOPE CITY colors for backward compatibility (now uses Highway 420 Green) */
+    --dope-orange: #5EB499; /* Primary accent color - Highway 420 Green */
+    --dope-orange-dark: #16a34a; /* Hover states, darker green */
+    --dope-orange-light: #4ade80; /* Light green for subtle accents */
     --dope-black: #000000;
     --dope-gray-900: #111827;
     --dope-gray-800: #1f2937;
@@ -174,22 +181,26 @@
   }
 }
 
-/* DOPE CITY Custom Styles */
+/* HIGHWAY 420 Custom Component Styles */
 @layer components {
-  .dope-text-shadow {
+  .highway-text-shadow {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
 
-  .dope-gradient-orange {
-    background: linear-gradient(135deg, #f8d71c, #e55a2b);
+  .highway-gradient-primary {
+    background: linear-gradient(135deg, var(--highway-green), var(--highway-orange));
   }
 
-  .dope-gradient-dark {
-    background: linear-gradient(135deg, #c7c4c4c5, #1f2937);
+  .highway-gradient-secondary {
+    background: linear-gradient(135deg, var(--highway-orange), var(--highway-blue));
   }
 
-  /* HIGHWAY 420 Button Styles */
-  .highway-button-green {
+  .highway-gradient-accent {
+    background: linear-gradient(135deg, var(--highway-yellow), var(--highway-green));
+  }
+
+  /* HIGHWAY 420 Primary Button Styles */
+  .highway-btn-primary {
     background: var(--highway-green);
     color: white;
     font-family: 'Highway Gothic', 'Arial', sans-serif;
@@ -203,14 +214,14 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
-  .highway-button-green:hover {
+  .highway-btn-primary:hover {
     background: white;
     color: var(--highway-green);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
 
-  .highway-button-orange {
+  .highway-btn-secondary {
     background: var(--highway-orange);
     color: white;
     font-family: 'Highway Gothic', 'Arial', sans-serif;
@@ -224,33 +235,64 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
-  .highway-button-orange:hover {
+  .highway-btn-secondary:hover {
     background: white;
     color: var(--highway-orange);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
 
-  /* Legacy Hover Effects */
-  .dope-hover {
+  .highway-btn-accent {
+    background: var(--highway-yellow);
+    color: var(--highway-gray);
+    font-family: 'Highway Gothic', 'Arial', sans-serif;
+    font-weight: normal;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 3px solid var(--highway-yellow);
+    border-radius: 0;
+    padding: 12px 24px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .highway-btn-accent:hover {
+    background: white;
+    color: var(--highway-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Global Hover Effects */
+  .highway-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .dope-glow-orange {
-    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+  .highway-glow-green {
+    box-shadow: 0 0 0 0 rgba(94, 180, 153, 0);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .dope-glow-orange:hover {
-    box-shadow: 0 0 20px 5px rgba(250, 208, 20, 0.3);
+  .highway-glow-green:hover {
+    box-shadow: 0 0 20px 5px rgba(94, 180, 153, 0.3);
     transform: translateY(-2px);
   }
 
-  .dope-scale-hover:hover {
+  .highway-glow-orange {
+    box-shadow: 0 0 0 0 rgba(255, 89, 150, 0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .highway-glow-orange:hover {
+    box-shadow: 0 0 20px 5px rgba(255, 89, 150, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .highway-scale-hover:hover {
     transform: scale(1.05);
   }
 
-  .dope-glass {
+  .highway-glass {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     background: rgba(255, 255, 255, 0.1);
@@ -309,11 +351,11 @@
     animation-play-state: paused;
   }
 
-  .dope-hover-lift {
+  .highway-hover-lift {
     transition: all 0.3s ease;
   }
 
-  .dope-hover-lift:hover {
+  .highway-hover-lift:hover {
     transform: translateY(-4px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
@@ -325,41 +367,41 @@
     overflow: hidden;
   }
 
-  /* DOPE CITY Standard Spacing Utility Classes */
-  .dope-spacing-edge {
+  /* HIGHWAY 420 Standard Spacing Utility Classes */
+  .highway-spacing-edge {
     padding-left: var(--spacing-edge);
     padding-right: var(--spacing-edge);
   }
 
-  .dope-spacing-edge-left {
+  .highway-spacing-edge-left {
     padding-left: var(--spacing-edge);
   }
 
-  .dope-spacing-edge-right {
+  .highway-spacing-edge-right {
     padding-right: var(--spacing-edge);
   }
 
-  .dope-spacing-bottom-close {
+  .highway-spacing-bottom-close {
     padding-bottom: var(--spacing-bottom-close);
   }
 
-  .dope-spacing-bottom-standard {
+  .highway-spacing-bottom-standard {
     padding-bottom: var(--spacing-bottom-standard);
   }
 
-  .dope-text-tight {
+  .highway-text-tight {
     margin-top: var(--spacing-text-tight);
   }
 
-  /* Collection Text Block Positioning - Standard Pattern */
-  .dope-collection-text-left {
+  /* Collection Text Block Positioning - HIGHWAY 420 Standard Pattern */
+  .highway-collection-text-left {
     position: absolute;
     bottom: var(--spacing-bottom-close);
     left: var(--spacing-edge);
     color: white;
   }
 
-  .dope-collection-text-right {
+  .highway-collection-text-right {
     position: absolute;
     bottom: var(--spacing-bottom-close);
     right: var(--spacing-edge);
@@ -367,7 +409,7 @@
     text-align: right;
   }
 
-  .dope-collection-subtext {
+  .highway-collection-subtext {
     margin-top: var(--spacing-text-tight);
   }
 }

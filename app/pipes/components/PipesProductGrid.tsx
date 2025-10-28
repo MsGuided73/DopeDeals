@@ -1,30 +1,29 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import PipesProductCard from './PipesProductCard';
 import UniversalProductCard from '../../components/UniversalProductCard';
-import type { PipeProduct } from '../PipesPageContent';
 import { addToCart } from '../../lib/cart-utils';
+import type { PipeProduct } from '../PipesPageContent';
 
 interface PipesProductGridProps {
   products: PipeProduct[];
-  viewMode: 'grid' | 'list';
+  viewMode: 'grid' | 'list' | 'sidebar';
 }
 
 export default function PipesProductGrid({ products, viewMode }: PipesProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   const toggleFavorite = (productId: string) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(productId)) {
-        newFavorites.delete(productId);
-      } else {
-        newFavorites.add(productId);
-      }
-      return newFavorites;
-    });
+    const newFavorites = new Set(favorites);
+    if (newFavorites.has(productId)) {
+      newFavorites.delete(productId);
+    } else {
+      newFavorites.add(productId);
+    }
+    setFavorites(newFavorites);
   };
 
   if (products.length === 0) {
@@ -185,43 +184,160 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
     );
   }
 
-  // Grid view - Using UniversalProductCard for consistency and larger images
+  // Sidebar view - Image on left, content on right (your requested layout)
+  if (viewMode === 'sidebar') {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {products.map((product) => (
+          <UniversalProductCard
+            key={product.id}
+            product={{
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image_url: product.image_url,
+              brand_name: product.brand,
+              short_description: product.description,
+              stock_quantity: product.inStock ? 10 : 0, // Mock stock data
+              featured: product.featured,
+            }}
+            viewMode="sidebar"
+            size="medium"
+            showAddToCart={true}
+            showFavorite={true}
+            showQuickView={true}
+            showRating={true}
+            showBrand={true}
+            showDescription={true}
+            showStock={true}
+            showDiscount={true}
+            onFavorite={toggleFavorite}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // Grid view - Traditional 3-column layout
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {products.map(product => (
-        <UniversalProductCard
-          key={product.id}
-          product={{
-            id: product.id,
-            name: product.name,
-            price: product.price.toString(),
-            image_url: product.image_url,
-            imageUrl: product.image_url,
-            image: product.image_url,
-            featured: product.featured,
-            stock_quantity: product.stock_quantity,
-            brand_name: product.brand,
-            short_description: product.short_description || product.description,
-            description: product.short_description || product.description,
-            compare_at_price: product.compare_at_price,
-            discount_percentage: product.compare_at_price && product.compare_at_price > product.price
-              ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
-              : undefined,
-          }}
-          viewMode="grid"
-          size="large"
-          showAddToCart={true}
-          showFavorite={true}
-          showQuickView={true}
-          showRating={true}
-          showBrand={true}
-          showDescription={true}
-          showStock={true}
-          showDiscount={true}
-          context="category"
-          priority="normal"
-          className="!bg-white !border-gray-200"
-        />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {products.map((product) => (
+        <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
+          {/* Product Image */}
+          <div className="relative aspect-square bg-gray-100 overflow-hidden">
+            {product.image_url ? (
+              <Image
+                src={product.image_url}
+                alt={product.name}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="text-center">
+                  <div className="text-3xl mb-2">📦</div>
+                  <div className="text-sm">No Image</div>
+                </div>
+              </div>
+            )}
+
+            {/* Badges */}
+            <div className="absolute top-3 left-3 flex flex-col space-y-1">
+              {product.isNew && (
+                <span className="bg-green-500 text-white px-2 py-1 rounded-md text-xs font-bold">
+                  NEW
+                </span>
+              )}
+              {product.isSale && (
+                <span className="bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold">
+                  SALE
+                </span>
+              )}
+              {/* Variant Indicator */}
+              {product.image_urls && product.image_urls.length > 1 && (
+                <div className="bg-white/90 rounded p-1">
+                  <div className="flex gap-1">
+                    {product.image_urls.slice(0, 3).map((_, index) => (
+                      <div key={index} className="w-2 h-2 rounded-full bg-gray-300"></div>
+                    ))}
+                    {product.image_urls.length > 3 && (
+                      <div className="w-2 h-2 rounded-full bg-gray-500"></div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Favorite Button */}
+            <button
+              onClick={() => toggleFavorite(product.id)}
+              className={`absolute top-3 right-3 p-2 rounded-full ${
+                favorites.has(product.id)
+                  ? 'text-red-500 bg-white'
+                  : 'text-gray-400 bg-white hover:text-red-500'
+              } shadow-sm`}
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Product Info */}
+          <div className="p-4">
+            <div className="flex items-start justify-between mb-2">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-sm font-medium text-gray-900 truncate">
+                  <Link href={`/product/${product.id}`} className="hover:text-[#2d8f47] transition-colors">
+                    {product.name}
+                  </Link>
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">{product.brand}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg font-bold text-gray-900">${product.price}</span>
+                {product.compare_at_price && product.compare_at_price > product.price && (
+                  <span className="text-sm text-gray-500 line-through">${product.compare_at_price}</span>
+                )}
+              </div>
+
+              <div className="flex items-center space-x-1">
+                <div className={`w-2 h-2 rounded-full ${product.inStock ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                <span className={`text-xs ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                  {product.inStock ? 'In Stock' : 'Out of Stock'}
+                </span>
+              </div>
+            </div>
+
+            {/* Action Buttons - Bottom of Card */}
+            <div className="flex gap-2 mt-3">
+              <Link
+                href={`/product/${product.id}`}
+                className="flex-1 px-3 py-2 bg-transparent border-2 border-[#2d8f47] text-[#2d8f47] hover:bg-[#2d8f47] hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
+              >
+                Quick View
+              </Link>
+              <button
+                onClick={async () => {
+                  if (product.inStock) {
+                    try {
+                      await addToCart(product.id, 1);
+                    } catch (error) {
+                      console.error('Failed to add to cart:', error);
+                    }
+                  }
+                }}
+                disabled={!product.inStock}
+                className="flex-1 px-3 py-2 bg-[#2d8f47] hover:bg-green-700 disabled:bg-gray-300 text-white disabled:text-gray-500 rounded-md text-sm font-medium transition-colors"
+              >
+                {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+              </button>
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   );

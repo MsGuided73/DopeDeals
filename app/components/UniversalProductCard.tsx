@@ -4,14 +4,15 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { ShoppingCart, Heart, Eye, Star } from 'lucide-react';
 import { addToCart } from '../lib/cart-utils';
-import { 
-  cleanProductDescription, 
-  extractProductDescription, 
-  isImageAppropriateForProduct, 
-  getProductPlaceholder, 
-  generateProductDescription 
+import {
+  cleanProductDescription,
+  extractProductDescription,
+  isImageAppropriateForProduct,
+  getProductPlaceholder,
+  generateProductDescription
 } from '../lib/product-utils';
 import toast from 'react-hot-toast';
+import { VariantIndicator, hasProductVariants } from './VariantSelector';
 
 interface UniversalProductCardProps {
   product: {
@@ -21,6 +22,7 @@ interface UniversalProductCardProps {
     image_url?: string;
     imageUrl?: string;
     image?: string;
+    image_urls?: string[]; // Added for variant support
     featured?: boolean;
     stock_quantity?: number;
     brand_name?: string;
@@ -720,9 +722,21 @@ export default function UniversalProductCard({
       <div className="p-4 flex flex-col h-full">
         {/* Content Section - Flexible height */}
         <div className="flex-grow">
-          <h3 className={`font-semibold ${config.title} mb-2 line-clamp-2 text-gray-900 group-hover:text-dope-orange-600 transition-colors`}>
-            {product.name}
-          </h3>
+          <div className="flex items-start justify-between mb-2">
+            <h3 className={`font-semibold ${config.title} line-clamp-2 text-gray-900 group-hover:text-dope-orange-600 transition-colors`}>
+              {product.name}
+            </h3>
+            {/* Variant Indicator */}
+            {hasProductVariants(product.image_urls || []) && (
+              <div className="ml-2">
+                <VariantIndicator
+                  imageUrls={product.image_urls || []}
+                  onClick={() => {/* Navigate to product page */}}
+                  className="-translate-y-1"
+                />
+              </div>
+            )}
+          </div>
 
           {showBrand && product.brand_name && (
             <p className="text-sm text-gray-500 mb-2">{product.brand_name}</p>

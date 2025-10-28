@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const user = await getSessionUser();
     if (!user) {
       return NextResponse.json(
-        { message: 'Authentication required' }, 
+        { message: 'Authentication required' },
         { status: 401 }
       );
     }
@@ -16,20 +16,48 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const currentProductId = searchParams.get('currentProduct');
     const limit = parseInt(searchParams.get('limit') || '8');
+    const type = searchParams.get('type') || 'personalized'; // 'personalized', 'ecosystem', 'brand-category'
 
     // Initialize recommendation agent
     const agent = new RecommendationAgent();
-    
-    // Get personalized recommendations
-    const recommendations = await agent.getPersonalizedRecommendations({
-      userId: user.id,
-      currentProductId: currentProductId || undefined,
-      limit
-    });
+
+    let recommendations;
+
+    // Route to different recommendation types
+    if (type === 'ecosystem' && currentProductId) {
+      // Get complete setup recommendations
+      const currentProduct = await agent.storage.getProduct(currentProductId);
+      if (currentProduct) {
+        recommendations = await agent.getEcosystemRecommendations(currentProduct, limit);
+      } else {
+        recommendations = [];
+      }
+    } else if (type === 'brand-category' && currentProductId) {
+      // Enhanced brand and category matching
+      const currentProduct = await agent.storage.getProduct(currentProductId);
+      if (currentProduct) {
+        // Get user preferences for brand matching
+        const [userOrders] = await Promise.all([
+          agent.storage.getUserOrders(user.id).catch(() => [])
+        ]);
+        const userPreferences = agent.analyzeUserPreferences(userOrders, []);
+        recommendations = await agent.getBrandCategoryRecommendations(userPreferences, currentProduct);
+      } else {
+        recommendations = [];
+      }
+    } else {
+      // Default personalized recommendations
+      recommendations = await agent.getPersonalizedRecommendations({
+        userId: user.id,
+        currentProductId: currentProductId || undefined,
+        limit
+      });
+    }
 
     return NextResponse.json({
       success: true,
       recommendations,
+      type,
       user: {
         id: user.id,
         firstName: user.user_metadata?.firstName || user.email?.split('@')[0]
@@ -38,11 +66,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('❌ Recommendation error:', error);
     return NextResponse.json(
-      { 
+      {
         success: false,
         message: 'Failed to get recommendations',
         error: String(error)
-      }, 
+      },
       { status: 500 }
     );
   }

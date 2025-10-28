@@ -348,17 +348,61 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      const searchQuery = searchConditions.join(',');
-      console.log(`📝 Search query: ${searchQuery.substring(0, 200)}...`);
+      const textSearchQuery = searchConditions.join(',');
+      console.log(`📝 Text search query: ${textSearchQuery.substring(0, 200)}...`);
 
-      let supabaseQuery = supabase
-        .from('main_site_products')
-        .select(`
-          id, name, brand_name, price, image_url, description, short_description,
-          sku, featured, stock_quantity, tags, materials, zoho_category_name,
-          manufacturer, specs, attributes, dtc_description, vip_price
-        `)
-        .or(searchQuery);
+      // #### CATEGORY-BASED SEARCH ENHANCEMENT ####
+      // Check if any expanded terms match category keywords to also search by category_slug
+      let supabaseQuery;
+      const categorySlugsToSearch: string[] = [];
+
+      // Map search terms to category slugs based on common keywords
+      for (const term of expandedTerms) {
+        if (CATEGORY_SYNONYMS.pipes.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
+          categorySlugsToSearch.push('pipes');
+        }
+        if (CATEGORY_SYNONYMS.bongs.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
+          categorySlugsToSearch.push('bongs');
+        }
+        if (CATEGORY_SYNONYMS['dab-rigs'].some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
+          categorySlugsToSearch.push('dab-rigs');
+        }
+        if (CATEGORY_SYNONYMS.vaporizers.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
+          categorySlugsToSearch.push('vaporizers');
+        }
+        // Add more category mappings as needed
+      }
+
+      // Remove duplicates
+      const uniqueCategorySlugs = [...new Set(categorySlugsToSearch)];
+
+      if (uniqueCategorySlugs.length > 0) {
+        console.log(`🎯 Category search: Searching for products in slugs: ${uniqueCategorySlugs.join(', ')}`);
+
+        // If we have category slugs to search, use OR condition to combine text search and category search
+        const categoryConditions = uniqueCategorySlugs.map(slug => `category_slug.eq.${slug}`);
+        const combinedQuery = `${textSearchQuery},${categoryConditions.join(',')}`;
+
+        supabaseQuery = supabase
+          .from('main_site_products')
+          .select(`
+            id, name, brand_name, price, image_url, description, short_description,
+            sku, featured, stock_quantity, tags, materials, zoho_category_name,
+            manufacturer, specs, attributes, dtc_description, vip_price, category_slug
+          `)
+          .or(combinedQuery);
+      } else {
+        // Fallback to text-only search
+        supabaseQuery = supabase
+          .from('main_site_products')
+          .select(`
+            id, name, brand_name, price, image_url, description, short_description,
+            sku, featured, stock_quantity, tags, materials, zoho_category_name,
+            manufacturer, specs, attributes, dtc_description, vip_price, category_slug
+          `)
+          .or(textSearchQuery);
+      }
+      // #### END CATEGORY-BASED SEARCH ENHANCEMENT ####
 
       // Apply filters with error handling
       try {
@@ -384,7 +428,7 @@ export async function GET(request: NextRequest) {
           .select(`
             id, name, brand_name, price, image_url, description, short_description,
             sku, featured, stock_quantity, tags, materials, zoho_category_name,
-            manufacturer, specs, attributes, dtc_description, vip_price
+            manufacturer, specs, attributes, dtc_description, vip_price, category_slug
           `)
           .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%`)
           // Note: Removed .eq('is_active', true) filter for current manual inventory phase

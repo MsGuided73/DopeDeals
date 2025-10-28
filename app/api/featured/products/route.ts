@@ -93,9 +93,7 @@ export async function GET(req: NextRequest) {
         `)
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
       // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-      // COMPLIANCE: Filter out nicotine and tobacco products for main site compliance
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
+      // Note: Removed nicotine and tobacco filters for recommendations
       .or('featured_product.eq.true,featured_product.eq."YES"') // Get featured_product items (both boolean true and string "YES")
       .order('created_at', { ascending: false });
 
@@ -124,9 +122,7 @@ export async function GET(req: NextRequest) {
         `)
         // Note: Removed .eq('is_active', true) filter for current manual inventory phase
         // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-        // COMPLIANCE: Filter out nicotine and tobacco products for main site compliance
-        .eq('nicotine_product', false)
-        .eq('tobacco_product', false)
+        // Note: Removed nicotine and tobacco filters for recommendations
         .eq('featured', true) // Get featured products as fallback
         .order('created_at', { ascending: false })
         .limit(Math.min(limit, 12)); // Get more featured products to ensure availability

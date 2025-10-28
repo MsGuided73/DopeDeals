@@ -18,13 +18,37 @@ interface BlogPost {
 }
 
 export default function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [showAIAssistant, setShowAIAssistant] = useState(false);
   const [aiQuery, setAiQuery] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [loading, setLoading] = useState(true);
 
-  const blogPosts: BlogPost[] = [
+  // Fetch blog posts on component mount
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const response = await fetch('/api/blog');
+        if (response.ok) {
+          const data = await response.json();
+          setBlogPosts(data.posts || []);
+        }
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setLoading(false);
+        return; // Exit early, no hardcoded fallback needed since database is available
+      }
+
+      setLoading(false);
+    };
+
+    fetchBlogPosts();
+  }, [selectedCategory]);
+
+  // Fallback hardcoded posts (only shown until database has posts)
+  const fallbackPosts: BlogPost[] = [
     {
       id: 'cannabis-history-global',
       title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',

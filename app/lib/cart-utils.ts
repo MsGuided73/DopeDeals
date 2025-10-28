@@ -55,9 +55,25 @@ export const ensureSessionId = (): string => {
   return sessionId;
 };
 
+// Store/retrieve the page where user came from to return after cart
+export const storeShopReferer = (url?: string) => {
+  if (typeof window === 'undefined') return;
+  const refererUrl = url || window.location.href;
+  localStorage.setItem('shop_referer', refererUrl);
+};
+
+export const getShopReferer = (): string => {
+  if (typeof window === 'undefined') return '/products';
+  const stored = localStorage.getItem('shop_referer');
+  return stored || '/products';
+};
+
 // Add item to cart with toast notification
 export const addToCart = async (productId: string, quantity: number = 1): Promise<boolean> => {
   const sessionId = getSessionId();
+
+  // Store current page for Continue Shopping functionality
+  storeShopReferer();
 
   const loadingToast = toast.loading('Adding to cart...');
 
