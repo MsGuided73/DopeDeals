@@ -142,7 +142,7 @@ export default function ComponentRenderer({ component, isSelected, onUpdate }: C
               />
             )}
             <div className="relative text-center text-white z-10 max-w-4xl mx-auto px-6">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 font-chalets tracking-wider">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4 font-chalets-legweb tracking-wider">
                 {component.defaultProps?.title || 'Hero Title'}
               </h1>
               <p className="text-xl md:text-2xl mb-8 opacity-90">
@@ -160,7 +160,7 @@ export default function ComponentRenderer({ component, isSelected, onUpdate }: C
       case 'heading':
         const HeadingTag = component.defaultProps?.level || 'h2';
         return (
-          <HeadingTag style={styles} className="font-chalets tracking-wider">
+          <HeadingTag style={styles} className="font-chalets-legweb tracking-wider">
             {component.defaultProps?.text || 'Your Heading Here'}
           </HeadingTag>
         );
