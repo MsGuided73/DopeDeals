@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Chat UI Design</title>
+  <link href="https://fonts.googleapis.com/css2?family=Chalet-London1960:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/flowbite@2.0.0/dist/flowbite.min.js"></script>
   <link href="https://example.com/placeholder-image.jpg" rel="preload" as="image">
@@ -22,12 +23,12 @@
 
     /* Message bubble animations */
     .message-enter {
-      animation: messageSlideIn 0.4s ease-out forwards;
+      animation: messageSlideIn 0.2s ease-out forwards;
     }
     @keyframes messageSlideIn {
       from {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(15px) scale(0.98);
       }
       to {
         opacity: 1;
@@ -80,7 +81,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
         </button>
-        <h1 class="text-xl font-bold">AI Assistant</h1>
+        <h1 class="text-xl font-bold text-left text-black font-['Chalet-London1960']">AI Assistant</h1>
         <div class="hidden md:flex items-center gap-2 text-sm text-gray-300">
           <div class="w-2 h-2 bg-green-400 rounded-full"></div>
           Online
@@ -123,8 +124,8 @@
   </aside>
 
   <!-- Main Chat Container -->
-  <main class="flex-1 flex flex-col max-w-4xl mx-auto px-4">
-    <div class="flex-1 flex flex-col justify-between py-8">
+  <main class="flex-1 flex flex-col max-w-4xl mx-auto px-4 md:ml-72">
+    <div class="flex-1 flex flex-col justify-between py-8 mt-7">
 
       <!-- Messages Container -->
       <div class="chat-messages space-y-6 max-h-[60vh] overflow-y-auto" id="messages">

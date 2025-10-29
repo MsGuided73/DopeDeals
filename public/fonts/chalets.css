@@ -19,14 +19,14 @@
 }
 
 /* Utility classes for Chalets font */
-.font-chalets {
+.font-chalets-legweb {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif;
   font-weight: normal; /* Never bold for Chalets */
   letter-spacing: 0.1em; /* Proper letter spacing */
 }
 
 /* Deprecated - Chalets should never be bold */
-.font-chalets-bold {
+.font-chalets-legweb-bold {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif;
   font-weight: normal; /* Override to normal weight */
   letter-spacing: 0.1em; /* Proper letter spacing */

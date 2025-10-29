@@ -7,7 +7,17 @@
 @import 'swiper/css';
 @import 'swiper/css/autoplay';
 
-/* Highway Gothic Font - Primary Brand Font */
+/* Chalets Font - Primary Brand Font for Titles & Headers */
+@font-face {
+  font-family: 'Chalets';
+  src: url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Chalets/chalets-webfont.woff') format('woff'),
+       url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Chalets/chalets-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Highway Gothic Font - Secondary Font for Body & Subtext */
 @font-face {
   font-family: 'Highway Gothic';
   src: url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/gothic_highway/HWYGOTH.TTF') format('truetype');
@@ -16,49 +26,51 @@
   font-display: swap;
 }
 
-/* Highway Gothic Font - Legacy Chalets Support */
-@font-face {
-  font-family: 'Chalets';
-  src: url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/gothic_highway/HWYGOTH.TTF') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
+
+.animate-scroll-horizontal {
+  animation: scroll-horizontal 60s linear infinite;
+}
+
+
+
+
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* HIGHWAY 420 Style Guide Enforcement */
-/* 1. Highway Gothic font should never be bold */
-.font-highway,
-.font-highway *,
-[class*="font-highway"] {
-  font-family: 'Highway Gothic', 'Arial', sans-serif !important;
-  font-weight: normal !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
-}
-
-/* 2. HIGHWAY 420 title specific styling */
-.highway-title,
-.highway-title * {
-  font-family: 'Highway Gothic', 'Arial', sans-serif !important;
-  font-weight: normal !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
-}
-
-/* 3. Legacy Chalets font support */
-.font-chalets,
-.font-chalets * {
+/* 1. Chalets - Primary Brand Font for All Titles & Headers */
+h1, h2, h3, h4, h5, h6,
+.font-chalets, .font-chalets *,
+.chalets-title, .chalets-title * {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
-  letter-spacing: -0.01em !important;
+  letter-spacing: -0.02em !important;
 }
 
-.chalets-title,
-.chalets-title * {
+/* 2. Inter - Secondary Font for Body & Subtext */
+.font-highway, .font-highway *,
+[class*="font-highway"],
+.highway-title, .highway-title *,
+body, p, .text-sm, .text-xs, .text-base {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+}
+
+/* 3. Legacy font class support - Redirect to new hierarchy */
+.font-chalets-legweb,
+.font-chalets-legweb * {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.02em !important;
@@ -80,22 +92,22 @@
 .search-bar-glow:focus-within {
   box-shadow: 0 0 0 3px rgba(94, 180, 153, 0.2),
               0 0 30px rgba(94, 180, 153, 0.3),
-              0 15px 35px -5px rgba(0, 0, 0, 0.15);
+              0 15px 35px -5px rgba(0, 0, 0, 0.0 0.0 0.15);
 }
 
 @layer base {
   :root {
     /* HIGHWAY 420 Color Scheme */
-    --highway-green: #5EB499; /* Primary brand color */
-    --highway-orange: #FF5996; /* Secondary accent color */
+    --highway-green: #16a34a; /* Primary brand color */
+    --highway-orange: #ff9a16; /* Secondary accent color */
     --highway-blue: #4F5996; /* Tertiary accent color */
     --highway-yellow: #FFB43C; /* Highlight color */
     --highway-gray: #374151; /* Neutral gray */
 
     /* Legacy DOPE CITY colors for backward compatibility (now uses Highway 420 Green) */
-    --dope-orange: #5EB499; /* Primary accent color - Highway 420 Green */
+    --dope-orange:  #16a34a; /* Primary accent color - Highway 420 Green */
     --dope-orange-dark: #16a34a; /* Hover states, darker green */
-    --dope-orange-light: #4ade80; /* Light green for subtle accents */
+    --dope-orange-light: #08bb4aa6; /* Light green for subtle accents */
     --dope-black: #000000;
     --dope-gray-900: #111827;
     --dope-gray-800: #1f2937;

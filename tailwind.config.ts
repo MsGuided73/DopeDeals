@@ -6,6 +6,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        'sans': ['Inter', 'system-ui', 'sans-serif'],
         'highway': ['Highway Gothic', 'Arial', 'sans-serif'],
         'highway-gothic': ['Highway Gothic', 'Arial', 'sans-serif'],
         'chalets': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
