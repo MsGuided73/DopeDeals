@@ -1,0 +1,1 @@
+feat: Update product components - enhance blog pages, carousel, product cards, variant selector, and layout utilities  
