@@ -17,7 +17,7 @@ export default function BubblersHero() {
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="text-center">
-          <h1 className="text-4xl md:text-6xl font-chalets font-bold text-white mb-6">
+          <h1 className="text-4xl md:text-6xl font-chalets-legweb font-bold text-white mb-6">
             BUBBLERS
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">

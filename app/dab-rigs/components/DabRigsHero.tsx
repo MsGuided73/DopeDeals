@@ -13,7 +13,7 @@ export default function DabRigsHero() {
           <div className="flex items-center space-x-6">
             {/* Title and Accent Line */}
             <div className="flex items-center space-x-4">
-              <h1 className="font-chalets text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-wider text-gray-900 leading-tight font-bold">
+              <h1 className="font-chalets-legweb text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-wider text-gray-900 leading-tight font-bold">
                 DAB RIGS & CONCENTRATE TOOLS
               </h1>
               <div className="hidden md:block w-16 h-1 bg-dope-orange-500"></div>
