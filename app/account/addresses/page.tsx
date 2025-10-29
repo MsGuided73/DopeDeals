@@ -85,7 +85,7 @@ export default function AddressBookPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-chalets text-gray-900 mb-2" style={{ letterSpacing: '-0.02em' }}>
+            <h1 className="text-3xl font-chalets-legweb text-gray-900 mb-2" style={{ letterSpacing: '-0.02em' }}>
               Address Book
             </h1>
             <p className="text-gray-600">Manage your shipping and billing addresses</p>

@@ -19,7 +19,7 @@ export default function AccountPage() {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-dope-orange-400 to-dope-orange-600 rounded-full mb-6 shadow-2xl">
               <User className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-chalets font-bold text-gray-900 mb-6 leading-tight tracking-wide">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-chalets-legweb font-bold text-gray-900 mb-6 leading-tight tracking-wide">
               MY ACCOUNT
             </h1>
             <div className="w-32 h-1 bg-dope-orange-500 mx-auto mb-8 rounded-full"></div>
