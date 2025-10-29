@@ -35,9 +35,28 @@ export default function FeaturedProductsSection() {
     fetchFeaturedProducts();
   }, []);
 
+  useEffect(() => {
+    if (products.length > 0) {
+      const scrollContainer = document.querySelector('.featured-products-scroll') as HTMLElement;
+      if (scrollContainer) {
+        const scrollSpeed = 1; // pixels per frame
+        const interval = setInterval(() => {
+          if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+            scrollContainer.scrollLeft = 0; // Reset to beginning
+          } else {
+            scrollContainer.scrollLeft += scrollSpeed;
+          }
+        }, 50); // Faster interval for snappier movement
+
+        return () => clearInterval(interval);
+      }
+    }
+  }, [products]);
+
   const fetchFeaturedProducts = async () => {
     try {
       setLoading(true);
+      console.log('Fetching featured products...');
       const response = await fetch('/api/featured/products?limit=12');
 
       if (!response.ok) {
@@ -53,6 +72,18 @@ export default function FeaturedProductsSection() {
       }
 
       const data = await response.json();
+      console.log('Featured products data received:', data);
+      
+      // Debug: Log the first product to see its structure
+      if (data.products && data.products.length > 0) {
+        console.log('First product structure:', data.products[0]);
+        console.log('Price field:', data.products[0].our_price, typeof data.products[0].our_price);
+        console.log('Brand field:', data.products[0].brand_name);
+        console.log('Description fields:', {
+          description: data.products[0].description,
+          short_description: data.products[0].short_description
+        });
+      }
 
       if (!data.products) {
         console.warn('No featured products data received');
@@ -74,17 +105,43 @@ export default function FeaturedProductsSection() {
   };
 
   const transformProductForCard = (product: Product) => {
-    const primaryImageUrl = product.image_url ||
-                           (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
+    // Clean image URL to remove trailing characters that Next.js Image rejects
+    const cleanImageUrl = (url: string | null): string | null => {
+      if (!url) return null;
+      // Remove trailing commas, spaces, and trailing characters that Next.js Image rejects
+      return url.trim().replace(/[,.\s]+$/, '');
+    };
+
+    const primaryImageUrl = cleanImageUrl(product.image_url) ||
+                           (product.image_urls && product.image_urls.length > 0
+                            ? cleanImageUrl(product.image_urls[0]) : null);
+
+    // Ensure price is a valid number
+    const price = product.our_price && typeof product.our_price === 'number' && !isNaN(product.our_price) 
+      ? product.our_price 
+      : 0;
+
+    // Debug logging
+    console.log('Transforming product:', {
+      id: product.id,
+      name: product.name,
+      our_price: product.our_price,
+      price: price,
+      brand_name: product.brand_name,
+      short_description: product.short_description,
+      description: product.description,
+      original_image_url: product.image_url,
+      cleaned_image_url: primaryImageUrl
+    });
 
     return {
       id: product.id,
-      name: product.name,
-      price: product.our_price.toString(),
+      name: product.name || 'Unnamed Product',
+      price: price.toString(),
       image_url: primaryImageUrl || undefined,
       featured: product.featured,
       stock_quantity: product.stock_quantity,
-      brand_name: product.brand_name || 'Unknown Brand',
+      brand_name: product.brand_name || null, // Changed from 'Unknown Brand' to null for better conditional rendering
       short_description: getProductDescription(product),
       description: getProductDescription(product),
       sku: product.sku || '',
@@ -99,9 +156,9 @@ export default function FeaturedProductsSection() {
     return (
       <section className="mt-24">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
-            FEATURED PRODUCTS
-          </h2>
+          <h1 className="text-4xl md:text-5xl text-black mb-4">
+            HOT PRODUCTS
+          </h1>
         </div>
         <div className="flex overflow-x-auto gap-6 pb-4 px-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -126,28 +183,23 @@ export default function FeaturedProductsSection() {
     return (
       <section className="mt-24">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
-            FEATURED PRODUCTS
-          </h2>
+          <h1 className="text-4xl md:text-5xl text-black mb-4">
+            HOT PRODUCTS
+          </h1>
           <p className="text-red-500 mt-6">Error loading featured products: {error}</p>
         </div>
       </section>
     );
   }
 
-  const productsToShow = products;
+  console.log('Rendering products:', products);
 
   return (
     <section className="mt-24">
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-chalets font-bold text-gray-900 mb-4"
-            style={{
-              letterSpacing: '-0.01em',
-              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 16px rgba(0, 0, 0, 0.1)',
-              fontWeight: 'bold'
-            }}>
-          FEATURED PRODUCTS
-        </h2>
+          <h1 className="text-4xl md:text-5xl text-black mb-4">
+          HOT PRODUCTS
+        </h1>
       </div>
 
       <div className="text-center mb-8">
@@ -159,15 +211,16 @@ export default function FeaturedProductsSection() {
         </Link>
       </div>
 
-      {productsToShow.length > 0 ? (
-        <div className="flex overflow-x-auto gap-6 pb-4 px-4">
-          {productsToShow.slice(0, 8).map((product) => {
+      {products.length > 0 ? (
+        <div className="featured-products-scroll flex overflow-x-auto gap-6 pb-4 px-4" style={{ scrollbarWidth: 'thin' }}>
+          {products.slice(0, 8).map((product) => {
             const transformedProduct = transformProductForCard(product);
+            console.log('Rendering product card:', transformedProduct);
             return (
               <Link
                 key={product.id}
                 href={`/product/${product.id}`}
-                className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-dope-orange-300 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 min-h-96 block"
+                className="group bg-white rounded-xl border border-gray-200 overflow-visible hover:shadow-lg hover:border-dope-orange-300 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 min-h-96 block"
               >
                 <div className="relative w-full h-full bg-gray-50 overflow-hidden">
                   {transformedProduct.image_url ? (
@@ -187,7 +240,7 @@ export default function FeaturedProductsSection() {
 
                   <div className="absolute top-3 left-3 flex flex-col gap-2">
                     {transformedProduct.featured && (
-                      <div className="bg-gradient-to-r from-dope-orange-500 to-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                         ⭐ Featured
                       </div>
                     )}
@@ -209,43 +262,32 @@ export default function FeaturedProductsSection() {
                 </div>
 
                 <div className="p-4 flex flex-col h-full">
-                  {transformedProduct.brand_name && (
-                    <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
-                      {transformedProduct.brand_name}
-                    </p>
-                  )}
+                  {/* Fixed brand name rendering - always show something */}
+                  <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                    {transformedProduct.brand_name || 'STORE BRAND'}
+                  </p>
 
                   <h3 className="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
                     {transformedProduct.name}
                   </h3>
 
-                  {transformedProduct.short_description && (
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {transformedProduct.short_description}
-                    </p>
-                  )}
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    {transformedProduct.short_description}
+                  </p>
 
                   <div className="mt-auto">
                     <div className="mb-4">
-                      {transformedProduct.compare_at_price ? (
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-500 line-through">
-                              ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
-                            </span>
-                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                              Save {transformedProduct.discount_percentage}%
-                            </span>
-                          </div>
-                          <div className="text-2xl font-bold text-green-600">
-                            ${parseFloat(transformedProduct.price).toFixed(2)}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-2xl font-bold text-gray-900">
-                          ${parseFloat(transformedProduct.price).toFixed(2)}
-                        </div>
-                      )}
+                      {/* Enhanced price display with fallbacks */}
+                      <div className="text-2xl font-bold text-gray-900">
+                        {transformedProduct.price && !isNaN(parseFloat(transformedProduct.price)) 
+                          ? `$${parseFloat(transformedProduct.price).toFixed(2)}`
+                          : 'Price Unavailable'
+                        }
+                      </div>
+                      {/* Debug info - remove this in production */}
+                      <div className="text-xs text-gray-400 mt-1">
+                        Debug: Price = "{transformedProduct.price}" | Original = {product.our_price}
+                      </div>
                     </div>
 
                     <div className="flex gap-3" onClick={(e) => e.stopPropagation()}>

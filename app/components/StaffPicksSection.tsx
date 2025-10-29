@@ -84,7 +84,7 @@ export default function StaffPicksSection() {
             <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
             <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
-              <h2 className="text-5xl font-chalets text-white mb-0 relative z-10" style={{
+              <h2 className="text-5xl font-chalets-legweb text-white mb-0 relative z-10" style={{
                 letterSpacing: '-0.02em',
                 textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
               }}>
@@ -121,7 +121,7 @@ export default function StaffPicksSection() {
             <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
             <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
-              <h2 className="text-5xl font-chalets text-white mb-0 relative z-10" style={{
+              <h2 className="text-5xl font-chalets-legweb text-white mb-0 relative z-10" style={{
                 letterSpacing: '-0.02em',
                 textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
               }}>
@@ -145,7 +145,7 @@ export default function StaffPicksSection() {
           <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-600 to-gray-900 rounded-lg transform -rotate-1"></div>
           <div className="relative bg-gradient-to-r from-black via-gray-800 to-black p-6 rounded-lg border-2 border-gray-600 shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg animate-shimmer"></div>
-            <h2 className="text-5xl font-chalets text-white mb-0 relative z-10" style={{
+            <h2 className="text-5xl font-chalets-legweb text-white mb-0 relative z-10" style={{
               letterSpacing: '-0.02em',
               textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.1)'
             }}>

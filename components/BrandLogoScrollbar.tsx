@@ -64,45 +64,30 @@ const brandLogos: BrandLogo[] = [
 
 export default function BrandLogoScrollbar() {
   return (
-    <section className="w-full relative overflow-hidden" style={{ height: '280px' }}>
+    <section className="w-full relative overflow-hidden mb-16 mt-8" style={{ height: '300px' }}>
       {/* Marquee Frame Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-white z-0">
+      <div className="absolute inset-0 bg-white z-0">
         {/* Neon lighting effects */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-[#2d8f47] to-transparent opacity-60"></div>
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-[#2d8f47] to-transparent opacity-60"></div>
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-[#2d8f4700] to-transparent opacity-100"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-[#2d8f4704] to-transparent opacity-100"></div>
 
         {/* Side neon strips */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-[#2d8f47] to-transparent opacity-40"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-[#2d8f47] to-transparent opacity-40"></div>
-
-        {/* Metallic frame texture */}
-        <div className="absolute inset-2 opacity-30" style={{
-          background: `repeating-linear-gradient(
-            45deg,
-            #333 0px,
-            #333 2px,
-            #444 2px,
-            #444 4px
-          )`
-        }}></div>
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-[#2d8f4700] to-transparent opacity-100"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-[#2d8f4704] to-transparent opacity-100"></div>
       </div>
 
       {/* Content Layer */}
       <div className="relative z-10 flex flex-col justify-center h-full px-4">
         {/* Section Header */}
         <div className="text-center mb-4">
-          <h3 className="text-white font-highway text-2xl md:text-3xl font-normal tracking-wider mb-2"
-              style={{
-                textShadow: '0 0 10px #2d8f47, 0 0 20px #2d8f47, 0 0 30px #2d8f47',
-                fontFamily: "'Highway Gothic', 'Arial', sans-serif"
-              }}>
+          <h1 className="text-4xl md:text-5xl text-black mb-4">
             TRUSTED BRANDS
-          </h3>
+          </h1>
           <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#fafcfa] to-transparent mx-auto opacity-80"></div>
         </div>
 
         {/* Logo Carousel - Full Height Utilization */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative overflow-visible">
           <Swiper
             modules={[Autoplay]}
             spaceBetween={20}
@@ -195,7 +180,7 @@ export default function BrandLogoScrollbar() {
         <div className="text-center mt-2">
           <a
             href="/brands"
-            className="inline-block px-6 py-2 bg-transparent text-[#2d8f47] border-2 border-[#2d8f47] font-highway text-sm uppercase tracking-wide rounded-none transition-all duration-300 hover:bg-[#2d8f47] hover:text-white hover:scale-105"
+            className="inline-block px-6 py-2 bg-transparent text-[#2d8f4700] border-2 border-[#2d8f4700] font-highway text-sm uppercase tracking-wide rounded-none transition-all duration-300 hover:bg-[#2d8f47] hover:text-white hover:scale-105"
             style={{
               fontFamily: "'Highway Gothic', 'Arial', sans-serif",
               fontWeight: 'normal',

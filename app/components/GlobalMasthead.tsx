@@ -21,8 +21,15 @@ export default function GlobalMasthead() {
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
 
-  // Get cart context
-  const { cartCount } = useCart();
+  // Get cart context with error handling
+  let cartCount = 0;
+  try {
+    const cartContext = useCart();
+    cartCount = cartContext.cartCount;
+  } catch (error) {
+    // Cart context not available, use 0
+    cartCount = 0;
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,9 +88,9 @@ export default function GlobalMasthead() {
         </div>
 
         {/* Main Masthead - Black Titlebar */}
-        <div className="bg-black text-white px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '140px', height: '140px' }}>
+        <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '130px', height: '130px' }}>
           {/* Logo extending from top of black titlebar to down below nav */}
-          <div className="absolute top-0 left-0 z-10" style={{ top: '0px', left: '0', height: '290px', width: 'auto', overflow: 'visible' }}>
+          <div className="absolute top-0 left-0 z-[100]" style={{ top: '0px', left: '-25px', height: '300px', width: 'auto', overflow: 'hidden' }}>
             <Link href="/">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
@@ -96,16 +103,13 @@ export default function GlobalMasthead() {
             </Link>
           </div>
 
-          {/* Left: Space for logo */}
-          <div className="flex-1"></div>
-
-          {/* Center: Search Bar */}
-          <div className="flex-1 max-w-3xl mx-8 hidden md:block">
+          {/* Center Right: Search Bar */}
+          <div className="mr-4 hidden md:block ml-auto">
             <EnhancedSearchBar />
           </div>
 
-          {/* Right: User Actions - Enhanced with 20px spacing and 2x larger 3D icons */}
-          <div className="flex items-center gap-6 flex-shrink-0 mr-5">
+          {/* Right: User Actions - Reduced spacing between icons */}
+          <div className="flex items-center gap-3 flex-shrink-0 mr-5 text-white">
             <Link href="/sitemap-page" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110" title="Site Map">
               <svg className="w-12 h-12 drop-shadow-lg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -113,18 +117,26 @@ export default function GlobalMasthead() {
             </Link>
             <button
               onClick={() => setShowProfileModal(true)}
-              className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110"
+              className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
               title="Profile & Recommendations"
             >
-              <User className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
+              <User className="w-8 h-8 stroke-3" strokeWidth="3" />
             </button>
-            <Link href="/cart" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 relative" title="Shopping Cart">
-              <ShoppingCart className="w-12 h-12 drop-shadow-lg" strokeWidth="2" />
+            <Link href="/cart" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 relative bg-white/10 rounded-lg hover:bg-white/20" title="Shopping Cart">
+              <ShoppingCart className="w-8 h-8 stroke-3" strokeWidth="3" />
               <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
                 {cartCount > 99 ? '99+' : cartCount}
               </span>
             </Link>
           </div>
+        </div>
+
+        {/* Headline - Now positioned outside black titlebar */}
+        <div className="text-center py-4">
+          <h1 className="text-white text-3xl md:text-5xl lg:text-6xl xl:text-6xl font-normal uppercase tracking-wider"
+              style={{ letterSpacing: '0.02em' }}>
+        High Adventure Starts Here
+          </h1>
         </div>
 
         {/* Mobile Search Bar - Only on mobile */}
@@ -207,16 +219,13 @@ export default function GlobalMasthead() {
                                   onMouseLeave={() => handleMouseLeaveWithDelay('nested')}
                                 >
                                   <div className="py-2">
-                                    <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
-                                    <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Pre-Rolls</Link>
+                                    <Link href="/thca_flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
+                                    <Link href="/thca_prerolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Pre-Rolls</Link>
                                     <div className="border-t border-gray-200/20 my-1"></div>
-                                    <Link href="/products?q=thca+concentrates" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Concentrates</Link>
-                                    <Link href="/products?q=thca+diamonds" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Diamonds</Link>
-                                    <Link href="/products?q=thca+sauce" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Sauce</Link>
-                                    <Link href="/products?q=thca+rosin" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
-                                    <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
-                                    <Link href="/products?q=delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
-                                    <Link href="/products?q=edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                                    <Link href="/thca_rosin" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
+                                    <Link href="/thca_cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
+                                    <Link href="/thca_delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
+                                    <Link href="/edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
                                   </div>
                                 </div>
                               )}
@@ -225,13 +234,10 @@ export default function GlobalMasthead() {
                             <div className="border-t border-gray-200/20 my-1"></div>
                             <Link href="/bongs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bongs & Water Pipes</Link>
                             <Link href="/pipes" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Hand Pipes</Link>
-                            <Link href="/products?category=dab-rigs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Dab Rigs</Link>
-                            <Link href="/products?category=vaporizers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Vaporizers</Link>
-                            <Link href="/products?q=torch" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Torches & Lighters</Link>
-                            <Link href="/products?category=accessories" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Accessories</Link>
-                            <Link href="/products?q=grinder" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Grinders</Link>
-                            <Link href="/products?q=rolling" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Rolling Papers</Link>
-                          </div>
+                            <Link href="/dab-rigs" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Dab Rigs</Link>
+                            <Link href="/thca_vapes" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Vaporizers</Link>
+                            <Link href="/accessories" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Accessories</Link>
+                            </div>
                         </div>
                       )}
                     </div>
@@ -261,7 +267,7 @@ export default function GlobalMasthead() {
                           <div className="py-2">
                             <Link href="/brands/raw-papers" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
                             <Link href="/brands/puffco" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
-                            <Link href="/brands/storz-bickel" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
+                            <Link href="/brands/crave" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
                             <Link href="/brands/roor" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
                             <div className="border-t border-gray-200/20 my-1"></div>
                             <Link href="/brands" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
@@ -288,17 +294,15 @@ export default function GlobalMasthead() {
               {openDropdown === 'thca' && (
                 <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
                   <div className="py-2">
-                    <Link href="/products?q=thca+flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Flower</Link>
-                    <Link href="/pre-rolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Pre-Rolls</Link>
+                    <Link href="/thca_flower" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Flower</Link>
+                    <Link href="/thca_prerolls" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Pre-Rolls</Link>
                     <div className="border-t border-gray-200/20 my-1"></div>
-                    <Link href="/products?q=thca+concentrate" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Concentrates</Link>
-                    <Link href="/products?q=thca+diamond" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Diamonds</Link>
-                    <Link href="/products?q=thca+sauce" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Sauce</Link>
-                    <Link href="/products?q=thca+rosin" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
+                    <Link href="/thca/thca_concentrate" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Concentrates</Link>
+                    <Link href="/thca_rosin" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
                     <div className="border-t border-gray-200/20 my-1"></div>
-                    <Link href="/products?q=cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
-                    <Link href="/products?q=delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
-                    <Link href="/products?q=edible" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                    <Link href="/thca_cbd" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
+                    <Link href="/thca_delta" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
+                    <Link href="/thca_edibles" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
                     <div className="border-t border-gray-200/20 my-1"></div>
                     {/* New Product Types at bottom */}
                     <Link href="/mushrooms" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">🍄 Mushrooms</Link>
@@ -362,29 +366,9 @@ export default function GlobalMasthead() {
             <li>
               <Link
                 href="/products?category=dab-rigs"
-                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
+                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
               >
                 Dab Rigs
-              </Link>
-            </li>
-
-            {/* E-Rigs */}
-            <li>
-              <Link
-                href="/category/e-rigs"
-                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
-              >
-                E-Rigs
-              </Link>
-            </li>
-
-            {/* Vaporizers */}
-            <li>
-              <Link
-                href="/products?category=vaporizers"
-                className="text-black dark:text-white text-lg font-bold hover:text-dope-orange transition-colors"
-              >
-                Vaporizers
               </Link>
             </li>
 

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -9,12 +11,12 @@ interface LogoButtonProps {
 export default function CollectionsGrid() {
   const categories = [
     { name: 'THCA Flower', route: '/thca-flower', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg' },
-    { name: 'THCA Vapes & Concentrates', route: '/vapes', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg' },
-    { name: 'THCA Prerolls & More', route: '/pre-rolls', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Green%20Grid%20Sign.png' },
+    { name: 'Smoking Accessories', route: '/accessories', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg' },
+    { name: 'THCA Prerolls & Vapes', route: '/prerolls', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg' },
     { name: 'Bongs & Bong Attachments', route: '/bongs', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png' },
-    { name: 'Hand Pipes', route: '/pipes', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Grinder%20&%20Supplies.png' },
+    { name: 'Hand Pipes', route: '/pipes', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/hand_pipes.jpg' },
     { name: 'Dab-Rigs & Tools', route: '/dab-rigs', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png' },
-    { name: 'Smoking Accessories', route: '/accessories', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Green%20Grid%20Sign.png' },
+    { name: 'Shrooms & Stuff', route: '/shrooms', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg' },
     { name: 'Hookahs', route: '/hookahs', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg' },
   ];
 
@@ -44,7 +46,7 @@ export default function CollectionsGrid() {
         style={{
           backgroundColor: '#2d8f47',
           borderColor: '#2d8f47',
-          fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+          fontFamily: "'Chalets-Legweb', 'Inter', system-ui, sans-serif",
           fontWeight: 'normal',
           letterSpacing: '0.05em',
         }}
@@ -83,7 +85,7 @@ export default function CollectionsGrid() {
           <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/60 transition-colors duration-300" />
           <div className="absolute inset-0 flex items-end justify-center p-3 z-10 pointer-events-none">
-            <h3 className="font-highway text-white text-xl font-bold text-center">{cat.name}</h3>
+            <h1 className="text-white text-4xl md:text-5xl font-bold text-center uppercase">{cat.name}</h1>
           </div>
           <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <LogoButton href={cat.route} label="SHOP NOW" />
