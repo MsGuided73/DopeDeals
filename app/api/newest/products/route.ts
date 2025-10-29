@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 /**
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '8');
 
-    // Get newest products ordered by created_at (newest first)
+    // Get products specifically marked as "new arrivals" with valid images
     const { data: newProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -65,33 +65,41 @@ export async function GET(req: NextRequest) {
         image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product,
         brand_name, category_id, created_at, updated_at
       `)
-      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-      // Prioritize products with images
+
+      .eq('is_new', true) // Filter for products marked as new
       .order('created_at', { ascending: false })
-      .limit(limit * 2); // Get more to filter for valid images
+      .limit(50); // Limit since we're targeting specific products
 
     if (error) {
       console.error('Error fetching new products:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Filter for products with valid images
+    console.log(`⏬ Fetched ${newProducts?.length || 0} products with non-null image_url`);
+
+    // Filter for products with valid image URLs (including sigdistro.com)
     const validProducts = (newProducts || []).filter((product: any) => {
-      // Accept any non-empty image_url
-      if (product.image_url && product.image_url.trim() !== '') {
-        return hasRealProductImage(product.image_url);
+      // Check if image_url has a valid URL (including sigdistro.com)
+      if (product.image_url && product.image_url.trim() !== '' && hasRealProductImage(product.image_url)) {
+        console.log(`✅ Valid image_url for ${product.name}: ${product.image_url}`);
+        return true;
       }
 
-      // Check image_urls array for any non-empty URLs
+      // Fallback: Check image_urls array for valid URLs
       if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
-        return product.image_urls.some((url: string) => url && url.trim() !== '' && hasRealProductImage(url));
+        const hasValidUrls = product.image_urls.some((url: string) =>
+          url && url.trim() !== '' && hasRealProductImage(url)
+        );
+        if (hasValidUrls) {
+          console.log(`✅ Valid image_urls for ${product.name}: ${product.image_urls}`);
+          return true;
+        }
       }
 
-      return false;
+      return false; // Strict filtering - only show products with valid image URLs
     });
 
-    console.log(`🎯 New Products API: ${validProducts.length} products with valid image URLs from ${newProducts?.length || 0} total`);
+    console.log(`🎯 New Products API: ${validProducts.length} products with valid image URLs from ${newProducts?.length || 0} total products checked`);
 
     // Take only the requested number
     const finalProducts = validProducts.slice(0, limit);
