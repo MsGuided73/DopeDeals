@@ -34,7 +34,7 @@ export default function RewardsPage() {
             {/* Main Title */}
             <div className="mb-8">
               <h1
-                className="font-chalets text-6xl lg:text-8xl text-white mb-4 leading-none"
+                className="font-chalets-legweb text-6xl lg:text-8xl text-white mb-4 leading-none"
                 style={{
                   letterSpacing: '-0.02em',
                   textShadow: '3px 3px 12px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.7)'
@@ -43,7 +43,7 @@ export default function RewardsPage() {
                 DOPE
               </h1>
               <h1
-                className="font-chalets text-6xl lg:text-8xl text-dope-orange-500 mb-6 leading-none"
+                className="font-chalets-legweb text-6xl lg:text-8xl text-dope-orange-500 mb-6 leading-none"
                 style={{
                   letterSpacing: '-0.02em',
                   textShadow: '3px 3px 12px rgba(0, 0, 0, 0.9), 0 0 20px rgba(250, 105, 52, 0.5)'
@@ -99,7 +99,7 @@ export default function RewardsPage() {
       <section className="py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="font-chalets text-4xl lg:text-6xl text-white mb-6 tracking-tight">
+            <h2 className="font-chalets-legweb-legweb text-4xl lg:text-6xl text-white mb-6 tracking-tight">
               HERE'S THE <span className="text-dope-orange-500">DEAL</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
@@ -149,7 +149,7 @@ export default function RewardsPage() {
       <section className="py-20 bg-black">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="font-chalets text-4xl lg:text-6xl text-white mb-6 tracking-tight">
+            <h2 className="font-chalets-legweb text-4xl lg:text-6xl text-white mb-6 tracking-tight">
               SIMPLE AS <span className="text-dope-orange-500">HELL</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -207,7 +207,7 @@ export default function RewardsPage() {
       <section className="py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="font-chalets text-5xl lg:text-7xl text-white mb-6 tracking-tight">
+            <h2 className="font-chalets-legweb text-5xl lg:text-7xl text-white mb-6 tracking-tight">
               THE <span className="text-dope-orange-500">VIP LADDER</span>
             </h2>
             <p className="text-2xl text-gray-300 max-w-4xl mx-auto mb-4">
@@ -226,7 +226,7 @@ export default function RewardsPage() {
                 <div className="w-20 h-20 bg-gradient-to-r from-gray-500 to-gray-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <span className="text-2xl">🌱</span>
                 </div>
-                <h3 className="font-chalets text-2xl text-white mb-3 tracking-tight">STARTER</h3>
+                <h3 className="font-chalets-legweb text-2xl text-white mb-3 tracking-tight">STARTER</h3>
                 <div className="text-dope-orange-500 font-bold text-lg mb-2">$0 - $249</div>
                 <div className="text-gray-400 text-sm mb-6">Everyone starts here</div>
 
@@ -262,7 +262,7 @@ export default function RewardsPage() {
                 <div className="w-20 h-20 bg-gradient-to-r from-gray-300 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <span className="text-2xl">🥈</span>
                 </div>
-                <h3 className="font-chalets text-2xl text-white mb-3 tracking-tight">SILVER</h3>
+                <h3 className="font-chalets-legweb text-2xl text-white mb-3 tracking-tight">SILVER</h3>
                 <div className="text-dope-orange-500 font-bold text-lg mb-2">$250 - $749</div>
                 <div className="text-gray-400 text-sm mb-6">Getting warmed up</div>
 
@@ -307,7 +307,7 @@ export default function RewardsPage() {
                 <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <span className="text-2xl">🥇</span>
                 </div>
-                <h3 className="font-chalets text-2xl text-white mb-3 tracking-tight">GOLD</h3>
+                <h3 className="font-chalets-legweb text-2xl text-white mb-3 tracking-tight">GOLD</h3>
                 <div className="text-dope-orange-500 font-bold text-lg mb-2">$750 - $1,999</div>
                 <div className="text-yellow-400 text-sm mb-6 font-semibold">Now we're talking!</div>
 
@@ -357,7 +357,7 @@ export default function RewardsPage() {
                 <div className="w-20 h-20 bg-gradient-to-r from-dope-orange-500 to-dope-orange-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl animate-pulse">
                   <span className="text-2xl">💎</span>
                 </div>
-                <h3 className="font-chalets text-2xl text-white mb-3 tracking-tight">PLATINUM</h3>
+                <h3 className="font-chalets-legweb text-2xl text-white mb-3 tracking-tight">PLATINUM</h3>
                 <div className="text-dope-orange-500 font-bold text-lg mb-2">$2,000+</div>
                 <div className="text-dope-orange-400 text-sm mb-6 font-bold">ABSOLUTE LEGEND STATUS</div>
 
@@ -405,7 +405,7 @@ export default function RewardsPage() {
       <section className="py-20 bg-gradient-to-b from-gray-900 to-black">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="font-chalets text-5xl lg:text-7xl text-white mb-6 tracking-tight">
+            <h2 className="font-chalets-legweb text-5xl lg:text-7xl text-white mb-6 tracking-tight">
               IT'S <span className="text-dope-orange-500">STUPID SIMPLE</span>
             </h2>
             <p className="text-2xl text-gray-300 max-w-4xl mx-auto mb-4">
@@ -460,7 +460,7 @@ export default function RewardsPage() {
 
           {/* Bonus Ways to Earn */}
           <div className="mt-16 bg-gradient-to-r from-dope-orange-500/10 to-dope-orange-600/10 border border-dope-orange-500/20 rounded-xl p-8">
-            <h3 className="font-chalets text-2xl text-white mb-6 text-center tracking-tight">
+            <h3 className="font-chalets-legweb text-2xl text-white mb-6 text-center tracking-tight">
               BONUS WAYS TO EARN POINTS
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -496,7 +496,7 @@ export default function RewardsPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
         </div>
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
-          <h2 className="font-chalets text-5xl lg:text-8xl text-white mb-8 tracking-tight" style={{ textShadow: '3px 3px 12px rgba(0, 0, 0, 0.5)' }}>
+          <h2 className="font-chalets-legweb text-5xl lg:text-8xl text-white mb-8 tracking-tight" style={{ textShadow: '3px 3px 12px rgba(0, 0, 0, 0.5)' }}>
             READY TO GET <span className="text-black">DOPE</span>?
           </h2>
           <p className="text-2xl lg:text-3xl text-white/95 mb-4 font-bold max-w-4xl mx-auto" style={{ textShadow: '2px 2px 8px rgba(0, 0, 0, 0.3)' }}>

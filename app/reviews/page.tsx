@@ -121,7 +121,7 @@ export default function ReviewsPage() {
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-4xl font-chalets-legweb text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
             DOPE FEEDBACK
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -266,7 +266,7 @@ export default function ReviewsPage() {
 
         {/* Review Guidelines */}
         <div className="mt-16 bg-gray-50 rounded-lg p-8">
-          <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
             Review Guidelines
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

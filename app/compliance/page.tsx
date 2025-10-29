@@ -20,7 +20,7 @@ export default function CompliancePage() {
 
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-4xl font-chalets-legweb text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
             Legal Compliance & Regulations
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -32,7 +32,7 @@ export default function CompliancePage() {
         <div className="space-y-12">
           {/* Age Verification */}
           <section className="bg-gray-50 rounded-lg p-8">
-            <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
               Age Verification Requirements
             </h2>
             <div className="prose prose-lg max-w-none">
@@ -55,7 +55,7 @@ export default function CompliancePage() {
 
           {/* Product Compliance */}
           <section>
-            <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
               Product Compliance Standards
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -82,7 +82,7 @@ export default function CompliancePage() {
 
           {/* State Regulations */}
           <section className="bg-blue-50 rounded-lg p-8">
-            <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
               State-Specific Regulations
             </h2>
             <div className="prose prose-lg max-w-none">
@@ -108,7 +108,7 @@ export default function CompliancePage() {
 
           {/* Banking & Payment Compliance */}
           <section>
-            <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
               Financial Compliance
             </h2>
             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -137,7 +137,7 @@ export default function CompliancePage() {
 
           {/* Shipping & Delivery Compliance */}
           <section className="bg-green-50 rounded-lg p-8">
-            <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
               Shipping & Delivery Compliance
             </h2>
             <div className="prose prose-lg max-w-none">
@@ -166,7 +166,7 @@ export default function CompliancePage() {
 
           {/* Regulatory Updates */}
           <section>
-            <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
               Staying Current with Regulations
             </h2>
             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -207,7 +207,7 @@ export default function CompliancePage() {
 
           {/* Contact Information */}
           <section className="bg-gray-900 text-white rounded-lg p-8">
-            <h2 className="text-2xl font-chalets mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb mb-6" style={{ letterSpacing: '-0.02em' }}>
               Compliance Questions?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -11,7 +11,7 @@ export default function AffiliatePage() {
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-5xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
             AFFILIATE PROGRAM
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -31,7 +31,7 @@ export default function AffiliatePage() {
         {/* Commission Structure */}
         <section className="mb-16 bg-gradient-to-r from-dope-orange to-orange-600 rounded-2xl p-8 text-white">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-chalets mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-3xl font-chalets-legweb mb-4" style={{ letterSpacing: '-0.02em' }}>
               Earn Up To 15% Commission
             </h2>
             <p className="text-xl opacity-90">
@@ -59,7 +59,7 @@ export default function AffiliatePage() {
 
         {/* Why Join */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Why Join DOPE CITY Affiliates?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -134,7 +134,7 @@ export default function AffiliatePage() {
 
         {/* How It Works */}
         <section className="mb-16 bg-gray-50 rounded-2xl p-8">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             How It Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -171,7 +171,7 @@ export default function AffiliatePage() {
 
         {/* Perfect For */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Perfect For
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -216,7 +216,7 @@ export default function AffiliatePage() {
 
         {/* Terms & Requirements */}
         <section className="mb-16 bg-gray-900 text-white rounded-2xl p-8">
-          <h2 className="text-3xl font-chalets text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
             Program Requirements
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -245,7 +245,7 @@ export default function AffiliatePage() {
 
         {/* FAQ */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Frequently Asked Questions
           </h2>
           <div className="max-w-3xl mx-auto space-y-6">
@@ -281,7 +281,7 @@ export default function AffiliatePage() {
 
         {/* CTA Section */}
         <section className="text-center bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-12 text-white">
-          <h2 className="text-4xl font-chalets mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-4xl font-chalets-legweb mb-6" style={{ letterSpacing: '-0.02em' }}>
             Ready to Start Earning?
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">

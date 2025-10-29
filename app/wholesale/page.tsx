@@ -11,7 +11,7 @@ export default function WholesalePage() {
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-5xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
             WHOLESALE PORTAL
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -30,7 +30,7 @@ export default function WholesalePage() {
 
         {/* Benefits Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Why Choose DOPE CITY Wholesale?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -72,7 +72,7 @@ export default function WholesalePage() {
 
         {/* Pricing Tiers */}
         <section className="mb-16 bg-gray-50 rounded-2xl p-8">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Wholesale Pricing Tiers
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -180,7 +180,7 @@ export default function WholesalePage() {
 
         {/* Application Process */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             How to Get Started
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -217,7 +217,7 @@ export default function WholesalePage() {
 
         {/* Requirements */}
         <section className="mb-16 bg-gray-900 text-white rounded-2xl p-8">
-          <h2 className="text-3xl font-chalets text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
             Wholesale Requirements
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -246,7 +246,7 @@ export default function WholesalePage() {
 
         {/* Contact Information */}
         <section className="text-center">
-          <h2 className="text-3xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
             Ready to Partner with Us?
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">

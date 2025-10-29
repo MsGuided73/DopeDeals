@@ -96,7 +96,7 @@ export default function PressPage() {
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-5xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
             PRESS KIT
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -115,7 +115,7 @@ export default function PressPage() {
 
         {/* Company Overview */}
         <section className="mb-16 bg-gray-50 rounded-2xl p-8">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
             About DOPE CITY
           </h2>
           <div className="max-w-4xl mx-auto">
@@ -144,7 +144,7 @@ export default function PressPage() {
 
         {/* Press Releases */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Latest Press Releases
           </h2>
           <div className="space-y-6">
@@ -183,7 +183,7 @@ export default function PressPage() {
 
         {/* Media Assets */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Brand Assets & Media
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -227,7 +227,7 @@ export default function PressPage() {
 
         {/* Leadership Team */}
         <section className="mb-16 bg-gray-900 text-white rounded-2xl p-8">
-          <h2 className="text-3xl font-chalets text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
             Leadership Team
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -260,7 +260,7 @@ export default function PressPage() {
 
         {/* Media Guidelines */}
         <section className="mb-16">
-          <h2 className="text-3xl font-chalets text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
             Media Guidelines
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -289,7 +289,7 @@ export default function PressPage() {
 
         {/* Contact Information */}
         <section className="text-center bg-gray-50 rounded-2xl p-8">
-          <h2 className="text-3xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
             Media Inquiries
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
