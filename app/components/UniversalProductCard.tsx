@@ -87,13 +87,18 @@ export default function UniversalProductCard({
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  // Handle different image field names for maximum compatibility
-  const rawImageUrl = product.image_url || product.imageUrl || product.image;
-  
+  // Handle multiple images for variant switching
+  const imageUrls = product.image_urls || [];
+  const primaryImageUrl = product.image_url || product.imageUrl || product.image;
+
+  // Use selected variant image or fallback to primary image
+  const selectedImageUrl = imageUrls[selectedImageIndex] || primaryImageUrl;
+
   // Check if the image is appropriate for this product type
-  const isImageAppropriate = isImageAppropriateForProduct(rawImageUrl, product.name);
-  const imageUrl = isImageAppropriate && !imageError ? rawImageUrl : null;
+  const isImageAppropriate = isImageAppropriateForProduct(selectedImageUrl, product.name);
+  const imageUrl = isImageAppropriate && !imageError ? selectedImageUrl : null;
   const hasImage = imageUrl && imageUrl.trim() !== '';
 
   // Clean up product descriptions
@@ -731,7 +736,7 @@ export default function UniversalProductCard({
               <div className="ml-2">
                 <VariantIndicator
                   imageUrls={product.image_urls || []}
-                  onClick={() => {/* Navigate to product page */}}
+                  onClick={(index) => setSelectedImageIndex(index)}
                   className="-translate-y-1"
                 />
               </div>

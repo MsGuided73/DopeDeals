@@ -12,7 +12,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Font Preloading - Highway Gothic */}
+        {/* Font Preloading - Chalets (Primary) and Highway Gothic (Secondary) */}
+        <link rel="preload" href="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Chalets/chalets-webfont.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/gothic_highway/HWYGOTH.TTF" as="font" type="font/ttf" crossOrigin="anonymous" />
 
         {/* DNS Prefetch for External Domains */}

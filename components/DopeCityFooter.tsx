@@ -210,7 +210,7 @@ export default function Highway420Footer() {
           {/* Large HIGHWAY 420 Branding */}
           <div className="mb-8">
             <Link href="/" className="inline-block dope-hover hover:scale-105">
-              <h1 className="font-chalets text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal' }}>
+              <h1 className="font-chalets-legweb text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal' }}>
                 <span className="text-white drop-shadow-2xl">HIGHWAY</span>
                 <span className="text-white ml-4 drop-shadow-2xl">420</span>
               </h1>

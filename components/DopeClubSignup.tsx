@@ -64,7 +64,7 @@ export default function DopeClubSignup({ onSuccess }: DopeClubSignupProps) {
         <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
           <Crown className="w-10 h-10 text-white" />
         </div>
-        <h3 className="font-chalets text-3xl mb-4 tracking-tight">WELCOME TO DOPE CLUB!</h3>
+        <h3 className="font-chalets-legweb text-3xl mb-4 tracking-tight">WELCOME TO DOPE CLUB!</h3>
         <p className="text-xl mb-6 text-white/90">
           You've successfully joined our VIP rewards program!
         </p>
@@ -89,7 +89,7 @@ export default function DopeClubSignup({ onSuccess }: DopeClubSignupProps) {
         <div className="w-16 h-16 bg-gradient-to-r from-dope-orange-500 to-dope-orange-400 rounded-full flex items-center justify-center mx-auto mb-4">
           <Star className="w-8 h-8 text-white" />
         </div>
-        <h3 className="font-chalets text-3xl text-white mb-2 tracking-tight">JOIN DOPE CLUB</h3>
+        <h3 className="font-chalets-legweb text-3xl text-white mb-2 tracking-tight">JOIN DOPE CLUB</h3>
         <p className="text-gray-300">Unlock exclusive rewards and VIP benefits</p>
       </div>
 

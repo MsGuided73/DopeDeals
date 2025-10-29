@@ -252,20 +252,25 @@ export function VariantIndicator({
 }: {
   imageUrls: string[];
   className?: string;
-  onClick?: () => void;
+  onClick?: (index: number) => void;
 }) {
   if (!hasProductVariants(imageUrls)) return null;
 
+  // Don't make the whole component clickable, but make individual dots clickable
   return (
-    <button
-      onClick={onClick}
+    <div
       className={`flex gap-1 ${className}`}
       title={`${imageUrls.length} variants available`}
     >
       {imageUrls.slice(0, 4).map((url, index) => (
-        <div
+        <button
           key={index}
-          className="w-3 h-3 rounded-full border border-white shadow-sm"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onClick?.(index);
+          }}
+          className="w-3 h-3 rounded-full border border-white shadow-sm hover:scale-110 transition-transform"
           style={{
             backgroundColor: extractColorFromFilename(url.split('/').pop() || '')?.hex || '#9CA3AF'
           }}
@@ -276,6 +281,6 @@ export function VariantIndicator({
           <span className="text-xs text-white font-bold">+</span>
         </div>
       )}
-    </button>
+    </div>
   );
 }

@@ -18,28 +18,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const refreshCart = async () => {
     setIsLoading(true);
     try {
-      if (typeof window !== 'undefined') {
-        // Only try to load cart if we have a session
-        // This prevents the "User ID or session ID required" error on page load
-        const sessionId = getSessionId();
-        if (sessionId && sessionId !== '') {
-          try {
-            const cartData = await getCart();
-            setCart(cartData);
-          } catch (cartError) {
-            console.error('Cart loading error:', cartError);
-            // Set empty cart if cart loading fails
-            setCart({
-              items: [],
-              itemCount: 0,
-              subtotal: 0,
-              taxAmount: 0,
-              shippingAmount: 0,
-              total: 0
-            });
-          }
-        } else {
-          // No session yet, set empty cart
+      // Wait for window to be available
+      if (typeof window === 'undefined') {
+        // Server-side, set empty cart
+        setCart({
+          items: [],
+          itemCount: 0,
+          subtotal: 0,
+          taxAmount: 0,
+          shippingAmount: 0,
+          total: 0
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Client-side: ensure session exists before trying to load cart
+      const sessionId = ensureSessionId();
+
+      if (sessionId) {
+        try {
+          const cartData = await getCart();
+          setCart(cartData);
+        } catch (cartError) {
+          console.error('Cart loading error:', cartError);
+          // Set empty cart if cart loading fails
           setCart({
             items: [],
             itemCount: 0,
@@ -49,10 +52,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
             total: 0
           });
         }
+      } else {
+        // No session, set empty cart
+        setCart({
+          items: [],
+          itemCount: 0,
+          subtotal: 0,
+          taxAmount: 0,
+          shippingAmount: 0,
+          total: 0
+        });
       }
     } catch (error) {
       console.error('Error in refreshCart:', error);
-      // Set empty cart on any error to prevent app breaking
+      // Set empty cart on any error
       setCart({
         items: [],
         itemCount: 0,
@@ -67,21 +80,33 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Ensure session ID exists before trying to load cart
-    if (typeof window !== 'undefined') {
-      ensureSessionId();
-    }
+    // Only run on client side after hydration
+    let mounted = true;
 
-    refreshCart();
+    const initCart = async () => {
+      if (!mounted) return;
+
+      // Small delay to ensure hydration is complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      if (mounted) {
+        refreshCart();
+      }
+    };
+
+    initCart();
 
     // Listen for cart updates from other components
     const handleCartUpdate = () => {
-      refreshCart();
+      if (mounted) {
+        refreshCart();
+      }
     };
 
     window.addEventListener('cartUpdated', handleCartUpdate);
 
     return () => {
+      mounted = false;
       window.removeEventListener('cartUpdated', handleCartUpdate);
     };
   }, []);

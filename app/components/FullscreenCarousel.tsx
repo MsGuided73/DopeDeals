@@ -220,7 +220,7 @@ export default function FullscreenCarousel() {
             {/* Main Title */}
             {currentSlideData.title && (
               <h1
-                className={`font-chalets tracking-wider leading-none mb-6 ${currentSlideData.text_color}`}
+                className={`font-chalets-legweb tracking-wider leading-none mb-6 ${currentSlideData.text_color}`}
                 style={{
                   fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                   fontSize: 'clamp(4rem, 12vw, 8rem)',

@@ -99,9 +99,8 @@ export const addToCart = async (productId: string, quantity: number = 1): Promis
     const result = await response.json();
 
     toast.dismiss(loadingToast);
-    toast.success(`Added ${result.product?.name || 'item'} to cart!`, {
+    toast.success(`🔥 ${result.product?.name || 'item'} added to cart!`, {
       duration: 3000,
-      icon: '🛒',
     });
 
     // Trigger cart refresh event for global state
@@ -164,18 +163,25 @@ export const removeFromCart = async (itemId: string): Promise<boolean> => {
   const loadingToast = toast.loading('Removing from cart...');
 
   try {
-    // Use the new cart API structure
+    // Use PUT with quantity=0 to remove the item
     const response = await fetch('/api/cart', {
-      method: 'DELETE',
+      method: 'PUT',
       headers: {
+        'Content-Type': 'application/json',
         'x-session-id': sessionId,
       },
+      body: JSON.stringify({
+        cartItemId: itemId,
+        quantity: 0,
+      }),
     });
 
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || 'Failed to remove item from cart');
     }
+
+    const data = await response.json();
 
     toast.dismiss(loadingToast);
     toast.success('Item removed from cart', {

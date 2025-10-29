@@ -162,7 +162,7 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-chalets text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-4xl font-chalets-legweb text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
             DOPE CITY BLOG
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -234,7 +234,7 @@ export default function BlogPage() {
         {/* Featured Posts */}
         {featuredPosts.length > 0 && (
           <section className="mb-16">
-            <h2 className="text-2xl font-chalets text-gray-900 mb-8" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-8" style={{ letterSpacing: '-0.02em' }}>
               Featured Articles
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -279,7 +279,7 @@ export default function BlogPage() {
 
         {/* Regular Posts */}
         <section>
-          <h2 className="text-2xl font-chalets text-gray-900 mb-8" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-8" style={{ letterSpacing: '-0.02em' }}>
             Latest Articles
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -317,7 +317,7 @@ export default function BlogPage() {
 
         {/* Newsletter Signup */}
         <section className="mt-16 bg-gray-900 rounded-2xl p-8 text-center text-white">
-          <h2 className="text-2xl font-chalets mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-2xl font-chalets-legweb mb-4" style={{ letterSpacing: '-0.02em' }}>
             Stay in the Loop
           </h2>
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
@@ -340,7 +340,7 @@ export default function BlogPage() {
 
         {/* Popular Tags */}
         <section className="mt-16">
-          <h2 className="text-2xl font-chalets text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
             Popular Topics
           </h2>
           <div className="flex flex-wrap gap-3">
