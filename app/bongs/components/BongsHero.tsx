@@ -14,7 +14,7 @@ export default function BongsHero() {
           <div className="flex items-center space-x-6">
             {/* Title and Accent Line */}
             <div className="flex items-center space-x-4">
-              <h1 className="font-chalets-legweb text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-wider text-gray-900 leading-tight font-bold">
+              <h1 className="font-chalets text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-wider text-gray-900 leading-tight font-bold">
                 BONGS & WATER PIPES
               </h1>
               <div className="hidden md:block w-16 h-1 bg-dope-orange-500"></div>
@@ -47,7 +47,7 @@ export default function BongsHero() {
         <div className="mt-4">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="inline-flex items-center text-dope-orange-400 hover:text-dope-orange-300 font-medium transition-colors text-sm"
+            className="inline-flex items-center text-dope-orange-600 hover:text-dope-orange-300 font-medium transition-colors text-sm"
           >
             {isExpanded ? 'Hide bong details' : 'Learn why bongs hit different'}
             <svg
@@ -114,7 +114,7 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('all-bongs')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'all-bongs'
-                ? 'bg-dope-orange-500 text-white transform scale-105'
+                ? 'bg-dope-orange-600 text-white transform scale-105'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
@@ -124,8 +124,8 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('beaker-bongs')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'beaker-bongs'
-                ? 'bg-dope-orange-500 text-white transform scale-105'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-600 text-white transform scale-105'
+                : 'bg-white hover:bg-white text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             Beaker Bongs
@@ -134,8 +134,8 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('straight-tubes')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'straight-tubes'
-                ? 'bg-dope-orange-500 text-white transform scale-105'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-600 text-white transform scale-105'
+                : 'bg-white hover:bg-white text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             Straight Tubes
@@ -144,8 +144,8 @@ export default function BongsHero() {
             onClick={() => setActiveCategory('percolator-bongs')}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'percolator-bongs'
-                ? 'bg-dope-orange-500 text-white transform scale-105'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
+                ? 'bg-dope-orange-600 text-white transform scale-105'
+                : 'bg-white hover:bg-white text-gray-800 border-2 border-gray-300 hover:border-dope-orange-400'
             }`}
           >
             Percolator Bongs

@@ -15,13 +15,13 @@ interface BannerItem {
 const BANNER_MESSAGES = [
   {
     id: "1",
-    title: "Free VIP Membership - Join today, and get 15% off your first purchase.",
+    title: "Join our Road Crew Today and get 15% off your first purchase.",
     cta_text: "JOIN NOW",
     cta_link: "/rewards"
   },
   {
     id: "2",
-    title: "October 2025 Contest - DOPE CITY Roll Call - Submit a photo and short description of why you believe you live in a DOPE CITY. Prizes will be announced shortly.",
+    title: "",
     cta_text: "ENTER NOW",
     cta_link: "/contact"
   }

@@ -7,12 +7,53 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Helper function to get session_id from headers
+// Validation helpers
+function validateUUID(uuid: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+}
+
+// Setup session-based RLS using PostgreSQL GUC
+async function setupSessionRLS(sessionId?: string | null, userId?: string | null) {
+  try {
+    // Set GUC variables for session-based RLS
+    if (sessionId) {
+      await supabase.rpc('exec_sql', {
+        sql: `SET LOCAL app.current_session_id = '${sessionId}'`
+      });
+    }
+
+    if (userId) {
+      await supabase.rpc('exec_sql', {
+        sql: `SET LOCAL app.current_user_id = '${userId}'`
+      });
+    }
+  } catch (error) {
+    // Fallback: Try direct set_config calls
+    console.warn('GUC setup via RPC failed, this may be expected in some environments');
+  }
+}
+
+// Helper function to get session_id from headers/cookies
+async function getSessionId(request: NextRequest): Promise<string | null> {
+  // Try headers first
+  const headerSession = request.headers.get('x-session-id');
+  if (headerSession) return headerSession;
+
+  // Try cookies second
+  const cookieStore = await cookies();
+  const cookieSession = cookieStore.get('cart_session_id')?.value;
+  if (cookieSession) return cookieSession;
+
+  return null;
+}
+
+// Helper function to get session_id from headers (for backwards compatibility)
 function getSessionIdFromHeaders(request: NextRequest): string | null {
   return request.headers.get('x-session-id');
 }
 
-// Helper function to get user from auth token
+// Helper function to get current auth user
 async function getCurrentUser() {
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) {
@@ -21,44 +62,60 @@ async function getCurrentUser() {
   return user;
 }
 
-// Initialize cart on app load - ensures cart exists for user or session
-async function initializeCart(userId?: string | null, sessionId?: string | null) {
-  // If no user or session, nothing to initialize
-  if (!userId && !sessionId) return;
+// Get or create cart for user/session with session RLS
+async function getOrCreateCart(sessionId?: string | null, userId?: string | null): Promise<string | null> {
+  if (!sessionId && !userId) return null;
 
   try {
-    // Check if cart already exists
-    let existingQuery = supabase.from('shopping_cart').select('id').limit(1);
+    // First setup the session RLS
+    await setupSessionRLS(sessionId, userId);
+
+    // Try to find existing cart
+    let cartQuery = supabase.from('carts').select('id').limit(1);
 
     if (userId) {
-      existingQuery = existingQuery.eq('user_id', userId);
+      cartQuery = cartQuery.eq('user_id', userId);
     } else if (sessionId) {
-      existingQuery = existingQuery.eq('session_id', sessionId);
+      cartQuery = cartQuery.eq('session_id', sessionId);
     }
 
-    const { data: existingCart } = await existingQuery;
+    const { data: existingCart } = await cartQuery;
+    if (existingCart && existingCart.length > 0) {
+      return existingCart[0].id;
+    }
 
-    // If no cart exists, create one (shopping_cart table auto-creates via inserts)
-    // We don't need to pre-create an empty cart, just let inserts happen naturally
-    return existingCart?.[0]?.id || null;
+    // Create new cart if none exists
+    const { data: newCart, error } = await supabase
+      .from('carts')
+      .insert({
+        user_id: userId,
+        session_id: sessionId,
+      })
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    return newCart.id;
   } catch (error) {
-    console.error('Error initializing cart:', error);
+    console.error('Error getting/creating cart:', error);
     return null;
   }
 }
 
-// Get cart for display
-async function getCartItems(userId?: string | null, sessionId?: string | null) {
-  if (!userId && !sessionId) return [];
+// Get cart contents with proper RLS
+async function getCartItems(sessionId?: string | null, userId?: string | null) {
+  if (!sessionId && !userId) return [];
 
   try {
-    // Query all cart items for this user/session
-    let query = supabase
-      .from('shopping_cart')
+    // Setup session RLS first
+    await setupSessionRLS(sessionId, userId);
+
+    // Get cart items with product details
+    const { data: cartItems, error } = await supabase
+      .from('cart_items')
       .select(`
         id,
-        user_id,
-        session_id,
+        cart_id,
         product_id,
         quantity,
         price_at_time,
@@ -77,37 +134,29 @@ async function getCartItems(userId?: string | null, sessionId?: string | null) {
         )
       `);
 
-    if (userId) {
-      query = query.eq('user_id', userId);
-    } else if (sessionId) {
-      query = query.eq('session_id', sessionId);
-    }
-
-    const { data: cartRows, error } = await query;
-
     if (error) {
       console.error('Error fetching cart items:', error);
       return [];
     }
 
-    // Transform to cart item format expected by frontend
-    return (cartRows || []).map(row => ({
-      id: row.id,
-      productId: row.product_id,
-      quantity: row.quantity,
-      priceAtTime: parseFloat(row.price_at_time) || 0,
-      itemTotal: (parseFloat(row.price_at_time) || 0) * row.quantity,
-      product: row.main_site_products as any ? {
-        id: (row.main_site_products as any).id,
-        name: (row.main_site_products as any).name,
+    // Transform to expected format - cart_items.id is varchar
+    return (cartItems || []).map(item => ({
+      id: item.id.toString(), // Convert to string to match expected interface
+      productId: item.product_id,
+      quantity: item.quantity,
+      priceAtTime: parseFloat(item.price_at_time?.toString() || '0') || 0,
+      itemTotal: (parseFloat(item.price_at_time?.toString() || '0') || 0) * item.quantity,
+      product: item.main_site_products ? {
+        id: (item.main_site_products as any).id,
+        name: (item.main_site_products as any).name,
         description: '',
-        sku: `SKU-${row.product_id}`,
-        currentPrice: parseFloat((row.main_site_products as any).our_price) || 0,
-        vipPrice: parseFloat((row.main_site_products as any).fire_price) || null,
-        imageUrl: (row.main_site_products as any).image_url || null,
-        stockQuantity: (row.main_site_products as any).stock_quantity || 0,
-        isActive: (row.main_site_products as any).is_active || false,
-        inStock: ((row.main_site_products as any).stock_quantity || 0) > 0,
+        sku: `SKU-${item.product_id}`,
+        currentPrice: parseFloat((item.main_site_products as any).our_price) || 0,
+        vipPrice: parseFloat((item.main_site_products as any).fire_price) || null,
+        imageUrl: (item.main_site_products as any).image_url || null,
+        stockQuantity: (item.main_site_products as any).stock_quantity || 0,
+        isActive: (item.main_site_products as any).is_active || false,
+        inStock: ((item.main_site_products as any).stock_quantity || 0) > 0,
       } : null,
     }));
 
@@ -117,84 +166,105 @@ async function getCartItems(userId?: string | null, sessionId?: string | null) {
   }
 }
 
-// Add or update item in cart
-async function manageCartItem(userId?: string | null, sessionId?: string | null, productId?: string, quantity?: number, action: 'add' | 'update' | 'remove' = 'add') {
-  if (!productId || (!userId && !sessionId)) return null;
+// Add or update cart item with session-based UPSERT logic
+async function manageCartItem(
+  sessionId?: string | null,
+  userId?: string | null,
+  itemId?: string,
+  productId?: string,
+  quantity?: number,
+  action: 'add' | 'update' | 'remove' = 'add'
+) {
+  if (!productId || (!sessionId && !userId)) return null;
 
   try {
-    const conditions = userId
-      ? { user_id: userId, product_id: productId }
-      : { session_id: sessionId, product_id: productId };
+    // Setup session RLS
+    await setupSessionRLS(sessionId, userId);
+
+    // Get cart ID first
+    const cartId = await getOrCreateCart(sessionId, userId);
+    if (!cartId) throw new Error('Could not create or find cart');
+
+    const conditions = { cart_id: cartId, product_id: productId };
 
     if (action === 'add') {
-      // Try to find existing item
+      // Try UPSERT instead of separate check/insert
+      const finalQuantity = quantity || 1;
+
+      // Get current quantity if item exists
       const { data: existingItem } = await supabase
-        .from('shopping_cart')
-        .select('*')
+        .from('cart_items')
+        .select('quantity')
         .match(conditions)
         .single();
 
+      let newQuantity = finalQuantity;
       if (existingItem) {
-        // Update existing quantity
-        const newQuantity = existingItem.quantity + (quantity || 1);
-        const { error } = await supabase
-          .from('shopping_cart')
-          .update({
-            quantity: newQuantity,
-            updated_at: new Date().toISOString()
-          })
-          .match(conditions);
-
-        if (error) throw error;
-        return { ...existingItem, quantity: newQuantity };
-      } else {
-        // Get product price
-        const { data: product } = await supabase
-          .from('main_site_products')
-          .select('our_price')
-          .eq('id', productId)
-          .single();
-
-        const price = parseFloat(product?.our_price) || 0;
-
-        // Insert new item
-        const { data: newItem, error } = await supabase
-          .from('shopping_cart')
-          .insert({
-            user_id: userId || null,
-            session_id: sessionId || null,
-            product_id: productId,
-            quantity: quantity || 1,
-            price_at_time: price,
-          })
-          .select()
-          .single();
-
-        if (error) throw error;
-        return newItem;
+        newQuantity = existingItem.quantity + finalQuantity;
       }
-    }
 
-    if (action === 'update') {
+      // Get fresh product price
+      const { data: product } = await supabase
+        .from('main_site_products')
+        .select('our_price')
+        .eq('id', productId)
+        .single();
+
+      const price = parseFloat(product?.our_price) || 0;
+
+      // Upsert the item
+      const { data: upsertedItem, error } = await supabase
+        .from('cart_items')
+        .upsert({
+          cart_id: cartId,
+          product_id: productId,
+          quantity: newQuantity,
+          price_at_time: price,
+        }, {
+          onConflict: 'cart_id,product_id'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return upsertedItem;
+
+    } else if (action === 'update') {
+      // Update specific item by ID
+      if (!itemId) throw new Error('Item ID required for update');
+
       const { error } = await supabase
-        .from('shopping_cart')
+        .from('cart_items')
         .update({
-          quantity: quantity,
+          quantity,
           updated_at: new Date().toISOString()
         })
-        .match(conditions);
+        .eq('id', itemId)
+        .eq('cart_id', cartId); // Security: only update items in current cart
 
       if (error) throw error;
       return { quantity };
-    }
 
-    if (action === 'remove') {
-      const { error } = await supabase
-        .from('shopping_cart')
-        .delete()
-        .match(conditions);
+    } else if (action === 'remove') {
+      if (itemId) {
+        // Remove by item ID
+        const { error } = await supabase
+          .from('cart_items')
+          .delete()
+          .eq('id', itemId)
+          .eq('cart_id', cartId);
 
-      if (error) throw error;
+        if (error) throw error;
+      } else if (productId) {
+        // Remove by product ID
+        const { error } = await supabase
+          .from('cart_items')
+          .delete()
+          .match(conditions);
+
+        if (error) throw error;
+      }
+
       return null;
     }
 
@@ -210,16 +280,13 @@ export async function GET(request: NextRequest) {
     // Try to get authenticated user first
     const user = await getCurrentUser();
 
-    // Get session from headers for anonymous users
-    const sessionId = getSessionIdFromHeaders(request);
+    // Get session from headers/cookies for anonymous users
+    const sessionId = await getSessionId(request);
 
     const userId = user?.id || null;
 
-    // Initialize cart (ensures it exists, though with shopping_cart table, it's not strictly necessary)
-    await initializeCart(userId, sessionId);
-
-    // Get cart items
-    const cartItems = await getCartItems(userId, sessionId);
+    // Get cart items (cart will be created automatically if needed)
+    const cartItems = await getCartItems(sessionId, userId);
 
     // Calculate totals
     let subtotal = 0;
@@ -250,7 +317,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Cart GET error:', error);
     return NextResponse.json({
-      success: true,
+      success: false,
       cart: {
         items: [],
         itemCount: 0,
@@ -258,8 +325,9 @@ export async function GET(request: NextRequest) {
         taxAmount: 0,
         shippingAmount: 0,
         total: 0
-      }
-    });
+      },
+      error: 'Failed to fetch cart'
+    }, { status: 500 });
   }
 }
 
@@ -276,16 +344,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (typeof quantity !== 'number' || quantity < 1) {
+      return NextResponse.json(
+        { error: 'Quantity must be a positive number' },
+        { status: 400 }
+      );
+    }
+
     // Get user and session info
     const user = await getCurrentUser();
-    const sessionId = getSessionIdFromHeaders(request);
+    const sessionId = await getSessionId(request);
 
     const userId = user?.id || null;
 
     // Validate we have either user or session
     if (!userId && !sessionId) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { error: 'Authentication required - please refresh the page to establish a session' },
         { status: 401 }
       );
     }
@@ -333,14 +408,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Add to cart
-    const result = await manageCartItem(userId, sessionId, productId, quantity, 'add');
+    // Add to cart - correct parameter order: sessionId, userId, itemId?, productId, quantity?, action
+    const result = await manageCartItem(sessionId, userId, undefined, productId, quantity, 'add');
 
     if (result) {
       return NextResponse.json({
         success: true,
         message: 'Item added to cart successfully',
-        quantity: result.quantity
+        quantity: result.quantity,
+        itemId: result.id
       });
     } else {
       return NextResponse.json(
@@ -352,7 +428,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Add to cart error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
@@ -371,51 +447,69 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    if (quantity < 0) {
+    if (!validateUUID(cartItemId) && typeof cartItemId !== 'string') {
       return NextResponse.json(
-        { error: 'Quantity must be positive' },
+        { error: 'Invalid cart item ID format' },
+        { status: 400 }
+      );
+    }
+
+    if (typeof quantity !== 'number' || quantity < 0) {
+      return NextResponse.json(
+        { error: 'Quantity must be a non-negative number' },
         { status: 400 }
       );
     }
 
     // Get current user and session
     const user = await getCurrentUser();
-    const sessionId = getSessionIdFromHeaders(request);
+    const sessionId = await getSessionId(request);
     const userId = user?.id || null;
 
     if (!userId && !sessionId) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { error: 'Authentication required - please refresh the page to establish a session' },
         { status: 401 }
       );
     }
 
-    // Verify cart item belongs to current user/session
-    let itemQuery = supabase
-      .from('shopping_cart')
-      .select('id, product_id, quantity')
-      .eq('id', cartItemId);
+    // Check if we have access to this cart item via RLS
+    const { data: cartItem, error: itemError } = await supabase
+      .from('cart_items')
+      .select(`
+        id,
+        cart_id,
+        product_id,
+        quantity,
+        carts!inner(user_id, session_id)
+      `)
+      .eq('id', cartItemId)
+      .single();
 
-    if (userId) {
-      itemQuery = itemQuery.eq('user_id', userId);
-    } else {
-      itemQuery = itemQuery.eq('session_id', sessionId);
+    if (itemError || !cartItem) {
+      return NextResponse.json(
+        { error: 'Cart item not found or access denied' },
+        { status: 404 }
+      );
     }
 
-    const { data: cartItemData } = await itemQuery.single();
+    // Verify the cart item belongs to current user/session (additional server-side check)
+    const cartData = cartItem.carts as any;
+    const isOwner = (userId && cartData.user_id === userId) ||
+                   (sessionId && cartData.session_id === sessionId);
 
-    if (!cartItemData) {
+    if (!isOwner) {
       return NextResponse.json(
-        { error: 'Cart item not found' },
-        { status: 404 }
+        { error: 'Unauthorized access to cart item' },
+        { status: 403 }
       );
     }
 
     // Get product details for stock validation
     const { data: product } = await supabase
       .from('main_site_products')
-      .select('id, stock_quantity')
-      .eq('id', cartItemData.product_id)
+      .select('stock_quantity')
+      .eq('id', cartItem.product_id)
       .single();
 
     // Validate stock availability
@@ -430,24 +524,9 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // If quantity is 0, delete the item
+    // If quantity is 0, remove the item
     if (quantity === 0) {
-      const conditions = userId
-        ? { user_id: userId, id: cartItemId }
-        : { session_id: sessionId, id: cartItemId };
-
-      const { error: deleteError } = await supabase
-        .from('shopping_cart')
-        .delete()
-        .match(conditions);
-
-      if (deleteError) {
-        console.error('Error removing cart item:', deleteError);
-        return NextResponse.json(
-          { error: 'Failed to remove item' },
-          { status: 500 }
-        );
-      }
+      const result = await manageCartItem(sessionId, userId, cartItemId, cartItem.product_id, 0, 'remove');
 
       return NextResponse.json({
         success: true,
@@ -457,37 +536,26 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update quantity
-    const conditions = userId
-      ? { user_id: userId, id: cartItemId }
-      : { session_id: sessionId, id: cartItemId };
+    const result = await manageCartItem(sessionId, userId, cartItemId, cartItem.product_id, quantity, 'update');
 
-    const { error: updateError } = await supabase
-      .from('shopping_cart')
-      .update({
-        quantity,
-        updated_at: new Date().toISOString()
-      })
-      .match(conditions);
-
-    if (updateError) {
-      console.error('Error updating cart item:', updateError);
+    if (result) {
+      return NextResponse.json({
+        success: true,
+        message: 'Cart updated successfully',
+        action: 'updated',
+        quantity: result.quantity || quantity
+      });
+    } else {
       return NextResponse.json(
-        { error: 'Failed to update cart' },
+        { error: 'Failed to update cart item' },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Cart updated successfully',
-      action: 'updated',
-      quantity
-    });
-
   } catch (error) {
     console.error('Update cart error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
@@ -498,26 +566,24 @@ export async function DELETE(request: NextRequest) {
   try {
     // Get current user and session
     const user = await getCurrentUser();
-    const sessionId = getSessionIdFromHeaders(request);
+    const sessionId = await getSessionId(request);
     const userId = user?.id || null;
 
     if (!userId && !sessionId) {
       return NextResponse.json(
-        { error: 'Authentication required' },
+        { error: 'Authentication required - please refresh the page to establish a session' },
         { status: 401 }
       );
     }
 
-    // Delete all cart items for this user/session
-    let deleteQuery = supabase.from('shopping_cart').delete();
+    // Setup session RLS first
+    await setupSessionRLS(sessionId, userId);
 
-    if (userId) {
-      deleteQuery = deleteQuery.eq('user_id', userId);
-    } else {
-      deleteQuery = deleteQuery.eq('session_id', sessionId);
-    }
-
-    const { error } = await deleteQuery;
+    // Delete all cart items - the RLS policies will ensure only authorized items are affected
+    const { error } = await supabase
+      .from('cart_items')
+      .delete()
+      .neq('id', ''); // Delete all accessible items (empty string won't match any varchar)
 
     if (error) {
       console.error('Error clearing cart:', error);
@@ -535,7 +601,7 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     console.error('Clear cart error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

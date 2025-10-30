@@ -60,13 +60,13 @@ export default function Highway420Footer() {
                 <span className="text-dope-orange-400 font-bold text-xl">$</span>
               </div>
               <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">LOW PRICE</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md">Guarantee</p>
+              <p className="text-gray-200 text-sms drop-shadow-md">Guarantee</p>
             </div>
 
             {/* Easy, Hassle Free Returns */}
             <div className="text-center">
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-dope-orange-400" />
+                <Phone className="w-8 h-8 text-dope-orange-600" />
               </div>
               <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">EASY, HASSLE FREE</h3>
               <p className="text-gray-200 text-xs drop-shadow-md">Returns</p>
@@ -208,9 +208,9 @@ export default function Highway420Footer() {
           </div>
 
           {/* Large HIGHWAY 420 Branding */}
-          <div className="mb-8">
+          <div className="mb-12">
             <Link href="/" className="inline-block dope-hover hover:scale-105">
-              <h1 className="font-chalets-legweb text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl" style={{ fontFamily: "'Chalets', 'Inter', system-ui, sans-serif", fontWeight: 'normal' }}>
+              <h1 className="font-inter-black text-8xl md:text-9xl lg:text-[12rem] tracking-wider drop-shadow-2xl font-black" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
                 <span className="text-white drop-shadow-2xl">HIGHWAY</span>
                 <span className="text-white ml-4 drop-shadow-2xl">420</span>
               </h1>

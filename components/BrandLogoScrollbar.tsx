@@ -64,22 +64,15 @@ const brandLogos: BrandLogo[] = [
 
 export default function BrandLogoScrollbar() {
   return (
-    <section className="w-full relative overflow-hidden mb-16 mt-8" style={{ height: '300px' }}>
+    <section className="w-full relative overflow-hidden mb-16 mt-8" style={{ height: '450px' }}>
       {/* Marquee Frame Background */}
       <div className="absolute inset-0 bg-white z-0">
-        {/* Neon lighting effects */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-[#2d8f4700] to-transparent opacity-100"></div>
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-[#2d8f4704] to-transparent opacity-100"></div>
-
-        {/* Side neon strips */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-[#2d8f4700] to-transparent opacity-100"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-[#2d8f4704] to-transparent opacity-100"></div>
       </div>
 
       {/* Content Layer */}
       <div className="relative z-10 flex flex-col justify-center h-full px-4">
         {/* Section Header */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-4 mt-2.5">
           <h1 className="text-4xl md:text-5xl text-black mb-4">
             TRUSTED BRANDS
           </h1>
@@ -136,9 +129,9 @@ export default function BrandLogoScrollbar() {
                     className="relative z-10 max-w-full max-h-full object-contain"
                     loading="lazy"
                     style={{
-                      filter: 'brightness(1.4) contrast(1.3) saturate(1.1) drop-shadow(0 0 20px rgba(45, 143, 71, 0.3)) drop-shadow(0 0 40px rgba(45, 143, 71, 0.1))',
+                      filter: 'brightness(1.4) contrast(1.3) saturate(1.1)',
                       maxHeight: '180px',
-                      WebkitFilter: 'brightness(1.4) contrast(1.3) saturate(1.1) drop-shadow(0 0 20px rgba(45, 143, 71, 0.3)) drop-shadow(0 0 40px rgba(45, 143, 71, 0.1))'
+                      WebkitFilter: 'brightness(1.4) contrast(1.3) saturate(1.1)'
                     }}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
@@ -161,9 +154,9 @@ export default function BrandLogoScrollbar() {
                     className="relative z-10 max-w-full max-h-full object-contain"
                     loading="lazy"
                     style={{
-                      filter: 'brightness(1.4) contrast(1.3) saturate(1.1) drop-shadow(0 0 20px rgba(45, 143, 71, 0.3)) drop-shadow(0 0 40px rgba(45, 143, 71, 0.1))',
+                      filter: 'brightness(1.4) contrast(1.3) saturate(1.1)',
                       maxHeight: '180px',
-                      WebkitFilter: 'brightness(1.4) contrast(1.3) saturate(1.1) drop-shadow(0 0 20px rgba(45, 143, 71, 0.3)) drop-shadow(0 0 40px rgba(45, 143, 71, 0.1))'
+                      WebkitFilter: 'brightness(1.4) contrast(1.3) saturate(1.1)'
                     }}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
@@ -180,15 +173,9 @@ export default function BrandLogoScrollbar() {
         <div className="text-center mt-2">
           <a
             href="/brands"
-            className="inline-block px-6 py-2 bg-transparent text-[#2d8f4700] border-2 border-[#2d8f4700] font-highway text-sm uppercase tracking-wide rounded-none transition-all duration-300 hover:bg-[#2d8f47] hover:text-white hover:scale-105"
-            style={{
-              fontFamily: "'Highway Gothic', 'Arial', sans-serif",
-              fontWeight: 'normal',
-              letterSpacing: '0.05em',
-              textShadow: '0 0 8px rgba(45, 143, 71, 0.5)'
-            }}
+            className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
           >
-            EXPLORE ALL BRANDS
+            SHOP BY BRAND →
           </a>
         </div>
       </div>

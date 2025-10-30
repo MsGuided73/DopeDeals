@@ -48,29 +48,54 @@
 @tailwind utilities;
 
 /* HIGHWAY 420 Style Guide Enforcement */
-/* 1. Chalets - Primary Brand Font for All Titles & Headers */
-h1, h2, h3, h4, h5, h6,
-.font-chalets, .font-chalets *,
-.chalets-title, .chalets-title * {
+/* 1. Product Cards Override - Use Inter for Product Names (HIGHEST PRIORITY) */
+.product-card .text-lg, .product-card .text-xl, .product-card .text-2xl,
+.product-card .text-3xl, .product-card .text-4xl, .product-card .text-5xl,
+.product-card .text-6xl, .product-card h1, .product-card h2, .product-card h3,
+.product-card h4, .product-card h5, .product-card h6 {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-weight: bold !important;
+}
+
+/* 2. Size-Aware Chalets - Large Text (text-xl+) Uses Chalets (LOW PRIORITY) */
+.text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl,
+.text-6xl, .text-7xl, .text-8xl, .text-9xl,
+.chalets-title, .chalets-title *,
+.font-chalets, .font-chalets,
+.font-chalets * {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.02em !important;
 }
 
-/* 2. Inter - Secondary Font for Body & Subtext */
+/* Override any Tailwind font-bold on Chalets elements */
+*[style*="font-family: 'Chalets'"] { font-weight: normal !important; }
+
+/* 2. Inter - Readable Font Override */
+.font-inter,
+.font-inter * {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-weight: bold !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* 3. Legacy font class support - Redirect to new hierarchy */
 .font-highway, .font-highway *,
 [class*="font-highway"],
 .highway-title, .highway-title *,
-body, p, .text-sm, .text-xs, .text-base {
+body, p, .text-sm, .text-xs, .text-base,
+.font-chalets-legweb,
+.font-chalets-legweb * {
   font-family: 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: 0.01em !important;
   text-transform: none !important;
 }
 
-/* 3. Legacy font class support - Redirect to new hierarchy */
-.font-chalets-legweb,
-.font-chalets-legweb * {
+/* 4. Hero titles get automatic Chalets */
+.hero-title, .hero-title *,
+.h1, .h1 *, h1, h1 *,
+.hero-text, .hero-text * {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.02em !important;

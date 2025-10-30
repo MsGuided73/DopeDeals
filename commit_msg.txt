@@ -1,1 +1,1 @@
-feat: Update product components - enhance blog pages, carousel, product cards, variant selector, and layout utilities  
+feat: Add new features - introduce dope deals API and section, along with VIP benefits documentation  

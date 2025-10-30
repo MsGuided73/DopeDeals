@@ -6,22 +6,12 @@ export default function PipesHero() {
 
   return (
     <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-100 text-black overflow-hidden shadow-lg">
-      {/* Orange Pipe Graphic - Far Left Edge - Full Height */}
-      <div className="absolute left-0 top-0 w-64 bg-dope-orange z-10" style={{ height: '140px' }}>
-        <div className="flex items-center justify-center h-full">
-          <img
-            src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/icons/pipe%20icon.png"
-            alt="Hand Pipes"
-            className="w-20 h-20 object-contain"
-          />
-        </div>
-      </div>
 
       {/* Compact Header Bar */}
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h1 className="font-chalets-legweb text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider text-black leading-tight font-bold">
+            <h1 className="font-chalets-text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider text-black leading-tight font-bold">
               GLASS PIPES & HAND PIPES
             </h1>
             <div className="hidden md:block w-16 h-0.5 bg-dope-orange-500"></div>

@@ -163,11 +163,13 @@ export default function FeaturedProductsSection() {
         <div className="flex overflow-x-auto gap-6 pb-4 px-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse flex-shrink-0 w-96">
-              <div className="aspect-square bg-muted h-80"></div>
-              <div className="p-6">
+              <div className="p-4">
                 <div className="h-6 bg-muted-foreground/30 rounded mb-2"></div>
                 <div className="h-4 bg-muted-foreground/20 rounded mb-4"></div>
-                <div className="flex items-center justify-between">
+              </div>
+              <div className="aspect-square bg-muted h-64 mx-4 rounded-lg"></div>
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
                   <div className="h-6 bg-muted-foreground/20 rounded w-16"></div>
                   <div className="h-8 bg-muted-foreground/30 rounded w-20"></div>
                 </div>
@@ -220,73 +222,73 @@ export default function FeaturedProductsSection() {
               <Link
                 key={product.id}
                 href={`/product/${product.id}`}
-                className="group bg-white rounded-xl border border-gray-200 overflow-visible hover:shadow-lg hover:border-dope-orange-300 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 min-h-96 block"
+                className="product-card group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-dope-orange-300 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 block"
               >
-                <div className="relative w-full h-full bg-gray-50 overflow-hidden">
-                  {transformedProduct.image_url ? (
-                    <img
-                      src={transformedProduct.image_url}
-                      alt={transformedProduct.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                      <div className="text-center">
-                        <div className="text-4xl mb-2">📦</div>
-                        <div className="text-sm font-medium">No Image</div>
+                <div className="p-4 flex flex-col">
+                  {/* TOP SECTION: Brand Name and Product Name */}
+                  <div className="mb-4">
+                    <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                      {transformedProduct.brand_name || 'STORE BRAND'}
+                    </p>
+                    <h3 className="font-bold text-gray-900 text-lg leading-tight line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                      {transformedProduct.name}
+                    </h3>
+                  </div>
+
+                  {/* MIDDLE SECTION: Image with badges */}
+                  <div className="relative w-full h-64 bg-gray-50 overflow-hidden rounded-lg mb-4">
+                    {transformedProduct.image_url ? (
+                      <img
+                        src={transformedProduct.image_url}
+                        alt={transformedProduct.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                        <div className="text-center">
+                          <div className="text-4xl mb-2">📦</div>
+                          <div className="text-sm font-medium">No Image</div>
+                        </div>
                       </div>
+                    )}
+
+                    <div className="absolute top-3 left-3 flex flex-col gap-2">
+                      {transformedProduct.featured && (
+                        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                          ⭐ Featured
+                        </div>
+                      )}
+                      {transformedProduct.discount_percentage && (
+                        <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                          -{transformedProduct.discount_percentage}% OFF
+                        </div>
+                      )}
                     </div>
-                  )}
 
-                  <div className="absolute top-3 left-3 flex flex-col gap-2">
-                    {transformedProduct.featured && (
-                      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                        ⭐ Featured
-                      </div>
-                    )}
-                    {transformedProduct.discount_percentage && (
-                      <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                        -{transformedProduct.discount_percentage}% OFF
-                      </div>
-                    )}
+                    <div className="absolute top-3 right-3">
+                      <button className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                              onClick={(e) => e.stopPropagation()}>
+                        <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="absolute top-3 right-3">
-                    <button className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
-                            onClick={(e) => e.stopPropagation()}>
-                      <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-4 flex flex-col h-full">
-                  {/* Fixed brand name rendering - always show something */}
-                  <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
-                    {transformedProduct.brand_name || 'STORE BRAND'}
-                  </p>
-
-                  <h3 className="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
-                    {transformedProduct.name}
-                  </h3>
-
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                  {/* Short description */}
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
                     {transformedProduct.short_description}
                   </p>
 
+                  {/* BOTTOM SECTION: Price and Buttons */}
                   <div className="mt-auto">
                     <div className="mb-4">
                       {/* Enhanced price display with fallbacks */}
                       <div className="text-2xl font-bold text-gray-900">
-                        {transformedProduct.price && !isNaN(parseFloat(transformedProduct.price)) 
+                        {transformedProduct.price && !isNaN(parseFloat(transformedProduct.price))
                           ? `$${parseFloat(transformedProduct.price).toFixed(2)}`
                           : 'Price Unavailable'
                         }
-                      </div>
-                      {/* Debug info - remove this in production */}
-                      <div className="text-xs text-gray-400 mt-1">
-                        Debug: Price = "{transformedProduct.price}" | Original = {product.our_price}
                       </div>
                     </div>
 

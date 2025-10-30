@@ -55,25 +55,21 @@ export default function HomePage() {
 
           <CollectionsGrid />
 
+          {/* Featured Products Section - Moved below Collections Grid */}
+          <FeaturedProductsSection />
+
           {/* New Products Section */}
           <NewProductsSection />
 
           {/* Brand Logo Scrollbar */}
           <BrandLogoScrollbar />
 
-          {/* Dope Deals Section */}
-          <DopeDealsSection />
-
           {/* Customer Reviews Section - Moved above footer */}
           <section className="mt-24 mb-16">
             <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-chalets-legweb font-bold mb-4" style={{
+              <h1 className="text-4xl md:text-5xl font-chalets font-bold mb-4" style={{
                 letterSpacing: '-0.02em',
-                background: 'linear-gradient(135deg, #374151 0%, #6b7280 50%, #374151 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                color: '#374151'
+                color: '#000000'
               }}>
                 HIGH PRAISE
               </h1>
@@ -194,8 +190,8 @@ export default function HomePage() {
           </section>
         </main>
 
-        {/* Hot Products Section - Moved below Collections Grid */}
-        <FeaturedProductsSection />
+        {/* Dope Deals Section - Moved to bottom */}
+        <DopeDealsSection />
       </div>
     </div>
   );

@@ -136,7 +136,7 @@ export default function NewProductsSection() {
   const productsToShow = products;
 
   return (
-    <section className="mt-16 bg-gray-50 dark:bg-gray-950 py-12">
+    <section className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -157,7 +157,7 @@ export default function NewProductsSection() {
                   href={`/product/${product.id}`}
                   className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-72 h-80 block mx-3"
                 >
-                  <div className="relative w-full aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
+                  <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
                       <img
                         src={transformedProduct.image_url}
@@ -255,7 +255,7 @@ export default function NewProductsSection() {
                   href={`/product/${product.id}`}
                   className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-72 h-80 block mx-3"
                 >
-                  <div className="relative w-full aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
+                  <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
                       <img
                         src={transformedProduct.image_url}
@@ -351,8 +351,9 @@ export default function NewProductsSection() {
         <div className="text-center mt-8">
           <Link
             href="/products"
-            className="inline-block px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-full font-medium transition-colors duration-200">
-            View All Fresh Drops
+            className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
+          >
+            VIEW ALL FRESH DROPS →
           </Link>
         </div>
       </div>

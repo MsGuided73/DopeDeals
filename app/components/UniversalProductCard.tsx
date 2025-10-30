@@ -202,7 +202,7 @@ export default function UniversalProductCard({
         href={`/product/${product.id}`} 
         className={`group flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 ${className}`}
       >
-        <div className="relative w-16 h-16 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
+        <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-md overflow-hidden">
           {hasImage ? (
             <Image
               src={imageUrl}
@@ -246,7 +246,7 @@ export default function UniversalProductCard({
         className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}
       >
         {/* Large Product Image - Left Side */}
-        <div className="relative w-48 h-48 flex-shrink-0 bg-gray-100 overflow-hidden">
+        <div className="relative w-48 h-48 flex-shrink-0 bg-white overflow-hidden">
           {hasImage ? (
             <Image
               src={imageUrl}
@@ -391,7 +391,7 @@ export default function UniversalProductCard({
       >
         <div className="flex">
           {/* Product Image */}
-          <div className="relative w-48 h-48 flex-shrink-0 bg-gray-100">
+          <div className="relative w-48 h-48 flex-shrink-0 bg-white">
             {hasImage ? (
               <Image
                 src={imageUrl}
@@ -528,7 +528,7 @@ export default function UniversalProductCard({
     return (
       <div className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}>
         {/* Large Product Image - Left Side - Full Height */}
-        <div className="relative w-64 h-80 flex-shrink-0 bg-gray-100 overflow-hidden">
+        <div className="relative w-64 h-80 flex-shrink-0 bg-white overflow-hidden">
           {hasImage ? (
             <Image
               src={imageUrl}
@@ -668,7 +668,7 @@ export default function UniversalProductCard({
   return (
     <div className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}>
       {/* Product Image */}
-      <div className={`relative ${config.image} bg-gray-100 overflow-hidden`}>
+      <div className={`relative ${config.image} bg-white overflow-hidden`}>
         {hasImage ? (
           <Image
             src={imageUrl}

@@ -88,33 +88,41 @@ export default function GlobalMasthead() {
         </div>
 
         {/* Main Masthead - Black Titlebar */}
-        <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '130px', height: '130px' }}>
+        <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '100px', height: '100px' }}>
           {/* Logo extending from top of black titlebar to down below nav */}
-          <div className="absolute top-0 left-0 z-[100]" style={{ top: '0px', left: '-25px', height: '300px', width: 'auto', overflow: 'hidden' }}>
+          <div className="absolute top-10 left-0 z-[100] md:h-[290px] h-[180px]" style={{ top: '-10px', left: '-25px', width: 'auto', overflow: 'hidden' }}>
             <Link href="/">
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_HighWAY420-official_transparent.png"
                 alt="HIGHWAY 420 Logo"
                 width={200}
                 height={290}
-                className="object-contain"
-                style={{ height: '290px', width: 'auto', display: 'block' }}
+                className="object-contain md:h-[290px] h-[180px]"
+                style={{ width: 'auto', display: 'block' }}
               />
             </Link>
           </div>
 
           {/* Center Right: Search Bar */}
-          <div className="mr-4 hidden md:block ml-auto">
+          <div className="hidden md:block flex-1 mr-4">
             <EnhancedSearchBar />
           </div>
 
           {/* Right: User Actions - Reduced spacing between icons */}
           <div className="flex items-center gap-3 flex-shrink-0 mr-5 text-white">
-            <Link href="/sitemap-page" className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110" title="Site Map">
+            <Link href="/sitemap-page" className="hidden md:block p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110" title="Site Map">
               <svg className="w-12 h-12 drop-shadow-lg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
             </Link>
+            {/* Mobile Hamburger Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
+              title="Menu"
+            >
+              <Menu className="w-8 h-8 stroke-3" strokeWidth="3" />
+            </button>
             <button
               onClick={() => setShowProfileModal(true)}
               className="p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
@@ -131,20 +139,155 @@ export default function GlobalMasthead() {
           </div>
         </div>
 
-        {/* Headline - Now positioned outside black titlebar */}
-        <div className="text-center py-4">
-          <h1 className="text-white text-3xl md:text-5xl lg:text-6xl xl:text-6xl font-normal uppercase tracking-wider"
-              style={{ letterSpacing: '0.02em' }}>
-        High Adventure Starts Here
-          </h1>
-        </div>
-
         {/* Mobile Search Bar - Only on mobile */}
         <div className="md:hidden bg-black text-white px-4 pb-4">
           <EnhancedSearchBar />
         </div>
 
-        {/* Highway sign divider line */}
+        {/* Mobile Hamburger Menu - Only on mobile */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-200 shadow-lg" style={{ backgroundColor: '#f4f1e8' }}>
+            <div className="px-4 py-6 space-y-4">
+              {/* Main Navigation Links */}
+              <div className="space-y-3">
+                <Link
+                  href="/products"
+                  className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Shop All Products
+                </Link>
+                <Link
+                  href="/bongs"
+                  className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Bongs & Water Pipes
+                </Link>
+                <Link
+                  href="/pipes"
+                  className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Pipes
+                </Link>
+                <Link
+                  href="/products?category=dab-rigs"
+                  className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Dab Rigs
+                </Link>
+                <Link
+                  href="/products?category=vaporizers"
+                  className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Vaporizers
+                </Link>
+                <Link
+                  href="/products?category=accessories"
+                  className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Accessories
+                </Link>
+                <Link
+                  href="/products?category=edibles"
+                  className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Edibles & Munchies
+                </Link>
+
+                {/* THCA Section */}
+                <div className="pt-4">
+                  <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">THCA & More</h3>
+                  <div className="space-y-2 pl-4">
+                    <Link
+                      href="/thca_flower"
+                      className="block text-gray-800 hover:text-yellow-500 transition-colors text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      THCA Flower
+                    </Link>
+                    <Link
+                      href="/thca_prerolls"
+                      className="block text-gray-800 hover:text-yellow-500 transition-colors text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      THCA Pre-Rolls
+                    </Link>
+                    <Link
+                      href="/thca_cbd"
+                      className="block text-gray-800 hover:text-yellow-500 transition-colors text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      CBD Products
+                    </Link>
+                    <Link
+                      href="/mushrooms"
+                      className="block text-gray-800 hover:text-yellow-500 transition-colors text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      🍄 Mushrooms
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Brands Section */}
+                <div className="pt-4">
+                  <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">Brands</h3>
+                  <div className="space-y-2 pl-4">
+                    <Link
+                      href="/brands"
+                      className="block text-gray-800 hover:text-yellow-500 transition-colors text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      View All Brands
+                    </Link>
+                    <Link
+                      href="/brands/raw-papers"
+                      className="block text-gray-800 hover:text-yellow-500 transition-colors text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      RAW Papers
+                    </Link>
+                    <Link
+                      href="/brands/roor"
+                      className="block text-gray-800 hover:text-yellow-500 transition-colors text-base"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      ROOR
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Account Section */}
+                <div className="pt-4 border-t border-gray-200/50">
+                  <div className="space-y-3">
+                    <Link
+                      href="/account"
+                      className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      My Account
+                    </Link>
+                    <Link
+                      href="/rewards"
+                      className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      VIP Rewards
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Highway sign divider line - Now connects directly to title bar */}
         <div
           className="h-1"
           style={{
@@ -154,7 +297,7 @@ export default function GlobalMasthead() {
         ></div>
 
         {/* Highway Sign Navigation Bar - Desktop Only */}
-        <nav className="hidden md:block shadow-lg" style={{ backgroundColor: '#f4f1e8' }}>
+        <nav className="hidden md:block shadow-lg border-b-4 border-black" style={{ backgroundColor: '#f4f1e8' }}>
           <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
             {/* Shop Dropdown - Consolidated Categories and Brands */}
             <li
@@ -172,7 +315,7 @@ export default function GlobalMasthead() {
                 </svg>
               </button>
               {openDropdown === 'shop' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl show-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
                   <div className="py-2">
                     <Link href="/products" className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">All Products</Link>
                     <div className="border-t border-gray-200/20 my-1"></div>

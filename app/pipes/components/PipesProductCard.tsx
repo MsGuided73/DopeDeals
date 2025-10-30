@@ -66,9 +66,9 @@ export default function PipesProductCard({ product }: PipesProductCardProps) {
   return (
     <Link
       href={`/product/${product.id}`}
-      className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-gray-300 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 min-h-[400px] block"
+      className="group bg-white rounded-xl border border-white overflow-hidden hover:shadow-lg hover:border-gray-300 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 min-h-[400px] block"
     >
-      <div className="relative w-full h-80 bg-gray-50 overflow-hidden">
+      <div className="relative w-full h-80 bg-white overflow-hidden">
         {product.image_url ? (
           <img
             src={product.image_url}
