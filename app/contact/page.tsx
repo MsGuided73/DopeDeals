@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 import { Mail, Phone, MapPin, Clock, MessageCircle, Headphones } from 'lucide-react';
 

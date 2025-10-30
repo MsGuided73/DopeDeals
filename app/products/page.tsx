@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import GlobalMasthead from '../components/GlobalMasthead';
 import ProductsPageContent from './ProductsPageContent';
 import AgeVerification from '../components/AgeVerification';
 

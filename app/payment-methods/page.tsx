@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 import { CreditCard, Smartphone, Shield, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 

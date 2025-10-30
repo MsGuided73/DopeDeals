@@ -1,5 +1,6 @@
 import "./globals.css";
 import AppProviders from "./providers";
+import GlobalMasthead from "./components/GlobalMasthead";
 import Highway420Footer from "../components/Highway420Footer";
 import ScrollingBanner from "./components/ScrollingBanner";
 
@@ -36,6 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="min-h-screen flex flex-col" suppressHydrationWarning>
             {/* Scrolling Banner - DISABLED for now */}
             {/* <ScrollingBanner /> */}
+
+            {/* Global Masthead - Added to ALL pages */}
+            <GlobalMasthead />
 
             <main className="flex-1">
               {children}

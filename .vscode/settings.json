@@ -21,5 +21,6 @@
     "http",
     "net"
   ],
-  "npm.packageManager": "pnpm"
+  "npm.packageManager": "pnpm",
+  "todo-tree.tree.scanMode": "workspace only"
 }

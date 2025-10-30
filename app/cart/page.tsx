@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
-import GlobalMasthead from '../components/GlobalMasthead';
+
 import {
   getCart,
   updateCartQuantity,
@@ -89,7 +89,6 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
-        <GlobalMasthead />
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
@@ -112,7 +111,6 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <GlobalMasthead />
 
       {/* Cart Breadcrumbs */}
       <div className="bg-gray-50 border-b border-gray-200">

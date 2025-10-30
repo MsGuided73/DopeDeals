@@ -50,7 +50,7 @@ export default function Highway420Footer() {
                   className="w-8 h-8 object-contain"
                 />
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>DISCREET SHIPPING</h3>
+              <h3 className="text-white font-black text-lg mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>DISCREET SHIPPING</h3>
               <p className="text-gray-200 text-xs drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>Nothing to see here</p>
             </div>
 

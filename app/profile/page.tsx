@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { User, Package, MapPin, CreditCard, Settings, LogOut } from 'lucide-react';
-import GlobalMasthead from '../components/GlobalMasthead';
-
 interface Order {
   id: string;
   orderNumber: string;

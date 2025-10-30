@@ -1,6 +1,5 @@
 "use client";
 import { useState } from 'react';
-import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 import { Gift, CreditCard, Mail, Calendar, CheckCircle } from 'lucide-react';
 

@@ -14,7 +14,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import GlobalMasthead from '../app/components/GlobalMasthead';
 import DopeCityFooter from '../components/DopeCityFooter';
 import { supabaseBrowser } from '../app/lib/supabase-browser';
 import { Button } from '../app/components/ui/button';

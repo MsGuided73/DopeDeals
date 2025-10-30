@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import GlobalMasthead from '../components/GlobalMasthead';
-
 import Image from 'next/image';
 import { PRODUCT_CATEGORIES, PRODUCT_BRANDS, PRICE_RANGES } from '../lib/product-categorization';
 import ProductCard from '../products/components/ProductCard';

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import GlobalMasthead from '../../components/GlobalMasthead';
 import AgeVerification from '../../components/AgeVerification';
 
 interface Address {

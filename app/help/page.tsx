@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 import { Search, Package, CreditCard, Truck, RotateCcw, Shield, MessageCircle, Phone } from 'lucide-react';
 

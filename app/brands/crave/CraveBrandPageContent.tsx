@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { supabaseBrowser } from '../../lib/supabase-browser';
-import GlobalMasthead from '../../components/GlobalMasthead';
 import Highway420Footer from '../../../components/DopeCityFooter';
 
 import Image from 'next/image';

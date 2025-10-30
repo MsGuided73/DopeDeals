@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '../../products/components/ProductCard';
-import GlobalMasthead from '../../components/GlobalMasthead';
 import AgeVerification from '../../components/AgeVerification';
 import { supabaseServer } from '../../lib/supabase-server';
 

@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, CreditCard, Truck, Shield, CheckCircle } from 'lucide-react';
-import GlobalMasthead from '../components/GlobalMasthead';
-
 interface CheckoutForm {
   // Customer Information
   firstName: string;

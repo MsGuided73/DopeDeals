@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 import { MessageCircle, Sparkles, Clock, User, Search, Filter } from 'lucide-react';
 
@@ -156,7 +155,6 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <GlobalMasthead />
       <AgeVerification />
       
       <div className="max-w-7xl mx-auto py-12 px-4">

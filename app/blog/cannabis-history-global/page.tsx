@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import GlobalMasthead from '../../components/GlobalMasthead';
 import AgeVerification from '../../components/AgeVerification';
 import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle } from 'lucide-react';
 

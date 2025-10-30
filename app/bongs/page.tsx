@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import GlobalMasthead from '../components/GlobalMasthead';
 import BongsPageContent from './BongsPageContent';
 import AgeVerification from '../components/AgeVerification';
 
@@ -14,9 +13,6 @@ export default function BongsPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Age Verification Popup */}
       <AgeVerification />
-
-      {/* Universal Layout Components */}
-      <GlobalMasthead />
 
       <Suspense fallback={
         <div className="min-h-screen flex items-center justify-center">

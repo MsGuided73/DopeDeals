@@ -1,7 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import GlobalMasthead from '../components/GlobalMasthead';
-
 export const metadata = {
   title: 'DOPE REWARDS | VIP Club That Pays You Back - DOPE CITY',
   description: 'Join the most exclusive cannabis rewards program. Earn serious cash back, get VIP perks, exclusive drops, and birthday gifts that get better every year. The higher you climb, the more DOPE it gets.',

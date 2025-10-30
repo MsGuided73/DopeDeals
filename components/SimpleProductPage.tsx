@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import GlobalMasthead from '../app/components/GlobalMasthead';
 import ProductGallery from '../app/components/ProductGallery';
 import { addToCart } from '../app/lib/cart-utils';
 

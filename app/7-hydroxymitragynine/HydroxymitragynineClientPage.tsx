@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense } from 'react';
-import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 import HydroxymitragyninePageContent from './HydroxymitragyninePageContent';
 import PrismaticBurst from '../components/PrismaticBurst';

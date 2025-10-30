@@ -59,8 +59,8 @@ export default function Highway420Footer() {
                   className="w-10 h-10 object-contain"
                 />
               </div>
-              <h3 className="text-black font-black text-base mb-2">DISCREET SHIPPING</h3>
-              <p className="text-gray-800 font-medium text-sm">Nothing to see here</p>
+              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>DISCREET SHIPPING</h3>
+              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Nothing to see here</p>
             </div>
 
             {/* Low Price Guarantee */}
@@ -68,8 +68,8 @@ export default function Highway420Footer() {
               <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <span className="text-green-600 font-black text-2xl">$</span>
               </div>
-              <h3 className="text-black font-black text-base mb-2">LOW PRICE</h3>
-              <p className="text-gray-800 font-medium text-sm">Guarantee</p>
+              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>LOW PRICE</h3>
+              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Guarantee</p>
             </div>
 
             {/* Easy, Hassle Free Returns */}
@@ -77,8 +77,8 @@ export default function Highway420Footer() {
               <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <Phone className="w-10 h-10 text-green-600" />
               </div>
-              <h3 className="text-black font-black text-base mb-2">EASY, HASSLE FREE</h3>
-              <p className="text-gray-800 font-medium text-sm">Returns</p>
+              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>EASY, HASSLE FREE</h3>
+              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Returns</p>
             </div>
 
             {/* Get 10% Back in Rewards */}
@@ -86,8 +86,8 @@ export default function Highway420Footer() {
               <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <MapPin className="w-10 h-10 text-green-600" />
               </div>
-              <h3 className="text-black font-black text-base mb-2">GET 10% BACK IN</h3>
-              <p className="text-gray-800 font-medium text-sm">Rewards</p>
+              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>GET 10% BACK IN</h3>
+              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Rewards</p>
             </div>
           </div>
         </div>
@@ -98,59 +98,58 @@ export default function Highway420Footer() {
 
             {/* Help Section */}
             <div>
-              <h3 className="text-black font-black text-xl mb-6">Help</h3>
+              <h3 className="text-black font-black text-2xl mb-6">Help</h3>
               <ul className="space-y-3">
-                <li><Link href="/about" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">About Us</Link></li>
-                <li><Link href="/help" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Help Center & FAQ</Link></li>
-                <li><Link href="/contact" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Contact Us</Link></li>
-                <li><Link href="/reviews" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Customer Reviews</Link></li>
-                <li><Link href="/price-guarantee" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Low Price Guarantee</Link></li>
-                <li><Link href="/returns" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Returns & Refund Policy</Link></li>
-                <li><Link href="/shipping" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Shipping Policy</Link></li>
-                <li><Link href="/privacy" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Terms and Conditions</Link></li>
-                <li><Link href="/hemp-disclaimer" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Hemp Disclaimer</Link></li>
-                <li><Link href="/fda-disclaimer" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">FDA Disclaimer</Link></li>
-                <li><Link href="/accessibility" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Accessibility Statement</Link></li>
-                <li><Link href="/accessibility-help" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Accessibility</Link></li>
+                <li><Link href="/about" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">About Us</Link></li>
+                <li><Link href="/help" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Help Center & FAQ</Link></li>
+                <li><Link href="/contact" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Contact Us</Link></li>
+                <li><Link href="/reviews" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Customer Reviews</Link></li>
+                <li><Link href="/price-guarantee" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Low Price Guarantee</Link></li>
+                <li><Link href="/returns" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Returns & Refund Policy</Link></li>
+                <li><Link href="/shipping" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Shipping Policy</Link></li>
+                <li><Link href="/privacy" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Terms and Conditions</Link></li>
+                <li><Link href="/hemp-disclaimer" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Hemp Disclaimer</Link></li>
+                <li><Link href="/fda-disclaimer" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">FDA Disclaimer</Link></li>
+                <li><Link href="/accessibility" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Accessibility Statement</Link></li>
+                <li><Link href="/accessibility-help" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Accessibility</Link></li>
               </ul>
             </div>
 
             {/* Useful Links Section */}
             <div>
-              <h3 className="text-black font-black text-xl mb-6">Useful Links</h3>
+              <h3 className="text-black font-black text-2xl mb-6">Useful Links</h3>
               <ul className="space-y-3">
-                <li><Link href="/sale" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">On Sale</Link></li>
-                <li><Link href="/products?filter=new" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Newest Products</Link></li>
-                <li><Link href="/brands" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Shop by Brand</Link></li>
-                <li><Link href="/gift-cards" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Gift Cards</Link></li>
-                <li><Link href="/rewards" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">HIGHWAY 420 Rewards</Link></li>
-                <li><Link href="/glossary" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Glossary of Terms</Link></li>
-                <li><Link href="/blog" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">HIGHWAY 420 Dispatches</Link></li>
+                <li><Link href="/sale" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">On Sale</Link></li>
+                <li><Link href="/products?filter=new" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Newest Products</Link></li>
+                <li><Link href="/brands" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Shop by Brand</Link></li>
+                <li><Link href="/gift-cards" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Gift Cards</Link></li>
+                <li><Link href="/rewards" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">HIGHWAY 420 Rewards</Link></li>
+                <li><Link href="/glossary" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Glossary of Terms</Link></li>
+                <li><Link href="/blog" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">HIGHWAY 420 Dispatches</Link></li>
               </ul>
             </div>
 
             {/* Shop Now Section */}
             <div>
-              <h3 className="text-black font-black text-xl mb-6">SHOP NOW</h3>
+              <h3 className="text-black font-black text-2xl mb-6">SHOP NOW</h3>
               <ul className="space-y-3">
-                <li><Link href="/products" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>All Products</Link></li>
-                <li><Link href="/thca" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>THCA & More</Link></li>
-                <li><Link href="/pre-rolls" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Pre-Rolls</Link></li>
-                <li><Link href="/bongs" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Bongs</Link></li>
-                <li><Link href="/bubblers" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Bubblers</Link></li>
-                <li><Link href="/pipes" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Pipes</Link></li>
-                <li><Link href="/dab-rigs" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Dab Rigs</Link></li>
-                <li><Link href="/vaporizers" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium" prefetch={false}>Vaporizers</Link></li>
-                <li><Link href="/accessories" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Accessories</Link></li>
-                <li><Link href="/brands" className="text-gray-800 hover:text-green-600 transition-colors text-base font-medium">Shop by Brand</Link></li>
+                <li><Link href="/products" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>All Products</Link></li>
+                <li><Link href="/thca" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>THCA & More</Link></li>
+                <li><Link href="/pre-rolls" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>Pre-Rolls</Link></li>
+                <li><Link href="/bongs" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>Bongs</Link></li>
+                <li><Link href="/pipes" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>Pipes</Link></li>
+                <li><Link href="/dab-rigs" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>Dab Rigs</Link></li>
+                <li><Link href="/vaporizers" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>Vaporizers</Link></li>
+                <li><Link href="/accessories" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Accessories</Link></li>
+                <li><Link href="/brands" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Shop by Brand</Link></li>
               </ul>
             </div>
 
             {/* Keep in Touch Section */}
             <div>
-              <h3 className="text-green-600 font-black text-2xl mb-6 border-b border-green-600/50 pb-3">Keep in Touch</h3>
-              <p className="text-gray-800 font-medium text-base mb-6 leading-relaxed">
+              <h3 className="text-green-600 font-black text-3xl mb-6 border-b border-green-600/50 pb-3">Keep in Touch</h3>
+              <p className="text-gray-800 font-medium text-lg mb-6 leading-relaxed">
                 Sign up for our newsletter and be the first to know about coupons and special promotions.
               </p>
               <form onSubmit={handleNewsletterSubmit} className="mb-6">

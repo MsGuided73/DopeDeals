@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { supabaseBrowser } from '../../lib/supabase-browser';
-import GlobalMasthead from '../../components/GlobalMasthead';
-
 import Image from 'next/image';
 import { Search, Filter, Grid, List, SlidersHorizontal } from 'lucide-react';
 import { detectCategory } from '../../lib/product-categorization';

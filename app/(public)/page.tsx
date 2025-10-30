@@ -2,13 +2,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, ShoppingCart, Search } from 'lucide-react';
-import GlobalMasthead from '../components/GlobalMasthead';
 import CollectionsGrid from '../components/CollectionsGrid';
 import NewProductsSection from '../components/NewProductsSection';
 import BrandLogoScrollbar from '../../components/BrandLogoScrollbar';
 import DopeDealsSection from '../components/DopeDealsSection';
-import StaffPicksSection from '../components/StaffPicksSection';
-import FullscreenCarousel from '../components/FullscreenCarousel';
 import FeaturedProductsSection from '../components/FeaturedProductsSection';
 
 export default function HomePage() {
@@ -34,22 +31,21 @@ export default function HomePage() {
       {/* Age Verification Popup */}
       {/* <AgeVerification /> */}
 
-      {/* Global Masthead - Always at the top */}
-      <GlobalMasthead />
+
 
       {/* Main Content */}
       <div>
 
         {/* Collections Grid */}
         <main className="w-full px-0 py-0">
-          {/* Enhanced Metallic Section Divider */}
-          <div className="w-full -mt-0 mb-4">
+          {/* Enhanced Metallic Section Divider - Adjusted spacing */}
+          <div className="w-full -mt-0 mb-1">
             {/* Top metallic line - Reduced by 50% */}
-            <div className="h-4 bg-gradient-to-r from-transparent via-white to-transparent mb-4 shadow-lg"></div>
-            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-6"></div>
+            <div className="h-4 bg-gradient-to-r from-transparent via-white to-transparent mb-3 shadow-lg"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-4"></div>
 
             {/* Bottom metallic lines */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-4"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-2"></div>
             <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg"></div>
           </div>
 

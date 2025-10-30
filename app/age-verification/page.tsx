@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import GlobalMasthead from '../components/GlobalMasthead';
 import { Shield, Calendar, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export const metadata: Metadata = {
