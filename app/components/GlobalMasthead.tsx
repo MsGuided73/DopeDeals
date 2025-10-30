@@ -93,7 +93,7 @@ export default function GlobalMasthead() {
           <div className="absolute top-10 left-0 z-[100] md:h-[290px] h-[180px]" style={{ top: '-10px', left: '-25px', width: 'auto', overflow: 'hidden' }}>
             <Link href="/">
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_HighWAY420-official_transparent.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420 Logo"
                 width={200}
                 height={290}
