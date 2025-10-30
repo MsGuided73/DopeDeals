@@ -64,7 +64,7 @@ export default function CollectionsGrid() {
         className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative h-full w-full group"
         whileHover={{ scale: 1.01 }}
       >
-        <img src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/ChatGPT%20Image%20Oct%2023,%202025,%2004_02_38%20PM.png" alt="Highway 420 Collection" className="w-full h-full object-cover" />
+        <img src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg" alt="Highway 420 Collection" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/60 transition-colors duration-300" />
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
           <h2 className="font-highway text-white text-4xl font-bold tracking-wide mb-2"></h2>
