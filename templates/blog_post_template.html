@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{blog_title}}</title>
+    <meta name="description" content="{{blog_excerpt}}">
+    <meta name="author" content="{{blog_author}}">
+    <meta name="keywords" content="{{blog_tags}}">
+    <meta property="og:title" content="{{blog_title}}">
+    <meta property="og:description" content="{{blog_excerpt}}">
+    <meta property="og:image" content="{{blog_featured_image}}">
+    <meta property="og:url" content="{{blog_url}}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white">
+    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section with Featured Image -->
+        <div class="mb-8">
+            <img src="{{blog_featured_image}}"
+                 alt="{{blog_title}}"
+                 class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+                 onerror="this.src='/placeholder-blog.jpg'">
+        </div>
+
+        <!-- Article Header -->
+        <header class="mb-8">
+            <div class="mb-4">
+                <span class="inline-block bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    {{blog_category}}
+                </span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                {{blog_title}}
+            </h1>
+            <p class="text-xl text-gray-600 mb-6 leading-relaxed">
+                {{blog_excerpt}}
+            </p>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200 pb-6">
+                <div class="flex items-center mb-4 sm:mb-0">
+                    <img src="{{author_avatar}}" alt="{{blog_author}}" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <p class="font-semibold text-gray-900">{{blog_author}}</p>
+                        <p class="text-gray-500 text-sm">{{blog_published_date}}</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                    <span>{{blog_read_time}} min read</span>
+                    <span>{{blog_views}} views</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Content -->
+        <div class="prose prose-lg max-w-none mb-8">
+            {{blog_content}}
+        </div>
+
+        <!-- Tags -->
+        <div class="mb-8">
+            <div class="flex flex-wrap gap-2">
+                {{blog_tags_list}}
+            </div>
+        </div>
+
+        <!-- Author Bio -->
+        <aside class="bg-gray-50 rounded-lg p-6 mb-8">
+            <div class="flex items-center">
+                <img src="{{author_avatar}}" alt="{{blog_author}}" class="w-16 h-16 rounded-full mr-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1">About {{blog_author}}</h3>
+                    <p class="text-gray-600">{{author_bio}}</p>
+                    <a href="{{author_link}}" class="text-green-600 hover:text-green-700 font-medium">Read more articles</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Related Articles -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Related article cards will be populated dynamically -->
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <div class="bg-green-50 rounded-lg p-8 text-center">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Enjoyed this article?</h2>
+            <p class="text-gray-600 mb-6">Share it with your friends or subscribe for more great content!</p>
+            <div class="flex justify-center space-x-4">
+                <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    Share Article
+                </button>
+                <button class="border border-green-600 text-green-600 px-6 py-2 rounded-lg hover:bg-green-700 hover:text-white transition-colors">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </article>
+
+    <!-- Social Share Script -->
+    <script>
+        // Add social sharing functionality
+        console.log('Blog post template loaded');
+    </script>
+</body>
+</html>

@@ -319,43 +319,70 @@ export function detectNicotineProduct(productName: string, categories: string, t
   const categoriesLower = categories.toLowerCase();
   const tagsLower = tags.toLowerCase();
 
-  // Check for nicotine indicators in product name
-  const nicotineKeywords = [
-    'nicotine', 'vape', 'e-liquid', 'e-juice', 'ejuice',
-    'disposable', 'cartridge', 'pod', 'nic salt', 'nic-salt',
-    'tobacco', 'cigarette', 'cigar'
+  // FIRST: Check for explicit NON-nicotine indicators that override any flagging
+  // These products are clearly cannabis/hemp related and should never be flagged
+  const nonNicotineIndicators = [
+    'thc', 'cbd', 'thca', 'delta9', 'delta8', 'delta-9', 'delta-8', 'hcg', 'hemp',
+    'dab rig', 'bong', 'pipe', 'water pipe', 'glass', 'smokable flower', 'cannabis',
+    'marijuana', 'weed', 'joint', 'blaze', 'smoke shop', 'headshop', 'engraved',
+    'limited edition', 'utopia', 'roor', 'kalibloom', 'zengaz', 'screaming o',
+    'leaf buddi', 'puffco', 'lotus', 'neo hookah', 'ploox', 'fls lighter',
+    'nifty', 'raw papers', 'thicket', 'cany cane', 'aztec', 'diamond glass'
   ];
 
-  for (const keyword of nicotineKeywords) {
+  for (const indicator of nonNicotineIndicators) {
+    if (productNameLower.includes(indicator) || categoriesLower.includes(indicator) || tagsLower.includes(indicator)) {
+      return false; // Explicitly NOT nicotine
+    }
+  }
+
+  // SECOND: Check for definite nicotine indicators - these are clearly nicotine/tobacco
+  const definiteNicotineKeywords = [
+    'nicotine', 'e-liquid', 'e-juice', 'ejuice', 'nic salt', 'nic-salt',
+    'tobacco', 'cigarette', 'cigar', 'juul', 'electronic cigarette'
+  ];
+
+  for (const keyword of definiteNicotineKeywords) {
     if (productNameLower.includes(keyword)) {
       return true;
     }
   }
 
-  // Check categories for nicotine products
-  if (categoriesLower.includes('nicotine') || categoriesLower.includes('vape') ||
-      categoriesLower.includes('tobacco') || categoriesLower.includes('e-liquid')) {
+  // THIRD: Check for vape/e-cig context (with nicotine likely)
+  // Only flag if it's clearly a vaping device/kit, not infusion
+  if ((productNameLower.includes('vape') || productNameLower.includes('pod')) &&
+      (productNameLower.includes('device') || productNameLower.includes('kit') ||
+       productNameLower.includes('starter') || productNameLower.includes('pen') ||
+       productNameLower.includes('mod'))) {
     return true;
   }
 
-  // Check tags for nicotine products
-  if (tagsLower.includes('nicotine') || tagsLower.includes('vape') ||
-      tagsLower.includes('tobacco') || tagsLower.includes('disposable')) {
+  // FOURTH: Check categories and tags with more specific logic
+  if (categoriesLower.includes('nicotine') || categoriesLower.includes('e-liquid') ||
+      categoriesLower.includes('electronic cigarettes')) {
     return true;
   }
 
-  // Special handling for brands that have both nicotine and non-nicotine products
+  if (tagsLower.includes('nicotine') || tagsLower.includes('e-liquid') ||
+      tagsLower.includes('electronic cigarette')) {
+    return true;
+  }
+
+  // FIFTH: Brand-specific logic for companies with both types
+  // Only flag if it's explicitly a nicotine delivery device
   const dualBrands = ['crave', 'hidden hills', 'packman'];
   for (const brand of dualBrands) {
     if (productNameLower.includes(brand)) {
-      // Check if it's specifically a nicotine product
-      if (productNameLower.includes('vape') || productNameLower.includes('disposable') ||
-          categoriesLower.includes('vape') || tagsLower.includes('nicotine')) {
+      // Only flag as nicotine if it explicitly mentions vaping or nicotine
+      if (productNameLower.includes('vape') && productNameLower.includes('device') ||
+          productNameLower.includes('nicotine') ||
+          (productNameLower.includes('pod') && productNameLower.includes('kit'))) {
         return true;
       }
     }
   }
 
+  // If no definitive nicotine indicators found, don't flag as nicotine
   return false;
 }
 

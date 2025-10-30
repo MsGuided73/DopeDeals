@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import Papa from 'papaparse';
-import { transformCSVProduct, findMatchingProduct, detectNicotineProduct, extractBrandName, importProductsBatch } from '../../../lib/csv-import-engine';
+import { transformCSVProduct, findMatchingProduct, detectNicotineProduct, extractBrandName, importProductsBatch, analyzeProductsForReview } from '../../../../lib/csv-import-engine';
 
 /**
  * CSV PRODUCT IMPORT ENDPOINT

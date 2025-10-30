@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { Shield, Calendar, CheckCircle, AlertTriangle } from 'lucide-react';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata: Metadata = {
   title: 'Age Verification - DOPE CITY',
@@ -226,7 +227,6 @@ export default function AgeVerificationPage() {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </>

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { addToCart } from '../lib/cart-utils';
+import { useFavorites } from '../hooks/useFavorites';
+import { toast } from 'react-hot-toast';
 
 interface Product {
   id: string;
@@ -30,6 +32,7 @@ export default function FeaturedProductsSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     fetchFeaturedProducts();
@@ -266,10 +269,41 @@ export default function FeaturedProductsSection() {
                     </div>
 
                     <div className="absolute top-3 right-3">
-                      <button className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
-                              onClick={(e) => e.stopPropagation()}>
-                        <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      <button
+                        className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 lg:opacity-100 transition-all duration-300 hover:scale-110"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+
+                          if (!product.sku) {
+                            console.error('Product SKU missing for favorites');
+                            toast.error('Unable to favorite this product');
+                            return;
+                          }
+
+                          const success = await toggleFavorite(product.sku.toString());
+                          if (success) {
+                            const isCurrentlyFavorite = isFavorite(product.sku.toString());
+                            toast.success(isCurrentlyFavorite ? 'Added to favorites!' : 'Removed from favorites');
+                          } else {
+                            toast.error('Failed to update favorites');
+                          }
+                        }}
+                      >
+                        <svg
+                          className={`w-5 h-5 transition-colors duration-200 ${
+                            isFavorite(product.sku || '') ? 'text-red-500 fill-red-500' : 'text-gray-700'
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                          />
                         </svg>
                       </button>
                     </div>
