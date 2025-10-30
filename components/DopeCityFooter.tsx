@@ -50,8 +50,8 @@ export default function Highway420Footer() {
                   className="w-8 h-8 object-contain"
                 />
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">DISCREET SHIPPING</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md">Nothing to see here</p>
+              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>DISCREET SHIPPING</h3>
+              <p className="text-gray-200 text-xs drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>Nothing to see here</p>
             </div>
 
             {/* Low Price Guarantee */}
@@ -59,8 +59,8 @@ export default function Highway420Footer() {
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-dope-orange-400 font-bold text-xl">$</span>
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">LOW PRICE</h3>
-              <p className="text-gray-200 text-sms drop-shadow-md">Guarantee</p>
+              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>LOW PRICE</h3>
+              <p className="text-gray-200 text-sms drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>Guarantee</p>
             </div>
 
             {/* Easy, Hassle Free Returns */}
@@ -68,8 +68,8 @@ export default function Highway420Footer() {
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-8 h-8 text-dope-orange-600" />
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">EASY, HASSLE FREE</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md">Returns</p>
+              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>EASY, HASSLE FREE</h3>
+              <p className="text-gray-200 text-xs drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>Returns</p>
             </div>
 
             {/* Get 10% Back in Rewards */}
@@ -77,8 +77,8 @@ export default function Highway420Footer() {
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-8 h-8 text-dope-orange-400" />
               </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg">GET 10% BACK IN</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md">Rewards</p>
+              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>GET 10% BACK IN</h3>
+              <p className="text-gray-200 text-xs drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>Rewards</p>
             </div>
           </div>
         </div>
@@ -89,60 +89,60 @@ export default function Highway420Footer() {
 
             {/* Help Section */}
             <div>
-              <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg">Help</h3>
+              <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>Help</h3>
               <ul className="space-y-3">
-                <li><Link href="/about" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">About Us</Link></li>
-                <li><Link href="/help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Help Center & FAQ</Link></li>
-                <li><Link href="/contact" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Contact Us</Link></li>
-                <li><Link href="/reviews" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Customer Reviews</Link></li>
-                <li><Link href="/price-guarantee" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Low Price Guarantee</Link></li>
-                <li><Link href="/returns" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Returns & Refund Policy</Link></li>
-                <li><Link href="/shipping" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shipping Policy</Link></li>
-                <li><Link href="/privacy" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Terms and Conditions</Link></li>
-                <li><Link href="/hemp-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Hemp Disclaimer</Link></li>
-                <li><Link href="/fda-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">FDA Disclaimer</Link></li>
-                <li><Link href="/accessibility" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessibility Statement</Link></li>
-                <li><Link href="/accessibility-help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessibility</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/about" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">About Us</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Help Center & FAQ</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/contact" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Contact Us</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/reviews" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Customer Reviews</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/price-guarantee" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Low Price Guarantee</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/returns" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Returns & Refund Policy</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/shipping" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shipping Policy</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/privacy" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Privacy Policy</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/terms" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Terms and Conditions</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/hemp-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Hemp Disclaimer</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/fda-disclaimer" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">FDA Disclaimer</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/accessibility" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessibility Statement</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/accessibility-help" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessibility</Link></li>
               </ul>
             </div>
 
             {/* Useful Links Section */}
             <div>
-              <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg">Useful Links</h3>
-              <ul className="space-y-3">
-                <li><Link href="/sale" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">On Sale</Link></li>
-                <li><Link href="/products?filter=new" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Newest Products</Link></li>
-                <li><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shop by Brand</Link></li>
-                <li><Link href="/gift-cards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Gift Cards</Link></li>
-                <li><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">HIGHWAY 420 Rewards</Link></li>
-                <li><Link href="/glossary" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Glossary of Terms</Link></li>
-                <li><Link href="/blog" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">HIGHWAY 420 Dispatches</Link></li>
+              <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>Useful Links</h3>
+              <ul className="space-y-3" style={{ fontFamily: '"BF Inter", sans-serif' }}>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/sale" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">On Sale</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/products?filter=new" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Newest Products</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shop by Brand</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/gift-cards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Gift Cards</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/rewards" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">HIGHWAY 420 Rewards</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/glossary" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Glossary of Terms</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/blog" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">HIGHWAY 420 Dispatches</Link></li>
               </ul>
             </div>
 
             {/* Shop Now Section */}
             <div>
-              <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg">SHOP NOW</h3>
+              <h3 className="text-white font-bold text-lg mb-6 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>SHOP NOW</h3>
               <ul className="space-y-3">
-                <li><Link href="/products" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>All Products</Link></li>
-                <li><Link href="/products?q=thca" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>THCA Flower</Link></li>
-                <li><Link href="/pre-rolls" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Pre-Rolls</Link></li>
-                <li><Link href="/bongs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Bongs</Link></li>
-                <li><Link href="/bubblers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Bubblers</Link></li>
-                <li><Link href="/pipes" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Hand Pipes</Link></li>
-                <li><Link href="/products?category=dab-rigs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Dab Rigs</Link></li>
-                <li><Link href="/products?category=vaporizers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Vaporizers</Link></li>
-                <li><Link href="/products?q=e-rig" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">E-Rigs</Link></li>
-                <li><Link href="/products?category=accessories" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessories</Link></li>
-                <li><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shop by Brand</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/products" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>All Products</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/products?q=thca" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>THCA Flower</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/pre-rolls" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Pre-Rolls</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/bongs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Bongs</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/bubblers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Bubblers</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/pipes" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Hand Pipes</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/products?category=dab-rigs" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Dab Rigs</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/products?category=vaporizers" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md" prefetch={false}>Vaporizers</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/products?q=e-rig" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">E-Rigs</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/products?category=accessories" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Accessories</Link></li>
+                <li style={{ fontFamily: '"BF Inter", sans-serif' }}><Link href="/brands" className="text-gray-100 hover:text-dope-orange-400 dope-hover transition-colors text-base drop-shadow-md">Shop by Brand</Link></li>
               </ul>
             </div>
 
             {/* Keep in Touch Section */}
             <div>
-              <h3 className="text-dope-orange-400 font-bold text-lg mb-6 border-b border-dope-orange-400/50 pb-2 drop-shadow-lg">Keep in Touch</h3>
-              <p className="text-gray-100 text-sm mb-6 drop-shadow-md">
+              <h3 className="text-dope-orange-400 font-bold text-lg mb-6 border-b border-dope-orange-400/50 pb-2 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>Keep in Touch</h3>
+              <p className="text-gray-100 text-sm mb-6 drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>
                 Sign up for our newsletter and be the first to know about coupons and special promotions.
               </p>
               <form onSubmit={handleNewsletterSubmit} className="mb-6">
@@ -152,11 +152,13 @@ export default function Highway420Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your-email@example.com"
                   className="w-full glassmorphic-medium rounded-lg px-4 py-3 text-white placeholder-gray-300 text-sm focus:border-dope-orange-400 focus:ring-2 focus:ring-dope-orange-400/30 focus:outline-none transition-all mb-3"
+                  style={{ fontFamily: '"BF Inter", sans-serif' }}
                   required
                 />
                 <button
                   type="submit"
                   className="w-full bg-dope-orange-500 hover:bg-dope-orange-600 text-white font-bold px-6 py-3 rounded-lg dope-hover hover:scale-105 hover:shadow-xl hover:shadow-dope-orange-500/30 text-sm transition-all drop-shadow-lg"
+                  style={{ fontFamily: '"BF Inter", sans-serif' }}
                 >
                   Subscribe
                 </button>
@@ -200,7 +202,7 @@ export default function Highway420Footer() {
         {/* Bottom Copyright with HIGHWAY 420 Branding */}
         <div className="mt-12 text-center">
           <div className="mb-8">
-              <p className="text-gray-200 text-sm mb-2 drop-shadow-lg">
+              <p className="text-gray-200 text-sm mb-2 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>
               © 2025 HIGHWAY 420. All rights reserved. | Designed with
               <span className="text-dope-orange-400 mx-1">♥</span>
               for better shopping experience.
