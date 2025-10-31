@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata: Metadata = {
   title: 'Terms of Service - DOPE CITY',

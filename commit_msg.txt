@@ -1,1 +1,1 @@
-fix: add missing GlobalMasthead import to press page for deployment fix
+fix: add missing GlobalMasthead imports to profile and terms pages for deployment fix
