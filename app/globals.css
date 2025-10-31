@@ -48,12 +48,12 @@
 @tailwind utilities;
 
 /* HIGHWAY 420 Style Guide Enforcement */
-/* 1. Product Cards Override - Use Inter for Product Names (HIGHEST PRIORITY) */
+/* 1. Product Cards Override - Use System Font Stack for Product Names (HIGHEST PRIORITY) */
 .product-card .text-lg, .product-card .text-xl, .product-card .text-2xl,
 .product-card .text-3xl, .product-card .text-4xl, .product-card .text-5xl,
 .product-card .text-6xl, .product-card h1, .product-card h2, .product-card h3,
 .product-card h4, .product-card h5, .product-card h6 {
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-weight: bold !important;
 }
 
@@ -71,10 +71,10 @@
 /* Override any Tailwind font-bold on Chalets elements */
 *[style*="font-family: 'Chalets'"] { font-weight: normal !important; }
 
-/* 2. Inter - Readable Font Override */
+/* 2. System Font Stack - Fast, Readable Font Override */
 .font-inter,
 .font-inter * {
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
   font-weight: bold !important;
   letter-spacing: 0.01em !important;
 }

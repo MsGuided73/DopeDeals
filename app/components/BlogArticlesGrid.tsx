@@ -116,12 +116,12 @@ export default function BlogArticlesGrid() {
             {/* Content */}
             <div>
               {/* Title */}
-              <h3 className="text-xl font-inter font-bold text-gray-900 mb-3 leading-tight group-hover:text-green-700 transition-colors line-clamp-2">
+              <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-green-700 transition-colors line-clamp-2" style={{ fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
                 {post.title}
               </h3>
 
               {/* Excerpt */}
-              <p className="text-gray-600 mb-4 leading-relaxed line-clamp-3">
+              <p className="text-gray-600 mb-4 leading-relaxed line-clamp-3" style={{ fontFamily: "Roboto, system-ui, sans-serif" }}>
                 {post.excerpt}
               </p>
 

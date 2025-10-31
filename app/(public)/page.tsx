@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { User, ShoppingCart, Search } from 'lucide-react';
 import GlobalMasthead from '../components/GlobalMasthead';
 import CollectionsGrid from '../components/CollectionsGrid';
 import NewProductsSection from '../components/NewProductsSection';
@@ -83,13 +82,13 @@ export default function HomePage() {
                       <span className="text-2xl">🥦</span>
                     </div>
                     <div>
-                      <h4 className="text-xl font-inter font-bold text-gray-900 mb-2">Mike J., CA</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>Mike J., CA</h4>
                       <div className="flex text-yellow-400 text-lg">
                         ★★★★★
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg font-inter font-medium text-gray-700 leading-relaxed">
+                  <p className="text-lg font-medium text-gray-700 leading-relaxed">
                     "Amazing quality! The glass is thick and the design is perfect. Fast shipping too. Will definitely order again!"
                   </p>
                 </div>
@@ -101,13 +100,13 @@ export default function HomePage() {
                       <span className="text-2xl">🌿</span>
                     </div>
                     <div>
-                      <h4 className="text-xl font-inter font-bold text-gray-900 mb-2">Sarah C., TX</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>Sarah C., TX</h4>
                       <div className="flex text-yellow-400 text-lg">
                         ★★★★★
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg font-inter font-medium text-gray-700 leading-relaxed">
+                  <p className="text-lg font-medium text-gray-700 leading-relaxed">
                     "Best smoke shop online! Great prices and the customer service is top notch. Highly recommend DOPE CITY!"
                   </p>
                 </div>
@@ -119,13 +118,13 @@ export default function HomePage() {
                       <span className="text-2xl">🫧</span>
                     </div>
                     <div>
-                      <h4 className="text-xl font-inter font-bold text-gray-900 mb-2">Alex R., CO</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>Alex R., CO</h4>
                       <div className="flex text-yellow-400 text-lg">
                         ★★★★★
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg font-inter font-medium text-gray-700 leading-relaxed">
+                  <p className="text-lg font-normal text-gray-700 leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                     "The vaporizer I bought works perfectly. Great build quality and arrived exactly as described. 5 stars!"
                   </p>
                 </div>
@@ -137,13 +136,13 @@ export default function HomePage() {
                       <span className="text-2xl">💨</span>
                     </div>
                     <div>
-                      <h4 className="text-xl font-inter font-bold text-gray-900 mb-2">Emma W., FL</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>Emma W., FL</h4>
                       <div className="flex text-yellow-400 text-lg">
                         ★★★★★
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg font-inter font-medium text-gray-700 leading-relaxed">
+                  <p className="text-lg font-normal text-gray-700 leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                     "Love the selection and quality. The packaging was discreet and professional. Will be a repeat customer!"
                   </p>
                 </div>
@@ -155,13 +154,13 @@ export default function HomePage() {
                       <span className="text-2xl">🌱</span>
                     </div>
                     <div>
-                      <h4 className="text-xl font-inter font-bold text-gray-900 mb-2">David K., NY</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>David K., NY</h4>
                       <div className="flex text-yellow-400 text-lg">
                         ★★★★★
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg font-inter font-medium text-gray-700 leading-relaxed">
+                  <p className="text-lg font-normal text-gray-700 leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                     "Excellent products and fast delivery. The grinder I ordered is solid and works great. Highly recommended!"
                   </p>
                 </div>
@@ -173,13 +172,13 @@ export default function HomePage() {
                       <span className="text-2xl">🍀</span>
                     </div>
                     <div>
-                      <h4 className="text-xl font-inter font-bold text-gray-900 mb-2">Jessica T., WA</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>Jessica T., WA</h4>
                       <div className="flex text-yellow-400 text-lg">
                         ★★★★★
                       </div>
                     </div>
                   </div>
-                  <p className="text-lg font-inter font-medium text-gray-700 leading-relaxed">
+                  <p className="text-lg font-normal text-gray-700 leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                     "Perfect experience from start to finish. Quality products, fair prices, and excellent customer support!"
                   </p>
                 </div>

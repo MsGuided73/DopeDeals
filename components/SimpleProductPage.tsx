@@ -1,8 +1,9 @@
-"use client";
+ "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ProductGallery from '../app/components/ProductGallery';
 import { addToCart } from '../app/lib/cart-utils';
+import GlobalMasthead from '../app/components/GlobalMasthead';
 
 interface Product {
   id: string;
@@ -124,6 +125,9 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Global Masthead */}
+      <GlobalMasthead />
+
       {/* Product Breadcrumb */}
       <div className="bg-gray-50 border-b">
         <div className="max-w-6xl mx-auto px-6 py-4">

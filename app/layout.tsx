@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         {/* Font Preloading - Chalets (Primary) and Highway Gothic (Secondary) */}
         <link rel="preload" href="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Chalets/chalets-webfont.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
@@ -32,9 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Resource Hints */}
         <link rel="prefetch" href="/api/products" />
       </head>
-      <body className="bg-white" suppressHydrationWarning>
+      <body className="bg-white">
         <AppProviders>
-          <div className="min-h-screen flex flex-col" suppressHydrationWarning>
+          <div className="min-h-screen flex flex-col">
             {/* Scrolling Banner - DISABLED for now */}
             {/* <ScrollingBanner /> */}
 

@@ -40,7 +40,7 @@ export default function Highway420Footer() {
       <div className="relative z-20 max-w-7xl mx-auto px-4 py-16">
         {/* Service Features */}
         <div className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Discreet Shipping - Nothing to see here */}
             <div className="text-center">
               <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
@@ -70,15 +70,6 @@ export default function Highway420Footer() {
               </div>
               <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>EASY, HASSLE FREE</h3>
               <p className="text-gray-200 text-xs drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>Returns</p>
-            </div>
-
-            {/* Get 10% Back in Rewards */}
-            <div className="text-center">
-              <div className="w-16 h-16 glassmorphic-medium rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-dope-orange-400" />
-              </div>
-              <h3 className="text-white font-bold text-sm mb-1 drop-shadow-lg" style={{ fontFamily: '"BF Inter", sans-serif' }}>GET 10% BACK IN</h3>
-              <p className="text-gray-200 text-xs drop-shadow-md" style={{ fontFamily: '"BF Inter", sans-serif' }}>Rewards</p>
             </div>
           </div>
         </div>

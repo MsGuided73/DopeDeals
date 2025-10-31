@@ -230,7 +230,7 @@ export default function EnhancedSearchBar() {
             onKeyDown={handleKeyDown}
             onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
             placeholder={currentPlaceholder}
-            className="w-full px-6 py-3 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200"
+            className="w-full px-6 py-3 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold"
           />
 
           {/* Search Suggestions Dropdown */}

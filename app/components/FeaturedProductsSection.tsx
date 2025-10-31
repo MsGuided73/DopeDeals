@@ -239,7 +239,7 @@ export default function FeaturedProductsSection() {
                   </div>
 
                   {/* MIDDLE SECTION: Image with badges */}
-                  <div className="relative w-full h-64 bg-gray-50 overflow-hidden rounded-lg mb-4">
+                  <div className="relative w-full h-80 bg-gray-50 overflow-hidden rounded-lg mb-4">
                     {transformedProduct.image_url ? (
                       <img
                         src={transformedProduct.image_url}

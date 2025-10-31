@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { addToCart } from '../lib/cart-utils';
 
 interface Product {
@@ -29,6 +30,7 @@ export default function NewProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchNewProducts();
@@ -135,6 +137,18 @@ export default function NewProductsSection() {
 
   const productsToShow = products;
 
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -145,9 +159,23 @@ export default function NewProductsSection() {
           </h1>
         </div>
 
-        {/* Auto-Scroll Container */}
-        <div className="relative overflow-hidden">
-          <div className="flex animate-scroll-horizontal">
+        {/* Manual Scroll Container with Navigation Arrows */}
+        <div className="relative">
+          {/* Left Arrow */}
+          <button
+            onClick={scrollLeft}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-6 h-6 text-gray-700" />
+          </button>
+
+          {/* Scroll Container */}
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto gap-6 pb-4 px-12"
+            style={{ scrollbarWidth: 'thin' }}
+          >
             {/* First set of products */}
             {productsToShow.slice(0, 10).map((product) => {
               const transformedProduct = transformProductForCard(product);
@@ -155,7 +183,7 @@ export default function NewProductsSection() {
                 <Link
                   key={`first-${product.id}`}
                   href={`/product/${product.id}`}
-                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-72 h-80 block mx-3"
+                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-80 h-104 block mx-3"
                 >
                   <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
@@ -192,12 +220,12 @@ export default function NewProductsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-base font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                      <p className="text-lg font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight">
                         {transformedProduct.brand_name}
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-xl leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xl leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                       {transformedProduct.name}
                     </h3>
 
@@ -253,7 +281,7 @@ export default function NewProductsSection() {
                 <Link
                   key={`second-${product.id}`}
                   href={`/product/${product.id}`}
-                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-72 h-80 block mx-3"
+                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-80 h-104 block mx-3"
                 >
                   <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
@@ -290,12 +318,12 @@ export default function NewProductsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-base font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                      <p className="text-lg font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight">
                         {transformedProduct.brand_name}
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-xl leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xl leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                       {transformedProduct.name}
                     </h3>
 
@@ -345,6 +373,15 @@ export default function NewProductsSection() {
               );
             })}
           </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={scrollRight}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-6 h-6 text-gray-700" />
+          </button>
         </div>
 
         {/* View All Button */}
