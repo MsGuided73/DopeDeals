@@ -192,17 +192,17 @@ export default function NewProductsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                      <p className="text-base font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
                         {transformedProduct.brand_name}
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xl leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
                       {transformedProduct.name}
                     </h3>
 
                     {transformedProduct.short_description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
                         {transformedProduct.short_description}
                       </p>
                     )}
@@ -290,17 +290,17 @@ export default function NewProductsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                      <p className="text-base font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
                         {transformedProduct.brand_name}
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xl leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
                       {transformedProduct.name}
                     </h3>
 
                     {transformedProduct.short_description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
                         {transformedProduct.short_description}
                       </p>
                     )}

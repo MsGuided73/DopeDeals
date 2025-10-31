@@ -230,10 +230,10 @@ export default function FeaturedProductsSection() {
                 <div className="p-4 flex flex-col">
                   {/* TOP SECTION: Brand Name and Product Name */}
                   <div className="mb-4">
-                    <p className="text-sm font-semibold text-dope-orange-600 mb-1 uppercase tracking-wide">
-                      {transformedProduct.brand_name || 'STORE BRAND'}
+                    <p className="text-sm font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                      {transformedProduct.brand_name?.toUpperCase() || 'STORE BRAND'}
                     </p>
-                    <h3 className="font-bold text-gray-900 text-lg leading-tight line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                    <h3 className="font-bold text-gray-900 text-xl leading-tight line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
                       {transformedProduct.name}
                     </h3>
                   </div>
@@ -310,7 +310,7 @@ export default function FeaturedProductsSection() {
                   </div>
 
                   {/* Short description */}
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                  <p className="text-base font-semibold text-gray-600 mb-4 line-clamp-2">
                     {transformedProduct.short_description}
                   </p>
 
@@ -332,7 +332,7 @@ export default function FeaturedProductsSection() {
                           e.stopPropagation();
                           router.push(`/product/${product.id}`);
                         }}
-                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-bold rounded-full transition-all duration-300 text-center text-sm font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
+                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                         style={{
                           fontFamily: "'Highway Gothic', 'Arial', sans-serif",
                           fontWeight: 'normal',
@@ -350,7 +350,7 @@ export default function FeaturedProductsSection() {
                             console.error('Failed to add to cart:', error);
                           }
                         }}
-                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-bold rounded-full transition-all duration-300 text-center text-sm font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
+                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                         style={{
                           fontFamily: "'Highway Gothic', 'Arial', sans-serif",
                           fontWeight: 'normal',

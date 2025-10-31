@@ -1,6 +1,8 @@
 fix: add missing GlobalMasthead imports to all files using the component
 
-- Fixed missing imports in 15 files that use <GlobalMasthead>
+- Fixed missing imports in 21 files that use <GlobalMasthead>
 - Templates: SimplePageTemplate, PageTemplate, InteractivePageTemplate
-- Pages: about, account/addresses, account/profile, categories, privacy, rewards, shipping, search/SearchResultsContent, wishlist
+- Pages: about, account/addresses, account/profile, categories, privacy, rewards, returns, shipping, search/SearchResultsContent, wishlist
+- Brand Pages: crave, roor, puffco, cookies, urth-farmacy
+- Added SSR-safe dynamic import for returns page to prevent prerender errors
 - Corrected import paths for proper TypeScript resolution

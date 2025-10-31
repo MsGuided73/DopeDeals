@@ -116,7 +116,7 @@ export default function BlogArticlesGrid() {
             {/* Content */}
             <div>
               {/* Title */}
-              <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-green-700 transition-colors line-clamp-2">
+              <h3 className="text-xl font-inter font-bold text-gray-900 mb-3 leading-tight group-hover:text-green-700 transition-colors line-clamp-2">
                 {post.title}
               </h3>
 

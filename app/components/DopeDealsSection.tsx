@@ -205,13 +205,13 @@ export default function DopeDealsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-sm font-semibold text-red-600 mb-1 uppercase tracking-wide">
-                        {transformedProduct.brand_name}
+                      <p className="text-base font-bold text-red-600 mb-1 uppercase tracking-wide">
+                        {transformedProduct.brand_name.toUpperCase()}
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-2 line-clamp-2 group-hover:text-red-700 transition-colors">
-                      {transformedProduct.name}
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xl capitalize leading-tight mb-2 line-clamp-2 group-hover:text-red-700 transition-colors">
+                      {transformedProduct.name.toLowerCase()}
                     </h3>
 
                     {transformedProduct.short_description && (
@@ -221,7 +221,7 @@ export default function DopeDealsSection() {
                     )}
 
                     <div className="mt-auto">
-                      <div className="mb-3">
+                      <div className="mb-3 relative">
                         {transformedProduct.compare_at_price ? (
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
@@ -241,6 +241,20 @@ export default function DopeDealsSection() {
                             ${transformedProduct.salePrice.toFixed(2)}
                           </div>
                         )}
+
+                        {/* Hover price display */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/80 rounded-lg flex items-center justify-center">
+                          <div className="text-center text-white">
+                            <div className="text-2xl font-bold">
+                              🔥 ${transformedProduct.salePrice.toFixed(2)}
+                            </div>
+                            {transformedProduct.discountPercent > 0 && (
+                              <div className="text-sm opacity-90">
+                                Save {transformedProduct.discountPercent}% off regular price!
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       <button
