@@ -1,4 +1,17 @@
-# HIGHWAY 420
+# HIGHWAY 420 - E-commerce Store
+
+## 🚨 IMPORTANT: This is the Highway 420 E-commerce Store
+
+This repository contains the **Highway 420** e-commerce platform - a premium online store specializing in cannabis culture products, smoking accessories, CBD products, and related lifestyle essentials. This is **NOT** a generic application - it is specifically designed for the cannabis industry with age verification, compliance features, and product categories tailored for smoke shop and cannabis accessories retailers.
+
+**Any developer or agent working on this code must understand:**
+- This is a real e-commerce business platform
+- It handles sensitive cannabis-related products
+- All features must comply with cannabis retail regulations
+- Age verification and compliance are critical requirements
+- The branding and design must maintain "Highway 420" identity
+
+## Project Overview
 
 Premium cannabis culture meets street authenticity. Welcome to Highway 420 - your destination for the finest smoking accessories, CBD products, and cannabis culture essentials.
 
