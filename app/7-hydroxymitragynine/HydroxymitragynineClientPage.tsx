@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import AgeVerification from '../components/AgeVerification';
 import HydroxymitragyninePageContent from './HydroxymitragyninePageContent';
 import PrismaticBurst from '../components/PrismaticBurst';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export default function HydroxymitragynineClientPage() {
   const structuredData = {

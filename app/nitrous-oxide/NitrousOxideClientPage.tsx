@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import AgeVerification from '../components/AgeVerification';
 import NitrousOxidePageContent from './NitrousOxidePageContent';
 import PrismaticBurst from '../components/PrismaticBurst';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export default function NitrousOxideClientPage() {
   const structuredData = {
