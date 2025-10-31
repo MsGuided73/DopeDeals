@@ -373,7 +373,7 @@ export default function CategoryFilters({
             )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
