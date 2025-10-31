@@ -1,0 +1,129 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+export async function GET(req: NextRequest) {
+  try {
+    // Direct Supabase connection for testing
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({ error: 'Supabase credentials not configured' }, { status: 500 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Parse query parameters
+    const url = new URL(req.url);
+    const limit = parseInt(url.searchParams.get('limit') || '50');
+    const offset = parseInt(url.searchParams.get('offset') || '0');
+    const category = url.searchParams.get('category');
+
+    // Get dab rig and tool products from multiple categories
+    // First, let's check if we have a specific query for dab products in the category field
+    let query = supabase
+      .from('main_site_products')
+      .select('*');
+
+    // Include categories: dab-rigs, e-rigs, concentrates (for concentrate-specific tools), and search by name patterns
+    const dabCategories = ['dab-rigs', 'e-rigs', 'concentrates'];
+    const dabKeywords = [
+      'dab rig', 'dabrig', 'oil rig', 'concentrate rig', 'quartz banger',
+      'nail', 'domeless nail', 'banger', 'carb cap', 'dab tool', 'dabber',
+      'e-rig', 'erig', 'electric rig', 'puffco', 'proxy', 'peak pro',
+      'concentrate tool', 'dabbing tool', 'wax tool'
+    ];
+
+    if (category && dabCategories.includes(category)) {
+      // Filter by specific category
+      query = query.eq('category_id', category);
+    } else {
+      // Filter by keywords in product name or include certain categories
+      const keywordCondition = dabKeywords.map(keyword =>
+        `name.ilike.%${keyword}%`
+      ).join(',');
+
+      query = query.or(keywordCondition);
+    }
+
+    // Add category inclusion as fallback
+    if (!category) {
+      query = query.or(`category_id.in.(${dabCategories.map(c => `"${c}"`).join(',')})`);
+    }
+
+    // Apply pagination
+    if (limit > 0) {
+      query = query.limit(limit);
+    }
+    if (offset > 0) {
+      query = query.range(offset, offset + (limit || 50) - 1);
+    }
+
+    // Order by featured and stock quantity
+    query = query.order('featured', { ascending: false })
+                 .order('stock_quantity', { ascending: false })
+                 .order('created_at', { ascending: false });
+
+    const { data: products, error } = await query;
+
+    if (error) {
+      console.error('Supabase query error:', error);
+      return NextResponse.json({ error: 'Failed to fetch dab products', details: error.message }, { status: 500 });
+    }
+
+    // Get total count for pagination info
+    let countQuery = supabase
+      .from('main_site_products')
+      .select('*', { count: 'exact', head: true });
+
+    if (category && dabCategories.includes(category)) {
+      countQuery = countQuery.eq('category_id', category);
+    } else if (!category) {
+      const keywordCondition = dabKeywords.map(keyword =>
+        `name.ilike.%${keyword}%`
+      ).join(',');
+      countQuery = countQuery.or(keywordCondition);
+      countQuery = countQuery.or(`category_id.in.(${dabCategories.map(c => `"${c}"`).join(',')})`);
+    }
+
+    const { count } = await countQuery;
+
+    // Transform the data to match expected format (similar to other product APIs)
+    const transformedProducts = (products || []).map((product: any) => ({
+      id: product.id,
+      name: product.name,
+      price: product.our_price || product.price,
+      compare_at_price: product.sale_price,
+      image_url: product.image_url,
+      description: product.description,
+      short_description: product.short_description,
+      sku: product.sku,
+      stock_quantity: product.stock_quantity || 0,
+      is_active: product.is_active,
+      featured: product.featured || false,
+      brand_id: product.brand_id,
+      category_id: product.category_id,
+      created_at: product.created_at,
+      updated_at: product.updated_at,
+      // Add additional fields expected by frontend
+      specs: {
+        type: product.type || 'Rigs',
+        size: product.size || 'Standard',
+        material: product.material || 'Glass'
+      },
+      isNew: product.is_new || false,
+      is_sale: !!product.sale_price
+    }));
+
+    return NextResponse.json({
+      products: transformedProducts,
+      totalCount: count || 0,
+      limit,
+      offset,
+      hasMore: count ? (offset + (products?.length || 0)) < count : false
+    });
+  } catch (error) {
+    console.error('API error:', error);
+    return NextResponse.json({ error: 'Failed to fetch dab products', details: String(error) }, { status: 500 });
+  }
+}</content>

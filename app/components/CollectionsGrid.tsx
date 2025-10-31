@@ -11,7 +11,7 @@ export default function CollectionsGrid() {
   const categories = [
     { name: 'THCA Flower', route: '/thca-flower', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg' },
     { name: 'Shrooms & Stuff', route: '/shrooms', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg' },
-    { name: 'THCA Prerolls & Vapes', route: '/prerolls', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg' },
+    { name: 'THCA Prerolls & Vapes', route: '/thca_pnv', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg' },
     { name: 'Bongs & Bong Attachments', route: '/bongs', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png' },
     { name: 'Hand Pipes', route: '/pipes', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/hand_pipes.jpg' },
     { name: 'Dab-Rigs & Tools', route: '/dab-rigs', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png' },
@@ -63,7 +63,7 @@ export default function CollectionsGrid() {
         className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative h-full w-full group hover:scale-105 transition-transform duration-300 block"
       >
         <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
         <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <LogoButton href="/ride-with-us" label="RIDE WITH US" />
         </div>

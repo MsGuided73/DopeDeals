@@ -178,7 +178,7 @@ export default function GlobalMasthead() {
                   Pipes
                 </Link>
                 <Link
-                  href="/products?category=dab-rigs"
+                  href="/dabsntools"
                   className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -514,7 +514,7 @@ export default function GlobalMasthead() {
             {/* Dab Rigs */}
             <li>
               <Link
-                href="/products?category=dab-rigs"
+                href="/dabsntools"
                 className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
               >
                 Dab Rigs

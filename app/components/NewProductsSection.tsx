@@ -220,7 +220,7 @@ export default function NewProductsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-lg font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight">
+                      <p className="text-lg font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                         {transformedProduct.brand_name}
                       </p>
                     )}
@@ -230,7 +230,7 @@ export default function NewProductsSection() {
                     </h3>
 
                     {transformedProduct.short_description && (
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                         {transformedProduct.short_description}
                       </p>
                     )}
@@ -318,7 +318,7 @@ export default function NewProductsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-lg font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight">
+                      <p className="text-lg font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                         {transformedProduct.brand_name}
                       </p>
                     )}
@@ -328,7 +328,7 @@ export default function NewProductsSection() {
                     </h3>
 
                     {transformedProduct.short_description && (
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                         {transformedProduct.short_description}
                       </p>
                     )}

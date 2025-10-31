@@ -205,17 +205,17 @@ export default function DopeDealsSection() {
 
                   <div className="p-4 flex flex-col h-full">
                     {transformedProduct.brand_name && (
-                      <p className="text-base font-bold text-red-600 mb-1 uppercase tracking-wide">
+                      <p className="text-base font-bold text-red-600 mb-1 uppercase tracking-wide" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                         {transformedProduct.brand_name.toUpperCase()}
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-xl capitalize leading-tight mb-2 line-clamp-2 group-hover:text-red-700 transition-colors">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xl capitalize leading-tight mb-2 line-clamp-2 group-hover:text-red-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                       {transformedProduct.name.toLowerCase()}
                     </h3>
 
                     {transformedProduct.short_description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
                         {transformedProduct.short_description}
                       </p>
                     )}

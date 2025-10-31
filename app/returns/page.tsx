@@ -1,4 +1,4 @@
-immport dynamic from 'next/dynamic';
+import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
 const GlobalMasthead = dynamic(() => import('../components/GlobalMasthead'));
 import AgeVerification from '../components/AgeVerification';
