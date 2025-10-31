@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
 
 interface LogoButtonProps {
   href: string;
@@ -59,28 +58,26 @@ export default function CollectionsGrid() {
 
   return (
     <div className="grid grid-cols-4 grid-rows-3 gap-3 p-4 aspect-[4/2] items-stretch justify-stretch">
-      <motion.a
-        href="/thca-flower"
-        className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative h-full w-full group"
-        whileHover={{ scale: 1.01 }}
+      <a
+        href="/ride-with-us"
+        className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative h-full w-full group hover:scale-105 transition-transform duration-300 block"
       >
-        <img src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg" alt="Highway 420 Collection" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/60 transition-colors duration-300" />
+        <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
-          <h2 className="font-highway text-white text-4xl font-bold tracking-wide mb-2"></h2>
-          <p className="text-white/85 text-base pointer-events-none">Shop our signature flower</p>
+          <h2 className="font-highway text-white text-4xl font-bold tracking-wide mb-2">LIFE IS A HIGHWAY</h2>
+          <p className="text-white/85 text-base pointer-events-none">Ride with us</p>
         </div>
         <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <LogoButton href="/thca-flower" label="SHOP NOW" />
+          <LogoButton href="/ride-with-us" label="RIDE WITH US" />
         </div>
-      </motion.a>
+      </a>
 
       {categories.map((cat, i) => (
-        <motion.a
+        <a
           key={i}
           href={cat.route}
-          className="rounded-2xl overflow-hidden shadow-md relative w-full h-full flex group"
-          whileHover={{ scale: 1.02 }}
+          className="rounded-2xl overflow-hidden shadow-md relative w-full h-full flex group hover:scale-105 transition-transform duration-300 block"
         >
           <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/60 transition-colors duration-300" />
@@ -90,7 +87,7 @@ export default function CollectionsGrid() {
           <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <LogoButton href={cat.route} label="SHOP NOW" />
           </div>
-        </motion.a>
+        </a>
       ))}
     </div>
   );
