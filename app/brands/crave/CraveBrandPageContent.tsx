@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import GlobalMasthead from '../../components/GlobalMasthead';
 import { supabaseBrowser } from '../../lib/supabase-browser';
 import Highway420Footer from '../../../components/DopeCityFooter';
 
@@ -51,7 +52,7 @@ export default function CraveBrandPageContent() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
-  
+
   const [filters, setFilters] = useState<FilterState>({
     category: 'all',
     priceRange: [0, 500],
@@ -99,7 +100,7 @@ export default function CraveBrandPageContent() {
 
     // Category filter
     if (filters.category !== 'all') {
-      filtered = filtered.filter(product => 
+      filtered = filtered.filter(product =>
         categorizeProduct(product) === filters.category
       );
     }
@@ -117,13 +118,13 @@ export default function CraveBrandPageContent() {
 
     // Price filter
     filtered = filtered.filter(product =>
-      product.price >= filters.priceRange[0] && 
+      product.price >= filters.priceRange[0] &&
       product.price <= filters.priceRange[1]
     );
 
     // Stock filter
     if (filters.inStock) {
-      filtered = filtered.filter(product => 
+      filtered = filtered.filter(product =>
         (product.stock_quantity || 0) > 0
       );
     }
@@ -198,7 +199,7 @@ export default function CraveBrandPageContent() {
   return (
     <div className="min-h-screen bg-white">
       <GlobalMasthead />
-      
+
       {/* Compact Brand Header */}
       <div className="relative bg-black text-white overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

@@ -12,6 +12,7 @@
  */
 
 import { Metadata } from 'next';
+import GlobalMasthead from '../app/components/GlobalMasthead';
 import DopeCityFooter from '../components/DopeCityFooter';
 
 // Update this metadata for your page

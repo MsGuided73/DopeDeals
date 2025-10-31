@@ -1,6 +1,7 @@
+import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
+const GlobalMasthead = dynamic(() => import('../components/GlobalMasthead'), { ssr: false });
 import AgeVerification from '../components/AgeVerification';
-import GlobalMasthead from '../components/GlobalMasthead';
 import { RotateCcw, Clock, CheckCircle, XCircle, Package, CreditCard } from 'lucide-react';
 
 export const metadata: Metadata = {

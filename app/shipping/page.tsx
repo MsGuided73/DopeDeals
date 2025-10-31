@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 import { Truck, Clock, Package, Shield, MapPin, DollarSign } from 'lucide-react';
 

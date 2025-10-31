@@ -18,6 +18,7 @@ import { useState, useEffect } from 'react';
 import { Metadata } from 'next';
 
 // === GLOBAL LAYOUT COMPONENTS ===
+import GlobalMasthead from '../app/components/GlobalMasthead';
 import Highway420Header from '../components/DopeCityHeader';
 import Highway420Footer from '../components/Highway420Footer';
 

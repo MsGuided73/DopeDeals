@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import GlobalMasthead from '../components/GlobalMasthead';
 import { PRODUCT_CATEGORIES, PRODUCT_BRANDS, PRICE_RANGES } from '../lib/product-categorization';
 import ProductCard from '../products/components/ProductCard';
 import { 

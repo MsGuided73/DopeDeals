@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import GlobalMasthead from '../../components/GlobalMasthead';
 import { supabaseBrowser } from '../../lib/supabase-browser';
 import Image from 'next/image';
 import { Search, Filter, Grid, List, SlidersHorizontal } from 'lucide-react';

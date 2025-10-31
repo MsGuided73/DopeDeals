@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 import { Award, Users, Shield, Truck } from 'lucide-react';
 
 export const metadata: Metadata = {

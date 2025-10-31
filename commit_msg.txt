@@ -1,1 +1,6 @@
-fix: add missing GlobalMasthead imports to profile and terms pages for deployment fix
+fix: add missing GlobalMasthead imports to all files using the component
+
+- Fixed missing imports in 15 files that use <GlobalMasthead>
+- Templates: SimplePageTemplate, PageTemplate, InteractivePageTemplate
+- Pages: about, account/addresses, account/profile, categories, privacy, rewards, shipping, search/SearchResultsContent, wishlist
+- Corrected import paths for proper TypeScript resolution
