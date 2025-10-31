@@ -1,1 +1,1 @@
-feat: update engine requirements to use Node.js 22.12.0 for deployment consistency
+fix: add missing GlobalMasthead import to press page for deployment fix
