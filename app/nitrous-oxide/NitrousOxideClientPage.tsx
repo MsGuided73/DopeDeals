@@ -11,7 +11,7 @@ export default function NitrousOxideClientPage() {
     "@type": "CollectionPage",
     "name": "Nitrous Oxide Products Collection",
     "description": "Premium nitrous oxide products collection at DOPE CITY",
-    "url": "https://dopecity.com/nitrous-oxide",
+    "url": "https://highway420store.com/nitrous-oxide",
     "mainEntity": {
       "@type": "ItemList",
       "name": "Nitrous Oxide Products Collection",
@@ -32,19 +32,19 @@ export default function NitrousOxideClientPage() {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://dopecity.com"
+          "item": "https://highway420store.com"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Products",
-          "item": "https://dopecity.com/products"
+          "item": "https://highway420store.com/products"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Nitrous Oxide",
-          "item": "https://dopecity.com/nitrous-oxide"
+          "item": "https://highway420store.com/nitrous-oxide"
         }
       ]
     }

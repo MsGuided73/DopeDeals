@@ -8,7 +8,7 @@ export const metadata = {
     title: 'Premium Mushroom Products | DOPE CITY',
     description: 'Discover our curated collection of high-quality mushroom products. Premium quality with discreet shipping.',
     type: 'website',
-    url: 'https://dopecity.com/mushrooms',
+    url: 'https://highway420store.com/mushrooms',
     images: [
       {
         url: '/images/mushrooms/mushrooms-collection-og.jpg',
@@ -25,7 +25,7 @@ export const metadata = {
     images: ['/images/mushrooms/mushrooms-collection-twitter.jpg'],
   },
   alternates: {
-    canonical: 'https://dopecity.com/mushrooms',
+    canonical: 'https://highway420store.com/mushrooms',
   },
   robots: {
     index: true,

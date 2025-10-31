@@ -42,7 +42,7 @@ export default async function PuffcoPage() {
     "@type": "Brand",
     "name": "Puffco",
     "description": "Premium electronic dabbing devices and accessories",
-    "url": "https://dopecity.com/brands/puffco",
+    "url": "https://highway420store.com/brands/puffco",
     "logo": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
     "sameAs": [
       "https://www.puffco.com"

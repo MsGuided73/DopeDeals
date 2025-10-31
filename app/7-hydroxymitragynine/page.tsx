@@ -8,7 +8,7 @@ export const metadata = {
     title: 'Premium 7-Hydroxymitragynine Products | DOPE CITY',
     description: 'Discover our curated collection of high-quality 7-Hydroxymitragynine products.',
     type: 'website',
-    url: 'https://dopecity.com/7-hydroxymitragynine',
+    url: 'https://highway420store.com/7-hydroxymitragynine',
     images: [
       {
         url: '/images/7-hydroxymitragynine/7oh-collection-og.jpg',
@@ -25,7 +25,7 @@ export const metadata = {
     images: ['/images/7-hydroxymitragynine/7oh-collection-twitter.jpg'],
   },
   alternates: {
-    canonical: 'https://dopecity.com/7-hydroxymitragynine',
+    canonical: 'https://highway420store.com/7-hydroxymitragynine',
   },
   robots: {
     index: true,

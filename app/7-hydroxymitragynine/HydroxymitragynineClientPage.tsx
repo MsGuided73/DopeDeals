@@ -11,7 +11,7 @@ export default function HydroxymitragynineClientPage() {
     "@type": "CollectionPage",
     "name": "7-Hydroxymitragynine Products Collection",
     "description": "Premium 7-Hydroxymitragynine products collection at DOPE CITY",
-    "url": "https://dopecity.com/7-hydroxymitragynine",
+    "url": "https://highway420store.com/7-hydroxymitragynine",
     "mainEntity": {
       "@type": "ItemList",
       "name": "7-Hydroxymitragynine Products Collection",
@@ -32,19 +32,19 @@ export default function HydroxymitragynineClientPage() {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://dopecity.com"
+          "item": "https://highway420store.com"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Products",
-          "item": "https://dopecity.com/products"
+          "item": "https://highway420store.com/products"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "7-Hydroxymitragynine",
-          "item": "https://dopecity.com/7-hydroxymitragynine"
+          "item": "https://highway420store.com/7-hydroxymitragynine"
         }
       ]
     }

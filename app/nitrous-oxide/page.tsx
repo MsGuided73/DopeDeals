@@ -8,7 +8,7 @@ export const metadata = {
     title: 'Premium Nitrous Oxide Products | DOPE CITY',
     description: 'Discover our curated collection of high-quality nitrous oxide products.',
     type: 'website',
-    url: 'https://dopecity.com/nitrous-oxide',
+    url: 'https://highway420store.com/nitrous-oxide',
     images: [
       {
         url: '/images/nitrous-oxide/nitrous-collection-og.jpg',
@@ -25,7 +25,7 @@ export const metadata = {
     images: ['/images/nitrous-oxide/nitrous-collection-twitter.jpg'],
   },
   alternates: {
-    canonical: 'https://dopecity.com/nitrous-oxide',
+    canonical: 'https://highway420store.com/nitrous-oxide',
   },
   robots: {
     index: true,

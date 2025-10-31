@@ -36,7 +36,7 @@ export default async function UrthFarmacyPage() {
     "@type": "Brand",
     "name": "Urth Farmacy",
     "description": "Premium cannabis brand specializing in THCA products and pharmaceutical-grade extraction",
-    "url": "https://dopecity.com/brands/urth-farmacy",
+    "url": "https://highway420store.com/brands/urth-farmacy",
     "logo": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80",
     "makesOffer": {
       "@type": "AggregateOffer",

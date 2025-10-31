@@ -36,7 +36,7 @@ export default async function CookiesPage() {
     "@type": "Brand",
     "name": "Cookies",
     "description": "Premium cannabis brand founded by Berner, known for high-quality flower, pre-rolls, and accessories",
-    "url": "https://dopecity.com/brands/cookies",
+    "url": "https://highway420store.com/brands/cookies",
     "logo": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
     "sameAs": [
       "https://www.cookies.co"
