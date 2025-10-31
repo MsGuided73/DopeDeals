@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 import { RotateCcw, Clock, CheckCircle, XCircle, Package, CreditCard } from 'lucide-react';
 
 export const metadata: Metadata = {
