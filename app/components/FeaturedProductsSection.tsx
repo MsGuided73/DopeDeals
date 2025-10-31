@@ -334,7 +334,7 @@ export default function FeaturedProductsSection() {
                         }}
                         className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                         style={{
-                          fontFamily: "'Highway Gothic', 'Arial', sans-serif",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
                           fontWeight: 'normal',
                           letterSpacing: '0.05em',
                         }}
@@ -352,7 +352,7 @@ export default function FeaturedProductsSection() {
                         }}
                         className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
                         style={{
-                          fontFamily: "'Highway Gothic', 'Arial', sans-serif",
+                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
                           fontWeight: 'normal',
                           letterSpacing: '0.05em',
                         }}

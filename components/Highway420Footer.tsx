@@ -49,7 +49,7 @@ export default function Highway420Footer() {
       <div className="relative z-20 max-w-7xl mx-auto px-4 py-16">
         {/* Service Features */}
         <div className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Discreet Shipping - Nothing to see here */}
             <div className="text-center">
               <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
@@ -60,7 +60,7 @@ export default function Highway420Footer() {
                 />
               </div>
               <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>DISCREET SHIPPING</h3>
-              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Nothing to see here</p>
+              <p className="text-gray-800 font-bold text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Nothing to see here</p>
             </div>
 
             {/* Low Price Guarantee */}
@@ -69,7 +69,7 @@ export default function Highway420Footer() {
                 <span className="text-green-600 font-black text-2xl">$</span>
               </div>
               <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>LOW PRICE</h3>
-              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Guarantee</p>
+              <p className="text-gray-800 font-bold text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Guarantee</p>
             </div>
 
             {/* Easy, Hassle Free Returns */}
@@ -78,16 +78,7 @@ export default function Highway420Footer() {
                 <Phone className="w-10 h-10 text-green-600" />
               </div>
               <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>EASY, HASSLE FREE</h3>
-              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Returns</p>
-            </div>
-
-            {/* Get 10% Back in Rewards */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
-                <MapPin className="w-10 h-10 text-green-600" />
-              </div>
-              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>GET 10% BACK IN</h3>
-              <p className="text-gray-800 font-medium text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Rewards</p>
+              <p className="text-gray-800 font-bold text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Returns</p>
             </div>
           </div>
         </div>
