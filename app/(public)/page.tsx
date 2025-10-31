@@ -7,6 +7,7 @@ import NewProductsSection from '../components/NewProductsSection';
 import BrandLogoScrollbar from '../../components/BrandLogoScrollbar';
 import DopeDealsSection from '../components/DopeDealsSection';
 import FeaturedProductsSection from '../components/FeaturedProductsSection';
+import BlogArticlesGrid from '../components/BlogArticlesGrid';
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
@@ -188,6 +189,25 @@ export default function HomePage() {
 
         {/* Dope Deals Section - Moved to bottom */}
         <DopeDealsSection />
+
+        {/* Blog Articles Section - Just above footer */}
+        <section className="mt-24 mb-16">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-chalets font-bold mb-4" style={{
+                letterSpacing: '-0.02em',
+                color: '#000000'
+              }}>
+                BLOG ARTICLES
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Stay informed with the latest news, guides, and insights from the Highway 420 community
+              </p>
+            </div>
+
+            <BlogArticlesGrid />
+          </div>
+        </section>
       </div>
     </div>
   );

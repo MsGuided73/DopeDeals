@@ -129,26 +129,34 @@ export default function EnhancedSearchBar() {
 
     // Record analytics for suggestion selection
     try {
-      fetch('/api/search/analytics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: searchQuery,
-          resultCount: suggestions.length,
-          selectedResult: {
-            type: suggestion.type,
-            title: suggestion.title,
-            url: suggestion.url
-          },
-          userAgent: navigator.userAgent
-        })
-      }).catch(() => {}); // Ignore analytics errors
+      if (typeof window !== 'undefined') {
+        fetch('/api/search/analytics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: searchQuery,
+            resultCount: suggestions.length,
+            selectedResult: {
+              type: suggestion.type,
+              title: suggestion.title,
+              url: suggestion.url
+            },
+            userAgent: navigator?.userAgent || 'Unknown'
+          })
+        }).catch(() => {}); // Ignore analytics errors
+      }
     } catch (error) {
       // Ignore analytics errors
     }
 
     setSearchQuery('')
-    router.push(suggestion.url)
+    // Ensure router is available (prevent SSR issues)
+    if (typeof window !== 'undefined' && router) {
+      router.push(suggestion.url)
+    } else {
+      // Fallback for when router isn't available
+      window.location.href = suggestion.url
+    }
   }
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -156,7 +164,11 @@ export default function EnhancedSearchBar() {
 
     if (!searchQuery.trim()) {
       // No search query, go to products page
-      router.push('/products')
+      if (typeof window !== 'undefined' && router) {
+        router.push('/products')
+      } else {
+        window.location.href = '/products'
+      }
       return
     }
 
@@ -164,14 +176,16 @@ export default function EnhancedSearchBar() {
 
     // Record search analytics
     try {
-      fetch('/api/search/analytics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: searchQuery,
-          userAgent: navigator.userAgent
-        })
-      }).catch(() => {}) // Ignore analytics errors
+      if (typeof window !== 'undefined') {
+        fetch('/api/search/analytics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: searchQuery,
+            userAgent: navigator?.userAgent || 'Unknown'
+          })
+        }).catch(() => {}) // Ignore analytics errors
+      }
     } catch (error) {
       // Ignore analytics errors
     }
@@ -181,7 +195,11 @@ export default function EnhancedSearchBar() {
     params.set('q', searchQuery.trim())
 
     const searchUrl = `/search?${params.toString()}`
-    router.push(searchUrl)
+    if (typeof window !== 'undefined' && router) {
+      router.push(searchUrl)
+    } else {
+      window.location.href = searchUrl
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

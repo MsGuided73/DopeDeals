@@ -3,8 +3,8 @@ import { Shield, Calendar, CheckCircle, AlertTriangle } from 'lucide-react';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata: Metadata = {
-  title: 'Age Verification - DOPE CITY',
-  description: 'Age verification process and compliance information for DOPE CITY customers.',
+  title: 'Age Verification - Highway 420',
+  description: 'Age verification process and compliance information for Highway 420 customers.',
 };
 
 export default function AgeVerificationPage() {
@@ -32,7 +32,7 @@ export default function AgeVerificationPage() {
             <h1 className="dope-city-title text-5xl md:text-6xl mb-4">
               AGE VERIFICATION
             </h1>
-            <div className="w-24 h-1 bg-dope-orange-500 mx-auto mb-6"></div>
+            <div className="w-24 h-1 bg-dope-orange-600 mx-auto mb-6"></div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Ensuring compliance and responsible access to our products
             </p>
@@ -58,7 +58,7 @@ export default function AgeVerificationPage() {
             
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
               <div className="flex items-center mb-6">
-                <Shield className="w-8 h-8 text-dope-orange-500 mr-3" />
+                <Shield className="w-8 h-8 text-dope-orange-600 mr-3" />
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Why We Verify Age</h2>
               </div>
               
@@ -79,7 +79,7 @@ export default function AgeVerificationPage() {
 
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
               <div className="flex items-center mb-6">
-                <Calendar className="w-8 h-8 text-dope-orange-500 mr-3" />
+                <Calendar className="w-8 h-8 text-dope-orange-600 mr-3" />
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Verification Process</h2>
               </div>
               
@@ -102,14 +102,14 @@ export default function AgeVerificationPage() {
           {/* Verification Methods */}
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8 mb-12">
             <div className="flex items-center mb-6">
-              <CheckCircle className="w-8 h-8 text-dope-orange-500 mr-3" />
+              <CheckCircle className="w-8 h-8 text-dope-orange-600 mr-3" />
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Verification Methods</h2>
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="w-16 h-16 bg-dope-orange-100 dark:bg-dope-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Calendar className="w-8 h-8 text-dope-orange-500" />
+                  <Calendar className="w-8 h-8 text-dope-orange-600" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Date of Birth</h3>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -119,7 +119,7 @@ export default function AgeVerificationPage() {
 
               <div className="text-center">
                 <div className="w-16 h-16 bg-dope-orange-100 dark:bg-dope-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-dope-orange-500" />
+                  <Shield className="w-8 h-8 text-dope-orange-600" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">ID Verification</h3>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -229,6 +229,7 @@ export default function AgeVerificationPage() {
           </div>
         </div>
       </div>
-    </>
-  );
+    </div>
+  </>
+);
 }

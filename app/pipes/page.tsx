@@ -102,9 +102,6 @@ export default function PipesPage() {
       {/* Age Verification Popup */}
       <AgeVerification />
 
-      {/* Universal Layout Components */}
-      <GlobalMasthead />
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

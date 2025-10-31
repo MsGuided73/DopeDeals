@@ -32,7 +32,45 @@ export async function GET(request: NextRequest) {
     }
 
     // Fallback to hardcoded posts if database is empty or unavailable
-    const fallbackPosts = [
+    // Featured blog articles for homepage display
+    const featuredPosts = [
+      {
+        id: 'dabbing-101-beginners-guide',
+        title: 'Dabbing 101: Your Beginner\'s Guide to Rigs, Nails & First Setups',
+        excerpt: 'New to dabbing? This comprehensive guide breaks down rigs, nails, temperature control, and essential setup tips for smooth, flavorful vapor every time.',
+        author: 'Highway 420 Team',
+        date: '2025-10-30',
+        category: 'Education',
+        image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop',
+        readTime: '8 min read',
+        featured: true
+      },
+      {
+        id: 'anatomy-smooth-hit',
+        title: 'The Anatomy of a Smooth Hit: How Airflow & Cooling Design Transform Your Experience',
+        excerpt: 'Discover how percolators, recyclers, and airflow systems work together to eliminate harshness and deliver impeccably smooth, flavorful vapor.',
+        author: 'Highway 420 Team',
+        date: '2025-10-30',
+        category: 'Education',
+        image: 'https://images.unsplash.com/photo-1586227740560-8cf2732c1531?w=600&h=400&fit=crop',
+        readTime: '10 min read',
+        featured: true
+      },
+      {
+        id: 'perfect-temperature-control',
+        title: 'Finding the Perfect Hit: Temperature Control for Maximum Flavor & Smoothness',
+        excerpt: 'Master temperature precision for concentrates. Learn the goldilocks zone, heat effects on vapor quality, and gear that keeps you in the flavor zone.',
+        author: 'Highway 420 Team',
+        date: '2025-10-30',
+        category: 'Education',
+        image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&h=400&fit=crop',
+        readTime: '7 min read',
+        featured: true
+      }
+    ];
+
+    // Additional blog posts
+    const additionalPosts = [
       {
         id: 'cannabis-history-global',
         title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
@@ -42,7 +80,7 @@ export async function GET(request: NextRequest) {
         category: 'Culture',
         image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
         readTime: '10 min read',
-        featured: true
+        featured: false
       },
       {
         id: 'ultimate-bong-guide',
@@ -53,75 +91,11 @@ export async function GET(request: NextRequest) {
         category: 'Education',
         image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
         readTime: '12 min read',
-        featured: true
-      },
-      {
-        id: '1',
-        title: 'The Ultimate Guide to Choosing Your First Dab Rig',
-        excerpt: 'Everything you need to know about selecting the perfect dab rig for your concentrate experience. From materials to size, we cover it all.',
-        author: 'Highway 420 Team',
-        date: '2025-10-15',
-        category: 'Education',
-        image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
-        readTime: '8 min read',
-        featured: true
-      },
-      {
-        id: '2',
-        title: 'THCA vs THC: Understanding the Difference',
-        excerpt: 'Learn about the key differences between THCA and THC, their effects, and why THCA products are gaining popularity in the hemp industry.',
-        author: 'Highway 420 Team',
-        date: '2025-10-12',
-        category: 'Science',
-        image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
-        readTime: '6 min read',
-        featured: true
-      },
-      {
-        id: '3',
-        title: 'New Arrivals: Premium Glass Collection',
-        excerpt: 'Check out our latest collection of premium glass pieces from top artists. Limited edition designs now available.',
-        author: 'Highway 420 Team',
-        date: '2025-15-10',
-        category: 'Product News',
-        image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=400&fit=crop',
-        readTime: '4 min read',
-        featured: false
-      },
-      {
-        id: '4',
-        title: 'Proper Cleaning and Maintenance for Your Glass',
-        excerpt: 'Keep your glass pieces in pristine condition with our comprehensive cleaning guide. Tips from the pros.',
-        author: 'Highway 420 Team',
-        date: '2025-10-15',
-        category: 'Maintenance',
-        image: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&h=400&fit=crop',
-        readTime: '7 min read',
-        featured: false
-      },
-      {
-        id: '5',
-        title: 'The Rise of Electric Dab Rigs: E-Rigs Explained',
-        excerpt: 'Discover why electric dab rigs are revolutionizing the concentrate experience. Technology meets tradition.',
-        author: 'Highway 420 Team',
-        date: '2025-10-15',
-        category: 'Technology',
-        image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&h=400&fit=crop',
-        readTime: '9 min read',
-        featured: false
-      },
-      {
-        id: '6',
-        title: 'Cannabis Culture: A Brief History',
-        excerpt: 'Explore the rich history of cannabis culture and how it has evolved over the decades to become mainstream.',
-        author: 'Culture Historian',
-        date: '2024-01-03',
-        category: 'Culture',
-        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
-        readTime: '12 min read',
         featured: false
       }
     ];
+
+    const fallbackPosts = [...featuredPosts, ...additionalPosts];
 
     return NextResponse.json({ posts: fallbackPosts });
 
