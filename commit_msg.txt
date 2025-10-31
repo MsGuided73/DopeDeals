@@ -1,8 +1,7 @@
-fix: add missing GlobalMasthead imports to all files using the component
+refactor: remove rewards badge from footer and use system fonts
 
-- Fixed missing imports in 21 files that use <GlobalMasthead>
-- Templates: SimplePageTemplate, PageTemplate, InteractivePageTemplate
-- Pages: about, account/addresses, account/profile, categories, privacy, rewards, returns, shipping, search/SearchResultsContent, wishlist
-- Brand Pages: crave, roor, puffco, cookies, urth-farmacy
-- Added SSR-safe dynamic import for returns page to prevent prerender errors
-- Corrected import paths for proper TypeScript resolution
+- Removed 'Get 10% Back in Rewards' badge from footer service features
+- Updated grid layout from 4 to 3 columns to accommodate removal
+- Made subtitle text below badges bold face
+- Removed unused DopeCityFooter.tsx file
+- All text now uses default system-ui fonts
