@@ -278,4 +278,4 @@ export default function DabsntoolsProductGrid({ products, viewMode }: Dabsntools
       ))}
     </div>
   );
-}</content>
+}

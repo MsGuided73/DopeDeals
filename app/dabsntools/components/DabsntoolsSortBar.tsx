@@ -35,4 +35,4 @@ export default function DabsntoolsSortBar({ sortBy, setSortBy }: DabsntoolsSortB
       </div>
     </div>
   );
-}</content>
+}

@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import ErrorBoundary from '../components/ErrorBoundary';
-import LoadingState, { useLoadingState } from '../components/LoadingState';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import LoadingState, { useLoadingState } from '../../components/LoadingState';
 import DabsntoolsFilters from './components/DabsntoolsFilters';
 import DabsntoolsProductGrid from './components/DabsntoolsProductGrid';
 import DabsntoolsBreadcrumb from './components/DabsntoolsBreadcrumb';
@@ -311,4 +311,4 @@ function extractTypeFromName(productName: string): string | null {
   if (nameLower.includes('glass')) return 'Glass Rigs';
 
   return null;
-}</content>
+}

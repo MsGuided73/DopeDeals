@@ -259,4 +259,4 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
       </div>
     </div>
   );
-}</content>
+}

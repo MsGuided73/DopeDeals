@@ -197,4 +197,4 @@ export default function DabsntoolsHero() {
       <div className="absolute top-0 right-0 w-32 h-32 bg-dope-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
     </div>
   );
-}</content>
+}
