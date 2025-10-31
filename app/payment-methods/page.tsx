@@ -42,8 +42,7 @@ export default function PaymentMethodsPage() {
   return (
     <>
       <AgeVerification />
-      <GlobalMasthead />
-      
+
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
