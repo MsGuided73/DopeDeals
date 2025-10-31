@@ -1,15 +1,4 @@
-feat: create THCA Prerolls & Vapes page with complete product catalog
+Delete careers page
 
-- Create new THCA Prerolls & Vapes product page at /thca_pnv
-- Link collections grid card to new THCA page
-- Implement product grid with filter system cloned from pipes/bongs pages
-- Add comprehensive filtering for THCA product types (Prerolls/Cartridges/Disposables)
-- Include sorting, view toggles, pagination, and search functionality
-- Fix font styling issues: remove Chalet fonts from product cards/descriptions
-- Use system fonts for all subtext, product names, and UI elements
-- Keep Chalet fonts only for approved section titles
-- Resolve syntax errors in multiple component files
-
-Pages: New THCA Prerolls & Vapes page (/thca_pnv)
-Components: Full component library for THCA product catalog
-Fonts: Comprehensive system font implementation for product UI
+- Remove entire app/careers directory
+- Remove careers page and all associated files
