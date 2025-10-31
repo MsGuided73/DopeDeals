@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '../../lib/supabase-browser';
 import Link from 'next/link';
 import AgeVerification from '../../components/AgeVerification';
+import GlobalMasthead from '../../components/GlobalMasthead';
 
 export default function AuthPage() {
   const router = useRouter();
@@ -271,4 +272,3 @@ export default function AuthPage() {
     </div>
   );
 }
-

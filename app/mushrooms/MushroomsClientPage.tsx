@@ -1,6 +1,7 @@
 'use client';
 
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 import PrismaticBurst from '../components/PrismaticBurst';
 
 export default function MushroomsClientPage() {

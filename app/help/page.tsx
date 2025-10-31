@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 import { Search, Package, CreditCard, Truck, RotateCcw, Shield, MessageCircle, Phone } from 'lucide-react';
 
 export const metadata: Metadata = {

@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 import DabRigsHero from './components/DabRigsHero';
 import { Metadata } from 'next';
 

@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import BongsPageContent from './BongsPageContent';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
   title: 'Bongs & Water Pipes | HIGHWAY 420 - Premium Glass Collection',
@@ -13,6 +14,9 @@ export default function BongsPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Age Verification Popup */}
       <AgeVerification />
+
+      {/* Universal Layout Components */}
+      <GlobalMasthead />
 
       <Suspense fallback={
         <div className="min-h-screen flex items-center justify-center">

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 interface Review {
   id: string;

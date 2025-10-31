@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import AgeVerification from '../../components/AgeVerification';
+import GlobalMasthead from '../../components/GlobalMasthead';
 import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle } from 'lucide-react';
 
 export default function CannabisHistoryArticle() {

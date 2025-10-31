@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import PipesPageContent from './PipesPageContent';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
   title: 'Glass Pipes & Hand Pipes | DOPE CITY - Premium Smoking Pipes Collection',
@@ -101,6 +102,9 @@ export default function PipesPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Age Verification Popup */}
       <AgeVerification />
+
+      {/* Universal Layout Components */}
+      <GlobalMasthead />
 
       <script
         type="application/ld+json"

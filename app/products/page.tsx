@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import ProductsPageContent from './ProductsPageContent';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
   title: 'All Products | DOPE CITY - Water Bongs, Pipes, THCA Flower & More',
