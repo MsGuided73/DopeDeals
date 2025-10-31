@@ -1,1 +1,1 @@
-feat: Add new features - introduce dope deals API and section, along with VIP benefits documentation  
+feat: update engine requirements to use Node.js 22.12.0 for deployment consistency
