@@ -11,7 +11,7 @@ export const metadata = {
     title: 'Premium Glass Pipes & Hand Pipes | DOPE CITY',
     description: 'Discover our curated collection of high-quality glass pipes, spoon pipes, chillums, and more. Premium borosilicate glass with free shipping over $50.',
     type: 'website',
-    url: 'https://dopecity.com/pipes',
+    url: 'https://highway420store.com/pipes',
     images: [
       {
         url: '/images/pipes/pipes-collection-og.jpg',
@@ -28,7 +28,7 @@ export const metadata = {
     images: ['/images/pipes/pipes-collection-twitter.jpg'],
   },
   alternates: {
-    canonical: 'https://dopecity.com/pipes',
+    canonical: 'https://highway420store.com/pipes',
   },
   robots: {
     index: true,
@@ -49,7 +49,7 @@ export default function PipesPage() {
     "@type": "CollectionPage",
     "name": "Glass Pipes & Hand Pipes Collection",
     "description": "Premium glass pipes, hand pipes, spoon pipes, and chillums collection at DOPE CITY",
-    "url": "https://dopecity.com/pipes",
+    "url": "https://highway420store.com/pipes",
     "mainEntity": {
       "@type": "ItemList",
       "name": "Glass Pipes Collection",
@@ -80,19 +80,19 @@ export default function PipesPage() {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://dopecity.com"
+          "item": "https://highway420store.com"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Products",
-          "item": "https://dopecity.com/products"
+          "item": "https://highway420store.com/products"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": "Glass Pipes",
-          "item": "https://dopecity.com/pipes"
+          "item": "https://highway420store.com/pipes"
         }
       ]
     }
