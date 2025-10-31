@@ -3,26 +3,27 @@ import ProductCard from '../../products/components/ProductCard';
 import { Hero } from '../../components/design/NikeIndustrial';
 import { supabaseServer } from '../../../lib/supabase-server';
 
-// 🚀 Prevent prerender from evaluating request-scoped code
+// Render at request time to avoid prerender pitfalls
 export const dynamic = 'force-dynamic';
-// optional extra: export const fetchCache = 'force-no-store';
+// Optional: export const revalidate = 0;
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
   const { data: category } = await supabaseServer
     .from('categories')
     .select('name')
     .eq('slug', id)
     .single();
+
   return { title: `${category?.name || 'Category'} | Dope Deals` };
 }
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+export default async function CategoryPage(
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
   const supabase = supabaseServer;
 
   // Fetch category info
