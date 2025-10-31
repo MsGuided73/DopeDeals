@@ -124,9 +124,6 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Global Masthead with Search Bar */}
-      <GlobalMasthead />
-
       {/* Product Breadcrumb */}
       <div className="bg-gray-50 border-b">
         <div className="max-w-6xl mx-auto px-6 py-4">

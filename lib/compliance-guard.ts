@@ -1,6 +1,6 @@
 /**
  * Compliance Guard - Critical System for Nicotine Product Filtering
- * ENSURES DOPE CITY NEVER DISPLAYS NICOTINE PRODUCTS
+ * ENSURES Highway 420 NEVER DISPLAYS NICOTINE PRODUCTS
  */
 
 export interface ComplianceCheck {
@@ -19,6 +19,16 @@ export interface ComplianceReport {
   lastScan: string;
   flaggedProducts: string[];
 }
+
+/**
+ * Product categories that are inherently nicotine-free accessories
+ * These cannot contain nicotine by physical nature
+ */
+const NICOTINE_FREE_CATEGORIES = [
+  'pipes', 'bongs', 'dab-rigs', 'bowls-stems', 'percolators', 'downstems',
+  'carb caps', 'nails', 'grinders', 'screens', 'storage', 'screens',
+  'tools', 'accessories', 'hookahs', 'shisha', 'water adapters'
+];
 
 /**
  * High-risk product detection patterns
@@ -67,6 +77,17 @@ export function isNicotineProduct(product: {
   tobacco_product?: boolean;
   category?: string | null;
 }): boolean {
+  // Check if this is an accessory category that cannot contain nicotine
+  const isAccessoryCategory = product.category &&
+    NICOTINE_FREE_CATEGORIES.some(accessoryCategory =>
+      product.category!.toLowerCase().includes(accessoryCategory.toLowerCase())
+    );
+
+  if (isAccessoryCategory) {
+    console.log(`✋ ACCESSORY EXEMPTION: Skipping nicotine checks for ${product.name} (category: ${product.category})`);
+    return false;
+  }
+
   // First check database flags (most reliable)
   if (product.nicotine_product === true || product.tobacco_product === true) {
     console.warn(`🚨 COMPLIANCE VIOLATION: Product ${product.name} flagged as nicotine/tobacco in database`);
