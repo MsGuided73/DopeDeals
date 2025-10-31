@@ -7,7 +7,12 @@ export const supabaseServer = createServerClient(
   {
     cookies: {
       async getAll() {
-        return (await cookies()).getAll();
+        try {
+          return (await cookies()).getAll();
+        } catch {
+          // During build time or when cookies are not available, return empty array
+          return [];
+        }
       },
       async setAll(cookiesToSet) {
         try {

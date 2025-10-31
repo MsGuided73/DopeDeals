@@ -5,6 +5,9 @@ import Link from 'next/link';
 import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic';
+
 export default function ProfileSettingsPage() {
   const [formData, setFormData] = useState({
     firstName: 'John',

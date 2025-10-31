@@ -1,5 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
+
+// Force dynamic rendering since this is a client component
+export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import GlobalMasthead from '../components/GlobalMasthead';
 import CollectionsGrid from '../components/CollectionsGrid';

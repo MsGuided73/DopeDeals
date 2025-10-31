@@ -1,6 +1,11 @@
+// app/category/[id]/page.tsx
 import ProductCard from '../../products/components/ProductCard';
 import { Hero } from '../../components/design/NikeIndustrial';
 import { supabaseServer } from '../../../lib/supabase-server';
+
+// 🚀 Prevent prerender from evaluating request-scoped code
+export const dynamic = 'force-dynamic';
+// optional extra: export const fetchCache = 'force-no-store';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -12,14 +17,21 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: `${category?.name || 'Category'} | Dope Deals` };
 }
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const supabase = supabaseServer;
+
+  // Fetch category info
   const { data: category } = await supabase
     .from('categories')
     .select('*')
     .eq('slug', id)
     .single();
+
   if (!category) {
     return (
       <div className="p-6">
@@ -27,10 +39,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       </div>
     );
   }
+
+  // Fetch products for this category
   const { data: products } = await supabase
     .from('products')
     .select('*')
     .eq('category_id', category.id);
+
   return (
     <div className="px-6 py-8 space-y-8">
       <Hero title={category.name} subtitle={category.description} />

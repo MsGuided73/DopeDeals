@@ -9,6 +9,9 @@ import DopeDealsSection from './components/DopeDealsSection';
 import FeaturedProductsSection from './components/FeaturedProductsSection';
 import BlogArticlesGrid from './components/BlogArticlesGrid';
 
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [isAgeVerified, setIsAgeVerified] = useState(false);

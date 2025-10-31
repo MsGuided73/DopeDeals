@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RecommendationAgent } from '../../../lib/recommendation-agent';
 import { getSessionUser } from '../../../lib/supabase-server-ssr';
 
+// Force dynamic rendering for this API route since it uses cookies
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Get current user

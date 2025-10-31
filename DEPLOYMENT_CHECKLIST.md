@@ -29,8 +29,8 @@ Health Check: /
 ### Step 3: Add Environment Variables
 Copy all variables from `.env.local` to Coolify environment settings:
 
-**Critical Variables:**
-- `NEXT_PUBLIC_SITE_URL` (update to your domain)
+**Critical Variables:**- `NEXT_PUBLIC_SITE_URL` (update to your domain)
+ - 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`

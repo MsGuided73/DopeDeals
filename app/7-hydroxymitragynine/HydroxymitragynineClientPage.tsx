@@ -1,10 +1,11 @@
 'use client';
 
 import { Suspense } from 'react';
-import AgeVerification from '../components/AgeVerification';
 import HydroxymitragyninePageContent from './HydroxymitragyninePageContent';
-import PrismaticBurst from '../components/PrismaticBurst';
 import GlobalMasthead from '../components/GlobalMasthead';
+// 👉 if the build later fails due to GlobalMasthead, replace the import above with:
+// import dynamic from 'next/dynamic';
+// const GlobalMasthead = dynamic(() => import('../components/GlobalMasthead'), { ssr: false });
 
 export default function HydroxymitragynineClientPage() {
   const structuredData = {
@@ -29,39 +30,15 @@ export default function HydroxymitragynineClientPage() {
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://highway420store.com"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Products",
-          "item": "https://highway420store.com/products"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "7-Hydroxymitragynine",
-          "item": "https://highway420store.com/7-hydroxymitragynine"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://highway420store.com" },
+        { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://highway420store.com/products" },
+        { "@type": "ListItem", "position": 3, "name": "7-Hydroxymitragynine", "item": "https://highway420store.com/7-hydroxymitragynine" }
       ]
     }
   };
 
   return (
     <div className="min-h-screen relative">
-      <PrismaticBurst
-        intensity={4}
-        speed={0.8}
-        colors={['#ff007a', '#4d3dff', '#ffffff']}
-      />
-
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
       {/* Universal Layout Components */}
       <GlobalMasthead />
 
@@ -70,11 +47,13 @@ export default function HydroxymitragynineClientPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
+          </div>
+        }
+      >
         <HydroxymitragyninePageContent />
       </Suspense>
     </div>
