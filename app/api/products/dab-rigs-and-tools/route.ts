@@ -126,4 +126,4 @@ export async function GET(req: NextRequest) {
     console.error('API error:', error);
     return NextResponse.json({ error: 'Failed to fetch dab products', details: String(error) }, { status: 500 });
   }
-}</content>
+}
