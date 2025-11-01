@@ -3,6 +3,7 @@ import AppProviders from "./providers";
 import GlobalMasthead from "./components/GlobalMasthead";
 import Highway420Footer from "../components/Highway420Footer";
 import ScrollingBanner from "./components/ScrollingBanner";
+import FeedbackButton from "./components/FeedbackButton";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
@@ -89,6 +90,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </main>
             <Highway420Footer />
+
+            {/* Global Feedback Button */}
+            <FeedbackButton />
           </div>
         </AppProviders>
       </body>
