@@ -39,6 +39,11 @@ export interface BongProduct {
   inStock?: boolean;
   brand?: string; // For compatibility
   category?: string; // For compatibility
+  // Add properties for bong specifications
+  height?: string;
+  jointSize?: string;
+  material?: string;
+  percolator?: string;
 }
 
 export default function BongsPageContent() {

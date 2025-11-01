@@ -19,13 +19,13 @@ async function setupSessionRLS(sessionId?: string | null, userId?: string | null
     // Set GUC variables for session-based RLS
     if (sessionId) {
       await supabase.rpc('exec_sql', {
-        sql: `SET LOCAL app.current_session_id = '${sessionId}'`
+        sql: `SET LOCAL app.current_session_id = '${sessionId.replace(/'/g, "''")}'`
       });
     }
 
     if (userId) {
       await supabase.rpc('exec_sql', {
-        sql: `SET LOCAL app.current_user_id = '${userId}'`
+        sql: `SET LOCAL app.current_user_id = '${userId.replace(/'/g, "''")}'`
       });
     }
   } catch (error) {

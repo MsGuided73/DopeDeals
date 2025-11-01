@@ -6,13 +6,10 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 interface SearchSuggestion {
-  type: 'product' | 'brand' | 'category'
-  id: string
-  title: string
-  subtitle: string
-  price?: number
-  image?: string
-  url: string
+  text: string
+  type: 'product' | 'brand' | 'category' | 'popular'
+  count?: number
+  image_url?: string
 }
 
 
@@ -83,6 +80,25 @@ export default function EnhancedSearchBar() {
   // Fetch search suggestions
   useEffect(() => {
     const fetchSuggestions = async () => {
+      if (searchQuery.length < 1) {
+        // Show popular suggestions when no query
+        setLoadingSuggestions(true)
+        try {
+          const response = await fetch(`/api/search/autosuggest?q=&limit=8`)
+          if (response.ok) {
+            const data = await response.json()
+            setSuggestions(data.suggestions || [])
+            setShowSuggestions(true)
+          }
+        } catch (error) {
+          console.error('Error fetching popular suggestions:', error)
+          setSuggestions([])
+        } finally {
+          setLoadingSuggestions(false)
+        }
+        return
+      }
+
       if (searchQuery.length < 2) {
         setSuggestions([])
         setShowSuggestions(false)
@@ -91,7 +107,7 @@ export default function EnhancedSearchBar() {
 
       setLoadingSuggestions(true)
       try {
-        const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(searchQuery)}&limit=8`)
+        const response = await fetch(`/api/search/autosuggest?q=${encodeURIComponent(searchQuery)}&limit=8`)
         if (response.ok) {
           const data = await response.json()
           setSuggestions(data.suggestions || [])
@@ -124,6 +140,41 @@ export default function EnhancedSearchBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const getSuggestionUrl = (suggestion: SearchSuggestion): string => {
+    // For popular suggestions, just search for the term
+    if (suggestion.type === 'popular') {
+      return `/search?q=${encodeURIComponent(suggestion.text)}`
+    }
+
+    // For product suggestions, search for the product name
+    if (suggestion.type === 'product') {
+      return `/search?q=${encodeURIComponent(suggestion.text)}`
+    }
+
+    // For brand suggestions, go to brands page or search
+    if (suggestion.type === 'brand') {
+      return `/search?q=${encodeURIComponent(suggestion.text)}`
+    }
+
+    // For category suggestions, try to map to category pages
+    if (suggestion.type === 'category') {
+      const categoryRoutes: Record<string, string> = {
+        'Bongs & Water Pipes': '/bongs',
+        'Hand Pipes': '/pipes',
+        'Dab Rigs & Tools': '/dab-rigs',
+        'Vaporizers': '/thca_pnv',
+        'Smoking Accessories': '/accessories',
+        'THCA Flower': '/thca-flower',
+        'Pre-Rolls & Vapes': '/thca_pnv'
+      }
+
+      return categoryRoutes[suggestion.text] || `/search?q=${encodeURIComponent(suggestion.text)}`
+    }
+
+    // Default fallback
+    return `/search?q=${encodeURIComponent(suggestion.text)}`
+  }
+
   const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
     setShowSuggestions(false)
 
@@ -138,8 +189,8 @@ export default function EnhancedSearchBar() {
             resultCount: suggestions.length,
             selectedResult: {
               type: suggestion.type,
-              title: suggestion.title,
-              url: suggestion.url
+              text: suggestion.text,
+              url: getSuggestionUrl(suggestion)
             },
             userAgent: navigator?.userAgent || 'Unknown'
           })
@@ -150,12 +201,14 @@ export default function EnhancedSearchBar() {
     }
 
     setSearchQuery('')
+    const url = getSuggestionUrl(suggestion)
+
     // Ensure router is available (prevent SSR issues)
     if (typeof window !== 'undefined' && router) {
-      router.push(suggestion.url)
+      router.push(url)
     } else {
       // Fallback for when router isn't available
-      window.location.href = suggestion.url
+      window.location.href = url
     }
   }
 
@@ -234,7 +287,7 @@ export default function EnhancedSearchBar() {
           />
 
           {/* Search Suggestions Dropdown */}
-          {showSuggestions && (searchQuery.length >= 2) && (
+          {showSuggestions && (
             <div
               ref={suggestionsRef}
               className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-xl z-50 max-h-96 overflow-y-auto"
@@ -249,15 +302,15 @@ export default function EnhancedSearchBar() {
                 <div className="py-2">
                   {suggestions.map((suggestion, index) => (
                     <button
-                      key={`${suggestion.type}-${suggestion.id}-${index}`}
+                      key={`${suggestion.type}-${suggestion.text}-${index}`}
                       onClick={() => handleSuggestionSelect(suggestion)}
                       className="w-full px-4 py-3 hover:bg-gray-50 transition-colors flex items-center gap-3 text-left"
                     >
-                      {suggestion.type === 'product' && suggestion.image ? (
+                      {suggestion.type === 'product' && suggestion.image_url ? (
                         <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                           <Image
-                            src={suggestion.image}
-                            alt={suggestion.title}
+                            src={suggestion.image_url}
+                            alt={suggestion.text}
                             width={40}
                             height={40}
                             className="w-full h-full object-cover"
@@ -267,6 +320,8 @@ export default function EnhancedSearchBar() {
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#dcfce7' }}>
                           {suggestion.type === 'brand' ? (
                             <TrendingUp className="w-5 h-5" style={{ color: '#2d8f47' }} />
+                          ) : suggestion.type === 'popular' ? (
+                            <Clock className="w-5 h-5" style={{ color: '#2d8f47' }} />
                           ) : (
                             <Search className="w-5 h-5" style={{ color: '#2d8f47' }} />
                           )}
@@ -274,13 +329,16 @@ export default function EnhancedSearchBar() {
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-gray-900 truncate">
-                          {suggestion.title}
+                          {suggestion.text}
                         </div>
                         <div className="text-sm text-gray-500 truncate">
-                          {suggestion.subtitle}
-                          {suggestion.price && (
-                            <span className="ml-2 font-medium" style={{ color: '#2d8f47' }}>
-                              ${suggestion.price}
+                          {suggestion.type === 'popular' ? 'Popular search' :
+                           suggestion.type === 'product' ? 'Product' :
+                           suggestion.type === 'brand' ? 'Brand' :
+                           suggestion.type === 'category' ? 'Category' : ''}
+                          {suggestion.count && suggestion.count > 1 && (
+                            <span className="ml-2 text-xs bg-gray-100 px-2 py-1 rounded">
+                              {suggestion.count} results
                             </span>
                           )}
                         </div>

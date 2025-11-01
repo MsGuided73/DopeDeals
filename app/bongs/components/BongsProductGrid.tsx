@@ -35,21 +35,19 @@ export default function BongsProductGrid({ products, viewMode }: BongsProductGri
             <div className="flex">
               {/* Product Image */}
               <div className="relative w-48 h-48 flex-shrink-0 bg-gray-100">
-                {product.image ? (
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    <div className="text-center">
-                      <div className="text-3xl mb-2">💨</div>
-                      <div className="text-sm">No Image</div>
-                    </div>
-                  </div>
-                )}
+                <Image
+                  src={product.image || product.imageUrl || product.image_url || 'https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400'}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  onError={(e) => {
+                    // Fallback to a default bong image if the original fails to load
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== 'https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400') {
+                      target.src = 'https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400';
+                    }
+                  }}
+                />
                 {product.isNew && (
                   <span className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                     NEW
@@ -138,21 +136,19 @@ export default function BongsProductGrid({ products, viewMode }: BongsProductGri
         <div key={product.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 group">
           {/* Product Image */}
           <div className="relative aspect-square overflow-hidden bg-gray-100">
-            {product.image ? (
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                <div className="text-center">
-                  <div className="text-4xl mb-2">💨</div>
-                  <div className="text-sm">No Image</div>
-                </div>
-              </div>
-            )}
+            <Image
+              src={product.image || product.imageUrl || product.image_url || 'https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400'}
+              alt={product.name}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                // Fallback to a default bong image if the original fails to load
+                const target = e.target as HTMLImageElement;
+                if (target.src !== 'https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400') {
+                  target.src = 'https://images.unsplash.com/photo-1607734834519-d8576ae60ea4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400';
+                }
+              }}
+            />
             
             {/* Badges */}
             <div className="absolute top-2 left-2 flex flex-col gap-1">

@@ -263,6 +263,22 @@ export const getCart = async (): Promise<Cart | null> => {
   }
 };
 
+// Initialize cart session on app startup
+export const initializeCart = () => {
+  if (typeof window === 'undefined') return;
+
+  // Ensure session ID exists
+  ensureSessionId();
+
+  // Listen for cart updates from other tabs/windows
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'cart_session_id') {
+      // Session ID changed, refresh cart
+      window.dispatchEvent(new CustomEvent('cartSessionChanged'));
+    }
+  });
+};
+
 // Clear entire cart
 export const clearCart = async (): Promise<boolean> => {
   const sessionId = getSessionId();

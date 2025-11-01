@@ -19,7 +19,7 @@ export default function CollectionsGrid() {
     { name: 'Hookahs', route: '/hookahs', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg' },
   ];
 
-  const logoPath = 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg';
+  const logoPath = 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/AdobeStock_1060112988.jpeg';
 
   const LogoButton: React.FC<LogoButtonProps> = ({ href, label = 'SHOP NOW' }) => {
     return (
@@ -57,9 +57,9 @@ export default function CollectionsGrid() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4">
+    <div className="w-full px-4 py-8">
       {/* Mobile: Stack vertically */}
-      <div className="block lg:hidden space-y-4">
+      <div className="block lg:hidden space-y-4 max-w-7xl mx-auto">
         {/* Large hero image first on mobile */}
         <a
           href="/ride-with-us"
@@ -103,45 +103,47 @@ export default function CollectionsGrid() {
         </div>
       </div>
 
-      {/* Desktop: Original grid layout */}
-      <div className="hidden lg:grid lg:grid-cols-4 lg:gap-3 lg:aspect-[4/2] lg:items-stretch lg:justify-stretch">
-        <a
-          href="/ride-with-us"
-          className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative h-full w-full group hover:scale-105 transition-transform duration-300 block"
-        >
-          <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
-          <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <LogoButton href="/ride-with-us" label="RIDE WITH US" />
-          </div>
-        </a>
-
-        {categories.map((cat, i) => (
+      {/* Desktop: Full-width grid layout */}
+      <div className="hidden lg:block w-full">
+        <div className="grid grid-cols-4 gap-4 h-[70vh] min-h-[500px]">
           <a
-            key={i}
-            href={cat.route}
-            className="rounded-2xl overflow-hidden shadow-md relative w-full h-full flex group hover:scale-105 transition-all duration-300 block"
-            style={{
-              boxShadow: '0 0 0 0 rgba(34, 197, 94, 0.7)',
-              transition: 'box-shadow 0.3s ease, transform 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 20px 5px rgba(34, 197, 94, 0.7)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 0 0 rgba(34, 197, 94, 0.7)';
-            }}
+            href="/ride-with-us"
+            className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group hover:scale-105 transition-transform duration-300 block"
           >
-            <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
-            <div className="absolute inset-0 flex items-end justify-center p-3 z-10 pointer-events-none">
-              <h1 className="text-white text-4xl md:text-5xl font-bold text-center uppercase">{cat.name}</h1>
-            </div>
+            <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
             <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <LogoButton href={cat.route} label="SHOP NOW" />
+              <LogoButton href="/ride-with-us" label="RIDE WITH US" />
             </div>
           </a>
-        ))}
+
+          {categories.map((cat, i) => (
+            <a
+              key={i}
+              href={cat.route}
+              className="rounded-2xl overflow-hidden shadow-md relative group hover:scale-105 transition-all duration-300 block"
+              style={{
+                boxShadow: '0 0 0 0 rgba(34, 197, 94, 0.7)',
+                transition: 'box-shadow 0.3s ease, transform 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px 5px rgba(34, 197, 94, 0.7)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 0 0 rgba(34, 197, 94, 0.7)';
+              }}
+            >
+              <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
+              <div className="absolute inset-0 flex items-end justify-center p-4 z-10 pointer-events-none">
+                <h1 className="text-white text-2xl xl:text-3xl 2xl:text-4xl font-bold text-center uppercase leading-tight break-words">{cat.name}</h1>
+              </div>
+              <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <LogoButton href={cat.route} label="SHOP NOW" />
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );

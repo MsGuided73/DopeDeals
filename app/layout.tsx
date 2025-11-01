@@ -6,7 +6,51 @@ import ScrollingBanner from "./components/ScrollingBanner";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
-  description: "Welcome to HIGHWAY 420 - Where premium meets street. Discover the finest smoking accessories, CBD products, and cannabis culture essentials.",
+  description: "Life is Highway, Ride With Us. Premium smoking accessories, bongs, pipes, dab rigs, vaporizers & cannabis culture essentials. Free shipping over $50.",
+
+  // Open Graph / Facebook
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://yourdomain.com',
+    siteName: 'HIGHWAY 420',
+    title: 'HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop',
+    description: 'Life is Highway, Ride With Us. Premium smoking accessories, bongs, pipes, dab rigs, vaporizers & cannabis culture essentials. Free shipping over $50.',
+    images: [
+      {
+        url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop',
+      },
+    ],
+  },
+
+  // Twitter Card
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop',
+    description: 'Life is Highway, Ride With Us. Premium smoking accessories, bongs, pipes, dab rigs, vaporizers & cannabis culture essentials.',
+    images: ['https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg'],
+    creator: '@highway420',
+  },
+
+  // Additional meta tags
+  keywords: ['cannabis', 'smoking accessories', 'bongs', 'pipes', 'dab rigs', 'vaporizers', 'cbd', 'smoke shop', 'premium glass'],
+  authors: [{ name: 'HIGHWAY 420' }],
+  creator: 'HIGHWAY 420',
+  publisher: 'HIGHWAY 420',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

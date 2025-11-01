@@ -359,7 +359,7 @@ export async function GET(request: NextRequest) {
       // Map search terms to category slugs based on common keywords
       for (const term of expandedTerms) {
         if (CATEGORY_SYNONYMS.pipes.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
-          categorySlugsToSearch.push('pipes');
+          categorySlugsToSearch.push('pipes', 'hand-pipes'); // Include both category slugs for pipes
         }
         if (CATEGORY_SYNONYMS.bongs.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
           categorySlugsToSearch.push('bongs');

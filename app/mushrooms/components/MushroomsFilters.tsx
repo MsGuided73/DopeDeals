@@ -2,30 +2,37 @@
 
 import { MushroomProduct } from '../MushroomsPageContent';
 
+interface MushroomFilters {
+  priceRange: [number, number];
+  types: string[];
+  desiredEffects: string[];
+  strengths: string[];
+  origins: string[];
+  forms: string[];
+  inStock: boolean;
+  onSale: boolean;
+  isNew: boolean;
+  featured: boolean;
+  vipExclusive: boolean;
+}
+
 interface MushroomsFiltersProps {
-  filters: {
-    priceRange: [number, number];
-    types: string[];
-    desiredEffects: string[];
-    strengths: string[];
-    origins: string[];
-    forms: string[];
-    inStock: boolean;
-    onSale: boolean;
-    isNew: boolean;
-    featured: boolean;
-    vipExclusive: boolean;
-  };
-  setFilters: (filters: any) => void;
+  filters: MushroomFilters;
+  setFilters: (filters: MushroomFilters) => void;
   products: MushroomProduct[];
 }
 
+// Type guard function for filtering strings
+function isString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
 export default function MushroomsFilters({ filters, setFilters, products }: MushroomsFiltersProps) {
-  // Extract unique values for filter options
-  const types = [...new Set(products.map(p => p.type).filter(Boolean))];
-  const effects = [...new Set(products.flatMap(p => p.desired_effect || []).filter(Boolean))];
-  const strengths = [...new Set(products.map(p => p.strength).filter(Boolean))];
-  const forms = [...new Set(products.map(p => p.form).filter(Boolean))];
+  // Extract unique values for filter options with proper type narrowing
+  const types = [...new Set(products.map(p => p.type).filter(isString))];
+  const effects = [...new Set(products.flatMap(p => p.desired_effect || []).filter(isString))];
+  const strengths = [...new Set(products.map(p => p.strength).filter(isString))];
+  const forms = [...new Set(products.map(p => p.form).filter(isString))];
 
   const updateFilter = (key: string, value: any) => {
     setFilters({
