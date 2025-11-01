@@ -6,7 +6,7 @@ import ScrollingBanner from "./components/ScrollingBanner";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
-  description: "🚀 Life is Highway, Ride With Us! 🔥 Premium smoking accessories, bongs, pipes, dab rigs & vaporizers. Free shipping over $50. 🌿 #Highway420",
+  description: "Life is Highway, Ride With Us 🌿 Premium glass, bongs, dab rigs & smoking accessories. Curated cannabis culture since day one. Free shipping over $50 🚚 #Highway420",
 
   // Open Graph / Facebook
   openGraph: {
@@ -14,8 +14,8 @@ export const metadata = {
     locale: 'en_US',
     url: 'https://yourdomain.com',
     siteName: 'HIGHWAY 420',
-    title: '🚀 HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop 🔥',
-    description: 'Life is Highway, Ride With Us! Premium smoking accessories, bongs, pipes, dab rigs, vaporizers & cannabis culture essentials. Free shipping over $50. 🌿',
+    title: 'HIGHWAY 420 - Life is Highway, Ride With Us 🌿',
+    description: 'Premium glass art, bongs, dab rigs & smoking accessories. Curated cannabis culture essentials. Free shipping over $50. Join the movement.',
     images: [
       {
         url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg',
@@ -29,8 +29,8 @@ export const metadata = {
   // Twitter Card
   twitter: {
     card: 'summary_large_image',
-    title: '🚀 HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop 🔥',
-    description: 'Life is Highway, Ride With Us! Premium smoking accessories, bongs, pipes, dab rigs & vaporizers. Free shipping over $50. 🌿 #Highway420',
+    title: 'HIGHWAY 420 - Life is Highway, Ride With Us 🌿',
+    description: 'Premium glass, bongs, dab rigs & smoking accessories. Curated cannabis culture since day one. Free shipping over $50 🚚 #Highway420',
     images: ['https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg'],
     creator: '@highway420',
   },
