@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { sendFeedbackEmail } from '../../../lib/email';
 
 interface FeedbackData {
   type: 'bug' | 'design' | 'feature' | 'other';
@@ -15,7 +16,18 @@ const GLITCHES_FILE_PATH = path.join(process.cwd(), 'POST_DEPLOYMENT_GLITCHES.md
 
 export async function POST(request: NextRequest) {
   try {
-    const feedback: FeedbackData = await request.json();
+    let feedback: FeedbackData;
+
+    try {
+      // Try to parse JSON directly from request
+      feedback = await request.json();
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      return NextResponse.json(
+        { error: 'Invalid JSON format' },
+        { status: 400 }
+      );
+    }
 
     // Validate required fields
     if (!feedback.description || !feedback.type || !feedback.timestamp) {
@@ -31,6 +43,14 @@ export async function POST(request: NextRequest) {
 
     // Append to the glitches file
     await appendToGlitchesFile(formattedEntry);
+
+    // Send email notification
+    try {
+      await sendFeedbackEmail({ ...feedback, issueNumber });
+    } catch (emailError) {
+      console.error('Failed to send feedback email:', emailError);
+      // Don't fail the request if email fails, just log it
+    }
 
     return NextResponse.json(
       { message: 'Feedback submitted successfully', issueNumber },

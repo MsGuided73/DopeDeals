@@ -1,4 +1,8 @@
-Delete careers page
+feat: complete Priority 1 product APIs - bubblers, mushrooms, pre-rolls
 
-- Remove entire app/careers directory
-- Remove careers page and all associated files
+- Create /api/products/bubblers/ endpoint with style detection (Classic, Mini, Scientific, Hammer, etc.)
+- Create /api/products/mushrooms/ endpoint with type detection (Reishi, Lion's Mane, Cordyceps, etc.)
+- Create /api/products/pre-rolls/ endpoint with size and THC content detection
+- All APIs include image validation, product transformation, and category-specific features
+- Follows established patterns from existing bongs/pipes/dab-rigs APIs
+- Enables bubblers, mushrooms, and pre-rolls pages to display products properly

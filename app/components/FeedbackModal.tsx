@@ -33,7 +33,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           type: feedbackType,
           description,
           pageUrl: pageUrl || window.location.href,
-          browser: browser || navigator.userAgent,
+          browser: browser || navigator.userAgent.substring(0, 100) + (navigator.userAgent.length > 100 ? '...' : ''),
           contactInfo,
           timestamp: new Date().toISOString(),
         }),
