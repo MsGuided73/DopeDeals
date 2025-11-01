@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import BubblersPageContent from './BubblersPageContent';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
   title: 'Bubblers | DOPE CITY - Premium Glass Bubblers Collection',

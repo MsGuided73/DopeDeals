@@ -3,6 +3,7 @@ import { createServerClient } from '@supabase/ssr';
 import { storage } from '@/../server/storage';
 import Link from 'next/link';
 import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 export default async function OrdersPage() {
   const cookieStore = await cookies();
@@ -63,4 +64,3 @@ export default async function OrdersPage() {
     </div>
   );
 }
-

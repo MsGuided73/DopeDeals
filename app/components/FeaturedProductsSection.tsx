@@ -210,7 +210,7 @@ export default function FeaturedProductsSection() {
       <div className="text-center mb-8">
         <Link
           href="/products"
-          className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
+          className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg"
         >
           Shop all →
         </Link>
@@ -225,7 +225,7 @@ export default function FeaturedProductsSection() {
               <Link
                 key={product.id}
                 href={`/product/${product.id}`}
-                className="product-card group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-dope-orange-300 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 block"
+                className="product-card group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 block"
               >
                 <div className="p-4 flex flex-col">
                   {/* TOP SECTION: Brand Name and Product Name */}
@@ -332,7 +332,7 @@ export default function FeaturedProductsSection() {
                           e.stopPropagation();
                           router.push(`/product/${product.id}`);
                         }}
-                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
+                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg"
                         style={{
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
                           fontWeight: 'normal',
@@ -350,7 +350,7 @@ export default function FeaturedProductsSection() {
                             console.error('Failed to add to cart:', error);
                           }
                         }}
-                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
+                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg"
                         style={{
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
                           fontWeight: 'normal',

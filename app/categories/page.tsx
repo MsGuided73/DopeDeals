@@ -1,12 +1,6 @@
 // C:\__DOPE CITY\DopeDeals\app\categories\page.tsx
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-
-// Keep GlobalMasthead but ensure it never runs during prerender/build
-const GlobalMasthead = dynamic(() => import('../components/GlobalMasthead'), {
-  ssr: false,
-});
 
 export const metadata: Metadata = {
   title: 'Categories | Dope Deals',
@@ -43,9 +37,6 @@ export default async function CategoriesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Universal Layout Components */}
-      <GlobalMasthead />
-
       <main className="px-6 py-8 max-w-7xl mx-auto space-y-6">
         <h1 className="text-3xl font-extrabold uppercase tracking-wide">Categories</h1>
 

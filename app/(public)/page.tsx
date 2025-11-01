@@ -1,8 +1,3 @@
-"use client";
-import { useEffect, useState } from "react";
-
-// Force dynamic rendering since this is a client component
-export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import GlobalMasthead from '../components/GlobalMasthead';
 import CollectionsGrid from '../components/CollectionsGrid';
@@ -12,23 +7,10 @@ import DopeDealsSection from '../components/DopeDealsSection';
 import FeaturedProductsSection from '../components/FeaturedProductsSection';
 import BlogArticlesGrid from '../components/BlogArticlesGrid';
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
-  const [scrolled, setScrolled] = useState(false);
-  const [isAgeVerified, setIsAgeVerified] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 0);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Check age verification status
-  useEffect(() => {
-    const verified = localStorage.getItem('dope-city-age-verified');
-    setIsAgeVerified(!!verified);
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
