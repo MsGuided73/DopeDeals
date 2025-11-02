@@ -226,7 +226,7 @@ export default function GlobalMasthead() {
                             <Link href="/dab-rigs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Dab Rigs</Link>
                             <Link href="/thca_vapes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Vaporizers</Link>
                             <Link href="/accessories" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Accessories</Link>
-                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -525,9 +525,6 @@ export default function GlobalMasthead() {
           </div>
         )}
 
-
-      </div>
-
       {/* Profile Modal with Guest Recommendations */}
       {showProfileModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
@@ -656,6 +653,7 @@ export default function GlobalMasthead() {
           </div>
         </div>
       )}
+
     </header>
   );
 }
