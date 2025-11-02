@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { addToCart } from '../lib/cart-utils';
@@ -59,7 +59,6 @@ export default function FeaturedProductsSection() {
   const fetchFeaturedProducts = async () => {
     try {
       setLoading(true);
-      console.log('Fetching featured products...');
       const response = await fetch('/api/featured/products?limit=12');
 
       if (!response.ok) {
@@ -75,21 +74,8 @@ export default function FeaturedProductsSection() {
       }
 
       const data = await response.json();
-      console.log('Featured products data received:', data);
-      
-      // Debug: Log the first product to see its structure
-      if (data.products && data.products.length > 0) {
-        console.log('First product structure:', data.products[0]);
-        console.log('Price field:', data.products[0].our_price, typeof data.products[0].our_price);
-        console.log('Brand field:', data.products[0].brand_name);
-        console.log('Description fields:', {
-          description: data.products[0].description,
-          short_description: data.products[0].short_description
-        });
-      }
 
       if (!data.products) {
-        console.warn('No featured products data received');
         setProducts([]);
         return;
       }
@@ -120,22 +106,9 @@ export default function FeaturedProductsSection() {
                             ? cleanImageUrl(product.image_urls[0]) : null);
 
     // Ensure price is a valid number
-    const price = product.our_price && typeof product.our_price === 'number' && !isNaN(product.our_price) 
-      ? product.our_price 
+    const price = product.our_price && typeof product.our_price === 'number' && !isNaN(product.our_price)
+      ? product.our_price
       : 0;
-
-    // Debug logging
-    console.log('Transforming product:', {
-      id: product.id,
-      name: product.name,
-      our_price: product.our_price,
-      price: price,
-      brand_name: product.brand_name,
-      short_description: product.short_description,
-      description: product.description,
-      original_image_url: product.image_url,
-      cleaned_image_url: primaryImageUrl
-    });
 
     return {
       id: product.id,
@@ -154,6 +127,11 @@ export default function FeaturedProductsSection() {
         : undefined,
     };
   };
+
+  // Memoize product transformations to prevent expensive recalculations on every render
+  const transformedProducts = useMemo(() => {
+    return products.slice(0, 8).map(product => transformProductForCard(product));
+  }, [products]);
 
   if (loading) {
     return (
@@ -197,8 +175,6 @@ export default function FeaturedProductsSection() {
     );
   }
 
-  console.log('Rendering products:', products);
-
   return (
     <section className="mt-24">
       <div className="text-center mb-12">
@@ -218,13 +194,13 @@ export default function FeaturedProductsSection() {
 
       {products.length > 0 ? (
         <div className="featured-products-scroll flex overflow-x-auto gap-6 pb-4 px-4" style={{ scrollbarWidth: 'thin' }}>
-          {products.slice(0, 8).map((product) => {
-            const transformedProduct = transformProductForCard(product);
-            console.log('Rendering product card:', transformedProduct);
+          {transformedProducts.map((transformedProduct, index) => {
+            // Get the original product for cart/favorites functionality
+            const product = products[index];
             return (
               <Link
-                key={product.id}
-                href={`/product/${product.id}`}
+                key={transformedProduct.id}
+                href={`/product/${transformedProduct.id}`}
                 className="product-card group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 block"
               >
                 <div className="p-4 flex flex-col">
