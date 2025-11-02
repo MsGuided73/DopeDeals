@@ -93,28 +93,30 @@ export default function GlobalMastheadClient() {
           <div className="absolute right-0 top-0 bottom-0 w-2 bg-green-700" style={{ backgroundColor: '#1a5c32' }}></div>
         </div>
 
-        {/* Main Masthead - Black Titlebar */}
+        {/* Main Masthead - Black Titlebar with Navigation */}
         <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '100px', height: '100px' }}>
-          {/* Logo extending from top of black titlebar to down below nav */}
-          <div className="absolute top-10 left-0 z-[100] md:h-[290px] h-[180px]" style={{ top: '-10px', left: '-25px', width: 'auto', overflow: 'hidden' }}>
-            <Link href="/">
+          {/* Logo touching top and bottom edges */}
+          <div className="flex-shrink-0 ml-2 h-full flex items-center">
+            <Link href="/" className="h-full flex items-center">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420 Logo"
-                width={200}
-                height={290}
-                className="object-contain md:h-[290px] h-[180px]"
-                style={{ width: 'auto', display: 'block' }}
+                width={120}
+                height={100}
+                className="object-contain h-full w-auto"
+                style={{ display: 'block' }}
               />
             </Link>
           </div>
 
-          {/* Center Right: Search Bar */}
-          <div className="hidden md:block flex-1 mr-4">
-            <EnhancedSearchBar />
+          {/* Center: Search Bar - 25% width, centered */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block" style={{ width: '25%' }}>
+            <div className="flex items-center justify-center h-full">
+              <EnhancedSearchBar />
+            </div>
           </div>
 
-          {/* Right: User Actions - Reduced spacing between icons */}
+          {/* Right: User Actions */}
           <div className="flex items-center gap-3 flex-shrink-0 mr-5 text-white">
             <Link href="/sitemap-page" className="hidden md:block p-3 hover:text-yellow-400 transition-all duration-300 hover:scale-110" title="Site Map">
               <svg className="w-12 h-12 drop-shadow-lg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -142,7 +144,237 @@ export default function GlobalMastheadClient() {
                 {cartCount > 99 ? '99+' : cartCount}
               </span>
             </Link>
+            </div>
           </div>
+
+          {/* Navigation Links - Desktop Only */}
+          <nav className="hidden md:flex absolute bottom-0 left-0 right-0 justify-center items-center gap-6 pb-3">
+            {/* Shop Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'shop' ? null : 'shop')}
+                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+              >
+                Shop
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'shop' && (
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
+                  <div className="py-2">
+                    <Link href="/products" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">All Products</Link>
+                    <div className="border-t border-gray-200/20 my-1"></div>
+
+                    {/* Categories Section */}
+                    <div className="relative">
+                      <button
+                        onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
+                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
+                      >
+                        Shop by Category
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+
+                      {/* Categories Submenu */}
+                      {openSubmenu === 'categories' && (
+                        <div
+                          className="absolute left-full top-0 ml-1 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
+                          onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
+                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
+                        >
+                          <div className="py-2">
+                            {/* THCA & More with Nested Submenu */}
+                            <div className="relative">
+                              <button
+                                onMouseEnter={() => handleMouseEnter('nested', 'thca-nested-categories')}
+                                onMouseLeave={() => handleMouseLeaveWithDelay('nested')}
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
+                              >
+                                THCA & More
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </button>
+
+                              {/* THCA Nested Submenu */}
+                              {openNestedSubmenu === 'thca-nested-categories' && (
+                                <div
+                                  className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-70"
+                                  onMouseEnter={() => handleMouseEnter('nested', 'thca-nested-categories')}
+                                  onMouseLeave={() => handleMouseLeaveWithDelay('nested')}
+                                >
+                                  <div className="py-2">
+                                    <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
+                                    <Link href="/thca_prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Pre-Rolls</Link>
+                                    <div className="border-t border-gray-200/20 my-1"></div>
+                                    <Link href="/thca_rosin" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
+                                    <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
+                                    <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
+                                    <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="border-t border-gray-200/20 my-1"></div>
+                            <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bongs & Water Pipes</Link>
+                            <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Hand Pipes</Link>
+                            <Link href="/dab-rigs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Dab Rigs</Link>
+                            <Link href="/thca_vapes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Vaporizers</Link>
+                            <Link href="/accessories" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Accessories</Link>
+                            </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="border-t border-gray-200/20 my-1"></div>
+
+                    {/* Brands Section */}
+                    <div className="relative">
+                      <button
+                        onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
+                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
+                      >
+                        Shop by Brand
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+
+                      {/* Brands Submenu */}
+                      {openSubmenu === 'brands' && (
+                        <div
+                          className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
+                          onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
+                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
+                        >
+                          <div className="py-2">
+                            <Link href="/brands/raw-papers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
+                            <Link href="/brands/puffco" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
+                            <Link href="/brands/crave" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
+                            <Link href="/brands/roor" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
+                            <div className="border-t border-gray-200/20 my-1"></div>
+                            <Link href="/brands" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* THCA & More Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'thca' ? null : 'thca')}
+                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+              >
+                THCA & More
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'thca' && (
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
+                  <div className="py-2">
+                    <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Flower</Link>
+                    <Link href="/thca_prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Pre-Rolls</Link>
+                    <div className="border-t border-gray-200/20 my-1"></div>
+                    <Link href="/thca/thca_concentrate" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Concentrates</Link>
+                    <Link href="/thca_rosin" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
+                    <div className="border-t border-gray-200/20 my-1"></div>
+                    <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
+                    <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
+                    <Link href="/thca_edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
+                    <div className="border-t border-gray-200/20 my-1"></div>
+                    {/* New Product Types at bottom */}
+                    <Link href="/mushrooms" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">🍄 Mushrooms</Link>
+                    <Link href="/nitrous-oxide" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Nitrous Oxide</Link>
+                    <Link href="/7-hydroxymitragynine" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">7-Hydroxymitragynine</Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Bongs Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'bongs' ? null : 'bongs')}
+                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+              >
+                Bongs
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'bongs' && (
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
+                  <div className="py-2">
+                    <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Bongs</Link>
+                    <Link href="/bubblers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bubblers</Link>
+                    <Link href="/products?q=glass+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Glass Bongs</Link>
+                    <Link href="/products?q=beaker+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Beaker Bongs</Link>
+                    <Link href="/products?q=straight+tube" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Straight Tube</Link>
+                    <Link href="/products?q=percolator" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Percolator Bongs</Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Pipes Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'pipes' ? null : 'pipes')}
+                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+              >
+                Pipes
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openDropdown === 'pipes' && (
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
+                  <div className="py-2">
+                    <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Pipes</Link>
+                    <Link href="/products?q=spoon+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Spoon Pipes</Link>
+                    <Link href="/products?q=sherlock+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Sherlock Pipes</Link>
+                    <Link href="/products?q=chillum" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Chillums</Link>
+                    <Link href="/products?q=one+hitter" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">One Hitters</Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Dab Rigs */}
+            <Link
+              href="/dabsntools"
+              className="text-white text-sm font-bold hover:text-yellow-400 transition-colors"
+            >
+              Dab Rigs
+            </Link>
+
+            {/* Accessories */}
+            <Link
+              href="/products?category=accessories"
+              className="text-white text-sm font-bold hover:text-yellow-400 transition-colors"
+            >
+              Accessories
+            </Link>
+
+            {/* Munchies */}
+            <Link
+              href="/products?category=edibles"
+              className="text-white text-sm font-bold hover:text-yellow-400 transition-colors"
+            >
+              Munchies
+            </Link>
+          </nav>
         </div>
 
         {/* Mobile Search Bar - Only on mobile */}
@@ -292,257 +524,6 @@ export default function GlobalMastheadClient() {
             </div>
           </div>
         )}
-
-        {/* Highway sign divider line - Now connects directly to title bar */}
-        <div
-          className="h-1"
-          style={{
-            backgroundColor: '#1a5c32 !important',
-            backgroundImage: 'none !important'
-          }}
-        ></div>
-
-        {/* Highway Sign Navigation Bar - Desktop Only */}
-        <nav className="hidden md:block shadow-lg border-b-4 border-black" style={{ backgroundColor: '#f4f1e8' }}>
-          <ul className="flex items-center justify-center gap-8 py-5 flex-wrap relative">
-            {/* Shop Dropdown - Consolidated Categories and Brands */}
-            <li
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('dropdown', 'shop')}
-              onMouseLeave={() => handleMouseLeaveWithDelay('main')}
-            >
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'shop' ? null : 'shop')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                Shop
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'shop' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl show-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
-                  <div className="py-2">
-                    <Link href="/products" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">All Products</Link>
-                    <div className="border-t border-gray-200/20 my-1"></div>
-
-                    {/* Categories Section */}
-                    <div className="relative">
-                      <button
-                        onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
-                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
-                      >
-                        Shop by Category
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-
-                      {/* Categories Submenu */}
-                      {openSubmenu === 'categories' && (
-                        <div
-                          className="absolute left-full top-0 ml-1 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
-                          onMouseEnter={() => handleMouseEnter('submenu', 'categories')}
-                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
-                        >
-                          <div className="py-2">
-                            {/* THCA & More with Nested Submenu */}
-                            <div className="relative">
-                              <button
-                                onMouseEnter={() => handleMouseEnter('nested', 'thca-nested-categories')}
-                                onMouseLeave={() => handleMouseLeaveWithDelay('nested')}
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
-                              >
-                                THCA & More
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                              </button>
-
-                              {/* THCA Nested Submenu */}
-                              {openNestedSubmenu === 'thca-nested-categories' && (
-                                <div
-                                  className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-70"
-                                  onMouseEnter={() => handleMouseEnter('nested', 'thca-nested-categories')}
-                                  onMouseLeave={() => handleMouseLeaveWithDelay('nested')}
-                                >
-                                  <div className="py-2">
-                                    <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Flower</Link>
-                                    <Link href="/thca_prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">⭐ THCA Pre-Rolls</Link>
-                                    <div className="border-t border-gray-200/20 my-1"></div>
-                                    <Link href="/thca_rosin" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
-                                    <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
-                                    <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
-                                    <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="border-t border-gray-200/20 my-1"></div>
-                            <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bongs & Water Pipes</Link>
-                            <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Hand Pipes</Link>
-                            <Link href="/dab-rigs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Dab Rigs</Link>
-                            <Link href="/thca_vapes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Vaporizers</Link>
-                            <Link href="/accessories" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Accessories</Link>
-                            </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="border-t border-gray-200/20 my-1"></div>
-
-                    {/* Brands Section */}
-                    <div className="relative">
-                      <button
-                        onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
-                        onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
-                      >
-                        Shop by Brand
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-
-                      {/* Brands Submenu */}
-                      {openSubmenu === 'brands' && (
-                        <div
-                          className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-60"
-                          onMouseEnter={() => handleMouseEnter('submenu', 'brands')}
-                          onMouseLeave={() => handleMouseLeaveWithDelay('submenu')}
-                        >
-                          <div className="py-2">
-                            <Link href="/brands/raw-papers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">RAW</Link>
-                            <Link href="/brands/puffco" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Puffco</Link>
-                            <Link href="/brands/crave" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Storz & Bickel</Link>
-                            <Link href="/brands/roor" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">ROOR</Link>
-                            <div className="border-t border-gray-200/20 my-1"></div>
-                            <Link href="/brands" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">View All Brands</Link>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* THCA & More Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'thca' ? null : 'thca')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                THCA & More
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'thca' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
-                  <div className="py-2">
-                    <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Flower</Link>
-                    <Link href="/thca_prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">THCA Pre-Rolls</Link>
-                    <div className="border-t border-gray-200/20 my-1"></div>
-                    <Link href="/thca/thca_concentrate" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Concentrates</Link>
-                    <Link href="/thca_rosin" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">THCA Rosin</Link>
-                    <div className="border-t border-gray-200/20 my-1"></div>
-                    <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">CBD Products</Link>
-                    <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Delta Products</Link>
-                    <Link href="/thca_edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Edibles</Link>
-                    <div className="border-t border-gray-200/20 my-1"></div>
-                    {/* New Product Types at bottom */}
-                    <Link href="/mushrooms" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">🍄 Mushrooms</Link>
-                    <Link href="/nitrous-oxide" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Nitrous Oxide</Link>
-                    <Link href="/7-hydroxymitragynine" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">7-Hydroxymitragynine</Link>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* Bongs Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'bongs' ? null : 'bongs')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                Bongs
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'bongs' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
-                  <div className="py-2">
-                    <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Bongs</Link>
-                    <Link href="/bubblers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Bubblers</Link>
-                    <Link href="/products?q=glass+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Glass Bongs</Link>
-                    <Link href="/products?q=beaker+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Beaker Bongs</Link>
-                    <Link href="/products?q=straight+tube" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Straight Tube</Link>
-                    <Link href="/products?q=percolator" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Percolator Bongs</Link>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* Pipes Dropdown */}
-            <li className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'pipes' ? null : 'pipes')}
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors flex items-center gap-1"
-              >
-                Pipes
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {openDropdown === 'pipes' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 z-50" style={{ backgroundColor: '#f4f1e8' }}>
-                  <div className="py-2">
-                    <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">All Pipes</Link>
-                    <Link href="/products?q=spoon+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Spoon Pipes</Link>
-                    <Link href="/products?q=sherlock+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Sherlock Pipes</Link>
-                    <Link href="/products?q=chillum" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">Chillums</Link>
-                    <Link href="/products?q=one+hitter" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">One Hitters</Link>
-                  </div>
-                </div>
-              )}
-            </li>
-
-            {/* Dab Rigs */}
-            <li>
-              <Link
-                href="/dabsntools"
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
-              >
-                Dab Rigs
-              </Link>
-            </li>
-
-            {/* Accessories */}
-            <li>
-              <Link
-                href="/products?category=accessories"
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
-              >
-                Accessories
-              </Link>
-            </li>
-
-            {/* Munchies */}
-            <li>
-              <Link
-                href="/products?category=edibles"
-                className="text-black dark:text-white text-lg font-bold hover:text-yellow-500 transition-colors"
-              >
-                Munchies
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
 
       {/* Profile Modal with Guest Recommendations */}
       {showProfileModal && (
