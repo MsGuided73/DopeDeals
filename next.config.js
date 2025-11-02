@@ -93,7 +93,7 @@ const nextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
           { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://qirbapivptotybspnbet.supabase.co wss://qirbapivptotybspnbet.supabase.co https://api.unsplash.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';" },
+          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com https://qirbapivptotybspnbet.supabase.co; img-src 'self' data: https: blob:; connect-src 'self' https://qirbapivptotybspnbet.supabase.co wss://qirbapivptotybspnbet.supabase.co https://api.unsplash.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';" },
         ],
       },
       {

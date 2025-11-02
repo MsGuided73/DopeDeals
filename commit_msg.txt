@@ -1,5 +1,6 @@
-fix: resolve JSX syntax error in GlobalMasthead component
+fix: resolve Content Security Policy violations
 
-- Fixed mismatched JSX closing tags causing deployment build failure
-- Corrected indentation of profile modal comment to ensure proper tag matching
-- Build now compiles successfully, resolving deployment blocker
+- Added Supabase domain to font-src directive to allow custom font loading
+- Added 'unsafe-eval' to script-src directive for Next.js React Refresh in development
+- Fixed font loading errors from qirbapivptotybspnbet.supabase.co
+- Fixed unsafe-eval errors from Next.js hot reloading utilities
