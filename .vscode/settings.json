@@ -22,5 +22,9 @@
     "net"
   ],
   "npm.packageManager": "pnpm",
-  "todo-tree.tree.scanMode": "workspace only"
+  "todo-tree.tree.scanMode": "workspace only",
+  "workbench.colorTheme": "Visual Studio Light",
+  "coderabbit.agentType": "Cline",
+  "coderabbit.autoReviewMode": "auto",
+  "coderabbit.selfHostedUrl": ""
 }

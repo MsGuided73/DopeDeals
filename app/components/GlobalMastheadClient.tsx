@@ -39,7 +39,8 @@ export default function GlobalMastheadClient() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 0);
+      // Fade search bar when scrolling past the first page (viewport height)
+      setScrolled(window.scrollY > window.innerHeight);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -110,7 +111,7 @@ export default function GlobalMastheadClient() {
           </div>
 
           {/* Center: Search Bar - 25% width, centered */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block" style={{ width: '25%' }}>
+          <div className={`absolute left-1/2 transform -translate-x-1/2 hidden md:block transition-opacity duration-300 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ width: '25%' }}>
             <div className="flex items-center justify-center h-full">
               <EnhancedSearchBar />
             </div>

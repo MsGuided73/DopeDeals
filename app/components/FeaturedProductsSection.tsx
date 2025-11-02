@@ -130,7 +130,10 @@ export default function FeaturedProductsSection() {
 
   // Memoize product transformations to prevent expensive recalculations on every render
   const transformedProducts = useMemo(() => {
-    return products.slice(0, 8).map(product => transformProductForCard(product));
+    return products.slice(0, 8).map(product => ({
+      ...transformProductForCard(product),
+      originalProduct: product
+    }));
   }, [products]);
 
   if (loading) {
@@ -196,7 +199,7 @@ export default function FeaturedProductsSection() {
         <div className="featured-products-scroll flex overflow-x-auto gap-6 pb-4 px-4" style={{ scrollbarWidth: 'thin' }}>
           {transformedProducts.map((transformedProduct, index) => {
             // Get the original product for cart/favorites functionality
-            const product = products[index];
+            const product = transformedProduct.originalProduct;
             return (
               <Link
                 key={transformedProduct.id}

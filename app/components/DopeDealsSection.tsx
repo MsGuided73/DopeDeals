@@ -168,7 +168,7 @@ export default function DopeDealsSection() {
                 <Link
                   key={product.id}
                   href={`/product/${product.id}`}
-                  className="group bg-white dark:bg-gray-900 rounded-xl border border-red-200 dark:border-red-800 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-72 h-96 block mx-3"
+                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-80 h-[28rem] block mx-3"
                 >
                   <div className="relative w-full aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
@@ -210,7 +210,7 @@ export default function DopeDealsSection() {
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-xl capitalize leading-tight mb-2 line-clamp-2 group-hover:text-red-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xl capitalize leading-tight mb-2 line-clamp-2 group-hover:text-red-700 transition-colors" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
                       {transformedProduct.name.toLowerCase()}
                     </h3>
 
@@ -258,15 +258,17 @@ export default function DopeDealsSection() {
                       </div>
 
                       <button
-                        className="w-full text-center px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all duration-300 text-sm font-highway uppercase tracking-wide hover:scale-105 hover:shadow-lg hover:shadow-red-600/25"
+                        className="w-full text-center px-4 py-2.5 bg-transparent border-2 border-black text-black font-bold rounded-full transition-all duration-300 text-sm uppercase tracking-wide hover:scale-105 relative overflow-hidden group"
                         style={{
-                          fontFamily: "'Highway Gothic', 'Arial', sans-serif",
-                          fontWeight: 'normal',
+                          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                          fontWeight: 'bold',
                           letterSpacing: '0.05em',
                         }}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        Get Deal
+                        <span className="relative z-10">Get Deal</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
                       </button>
                     </div>
                   </div>

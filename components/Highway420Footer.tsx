@@ -59,7 +59,7 @@ export default function Highway420Footer() {
                   className="w-10 h-10 object-contain"
                 />
               </div>
-              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>DISCREET SHIPPING</h3>
+              <h3 className="text-black font-bold text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>DISCREET SHIPPING</h3>
               <p className="text-gray-800 font-bold text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Nothing to see here</p>
             </div>
 
@@ -68,17 +68,20 @@ export default function Highway420Footer() {
               <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <span className="text-green-600 font-black text-2xl">$</span>
               </div>
-              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>LOW PRICE</h3>
+              <h3 className="text-black font-bold text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>LOW PRICE</h3>
               <p className="text-gray-800 font-bold text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Guarantee</p>
             </div>
 
-            {/* Easy, Hassle Free Returns */}
+            {/* Fast & Free Delivery */}
             <div className="text-center">
               <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
-                <Phone className="w-10 h-10 text-green-600" />
+                <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V7M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" />
+                </svg>
               </div>
-              <h3 className="text-black font-black text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2' }}>EASY, HASSLE FREE</h3>
-              <p className="text-gray-800 font-bold text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Returns</p>
+              <h3 className="text-black font-bold text-xl mb-3" style={{ fontSize: '1.375rem', lineHeight: '1.2', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>FAST & FREE</h3>
+              <p className="text-gray-800 font-bold text-base" style={{ fontSize: '1rem', lineHeight: '1.4' }}>Delivery at $75 or more</p>
             </div>
           </div>
         </div>
@@ -89,7 +92,7 @@ export default function Highway420Footer() {
 
             {/* Help Section */}
             <div>
-              <h3 className="text-black font-black text-2xl mb-6">Help</h3>
+              <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>Help</h3>
               <ul className="space-y-3">
                 <li><Link href="/about" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">About Us</Link></li>
                 <li><Link href="/help" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Help Center & FAQ</Link></li>
@@ -109,7 +112,7 @@ export default function Highway420Footer() {
 
             {/* Useful Links Section */}
             <div>
-              <h3 className="text-black font-black text-2xl mb-6">Useful Links</h3>
+              <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>Useful Links</h3>
               <ul className="space-y-3">
                 <li><Link href="/sale" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">On Sale</Link></li>
                 <li><Link href="/products?filter=new" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Newest Products</Link></li>
@@ -117,13 +120,13 @@ export default function Highway420Footer() {
                 <li><Link href="/gift-cards" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Gift Cards</Link></li>
                 <li><Link href="/rewards" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">HIGHWAY 420 Rewards</Link></li>
                 <li><Link href="/glossary" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Glossary of Terms</Link></li>
-                <li><Link href="/blog" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">HIGHWAY 420 Dispatches</Link></li>
+                <li><Link href="/blog" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium">Higher Learning</Link></li>
               </ul>
             </div>
 
             {/* Shop Now Section */}
             <div>
-              <h3 className="text-black font-black text-2xl mb-6">SHOP NOW</h3>
+              <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>SHOP NOW</h3>
               <ul className="space-y-3">
                 <li><Link href="/products" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>All Products</Link></li>
                 <li><Link href="/thca" className="text-gray-800 hover:text-green-600 transition-colors text-lg font-medium" prefetch={false}>THCA & More</Link></li>
@@ -139,7 +142,7 @@ export default function Highway420Footer() {
 
             {/* Keep in Touch Section */}
             <div>
-              <h3 className="text-green-600 font-black text-3xl mb-6 border-b border-green-600/50 pb-3">Keep in Touch</h3>
+              <h3 className="text-green-600 font-bold text-3xl mb-6 border-b border-green-600/50 pb-3" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>Keep in Touch</h3>
               <p className="text-gray-800 font-medium text-lg mb-6 leading-relaxed">
                 Sign up for our newsletter and be the first to know about coupons and special promotions.
               </p>
