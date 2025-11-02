@@ -37,7 +37,7 @@ export default function CollectionsGrid() {
           font-bold uppercase tracking-wide
           transition-all duration-300
           hover:scale-105 hover:shadow-lg
-          text-sm
+          text-lg
           z-30
           rounded-full
           highway-hover-lift
@@ -45,7 +45,7 @@ export default function CollectionsGrid() {
         style={{
           backgroundColor: '#2d8f47',
           borderColor: '#2d8f47',
-          fontFamily: "'Chalets-Legweb', 'Inter', system-ui, sans-serif",
+          fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
           fontWeight: 'normal',
           letterSpacing: '0.05em',
         }}
@@ -68,7 +68,7 @@ export default function CollectionsGrid() {
           <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
           <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <LogoButton href="/ride-with-us" label="RIDE WITH US" />
+            <LogoButton href="/ride-with-us" label="ride with us" />
           </div>
         </a>
 
@@ -113,7 +113,7 @@ export default function CollectionsGrid() {
             <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
             <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <LogoButton href="/ride-with-us" label="RIDE WITH US" />
+              <LogoButton href="/ride-with-us" label="ride with us" />
             </div>
           </a>
 

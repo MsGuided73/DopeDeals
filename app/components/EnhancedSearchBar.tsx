@@ -360,7 +360,7 @@ export default function EnhancedSearchBar() {
         <button
           type="submit"
           onClick={() => handleSearch()}
-          className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white transition-colors flex items-center gap-2 font-medium"
+          className="px-0 py-0 bg-green-600 hover:bg-green-700 text-white transition-colors flex items-center gap-2 font-medium"
           style={{ backgroundColor: '#2d8f47' }}
         >
           <Search className="w-5 h-5" />
