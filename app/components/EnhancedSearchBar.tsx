@@ -273,7 +273,7 @@ export default function EnhancedSearchBar() {
 
   return (
     <div className="relative max-w-4xl w-full mx-auto">
-      <form onSubmit={handleSearch} className="flex bg-white rounded-lg shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl">
+      <form onSubmit={handleSearch} className="flex bg-white rounded-2xl shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl">
         {/* Search Input */}
         <div className="flex-1 relative">
           <input

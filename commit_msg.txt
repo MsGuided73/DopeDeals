@@ -1,6 +1,7 @@
-fix: resolve Content Security Policy violations
+feat: improve header UI design and readability
 
-- Added Supabase domain to font-src directive to allow custom font loading
-- Added 'unsafe-eval' to script-src directive for Next.js React Refresh in development
-- Fixed font loading errors from qirbapivptotybspnbet.supabase.co
-- Fixed unsafe-eval errors from Next.js hot reloading utilities
+- Made navigation links heavier weight by changing from text-sm to text-base
+- Made search bar corners more rounded (rounded-lg to rounded-2xl)
+- Moved logo toward center with added left padding
+- Moved user action icons toward center by reducing right margin
+- Enhanced overall header visual balance and readability
