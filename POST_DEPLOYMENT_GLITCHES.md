@@ -80,6 +80,46 @@ The large 2x2 grid card image in the collections grid flickers when the mouse ho
 
 ---
 
+
+
+## Issue #2: 🐛 Bug Report
+
+**Date Reported:** November 1, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3000
+**Browser/Device:** Chrome
+**Severity:** Medium
+**Status:** Open
+
+### Description
+Testing email functionality
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3000
+
+### Technical Details
+**User Agent:** Chrome
+**Page URL:** http://localhost:3000
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+No contact information provided
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
 ## Template for New Issues
 
 **Issue Title:** [Brief description]
