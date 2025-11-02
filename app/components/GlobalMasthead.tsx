@@ -94,24 +94,24 @@ export default function GlobalMasthead() {
         </div>
 
         {/* Main Masthead - Black Titlebar with Navigation */}
-        <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '100px', height: '100px' }}>
-          {/* Logo touching top and bottom edges */}
-          <div className="flex-shrink-0 ml-2 h-full flex items-center">
+        <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '70px', height: '70px' }}>
+          {/* Logo closer to search bar */}
+          <div className="flex-shrink-0 h-full flex items-center">
             <Link href="/" className="h-full flex items-center">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420 Logo"
                 width={120}
-                height={100}
+                height={70}
                 className="object-contain h-full w-auto"
                 style={{ display: 'block' }}
               />
             </Link>
           </div>
 
-          {/* Center: Search Bar - 25% width, centered */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block" style={{ width: '25%' }}>
-            <div className="flex items-center justify-center h-full">
+          {/* Center: Search Bar - moved up and reduced height */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:block" style={{ width: '30%' }}>
+            <div className="flex items-center justify-center">
               <EnhancedSearchBar />
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function GlobalMasthead() {
             <div className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'shop' ? null : 'shop')}
-                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+                className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
               >
                 Shop
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -273,7 +273,7 @@ export default function GlobalMasthead() {
             <div className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'thca' ? null : 'thca')}
-                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+                className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
               >
                 THCA & More
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -306,7 +306,7 @@ export default function GlobalMasthead() {
             <div className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'bongs' ? null : 'bongs')}
-                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+                className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
               >
                 Bongs
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -331,7 +331,7 @@ export default function GlobalMasthead() {
             <div className="relative">
               <button
                 onClick={() => setOpenDropdown(openDropdown === 'pipes' ? null : 'pipes')}
-                className="text-white text-sm font-bold hover:text-yellow-400 transition-colors flex items-center gap-1"
+                className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
               >
                 Pipes
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -354,7 +354,7 @@ export default function GlobalMasthead() {
             {/* Dab Rigs */}
             <Link
               href="/dabsntools"
-              className="text-white text-sm font-bold hover:text-yellow-400 transition-colors"
+              className="text-white text-sm font-black hover:text-yellow-400 transition-colors"
             >
               Dab Rigs
             </Link>
@@ -362,7 +362,7 @@ export default function GlobalMasthead() {
             {/* Accessories */}
             <Link
               href="/products?category=accessories"
-              className="text-white text-sm font-bold hover:text-yellow-400 transition-colors"
+              className="text-white text-sm font-black hover:text-yellow-400 transition-colors"
             >
               Accessories
             </Link>
@@ -370,7 +370,7 @@ export default function GlobalMasthead() {
             {/* Munchies */}
             <Link
               href="/products?category=edibles"
-              className="text-white text-sm font-bold hover:text-yellow-400 transition-colors"
+              className="text-white text-sm font-black hover:text-yellow-400 transition-colors"
             >
               Munchies
             </Link>
