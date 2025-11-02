@@ -94,7 +94,7 @@ export default function GlobalMasthead() {
         </div>
 
         {/* Main Masthead - Black Titlebar with Navigation */}
-        <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '70px', height: '70px' }}>
+        <div className="bg-black px-1 flex items-center justify-between gap-2 relative" style={{ minHeight: '100px', height: '100px' }}>
           {/* Logo closer to search bar */}
           <div className="flex-shrink-0 h-full flex items-center">
             <Link href="/" className="h-full flex items-center">
@@ -102,16 +102,16 @@ export default function GlobalMasthead() {
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420 Logo"
                 width={120}
-                height={70}
+                height={100}
                 className="object-contain h-full w-auto"
                 style={{ display: 'block' }}
               />
             </Link>
           </div>
 
-          {/* Center: Search Bar - moved up and reduced height */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:block" style={{ width: '30%' }}>
-            <div className="flex items-center justify-center">
+          {/* Center: Search Bar - positioned higher up */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-3 hidden md:block" style={{ width: '25%' }}>
+            <div className="flex items-start justify-center">
               <EnhancedSearchBar />
             </div>
           </div>
