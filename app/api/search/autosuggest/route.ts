@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     // Search products for autosuggest
     const { data: products, error: productsError } = await supabase
       .from('main_site_products')
-      .select('name, brand_name, category_slug, zoho_category_name')
+      .select('name, brand_name, category_slug')
       .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%`)
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Count category matches
-        const categoryName = product.zoho_category_name || product.category_slug;
+        const categoryName = product.category_slug;
         if (categoryName && categoryName.toLowerCase().includes(searchTerm)) {
           categories.set(categoryName, (categories.get(categoryName) || 0) + 1);
         }

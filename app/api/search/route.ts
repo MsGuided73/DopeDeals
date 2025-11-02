@@ -122,7 +122,7 @@ interface SearchResult {
   stock_quantity?: number;
   tags?: string[];
   materials?: string[];
-  zoho_category_name?: string;
+  category_slug?: string;
   manufacturer?: string;
   relevanceScore: number;
   resultType: 'product' | 'brand' | 'category';
@@ -151,7 +151,7 @@ function calculateRelevanceScore(item: any, searchTerm: string, searchType: 'pro
   const description = (item.description || '').toLowerCase();
   const shortDescription = (item.short_description || '').toLowerCase();
   const manufacturer = (item.manufacturer || '').toLowerCase();
-  const category = (item.zoho_category_name || '').toLowerCase();
+  const category = (item.category_slug || '').toLowerCase();
   
   // Array fields
   const tags = (item.tags || []).map((tag: string) => tag.toLowerCase());
@@ -316,92 +316,18 @@ export async function GET(request: NextRequest) {
     console.log(`🔍 Natural Language Search: "${query}"`);
     console.log(`📝 Expanded terms: ${expandedTerms.join(', ')}`);
 
-    // Build multiple search queries for comprehensive results
-    const searchQueries: string[] = [];
-
-    // Primary search with original term (remove newlines to fix PostgreSQL parsing)
-    searchQueries.push(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,short_description.ilike.%${searchTerm}%,manufacturer.ilike.%${searchTerm}%,zoho_category_name.ilike.%${searchTerm}%,dtc_description.ilike.%${searchTerm}%`);
-
-    // Add expanded term searches
-    for (const term of expandedTerms.slice(1, 6)) { // Limit to prevent query complexity
-      if (term !== searchTerm && term.length > 2) {
-        searchQueries.push(`name.ilike.%${term}%,brand_name.ilike.%${term}%,description.ilike.%${term}%,short_description.ilike.%${term}%`);
-      }
-    }
-
-    // Simplified single query approach to avoid PostgreSQL parsing issues
-    console.log(`🔍 Executing simplified search for: ${expandedTerms.join(', ')}`);
+    // Simplified search approach - just search by name and brand_name
+    console.log(`🔍 Executing simplified search for: "${searchTerm}"`);
 
     try {
-      // Build a single comprehensive query with all expanded terms
-      const searchConditions = [];
-
-      for (const term of expandedTerms.slice(0, 5)) { // Limit to prevent query complexity
-        if (term.length > 1) {
-          searchConditions.push(`name.ilike.%${term}%`);
-          searchConditions.push(`brand_name.ilike.%${term}%`);
-          searchConditions.push(`sku.ilike.%${term}%`);
-          searchConditions.push(`description.ilike.%${term}%`);
-          searchConditions.push(`short_description.ilike.%${term}%`);
-          searchConditions.push(`manufacturer.ilike.%${term}%`);
-          searchConditions.push(`zoho_category_name.ilike.%${term}%`);
-        }
-      }
-
-      const textSearchQuery = searchConditions.join(',');
-      console.log(`📝 Text search query: ${textSearchQuery.substring(0, 200)}...`);
-
-      // #### CATEGORY-BASED SEARCH ENHANCEMENT ####
-      // Check if any expanded terms match category keywords to also search by category_slug
-      let supabaseQuery;
-      const categorySlugsToSearch: string[] = [];
-
-      // Map search terms to category slugs based on common keywords
-      for (const term of expandedTerms) {
-        if (CATEGORY_SYNONYMS.pipes.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
-          categorySlugsToSearch.push('pipes', 'hand-pipes'); // Include both category slugs for pipes
-        }
-        if (CATEGORY_SYNONYMS.bongs.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
-          categorySlugsToSearch.push('bongs');
-        }
-        if (CATEGORY_SYNONYMS['dab-rigs'].some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
-          categorySlugsToSearch.push('dab-rigs');
-        }
-        if (CATEGORY_SYNONYMS.vaporizers.some(synonym => synonym.toLowerCase().includes(term.toLowerCase()) || term.toLowerCase().includes(synonym))) {
-          categorySlugsToSearch.push('vaporizers');
-        }
-        // Add more category mappings as needed
-      }
-
-      // Remove duplicates
-      const uniqueCategorySlugs = [...new Set(categorySlugsToSearch)];
-
-      if (uniqueCategorySlugs.length > 0) {
-        console.log(`🎯 Category search: Searching for products in slugs: ${uniqueCategorySlugs.join(', ')}`);
-
-        // If we have category slugs to search, use OR condition to combine text search and category search
-        const categoryConditions = uniqueCategorySlugs.map(slug => `category_slug.eq.${slug}`);
-        const combinedQuery = `${textSearchQuery},${categoryConditions.join(',')}`;
-
-        supabaseQuery = supabase
-          .from('main_site_products')
-          .select(`
-            id, name, brand_name, price, image_url, description, short_description,
-            sku, featured, stock_quantity, tags, materials, zoho_category_name,
-            manufacturer, specs, attributes, dtc_description, vip_price, category_slug
-          `)
-          .or(combinedQuery);
-      } else {
-        // Fallback to text-only search
-        supabaseQuery = supabase
-          .from('main_site_products')
-          .select(`
-            id, name, brand_name, price, image_url, description, short_description,
-            sku, featured, stock_quantity, tags, materials, zoho_category_name,
-            manufacturer, specs, attributes, dtc_description, vip_price, category_slug
-          `)
-          .or(textSearchQuery);
-      }
+      let supabaseQuery = supabase
+        .from('main_site_products')
+        .select(`
+          id, name, brand_name, our_price, image_url, description, short_description,
+          sku, featured, stock_quantity, tags, materials,
+          specs, attributes, category_slug
+        `)
+        .ilike('name', `%${searchTerm}%`);
       // #### END CATEGORY-BASED SEARCH ENHANCEMENT ####
 
       // Apply filters with error handling
@@ -426,9 +352,9 @@ export async function GET(request: NextRequest) {
         const { data: fallbackResults, error: fallbackError } = await supabase
           .from('main_site_products')
           .select(`
-            id, name, brand_name, price, image_url, description, short_description,
-            sku, featured, stock_quantity, tags, materials, zoho_category_name,
-            manufacturer, specs, attributes, dtc_description, vip_price, category_slug
+            id, name, brand_name, our_price, image_url, description, short_description,
+            sku, featured, stock_quantity, tags, materials,
+            specs, attributes, category_slug
           `)
           .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%`)
           // Note: Removed .eq('is_active', true) filter for current manual inventory phase
@@ -469,6 +395,9 @@ export async function GET(request: NextRequest) {
     );
 
     console.log(`📊 Found ${finalResults.length} total results, ${uniqueProducts.length} unique products`);
+    if (finalResults.length > 0) {
+      console.log(`🔍 Sample product:`, finalResults[0]);
+    }
 
     if (uniqueProducts.length > 0) {
       // Apply filters
@@ -496,14 +425,15 @@ export async function GET(request: NextRequest) {
           }
 
           // Boost for category matches
-          if (product.zoho_category_name && expandedTerms.some(term =>
-            product.zoho_category_name.toLowerCase().includes(term.toLowerCase())
+          if (product.category_slug && expandedTerms.some(term =>
+            product.category_slug.toLowerCase().includes(term.toLowerCase())
           )) {
             relevanceScore += 75;
           }
 
           return {
             ...product,
+            price: product.our_price, // Map our_price to price for interface compatibility
             relevanceScore,
             resultType: 'product' as const
           };
@@ -554,7 +484,7 @@ export async function GET(request: NextRequest) {
               stock_quantity: 0,
               tags: [],
               materials: [],
-              zoho_category_name: '',
+              category_slug: '',
               manufacturer: '',
               relevanceScore,
               resultType: 'brand' as const
@@ -588,7 +518,7 @@ export async function GET(request: NextRequest) {
           stock_quantity: 0,
           tags: [],
           materials: [],
-          zoho_category_name: category.name,
+          category_slug: category.name,
           manufacturer: '',
           relevanceScore: calculateRelevanceScore(category, searchTerm, 'category'),
           resultType: 'category' as const
