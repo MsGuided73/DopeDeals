@@ -81,7 +81,7 @@ export default function GlobalMastheadClient() {
   };
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="z-50">
       <div>
         {/* Promotional Banner - Highway Sign Style */}
         <div className="bg-green-600 text-white px-4 py-2 text-center relative overflow-hidden" style={{ backgroundColor: '#2d8f47' }}>
@@ -111,7 +111,7 @@ export default function GlobalMastheadClient() {
           </div>
 
           {/* Center: Search Bar - 25% width, centered */}
-          <div className={`absolute left-1/2 transform -translate-x-1/2 hidden md:block transition-opacity duration-300 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ width: '25%' }}>
+          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block" style={{ width: '25%' }}>
             <div className="flex items-center justify-center h-full">
               <EnhancedSearchBar />
             </div>
@@ -147,9 +147,10 @@ export default function GlobalMastheadClient() {
             </Link>
             </div>
           </div>
+        </div>
 
-          {/* Navigation Links - Desktop Only */}
-          <nav className="hidden md:flex absolute bottom-0 left-0 right-0 justify-center items-center gap-6 pb-3">
+        {/* Navigation Links - Desktop Only - Sticky */}
+        <nav className="hidden md:flex sticky top-0 left-0 right-0 justify-center items-center gap-6 py-3 bg-black z-40" style={{ height: 'auto', minHeight: '48px' }}>
             {/* Shop Dropdown */}
             <div className="relative">
               <button
@@ -377,6 +378,7 @@ export default function GlobalMastheadClient() {
             </Link>
           </nav>
         </div>
+      </div>
 
         {/* Mobile Search Bar - Only on mobile */}
         <div className="md:hidden bg-black text-white px-4 pb-4">

@@ -7,13 +7,6 @@ import EnhancedSearchBar from './EnhancedSearchBar';
 import { useCart } from '../contexts/CartContext';
 
 export default function GlobalMasthead() {
-  // Fix hydration mismatch by properly initializing scrolled state
-  const [scrolled, setScrolled] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.scrollY > 0;
-    }
-    return false;
-  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
@@ -37,14 +30,7 @@ export default function GlobalMasthead() {
     cartCount = 0;
   }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Fade search bar when scrolling past the first page (viewport height)
-      setScrolled(window.scrollY > window.innerHeight);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+
 
   // Handle delayed closing of dropdowns
   const handleMouseLeaveWithDelay = (dropdownType: string) => {
@@ -81,7 +67,7 @@ export default function GlobalMasthead() {
   };
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="z-50">
       <div>
         {/* Promotional Banner - Highway Sign Style */}
         <div className="bg-green-600 text-white px-4 py-2 text-center relative overflow-hidden" style={{ backgroundColor: '#2d8f47' }}>
@@ -111,7 +97,7 @@ export default function GlobalMasthead() {
           </div>
 
           {/* Center: Search Bar - positioned higher up */}
-          <div className={`absolute left-1/2 transform -translate-x-1/2 top-3 hidden md:block transition-opacity duration-300 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ width: '25%' }}>
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-3 hidden md:block" style={{ width: '25%' }}>
             <div className="flex items-start justify-center">
               <EnhancedSearchBar />
             </div>
@@ -147,9 +133,10 @@ export default function GlobalMasthead() {
             </Link>
             </div>
           </div>
+        </div>
 
-          {/* Navigation Links - Desktop Only */}
-          <nav className="hidden md:flex absolute bottom-0 left-0 right-0 justify-center items-center gap-6 pb-3">
+        {/* Navigation Links - Desktop Only - Sticky */}
+        <nav className="hidden md:flex sticky top-0 left-0 right-0 justify-center items-center gap-6 py-3 bg-black z-40" style={{ height: 'auto', minHeight: '48px' }}>
             {/* Shop Dropdown */}
             <div className="relative">
               <button
