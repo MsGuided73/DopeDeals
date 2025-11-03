@@ -14,14 +14,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if the authenticated user is a community member
-    const { data: subscriber, error: dbError } = await supabaseServer
+    const { data: subscribers, error: dbError } = await supabaseServer
       .from('community_subscribers')
       .select('id, email, is_active')
       .eq('email', user.email)
-      .eq('is_active', true)
-      .single();
+      .eq('is_active', true);
 
-    if (dbError && dbError.code !== 'PGRST116') { // PGRST116 is "not found"
+    if (dbError) {
       console.error('Database error checking membership:', dbError);
       return NextResponse.json(
         { error: 'Internal server error', isMember: false },
@@ -29,7 +28,16 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const isMember = !!subscriber;
+    // Handle multiple active subscriptions for the same email
+    if (subscribers.length > 1) {
+      console.error('Multiple active subscriptions found for email:', user.email);
+      return NextResponse.json(
+        { error: 'Multiple active subscriptions detected. Please contact support.', isMember: false },
+        { status: 409 }
+      );
+    }
+
+    const isMember = subscribers.length === 1;
 
     return NextResponse.json({
       isMember,
