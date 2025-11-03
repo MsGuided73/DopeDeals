@@ -447,7 +447,7 @@ export default function GlobalMasthead() {
 
         {/* Center: Search (desktop) */}
         <div
-          className="absolute left-[calc(75%-20px)] -translate-x-1/2 hidden md:block"
+          className="absolute left-[calc(55%_-_20px)] -translate-x-1/2 hidden md:block"
           style={{ width: "35%" }}
         >
           <div className="flex items-center justify-center">

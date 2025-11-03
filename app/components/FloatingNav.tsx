@@ -72,7 +72,7 @@ export default function FloatingNav() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-black z-40 border-b border-gray-800">
+    <nav className="fixed top-0 left-0 right-0 bg-black z-[60] border-b border-gray-800">
       <div className="flex items-center justify-center gap-4 py-2 px-4">
         {/* Shop Dropdown */}
         <div className="relative">

@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if the authenticated user is a community member
-b
+br
     if (dbError) {
       console.error('Database error checking membership:', dbError);
       return NextResponse.json(
