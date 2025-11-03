@@ -14,32 +14,20 @@ export default function UltimateBongGuideClient() {
   useEffect(() => {
     const checkCommunityMembership = async () => {
       try {
-        // Get current user from auth/session
-        const response = await fetch('/api/auth/session');
-        if (!response.ok) {
-          setIsCommunityMember(false);
-          return;
-        }
-
-        const session = await response.json();
-        if (!session?.user?.id) {
-          setIsCommunityMember(false);
-          return;
-        }
-
-        setUserId(session.user.id);
-
-        // Check community membership
-        const membershipResponse = await fetch(`/api/community/membership?userId=${session.user.id}`);
+        // Check community membership using server-side authentication
+        const membershipResponse = await fetch('/api/community/membership');
         if (membershipResponse.ok) {
           const membershipData = await membershipResponse.json();
           setIsCommunityMember(membershipData.isMember || false);
+          setUserId(membershipData.userId || undefined);
         } else {
           setIsCommunityMember(false);
+          setUserId(undefined);
         }
       } catch (error) {
         console.error('Error checking membership:', error);
         setIsCommunityMember(false);
+        setUserId(undefined);
       }
     };
 
