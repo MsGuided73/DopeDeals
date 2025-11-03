@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { addToCart } from '../lib/cart-utils';
 
 interface Product {
   id: string;
@@ -228,7 +229,10 @@ export default function NewProductsSection() {
                         fontWeight: 'bold',
                         letterSpacing: '0.05em',
                       }}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        await addToCart(product.id);
+                      }}
                     >
                       Add to Cart
                     </button>
