@@ -183,7 +183,7 @@ export default function HomePage() {
                 letterSpacing: '-0.02em',
                 color: '#000000'
               }}>
-                BLOG ARTICLES
+                HIGHER LEARNING
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Stay informed with the latest news, guides, and insights from the Highway 420 community

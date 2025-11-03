@@ -171,11 +171,17 @@ export default function NewProductsSection() {
                     </div>
                   )}
 
-                  {/* New Badge */}
-                  <div className="absolute top-3 left-3">
-                    <div className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                      NEW
-                    </div>
+                  {/* SHOP Button - Top Left */}
+                  <div className="absolute top-3 left-3 z-10">
+                    <button
+                      className="bg-black text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-gray-800 transition-colors"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        await addToCart(product.id);
+                      }}
+                    >
+                      SHOP
+                    </button>
                   </div>
 
                   {/* Favorite Button */}
@@ -225,7 +231,7 @@ export default function NewProductsSection() {
                     <button
                       className="w-full text-center px-4 py-3 border-2 border-green-600 text-black hover:bg-green-600 hover:text-white font-bold rounded-full transition-all duration-300 text-sm font-highway uppercase tracking-wide hover:scale-105 hover:shadow-lg"
                       style={{
-                        fontFamily: "'Highway Gothic', 'Arial', sans-serif",
+                        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
                         fontWeight: 'bold',
                         letterSpacing: '0.05em',
                       }}

@@ -196,7 +196,7 @@ export default function FeaturedProductsSection() {
       </div>
 
       {products.length > 0 ? (
-        <div className="featured-products-scroll flex overflow-x-auto gap-6 pb-4 px-4" style={{ scrollbarWidth: 'thin' }}>
+        <div className="grid grid-cols-2 md:flex md:overflow-x-auto md:gap-6 md:pb-4 md:px-4 gap-4 px-4">
           {transformedProducts.map((transformedProduct, index) => {
             // Get the original product for cart/favorites functionality
             const product = transformedProduct.originalProduct;

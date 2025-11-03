@@ -121,7 +121,7 @@ export default function GlobalMasthead() {
       >
         {/* Left: Logo + Navigation Links */}
         <div className="flex items-center gap-6 flex-shrink-0">
-          {/* Logo */}
+          {/* Logo - Minimized on mobile */}
           <div className="h-full flex items-center">
             <Link href="/" className="h-full flex items-center">
               <Image
@@ -129,8 +129,12 @@ export default function GlobalMasthead() {
                 alt="HIGHWAY 420 Logo"
                 width={90}
                 height={65}
-                className="object-contain h-full w-auto"
-                style={{ display: "block" }}
+                className="object-contain h-full w-auto md:h-full md:w-auto"
+                style={{
+                  display: "block",
+                  maxWidth: "60px", // Smaller on mobile
+                  height: "auto"
+                }}
                 priority
               />
             </Link>
