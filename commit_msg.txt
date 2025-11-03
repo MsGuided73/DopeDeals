@@ -1,7 +1,0 @@
-feat: improve header UI design and readability
-
-- Made navigation links heavier weight by changing from text-sm to text-base
-- Made search bar corners more rounded (rounded-lg to rounded-2xl)
-- Moved logo toward center with added left padding
-- Moved user action icons toward center by reducing right margin
-- Enhanced overall header visual balance and readability
