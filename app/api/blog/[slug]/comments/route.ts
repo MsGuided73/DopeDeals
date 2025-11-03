@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+interface CommunitySubscriber {
+  full_name?: string;
+  email: string;
+}
+
+interface CommentWithSubscriber {
+  id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  like_count: number | null;
+  reply_count: number | null;
+  community_subscribers: CommunitySubscriber | CommunitySubscriber[];
+}
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -22,21 +37,8 @@ export async function GET(
       .single();
 
     if (blogError || !blogPost) {
-      // Try to find by ID if slug lookup fails (for hardcoded posts)
-      const { data: blogPostById, error: idError } = await supabase
-        .from('blog_posts')
-        .select('id')
-        .eq('id', slug)
-        .single();
-
-      if (idError || !blogPostById) {
-        // Return empty array for hardcoded posts that don't exist in DB yet
-        return NextResponse.json({ comments: [] });
-      }
-
-      // Use the found blog post
-      const comments = await getCommentsForPost(blogPostById.id);
-      return NextResponse.json({ comments });
+      // Return empty comments for unknown slugs - no fallback to ID lookup
+      return NextResponse.json({ comments: [] });
     }
 
     const comments = await getCommentsForPost(blogPost.id);
@@ -91,6 +93,56 @@ export async function POST(
       );
     }
 
+    // Validate content length
+    const trimmedContent = content.trim();
+    if (trimmedContent.length < 10) {
+      return NextResponse.json(
+        { error: 'Comment must be at least 10 characters long' },
+        { status: 400 }
+      );
+    }
+
+    if (trimmedContent.length > 1000) {
+      return NextResponse.json(
+        { error: 'Comment cannot exceed 1000 characters' },
+        { status: 400 }
+      );
+    }
+
+    // Basic profanity/spam check
+    const spamKeywords = ['spam', 'scam', 'fake', 'test123', 'asdf', 'qwerty'];
+    const lowerContent = trimmedContent.toLowerCase();
+    const hasSpam = spamKeywords.some(keyword => lowerContent.includes(keyword));
+
+    // Rate limiting: check recent comments from this user
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { data: recentComments, error: rateLimitError } = await supabase
+      .from('blog_comments')
+      .select('id')
+      .eq('user_id', userId)
+      .gte('created_at', oneHourAgo);
+
+    if (rateLimitError) {
+      console.error('Error checking rate limit:', rateLimitError);
+      return NextResponse.json(
+        { error: 'Unable to verify comment rate limit' },
+        { status: 500 }
+      );
+    }
+
+    if (recentComments && recentComments.length >= 5) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. You can only post 5 comments per hour.' },
+        { status: 429 }
+      );
+    }
+
+    // Determine comment status based on validation
+    let commentStatus: 'approved' | 'pending' = 'approved';
+    if (hasSpam || trimmedContent.length < 20) {
+      commentStatus = 'pending';
+    }
+
     // Get the blog post ID
     let blogPostId = null;
 
@@ -101,45 +153,14 @@ export async function POST(
       .eq('slug', slug)
       .single();
 
-    if (blogPost) {
-      blogPostId = blogPost.id;
-    } else {
-      // Try to find by ID (for hardcoded posts)
-      const { data: blogPostById, error: idError } = await supabase
-        .from('blog_posts')
-        .select('id')
-        .eq('id', slug)
-        .single();
-
-      if (blogPostById) {
-        blogPostId = blogPostById.id;
-      } else {
-        // Create a placeholder blog post entry for hardcoded posts
-        const { data: newBlogPost, error: createError } = await supabase
-          .from('blog_posts')
-          .insert({
-            title: 'Educational Article', // Placeholder
-            slug: slug,
-            excerpt: 'Educational content from Highway 420',
-            content: 'Content coming soon...',
-            author_name: 'Highway 420 Team',
-            category: 'Education',
-            status: 'published'
-          })
-          .select('id')
-          .single();
-
-        if (createError) {
-          console.error('Error creating placeholder blog post:', createError);
-          return NextResponse.json(
-            { error: 'Failed to create blog post reference' },
-            { status: 500 }
-          );
-        }
-
-        blogPostId = newBlogPost.id;
-      }
+    if (!blogPost) {
+      return NextResponse.json(
+        { error: 'Blog post not found' },
+        { status: 404 }
+      );
     }
+
+    blogPostId = blogPost.id;
 
     // Create the comment
     const { data: newComment, error: commentError } = await supabase
@@ -147,8 +168,8 @@ export async function POST(
       .insert({
         blog_id: blogPostId,
         user_id: userId,
-        content: content.trim(),
-        status: 'approved' // Auto-approve for community members
+        content: trimmedContent,
+        status: commentStatus
       })
       .select('id, content, created_at, updated_at, like_count, reply_count')
       .single();
@@ -213,13 +234,19 @@ async function getCommentsForPost(blogId: string) {
   }
 
   // Format comments for frontend
-  return comments.map(comment => ({
-    id: comment.id,
-    content: comment.content,
-    author: (comment.community_subscribers as any)?.full_name || 'Community Member',
-    date: comment.created_at,
-    likes: comment.like_count || 0,
-    replies: comment.reply_count || 0,
-    isCommunityMember: true
-  }));
+  return (comments as CommentWithSubscriber[]).map(comment => {
+    const subscriber = Array.isArray(comment.community_subscribers)
+      ? comment.community_subscribers[0]
+      : comment.community_subscribers;
+
+    return {
+      id: comment.id,
+      content: comment.content,
+      author: subscriber?.full_name || 'Community Member',
+      date: comment.created_at,
+      likes: comment.like_count || 0,
+      replies: comment.reply_count || 0,
+      isCommunityMember: true
+    };
+  });
 }

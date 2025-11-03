@@ -49,7 +49,7 @@ export default function BlogPortalPage() {
     };
 
     fetchBlogPosts();
-  }, [selectedCategory]);
+  }, []);
 
   // Higher Learning focused blog posts
   const higherLearningPosts: BlogPost[] = [

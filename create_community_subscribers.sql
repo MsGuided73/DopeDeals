@@ -38,7 +38,7 @@ BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;
 END;
-$$ language 'plpgsql';
+$$ LANGUAGE plpgsql;
 
 -- Create trigger to automatically update updated_at on row modifications
 CREATE TRIGGER update_community_subscribers_updated_at

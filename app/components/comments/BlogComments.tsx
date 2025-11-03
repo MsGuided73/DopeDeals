@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { MessageCircle, Send, Users, Heart, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
@@ -26,12 +26,7 @@ export default function BlogComments({ blogSlug, isCommunityMember = false, user
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Fetch comments on component mount
-  useEffect(() => {
-    fetchComments();
-  }, [blogSlug]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(`/api/blog/${blogSlug}/comments`);
       if (response.ok) {
@@ -43,7 +38,12 @@ export default function BlogComments({ blogSlug, isCommunityMember = false, user
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [blogSlug]);
+
+  // Fetch comments on component mount
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
