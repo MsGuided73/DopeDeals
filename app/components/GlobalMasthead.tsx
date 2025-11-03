@@ -9,6 +9,8 @@ import EnhancedSearchBar from "./EnhancedSearchBar";
 import { useCart } from "../contexts/CartContext";
 import { useNavigation } from "../contexts/NavigationContext";
 
+const PROMO_TEXT = "🚀 FREE SHIPPING ON ORDERS OVER $99 • 🔥 HOT DEALS DAILY • 🌿 PREMIUM QUALITY GUARANTEED";
+
 export default function GlobalMasthead() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -75,20 +77,38 @@ export default function GlobalMasthead() {
   return (
     <>
     {/* Scrolling Banner */}
-    <div className="bg-gradient-to-r from-green-800 via-green-700 to-green-800 text-white text-center py-2 overflow-hidden relative">
+    <div
+      className="bg-gradient-to-r from-green-800 via-green-700 to-green-800 text-white text-center py-2 overflow-hidden relative"
+      role="banner"
+      aria-label="Promotional announcements"
+    >
       <div className="absolute inset-0 bg-gradient-to-r from-green-900/20 via-transparent to-green-900/20 animate-pulse"></div>
-      <div className="relative z-10 whitespace-nowrap animate-marquee">
-        <span className="inline-block px-8 font-bold text-sm tracking-wide">
-          🚀 FREE SHIPPING ON ORDERS OVER $99 • 🔥 HOT DEALS DAILY • 🌿 PREMIUM QUALITY GUARANTEED • 🚀 FREE SHIPPING ON ORDERS OVER $99 • 🔥 HOT DEALS DAILY • 🌿 PREMIUM QUALITY GUARANTEED
+      <div className="relative z-10 flex whitespace-nowrap animate-marquee hover:pause-marquee">
+        <span className="inline-block px-8 font-bold text-sm tracking-wide" aria-hidden="true">
+          {PROMO_TEXT}
+        </span>
+        <span className="inline-block px-8 font-bold text-sm tracking-wide" aria-hidden="true">
+          {PROMO_TEXT}
+        </span>
+        <span className="inline-block px-8 font-bold text-sm tracking-wide" aria-hidden="true">
+          {PROMO_TEXT}
         </span>
       </div>
       <style jsx>{`
         @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
         }
         .animate-marquee {
           animation: marquee 30s linear infinite;
+        }
+        .hover\\:pause-marquee:hover .animate-marquee {
+          animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-marquee {
+            animation: none;
+          }
         }
       `}</style>
     </div>
