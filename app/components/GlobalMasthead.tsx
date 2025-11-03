@@ -84,7 +84,7 @@ export default function GlobalMasthead() {
     >
       <div className="absolute inset-0 bg-gradient-to-r from-green-900/20 via-transparent to-green-900/20 animate-pulse"></div>
       <div className="relative z-10 flex whitespace-nowrap animate-marquee hover:pause-marquee">
-        <span className="inline-block px-8 font-bold text-sm tracking-wide" aria-hidden="true">
+        <span className="inline-block px-8 font-bold text-sm tracking-wide">
           {PROMO_TEXT}
         </span>
         <span className="inline-block px-8 font-bold text-sm tracking-wide" aria-hidden="true">
@@ -102,7 +102,7 @@ export default function GlobalMasthead() {
         .animate-marquee {
           animation: marquee 30s linear infinite;
         }
-        .hover\\:pause-marquee:hover .animate-marquee {
+        .hover\\:pause-marquee.animate-marquee:hover {
           animation-play-state: paused;
         }
         @media (prefers-reduced-motion: reduce) {
