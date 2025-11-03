@@ -72,7 +72,8 @@ export default function GlobalMastheadClient() {
   };
 
   return (
-    <header className="z-50">
+    <>
+    <header className="z-50 relative">
       {/* === OUTER WRAPPER START === */}
       <div>
         {/* Promotional Banner - Highway Sign Style */}
@@ -472,11 +473,14 @@ export default function GlobalMastheadClient() {
           Munchies
         </Link>
       </nav>
+    </header>
 
-      {/* Mobile Search Bar - Only on mobile */}
-      <div className="md:hidden bg-black text-white px-4 pb-4">
-        <EnhancedSearchBar />
-      </div>
+    {/* Mobile Search Bar - Only on mobile */}
+    <div className="md:hidden bg-black text-white px-4 pb-4">
+      <EnhancedSearchBar />
+    </div>
+
+    <header className="z-50 relative">
 
       {/* Mobile Hamburger Menu - Only on mobile */}
       {isMenuOpen && (
@@ -705,5 +709,6 @@ export default function GlobalMastheadClient() {
         </div>
       )}
     </header>
+    </>
   );
 }

@@ -15,9 +15,21 @@ export default function GlobalMasthead() {
   const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Get cart count (safe defaults provided by useCart hook)
   const { cartCount } = useCart();
+
+  // Handle scroll to hide/show titlebar
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 100); // Hide titlebar after 100px scroll
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Clear any pending hover timeout on unmount
   useEffect(() => {
@@ -60,8 +72,10 @@ export default function GlobalMasthead() {
   };
 
   return (
+    <>
     <header className="z-50 relative">
       {/* === Top wrapper: Promo + Black masthead bar === */}
+      {!isScrolled && (
       <div>
         {/* Promotional Banner */}
         <div
@@ -156,6 +170,73 @@ export default function GlobalMasthead() {
           </div>
         </div>
       </div>
+      )}
+
+      {/* Shrunk Masthead - When Scrolled */}
+      {isScrolled && (
+        <div
+          className="bg-black px-4 flex items-center justify-between gap-4 relative transition-all duration-300"
+          style={{ minHeight: "60px", height: "60px" }}
+        >
+          {/* Left: Small Logo */}
+          <div className="flex-shrink-0 h-full flex items-center">
+            <Link href="/" className="h-full flex items-center">
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+                alt="HIGHWAY 420 Logo"
+                width={80}
+                height={60}
+                className="object-contain h-full w-auto"
+                style={{ display: "block" }}
+                priority
+              />
+            </Link>
+          </div>
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-3 flex-shrink-0 text-white">
+            <Link
+              href="/sitemap-page"
+              className="hidden md:block p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110"
+              title="Site Map"
+            >
+              <svg className="w-8 h-8 drop-shadow-lg" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+            </Link>
+
+            {/* Mobile Hamburger */}
+            <button
+              onClick={() => setIsMenuOpen((v) => !v)}
+              className="md:hidden p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
+              title="Menu"
+            >
+              <Menu className="w-6 h-6" strokeWidth={3} />
+            </button>
+
+            {/* Profile */}
+            <button
+              onClick={() => setShowProfileModal(true)}
+              className="p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
+              title="Profile & Recommendations"
+            >
+              <User className="w-6 h-6" strokeWidth={3} />
+            </button>
+
+            {/* Cart */}
+            <Link
+              href="/cart"
+              className="p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 relative bg-white/10 rounded-lg hover:bg-white/20"
+              title="Shopping Cart"
+            >
+              <ShoppingCart className="w-6 h-6" strokeWidth={3} />
+              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
+                {cartCount > 99 ? "99+" : cartCount}
+              </span>
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Desktop Nav (sticky) */}
       <nav
@@ -466,12 +547,15 @@ export default function GlobalMasthead() {
         <Link href="/products?category=edibles" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
           Munchies
         </Link>
-      </nav>
+      </nav>l
+    </header>
 
-      {/* Mobile Search (only mobile) */}
-      <div className="md:hidden bg-black text-white px-4 pb-4">
-        <EnhancedSearchBar />
-      </div>
+    {/* Mobile Search (only mobile) */}
+    <div className="md:hidden bg-black text-white px-4 pb-4">
+      <EnhancedSearchBar />
+    </div>
+
+    <header className="z-50 relative">
 
       {/* Mobile Menu */}
       {isMenuOpen && (
@@ -672,5 +756,6 @@ export default function GlobalMasthead() {
         </div>
       )}
     </header>
+    </>
   );
 }
