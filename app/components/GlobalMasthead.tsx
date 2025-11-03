@@ -74,6 +74,25 @@ export default function GlobalMasthead() {
 
   return (
     <>
+    {/* Scrolling Banner */}
+    <div className="bg-gradient-to-r from-green-800 via-green-700 to-green-800 text-white text-center py-2 overflow-hidden relative">
+      <div className="absolute inset-0 bg-gradient-to-r from-green-900/20 via-transparent to-green-900/20 animate-pulse"></div>
+      <div className="relative z-10 whitespace-nowrap animate-marquee">
+        <span className="inline-block px-8 font-bold text-sm tracking-wide">
+          🚀 FREE SHIPPING ON ORDERS OVER $99 • 🔥 HOT DEALS DAILY • 🌿 PREMIUM QUALITY GUARANTEED • 🚀 FREE SHIPPING ON ORDERS OVER $99 • 🔥 HOT DEALS DAILY • 🌿 PREMIUM QUALITY GUARANTEED
+        </span>
+      </div>
+      <style jsx>{`
+        @keyframes marquee {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+          animation: marquee 30s linear infinite;
+        }
+      `}</style>
+    </div>
+
     <header className="z-50 relative">
       {/* Single Compact Navigation Bar */}
       <div
@@ -408,7 +427,7 @@ export default function GlobalMasthead() {
 
         {/* Center: Search (desktop) */}
         <div
-          className="absolute left-1/2 -translate-x-1/2 hidden md:block"
+          className="absolute left-3/4 -translate-x-1/2 hidden md:block"
           style={{ width: "35%" }}
         >
           <div className="flex items-center justify-center">

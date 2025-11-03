@@ -363,7 +363,7 @@ export default function EnhancedSearchBar() {
           aria-label="Search"
           className="ml-2 mr-2 rounded-full w-10 h-10 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
         >
-          <Search className="w-6 h-6 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-200" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
+          <Search className="w-6 h-6 text-green-700 drop-shadow-lg group-hover:scale-110 transition-transform duration-200" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
         </button>
       </form>
     </div>
