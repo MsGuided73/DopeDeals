@@ -19,7 +19,7 @@ export default function CollectionsGrid() {
     { name: 'Hookahs', route: '/hookahs', image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg' },
   ];
 
-  const logoPath = 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/AdobeStock_1060112988.jpeg';
+  const logoPath = 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Danksgiving-Special.png';
 
   const LogoButton: React.FC<LogoButtonProps> = ({ href, label = 'SHOP NOW' }) => {
     return (
@@ -65,7 +65,7 @@ export default function CollectionsGrid() {
           href="/ride-with-us"
           className="block w-full aspect-[2/1] rounded-2xl overflow-hidden shadow-lg relative group hover:scale-105 transition-transform duration-300"
         >
-          <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
+          <img src={logoPath} alt="Highway 420" className="w-full h-full object-contain" />
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
           <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <LogoButton href="/ride-with-us" label="ride with us" />
@@ -110,7 +110,7 @@ export default function CollectionsGrid() {
             href="/ride-with-us"
             className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group hover:scale-105 transition-transform duration-300 block"
           >
-            <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
+            <img src={logoPath} alt="Highway 420" className="w-full h-full object-contain" />
             <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
             <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <LogoButton href="/ride-with-us" label="ride with us" />
