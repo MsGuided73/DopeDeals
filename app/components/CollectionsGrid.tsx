@@ -59,9 +59,9 @@ export default function CollectionsGrid() {
 
   return (
     // Strong local stacking context so siblings (e.g., blog) can't sit on top
-    <div className="relative z-50 isolate w-full px-6 pt-1 pb-8 max-w-7xl mx-auto">
+    <div className="relative z-50 isolate w-full px-4 pt-1 pb-4 max-w-7xl mx-auto">
       {/* Mobile: Stack vertically */}
-      <div className="block lg:hidden space-y-4 max-w-7xl mx-auto">
+      <div className="block lg:hidden space-y-2 max-w-7xl mx-auto">
         {/* Large hero image first on mobile */}
         <a
           href="/ride-with-us"
@@ -82,7 +82,7 @@ export default function CollectionsGrid() {
             <a
               key={i}
               href={cat.route}
-              className="aspect-square rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
+              className="aspect-[4/3] rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
               style={{
                 boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
                 transition: "box-shadow 0.3s ease, transform 0.3s ease",
@@ -122,7 +122,7 @@ export default function CollectionsGrid() {
 
       {/* Desktop: Full-width grid layout */}
       <div className="hidden lg:block w-full">
-        <div className="grid grid-cols-4 gap-3 h-[95vh] min-h-[700px] w-full">
+        <div className="grid grid-cols-4 gap-3 h-[65vh] max-h-[500px] w-full">
           <a
             href="/ride-with-us"
             className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group hover:scale-105 transition-transform duration-300 block bg-black"
