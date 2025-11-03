@@ -68,7 +68,7 @@ export const getShopReferer = (): string => {
   return stored || '/products';
 };
 
-// Add item to cart with toast notification
+// Add item to cart with toast notification and redirect to cart
 export const addToCart = async (productId: string, quantity: number = 1): Promise<boolean> => {
   const sessionId = getSessionId();
 
@@ -105,6 +105,11 @@ export const addToCart = async (productId: string, quantity: number = 1): Promis
 
     // Trigger cart refresh event for global state
     window.dispatchEvent(new CustomEvent('cartUpdated'));
+
+    // Redirect to cart page after successful addition
+    if (typeof window !== 'undefined') {
+      window.location.href = '/cart';
+    }
 
     return true;
   } catch (error) {

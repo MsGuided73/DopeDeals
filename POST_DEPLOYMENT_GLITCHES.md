@@ -120,6 +120,86 @@ No contact information provided
 
 ---
 
+
+
+## Issue #3: 🐛 Bug Report
+
+**Date Reported:** November 3, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3004/products
+**Browser/Device:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Severity:** Medium
+**Status:** Open
+
+### Description
+The Add to Cart button is not working from the /products page
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3004/products
+
+### Technical Details
+**User Agent:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Page URL:** http://localhost:3004/products
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+**Contact Info:** DCB
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
+
+
+## Issue #4: 🐛 Bug Report
+
+**Date Reported:** November 3, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3004/(public)/auth?redirectTo=%2Faccount
+**Browser/Device:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Severity:** Medium
+**Status:** Open
+
+### Description
+sign in/sign up is not working.  Need to link the auth form
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3004/(public)/auth?redirectTo=%2Faccount
+
+### Technical Details
+**User Agent:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Page URL:** http://localhost:3004/(public)/auth?redirectTo=%2Faccount
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+**Contact Info:** dcb
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
 ## Template for New Issues
 
 **Issue Title:** [Brief description]

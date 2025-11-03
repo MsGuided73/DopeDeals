@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ShoppingCart, X, Plus, Minus } from 'lucide-react';
+import FocusTrap from 'focus-trap-react';
 import { getCart, updateCartQuantity, removeFromCart, formatPrice, type Cart, type CartItem } from '../lib/cart-utils';
+
+const MAX_QUANTITY = 99;
 
 export default function StickyCartPopup() {
   const [cart, setCart] = useState<Cart | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [updating, setUpdating] = useState<string | null>(null);
+  const [removingItemId, setRemovingItemId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Fetch cart data
   const fetchCart = async () => {
@@ -19,27 +24,52 @@ export default function StickyCartPopup() {
         setCart(cartData);
         // Show popup if cart has items
         setIsVisible(cartData.items && cartData.items.length > 0);
+        // Clear any previous error on successful fetch
+        setErrorMessage(null);
       }
     } catch (error) {
       console.error('Error fetching cart:', error);
+      setErrorMessage('Unable to load cart. Please try again.');
     }
   };
 
   // Update cart quantity
   const updateQuantity = async (cartItemId: string, newQuantity: number) => {
-    setUpdating(cartItemId);
-    const success = await updateCartQuantity(cartItemId, newQuantity);
-    if (success) {
-      await fetchCart(); // Refresh cart
+    // Validate quantity against max limit
+    if (newQuantity > MAX_QUANTITY) {
+      setErrorMessage(`Maximum quantity allowed is ${MAX_QUANTITY}.`);
+      return;
     }
-    setUpdating(null);
+
+    setUpdating(cartItemId);
+    try {
+      const success = await updateCartQuantity(cartItemId, newQuantity);
+      if (success) {
+        await fetchCart(); // Refresh cart
+      } else {
+        setErrorMessage('Failed to update quantity. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+      setErrorMessage('Failed to update quantity. Please try again.');
+    } finally {
+      setUpdating(null);
+    }
   };
 
   // Remove item from cart
   const removeItem = async (cartItemId: string) => {
-    const success = await removeFromCart(cartItemId);
-    if (success) {
-      await fetchCart(); // Refresh cart
+    setRemovingItemId(cartItemId);
+    try {
+      const success = await removeFromCart(cartItemId);
+      if (success) {
+        await fetchCart(); // Refresh cart
+      }
+    } catch (error) {
+      console.error('Error removing item:', error);
+      // Could add toast notification here
+    } finally {
+      setRemovingItemId(null);
     }
   };
 
@@ -58,6 +88,23 @@ export default function StickyCartPopup() {
     };
   }, []);
 
+  // Handle Escape key to close popup
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isExpanded) {
+        setIsExpanded(false);
+      }
+    };
+
+    if (isExpanded) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isExpanded]);
+
   // Don't render if no cart or empty cart
   if (!cart || !cart.items || cart.items.length === 0 || !isVisible) {
     return null;
@@ -70,6 +117,8 @@ export default function StickyCartPopup() {
         <button
           onClick={() => setIsExpanded(true)}
           className="bg-green-600 hover:bg-green-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+          aria-label={`Open cart — ${cart.itemCount} items`}
+          aria-expanded={isExpanded}
         >
           <div className="relative">
             <ShoppingCart className="w-6 h-6" />
@@ -82,7 +131,12 @@ export default function StickyCartPopup() {
 
       {/* Expanded Cart Popup */}
       {isExpanded && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-2xl w-80 max-h-96 overflow-hidden">
+        <FocusTrap>
+          <div
+            className="bg-white border border-gray-200 rounded-lg shadow-2xl w-80 max-h-96 overflow-hidden"
+            aria-modal="true"
+            role="dialog"
+          >
           {/* Header */}
           <div className="bg-green-600 text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -92,10 +146,18 @@ export default function StickyCartPopup() {
             <button
               onClick={() => setIsExpanded(false)}
               className="hover:bg-green-700 rounded-full p-1 transition-colors"
+              aria-label="Close cart"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="p-3 bg-red-50 border-b border-red-200">
+              <p className="text-sm text-red-700">{errorMessage}</p>
+            </div>
+          )}
 
           {/* Cart Items */}
           <div className="max-h-64 overflow-y-auto">
@@ -132,6 +194,7 @@ export default function StickyCartPopup() {
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         disabled={updating === item.id || item.quantity <= 1}
                         className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 text-xs"
+                        aria-label={`Decrease quantity of ${item.product?.name || 'Product'} to ${item.quantity - 1}`}
                       >
                         <Minus className="w-3 h-3" />
                       </button>
@@ -144,14 +207,16 @@ export default function StickyCartPopup() {
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         disabled={updating === item.id}
                         className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 text-xs"
+                        aria-label={`Increase quantity of ${item.product?.name || 'Product'} to ${item.quantity + 1}`}
                       >
                         <Plus className="w-3 h-3" />
                       </button>
 
                       <button
                         onClick={() => removeItem(item.id)}
-                        disabled={updating === item.id}
+                        disabled={updating === item.id || removingItemId === item.id}
                         className="w-6 h-6 rounded border border-red-300 flex items-center justify-center hover:bg-red-50 disabled:opacity-50 text-xs ml-2"
+                        aria-label={`Remove ${item.product?.name || 'Product'} from cart`}
                       >
                         <X className="w-3 h-3 text-red-600" />
                       </button>
@@ -198,6 +263,7 @@ export default function StickyCartPopup() {
             </div>
           </div>
         </div>
+        </FocusTrap>
       )}
     </div>
   );

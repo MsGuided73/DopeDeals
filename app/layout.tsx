@@ -5,6 +5,7 @@ import Highway420Footer from "../components/Highway420Footer";
 import ScrollingBanner from "./components/ScrollingBanner";
 import FeedbackButton from "./components/FeedbackButton";
 import FloatingNav from "./components/FloatingNav";
+import StickyCartPopup from "./components/StickyCartPopup";
 import { NavigationProvider } from "./contexts/NavigationContext";
 
 export const metadata = {
@@ -99,6 +100,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Global Floating Navigation */}
               <FloatingNav />
+
+              {/* Global Sticky Cart Popup */}
+              <StickyCartPopup />
             </div>
           </NavigationProvider>
         </AppProviders>

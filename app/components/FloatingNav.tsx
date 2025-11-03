@@ -11,6 +11,7 @@ export default function FloatingNav() {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Clear any pending hover timeout on unmount
   useEffect(() => {
@@ -19,10 +20,18 @@ export default function FloatingNav() {
     };
   }, [hoverTimeout]);
 
-  // Don't render anything if masthead is present
-  if (hasMasthead) {
-    return null;
-  }
+  // Handle scroll to show/hide floating nav
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 200); // Show floating nav after 200px scroll
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Always render the floating nav - it can coexist with the masthead
 
   const handleDropdownLinkClick = () => {
     setOpenDropdown(null);
@@ -56,6 +65,11 @@ export default function FloatingNav() {
     else if (type === "submenu") setOpenSubmenu(value);
     else setOpenNestedSubmenu(value);
   };
+
+  // Only show floating nav when scrolled past 200px
+  if (!isScrolled) {
+    return null;
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-black z-40 border-b border-gray-800">
