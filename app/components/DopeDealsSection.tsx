@@ -108,9 +108,9 @@ export default function DopeDealsSection() {
               🔥 DOPE DEALS 🔥
             </h1>
           </div>
-          <div className="grid grid-cols-2 gap-6 px-4">
+          <div className="md:flex md:overflow-x-auto md:gap-6 md:pb-4 md:px-4 grid grid-cols-2 gap-6 px-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse w-full h-[36rem]">
+              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse md:flex-shrink-0 md:w-80 w-full h-[36rem]">
                 <div className="aspect-square bg-muted"></div>
                 <div className="p-4">
                   <div className="h-4 bg-muted-foreground/30 rounded mb-2"></div>
@@ -159,16 +159,16 @@ export default function DopeDealsSection() {
           </p>
         </div>
 
-        {/* Grid Container - 2 cards per row */}
+        {/* Responsive Container - Grid on mobile, horizontal scroll on larger screens */}
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 gap-6 px-4">
+          <div className="md:flex md:overflow-x-auto md:gap-6 md:pb-4 md:px-4 grid grid-cols-2 gap-6 px-4">
             {products.slice(0, 20).map((product) => {
               const transformedProduct = transformProductForCard(product);
               return (
                 <Link
                   key={product.id}
                   href={`/product/${product.id}`}
-                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-full h-[36rem] block"
+                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 md:flex-shrink-0 md:w-80 w-full h-[36rem] block md:mx-3"
                 >
                   <div className="relative w-full aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
