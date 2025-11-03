@@ -31,6 +31,21 @@ CREATE POLICY "Users can view their own subscription" ON community_subscribers
 GRANT SELECT, INSERT, UPDATE ON community_subscribers TO authenticated;
 GRANT ALL ON community_subscribers TO service_role;
 
+-- Create trigger function to update updated_at column
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Create trigger to automatically update updated_at on row modifications
+CREATE TRIGGER update_community_subscribers_updated_at
+    BEFORE UPDATE ON community_subscribers
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
 -- Add comments for documentation
 COMMENT ON TABLE community_subscribers IS 'Newsletter subscribers for Highway 420 community updates and exclusive offers';
 COMMENT ON COLUMN community_subscribers.full_name IS 'Subscriber full name';

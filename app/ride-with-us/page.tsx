@@ -160,7 +160,7 @@ export default function RideWithUsPage() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-16 bg-gradient-to-r from-green-600 to-green-700 text-white">
+        <section className="py-16 bg-gradient-to-r from-green-400 to-green-700 text-white">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <h2 className="chalets-title text-4xl font-normal mb-6 highway-text-shadow">
               Ready to Ride?

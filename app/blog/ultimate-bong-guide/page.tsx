@@ -1,25 +1,31 @@
-import { Metadata } from 'next';
+'use client';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, Share2, Bookmark, ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
 import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
-
-export const metadata: Metadata = {
-  title: 'The Ultimate Guide to Picking the Perfect Bong | DOPE CITY Blog',
-  description: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
-  keywords: 'bong guide, how to choose bong, glass bongs, percolator bongs, bong selection, smoking accessories',
-  openGraph: {
-    title: 'The Ultimate Guide to Picking the Perfect Bong',
-    description: 'Your complete guide to choosing the perfect bong for your smoking experience.',
-    images: [{
-      url: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=1200&h=630&fit=crop',
-      width: 1200,
-      height: 630,
-    }],
-  },
-};
+import BlogComments from '../../components/comments/BlogComments';
 
 export default function UltimateBongGuide() {
+  const [isCommunityMember, setIsCommunityMember] = useState(false);
+  const [userId, setUserId] = useState<string | undefined>();
+
+  // Check community membership status
+  useEffect(() => {
+    const checkCommunityMembership = async () => {
+      try {
+        // This would typically check user authentication and community membership
+        // For demo purposes, we'll assume some users are members
+        const demoUserId = 'demo-user-123'; // In real app, get from auth
+        setUserId(demoUserId);
+        setIsCommunityMember(true); // Demo: assume user is a member
+      } catch (error) {
+        console.error('Error checking membership:', error);
+      }
+    };
+
+    checkCommunityMembership();
+  }, []);
   return (
     <>
       <AgeVerification />
@@ -217,6 +223,15 @@ export default function UltimateBongGuide() {
               </Link>
             </p>
           </article>
+
+          {/* Comments Section */}
+          <div className="mt-16">
+            <BlogComments
+              blogSlug="ultimate-bong-guide"
+              isCommunityMember={isCommunityMember}
+              userId={userId}
+            />
+          </div>
         </div>
       </div>
     </>

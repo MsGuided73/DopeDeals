@@ -283,7 +283,7 @@ export default function EnhancedSearchBar() {
             onKeyDown={handleKeyDown}
             onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
             placeholder={currentPlaceholder}
-            className="w-full px-6 py-3 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold"
+            className="w-full px-6 py-2 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold"
           />
 
           {/* Search Suggestions Dropdown */}
@@ -360,11 +360,9 @@ export default function EnhancedSearchBar() {
         <button
           type="submit"
           onClick={() => handleSearch()}
-          className="px-0 py-0 bg-green-600 hover:bg-green-700 text-white transition-colors flex items-center gap-2 font-medium"
-          style={{ backgroundColor: '#2d8f47' }}
+          className="ml-2 mr-2 rounded-full w-10 h-10 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
         >
-          <Search className="w-5 h-5" />
-          <span className="hidden sm:inline">Search</span>
+          <Search className="w-6 h-6 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-200" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
         </button>
       </form>
     </div>

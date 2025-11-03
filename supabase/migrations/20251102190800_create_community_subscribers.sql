@@ -31,6 +31,21 @@ CREATE POLICY "Users can view their own subscription" ON community_subscribers
 GRANT SELECT, INSERT, UPDATE ON community_subscribers TO authenticated;
 GRANT ALL ON community_subscribers TO service_role;
 
+-- Create PL/pgSQL function to set timestamp
+CREATE OR REPLACE FUNCTION trg_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger to automatically update updated_at on row modifications
+CREATE TRIGGER set_timestamp_community_subscribers
+    AFTER UPDATE ON community_subscribers
+    FOR EACH ROW
+    EXECUTE FUNCTION trg_set_timestamp();
+
 -- Add comments for documentation
 COMMENT ON TABLE community_subscribers IS 'Newsletter subscribers for Highway 420 community updates and exclusive offers';
 COMMENT ON COLUMN community_subscribers.full_name IS 'Subscriber full name';
