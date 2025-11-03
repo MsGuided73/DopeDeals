@@ -456,7 +456,7 @@ export default function GlobalMasthead() {
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-3 flex-shrink-0 text-white">
+        <div className="flex items-center gap-4 flex-shrink-0 text-white">
           <Link
             href="/sitemap-page"
             className="hidden md:block p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110"

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { addToCart } from '../lib/cart-utils';
 
 interface Product {
   id: string;
@@ -203,37 +204,31 @@ export default function DopeDealsSection() {
                     </button>
                   </div>
 
-                  <div className="p-4 flex flex-col h-full">
+                  <div className="p-4 flex flex-col">
                     {transformedProduct.brand_name && (
-                      <p className="text-base font-bold text-red-600 mb-1 uppercase tracking-wide" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-                        {transformedProduct.brand_name.toUpperCase()}
+                      <p className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                        {transformedProduct.brand_name}
                       </p>
                     )}
 
-                    <h3 className="font-bold text-gray-900 dark:text-white text-xl capitalize leading-tight mb-2 line-clamp-2 group-hover:text-red-700 transition-colors" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
-                      {transformedProduct.name.toLowerCase()}
+                    <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                      {transformedProduct.name}
                     </h3>
 
-                    {transformedProduct.short_description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-                        {transformedProduct.short_description}
-                      </p>
-                    )}
-
                     <div className="mt-auto">
-                      <div className="mb-3 relative">
+                      <div className="mb-4">
                         {transformedProduct.compare_at_price ? (
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="text-sm text-gray-500 line-through">
                                 ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
                               </span>
-                              <span className="bg-white text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                                Save {transformedProduct.discountPercent}%
+                              <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
+                                -{transformedProduct.discountPercent}%
                               </span>
                             </div>
-                            <div className="text-xl font-bold text-red-600">
-                              🔥 ${transformedProduct.salePrice.toFixed(2)}
+                            <div className="text-xl font-bold text-green-600">
+                              ${transformedProduct.salePrice.toFixed(2)}
                             </div>
                           </div>
                         ) : (
@@ -241,34 +236,21 @@ export default function DopeDealsSection() {
                             ${transformedProduct.salePrice.toFixed(2)}
                           </div>
                         )}
-
-                        {/* Hover price display */}
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/80 rounded-lg flex items-center justify-center">
-                          <div className="text-center text-white">
-                            <div className="text-2xl font-bold">
-                              🔥 ${transformedProduct.salePrice.toFixed(2)}
-                            </div>
-                            {transformedProduct.discountPercent > 0 && (
-                              <div className="text-sm opacity-90">
-                                Save {transformedProduct.discountPercent}% off regular price!
-                              </div>
-                            )}
-                          </div>
-                        </div>
                       </div>
 
                       <button
-                        className="w-full text-center px-4 py-2.5 bg-transparent border-2 border-black text-black font-bold rounded-full transition-all duration-300 text-sm uppercase tracking-wide hover:scale-105 relative overflow-hidden group"
+                        className="w-full text-center px-4 py-3 border-2 border-black text-black hover:bg-black hover:text-white font-bold rounded-full transition-all duration-300 text-sm font-highway uppercase tracking-wide hover:scale-105 hover:shadow-lg"
                         style={{
-                          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                          fontFamily: "'Highway Gothic', 'Arial', sans-serif",
                           fontWeight: 'bold',
                           letterSpacing: '0.05em',
                         }}
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          await addToCart(product.id);
+                        }}
                       >
-                        <span className="relative z-10">Get Deal</span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+                        Add to Cart
                       </button>
                     </div>
                   </div>

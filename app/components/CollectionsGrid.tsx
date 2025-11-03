@@ -20,7 +20,7 @@ export default function CollectionsGrid() {
   ];
 
   const logoPath =
-    "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Danksgiving-special2.png";
+    "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/puffco_ad3.jpg";
 
   // CTA as anchor (styled like a button) to avoid event propagation issues
   const LogoButton: React.FC<LogoButtonProps> = ({ href, label = "SHOP NOW" }) => {
@@ -59,7 +59,7 @@ export default function CollectionsGrid() {
 
   return (
     // Strong local stacking context so siblings (e.g., blog) can't sit on top
-    <div className="relative z-50 isolate w-full px-4 pt-2 pb-8">
+    <div className="relative z-50 isolate w-full px-6 pt-1 pb-8 max-w-7xl mx-auto">
       {/* Mobile: Stack vertically */}
       <div className="block lg:hidden space-y-4 max-w-7xl mx-auto">
         {/* Large hero image first on mobile */}
@@ -82,7 +82,7 @@ export default function CollectionsGrid() {
             <a
               key={i}
               href={cat.route}
-              className="aspect-square rounded-2xl overflow-hidden shadow-md relative group hover:scale-105 transition-all duration-300 block"
+              className="aspect-square rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
               style={{
                 boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
                 transition: "box-shadow 0.3s ease, transform 0.3s ease",
@@ -135,7 +135,7 @@ export default function CollectionsGrid() {
             <a
               key={i}
               href={cat.route}
-              className="rounded-2xl overflow-hidden shadow-md relative group hover:scale-105 transition-all duration-300 block"
+              className="rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
               style={{
                 boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
                 transition: "box-shadow 0.3s ease, transform 0.3s ease",
