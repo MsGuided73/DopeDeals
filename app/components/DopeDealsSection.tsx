@@ -108,9 +108,9 @@ export default function DopeDealsSection() {
               🔥 DOPE DEALS 🔥
             </h1>
           </div>
-          <div className="flex space-x-6 pb-4 px-4 overflow-x-auto">
+          <div className="grid grid-cols-2 gap-6 px-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse flex-shrink-0 w-72 h-80">
+              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse w-full h-[36rem]">
                 <div className="aspect-square bg-muted"></div>
                 <div className="p-4">
                   <div className="h-4 bg-muted-foreground/30 rounded mb-2"></div>
@@ -159,16 +159,16 @@ export default function DopeDealsSection() {
           </p>
         </div>
 
-        {/* Manual Scroll Container */}
-        <div className="relative overflow-hidden">
-          <div className="flex overflow-x-auto gap-6 pb-4 px-4 scrollbar-hide">
+        {/* Grid Container - 2 cards per row */}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 gap-6 px-4">
             {products.slice(0, 20).map((product) => {
               const transformedProduct = transformProductForCard(product);
               return (
                 <Link
                   key={product.id}
                   href={`/product/${product.id}`}
-                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-80 h-[28rem] block mx-3"
+                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 w-full h-[36rem] block"
                 >
                   <div className="relative w-full aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
