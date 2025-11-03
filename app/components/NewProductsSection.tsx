@@ -222,15 +222,15 @@ export default function NewProductsSection() {
                     </div>
 
                     <button
-                      className="w-full text-center px-4 py-3 bg-black hover:bg-gray-800 text-white font-bold rounded-full transition-all duration-300 text-sm font-highway uppercase tracking-wide hover:scale-105 hover:shadow-lg"
+                      className="w-full text-center px-4 py-3 border-2 border-green-600 text-black hover:bg-green-600 hover:text-white font-bold rounded-full transition-all duration-300 text-sm font-highway uppercase tracking-wide hover:scale-105 hover:shadow-lg"
                       style={{
                         fontFamily: "'Highway Gothic', 'Arial', sans-serif",
-                        fontWeight: 'normal',
+                        fontWeight: 'bold',
                         letterSpacing: '0.05em',
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Shop Now
+                      Add to Cart
                     </button>
                   </div>
                 </div>

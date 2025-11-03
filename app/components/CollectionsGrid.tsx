@@ -90,7 +90,7 @@ export default function CollectionsGrid() {
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
-                <h1 className="text-white text-lg sm:text-xl font-bold text-left uppercase leading-tight whitespace-pre-line"
+                <h1 className="text-white text-xl sm:text-2xl font-bold text-left uppercase leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)',
@@ -114,7 +114,7 @@ export default function CollectionsGrid() {
             href="/ride-with-us"
             className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group hover:scale-105 transition-transform duration-300 block bg-black"
           >
-            <img src={logoPath} alt="Highway 420" className="w-full h-full object-contain max-w-[85%] max-h-[85%] mx-auto" />
+            <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
           </a>
 
@@ -137,7 +137,7 @@ export default function CollectionsGrid() {
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               <div className="absolute inset-0 flex items-end justify-start p-4 z-10 pointer-events-none">
-                <h1 className="text-white text-2xl xl:text-3xl 2xl:text-4xl font-bold text-left uppercase leading-tight whitespace-pre-line"
+                <h1 className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold text-left uppercase leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)',

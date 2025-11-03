@@ -119,7 +119,7 @@ export default function GlobalMasthead() {
           {/* Center: Search (desktop) */}
           <div
             className="absolute left-1/2 -translate-x-1/2 top-3 hidden md:block"
-            style={{ width: "25%" }}
+            style={{ width: "40%" }}
           >
             <div className="flex items-start justify-center">
               <EnhancedSearchBar />
@@ -240,8 +240,8 @@ export default function GlobalMasthead() {
 
       {/* Desktop Nav (sticky) */}
       <nav
-        className="hidden md:flex sticky top-0 left-0 right-0 justify-center items-center gap-6 py-3 bg-black z-40"
-        style={{ minHeight: "48px" }}
+        className="hidden md:flex sticky top-0 left-0 right-0 justify-center items-center gap-6 py-1 bg-black z-40"
+        style={{ minHeight: "32px" }}
       >
         {/* Shop Dropdown */}
         <div className="relative">
