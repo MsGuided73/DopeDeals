@@ -4,6 +4,8 @@ import GlobalMasthead from "./components/GlobalMasthead";
 import Highway420Footer from "../components/Highway420Footer";
 import ScrollingBanner from "./components/ScrollingBanner";
 import FeedbackButton from "./components/FeedbackButton";
+import FloatingNav from "./components/FloatingNav";
+import { NavigationProvider } from "./contexts/NavigationContext";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
@@ -79,21 +81,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-white">
         <AppProviders>
-          <div className="min-h-screen flex flex-col">
-            {/* Scrolling Banner - DISABLED for now */}
-            {/* <ScrollingBanner /> */}
+          <NavigationProvider>
+            <div className="min-h-screen flex flex-col">
+              {/* Scrolling Banner - DISABLED for now */}
+              {/* <ScrollingBanner /> */}
 
-            {/* Global Masthead removed from layout - pages control their own masthead inclusion */}
-            {/* <GlobalMasthead /> */}
+              {/* Global Masthead removed from layout - pages control their own masthead inclusion */}
+              {/* <GlobalMasthead /> */}
 
-            <main className="flex-1">
-              {children}
-            </main>
-            <Highway420Footer />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Highway420Footer />
 
-            {/* Global Feedback Button */}
-            <FeedbackButton />
-          </div>
+              {/* Global Feedback Button */}
+              <FeedbackButton />
+
+              {/* Global Floating Navigation */}
+              <FloatingNav />
+            </div>
+          </NavigationProvider>
         </AppProviders>
       </body>
     </html>

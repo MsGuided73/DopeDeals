@@ -7,6 +7,7 @@ import Image from "next/image";
 import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu } from "lucide-react";
 import EnhancedSearchBar from "./EnhancedSearchBar";
 import { useCart } from "../contexts/CartContext";
+import { useNavigation } from "../contexts/NavigationContext";
 
 export default function GlobalMasthead() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +20,15 @@ export default function GlobalMasthead() {
 
   // Get cart count (safe defaults provided by useCart hook)
   const { cartCount } = useCart();
+
+  // Navigation context to hide floating nav when masthead is present
+  const { setHasMasthead } = useNavigation();
+
+  // Set hasMasthead to true when component mounts, false when unmounts
+  useEffect(() => {
+    setHasMasthead(true);
+    return () => setHasMasthead(false);
+  }, [setHasMasthead]);
 
   // Handle scroll to hide/show titlebar
   useEffect(() => {
