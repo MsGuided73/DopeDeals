@@ -90,7 +90,7 @@ export default function CollectionsGrid() {
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
-                <h1 className="text-white text-xl sm:text-2xl font-bold text-left uppercase leading-tight whitespace-pre-line"
+                <h1 className="text-white text-xl sm:text-2xl font-bold text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)',
@@ -137,7 +137,7 @@ export default function CollectionsGrid() {
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               <div className="absolute inset-0 flex items-end justify-start p-4 z-10 pointer-events-none">
-                <h1 className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold text-left uppercase leading-tight whitespace-pre-line"
+                <h1 className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)',
