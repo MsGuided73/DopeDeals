@@ -12,17 +12,17 @@ export default function FloatingNav() {
   const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
-  // Don't render anything if masthead is present
-  if (hasMasthead) {
-    return null;
-  }
-
   // Clear any pending hover timeout on unmount
   useEffect(() => {
     return () => {
       if (hoverTimeout) clearTimeout(hoverTimeout);
     };
   }, [hoverTimeout]);
+
+  // Don't render anything if masthead is present
+  if (hasMasthead) {
+    return null;
+  }
 
   const handleDropdownLinkClick = () => {
     setOpenDropdown(null);
