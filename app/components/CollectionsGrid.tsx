@@ -82,7 +82,7 @@ export default function CollectionsGrid() {
             <a
               key={i}
               href={cat.route}
-              className="aspect-[4/3] rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
+              className="aspect-square rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
               style={{
                 boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
                 transition: "box-shadow 0.3s ease, transform 0.3s ease",
@@ -125,7 +125,7 @@ export default function CollectionsGrid() {
         <div className="grid grid-cols-4 gap-2 h-[65vh] max-h-[500px] w-full px-1">
           <a
             href="/ride-with-us"
-            className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group hover:scale-105 transition-transform duration-300 block bg-black"
+            className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group transition-transform duration-300 block bg-black"
           >
             <img src={logoPath} alt="Highway 420" className="w-full h-full object-cover" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />

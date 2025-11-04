@@ -129,7 +129,7 @@ export default function GlobalMasthead() {
                 alt="HIGHWAY 420 Logo"
                 width={90}
                 height={65}
-                className="object-contain h-full w-auto md:h-[120px] md:w-auto md:-my-[27.5px]"
+                className="object-contain h-full w-auto md:h-[135px] md:w-auto md:-my-[35px]"
                 style={{
                   display: "block",
                   maxWidth: "60px", // Smaller on mobile
