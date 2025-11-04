@@ -67,6 +67,8 @@ export default function SearchResultsContent() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
@@ -93,54 +95,75 @@ export default function SearchResultsContent() {
 
     setLoading(true);
     try {
-      const params = new URLSearchParams({
+      // Map sort options to API format
+      const sortMapping: Record<string, string> = {
+        'price-low': 'price_asc',
+        'price-high': 'price_desc',
+        'name': 'relevance', // fallback to relevance
+        'featured': 'relevance', // fallback to relevance
+        'relevance': 'relevance'
+      };
+
+      // Map stock status to API format
+      const stockStatusMapping: Record<string, string[]> = {
+        'all': [],
+        'in-stock': ['in_stock', 'low_stock'],
+        'out-of-stock': ['out_of_stock'],
+        'low-stock': ['low_stock'],
+        'high-stock': ['in_stock'] // assuming high stock means in_stock
+      };
+
+      const requestBody = {
         q: query,
-        limit: '20',
-        offset: '0',
-        includeCategories: 'true',
-        includeBrands: 'true',
-        ...(currentFilters.category !== 'all' && { category: currentFilters.category }),
-        ...(currentFilters.brand !== 'all' && { brand: currentFilters.brand }),
-        ...(currentFilters.priceMin && { priceMin: currentFilters.priceMin }),
-        ...(currentFilters.priceMax && { priceMax: currentFilters.priceMax }),
-        ...(currentFilters.stockStatus !== 'all' && { stockStatus: currentFilters.stockStatus }),
-        ...(currentFilters.featured && { featured: 'true' }),
-        ...(currentFilters.materials.length > 0 && { materials: currentFilters.materials.join(',') }),
-        ...(currentFilters.tags.length > 0 && { tags: currentFilters.tags.join(',') }),
+        category: currentFilters.category !== 'all' ? currentFilters.category : undefined,
+        filters: {
+          brand_slug: currentFilters.brand !== 'all' ? [currentFilters.brand] : [],
+          price_min: currentFilters.priceMin ? parseFloat(currentFilters.priceMin) : undefined,
+          price_max: currentFilters.priceMax ? parseFloat(currentFilters.priceMax) : undefined,
+          in_stock_only: currentFilters.stockStatus === 'in-stock',
+          inventory_status: stockStatusMapping[currentFilters.stockStatus] || [],
+          materials: currentFilters.materials,
+          tags: currentFilters.tags
+        },
+        sort: sortMapping[sort] || 'relevance',
+        page: currentPage,
+        page_size: 24
+      };
+
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
       });
 
-      const response = await fetch(`/api/search?${params}`);
       const data = await response.json();
 
       if (response.ok) {
-        let sortedResults = [...data.results];
-        
-        // Apply client-side sorting
-        switch (sort) {
-          case 'price-low':
-            sortedResults.sort((a, b) => a.price - b.price);
-            break;
-          case 'price-high':
-            sortedResults.sort((a, b) => b.price - a.price);
-            break;
-          case 'name':
-            sortedResults.sort((a, b) => a.name.localeCompare(b.name));
-            break;
-          case 'featured':
-            sortedResults.sort((a, b) => {
-              if (a.featured && !b.featured) return -1;
-              if (!a.featured && b.featured) return 1;
-              return b.relevanceScore - a.relevanceScore;
-            });
-            break;
-          case 'relevance':
-          default:
-            // Already sorted by relevance from API
-            break;
-        }
+        // Transform API response to match expected format
+        const transformedResults = data.items.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          brand_name: item.brand_name,
+          price: item.price,
+          image_url: item.image_url,
+          description: '', // API doesn't provide description
+          short_description: '', // API doesn't provide short_description
+          sku: '', // API doesn't provide SKU
+          featured: false, // API doesn't provide featured flag
+          stock_quantity: item.stock_quantity,
+          tags: [], // API doesn't provide tags in this format
+          materials: [], // API doesn't provide materials in this format
+          zoho_category_name: '', // API doesn't provide this
+          manufacturer: '', // API doesn't provide this
+          relevanceScore: 0, // API doesn't provide relevance score
+          resultType: 'product' as const
+        }));
 
-        setResults(sortedResults);
+        setResults(transformedResults);
         setTotal(data.total);
+        setTotalPages(Math.ceil(data.total / 24));
       } else {
         console.error('Search error:', data.error);
         setResults([]);
@@ -577,6 +600,58 @@ export default function SearchResultsContent() {
             <p className="text-gray-600">
               Enter a search term above to find products, brands, and categories.
             </p>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center space-x-2 mt-12">
+            <button
+              onClick={() => {
+                const newPage = Math.max(currentPage - 1, 1);
+                setCurrentPage(newPage);
+                performSearch(searchQuery, filters, sortBy);
+              }}
+              disabled={currentPage === 1}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+
+            {/* Page Numbers */}
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
+              if (pageNum > totalPages) return null;
+
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => {
+                    setCurrentPage(pageNum);
+                    performSearch(searchQuery, filters, sortBy);
+                  }}
+                  className={`px-4 py-2 border rounded-md text-sm font-medium ${
+                    currentPage === pageNum
+                      ? 'bg-dope-orange-500 text-white border-dope-orange-500'
+                      : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+
+            <button
+              onClick={() => {
+                const newPage = Math.min(currentPage + 1, totalPages);
+                setCurrentPage(newPage);
+                performSearch(searchQuery, filters, sortBy);
+              }}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
           </div>
         )}
       </main>
