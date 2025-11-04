@@ -3,7 +3,7 @@
 import React from "react";
 
 interface LogoButtonProps {
-  href: string;
+  href: string; 
   label?: string;
 }
 
