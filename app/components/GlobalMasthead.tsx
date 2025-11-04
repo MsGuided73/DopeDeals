@@ -129,7 +129,7 @@ export default function GlobalMasthead() {
                 alt="HIGHWAY 420 Logo"
                 width={90}
                 height={65}
-                className="object-contain h-full w-auto md:h-full md:w-auto"
+                className="object-contain h-full w-auto md:h-[120px] md:w-auto md:-my-[27.5px]"
                 style={{
                   display: "block",
                   maxWidth: "60px", // Smaller on mobile
@@ -451,7 +451,7 @@ export default function GlobalMasthead() {
 
         {/* Center: Search (desktop) */}
         <div
-          className="absolute left-[calc(75%_-_20px)] -translate-x-1/2 hidden md:block"
+          className="absolute left-[calc(55%_-_20px)] -translate-x-1/2 hidden md:block"
           style={{ width: "30%" }}
         >
           <div className="flex items-center justify-center">
