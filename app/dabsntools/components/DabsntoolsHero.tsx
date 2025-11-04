@@ -1,7 +1,14 @@
 'use client';
 import { useState } from 'react';
 
-export default function DabsntoolsHero() {
+interface DabsntoolsHeroProps {
+  filters?: {
+    types: string[];
+  };
+  setFilters?: (filters: any) => void;
+}
+
+export default function DabsntoolsHero({ filters, setFilters }: DabsntoolsHeroProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all-dabsntools');
 
@@ -128,7 +135,9 @@ export default function DabsntoolsHero() {
           <button
             onClick={() => {
               setActiveCategory('all-dabsntools');
-              scrollToSection('all-dabsntools-section');
+              if (setFilters) {
+                setFilters((prev: any) => ({ ...prev, types: [] }));
+              }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'all-dabsntools'
@@ -141,7 +150,9 @@ export default function DabsntoolsHero() {
           <button
             onClick={() => {
               setActiveCategory('glass-rigs');
-              scrollToSection('glass-rigs-section');
+              if (setFilters) {
+                setFilters((prev: any) => ({ ...prev, types: ['Glass'] }));
+              }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'glass-rigs'
@@ -154,7 +165,9 @@ export default function DabsntoolsHero() {
           <button
             onClick={() => {
               setActiveCategory('e-rigs');
-              scrollToSection('e-rigs-section');
+              if (setFilters) {
+                setFilters((prev: any) => ({ ...prev, types: ['Electric', 'E-Rig'] }));
+              }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'e-rigs'
@@ -167,7 +180,9 @@ export default function DabsntoolsHero() {
           <button
             onClick={() => {
               setActiveCategory('portable-rigs');
-              scrollToSection('portable-rigs-section');
+              if (setFilters) {
+                setFilters((prev: any) => ({ ...prev, types: ['Portable'] }));
+              }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'portable-rigs'
@@ -180,7 +195,9 @@ export default function DabsntoolsHero() {
           <button
             onClick={() => {
               setActiveCategory('concentrate-tools');
-              scrollToSection('concentrate-tools-section');
+              if (setFilters) {
+                setFilters((prev: any) => ({ ...prev, types: ['Tool', 'Dabber', 'Nail', 'Carb Cap'] }));
+              }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
               activeCategory === 'concentrate-tools'
