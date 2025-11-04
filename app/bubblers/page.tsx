@@ -4,8 +4,8 @@ import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
-  title: 'Bubblers | DOPE CITY - Premium Glass Bubblers Collection',
-  description: 'Shop premium glass bubblers at DOPE CITY. Compact water pipes, mini bubblers, sherlock bubblers, and more. Free shipping on orders over $75.',
+  title: 'Bubblers | Highway 420 - Premium Glass Bubblers Collection',
+  description: 'Shop premium glass bubblers at Highway 420. Compact water pipes, mini bubblers, sherlock bubblers, and more. Free shipping on orders over $75.',
   keywords: 'bubblers, glass bubblers, mini bubblers, sherlock bubblers, compact water pipes, premium glass',
 };
 

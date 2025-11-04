@@ -180,7 +180,7 @@ See: `scripts/flag-nicotine-products.sql`
 ## 8. 🎨 DESIGN & BRANDING
 
 ### Test Items:
-- [ ] DOPE CITY logo in Chalets font
+- [ ] Highway 420 logo
 - [ ] Logo fills title bar height
 - [ ] Black title bar (no orange)
 - [ ] Consistent masthead across pages

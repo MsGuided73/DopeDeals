@@ -1,4 +1,4 @@
--- Dope City Complete Products Migration
+-- Highway 420 Complete Products Migration
 -- Migrates only products with complete information (images + descriptions)
 -- Strategic launch with quality products only
 

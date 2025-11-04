@@ -1,6 +1,6 @@
-# 🚀 DOPE CITY Page Templates
+# 🚀 Highway 420 Page Templates
 
-This directory contains standardized page templates for creating new pages on the DOPE CITY website. Each template includes all necessary global components and follows the established design patterns.
+This directory contains standardized page templates for creating new pages on the Highway 420 website. Each template includes all necessary global components and follows the established design patterns.
 
 ## 📋 Available Templates
 
@@ -153,7 +153,7 @@ if (loading) {
 }
 ```
 
-## 🎯 DOPE CITY Design Standards
+## 🎯 Highway 420 Design Standards
 
 ### Typography
 - **Page Titles**: Use `dope-city-title` class
@@ -171,7 +171,7 @@ if (loading) {
 - **Sections**: `py-16` for vertical spacing
 
 ### Components
-- **Buttons**: Use `Button` component with DOPE CITY styling
+- **Buttons**: Use `Button` component with Highway 420 styling
 - **Cards**: White background with `border border-gray-200 rounded-lg`
 - **Hover Effects**: `hover:shadow-lg transition-shadow`
 

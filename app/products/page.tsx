@@ -4,8 +4,8 @@ import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
-  title: 'All Products | DOPE CITY - Water Bongs, Pipes, THCA Flower & More',
-  description: 'Shop premium cannabis accessories at DOPE CITY. Water bongs, pipes, THCA flower, and more premium products. Free shipping on orders over $50.',
+  title: 'All Products | Highway 420 - Water Bongs, Pipes, THCA Flower & More',
+  description: 'Shop premium cannabis accessories at Highway 420. Water bongs, pipes, THCA flower, and more premium products. Free shipping on orders over $50.',
   keywords: 'water bongs, pipes, THCA flower, cannabis accessories, premium products, CBD, hemp, glass pieces',
 };
 

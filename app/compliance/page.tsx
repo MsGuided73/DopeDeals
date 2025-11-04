@@ -24,7 +24,7 @@ export default function CompliancePage() {
             Legal Compliance & Regulations
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            DOPE CITY is committed to full compliance with all applicable laws and regulations governing the sale of smoking accessories and hemp-derived products.
+            Highway 420 is committed to full compliance with all applicable laws and regulations governing the sale of smoking accessories and hemp-derived products.
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export default function CompliancePage() {
             </h2>
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 mb-4">
-                All customers must be 21 years of age or older to purchase products from DOPE CITY. We employ strict age verification measures including:
+                All customers must be 21 years of age or older to purchase products from Highway 420. We employ strict age verification measures including:
               </p>
               <ul className="list-disc list-inside text-gray-700 space-y-2 mb-6">
                 <li>Digital age verification at account creation</li>
@@ -87,7 +87,7 @@ export default function CompliancePage() {
             </h2>
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 mb-4">
-                Cannabis and hemp laws vary significantly by state. DOPE CITY monitors and complies with regulations in all states where we operate:
+                Cannabis and hemp laws vary significantly by state. Highway 420 monitors and complies with regulations in all states where we operate:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-white rounded-lg p-4 border border-blue-200">
@@ -171,7 +171,7 @@ export default function CompliancePage() {
             </h2>
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <p className="text-gray-700 mb-4">
-                The regulatory landscape for cannabis and hemp products is constantly evolving. DOPE CITY maintains compliance through:
+                The regulatory landscape for cannabis and hemp products is constantly evolving. Highway 420 maintains compliance through:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="text-center p-4">

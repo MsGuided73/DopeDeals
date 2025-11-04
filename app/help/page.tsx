@@ -5,8 +5,8 @@ import GlobalMasthead from '../components/GlobalMasthead';
 import { Search, Package, CreditCard, Truck, RotateCcw, Shield, MessageCircle, Phone } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Help Center - DOPE CITY',
-  description: 'Find answers to frequently asked questions about orders, shipping, returns, and more at DOPE CITY.',
+  title: 'Help Center - Highway 420',
+  description: 'Find answers to frequently asked questions about orders, shipping, returns, and more at Highway 420.',
 };
 
 export default function HelpPage() {
@@ -188,7 +188,7 @@ export default function HelpPage() {
                   VIP Membership Benefits
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  Discover exclusive perks and savings with DOPE CITY VIP membership.
+                  Discover exclusive perks and savings with Highway 420 VIP membership.
                 </p>
                 <button className="text-dope-orange-500 hover:text-dope-orange-600 font-semibold">
                   Read More →

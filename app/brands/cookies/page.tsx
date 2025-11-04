@@ -7,7 +7,7 @@ import { supabaseServer } from '../../lib/supabase-server';
 
 export const metadata = {
   title: 'Cookies - Premium Cannabis Brand | Highway 420',
-  description: 'Discover Cookies premium cannabis products. Founded by Berner, Cookies offers high-quality flower, pre-rolls, and accessories. Experience top-tier cannabis genetics and lifestyle products at DOPE CITY.',
+  description: 'Discover Cookies premium cannabis products. Founded by Berner, Cookies offers high-quality flower, pre-rolls, and accessories. Experience top-tier cannabis genetics and lifestyle products at Highway 420.',
   keywords: 'Cookies, Berner, premium cannabis, flower, pre-rolls, THCA, cannabis genetics, lifestyle products',
 };
 

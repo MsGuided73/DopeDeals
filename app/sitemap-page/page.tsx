@@ -104,7 +104,7 @@ export default function SiteMapPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex-shrink-0">
               <Link href="/" className="text-2xl font-normal tracking-[-0.1em]" style={{ fontFamily: 'Chalets, sans-serif' }}>
-                DOPE CITY
+                Highway 420
               </Link>
             </div>
             <div className="flex-1 max-w-2xl mx-8">
@@ -147,7 +147,7 @@ export default function SiteMapPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-4xl font-normal text-gray-900" style={{ fontFamily: 'Chalets, sans-serif', letterSpacing: '-0.1em' }}>
-              DOPE CITY Site Map
+              Highway 420 Site Map
             </h1>
             <button
               onClick={refreshSitemap}
@@ -164,7 +164,7 @@ export default function SiteMapPage() {
           </div>
           <div className="mb-6">
             <p className="text-lg text-gray-600 mb-2">
-              Complete overview of all pages on the DOPE CITY platform - existing, in progress, and planned.
+              Complete overview of all pages on the Highway 420 platform - existing, in progress, and planned.
             </p>
             <p className="text-sm text-gray-500">
               Last updated: {lastUpdated.toLocaleString()}

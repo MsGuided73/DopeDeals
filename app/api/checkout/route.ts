@@ -241,7 +241,7 @@ export async function POST(req: NextRequest) {
           billingAddress,
           orderData: {
             orderNumber: order.orderNumber || order.id,
-            orderDescription: `DOPE CITY Order: ${createdItems.length} items`,
+            orderDescription: `Highway 420 Order: ${createdItems.length} items`,
             lineItems: createdItems.map((item: any) => ({
               name: item.productName || 'Item',
               description: item.productDescription || '',

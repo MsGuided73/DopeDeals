@@ -3,8 +3,8 @@ import GlobalMasthead from '../components/GlobalMasthead';
 import AgeVerification from '../components/AgeVerification';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - DOPE CITY',
-  description: 'DOPE CITY Privacy Policy - Learn how we collect, use, and protect your personal information.',
+  title: 'Privacy Policy - Highway 420',
+  description: 'Highway 420 Privacy Policy - Learn how we collect, use, and protect your personal information.',
 };
 
 export default function PrivacyPage() {
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
                   <p><strong>Email:</strong> privacy@dopecity.com</p>
                   <p><strong>Phone:</strong> 1-800-DOPE-CITY</p>
-                  <p><strong>Mail:</strong> DOPE CITY Privacy Team<br />
+                  <p><strong>Mail:</strong> Highway 420 Privacy Team<br />
                   [Address to be added]</p>
                 </div>
               </div>

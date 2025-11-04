@@ -3,8 +3,8 @@ import AgeVerification from '../components/AgeVerification';
 import { CreditCard, Smartphone, Shield, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Payment Methods - DOPE CITY',
-  description: 'Secure payment options available at DOPE CITY including credit cards, digital wallets, and more.',
+  title: 'Payment Methods - Highway 420',
+  description: 'Secure payment options available at Highway 420 including credit cards, digital wallets, and more.',
 };
 
 export default function PaymentMethodsPage() {
@@ -52,7 +52,7 @@ export default function PaymentMethodsPage() {
             </h1>
             <div className="w-24 h-1 bg-dope-orange-500 mx-auto mb-6"></div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Secure, fast, and convenient payment options for your DOPE CITY orders
+              Secure, fast, and convenient payment options for your Highway 420 orders
             </p>
           </div>
         </div>

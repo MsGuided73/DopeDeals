@@ -1,5 +1,5 @@
 /**
- * DOPE CITY Interactive Page Template
+ * Highway 420 Interactive Page Template
  * 
  * Template for pages that need client-side interactivity,
  * state management, and dynamic content.

@@ -5,7 +5,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   // TODO: Fetch actual product data for metadata
   return {
-    title: `Product ${id} | DOPE CITY`,
+    title: `Product ${id} | Highway 420`,
     description: 'Premium smoke shop products - glass pieces, accessories, and CBD/hemp products.'
   };
 }

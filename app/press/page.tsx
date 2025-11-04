@@ -23,21 +23,21 @@ export default function PressPage() {
   const pressReleases: PressRelease[] = [
     {
       id: '1',
-      title: 'DOPE CITY Launches Revolutionary E-commerce Platform for Premium Cannabis Accessories',
+      title: 'Highway 420 Launches Revolutionary E-commerce Platform for Premium Cannabis Accessories',
       date: '2024-01-15',
       excerpt: 'New platform features advanced age verification, AI-powered recommendations, and seamless checkout experience for cannabis enthusiasts nationwide.',
       category: 'Company News'
     },
     {
       id: '2',
-      title: 'DOPE CITY Partners with Leading Glass Artists for Exclusive Collection',
+      title: 'Highway 420 Partners with Leading Glass Artists for Exclusive Collection',
       date: '2024-01-10',
       excerpt: 'Partnership brings limited-edition, handcrafted glass pieces to customers seeking premium smoking accessories.',
       category: 'Partnership'
     },
     {
       id: '3',
-      title: 'DOPE CITY Expands THCA Product Line with Lab-Tested Premium Flower',
+      title: 'Highway 420 Expands THCA Product Line with Lab-Tested Premium Flower',
       date: '2024-01-05',
       excerpt: 'New product line features third-party lab testing and compliance with federal hemp regulations.',
       category: 'Product Launch'
@@ -47,7 +47,7 @@ export default function PressPage() {
   const mediaAssets: MediaAsset[] = [
     {
       id: '1',
-      name: 'DOPE CITY Logo - Primary',
+      name: 'Highway 420 Logo - Primary',
       type: 'logo',
       format: 'PNG, SVG',
       size: 'Various',
@@ -55,7 +55,7 @@ export default function PressPage() {
     },
     {
       id: '2',
-      name: 'DOPE CITY Logo - White',
+      name: 'Highway 420 Logo - White',
       type: 'logo',
       format: 'PNG, SVG',
       size: 'Various',
@@ -101,7 +101,7 @@ export default function PressPage() {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Media resources, press releases, and brand assets for journalists, bloggers, and media professionals 
-            covering DOPE CITY and the cannabis industry.
+            covering Highway 420 and the cannabis industry.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="px-8 py-4 bg-dope-orange text-white rounded-lg hover:bg-orange-600 transition-colors font-medium text-lg">
@@ -116,11 +116,11 @@ export default function PressPage() {
         {/* Company Overview */}
         <section className="mb-16 bg-gray-50 rounded-2xl p-8">
           <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-8" style={{ letterSpacing: '-0.02em' }}>
-            About DOPE CITY
+            About Highway 420
           </h2>
           <div className="max-w-4xl mx-auto">
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-              DOPE CITY is a premium online retailer specializing in high-quality smoking accessories, THCA products, 
+              Highway 420 is a premium online retailer specializing in high-quality smoking accessories, THCA products, 
               and cannabis culture essentials. Founded in 2023, we've quickly become a trusted destination for 
               cannabis enthusiasts seeking premium products and exceptional customer service.
             </p>
@@ -267,7 +267,7 @@ export default function PressPage() {
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Brand Usage</h3>
               <ul className="space-y-2 text-gray-700">
-                <li>• Use official DOPE CITY logos and brand assets</li>
+                <li>• Use official Highway 420 logos and brand assets</li>
                 <li>• Maintain proper spacing and proportions</li>
                 <li>• Do not alter colors or modify logos</li>
                 <li>• Use high-resolution images when possible</li>
@@ -327,7 +327,7 @@ export default function PressPage() {
         {/* Legal Notice */}
         <div className="mt-12 p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-sm text-yellow-800">
-            <strong>Media Notice:</strong> All content, images, and materials in this press kit are proprietary to DOPE CITY 
+            <strong>Media Notice:</strong> All content, images, and materials in this press kit are proprietary to Highway 420 
             and are provided for editorial use only. Commercial use requires written permission. Cannabis laws vary by state - 
             please ensure compliance with local regulations when covering cannabis-related topics.
           </p>

@@ -15,7 +15,7 @@ export default function AffiliatePage() {
             AFFILIATE PROGRAM
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Join the DOPE CITY affiliate program and earn commissions by promoting premium smoking accessories 
+            Join the Highway 420 affiliate program and earn commissions by promoting premium smoking accessories 
             and THCA products to your audience.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -60,7 +60,7 @@ export default function AffiliatePage() {
         {/* Why Join */}
         <section className="mb-16">
           <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
-            Why Join DOPE CITY Affiliates?
+            Why Join Highway 420 Affiliates?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="text-center p-6">
@@ -285,7 +285,7 @@ export default function AffiliatePage() {
             Ready to Start Earning?
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            Join thousands of affiliates who are already earning with DOPE CITY. 
+            Join thousands of affiliates who are already earning with Highway 420. 
             Sign up today and start promoting premium products your audience will love.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

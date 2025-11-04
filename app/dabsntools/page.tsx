@@ -5,11 +5,11 @@ import GlobalMasthead from '../components/GlobalMasthead';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Dab Rigs & Concentrate Tools | DOPE CITY - Premium Concentrate Equipment',
-  description: 'Shop premium dab rigs, e-rigs, glass concentrate equipment, and concentrate tools at DOPE CITY. Electric rigs, glass rigs, portable devices, bangers, and more. Free shipping $50+.',
+  title: 'Dab Rigs & Concentrate Tools | Highway420 - Premium Concentrate Equipment',
+  description: 'Shop premium dab rigs, e-rigs, glass concentrate equipment, and concentrate tools at Highway 420. Electric rigs, glass rigs, portable devices, bangers, and more. Free shipping $50+.',
   keywords: 'dab rigs, concentrate rigs, electric dab rigs, glass rigs, e-rigs, portable dab rigs, concentrate tools, bangers, dab nails, domeless nails, dab accessories',
   openGraph: {
-    title: 'Dab Rigs & Concentrate Tools | DOPE CITY',
+    title: 'Dab Rigs & Concentrate Tools | Highway 420',
     description: 'Discover premium concentrate equipment and tools. Glass rigs, e-rigs, portable devices, and concentrate accessories with free shipping.',
     type: 'website',
     url: 'https://highway420store.com/dabsntools',
@@ -18,13 +18,13 @@ export const metadata: Metadata = {
         url: '/images/collections/dab-rigs-collection.jpg',
         width: 1200,
         height: 630,
-        alt: 'DOPE CITY Premium Dab Rigs & Concentrate Tools Collection',
+        alt: 'Highway 420 Premium Dab Rigs & Concentrate Tools Collection',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Dab Rigs & Concentrate Tools | DOPE CITY',
+    title: 'Dab Rigs & Concentrate Tools | Highway 420',
     description: 'Shop premium dab rigs and concentrate tools. Free shipping $50+.',
     images: ['/images/collections/dab-rigs-collection-twitter.jpg'],
   },
@@ -49,7 +49,7 @@ export default function DabsntoolsPage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Dab Rigs & Concentrate Tools Collection",
-    "description": "Premium dab rigs, e-rigs, glass concentrate equipment, and concentrate tools at DOPE CITY",
+    "description": "Premium dab rigs, e-rigs, glass concentrate equipment, and concentrate tools at Highway 420",
     "url": "https://highway420store.com/dabsntools",
     "mainEntity": {
       "@type": "ItemList",

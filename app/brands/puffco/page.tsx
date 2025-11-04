@@ -6,8 +6,8 @@ import AgeVerification from '../../components/AgeVerification';
 import { supabaseServer } from '../../lib/supabase-server';
 
 export const metadata = {
-  title: 'Puffco - Premium Electronic Dabbing Devices | DOPE CITY',
-  description: 'Discover Puffco\'s revolutionary electronic dabbing devices. From the legendary Peak Pro to the portable Proxy, experience precision-engineered concentrate consumption at DOPE CITY.',
+  title: 'Puffco - Premium Electronic Dabbing Devices | Highway 420',
+  description: 'Discover Puffco\'s revolutionary electronic dabbing devices. From the legendary Peak Pro to the portable Proxy, experience precision-engineered concentrate consumption at Highway 420.',
   keywords: 'Puffco, Peak Pro, Proxy, electronic dab rig, concentrate vaporizer, dabbing device, premium cannabis accessories',
 };
 

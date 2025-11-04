@@ -1,4 +1,4 @@
-# 🚀 DOPE CITY - DopeDeals Platform TODO
+# 🚀 Highway 420 - DopeDeals Platform TODO
 *Updated: January 15, 2025 - Post-Phase 1 Completion & Pre-Deployment*
 
 ## **🎯 PROJECT STATUS SUMMARY**
@@ -39,7 +39,7 @@
 - ✅ **UI/UX Improvements**
   - Moved masthead to top of landing page
   - Adjusted carousel positioning beneath navbar
-  - Maintained DOPE CITY branding consistency
+  - Maintained Highway 420 branding consistency
   - Enhanced user experience flow
 
 ### **🚀 READY FOR DEPLOYMENT**

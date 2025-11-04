@@ -3,8 +3,8 @@ import { Suspense } from 'react';
 import SearchResultsContent from './SearchResultsContent';
 
 export const metadata: Metadata = {
-  title: 'Search Results | DOPE CITY',
-  description: 'Search results for premium vaping products, accessories, and more at DOPE CITY.',
+  title: 'Search Results | Highway 420',
+  description: 'Search results for premium vaping products, accessories, and more at Highway 420.',
   keywords: 'search, vaping products, accessories, brands, categories',
 };
 

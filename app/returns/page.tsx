@@ -5,8 +5,8 @@ import AgeVerification from '../components/AgeVerification';
 import { RotateCcw, Clock, CheckCircle, XCircle, Package, CreditCard } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Returns Policy - DOPE CITY',
-  description: 'Learn about DOPE CITY return policy, exchange process, and refund procedures.',
+  title: 'Returns Policy - Highway 420',
+  description: 'Learn about Highway 420 return policy, exchange process, and refund procedures.',
 };
 
 export default function ReturnsPage() {

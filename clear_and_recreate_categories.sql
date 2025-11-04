@@ -1,4 +1,4 @@
--- DOPE CITY CATEGORIES - CLEAR AND RECREATE FROM SCRATCH
+-- Highway 420 CATEGORIES - CLEAR AND RECREATE FROM SCRATCH
 -- This script clears all existing categories and creates the new structure
 
 -- Step 1: Clear existing categories (be careful - this removes all data)

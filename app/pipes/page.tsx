@@ -4,11 +4,11 @@ import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
-  title: 'Glass Pipes & Hand Pipes | DOPE CITY - Premium Smoking Pipes Collection',
-  description: 'Shop premium glass pipes, hand pipes, spoon pipes, and chillums at DOPE CITY. Borosilicate glass, unique designs, and affordable prices. Free shipping on orders over $50.',
+  title: 'Glass Pipes & Hand Pipes | Highway 420 - Premium Smoking Pipes Collection',
+  description: 'Shop premium glass pipes, hand pipes, spoon pipes, and chillums at Highway 420. Borosilicate glass, unique designs, and affordable prices. Free shipping on orders over $50.',
   keywords: 'glass pipes, hand pipes, spoon pipes, chillums, one hitters, sherlock pipes, glass smoking pipes, borosilicate glass pipes, premium pipes',
   openGraph: {
-    title: 'Premium Glass Pipes & Hand Pipes | DOPE CITY',
+    title: 'Premium Glass Pipes & Hand Pipes | Highway 420',
     description: 'Discover our curated collection of high-quality glass pipes, spoon pipes, chillums, and more. Premium borosilicate glass with free shipping over $50.',
     type: 'website',
     url: 'https://highway420store.com/pipes',
@@ -17,13 +17,13 @@ export const metadata = {
         url: '/images/pipes/pipes-collection-og.jpg',
         width: 1200,
         height: 630,
-        alt: 'DOPE CITY Premium Glass Pipes Collection',
+        alt: 'Highway 420 Premium Glass Pipes Collection',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Premium Glass Pipes & Hand Pipes | DOPE CITY',
+    title: 'Premium Glass Pipes & Hand Pipes | Highway 420',
     description: 'Shop premium glass pipes, spoon pipes, chillums & more. Free shipping over $50.',
     images: ['/images/pipes/pipes-collection-twitter.jpg'],
   },
@@ -48,7 +48,7 @@ export default function PipesPage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Glass Pipes & Hand Pipes Collection",
-    "description": "Premium glass pipes, hand pipes, spoon pipes, and chillums collection at DOPE CITY",
+    "description": "Premium glass pipes, hand pipes, spoon pipes, and chillums collection at Highway 420",
     "url": "https://highway420store.com/pipes",
     "mainEntity": {
       "@type": "ItemList",

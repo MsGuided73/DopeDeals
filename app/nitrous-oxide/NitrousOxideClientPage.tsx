@@ -11,7 +11,7 @@ export default function NitrousOxideClientPage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Nitrous Oxide Products Collection",
-    "description": "Premium nitrous oxide products collection at DOPE CITY",
+    "description": "Premium nitrous oxide products collection at Highway 420",
     "url": "https://highway420store.com/nitrous-oxide",
     "mainEntity": {
       "@type": "ItemList",

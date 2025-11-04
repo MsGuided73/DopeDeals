@@ -24,7 +24,7 @@ export default function ReviewsPage() {
       customerInitials: 'MR',
       rating: 5,
       title: 'Outstanding Quality and Service!',
-      content: 'I\'ve been shopping with DOPE CITY for over a year now, and they never disappoint. The glass quality is top-notch, shipping is always fast, and customer service is incredibly helpful. My recent dab rig purchase exceeded all expectations.',
+      content: 'I\'ve been shopping with Highway 420 for over a year now, and they never disappoint. The glass quality is top-notch, shipping is always fast, and customer service is incredibly helpful. My recent dab rig purchase exceeded all expectations.',
       date: '2024-01-15',
       verified: true,
       productName: 'Premium Glass Dab Rig',
@@ -37,7 +37,7 @@ export default function ReviewsPage() {
       customerInitials: 'SL',
       rating: 5,
       title: 'Best THCA Flower I\'ve Tried',
-      content: 'The THCA flower from DOPE CITY is absolutely incredible. Great taste, perfect cure, and the effects are exactly what I was looking for. Will definitely be ordering again soon!',
+      content: 'The THCA flower from Highway 420 is absolutely incredible. Great taste, perfect cure, and the effects are exactly what I was looking for. Will definitely be ordering again soon!',
       date: '2024-01-12',
       verified: true,
       productName: 'Premium THCA Flower',
@@ -73,7 +73,7 @@ export default function ReviewsPage() {
       customerInitials: 'RT',
       rating: 5,
       title: 'Premium Products, Fair Prices',
-      content: 'The quality-to-price ratio here is unbeatable. I\'ve compared with other sites and DOPE CITY consistently offers better value. The packaging is also very discreet and professional.',
+      content: 'The quality-to-price ratio here is unbeatable. I\'ve compared with other sites and Highway 420 consistently offers better value. The packaging is also very discreet and professional.',
       date: '2024-01-05',
       verified: true,
       productCategory: 'Vaporizers',
@@ -85,7 +85,7 @@ export default function ReviewsPage() {
       customerInitials: 'AC',
       rating: 4,
       title: 'Good Experience Overall',
-      content: 'My first order with DOPE CITY was smooth. Product arrived as described and packaging was secure. Website is easy to navigate. Looking forward to trying more products.',
+      content: 'My first order with Highway 420 was smooth. Product arrived as described and packaging was secure. Website is easy to navigate. Looking forward to trying more products.',
       date: '2024-01-03',
       verified: true,
       helpful: 12
@@ -125,7 +125,7 @@ export default function ReviewsPage() {
             DOPE FEEDBACK
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Real reviews from real customers. See what the DOPE CITY community has to say about their experiences.
+            Real reviews from real customers. See what the Highway 420 community has to say about their experiences.
           </p>
         </div>
 

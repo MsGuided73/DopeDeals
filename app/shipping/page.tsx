@@ -4,8 +4,8 @@ import AgeVerification from '../components/AgeVerification';
 import { Truck, Clock, Package, Shield, MapPin, DollarSign } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Shipping Information - DOPE CITY',
-  description: 'Learn about DOPE CITY shipping rates, delivery times, and policies for your orders.',
+  title: 'Shipping Information - Highway 420',
+  description: 'Learn about Highway 420 shipping rates, delivery times, and policies for your orders.',
 };
 
 export default function ShippingPage() {
@@ -54,7 +54,7 @@ export default function ShippingPage() {
             </h1>
             <div className="w-24 h-1 bg-dope-orange-500 mx-auto mb-6"></div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Fast, secure, and reliable shipping for all your DOPE CITY orders
+              Fast, secure, and reliable shipping for all your Highway 420 orders
             </p>
           </div>
         </div>

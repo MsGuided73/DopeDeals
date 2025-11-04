@@ -1,11 +1,11 @@
 import NitrousOxideClientPage from './NitrousOxideClientPage';
 
 export const metadata = {
-  title: 'Nitrous Oxide Products | DOPE CITY - Premium Collection',
-  description: 'Shop premium nitrous oxide products at DOPE CITY. High-quality, lab-tested products with discreet shipping and competitive prices.',
+  title: 'Nitrous Oxide Products | Highway 420 - Premium Collection',
+  description: 'Shop premium nitrous oxide products at Highway 420. High-quality, lab-tested products with discreet shipping and competitive prices.',
   keywords: 'nitrous oxide, nos, laughing gas, premium nitrous, n2o products',
   openGraph: {
-    title: 'Premium Nitrous Oxide Products | DOPE CITY',
+    title: 'Premium Nitrous Oxide Products | Highway 420',
     description: 'Discover our curated collection of high-quality nitrous oxide products.',
     type: 'website',
     url: 'https://highway420store.com/nitrous-oxide',
@@ -14,13 +14,13 @@ export const metadata = {
         url: '/images/nitrous-oxide/nitrous-collection-og.jpg',
         width: 1200,
         height: 630,
-        alt: 'DOPE CITY Premium Nitrous Oxide Collection',
+        alt: 'Highway 420 Premium Nitrous Oxide Collection',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Premium Nitrous Oxide Products | DOPE CITY',
+    title: 'Premium Nitrous Oxide Products | HIGHWAY 420',
     description: 'Shop premium nitrous oxide products with discreet shipping.',
     images: ['/images/nitrous-oxide/nitrous-collection-twitter.jpg'],
   },

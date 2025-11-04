@@ -1,5 +1,5 @@
 /**
- * DOPE CITY Simple Page Template
+ * Highway 420 Simple Page Template
  * 
  * A streamlined template for quickly creating new pages.
  * Includes only the essential global components.
@@ -17,7 +17,7 @@ import DopeCityFooter from '../components/DopeCityFooter';
 
 // Update this metadata for your page
 export const metadata: Metadata = {
-  title: 'Page Title | DOPE CITY',
+  title: 'Page Title | Highway 420',
   description: 'Page description for SEO',
   keywords: 'relevant, keywords, here',
 };

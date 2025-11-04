@@ -84,7 +84,7 @@ AIRTABLE_BRANDS_VIEW=your_airtable_brands_view
 ## 🧪 Post-Deployment Testing
 
 ### **Core Features to Test:**
-- [ ] Homepage loads with DOPE CITY branding
+- [ ] Homepage loads with Highway 420 branding
 - [ ] Product pages display correctly  
 - [ ] Search functionality works
 - [ ] Cart operations functional

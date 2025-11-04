@@ -30,7 +30,7 @@ export default function GiftCardsPage() {
             </h1>
             <div className="w-24 h-1 bg-dope-orange-500 mx-auto mb-6"></div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Give the perfect gift with DOPE CITY gift cards - let them choose their favorites
+              Give the perfect gift with Highway 420 gift cards - let them choose their favorites
             </p>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function GiftCardsPage() {
                 <div className="relative z-10">
                   <div className="flex items-center mb-6">
                     <Gift className="w-8 h-8 mr-3" />
-                    <span className="text-2xl font-bold dope-city-title">DOPE CITY</span>
+                    <span className="text-2xl font-bold dope-city-title">Highway 420</span>
                   </div>
                   
                   <div className="mb-8">

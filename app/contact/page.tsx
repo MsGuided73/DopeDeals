@@ -4,8 +4,8 @@ import GlobalMasthead from '../components/GlobalMasthead';
 import { Mail, Phone, MapPin, Clock, MessageCircle, Headphones } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us - DOPE CITY',
-  description: 'Get in touch with DOPE CITY. Customer service, support, and business inquiries welcome.',
+  title: 'Contact Us - Highway 420',
+  description: 'Get in touch with Highway 420. Customer service, support, and business inquiries welcome.',
 };
 
 export default function ContactPage() {

@@ -50,7 +50,7 @@ export default function CannabisHistoryArticle() {
           <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600 border-b border-gray-200 pb-8">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              <span>DOPE CITY Crew</span>
+              <span>Highway 420 Crew</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />

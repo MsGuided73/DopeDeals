@@ -1,7 +1,7 @@
-# Execute Dope City Database Restructure
+# Execute Highway 420 Database Restructure
 # This script runs the database restructure SQL against Supabase
 
-Write-Host "🚀 Starting Dope City Database Restructure..." -ForegroundColor Green
+Write-Host "🚀 Starting Highway 420 Database Restructure..." -ForegroundColor Green
 
 # Check if we're in the right directory
 $currentDir = Get-Location

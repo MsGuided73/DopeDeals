@@ -9,7 +9,7 @@ export default function MushroomsClientPage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Mushroom Products Collection",
-    "description": "Premium mushroom products collection at DOPE CITY",
+    "description": "Premium mushroom products collection at Highway 420",
     "url": "https://highway420store.com/mushrooms",
     "mainEntity": {
       "@type": "ItemList",

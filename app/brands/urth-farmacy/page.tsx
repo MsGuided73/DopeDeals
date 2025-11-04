@@ -6,7 +6,7 @@ import AgeVerification from '../../components/AgeVerification';
 import { supabaseServer } from '../../lib/supabase-server';
 
 export const metadata = {
-  title: 'Urth Farmacy - Premium THCA & Cannabis Products | DOPE CITY',
+  title: 'Urth Farmacy - Premium THCA & Cannabis Products | Highway 420',
   description: 'Discover Urth Farmacy\'s premium THCA products, live resin cartridges, and innovative disposables. Pharmaceutical-grade extraction meets exotic genetics for exceptional cannabis experiences.',
   keywords: 'Urth Farmacy, THCA, live resin, cartridges, disposables, pharmaceutical grade, cannabis extraction, exotic genetics',
 };

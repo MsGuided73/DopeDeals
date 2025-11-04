@@ -52,7 +52,7 @@ export default function BlogPage() {
       id: 'cannabis-history-global',
       title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
       excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
-      author: 'DOPE CITY Crew',
+      author: 'Highway 420 Crew',
       date: '2024-01-15',
       category: 'Culture',
       image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
@@ -63,7 +63,7 @@ export default function BlogPage() {
       id: 'ultimate-bong-guide',
       title: 'The Ultimate Guide to Picking the Perfect Bong',
       excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
-      author: 'DOPE CITY Team',
+      author: 'Highway 420 Team',
       date: '2024-01-15',
       category: 'Education',
       image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
@@ -74,7 +74,7 @@ export default function BlogPage() {
       id: '1',
       title: 'The Ultimate Guide to Choosing Your First Dab Rig',
       excerpt: 'Everything you need to know about selecting the perfect dab rig for your concentrate experience. From materials to size, we cover it all.',
-      author: 'DOPE CITY Team',
+      author: 'Highway 420 Team',
       date: '2024-01-15',
       category: 'Education',
       image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
@@ -96,7 +96,7 @@ export default function BlogPage() {
       id: '3',
       title: 'New Arrivals: Premium Glass Collection',
       excerpt: 'Check out our latest collection of premium glass pieces from top artists. Limited edition designs now available.',
-      author: 'DOPE CITY Team',
+      author: 'Highway 420 Team',
       date: '2024-01-10',
       category: 'Product News',
       image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=400&fit=crop',
@@ -161,7 +161,7 @@ export default function BlogPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-chalets-legweb text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
-            DOPE CITY BLOG
+            Highway 420 BLOG
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Stay informed with the latest news, education, and insights from the world of premium smoking culture.
@@ -319,7 +319,7 @@ export default function BlogPage() {
             Stay in the Loop
           </h2>
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            Subscribe to our newsletter for the latest articles, product updates, and exclusive insights from the DOPE CITY team.
+            Subscribe to our newsletter for the latest articles, product updates, and exclusive insights from the Highway 420 team.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input

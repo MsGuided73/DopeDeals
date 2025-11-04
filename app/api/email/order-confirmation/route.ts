@@ -54,14 +54,14 @@ function generateOrderConfirmationHTML(data: OrderConfirmationEmail): string {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Order Confirmation - DOPE CITY</title>
+      <title>Order Confirmation - Highway 420</title>
     </head>
     <body style="font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; background-color: #f9fafb; color: #111827;">
       <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #000000 0%, #1f2937 100%); padding: 40px 20px; text-align: center;">
           <h1 style="margin: 0; font-size: 36px; font-weight: 800; color: #ffffff; letter-spacing: 2px;">
-            DOPE CITY
+            Highway 420
           </h1>
           <p style="margin: 8px 0 0 0; font-size: 16px; color: #f97316; font-weight: 600;">
             Premium Cannabis Culture
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
     // For now, we'll simulate sending and log the email content
     console.log('📧 SENDING ORDER CONFIRMATION EMAIL:');
     console.log('To:', emailData.to);
-    console.log('Subject: Order Confirmation - DOPE CITY #' + order.order_number);
+    console.log('Subject: Order Confirmation - Highway 420 #' + order.order_number);
     console.log('Order Total:', emailData.total);
     console.log('Items:', emailData.orderItems.length);
 
@@ -259,7 +259,7 @@ export async function POST(request: NextRequest) {
     const msg = {
       to: emailData.to,
       from: 'orders@dopecity.com',
-      subject: `Order Confirmation - DOPE CITY #${order.order_number}`,
+      subject: `Order Confirmation - Highway 420 #${order.order_number}`,
       html: htmlContent,
     };
 
@@ -273,7 +273,7 @@ export async function POST(request: NextRequest) {
         order_id: orderId,
         email_type: 'order_confirmation',
         recipient: emailData.to,
-        subject: `Order Confirmation - DOPE CITY #${order.order_number}`,
+        subject: `Order Confirmation - Highway 420 #${order.order_number}`,
         content: htmlContent,
         sent_at: new Date().toISOString(),
         status: 'sent'
