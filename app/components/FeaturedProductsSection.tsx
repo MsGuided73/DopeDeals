@@ -196,7 +196,7 @@ export default function FeaturedProductsSection() {
       </div>
 
       {products.length > 0 ? (
-        <div className="grid grid-cols-2 md:flex md:overflow-x-auto md:gap-6 md:pb-4 md:px-4 gap-4 px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 px-4">
           {transformedProducts.map((transformedProduct, index) => {
             // Get the original product for cart/favorites functionality
             const product = transformedProduct.originalProduct;
@@ -204,7 +204,7 @@ export default function FeaturedProductsSection() {
               <Link
                 key={transformedProduct.id}
                 href={`/product/${transformedProduct.id}`}
-                className="product-card group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96 block"
+                className="product-card group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block"
               >
                 <div className="p-4 flex flex-col">
                   {/* TOP SECTION: Brand Name and Product Name */}

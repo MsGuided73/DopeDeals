@@ -146,7 +146,7 @@ export default function NewProductsSection() {
         </div>
 
         {/* Responsive Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 px-4">
           {productsToShow.slice(0, 8).map((product) => {
             const transformedProduct = transformProductForCard(product);
             return (
@@ -155,7 +155,7 @@ export default function NewProductsSection() {
                 href={`/product/${product.id}`}
                 className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 block"
               >
-                <div className="relative w-full aspect-[4/5] bg-white dark:bg-gray-800 overflow-hidden">
+                <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                   {transformedProduct.image_url ? (
                     <img
                       src={transformedProduct.image_url}
@@ -170,19 +170,6 @@ export default function NewProductsSection() {
                       </div>
                     </div>
                   )}
-
-                  {/* SHOP Button - Top Left */}
-                  <div className="absolute top-3 left-3 z-10">
-                    <button
-                      className="bg-black text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-gray-800 transition-colors"
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        await addToCart(product.id);
-                      }}
-                    >
-                      SHOP
-                    </button>
-                  </div>
 
                   {/* Favorite Button */}
                   <button

@@ -95,6 +95,20 @@ export default function CollectionsGrid() {
               }}
             >
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+
+              {/* SHOP Button - Top Left */}
+              <div className="absolute top-3 left-3 z-10">
+                <button
+                  className="bg-black text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg hover:bg-gray-800 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.location.href = cat.route;
+                  }}
+                >
+                  SHOP
+                </button>
+              </div>
+
               {/* Dimmer overlay — non-interactive */}
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               {/* Title layer — non-interactive */}
@@ -150,6 +164,20 @@ export default function CollectionsGrid() {
               }}
             >
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+
+              {/* SHOP Button - Top Left */}
+              <div className="absolute top-3 left-3 z-10">
+                <button
+                  className="bg-black text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg hover:bg-gray-800 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.location.href = cat.route;
+                  }}
+                >
+                  SHOP
+                </button>
+              </div>
+
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               <div className="absolute inset-0 flex items-end justify-start p-4 z-10 pointer-events-none">
                 <h1
