@@ -54,7 +54,7 @@ cp templates/SimplePageTemplate.tsx app/about/page.tsx
 ### Step 4: Update Metadata
 ```typescript
 export const metadata: Metadata = {
-  title: 'Your Page Title | DOPE CITY',
+  title: 'Your Page Title | Highway 420',
   description: 'SEO description for your page',
   keywords: 'relevant, keywords, here',
 };

@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-Comprehensive admin dashboard for managing DopeDeals products with brand and category organization.
+Comprehensive admin dashboard for managing Highway 420's products with brand and category organization.
 
 **Location:** `/admin/products`
 
