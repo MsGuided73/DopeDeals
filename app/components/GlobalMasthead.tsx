@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu } from "lucide-react";
-import EnhancedSearchBar from "./EnhancedSearchBar";
 import { useCart } from "../contexts/CartContext";
 import { useNavigation } from "../contexts/NavigationContext";
 
@@ -442,7 +441,7 @@ export default function GlobalMasthead() {
             "
           >
             <div className="flex items-center justify-center">
-              <EnhancedSearchBar />
+              {/* Search bar removed - using flexible original search bar */}
             </div>
           </div>
 
@@ -491,10 +490,7 @@ export default function GlobalMasthead() {
         </div>
       </header>
 
-      {/* Mobile Search (only mobile) */}
-      <div className="md:hidden bg-black text-white px-4 pb-4">
-        <EnhancedSearchBar />
-      </div>
+      {/* Mobile Search (only mobile) - removed, using flexible original search bar */}
 
       {/* Mobile Menu */}
       {isMenuOpen && (

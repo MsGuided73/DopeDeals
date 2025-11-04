@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import EnhancedSearchBar from '../components/EnhancedSearchBar';
 
 interface PageInfo {
   path: string;
@@ -108,7 +107,7 @@ export default function SiteMapPage() {
               </Link>
             </div>
             <div className="flex-1 max-w-2xl mx-8">
-              <EnhancedSearchBar />
+              {/* Search bar removed - using flexible original search bar */}
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/account" className="p-2 hover:bg-gray-800 rounded-md">

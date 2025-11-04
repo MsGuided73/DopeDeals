@@ -23,7 +23,6 @@ import Highway420Header from '../components/DopeCityHeader';
 import Highway420Footer from '../components/Highway420Footer';
 
 // === NAVIGATION & SEARCH ===
-import EnhancedSearchBar from '../app/components/EnhancedSearchBar';
 import BrandDropdown from '../components/BrandDropdown';
 
 // === USER INTERACTION COMPONENTS ===
@@ -206,14 +205,7 @@ export default function PageTemplate({
         {/* Alternative Header (choose one) */}
         {/* <Highway420Header /> */}
         
-        {/* Enhanced Search Bar (if needed separately) */}
-        {showSearch && (
-          <div className="bg-gray-50 py-4">
-            <div className="max-w-6xl mx-auto px-6">
-              <EnhancedSearchBar />
-            </div>
-          </div>
-        )}
+        {/* Enhanced Search Bar (if needed separately) - removed, using flexible original search bar */}
 
         {/* Personalized Greeting */}
         <PersonalizedGreeting />
