@@ -65,7 +65,7 @@ export default function BlogPage() {
       excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
       author: 'Highway 420 Team',
       date: '2024-01-15',
-      category: 'Education',
+      category: 'Product News',
       image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
       readTime: '12 min read',
       featured: true
@@ -76,7 +76,7 @@ export default function BlogPage() {
       excerpt: 'Everything you need to know about selecting the perfect dab rig for your concentrate experience. From materials to size, we cover it all.',
       author: 'Highway 420 Team',
       date: '2024-01-15',
-      category: 'Education',
+      category: 'Product News',
       image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
       readTime: '8 min read',
       featured: true
@@ -149,7 +149,7 @@ export default function BlogPage() {
     }, 1500);
   };
 
-  const categories = ['All', 'Education', 'Science', 'Product News', 'Maintenance', 'Technology', 'Culture'];
+  const categories = ['All', 'Science', 'Product News', 'Maintenance', 'Technology', 'Culture'];
   const featuredPosts = blogPosts.filter(post => post.featured);
   const regularPosts = blogPosts.filter(post => !post.featured);
 
@@ -160,11 +160,11 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-chalets-legweb text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Highway 420 BLOG
+          <h1 className="text-4xl text-gray-900 mb-4" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+            Higher Learning
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Stay informed with the latest news, education, and insights from the world of premium smoking culture.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+            Stay informed with the latest news and insights from the world of premium smoking culture.
           </p>
         </div>
 
@@ -232,7 +232,7 @@ export default function BlogPage() {
         {/* Featured Posts */}
         {featuredPosts.length > 0 && (
           <section className="mb-16">
-            <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-8" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-2xl text-gray-900 mb-8" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
               Featured Articles
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -277,7 +277,7 @@ export default function BlogPage() {
 
         {/* Regular Posts */}
         <section>
-          <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-8" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-2xl text-gray-900 mb-8" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
             Latest Articles
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -315,7 +315,7 @@ export default function BlogPage() {
 
         {/* Newsletter Signup */}
         <section className="mt-16 bg-gray-900 rounded-2xl p-8 text-center text-white">
-          <h2 className="text-2xl font-chalets-legweb mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-2xl mb-4" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
             Stay in the Loop
           </h2>
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
@@ -338,7 +338,7 @@ export default function BlogPage() {
 
         {/* Popular Tags */}
         <section className="mt-16">
-          <h2 className="text-2xl font-chalets-legweb text-gray-900 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-2xl text-gray-900 mb-6" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
             Popular Topics
           </h2>
           <div className="flex flex-wrap gap-3">
