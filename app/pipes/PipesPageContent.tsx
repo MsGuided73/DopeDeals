@@ -57,6 +57,7 @@ export default function PipesPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [activeCategory, setActiveCategory] = useState('all-pipes');
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
@@ -130,6 +131,48 @@ export default function PipesPageContent() {
   // Apply filters and sorting
   useEffect(() => {
     let filtered = [...products];
+
+    // Apply category filter first
+    if (activeCategory !== 'all-pipes') {
+      switch (activeCategory) {
+        case 'spoon-pipes':
+          filtered = filtered.filter((p: PipeProduct) =>
+            p.name?.toLowerCase().includes('spoon') ||
+            p.description?.toLowerCase().includes('spoon') ||
+            p.short_description?.toLowerCase().includes('spoon') ||
+            p.style?.toLowerCase().includes('spoon')
+          );
+          break;
+        case 'chillums':
+          filtered = filtered.filter((p: PipeProduct) =>
+            p.name?.toLowerCase().includes('chillum') ||
+            p.description?.toLowerCase().includes('chillum') ||
+            p.short_description?.toLowerCase().includes('chillum') ||
+            p.style?.toLowerCase().includes('chillum')
+          );
+          break;
+        case 'sherlock-pipes':
+          filtered = filtered.filter((p: PipeProduct) =>
+            p.name?.toLowerCase().includes('sherlock') ||
+            p.description?.toLowerCase().includes('sherlock') ||
+            p.short_description?.toLowerCase().includes('sherlock') ||
+            p.style?.toLowerCase().includes('sherlock')
+          );
+          break;
+        case 'one-hitters':
+          filtered = filtered.filter((p: PipeProduct) =>
+            p.name?.toLowerCase().includes('one hitter') ||
+            p.name?.toLowerCase().includes('one-hitter') ||
+            p.description?.toLowerCase().includes('one hitter') ||
+            p.description?.toLowerCase().includes('one-hitter') ||
+            p.short_description?.toLowerCase().includes('one hitter') ||
+            p.short_description?.toLowerCase().includes('one-hitter') ||
+            p.style?.toLowerCase().includes('one hitter') ||
+            p.style?.toLowerCase().includes('one-hitter')
+          );
+          break;
+      }
+    }
 
     // Apply search query filter first
     if (searchQuery.trim()) {
@@ -219,7 +262,7 @@ export default function PipesPageContent() {
 
     setFilteredProducts(filtered);
     setCurrentPage(1);
-  }, [products, filters, sortBy, searchQuery]);
+  }, [products, filters, sortBy, searchQuery, activeCategory]);
 
   // Pagination
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -236,7 +279,10 @@ export default function PipesPageContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       <PipesBreadcrumb />
-      <PipesHero />
+      <PipesHero
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+      />
       <PipesInfoSection />
 
       {/* Active Filters Bar */}

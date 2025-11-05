@@ -2,8 +2,12 @@
 
 import { useState } from 'react';
 
-export default function PipesHero() {
-  const [activeCategory, setActiveCategory] = useState('all-pipes');
+interface PipesHeroProps {
+  activeCategory: string;
+  setActiveCategory: (category: string) => void;
+}
+
+export default function PipesHero({ activeCategory, setActiveCategory }: PipesHeroProps) {
 
   return (
     <div className="bg-white text-black overflow-hidden min-h-[300px] md:min-h-[250px] py-12 px-4 sm:px-6 lg:px-8">
