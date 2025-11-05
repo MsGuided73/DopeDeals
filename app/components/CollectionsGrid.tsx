@@ -58,8 +58,8 @@ export default function CollectionsGrid() {
   };
 
   return (
-    // Strong local stacking context so siblings (e.g., blog) can't sit on top
-    <div className="relative z-50 isolate w-full px-2 pt-1 pb-4">
+    // Lower z-index so dropdown menus can appear on top
+    <div className="relative z-10 isolate w-full px-2 pt-1 pb-4">
       {/* Mobile: Stack vertically */}
       <div className="block lg:hidden space-y-2">
         {/* Large hero image first on mobile */}

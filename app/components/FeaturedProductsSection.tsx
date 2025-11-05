@@ -196,130 +196,254 @@ export default function FeaturedProductsSection() {
       </div>
 
       {products.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 px-4">
-          {transformedProducts.map((transformedProduct, index) => {
-            // Get the original product for cart/favorites functionality
-            const product = transformedProduct.originalProduct;
-            return (
-              <Link
-                key={transformedProduct.id}
-                href={`/product/${transformedProduct.id}`}
-                className="product-card group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block"
-              >
-                <div className="p-4 flex flex-col">
-                  {/* TOP SECTION: Brand Name and Product Name */}
-                  <div className="mb-4">
-                    <p className="text-sm font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
-                      {transformedProduct.brand_name?.toUpperCase() || 'STORE BRAND'}
-                    </p>
-                    <h3 className="font-bold text-gray-900 text-xl leading-tight line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
-                      {transformedProduct.name}
-                    </h3>
-                  </div>
+        <>
+          {/* Mobile: Grid layout */}
+          <div className="block lg:hidden">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-4">
+              {transformedProducts.slice(0, 6).map((transformedProduct, index) => {
+                // Get the original product for cart/favorites functionality
+                const product = transformedProduct.originalProduct;
+                return (
+                  <Link
+                    key={transformedProduct.id}
+                    href={`/product/${transformedProduct.id}`}
+                    className="product-card group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block"
+                  >
+                    <div className="p-4 flex flex-col">
+                      {/* TOP SECTION: Brand Name and Product Name */}
+                      <div className="mb-4">
+                        <p className="text-sm font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                          {transformedProduct.brand_name?.toUpperCase() || 'STORE BRAND'}
+                        </p>
+                        <h3 className="font-bold text-gray-900 text-xl leading-tight line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                          {transformedProduct.name}
+                        </h3>
+                      </div>
 
-                  {/* MIDDLE SECTION: Image with badges */}
-                  <div className="relative w-full h-80 bg-gray-50 overflow-hidden rounded-lg mb-4">
-                    {transformedProduct.image_url ? (
-                      <img
-                        src={transformedProduct.image_url}
-                        alt={transformedProduct.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                        <div className="text-center">
-                          <div className="text-4xl mb-2">📦</div>
-                          <div className="text-sm font-medium">No Image</div>
+                      {/* MIDDLE SECTION: Image with badges */}
+                      <div className="relative w-full h-80 bg-gray-50 overflow-hidden rounded-lg mb-4">
+                        {transformedProduct.image_url ? (
+                          <img
+                            src={transformedProduct.image_url}
+                            alt={transformedProduct.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                            <div className="text-center">
+                              <div className="text-4xl mb-2">📦</div>
+                              <div className="text-sm font-medium">No Image</div>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="absolute top-3 left-3 flex flex-col gap-2">
+                          {transformedProduct.featured && (
+                            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                              ⭐ Featured
+                            </div>
+                          )}
+                          {transformedProduct.discount_percentage && (
+                            <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                              -{transformedProduct.discount_percentage}% OFF
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="absolute top-3 right-3">
+                          <button
+                            className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 lg:opacity-100 transition-all duration-300 hover:scale-110"
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+
+                              if (!product.sku) {
+                                console.error('Product SKU missing for favorites');
+                                toast.error('Unable to favorite this product');
+                                return;
+                              }
+
+                              const success = await toggleFavorite(product.sku.toString());
+                              if (success) {
+                                const isCurrentlyFavorite = isFavorite(product.sku.toString());
+                                toast.success(isCurrentlyFavorite ? 'Added to favorites!' : 'Removed from favorites');
+                              } else {
+                                toast.error('Failed to update favorites');
+                              }
+                            }}
+                          >
+                            <svg
+                              className={`w-5 h-5 transition-colors duration-200 ${
+                                isFavorite(product.sku || '') ? 'text-red-500 fill-red-500' : 'text-gray-700'
+                              }`}
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                              />
+                            </svg>
+                          </button>
                         </div>
                       </div>
-                    )}
 
-                    <div className="absolute top-3 left-3 flex flex-col gap-2">
-                      {transformedProduct.featured && (
-                        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                          ⭐ Featured
+                      {/* Short description */}
+                      <p className="text-base font-semibold text-gray-600 mb-4 line-clamp-2">
+                        {transformedProduct.short_description}
+                      </p>
+
+                      {/* BOTTOM SECTION: Price and Buttons */}
+                      <div className="mt-auto">
+                        <div className="mb-4">
+                          {/* Enhanced price display with fallbacks */}
+                          <div className="text-2xl font-bold text-gray-900">
+                            {transformedProduct.price && !isNaN(parseFloat(transformedProduct.price))
+                              ? `$${parseFloat(transformedProduct.price).toFixed(2)}`
+                              : 'Price Unavailable'
+                            }
+                          </div>
                         </div>
-                      )}
-                      {transformedProduct.discount_percentage && (
-                        <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                          -{transformedProduct.discount_percentage}% OFF
-                        </div>
-                      )}
+
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            try {
+                              await addToCart(product.id, 1);
+                            } catch (error) {
+                              console.error('Failed to add to cart:', error);
+                            }
+                          }}
+                          className="w-full px-4 py-2.5 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-base hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg"
+                          style={{
+                            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                            letterSpacing: '0.05em',
+                          }}
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Desktop: Horizontal scrolling */}
+          <div className="hidden lg:flex lg:overflow-x-auto lg:gap-6 lg:pb-4 lg:px-4 featured-products-scroll">
+            {transformedProducts.map((transformedProduct, index) => {
+              // Get the original product for cart/favorites functionality
+              const product = transformedProduct.originalProduct;
+              return (
+                <Link
+                  key={transformedProduct.id}
+                  href={`/product/${transformedProduct.id}`}
+                  className="product-card group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-96"
+                >
+                  <div className="p-4 flex flex-col">
+                    {/* TOP SECTION: Brand Name and Product Name */}
+                    <div className="mb-4">
+                      <p className="text-sm font-bold text-dope-orange-600 mb-1 uppercase tracking-wide">
+                        {transformedProduct.brand_name?.toUpperCase() || 'STORE BRAND'}
+                      </p>
+                      <h3 className="font-bold text-gray-900 text-xl leading-tight line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
+                        {transformedProduct.name}
+                      </h3>
                     </div>
 
-                    <div className="absolute top-3 right-3">
-                      <button
-                        className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 lg:opacity-100 transition-all duration-300 hover:scale-110"
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
+                    {/* MIDDLE SECTION: Image with badges */}
+                    <div className="relative w-full h-80 bg-gray-50 overflow-hidden rounded-lg mb-4">
+                      {transformedProduct.image_url ? (
+                        <img
+                          src={transformedProduct.image_url}
+                          alt={transformedProduct.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                          <div className="text-center">
+                            <div className="text-4xl mb-2">📦</div>
+                            <div className="text-sm font-medium">No Image</div>
+                          </div>
+                        </div>
+                      )}
 
-                          if (!product.sku) {
-                            console.error('Product SKU missing for favorites');
-                            toast.error('Unable to favorite this product');
-                            return;
-                          }
+                      <div className="absolute top-3 left-3 flex flex-col gap-2">
+                        {transformedProduct.featured && (
+                          <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                            ⭐ Featured
+                          </div>
+                        )}
+                        {transformedProduct.discount_percentage && (
+                          <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                            -{transformedProduct.discount_percentage}% OFF
+                          </div>
+                        )}
+                      </div>
 
-                          const success = await toggleFavorite(product.sku.toString());
-                          if (success) {
-                            const isCurrentlyFavorite = isFavorite(product.sku.toString());
-                            toast.success(isCurrentlyFavorite ? 'Added to favorites!' : 'Removed from favorites');
-                          } else {
-                            toast.error('Failed to update favorites');
-                          }
-                        }}
-                      >
-                        <svg
-                          className={`w-5 h-5 transition-colors duration-200 ${
-                            isFavorite(product.sku || '') ? 'text-red-500 fill-red-500' : 'text-gray-700'
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                      <div className="absolute top-3 right-3">
+                        <button
+                          className="bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 lg:opacity-100 transition-all duration-300 hover:scale-110"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+
+                            if (!product.sku) {
+                              console.error('Product SKU missing for favorites');
+                              toast.error('Unable to favorite this product');
+                              return;
+                            }
+
+                            const success = await toggleFavorite(product.sku.toString());
+                            if (success) {
+                              const isCurrentlyFavorite = isFavorite(product.sku.toString());
+                              toast.success(isCurrentlyFavorite ? 'Added to favorites!' : 'Removed from favorites');
+                            } else {
+                              toast.error('Failed to update favorites');
+                            }
+                          }}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                          <svg
+                            className={`w-5 h-5 transition-colors duration-200 ${
+                              isFavorite(product.sku || '') ? 'text-red-500 fill-red-500' : 'text-gray-700'
+                            }`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                            />
                           />
                         </svg>
                       </button>
-                    </div>
-                  </div>
-
-                  {/* Short description */}
-                  <p className="text-base font-semibold text-gray-600 mb-4 line-clamp-2">
-                    {transformedProduct.short_description}
-                  </p>
-
-                  {/* BOTTOM SECTION: Price and Buttons */}
-                  <div className="mt-auto">
-                    <div className="mb-4">
-                      {/* Enhanced price display with fallbacks */}
-                      <div className="text-2xl font-bold text-gray-900">
-                        {transformedProduct.price && !isNaN(parseFloat(transformedProduct.price))
-                          ? `$${parseFloat(transformedProduct.price).toFixed(2)}`
-                          : 'Price Unavailable'
-                        }
                       </div>
                     </div>
 
-                    <div className="flex gap-3" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/product/${product.id}`);
-                        }}
-                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg"
-                        style={{
-                          fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                          fontWeight: 'normal',
-                          letterSpacing: '0.05em',
-                        }}
-                      >
-                        Learn More
-                      </button>
+                    {/* Short description */}
+                    <p className="text-base font-semibold text-gray-600 mb-4 line-clamp-2">
+                      {transformedProduct.short_description}
+                    </p>
+
+                    {/* BOTTOM SECTION: Price and Buttons */}
+                    <div className="mt-auto">
+                      <div className="mb-4">
+                        {/* Enhanced price display with fallbacks */}
+                        <div className="text-2xl font-bold text-gray-900">
+                          {transformedProduct.price && !isNaN(parseFloat(transformedProduct.price))
+                            ? `$${parseFloat(transformedProduct.price).toFixed(2)}`
+                            : 'Price Unavailable'
+                          }
+                        </div>
+                      </div>
+
                       <button
                         onClick={async (e) => {
                           e.stopPropagation();
@@ -329,10 +453,9 @@ export default function FeaturedProductsSection() {
                             console.error('Failed to add to cart:', error);
                           }
                         }}
-                        className="flex-1 px-4 py-2.5 bg-transparent text-green-600 border-2 border-green-600 font-black rounded-full transition-all duration-300 text-center text-base font-highway uppercase tracking-wide hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg"
+                        className="w-full px-4 py-2.5 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-base hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg"
                         style={{
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                          fontWeight: 'normal',
                           letterSpacing: '0.05em',
                         }}
                       >
@@ -340,11 +463,11 @@ export default function FeaturedProductsSection() {
                       </button>
                     </div>
                   </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                </Link>
+              );
+            })}
+          </div>
+        </>
       ) : (
         <div className="text-center py-12">
           <div className="text-gray-500 text-lg mb-2">No featured products available</div>

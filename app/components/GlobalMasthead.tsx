@@ -7,6 +7,7 @@ import Image from "next/image";
 import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import { useNavigation } from "../contexts/NavigationContext";
+import EnhancedSearchBar from "./EnhancedSearchBar";
 
 const PROMO_TEXT = "🚀 FREE SHIPPING ON ORDERS OVER $75 • 🔥 HOT DEALS DAILY • 🌿 PREMIUM QUALITY GUARANTEED";
 
@@ -490,7 +491,10 @@ export default function GlobalMasthead() {
         </div>
       </header>
 
-      {/* Mobile Search (only mobile) - removed, using flexible original search bar */}
+      {/* Mobile Search (only mobile) */}
+      <div className="md:hidden bg-black px-4 py-3 border-t border-gray-800">
+        <EnhancedSearchBar />
+      </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (

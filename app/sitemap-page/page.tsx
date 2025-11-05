@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import EnhancedSearchBar from '../components/EnhancedSearchBar';
 
 interface PageInfo {
   path: string;
@@ -107,7 +108,7 @@ export default function SiteMapPage() {
               </Link>
             </div>
             <div className="flex-1 max-w-2xl mx-8">
-              {/* Search bar removed - using flexible original search bar */}
+              <EnhancedSearchBar />
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/account" className="p-2 hover:bg-gray-800 rounded-md">
@@ -150,10 +151,8 @@ export default function SiteMapPage() {
             </h1>
             <button
               onClick={refreshSitemap}
-              className="flex items-center space-x-2 px-4 py-2 text-white rounded-md transition-colors"
-              style={{ backgroundColor: '#fa6934', hover: { backgroundColor: '#e55a2b' } }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e55a2b'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fa6934'}
+              className="flex items-center space-x-2 px-4 py-2 text-white rounded-md transition-colors hover:bg-orange-600"
+              style={{ backgroundColor: '#fa6934' }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

@@ -99,7 +99,7 @@ app/brands/brand-name/
 ### Optional Components (Include as Needed)
 - `AgeVerification` - Age verification modal
 - `PersonalizedGreeting` - User greeting
-- `EnhancedSearchBar` - Advanced search
+- `EnhancedSearchBar` - Advanced search with autosuggest
 - `AIProductChat` - AI chat widget
 - `ProductRecommendations` - Product suggestions
 - `DopeClubSignup` - Newsletter signup
@@ -109,6 +109,30 @@ app/brands/brand-name/
 - `Toast`, `Toaster` - Notifications
 - `Tooltip` - Help text
 - `Switch` - Toggle controls
+
+## 🔍 Search Components
+
+### Global Search (Always Available)
+- **GlobalMasthead** - Includes search in header (mobile) and navigation
+- **Location**: Automatically included on all pages
+- **Features**: Basic search with navigation to search results page
+
+### Enhanced Search Bar (Optional)
+- **Component**: `EnhancedSearchBar`
+- **Import Path**: `import EnhancedSearchBar from '../app/components/EnhancedSearchBar'`
+- **Props**: None required (self-contained component)
+- **Features**:
+  - Autosuggest with product, brand, and category suggestions
+  - Animated placeholder text
+  - Real-time search suggestions
+  - Direct navigation to product/category pages
+- **Usage**:
+  ```tsx
+  <div className="max-w-4xl mx-auto px-6 py-8">
+    <EnhancedSearchBar />
+  </div>
+  ```
+- **When to Use**: Add to pages that need prominent search functionality beyond the global header search
 
 ## 🔧 Common Patterns
 

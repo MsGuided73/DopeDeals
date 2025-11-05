@@ -24,6 +24,7 @@ import Highway420Footer from '../components/Highway420Footer';
 
 // === NAVIGATION & SEARCH ===
 import BrandDropdown from '../components/BrandDropdown';
+import EnhancedSearchBar from '../app/components/EnhancedSearchBar';
 
 // === USER INTERACTION COMPONENTS ===
 import AgeVerification from '../app/components/AgeVerification';
@@ -204,8 +205,14 @@ export default function PageTemplate({
         
         {/* Alternative Header (choose one) */}
         {/* <Highway420Header /> */}
-        
-        {/* Enhanced Search Bar (if needed separately) - removed, using flexible original search bar */}
+
+        {/* Enhanced Search Bar - Use this component for additional search functionality on pages */}
+        {/* Import: import EnhancedSearchBar from '../app/components/EnhancedSearchBar' */}
+        {/* Props: None required - self-contained component with autosuggest */}
+        {/* Uncomment below to add search bar to this page: */}
+        {/* <div className="max-w-4xl mx-auto px-6 py-8">
+          <EnhancedSearchBar />
+        </div> */}
 
         {/* Personalized Greeting */}
         <PersonalizedGreeting />
