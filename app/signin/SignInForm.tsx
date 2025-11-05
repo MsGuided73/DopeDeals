@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,6 +12,14 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  // Initialize remember me from localStorage on component mount
+  useEffect(() => {
+    const storedRememberMe = localStorage.getItem('rememberMe');
+    if (storedRememberMe === 'true') {
+      setRememberMe(true);
+    }
+  }, []);
 
   const { signIn } = useAuth();
   const router = useRouter();
@@ -27,7 +35,7 @@ export default function SignInForm() {
     setLoading(true);
 
     try {
-      const result = await signIn(email, password);
+      const result = await signIn(email, password, rememberMe);
 
       if (result.error) {
         toast.error(result.error);

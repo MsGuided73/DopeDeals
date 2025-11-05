@@ -9,7 +9,7 @@ interface AuthContextType {
   user: AuthenticatedUser | null;
   session: Session | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ error?: string }>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: any) => Promise<{ error?: string }>;
@@ -126,7 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Sign in function
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, rememberMe?: boolean) => {
     try {
       const { error } = await supabaseBrowser.auth.signInWithPassword({
         email,
@@ -135,6 +135,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         return { error: error.message };
+      }
+
+      // Store remember me preference for client-side persistence logic
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
+      } else {
+        localStorage.removeItem('rememberMe');
       }
 
       return {};
