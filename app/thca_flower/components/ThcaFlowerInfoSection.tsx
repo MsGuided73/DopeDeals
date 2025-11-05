@@ -183,6 +183,99 @@ export default function ThcaFlowerInfoSection() {
                   </div>
 
                   <div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">❓ THCA Flower FAQ</h2>
+
+                    <div className="space-y-6">
+                      <div className="bg-blue-50 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">What makes THCA Flower different from regular cannabis?</h3>
+                        <p className="text-gray-700 mb-3">
+                          THCA (Tetrahydrocannabinolic Acid) is the raw, non-psychoactive precursor to THC found naturally in hemp plants.
+                          Unlike traditional cannabis flower that contains high levels of THC, THCA flower contains less than 0.3% Delta-9 THC,
+                          making it federally legal and non-intoxicating.
+                        </p>
+                        <p className="text-gray-700">
+                          THCA flower offers wellness benefits without the "high" associated with THC-dominant products. It's perfect for
+                          daytime use, wellness routines, and those seeking natural hemp-derived alternatives.
+                        </p>
+                      </div>
+
+                      <div className="bg-green-50 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Why is THCA Flower legal?</h3>
+                        <p className="text-gray-700 mb-3">
+                          THCA flower is legal because it contains less than 0.3% Delta-9 THC by dry weight, qualifying it as hemp under
+                          the 2018 Farm Bill. This federal law legalized hemp and hemp-derived products containing no more than 0.3% THC.
+                        </p>
+                        <p className="text-gray-700">
+                          Our THCA flower is compliant with all federal regulations and undergoes rigorous third-party lab testing to
+                          ensure THC levels remain below the legal threshold. This makes it available nationwide without the restrictions
+                          that apply to THC-dominant cannabis products.
+                        </p>
+                      </div>
+
+                      <div className="bg-purple-50 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">How do I use THCA Flower?</h3>
+                        <p className="text-gray-700 mb-3">
+                          THCA flower can be enjoyed in several ways:
+                        </p>
+                        <ul className="list-disc list-inside text-gray-700 space-y-1 mb-3">
+                          <li><strong>Smoking:</strong> Use with pipes, bongs, or vaporizers for immediate effects</li>
+                          <li><strong>Vaporizing:</strong> Low-temperature vaping preserves THCA content</li>
+                          <li><strong>Topicals:</strong> Can be infused into oils for external wellness applications</li>
+                          <li><strong>Edibles:</strong> Decarboxylate first by heating to convert THCA to THC</li>
+                        </ul>
+                        <p className="text-gray-700">
+                          Start with small amounts and increase gradually to find your optimal dosage.
+                        </p>
+                      </div>
+
+                      <div className="bg-yellow-50 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">What are the benefits of THCA Flower?</h3>
+                        <p className="text-gray-700 mb-3">
+                          THCA flower offers various wellness benefits including:
+                        </p>
+                        <ul className="list-disc list-inside text-gray-700 space-y-1 mb-3">
+                          <li>Natural anti-inflammatory properties</li>
+                          <li>Potential neuroprotective effects</li>
+                          <li>Support for overall wellness and balance</li>
+                          <li>Non-psychoactive alternative to traditional cannabis</li>
+                          <li>Rich in beneficial hemp compounds and terpenes</li>
+                        </ul>
+                        <p className="text-gray-700 text-sm">
+                          *Individual results may vary. Consult with a healthcare professional before use.
+                        </p>
+                      </div>
+
+                      <div className="bg-indigo-50 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Is THCA Flower drug-tested safe?</h3>
+                        <p className="text-gray-700 mb-3">
+                          Yes! THCA flower contains less than 0.3% Delta-9 THC, which is below the threshold that most standard drug tests
+                          screen for. However, individual testing protocols may vary, and we always recommend checking with your specific
+                          testing requirements.
+                        </p>
+                        <p className="text-gray-700">
+                          Our products are lab-tested to ensure compliance and purity. All test results are available for customer review.
+                        </p>
+                      </div>
+
+                      <div className="bg-pink-50 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">How should I store THCA Flower?</h3>
+                        <p className="text-gray-700 mb-3">
+                          To maintain optimal freshness and potency:
+                        </p>
+                        <ul className="list-disc list-inside text-gray-700 space-y-1 mb-3">
+                          <li>Store in a cool, dark place away from direct sunlight</li>
+                          <li>Use airtight containers to prevent moisture and air exposure</li>
+                          <li>Avoid temperature fluctuations and humidity</li>
+                          <li>Keep away from strong odors that could be absorbed</li>
+                        </ul>
+                        <p className="text-gray-700">
+                          Proper storage can extend the shelf life and maintain the quality of your THCA flower for months.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">📦 Shipping & Returns</h2>
                     <p className="text-lg">
                       Free shipping on orders over $50. Discreet packaging and fast delivery.
