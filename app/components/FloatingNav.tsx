@@ -133,7 +133,7 @@ export default function FloatingNav() {
                               onMouseLeave={() => handleMouseLeaveWithDelay("nested")}
                             >
                               <div className="py-2">
-                                <Link href="/thca#flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
+                                <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
                                   ⭐ THCA Flower
                                 </Link>
                                 <Link href="/thca#prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
@@ -244,7 +244,7 @@ export default function FloatingNav() {
               onMouseLeave={() => handleMouseLeaveWithDelay("main")}
             >
               <div className="py-2">
-                <Link href="/thca#flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
+                <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
                   THCA Flower
                 </Link>
                 <Link href="/thca#prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
