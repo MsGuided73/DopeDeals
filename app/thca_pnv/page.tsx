@@ -4,12 +4,12 @@ import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
-  title: 'THCA Prerolls & Vapes | Highway 420 - Premium Cannabis Products',
-  description: 'Shop premium THCA prerolls and vaporizer products at Highway 420. High-quality cannabis prerolls, THCA cartridges, and vape products. Free shipping $50+.',
-  keywords: 'THCA prerolls, THCA cartridges, vape products, cannabis prerolls, premium prerolls, THCA flower prerolls, cannabis vaporizers',
+  title: 'THCA Prerolls, Cartridges & Vapes | Highway 420 - Premium Cannabis Products',
+  description: 'Shop premium THCA prerolls, cartridges, and vaporizer products at Highway 420. High-quality cannabis prerolls, THCA cartridges, disposable vapes, and vape products. Free shipping $50+.',
+  keywords: 'THCA prerolls, THCA cartridges, vape products, cannabis prerolls, premium prerolls, THCA flower prerolls, cannabis vaporizers, THCA disposables, THCA vapes, cartridge, preroll, vape pen',
   openGraph: {
-    title: 'THCA Prerolls & Vapes | Highway 420',
-    description: 'Discover premium THCA prerolls and vape products. Quality cannabis prerolls, cartridges, and vaporizers with free shipping.',
+    title: 'THCA Prerolls, Cartridges & Vapes | Highway 420',
+    description: 'Discover premium THCA prerolls, cartridges, and vape products. Quality cannabis prerolls, cartridges, and vaporizers with free shipping.',
     type: 'website',
     url: 'https://highway420store.com/thca_pnv',
     images: [
@@ -17,14 +17,14 @@ export const metadata = {
         url: '/images/thca_pnv/thca-collection-og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Highway 420 Premium THCA Prerolls and Vapes Collection',
+        alt: 'Highway 420 Premium THCA Prerolls, Cartridges and Vapes Collection',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'THCA Prerolls & Vapes | Highway 420',
-    description: 'Shop premium THCA prerolls and vape products. Free shipping $50+.',
+    title: 'THCA Prerolls, Cartridges & Vapes | Highway 420',
+    description: 'Shop premium THCA prerolls, cartridges, and vape products. Free shipping $50+.',
     images: ['/images/thca_pnv/thca-collection-twitter.jpg'],
   },
   alternates: {
@@ -47,13 +47,13 @@ export default function ThcaPnvPage() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "THCA Prerolls & Vapes Collection",
-    "description": "Premium THCA prerolls and vaporizer products at Highway 420",
+    "name": "THCA Prerolls, Cartridges & Vapes Collection",
+    "description": "Premium THCA prerolls, cartridges, and vaporizer products at Highway 420",
     "url": "https://highway420store.com/thca_pnv",
     "mainEntity": {
       "@type": "ItemList",
-      "name": "THCA Prerolls & Vapes Collection",
-      "description": "High-quality THCA cannabis prerolls and vaporizers",
+      "name": "THCA Prerolls, Cartridges & Vapes Collection",
+      "description": "High-quality THCA cannabis prerolls, cartridges, and vaporizers",
       "numberOfItems": "100+",
       "itemListElement": [
         {
@@ -64,12 +64,17 @@ export default function ThcaPnvPage() {
         {
           "@type": "Product",
           "name": "THCA Cartridges",
-          "category": "Vaporizers"
+          "category": "THCA Cartridges"
         },
         {
           "@type": "Product",
           "name": "THCA Disposable Vapes",
-          "category": "Vaporizers"
+          "category": "THCA Disposables"
+        },
+        {
+          "@type": "Product",
+          "name": "THCA Vaporizers",
+          "category": "THCA Vaporizers"
         }
       ]
     },
@@ -91,7 +96,7 @@ export default function ThcaPnvPage() {
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "THCA Prerolls & Vapes",
+          "name": "THCA Prerolls, Cartridges & Vapes",
           "item": "https://highway420store.com/thca_pnv"
         }
       ]
