@@ -11,7 +11,6 @@ import ThcaFlowerHero from './components/ThcaFlowerHero';
 import ThcaFlowerSortBar from './components/ThcaFlowerSortBar';
 import ThcaFlowerViewToggle from './components/ThcaFlowerViewToggle';
 import ThcaFlowerInfoSection from './components/ThcaFlowerInfoSection';
-import ActiveFilters from '../components/ActiveFilters';
 
 export interface ThcaFlowerProduct {
   id: string;
@@ -245,13 +244,6 @@ export default function ThcaFlowerPageContent() {
       <ThcaFlowerBreadcrumb />
       <ThcaFlowerHero />
       <ThcaFlowerInfoSection />
-
-      {/* Active Filters Bar */}
-      <ActiveFilters
-        filters={filters}
-        setFilters={setFilters}
-        totalProducts={filteredProducts.length}
-      />
 
       {/* Search Results Header */}
       {searchQuery && (
