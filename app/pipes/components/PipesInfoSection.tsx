@@ -218,68 +218,7 @@ export default function PipesInfoSection() {
             </div>
           </div>
 
-          {/* Sidebar - Categories */}
-          <div className="lg:col-span-1">
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                HAND PIPES CATEGORIES
-                <svg className="ml-2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </h3>
 
-              <ul className="space-y-3">
-                <li>
-                  <Link
-                    href="/pipes?category=dab-straws"
-                    className="text-gray-600 hover:text-dope-orange-500 transition-colors"
-                  >
-                    Dab Straws
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pipes?category=glass-pipes"
-                    className="text-gray-600 hover:text-dope-orange-500 transition-colors"
-                  >
-                    Glass Pipes
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pipes?category=metal-pipes"
-                    className="text-gray-600 hover:text-dope-orange-500 transition-colors"
-                  >
-                    Metal Pipes
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pipes?category=wood-pipes"
-                    className="text-gray-600 hover:text-dope-orange-500 transition-colors"
-                  >
-                    Wood Pipes
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pipes?category=silicone-pipes"
-                    className="text-gray-600 hover:text-dope-orange-500 transition-colors"
-                  >
-                    Silicone Pipes
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pipes?category=stone-pipes"
-                    className="text-gray-600 hover:text-dope-orange-500 transition-colors"
-                  >
-                    Stone Pipes
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
       </div>
     </div>
