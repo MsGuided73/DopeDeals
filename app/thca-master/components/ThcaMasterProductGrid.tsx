@@ -7,7 +7,7 @@ import type { ThcaMasterProduct } from '../ThcaMasterPageContent';
 
 interface ThcaMasterProductGridProps {
   products: ThcaMasterProduct[];
-  viewMode: 'grid' | 'list' | 'sidebar';
+  viewMode: 'grid' | 'sidebar';
 }
 
 export default function ThcaMasterProductGrid({ products, viewMode }: ThcaMasterProductGridProps) {

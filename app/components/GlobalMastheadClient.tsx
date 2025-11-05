@@ -156,7 +156,7 @@ export default function GlobalMastheadClient() {
               hidden md:block
             ">
               <div className="flex items-center justify-center h-full">
-                {/* Desktop Search Bar */}
+                <EnhancedSearchBar />
               </div>
             </div>
 

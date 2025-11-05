@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
+
+// Existing components in your project
 import ErrorBoundary from '../../components/ErrorBoundary';
 import LoadingState from '../../components/LoadingState';
 import ThcaMasterFilters from './components/ThcaMasterFilters';
@@ -18,10 +18,10 @@ export interface ThcaMasterProduct {
   id: string;
   name: string;
   our_price: number;
-  sale_price?: number;
+  sale_price?: number | null;
   image_url: string | null;
-  imageUrl?: string; // Add alias for compatibility
-  image?: string; // Add alias for compatibility
+  imageUrl?: string; // alias for compatibility
+  image?: string;    // alias for compatibility
   description?: string | null;
   short_description?: string | null;
   sku: string | null;
@@ -32,32 +32,118 @@ export interface ThcaMasterProduct {
   category_id: string | null;
   created_at: string;
   updated_at: string;
-  // Add missing properties that components expect
-  price?: number; // For compatibility
+  // extra/compat fields some cards may read
+  price?: number;
   isNew?: boolean;
   isSale?: boolean;
   originalPrice?: number;
   inStock?: boolean;
-  brand?: string; // For compatibility
-  category?: string; // For compatibility
-  type?: string; // Product type (Flower, Preroll, Cartridge, Concentrate, Edible, etc.)
-  size?: string; // Product size specifications
-  cannabinoid_type?: string; // THCA, CBD, Delta, etc.
-  search_vec?: number[]; // Vector for semantic search
+  brand?: string | null;
+  category?: string | null;
+  type?: string | null;
+  size?: string | null;
+  cannabinoid_type?: string | null;
+  search_vec?: number[]; // placeholder only; not used on client
+  inventory_status?: string | null;
+}
+
+// Map UI category → server "mode" used by the universal API
+const tabToMode: Record<
+  string,
+  'thca_all' | 'thca_prerolls' | 'thca_carts' | 'thca_disposables'
+> = {
+  all: 'thca_all',
+  flower: 'thca_all',        // optional: treat as all THCA until you add a dedicated mode
+  prerolls: 'thca_prerolls',
+  cartridges: 'thca_carts',
+  disposables: 'thca_disposables',
+  concentrates: 'thca_all',
+  edibles: 'thca_all',
+  cbd: 'thca_all',
+  delta: 'thca_all',
+  mushrooms: 'thca_all',
+  nitrous: 'thca_all',
+  kratom: 'thca_all',
+};
+
+// Map local sort keys → API sort keys
+function mapSort(sortBy: string): 'featured' | 'price_asc' | 'price_desc' | 'newest' | 'rank' {
+  switch (sortBy) {
+    case 'price-low':
+      return 'price_asc';
+    case 'price-high':
+      return 'price_desc';
+    case 'newest':
+      return 'newest';
+    case 'name':
+      // API doesn't support name sort; 'rank' is the closest user-friendly ordering
+      return 'rank';
+    default:
+      return 'featured';
+  }
+}
+
+// Helper function to generate pagination page array with ellipses
+function generatePaginationPages(totalPages: number, currentPage: number, maxVisible: number = 7): (number | string)[] {
+  if (totalPages <= maxVisible) {
+    // If total pages is less than or equal to max visible, show all pages
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  const pages: (number | string)[] = [];
+  const halfVisible = Math.floor((maxVisible - 2) / 2); // -2 for first and last pages
+
+  // Always show first page
+  pages.push(1);
+
+  // Calculate start and end of sliding window
+  let start = Math.max(2, currentPage - halfVisible);
+  let end = Math.min(totalPages - 1, currentPage + halfVisible);
+
+  // Adjust window if we're near the beginning or end
+  if (currentPage - halfVisible <= 2) {
+    end = Math.min(totalPages - 1, end + (2 - (currentPage - halfVisible)));
+  }
+  if (currentPage + halfVisible >= totalPages - 1) {
+    start = Math.max(2, start - ((currentPage + halfVisible) - (totalPages - 1)));
+  }
+
+  // Add ellipsis after first page if needed
+  if (start > 2) {
+    pages.push('...');
+  }
+
+  // Add pages in the sliding window
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  // Add ellipsis before last page if needed
+  if (end < totalPages - 1) {
+    pages.push('...');
+  }
+
+  // Always show last page (if different from first)
+  if (totalPages > 1) {
+    pages.push(totalPages);
+  }
+
+  return pages;
 }
 
 export default function ThcaMasterPageContent() {
   const searchParams = useSearchParams();
+
   const [products, setProducts] = useState<ThcaMasterProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ThcaMasterProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'sidebar'>('grid');
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
-  // Filter states - expanded for master collection
+  // Filter state (client-side refinements you still want)
   const [filters, setFilters] = useState({
     priceRange: [0, 300] as [number, number],
     brands: [] as string[],
@@ -72,214 +158,187 @@ export default function ThcaMasterPageContent() {
     featured: false,
   });
 
-  // Get URL parameters for category/section navigation
+  // URL params: optional local "q" filter (client-side contains)
   const categoryParam = searchParams.get('category') || 'all';
-  const searchQuery = searchParams.get('q') || '';
+  const searchQuery = (searchParams.get('q') || '').trim().toLowerCase();
 
+  // Sync active category from URL
   useEffect(() => {
     setActiveCategory(categoryParam);
   }, [categoryParam]);
 
+  // Fetch from the universal API whenever *server-side* filters change
   useEffect(() => {
-    // Load all THCA and cannabinoid products
-    loadThcaMasterProducts();
-  }, []);
+    loadFromUniversalApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCategory, filters.priceRange, filters.inStock, filters.onSale, sortBy]);
 
+  // Apply *client-side* filters/sort after we fetch
   useEffect(() => {
-    // Apply filters and sorting
-    let filtered = [...products];
+    let next = [...products];
 
-    // Apply category filter first
-    if (activeCategory !== 'all') {
-      filtered = filtered.filter(product => {
-        const categoryMap: Record<string, string[]> = {
-          'flower': ['THCA Flower', 'Flower', 'THCA'],
-          'prerolls': ['THCA Prerolls', 'Prerolls', 'Pre-Rolls'],
-          'cartridges': ['THCA Cartridges', 'Cartridges', 'Vape Cartridges'],
-          'concentrates': ['THCA Concentrates', 'Concentrates', 'Rosin', 'THCA Rosin'],
-          'edibles': ['Edibles', 'THCA Edibles', 'Cannabis Edibles'],
-          'cbd': ['CBD', 'CBD Products', 'Wellness'],
-          'delta': ['Delta', 'Delta Products', 'Delta-8', 'Delta-9'],
-          'mushrooms': ['Mushrooms', 'Psychedelic Mushrooms'],
-          'nitrous': ['Nitrous Oxide', 'Whippits'],
-          'kratom': ['7-Hydroxymitragynine', 'Kratom']
-        };
-
-        const categoryKeywords = categoryMap[activeCategory] || [];
-        return categoryKeywords.some(keyword =>
-          product.name.toLowerCase().includes(keyword.toLowerCase()) ||
-          (product.category && product.category.toLowerCase().includes(keyword.toLowerCase())) ||
-          (product.type && product.type.toLowerCase().includes(keyword.toLowerCase()))
-        );
+    // Optional client "q" filter (we can move to server later by adding `q` param to the API)
+    if (searchQuery) {
+      next = next.filter((p) => {
+        const text = [
+          p.name,
+          p.description,
+          p.short_description,
+          p.brand,
+          p.category,
+          p.sku ?? '',
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+        return text.includes(searchQuery);
       });
     }
 
-    // Apply search query filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(product => {
-        const searchableText = [
-          product.name,
-          product.description,
-          product.short_description,
-          product.brand,
-          product.category,
-          product.sku,
-          product.type,
-          product.cannabinoid_type
-        ].filter(Boolean).join(' ').toLowerCase();
-
-        return searchableText.includes(query);
-      });
+    // Brand filter
+    if (filters.brands.length) {
+      next = next.filter((p) => p.brand && filters.brands.includes(p.brand));
     }
 
-    // Apply filters
-    if (filters.brands.length > 0) {
-      filtered = filtered.filter((p: ThcaMasterProduct) => p.brand && filters.brands.includes(p.brand));
+    // Type filter (simple contains on name; refine later if you promote to server)
+    if (filters.types.length) {
+      const typesLower = filters.types.map((t) => t.toLowerCase());
+      next = next.filter((p) => typesLower.some((t) => p.name.toLowerCase().includes(t)));
     }
 
-    if (filters.types.length > 0) {
-      filtered = filtered.filter((p: ThcaMasterProduct) => {
-        return filters.types.some(type => p.name.toLowerCase().includes(type.toLowerCase()));
-      });
-    }
-
-    if (filters.cannabinoidTypes.length > 0) {
-      filtered = filtered.filter((p: ThcaMasterProduct) =>
-        p.cannabinoid_type && filters.cannabinoidTypes.includes(p.cannabinoid_type)
+    // Cannabinoid type filter
+    if (filters.cannabinoidTypes.length) {
+      next = next.filter(
+        (p) => p.cannabinoid_type && filters.cannabinoidTypes.includes(p.cannabinoid_type)
       );
     }
 
+    // In stock (server already narrowed if you set filters.inStock, but keep as guard)
     if (filters.inStock) {
-      filtered = filtered.filter((p: ThcaMasterProduct) => p.stock_quantity > 0);
+      next = next.filter((p) => (p.stock_quantity ?? 0) > 0 || p.inStock);
     }
 
+    // On sale (server already narrowed if you set filters.onSale, but keep as guard)
     if (filters.onSale) {
-      filtered = filtered.filter((p: ThcaMasterProduct) => p.sale_price && p.sale_price < (p.our_price || p.price || 0));
+      next = next.filter((p) => {
+        const sp = p.sale_price ?? null;
+        const op = p.our_price ?? p.price ?? 0;
+        return !!sp && sp < op;
+      });
     }
 
-    if (filters.isNew) {
-      filtered = filtered.filter((p: ThcaMasterProduct) => p.isNew);
-    }
+    // "New" and "featured" flags (client-only for now)
+    if (filters.isNew) next = next.filter((p) => !!p.isNew);
+    if (filters.featured) next = next.filter((p) => !!p.featured);
 
-    if (filters.featured) {
-      filtered = filtered.filter((p: ThcaMasterProduct) => p.featured);
-    }
-
-    // Price range filter
-    filtered = filtered.filter((p: ThcaMasterProduct) => {
-      const price = p.our_price || p.price || 0;
+    // Price range (server pre-filters; this keeps UI consistent even if server changes later)
+    next = next.filter((p) => {
+      const price = p.our_price ?? p.price ?? 0;
       return price >= filters.priceRange[0] && price <= filters.priceRange[1];
     });
 
-    // Apply sorting
+    // Sort (name not supported server-side; keep local)
     switch (sortBy) {
-      case 'price-low':
-        filtered.sort((a: ThcaMasterProduct, b: ThcaMasterProduct) => {
-          const priceA = a.our_price || a.price || 0;
-          const priceB = b.our_price || b.price || 0;
-          return priceA - priceB;
+      case 'price-low': {
+        next.sort((a, b) => {
+          const pa = a.our_price ?? a.price ?? 0;
+          const pb = b.our_price ?? b.price ?? 0;
+          return pa - pb;
         });
         break;
-      case 'price-high':
-        filtered.sort((a: ThcaMasterProduct, b: ThcaMasterProduct) => {
-          const priceA = a.our_price || a.price || 0;
-          const priceB = b.our_price || b.price || 0;
-          return priceB - priceA;
+      }
+      case 'price-high': {
+        next.sort((a, b) => {
+          const pa = a.our_price ?? a.price ?? 0;
+          const pb = b.our_price ?? b.price ?? 0;
+          return pb - pa;
         });
         break;
-      case 'name':
-        filtered.sort((a: ThcaMasterProduct, b: ThcaMasterProduct) => a.name.localeCompare(b.name));
+      }
+      case 'name': {
+        next.sort((a, b) => a.name.localeCompare(b.name));
         break;
-      case 'newest':
-        filtered.sort((a: ThcaMasterProduct, b: ThcaMasterProduct) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      }
+      case 'newest': {
+        next.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
         break;
-      default: // featured
-        filtered.sort((a: ThcaMasterProduct, b: ThcaMasterProduct) => {
-          if (a.featured && !b.featured) return -1;
-          if (!a.featured && b.featured) return 1;
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-        });
+      }
+      default: {
+        // 'featured' (fallback: newest)
+        next.sort(
+          (a, b) =>
+            Number(b.featured) - Number(a.featured) ||
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      }
     }
 
-    setFilteredProducts(filtered);
+    setFilteredProducts(next);
     setCurrentPage(1);
-  }, [products, filters, sortBy, activeCategory, searchQuery]);
+  }, [products, filters, sortBy, searchQuery]);
 
-  const loadThcaMasterProducts = async () => {
+  // Fetcher: calls your universal API route (which calls the RPC on the server)
+  const loadFromUniversalApi = async () => {
     try {
       setLoading(true);
 
-      // TODO: Replace with comprehensive API that uses search_vec system
-      // For now, we'll aggregate from multiple product endpoints
-      const endpoints = [
-        '/api/products/thca-pre-rolls',
-        '/api/products/thca-flower',
-        '/api/products/thca-concentrates',
-        '/api/products/cbd-products',
-        '/api/products/edibles',
-        '/api/products/mushrooms',
-        '/api/products/nitrous-oxide',
-        '/api/products/7-hydroxymitragynine'
-      ];
+      const mode = tabToMode[activeCategory] ?? 'thca_all';
+      const qs = new URLSearchParams({
+        mode,
+        sort: mapSort(sortBy),
+        page: '1',
+        pageSize: '200', // pull a big page; you paginate on client
+        minPrice: String(filters.priceRange[0]),
+        maxPrice: String(filters.priceRange[1]),
+      });
+      if (filters.inStock) qs.set('inStockOnly', 'true');
+      if (filters.onSale) qs.set('sale', 'true');
 
-      const allProducts: ThcaMasterProduct[] = [];
+      const res = await fetch(`/api/search/category?${qs.toString()}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const { products: apiProducts } = await res.json();
 
-      for (const endpoint of endpoints) {
-        try {
-          const response = await fetch(endpoint);
-          if (response.ok) {
-            const data = await response.json();
-            if (data.products && Array.isArray(data.products)) {
-              // Transform products to match our interface
-              const transformedProducts = data.products.map((product: any) => ({
-                id: product.id,
-                name: product.name,
-                our_price: product.price || product.our_price,
-                sale_price: product.compare_at_price || product.sale_price,
-                image_url: product.image_url,
-                imageUrl: product.image_url,
-                image: product.image_url,
-                description: product.description,
-                short_description: product.short_description,
-                sku: product.sku,
-                stock_quantity: product.stock_quantity || 0,
-                is_active: product.is_active,
-                featured: product.featured || false,
-                brand_id: product.brand_id,
-                category_id: product.category_id,
-                created_at: product.created_at,
-                updated_at: product.updated_at,
-                price: product.price,
-                isNew: product.isNew,
-                isSale: product.isSale,
-                originalPrice: product.compare_at_price,
-                inStock: product.inStock,
-                brand: product.brand,
-                category: product.category,
-                type: extractTypeFromName(product.name),
-                size: product.specs?.size || '1g',
-                cannabinoid_type: extractCannabinoidType(product.name, product.description),
-                search_vec: product.search_vec // Will be populated by search_vec system
-              }));
-              allProducts.push(...transformedProducts);
-            }
-          }
-        } catch (error) {
-          console.warn(`Failed to load products from ${endpoint}:`, error);
-        }
-      }
+      // Transform rows → your card-compatible shape
+      const transformed: ThcaMasterProduct[] = (apiProducts || []).map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        our_price: p.price ?? 0,
+        sale_price: p.sale_price ?? null,
+        image_url: p.image_url ?? null,
+        imageUrl: p.image_url ?? null,
+        image: p.image_url ?? null,
+        description: null,
+        short_description: null,
+        sku: null,
+        stock_quantity: p.inventory_status === 'out_of_stock' ? 0 : 1,
+        is_active: true,
+        featured: false,
+        brand_id: null,
+        category_id: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        price: p.price ?? 0,
+        originalPrice: p.price ?? 0,
+        isSale: !!p.sale_price,
+        inStock: p.inventory_status !== 'out_of_stock',
+        brand: p.brand ?? null,
+        category: p.subcategory_slug ?? p.category_slug ?? null,
+        type: null,
+        size: '1g',
+        cannabinoid_type: 'THCA',
+        search_vec: undefined as any,
+        isNew: !!p.is_new,
+        inventory_status: p.inventory_status ?? null,
+      }));
 
-      // Remove duplicates based on ID
-      const uniqueProducts = allProducts.filter((product, index, self) =>
-        index === self.findIndex(p => p.id === product.id)
-      );
-
-      console.log(`✅ Loaded ${uniqueProducts.length} total THCA & cannabinoid products`);
-      setProducts(uniqueProducts);
-      setFilteredProducts(uniqueProducts);
-    } catch (error) {
-      console.error('Error loading THCA master products:', error);
+      setProducts(transformed);
+      setFilteredProducts(transformed);
+      setCurrentPage(1);
+    } catch (err) {
+      console.error('Error loading THCA master products:', err);
       setProducts([]);
       setFilteredProducts([]);
     } finally {
@@ -287,7 +346,7 @@ export default function ThcaMasterPageContent() {
     }
   };
 
-  // Pagination
+  // Client pagination
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -295,11 +354,7 @@ export default function ThcaMasterPageContent() {
 
   if (loading) {
     return (
-      <LoadingState
-        loading={loading}
-        onRetry={loadThcaMasterProducts}
-        timeout={15000}
-      >
+      <LoadingState loading={loading} onRetry={loadFromUniversalApi} timeout={15000}>
         <div>THCA Master Collection Loading...</div>
       </LoadingState>
     );
@@ -308,13 +363,9 @@ export default function ThcaMasterPageContent() {
   return (
     <ErrorBoundary>
       <div>
-        {/* Breadcrumb */}
         <ThcaMasterBreadcrumb />
-
-        {/* Hero Section */}
         <ThcaMasterHero />
 
-        {/* Category Navigation */}
         <ThcaMasterCategoryNav
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
@@ -322,7 +373,7 @@ export default function ThcaMasterPageContent() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Sidebar Filters - Using foundation from BongsFilters */}
+            {/* Sidebar Filters */}
             <div className="lg:w-1/4">
               <ThcaMasterFilters
                 filters={filters}
@@ -333,12 +384,13 @@ export default function ThcaMasterPageContent() {
 
             {/* Main Content */}
             <div className="lg:w-3/4">
-              {/* Sort Bar and View Toggle */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div className="flex items-center gap-4">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
-                    {activeCategory !== 'all' && ` in ${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}`}
+                    Showing {filteredProducts.length ? indexOfFirstProduct + 1 : 0}–
+                    {Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
+                    {activeCategory !== 'all' &&
+                      ` in ${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}`}
                   </p>
                 </div>
 
@@ -348,25 +400,31 @@ export default function ThcaMasterPageContent() {
                 </div>
               </div>
 
-              {/* Product Grid - Using UniversalProductCard from Pipes */}
-              <ThcaMasterProductGrid
-                products={currentProducts}
-                viewMode={viewMode}
-              />
+              <ThcaMasterProductGrid products={currentProducts} viewMode={viewMode} />
 
-              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center items-center mt-12 space-x-2">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
                     className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Previous
                   </button>
 
-                  {Array.from({ length: Math.min(5, totalPages) }, (_: number, i: number) => {
-                    const pageNum = i + 1;
+                  {generatePaginationPages(totalPages, currentPage).map((page, index) => {
+                    if (page === '...') {
+                      return (
+                        <span
+                          key={`ellipsis-${index}`}
+                          className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white"
+                        >
+                          ...
+                        </span>
+                      );
+                    }
+
+                    const pageNum = page as number;
                     return (
                       <button
                         key={pageNum}
@@ -383,7 +441,7 @@ export default function ThcaMasterPageContent() {
                   })}
 
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -397,36 +455,4 @@ export default function ThcaMasterPageContent() {
       </div>
     </ErrorBoundary>
   );
-}
-
-// Helper functions
-function extractTypeFromName(productName: string): string | null {
-  if (!productName) return null;
-
-  const nameLower = productName.toLowerCase();
-
-  if (nameLower.includes('preroll')) return 'Preroll';
-  if (nameLower.includes('cartridge') || nameLower.includes('cart')) return 'Cartridge';
-  if (nameLower.includes('disposable') || nameLower.includes('vape pen')) return 'Disposable';
-  if (nameLower.includes('concentrate') || nameLower.includes('rosin')) return 'Concentrate';
-  if (nameLower.includes('edible') || nameLower.includes('gummies')) return 'Edible';
-  if (nameLower.includes('flower') || nameLower.includes('bud')) return 'Flower';
-  if (nameLower.includes('mushroom')) return 'Mushroom';
-  if (nameLower.includes('nitrous') || nameLower.includes('whippits')) return 'Nitrous';
-  if (nameLower.includes('kratom') || nameLower.includes('mitragynine')) return 'Kratom';
-
-  return null;
-}
-
-function extractCannabinoidType(productName: string, description?: string): string | null {
-  const text = `${productName} ${description || ''}`.toLowerCase();
-
-  if (text.includes('thca') || text.includes('thc-a')) return 'THCA';
-  if (text.includes('cbd')) return 'CBD';
-  if (text.includes('delta-8')) return 'Delta-8';
-  if (text.includes('delta-9')) return 'Delta-9';
-  if (text.includes('cbg')) return 'CBG';
-  if (text.includes('cbc')) return 'CBC';
-
-  return null;
 }

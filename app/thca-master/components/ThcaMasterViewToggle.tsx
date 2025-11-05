@@ -1,8 +1,8 @@
 import { Grid, List } from 'lucide-react';
 
 interface ThcaMasterViewToggleProps {
-  viewMode: 'grid' | 'list' | 'sidebar';
-  setViewMode: (mode: 'grid' | 'list' | 'sidebar') => void;
+  viewMode: 'grid' | 'sidebar';
+  setViewMode: (mode: 'grid' | 'sidebar') => void;
 }
 
 export default function ThcaMasterViewToggle({ viewMode, setViewMode }: ThcaMasterViewToggleProps) {

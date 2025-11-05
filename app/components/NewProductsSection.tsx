@@ -224,7 +224,16 @@ export default function NewProductsSection() {
                       }}
                       onClick={async (e) => {
                         e.stopPropagation();
-                        await addToCart(product.id);
+                        try {
+                          const success = await addToCart(product.id, 1);
+                          if (success) {
+                            // Success flow is handled by addToCart function with toast notifications
+                            // and cart state updates via window.dispatchEvent
+                          }
+                        } catch (error) {
+                          console.error('Error adding item to cart:', error);
+                          // Error handling is already done by addToCart function with toast notifications
+                        }
                       }}
                     >
                       Add to Cart
@@ -315,7 +324,16 @@ export default function NewProductsSection() {
                       }}
                       onClick={async (e) => {
                         e.stopPropagation();
-                        await addToCart(product.id);
+                        try {
+                          const success = await addToCart(product.id, 1);
+                          if (success) {
+                            // Success flow is handled by addToCart function with toast notifications
+                            // and cart state updates via window.dispatchEvent
+                          }
+                        } catch (error) {
+                          console.error('Error adding item to cart:', error);
+                          // Error handling is already done by addToCart function with toast notifications
+                        }
                       }}
                     >
                       Add to Cart
