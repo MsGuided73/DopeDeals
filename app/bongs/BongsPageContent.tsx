@@ -55,6 +55,7 @@ export default function BongsPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [activeCategory, setActiveCategory] = useState('all-bongs');
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -78,6 +79,44 @@ export default function BongsPageContent() {
   useEffect(() => {
     // Apply filters and sorting
     let filtered = [...products];
+
+    // Apply category filter first
+    if (activeCategory !== 'all-bongs') {
+      switch (activeCategory) {
+        case 'beaker-bongs':
+          filtered = filtered.filter((p: BongProduct) =>
+            p.name?.toLowerCase().includes('beaker') ||
+            p.description?.toLowerCase().includes('beaker') ||
+            p.short_description?.toLowerCase().includes('beaker')
+          );
+          break;
+        case 'straight-tubes':
+          filtered = filtered.filter((p: BongProduct) =>
+            p.name?.toLowerCase().includes('straight') ||
+            p.name?.toLowerCase().includes('tube') ||
+            p.description?.toLowerCase().includes('straight') ||
+            p.description?.toLowerCase().includes('tube') ||
+            p.short_description?.toLowerCase().includes('straight') ||
+            p.short_description?.toLowerCase().includes('tube')
+          );
+          break;
+        case 'percolator-bongs':
+          filtered = filtered.filter((p: BongProduct) =>
+            p.name?.toLowerCase().includes('percolator') ||
+            p.description?.toLowerCase().includes('percolator') ||
+            p.short_description?.toLowerCase().includes('percolator') ||
+            p.percolator !== null
+          );
+          break;
+        case 'mini-bongs':
+          filtered = filtered.filter((p: BongProduct) =>
+            p.name?.toLowerCase().includes('mini') ||
+            p.description?.toLowerCase().includes('mini') ||
+            p.short_description?.toLowerCase().includes('mini')
+          );
+          break;
+      }
+    }
 
     // Apply filters - using available fields from API
     if (filters.brands.length > 0) {
@@ -127,7 +166,7 @@ export default function BongsPageContent() {
 
     setFilteredProducts(filtered);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [products, filters, sortBy]);
+  }, [products, filters, sortBy, activeCategory]);
 
   const loadBongProducts = async () => {
     try {
@@ -218,7 +257,10 @@ export default function BongsPageContent() {
       <BongsBreadcrumb />
 
       {/* Hero Section */}
-      <BongsHero />
+      <BongsHero
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">

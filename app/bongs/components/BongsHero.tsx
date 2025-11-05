@@ -2,9 +2,13 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-export default function BongsHero() {
+interface BongsHeroProps {
+  activeCategory: string;
+  setActiveCategory: (category: string) => void;
+}
+
+export default function BongsHero({ activeCategory, setActiveCategory }: BongsHeroProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('all-bongs');
 
   return (
     <div className="relative bg-gradient-to-br from-gray-50 via-white to-gray-100 text-black overflow-hidden">
