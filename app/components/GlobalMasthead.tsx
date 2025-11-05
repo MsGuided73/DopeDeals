@@ -529,13 +529,13 @@ export default function GlobalMasthead() {
               <div className="pt-4">
                 <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">THCA & More</h3>
                 <div className="space-y-2 pl-4">
-                  <Link href="/thca_flower" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     THCA Flower
                   </Link>
-                  <Link href="/thca_prerolls" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     THCA Pre-Rolls
                   </Link>
-                  <Link href="/thca_cbd" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     CBD Products
                   </Link>
                   <Link href="/mushrooms" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
@@ -618,7 +618,7 @@ export default function GlobalMasthead() {
                       <Link href="/puffco" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 Puffco Peak Pro
                       </Link>
-                      <Link href="/thca_flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      <Link href="/thca_pnv" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 THCA Flower Collection
                       </Link>
                     </div>
@@ -667,11 +667,11 @@ export default function GlobalMasthead() {
                     <div className="text-2xl mb-2">🚬</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Bongs</div>
                   </Link>
-                  <Link href="/thca_flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🌿</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">THCA Flower</div>
                   </Link>
-                  <Link href="/thca_vapes" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">💨</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Vaporizers</div>
                   </Link>
