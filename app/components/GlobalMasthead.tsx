@@ -191,7 +191,7 @@ export default function GlobalMasthead() {
                                     onMouseLeave={() => handleMouseLeaveWithDelay("nested")}
                                   >
                                     <div className="py-2">
-                                      <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
+                                      <Link href="/thca#flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
                                         ⭐ THCA Flower
                                       </Link>
                                       <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
@@ -515,13 +515,13 @@ export default function GlobalMasthead() {
               <Link href="/dabsntools" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Dab Rigs
               </Link>
-              <Link href="/products?category=vaporizers" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/thca_pnv" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Vaporizers
               </Link>
-              <Link href="/products?category=accessories" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/accessories" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Accessories
               </Link>
-              <Link href="/products?category=edibles" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+              <Link href="/edibles" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Edibles & Munchies
               </Link>
 
@@ -529,13 +529,13 @@ export default function GlobalMasthead() {
               <div className="pt-4">
                 <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">THCA & More</h3>
                 <div className="space-y-2 pl-4">
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/thca#flower" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     THCA Flower
                   </Link>
                   <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     THCA Pre-Rolls
                   </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/cbd" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     CBD Products
                   </Link>
                   <Link href="/mushrooms" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
@@ -618,7 +618,7 @@ export default function GlobalMasthead() {
                       <Link href="/puffco" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 Puffco Peak Pro
                       </Link>
-                      <Link href="/thca_pnv" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      <Link href="/thca#flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 THCA Flower Collection
                       </Link>
                     </div>
@@ -636,7 +636,7 @@ export default function GlobalMasthead() {
                       <Link href="/products?q=roor" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
                         🌟 ROOR Glass Pieces
                       </Link>
-                      <Link href="/products?q=grinder" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
+                      <Link href="/accessories_grinders" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
                         🌟 Premium Grinders
                       </Link>
                     </div>
@@ -667,7 +667,7 @@ export default function GlobalMasthead() {
                     <div className="text-2xl mb-2">🚬</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Bongs</div>
                   </Link>
-                  <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/thca_flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🌿</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">THCA Flower</div>
                   </Link>
@@ -683,7 +683,7 @@ export default function GlobalMasthead() {
                     <div className="text-2xl mb-2">🔧</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Accessories</div>
                   </Link>
-                  <Link href="/mushrooms" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/shrooms" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🍄</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Mushrooms</div>
                   </Link>
