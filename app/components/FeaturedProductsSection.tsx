@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { addToCart } from '../lib/cart-utils'
-import { useFavorites } from '../hooks/useFavorites'
 import { toast } from 'react-hot-toast'
 
 interface Product {
@@ -33,7 +32,7 @@ export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const { favorites, toggleFavorite } = useFavorites()
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -169,7 +168,7 @@ export default function FeaturedProductsSection() {
             </Link>
 
             <div className="px-3 pb-3">
-              <div className="mt-3 flex justify-between">
+              <div className="mt-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -182,28 +181,9 @@ export default function FeaturedProductsSection() {
                   }}
                   disabled={product.stock_quantity === undefined || product.stock_quantity <= 0}
                   aria-disabled={product.stock_quantity === undefined || product.stock_quantity <= 0}
-                  className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white"
+                  className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white"
                 >
                   Add to cart
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    toggleFavorite(product.id)
-                    toast.success(
-                      favorites.has(product.id)
-                        ? 'Removed from favorites'
-                        : 'Added to favorites'
-                    )
-                  }}
-                  className={`rounded-lg border border-neutral-200 px-3 py-2 text-sm font-medium ${
-                    favorites.has(product.id)
-                      ? 'bg-red-100 text-red-600 hover:bg-red-200'
-                      : 'bg-white text-neutral-900 hover:bg-neutral-50'
-                  }`}
-                >
-                  {favorites.has(product.id) ? '♥' : '♡'}
                 </button>
               </div>
             </div>
