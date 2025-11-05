@@ -204,9 +204,6 @@ export default function GlobalMasthead() {
                                       <Link href="/thca#delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                         Delta Products
                                       </Link>
-                                      <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                        Delta Products
-                                      </Link>
                                       <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                         Edibles
                                       </Link>

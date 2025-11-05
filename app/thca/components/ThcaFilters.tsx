@@ -14,7 +14,6 @@ interface ThcaFiltersProps {
     featured: boolean;
   };
   onFiltersChange: (filters: any) => void;
-  onClearFilters: () => void;
   products: ThcaProduct[];
 }
 

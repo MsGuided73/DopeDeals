@@ -47,6 +47,7 @@ export default function ThcaPageContent() {
   // State
   const [products, setProducts] = useState<{[key: string]: ThcaProduct[]}>({});
   const [loading, setLoading] = useState(true);
+  const [embeddingLoading, setEmbeddingLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeFilters, setActiveFilters] = useState({
     priceRange: [0, 300] as [number, number],
@@ -94,17 +95,43 @@ export default function ThcaPageContent() {
         featured: activeFilters.featured,
       };
 
-      // If we have a search query, we need embeddings (simplified for now)
-      const requestBody = searchQuery ? {
-        query_embedding: Array(1536).fill(0).map(() => Math.random() - 0.5), // Mock embedding
+      let requestBody: any = {
         filters,
         page_size: 100, // Load more for sections
         page: 1
-      } : {
-        filters,
-        page_size: 100,
-        page: 1
       };
+
+      // If we have a search query, generate real embeddings
+      if (searchQuery) {
+        setEmbeddingLoading(true);
+        try {
+          const embeddingResponse = await fetch('/api/embeddings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: searchQuery }),
+          });
+
+          if (!embeddingResponse.ok) {
+            const errorData = await embeddingResponse.json();
+            throw new Error(errorData.error || `Embedding API error: ${embeddingResponse.status}`);
+          }
+
+          const embeddingData = await embeddingResponse.json();
+
+          if (!embeddingData.embedding || !Array.isArray(embeddingData.embedding) || embeddingData.embedding.length !== 1536) {
+            throw new Error('Invalid embedding received from API');
+          }
+
+          requestBody.query_embedding = embeddingData.embedding;
+        } catch (embeddingError: any) {
+          console.error('Error generating embedding:', embeddingError);
+          // Fallback to no search if embedding fails
+          setError(`Search unavailable: ${embeddingError.message}`);
+          return;
+        } finally {
+          setEmbeddingLoading(false);
+        }
+      }
 
       const response = await fetch('/api/search/thca', {
         method: 'POST',
@@ -143,6 +170,7 @@ export default function ThcaPageContent() {
       setError(err.message || 'Failed to load products');
     } finally {
       setLoading(false);
+      setEmbeddingLoading(false);
     }
   };
 
@@ -240,7 +268,6 @@ export default function ThcaPageContent() {
               <ThcaFilters
                 filters={activeFilters}
                 onFiltersChange={handleFiltersChange}
-                onClearFilters={clearFilters}
                 products={Object.values(products).flat()}
               />
             </div>

@@ -13,10 +13,18 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Parse query parameters
+    // Parse query parameters with validation
     const url = new URL(req.url);
-    const limit = parseInt(url.searchParams.get('limit') || '12');
-    const offset = parseInt(url.searchParams.get('offset') || '0');
+    const rawLimit = url.searchParams.get('limit');
+    const rawOffset = url.searchParams.get('offset');
+
+    // Parse and validate limit: default 12, clamp to 1-100
+    const parsedLimit = rawLimit ? parseInt(rawLimit, 10) : 12;
+    const limit = isNaN(parsedLimit) ? 12 : Math.max(1, Math.min(100, parsedLimit));
+
+    // Parse and validate offset: default 0, ensure non-negative
+    const parsedOffset = rawOffset ? parseInt(rawOffset, 10) : 0;
+    const offset = isNaN(parsedOffset) ? 0 : Math.max(0, Math.floor(parsedOffset));
 
     // Query featured products from main_site_products table
     const { data: products, error } = await supabase
@@ -32,6 +40,7 @@ export async function GET(req: NextRequest) {
         image_url,
         image_urls,
         sku,
+        slug,
         stock_quantity,
         is_active,
         featured,
