@@ -194,7 +194,7 @@ export default function GlobalMasthead() {
                                       <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
                                         ⭐ THCA Flower
                                       </Link>
-                                      <Link href="/thca_prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
+                                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
                                         ⭐ THCA Pre-Rolls
                                       </Link>
                                       <div className="border-t border-gray-200/20 my-1" />
@@ -222,7 +222,7 @@ export default function GlobalMasthead() {
                               <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                 Dab Rigs
                               </Link>
-                              <Link href="/thca_vapes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                              <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                 Vaporizers
                               </Link>
                               <Link href="/accessories" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
@@ -679,7 +679,7 @@ export default function GlobalMasthead() {
                     <div className="text-2xl mb-2">⚗️</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Dab Rigs</div>
                   </Link>
-                  <Link href="accessories" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/accessories" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🔧</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Accessories</div>
                   </Link>

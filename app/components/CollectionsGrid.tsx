@@ -14,7 +14,7 @@ export default function CollectionsGrid() {
     { name: "Legal THCA\nPrerolls & Vapes", route: "/thca_pnv", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg" },
     { name: "Bongs", route: "/bongs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png" },
     { name: "Hand Pipes", route: "/pipes", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/hand_pipes.jpg" },
-    { name: "Dab-Rigs & Tools", route: "/dab-rigs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png" },
+    { name: "Dab-Rigs & Tools", route: "/dabsntools", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png" },
     { name: "Accessories", route: "/accessories", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
     { name: "Hookahs", route: "/hookahs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg" },
   ];
@@ -59,7 +59,7 @@ export default function CollectionsGrid() {
 
   return (
     // Lower z-index so dropdown menus can appear on top
-    <div className="relative z-10 isolate w-full px-2 pt-1 pb-4">
+    <div className="relative w-full px-2 pt-1 pb-4">
       {/* Mobile: Stack vertically */}
       <div className="block lg:hidden space-y-2">
         {/* Large hero image first on mobile */}
