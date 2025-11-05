@@ -191,17 +191,17 @@ export default function GlobalMasthead() {
                                     onMouseLeave={() => handleMouseLeaveWithDelay("nested")}
                                   >
                                     <div className="py-2">
-                                      <Link href="/thca#flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
+                                      <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
                                         ⭐ THCA Flower
                                       </Link>
-                                      <Link href="/thca#prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
+                                      <Link href="/thca_prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
                                         ⭐ THCA Pre-Rolls
                                       </Link>
                                       <div className="border-t border-gray-200/20 my-1" />
-                                      <Link href="/thca#cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                                      <Link href="/cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                         CBD Products
                                       </Link>
-                                      <Link href="/thca#delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                                      <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                         Delta Products
                                       </Link>
                                       <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
@@ -219,7 +219,7 @@ export default function GlobalMasthead() {
                               <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                 Hand Pipes
                               </Link>
-                              <Link href="/dab-rigs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                              <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
                                 Dab Rigs
                               </Link>
                               <Link href="/thca_vapes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
@@ -427,8 +427,7 @@ export default function GlobalMasthead() {
               </Link>
             </nav>
           </div>
-
-          {/* Center: Search (now a flex child that can wrap) */}
+                   {/* Center: Search (single instance, responsive with capped width) */}
           <div
             className="
               order-3 w-full
@@ -436,12 +435,18 @@ export default function GlobalMasthead() {
               sm:flex-[1_1_500px] sm:min-w-[480px]
               md:flex-[1_1_600px] md:min-w-[560px]
               xl:flex-[1_1_700px]
+              bg-black md:bg-transparent
+              px-4 md:px-0
+              py-3 md:py-0
+              border-t border-gray-800 md:border-0
             "
           >
-            <div className="flex items-center justify-center">
-              {/* Search bar removed - using flexible original search bar */}
-            </div>
-          </div>
+            <div className="flex w-full items-center justify-center">
+            <div className="w-full max-w-[720px] xl:max-w-[640px] 2xl:max-w-[600px]">
+              <EnhancedSearchBar />
+             </div>
+           </div>
+         </div>
 
           {/* Right: Actions */}
           <div className="flex items-center gap-4 flex-shrink-0 text-white order-2 ml-auto">
@@ -610,10 +615,10 @@ export default function GlobalMasthead() {
                       <Link href="/bongs" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 Premium Glass Bongs
                       </Link>
-                      <Link href="/products?q=puffco" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      <Link href="/puffco" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 Puffco Peak Pro
                       </Link>
-                      <Link href="/products?q=thca+flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      <Link href="/thca_flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 THCA Flower Collection
                       </Link>
                     </div>
@@ -662,19 +667,19 @@ export default function GlobalMasthead() {
                     <div className="text-2xl mb-2">🚬</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Bongs</div>
                   </Link>
-                  <Link href="/products?q=thca+flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/thca_flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🌿</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">THCA Flower</div>
                   </Link>
-                  <Link href="/products?category=vaporizers" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/thca_vapes" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">💨</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Vaporizers</div>
                   </Link>
-                  <Link href="/products?category=dab-rigs" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/dabsntools" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">⚗️</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Dab Rigs</div>
                   </Link>
-                  <Link href="/products?category=accessories" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="accessories" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🔧</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Accessories</div>
                   </Link>
