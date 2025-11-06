@@ -40,7 +40,6 @@ export async function GET(req: NextRequest) {
         image_url,
         image_urls,
         sku,
-        slug,
         stock_quantity,
         is_active,
         featured,

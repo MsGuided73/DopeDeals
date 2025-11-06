@@ -41,7 +41,10 @@ export default function FeaturedProductsSection() {
         const res = await fetch('/api/products/featured')
         if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`)
         const data = await res.json()
-        setProducts(data.products ?? [])
+        if (!data || typeof data !== 'object' || !Array.isArray(data.products)) {
+          throw new Error('Invalid response structure: expected { products: Product[] }')
+        }
+        setProducts(data.products)
       } catch (err: any) {
         console.error(err)
         setError(err.message)
