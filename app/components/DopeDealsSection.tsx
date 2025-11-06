@@ -171,7 +171,7 @@ export default function DopeDealsSection() {
                   href={`/product/${product.id}`}
                   className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 md:flex-shrink-0 md:w-80 w-full h-[28rem] block md:mx-3"
                 >
-                  <div className="relative w-full aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
+                  <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
                       <img
                         src={transformedProduct.image_url}
@@ -187,29 +187,9 @@ export default function DopeDealsSection() {
                       </div>
                     )}
 
-                    {/* SHOP Button - Top Left */}
-                    <div className="absolute top-3 left-3 z-10">
-                      <button
-                        className="bg-black text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-gray-800 transition-colors"
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          await addToCart(product.id);
-                        }}
-                      >
-                        SHOP
-                      </button>
-                    </div>
-
-                    {/* Deal Badge - Moved to top right */}
-                    <div className="absolute top-3 right-3">
-                      <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                        {transformedProduct.discountPercent}% OFF
-                      </div>
-                    </div>
-
-                    {/* Favorite Button - Repositioned */}
+                    {/* Favorite Button */}
                     <button
-                      className="absolute top-16 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                      className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
                       onClick={(e) => e.stopPropagation()}>
                       <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -252,10 +232,9 @@ export default function DopeDealsSection() {
                       </div>
 
                       <button
-                        className="w-full text-center px-4 py-3 border-2 border-black text-black hover:bg-black hover:text-white font-bold rounded-full transition-all duration-300 text-sm font-highway uppercase tracking-wide hover:scale-105 hover:shadow-lg"
+                        className="w-full px-4 py-3 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-sm hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg"
                         style={{
                           fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                          fontWeight: 'bold',
                           letterSpacing: '0.05em',
                         }}
                         onClick={async (e) => {
