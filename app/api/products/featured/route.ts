@@ -26,9 +26,12 @@ export async function GET(req: NextRequest) {
     const parsedOffset = rawOffset ? parseInt(rawOffset, 10) : 0;
     const offset = isNaN(parsedOffset) ? 0 : Math.max(0, Math.floor(parsedOffset));
 
+    // For featured products, cap at 6 items for Hot Products section
+    const effectiveLimit = Math.min(limit, 6);
+
     // Query featured products from main_site_products table
-    // Filter for products with valid image URLs and limit to 6 for Hot Products section
-    const { data: products, error } = await supabase
+    // Filter for products with valid image URLs (either image_url or image_urls array)
+    const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
         id,
@@ -52,16 +55,28 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('featured', true)
-      .not('image_url', 'is', null)
-      .neq('image_url', '')
       .order('created_at', { ascending: false })
-      .limit(6) // Always limit to 6 for Hot Products section
-      .range(0, 5);
+      .limit(effectiveLimit)
+      .range(offset, offset + effectiveLimit - 1);
 
     if (error) {
       console.error('Supabase query error:', error);
       return NextResponse.json({ error: 'Failed to fetch featured products', details: error.message }, { status: 500 });
     }
+
+    // Apply post-query filter for image validation (OR logic: valid image_url OR non-empty image_urls)
+    const products = (rawProducts || []).filter(product => {
+      const hasValidImageUrl = product.image_url &&
+        product.image_url !== '' &&
+        product.image_url !== 'null' &&
+        product.image_url !== 'undefined' &&
+        product.image_url.trim() !== '';
+
+      const hasValidImageUrls = Array.isArray(product.image_urls) &&
+        product.image_urls.length > 0;
+
+      return hasValidImageUrl || hasValidImageUrls;
+    });
 
     // Get total count for pagination info
     const { count } = await supabase
