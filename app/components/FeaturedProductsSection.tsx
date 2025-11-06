@@ -28,6 +28,7 @@ export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchProducts();
@@ -87,10 +88,25 @@ export default function FeaturedProductsSection() {
       description: getProductDescription(product),
       sku: product.sku || '',
       compare_at_price: product.sale_price && product.sale_price < product.our_price ? product.sale_price : undefined,
-      discount_percentage: product.sale_price && product.sale_price < product.our_price
+      discount_percentage: product.sale_price && product.sale_price < product.our_price && product.our_price > 0
         ? Math.round(((product.our_price - product.sale_price) / product.our_price) * 100)
         : undefined,
     };
+  };
+
+  const handleFavorite = (productId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(productId)) {
+        newFavorites.delete(productId);
+      } else {
+        newFavorites.add(productId);
+      }
+      return newFavorites;
+    });
+    // TODO: Implement API call to save favorite to backend
+    // await saveFavorite(productId);
   };
 
   if (loading) {
@@ -174,8 +190,16 @@ export default function FeaturedProductsSection() {
                   {/* Favorite Button */}
                   <button
                     className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
-                    onClick={(e) => e.stopPropagation()}>
-                    <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    onClick={(e) => handleFavorite(product.id, e)}
+                    aria-pressed={favorites.has(product.id)}
+                    aria-label={favorites.has(product.id) ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    <svg
+                      className={`w-5 h-5 ${favorites.has(product.id) ? 'text-red-500 fill-current' : 'text-gray-700'}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                   </button>
