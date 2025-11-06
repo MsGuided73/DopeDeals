@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
     const offset = isNaN(parsedOffset) ? 0 : Math.max(0, Math.floor(parsedOffset));
 
     // Query featured products from main_site_products table
+    // Filter for products with valid image URLs and limit to 6 for Hot Products section
     const { data: products, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -51,9 +52,11 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('featured', true)
+      .not('image_url', 'is', null)
+      .neq('image_url', '')
       .order('created_at', { ascending: false })
-      .limit(limit)
-      .range(offset, offset + limit - 1);
+      .limit(6) // Always limit to 6 for Hot Products section
+      .range(0, 5);
 
     if (error) {
       console.error('Supabase query error:', error);
