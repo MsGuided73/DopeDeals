@@ -13,8 +13,6 @@ const supabase = createClient(
 export default function AgeVerification() {
   const [showModal, setShowModal] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [zipcode, setZipcode] = useState('');
-  const [showZipcodeStep, setShowZipcodeStep] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminBypass, setShowAdminBypass] = useState(false);
 
@@ -85,20 +83,10 @@ export default function AgeVerification() {
     setShowModal(false);
   };
 
-  const handleVerify = (isOfAge: boolean) => {
+  const handleVerify = async (isOfAge: boolean) => {
     if (isOfAge) {
-      // Move to zipcode step instead of immediately verifying
-      setShowZipcodeStep(true);
-    } else {
-      // Redirect to a different site or show message
-      window.location.href = 'https://www.google.com';
-    }
-  };
-
-  const handleZipcodeSubmit = async () => {
-    if (zipcode.trim().length >= 5) {
+      // Immediately verify without zipcode step
       localStorage.setItem('dope-city-age-verified', 'true');
-      localStorage.setItem('dope-city-zipcode', zipcode);
       localStorage.setItem('dope-city-last-verification', Date.now().toString());
 
       // Record age verification in audit table
@@ -109,8 +97,8 @@ export default function AgeVerification() {
           .insert({
             session_id: sessionId,
             verification_status: 'approved',
-            verification_method: 'zipcode',
-            zipcode: zipcode,
+            verification_method: 'age_only',
+            zipcode: null,
             user_agent: navigator.userAgent,
             ip_address: null,
             // cart_id will be linked when cart is created
@@ -149,8 +137,13 @@ export default function AgeVerification() {
 
       setIsVerified(true);
       setShowModal(false);
+    } else {
+      // Redirect to a different site or show message
+      window.location.href = 'https://www.google.com';
     }
   };
+
+
 
   // Force show modal if verification is required but not completed
   const shouldShowModal = showModal && !isVerified;
@@ -170,132 +163,68 @@ export default function AgeVerification() {
       />
       
       {/* Modal Content */}
-      <div className="relative z-10 bg-black text-white p-12 rounded-2xl shadow-2xl max-w-2xl mx-4 border border-dope-orange/30">
+      <div className="relative z-10 bg-black text-white p-6 sm:p-8 md:p-12 rounded-2xl shadow-2xl max-w-2xl mx-4 border border-dope-orange/30 max-h-[90vh] overflow-y-auto">
         {/* HIGHWAY 420 Logo - PREMIUM STYLING */}
-        <div className="text-center mb-8">
-          <h1 className="chalets-title text-7xl mb-4 highway-text-shadow" style={{ lineHeight: '1.1' }}>
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="chalets-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-3 sm:mb-4 highway-text-shadow" style={{ lineHeight: '1.1' }}>
             HIGHWAY 420
           </h1>
-          <div className="w-20 h-1 bg-green-400 mx-auto"></div>
+          <div className="w-16 sm:w-20 h-1 bg-green-400 mx-auto"></div>
         </div>
 
-        {!showZipcodeStep ? (
-          <>
-            {/* Age Verification Step */}
+        {/* Age Verification Step */}
 
-            {/* Highway 420 Welcome Message */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-green-400">
-                WELCOME TO THE HIGHWAY
-              </h2>
-              <p className="text-lg mb-4 leading-relaxed">
-                This ain't your corner store. We're the
-                <span className="text-green-400 font-bold"> PREMIUM </span>
-                destination for cannabis culture and craft.
-              </p>
-              <p className="text-gray-300 mb-6">
-                You gotta be <span className="text-white font-bold">21+</span> to ride this highway of excellence.
-              </p>
-              <p className="text-sm text-gray-400 italic">
-                "Life's a journey. Make sure you're old enough to enjoy the ride." �
-              </p>
-            </div>
+        {/* Highway 420 Welcome Message */}
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-green-400">
+            WELCOME TO THE HIGHWAY
+          </h2>
+          <p className="text-base sm:text-lg mb-3 sm:mb-4 leading-relaxed px-2">
+            This ain't your corner store. We're the
+            <span className="text-green-400 font-bold"> PREMIUM </span>
+            destination for cannabis culture and craft.
+          </p>
+          <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">
+            You gotta be <span className="text-white font-bold">21+</span> to ride this highway of excellence.
+          </p>
+          <p className="text-xs sm:text-sm text-gray-400 italic">
+            "Life's a journey. Make sure you're old enough to enjoy the ride."
+          </p>
+        </div>
 
-            {/* Age Verification Buttons */}
-            <div className="space-y-4">
-              <button
-                onClick={() => handleVerify(true)}
-                className="w-full bg-green-400 hover:bg-green-500 text-black font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-lg uppercase tracking-wide highway-glow-green"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-              >
-                LET'S RIDE, I'M 21+
-              </button>
+        {/* Age Verification Buttons */}
+        <div className="space-y-3 sm:space-y-4">
+          <button
+            onClick={() => handleVerify(true)}
+            className="w-full bg-green-400 hover:bg-green-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-base sm:text-lg uppercase tracking-wide highway-glow-green"
+            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+          >
+            LET'S RIDE, I'M 21+
+          </button>
 
-              <button
-                onClick={() => handleVerify(false)}
-                className="w-full bg-transparent border-2 border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 text-lg uppercase tracking-wide"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-              >
-                NOT YET, TOO YOUNG
-              </button>
+          <button
+            onClick={() => handleVerify(false)}
+            className="w-full bg-transparent border-2 border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-300 text-base sm:text-lg uppercase tracking-wide"
+            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+          >
+            NOT YET, TOO YOUNG
+          </button>
 
-              {/* Admin Bypass Button */}
-              {showAdminBypass && (
-                <button
-                  onClick={handleAdminBypass}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm uppercase tracking-wide border-2 border-purple-500"
-                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-                >
-                  🔑 ADMIN BYPASS
-                </button>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Zipcode Step */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-green-400">
-                ALMOST THERE...
-              </h2>
-              <p className="text-lg mb-4 leading-relaxed">
-                We need your <span className="text-green-400 font-bold">ZIP CODE</span> to customize
-                your Highway 420 experience.
-              </p>
-              <p className="text-gray-300 mb-6">
-                Product availability varies by location -
-                we'll show you exactly what's <span className="text-white font-bold">legal and available</span> in your area.
-              </p>
-            </div>
-
-            {/* Zipcode Input */}
-            <div className="space-y-4">
-              <div>
-                <input
-                  type="text"
-                  value={zipcode}
-                  onChange={(e) => setZipcode(e.target.value.replace(/\D/g, '').slice(0, 5))}
-                  placeholder="Enter your ZIP code"
-                  className="w-full bg-gray-800 border-2 border-gray-600 focus:border-green-400 text-white py-4 px-6 rounded-xl text-lg text-center tracking-wider"
-                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-                  maxLength={5}
-                />
-              </div>
-
-              <button
-                onClick={handleZipcodeSubmit}
-                disabled={zipcode.length < 5}
-                className="w-full bg-green-400 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-black disabled:text-gray-400 font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-lg uppercase tracking-wide highway-glow-green"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-              >
-                {zipcode.length < 5 ? 'ENTER ZIP CODE' : 'HIT THE HIGHWAY'}
-              </button>
-
-              {/* Admin Bypass Button in ZIP Code Step */}
-              {showAdminBypass && (
-                <button
-                  onClick={handleAdminBypass}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm uppercase tracking-wide border-2 border-purple-500"
-                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-                >
-                  🔑 ADMIN BYPASS - SKIP ZIP CODE
-                </button>
-              )}
-
-              <button
-                onClick={() => setShowZipcodeStep(false)}
-                className="w-full bg-transparent border-2 border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-bold py-2 px-6 rounded-xl transition-all duration-300 text-sm uppercase tracking-wide"
-                style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-              >
-                ← BACK
-              </button>
-            </div>
-          </>
-        )}
+          {/* Admin Bypass Button */}
+          {showAdminBypass && (
+            <button
+              onClick={handleAdminBypass}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-xs sm:text-sm uppercase tracking-wide border-2 border-purple-500"
+              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+            >
+              🔑 ADMIN BYPASS
+            </button>
+          )}
+        </div>
 
         {/* Legal Disclaimer */}
-        <div className="mt-8 pt-6 border-t border-gray-700">
-          <p className="text-xs text-gray-500 text-center leading-relaxed">
+        <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-700">
+          <p className="text-xs text-gray-500 text-center leading-relaxed px-2">
             By entering, you confirm you're 21+ and agree to our terms.
             We're all about that <span className="text-green-400">LEGAL</span> highway.
             <br />
