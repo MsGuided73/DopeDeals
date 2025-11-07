@@ -435,10 +435,8 @@ export default function GlobalMasthead() {
               sm:flex-[1_1_500px] sm:min-w-[480px]
               md:flex-[1_1_600px] md:min-w-[560px]
               xl:flex-[1_1_700px]
-              bg-black md:bg-transparent
-              px-4 md:px-0
-              py-3 md:py-0
-              border-t border-gray-800 md:border-0
+              bg-black
+              px-4 py-3
             "
           >
             <div className="flex w-full items-center justify-center">
@@ -493,10 +491,6 @@ export default function GlobalMasthead() {
         </div>
       </header>
 
-      {/* Mobile Search (only mobile) */}
-      <div className="md:hidden bg-black px-4 py-3 border-t border-gray-800">
-        <EnhancedSearchBar />
-      </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
