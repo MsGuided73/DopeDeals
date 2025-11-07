@@ -92,7 +92,7 @@ export default function HomePage() {
                     </div>
                   </div>
                   <p className="text-lg font-medium text-gray-700 leading-relaxed">
-                    "Best smoke shop online! Great prices and the customer service is top notch. Highly recommend DOPE CITY!"
+                    "Best smoke shop online! Great prices and the customer service is top notch. Highly recommend Highway 420!"
                   </p>
                 </div>
 
