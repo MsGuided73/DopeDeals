@@ -92,6 +92,13 @@ body, p, .text-sm, .text-xs, .text-base,
   text-transform: none !important;
 }
 
+/* IMPORTANT: Force INTER font for specific blog section subtitle - do not change */
+.blog-subtitle-inter {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: 0.01em !important;
+}
+
 /* 4. Hero titles get automatic Chalets */
 .hero-title, .hero-title *,
 .h1, .h1 *, h1, h1 *,

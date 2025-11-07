@@ -60,14 +60,28 @@ export function useFavorites() {
     try {
       const stored = localStorage.getItem(GUEST_FAVORITES_KEY);
       if (stored) {
+        // Validate that stored data is valid JSON and an array
         const favoriteSkus = JSON.parse(stored);
-        setFavorites(new Set(favoriteSkus));
+        if (Array.isArray(favoriteSkus)) {
+          setFavorites(new Set(favoriteSkus));
+        } else {
+          console.warn('Invalid favorites data format, resetting to empty');
+          setFavorites(new Set());
+          // Clear corrupted data
+          localStorage.removeItem(GUEST_FAVORITES_KEY);
+        }
       } else {
         setFavorites(new Set());
       }
     } catch (err) {
       console.error('Error loading guest favorites:', err);
       setFavorites(new Set());
+      // Clear corrupted data
+      try {
+        localStorage.removeItem(GUEST_FAVORITES_KEY);
+      } catch (storageErr) {
+        console.error('Error clearing corrupted favorites data:', storageErr);
+      }
     } finally {
       setLoading(false);
     }

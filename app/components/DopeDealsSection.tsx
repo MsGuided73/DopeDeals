@@ -109,9 +109,28 @@ export default function DopeDealsSection() {
               🔥 DOPE DEALS 🔥
             </h1>
           </div>
-          <div className="md:flex md:overflow-x-auto md:gap-6 md:pb-4 md:px-4 grid grid-cols-2 gap-6 px-4">
+          {/* Mobile: Grid layout */}
+          <div className="block lg:hidden">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse">
+                  <div className="aspect-square bg-muted"></div>
+                  <div className="p-3">
+                    <div className="h-3 bg-muted-foreground/30 rounded mb-2"></div>
+                    <div className="h-4 bg-muted-foreground/20 rounded mb-3"></div>
+                    <div className="flex items-center justify-between">
+                      <div className="h-4 bg-muted-foreground/20 rounded w-12"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: Horizontal scrolling */}
+          <div className="hidden lg:flex lg:overflow-x-auto lg:gap-6 lg:pb-4 lg:px-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse md:flex-shrink-0 md:w-80 w-full h-[36rem]">
+              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse flex-shrink-0 w-96">
                 <div className="aspect-square bg-muted"></div>
                 <div className="p-4">
                   <div className="h-4 bg-muted-foreground/30 rounded mb-2"></div>
@@ -161,16 +180,18 @@ export default function DopeDealsSection() {
         </div>
 
         {/* Responsive Container - Grid on mobile, horizontal scroll on larger screens */}
-        <div className="max-w-6xl mx-auto">
-          <div className="md:flex md:overflow-x-auto md:gap-6 md:pb-4 md:px-4 grid grid-cols-2 gap-6 px-4">
-            {products.slice(0, 20).map((product) => {
-              const transformedProduct = transformProductForCard(product);
-              return (
-                <Link
-                  key={product.id}
-                  href={`/product/${product.id}`}
-                  className="group bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 md:flex-shrink-0 md:w-80 w-full h-[28rem] block md:mx-3"
-                >
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Mobile: Grid layout */}
+          <div className="block lg:hidden">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-4">
+              {products.slice(0, 6).map((product) => {
+                const transformedProduct = transformProductForCard(product);
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/product/${product.id}`}
+                    className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 block"
+                  >
                   <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (
                       <img
@@ -246,10 +267,101 @@ export default function DopeDealsSection() {
                       </button>
                     </div>
                   </div>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Desktop: Horizontal scrolling */}
+        <div className="hidden lg:flex lg:overflow-x-auto lg:gap-6 lg:pb-4 lg:px-4">
+          {products.slice(0, 6).map((product) => {
+            const transformedProduct = transformProductForCard(product);
+            return (
+              <Link
+                key={product.id}
+                href={`/product/${product.id}`}
+                className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-96"
+              >
+                <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
+                  {transformedProduct.image_url ? (
+                    <img
+                      src={transformedProduct.image_url}
+                      alt={transformedProduct.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800">
+                      <div className="text-center">
+                        <div className="text-4xl mb-2">📦</div>
+                        <div className="text-sm font-medium">No Image</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Favorite Button */}
+                  <button
+                    className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                    onClick={(e) => e.stopPropagation()}>
+                    <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="p-4 flex flex-col">
+                  {transformedProduct.brand_name && (
+                    <p className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                      {transformedProduct.brand_name}
+                    </p>
+                  )}
+
+                  <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                    {transformedProduct.name}
+                  </h3>
+
+                  <div className="mt-auto">
+                    <div className="mb-4">
+                      {transformedProduct.compare_at_price ? (
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500 line-through">
+                              ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
+                            </span>
+                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
+                              {transformedProduct.discountPercent}%
+                            </span>
+                          </div>
+                          <div className="text-xl font-bold text-green-600">
+                            ${transformedProduct.salePrice.toFixed(2)}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-xl font-bold text-gray-900 dark:text-white">
+                          ${transformedProduct.salePrice.toFixed(2)}
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      className="w-full px-4 py-3 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-sm hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg"
+                      style={{
+                        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                        letterSpacing: '0.05em',
+                      }}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        await addToCart(product.id);
+                      }}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
         </div>
 
         {/* View All Button */}

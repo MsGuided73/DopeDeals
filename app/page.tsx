@@ -185,7 +185,8 @@ export default function HomePage() {
               }}>
                 HIGHER LEARNING
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              {/* IMPORTANT: This text MUST use INTER font - do not change back to other fonts */}
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto blog-subtitle-inter">
                 Stay informed with the latest news, guides, and insights from the Highway 420 community
               </p>
             </div>

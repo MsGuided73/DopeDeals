@@ -283,7 +283,7 @@ export default function EnhancedSearchBar() {
             onKeyDown={handleKeyDown}
             onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
             placeholder={currentPlaceholder}
-            className="w-full px-6 py-1 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold"
+            className="w-full px-6 py-0.5 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold"
             aria-label="Search Highway 420 products"
             role="searchbox"
             autoComplete="off"

@@ -2,11 +2,6 @@
 
 import React from "react";
 
-interface LogoButtonProps {
-  href: string; 
-  label?: string;
-}
-
 export default function CollectionsGrid() {
   const categories = [
     { name: "Legal\nTHCA Flower", route: "/thca-flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
@@ -21,41 +16,6 @@ export default function CollectionsGrid() {
 
   const logoPath =
     "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/puffco_ad3.jpg";
-
-  // CTA as anchor (styled like a button) to avoid event propagation issues
-  const LogoButton: React.FC<LogoButtonProps> = ({ href, label = "SHOP NOW" }) => {
-    return (
-      <a
-        href={href}
-        role="button"
-        aria-label={label}
-        className="
-          absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-          px-6 py-2
-          bg-green-600 hover:bg-white
-          text-white hover:text-green-600
-          border-2 border-green-600
-          font-bold tracking-wide
-          transition-all duration-300
-          hover:scale-105 hover:shadow-lg
-          text-lg
-          z-30
-          rounded-full
-          highway-hover-lift
-          pointer-events-auto
-        "
-        style={{
-          backgroundColor: "#2d8f47",
-          borderColor: "#2d8f47",
-          fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-          fontWeight: "normal",
-          letterSpacing: "0.05em",
-        }}
-      >
-        {label}
-      </a>
-    );
-  };
 
   return (
     // Lower z-index so dropdown menus can appear on top
@@ -125,10 +85,7 @@ export default function CollectionsGrid() {
                   {cat.name}
                 </h1>
               </div>
-              {/* CTA wrapper — container is non-interactive; CTA itself is clickable */}
-              <div className="pointer-events-none absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <LogoButton href={cat.route} label="SHOP NOW" />
-              </div>
+
             </a>
           ))}
         </div>
@@ -192,9 +149,7 @@ export default function CollectionsGrid() {
                   {cat.name}
                 </h1>
               </div>
-              <div className="pointer-events-none absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <LogoButton href={cat.route} label="SHOP NOW" />
-              </div>
+
             </a>
           ))}
         </div>
