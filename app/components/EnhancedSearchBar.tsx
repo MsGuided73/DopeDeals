@@ -165,7 +165,11 @@ export default function EnhancedSearchBar() {
         'Vaporizers': '/thca_pnv',
         'Smoking Accessories': '/accessories',
         'THCA Flower': '/thca-flower',
-        'Pre-Rolls & Vapes': '/thca_pnv'
+        'Pre-Rolls & Vapes': '/thca_pnv',
+        'THCA Prerolls & Vapes': '/thca_pnv',
+        'THCA Prerolls': '/thca_pnv',
+        'THCA Vapes': '/thca_pnv',
+        'THCA Cartridges': '/thca_pnv'
       }
 
       return categoryRoutes[suggestion.text] || `/search?q=${encodeURIComponent(suggestion.text)}`
@@ -226,6 +230,26 @@ export default function EnhancedSearchBar() {
     }
 
     setShowSuggestions(false)
+
+    // Check if search query should redirect to THCA page
+    const thcaKeywords = ['thca', 'prerolls', 'vapes', 'cartridges', 'disposable'];
+    const queryLower = searchQuery.toLowerCase().trim();
+    const shouldRedirectToThca = thcaKeywords.some(keyword =>
+      queryLower.includes(keyword) &&
+      (queryLower.includes('preroll') || queryLower.includes('vape') ||
+       queryLower.includes('cartridge') || queryLower.includes('disposable') ||
+       (queryLower.includes('thca') && (queryLower.includes('preroll') || queryLower.includes('vape'))))
+    );
+
+    if (shouldRedirectToThca) {
+      // Redirect to THCA page instead of general search
+      if (typeof window !== 'undefined' && router) {
+        router.push('/thca_pnv')
+      } else {
+        window.location.href = '/thca_pnv'
+      }
+      return
+    }
 
     // Record search analytics
     try {
