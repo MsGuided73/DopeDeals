@@ -584,8 +584,7 @@ export async function DELETE(request: NextRequest) {
     const sessionId = await getSessionId(request);
     const userId = user?.id || null;
 
-    console.log('DELETE CART - User ID:', userId);
-    console.log('DELETE CART - Session ID:', sessionId);
+
 
     if (!userId && !sessionId) {
       return NextResponse.json(
@@ -600,20 +599,14 @@ export async function DELETE(request: NextRequest) {
     if (userId) {
       // For authenticated users, find all their carts (across all sessions)
       cartQuery = cartQuery.eq('user_id', userId);
-      console.log('DELETE CART - Querying by user_id:', userId);
     } else if (sessionId) {
       // For anonymous users, find cart from current session
       cartQuery = cartQuery.eq('session_id', sessionId);
-      console.log('DELETE CART - Querying by session_id:', sessionId);
     }
 
     const { data: userCarts, error: cartQueryError } = await cartQuery;
 
-    console.log('DELETE CART - Query result:', userCarts);
-    console.log('DELETE CART - Query error:', cartQueryError);
-
     if (cartQueryError || !userCarts || userCarts.length === 0) {
-      console.log('DELETE CART - No carts found, returning success');
       return NextResponse.json({
         success: true,
         message: 'Cart cleared successfully',
@@ -623,15 +616,6 @@ export async function DELETE(request: NextRequest) {
 
     // Get all cart IDs for this user/session
     const cartIds = userCarts.map(cart => cart.id);
-    console.log('DELETE CART - Cart IDs to clear:', cartIds);
-
-    // Check what's in these carts before deleting
-    const { data: itemsBefore, error: beforeError } = await supabase
-      .from('cart_items')
-      .select('id, cart_id')
-      .in('cart_id', cartIds);
-
-    console.log('DELETE CART - Items before delete:', itemsBefore?.length || 0);
 
     // Delete all cart items for all user's carts
     const { data: deleteResult, error } = await supabase
@@ -640,9 +624,6 @@ export async function DELETE(request: NextRequest) {
       .in('cart_id', cartIds)
       .select();
 
-    console.log('DELETE CART - Delete result:', deleteResult);
-    console.log('DELETE CART - Delete error:', error);
-
     if (error) {
       console.error('Error clearing cart:', error);
       return NextResponse.json(
@@ -650,8 +631,6 @@ export async function DELETE(request: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log('DELETE CART - Successfully cleared', deleteResult?.length || 0, 'items');
 
     return NextResponse.json({
       success: true,
