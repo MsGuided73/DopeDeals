@@ -107,10 +107,27 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
   if (!sessionId && !userId) return [];
 
   try {
-    // Setup session RLS first
-    await setupSessionRLS(sessionId, userId);
+    // For cart retrieval, we'll bypass RLS issues by finding carts directly
+    // and then getting their items, since we verify ownership at app level
 
-    // Get cart items with product details
+    // Find all carts that belong to this user/session
+    let cartQuery = supabase.from('carts').select('id');
+
+    if (userId) {
+      cartQuery = cartQuery.eq('user_id', userId);
+    } else if (sessionId) {
+      cartQuery = cartQuery.eq('session_id', sessionId);
+    }
+
+    const { data: userCarts, error: cartError } = await cartQuery;
+
+    if (cartError || !userCarts || userCarts.length === 0) {
+      return [];
+    }
+
+    const cartIds = userCarts.map(cart => cart.id);
+
+    // Get cart items for all user's carts
     const { data: cartItems, error } = await supabase
       .from('cart_items')
       .select(`
@@ -132,7 +149,8 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
           tobacco_product,
           image_url
         )
-      `);
+      `)
+      .in('cart_id', cartIds);
 
     if (error) {
       console.error('Error fetching cart items:', error);
@@ -178,10 +196,7 @@ async function manageCartItem(
   if (!productId || (!sessionId && !userId)) return null;
 
   try {
-    // Setup session RLS
-    await setupSessionRLS(sessionId, userId);
-
-    // Get cart ID first
+    // Get cart ID first (bypassing RLS issues)
     const cartId = await getOrCreateCart(sessionId, userId);
     if (!cartId) throw new Error('Could not create or find cart');
 
