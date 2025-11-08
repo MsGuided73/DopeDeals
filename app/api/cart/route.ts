@@ -569,8 +569,7 @@ export async function DELETE(request: NextRequest) {
     const sessionId = await getSessionId(request);
     const userId = user?.id || null;
 
-    console.log('DELETE CART - Session ID:', sessionId);
-    console.log('DELETE CART - User ID:', userId);
+
 
     if (!userId && !sessionId) {
       return NextResponse.json(
@@ -592,11 +591,7 @@ export async function DELETE(request: NextRequest) {
 
     const { data: userCarts, error: cartQueryError } = await cartQuery;
 
-    console.log('DELETE CART - Found carts:', userCarts);
-    console.log('DELETE CART - Cart query error:', cartQueryError);
-
     if (cartQueryError || !userCarts || userCarts.length === 0) {
-      console.log('DELETE CART - No carts found to clear');
       return NextResponse.json({
         success: true,
         message: 'Cart cleared successfully',
@@ -606,15 +601,6 @@ export async function DELETE(request: NextRequest) {
 
     // Get all cart IDs for this user/session
     const cartIds = userCarts.map(cart => cart.id);
-    console.log('DELETE CART - Cart IDs to clear:', cartIds);
-
-    // Check how many items are in all these carts before deleting
-    const { data: itemsBefore, error: countError } = await supabase
-      .from('cart_items')
-      .select('id, cart_id')
-      .in('cart_id', cartIds);
-
-    console.log('DELETE CART - Items before delete:', itemsBefore?.length || 0);
 
     // Delete all cart items for all user's carts
     const { data: deleteResult, error } = await supabase
@@ -623,9 +609,6 @@ export async function DELETE(request: NextRequest) {
       .in('cart_id', cartIds)
       .select();
 
-    console.log('DELETE CART - Delete result:', deleteResult);
-    console.log('DELETE CART - Delete error:', error);
-
     if (error) {
       console.error('Error clearing cart:', error);
       return NextResponse.json(
@@ -633,8 +616,6 @@ export async function DELETE(request: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log('DELETE CART - Successfully cleared', deleteResult?.length || 0, 'items');
 
     return NextResponse.json({
       success: true,
