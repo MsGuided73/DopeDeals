@@ -8,6 +8,7 @@ import {
   getCart,
   updateCartQuantity,
   removeFromCart,
+  clearCart,
   formatPrice,
   getSessionId,
   getShopReferer,
@@ -58,27 +59,10 @@ export default function CartPage() {
     }
   };
 
-  const clearCart = async () => {
-    try {
-      const sessionId = getSessionId();
-
-      const response = await fetch('/api/cart', {
-        method: 'DELETE',
-        headers: {
-          'x-session-id': sessionId,
-        },
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        await fetchCart();
-      } else {
-        setError(data.error || 'Failed to clear cart');
-      }
-    } catch (err) {
-      setError('Failed to clear cart');
-      console.error('Clear cart error:', err);
+  const handleClearCart = async () => {
+    const success = await clearCart();
+    if (success) {
+      await fetchCart(); // Refresh cart after successful clear
     }
   };
 
@@ -129,7 +113,7 @@ export default function CartPage() {
           <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
           {cart && cart.items && cart.items.length > 0 && (
             <button
-              onClick={clearCart}
+              onClick={handleClearCart}
               className="text-red-600 hover:text-red-700 text-sm font-medium"
             >
               Clear Cart
