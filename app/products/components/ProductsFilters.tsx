@@ -54,7 +54,7 @@ export default function ProductsFilters({ filters, onFiltersChange, products }: 
       brands: [],
       categories: [],
       materials: [],
-      inStock: false,
+      inStock: true,  // Keep in-stock filter enabled by default
       onSale: false,
       newArrivals: false,
     });

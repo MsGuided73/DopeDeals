@@ -216,7 +216,7 @@ export default function GlobalMasthead() {
                                     onMouseLeave={() => handleMouseLeaveWithDelay("nested")}
                                   >
                                     <div className="py-2">
-                                      <Link href="/thca#flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
+                                      <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
                                         ⭐ THCA Flower
                                       </Link>
                                       <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
@@ -531,7 +531,7 @@ export default function GlobalMasthead() {
               <div className="pt-4">
                 <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">THCA+</h3>
                 <div className="space-y-2 pl-4">
-                  <Link href="/thca#flower" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/thca_flower" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     THCA Flower
                   </Link>
                   <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
@@ -620,7 +620,7 @@ export default function GlobalMasthead() {
                       <Link href="/puffco" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 Puffco Peak Pro
                       </Link>
-                      <Link href="/thca#flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                      <Link href="/thca_flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 THCA Flower Collection
                       </Link>
                     </div>

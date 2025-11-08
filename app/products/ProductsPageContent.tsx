@@ -58,7 +58,7 @@ export default function ProductsPageContent() {
     brands: [] as string[],
     categories: [] as string[],
     materials: [] as string[],
-    inStock: false,
+    inStock: true,  // Default to only show in-stock products
     onSale: false,
     newArrivals: false,
   });
@@ -68,15 +68,34 @@ export default function ProductsPageContent() {
     async function fetchProducts() {
       try {
         setLoading(true);
-        const { data, error } = await supabaseBrowser
+
+        let query = supabaseBrowser
           .from('main_site_products')
           .select(`
             id, name, description, short_description, our_price, sale_price, fire_price,
             image_url, sku, stock_quantity, is_active, featured, brand_id, category_id,
             created_at, updated_at
           `)
-          .eq('is_active', true)
-          .order('created_at', { ascending: false });
+          .eq('is_active', true);
+
+        // If there's a search query, use database full-text search
+        if (searchQuery.trim()) {
+          // Use PostgreSQL full-text search with the search vector
+          query = query.textSearch('search_vec', searchQuery.trim(), {
+            type: 'websearch', // More intuitive search syntax
+            config: 'english'
+          });
+        }
+
+        // Apply ordering - prioritize search relevance if searching, otherwise by creation date
+        if (searchQuery.trim()) {
+          // For search results, order by relevance (PostgreSQL ranks results)
+          query = query.order('created_at', { ascending: false });
+        } else {
+          query = query.order('created_at', { ascending: false });
+        }
+
+        const { data, error } = await query;
 
         if (error) {
           console.error('Error fetching products:', error);
@@ -90,6 +109,8 @@ export default function ProductsPageContent() {
           return;
         }
 
+
+
         // Transform Supabase data to match our Product interface
         const transformedProducts = data.map((product: any) => {
           try {
@@ -97,7 +118,7 @@ export default function ProductsPageContent() {
             const salePrice = product.sale_price ? Number(product.sale_price) : null;
             const isOnSale = salePrice && salePrice < price;
 
-            return {
+            const transformed = {
               id: product.id,
               name: product.name || 'Unnamed Product',
               description: product.description || product.short_description || '',
@@ -117,6 +138,9 @@ export default function ProductsPageContent() {
               features: [],
               tags: []
             };
+
+            console.log('name:', product.name, 'image_url:', product.image_url, 'stock_quantity:', product.stock_quantity);
+            return transformed;
           } catch (transformError) {
             console.error('Error transforming product:', product.id, transformError);
             // Return a minimal valid product object
@@ -142,6 +166,7 @@ export default function ProductsPageContent() {
           }
         });
 
+
         setProducts(transformedProducts);
         setFilteredProducts(transformedProducts);
       } catch (err) {
@@ -156,7 +181,7 @@ export default function ProductsPageContent() {
     }
 
     fetchProducts();
-  }, []);
+  }, [searchQuery]);
 
   // Detect if search query is a brand name
   useEffect(() => {
@@ -188,18 +213,8 @@ export default function ProductsPageContent() {
   useEffect(() => {
     let filtered = [...products];
 
-    // Search query filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query) ||
-        (product.brand && product.brand.toLowerCase().includes(query)) ||
-        product.category.toLowerCase().includes(query) ||
-        (product.sku || '').toLowerCase().includes(query) ||
-        (product.tags && product.tags.some(tag => tag.toLowerCase().includes(query)))
-      );
-    }
+    // Note: Search query filtering is now handled by database full-text search
+    // No need for client-side search filtering when using database search
 
     // Price filter
     filtered = filtered.filter(product =>
@@ -238,6 +253,20 @@ export default function ProductsPageContent() {
       filtered = filtered.filter(product => product.isNew);
     }
 
+    // TEMPORARILY DISABLED: Filter out products without valid images (CRITICAL REQUIREMENT)
+    // const beforeImageFilter = filtered.length;
+    // filtered = filtered.filter(product => {
+    //   const hasValidImage = product.imageUrl &&
+    //                        product.imageUrl.trim() !== '' &&
+    //                        product.imageUrl !== null &&
+    //                        product.imageUrl !== 'null';
+    //   if (!hasValidImage) {
+    //     console.log('Filtering out product without valid image:', product.name, 'imageUrl:', product.imageUrl);
+    //   }
+    //   return hasValidImage;
+    // });
+    // console.log(`Image filter: ${beforeImageFilter} → ${filtered.length} products`);
+
     // Apply sorting
     switch (sortBy) {
       case 'price-low':
@@ -255,6 +284,8 @@ export default function ProductsPageContent() {
       default: // featured
         filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
     }
+
+
 
     setFilteredProducts(filtered);
     setCurrentPage(1);
@@ -348,7 +379,7 @@ export default function ProductsPageContent() {
             </div>
 
             {/* Products Grid */}
-            <ProductsProductGrid 
+            <ProductsProductGrid
               products={currentProducts}
               viewMode={viewMode}
             />

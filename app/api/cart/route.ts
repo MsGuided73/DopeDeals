@@ -576,14 +576,46 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Setup session RLS first
-    await setupSessionRLS(sessionId, userId);
+    // Get the cart ID for the current user/session
+    const cartId = await getOrCreateCart(sessionId, userId);
+    if (!cartId) {
+      return NextResponse.json(
+        { error: 'No cart found to clear' },
+        { status: 404 }
+      );
+    }
 
-    // Delete all cart items - the RLS policies will ensure only authorized items are affected
+    // Verify cart ownership before deleting (bypass RLS issues)
+    const { data: cart, error: cartError } = await supabase
+      .from('carts')
+      .select('id, user_id, session_id')
+      .eq('id', cartId)
+      .single();
+
+    if (cartError || !cart) {
+      return NextResponse.json(
+        { error: 'Cart not found' },
+        { status: 404 }
+      );
+    }
+
+    // Verify ownership
+    const isOwner = (userId && cart.user_id === userId) ||
+                   (sessionId && cart.session_id === sessionId);
+
+    if (!isOwner) {
+      return NextResponse.json(
+        { error: 'Unauthorized access to cart' },
+        { status: 403 }
+      );
+    }
+
+    // Delete all cart items for this specific cart
+    // Since we've verified ownership above, we can safely delete
     const { error } = await supabase
       .from('cart_items')
       .delete()
-      .neq('id', ''); // Delete all accessible items (empty string won't match any varchar)
+      .eq('cart_id', cartId);
 
     if (error) {
       console.error('Error clearing cart:', error);

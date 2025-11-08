@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import PipesProductCard from '../../pipes/components/PipesProductCard';
 import UniversalProductCard from '../../components/UniversalProductCard';
 import { Product } from '../ProductsPageContent';
 
@@ -21,6 +22,8 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
     }
     setFavorites(newFavorites);
   };
+
+
 
   if (products.length === 0) {
     return (
@@ -153,106 +156,32 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
     );
   }
 
+  // Grid view - Use PipesProductCard design
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {products.map((product) => (
-        <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
-          {/* Product Image */}
-          <div className="relative aspect-square bg-gray-100 overflow-hidden">
-            {product.imageUrl ? (
-              <Image
-                src={product.imageUrl}
-                alt={product.name}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                <div className="text-center">
-                  <div className="text-3xl mb-2">📦</div>
-                  <div className="text-sm">No Image</div>
-                </div>
-              </div>
-            )}
-            
-            {/* Badges */}
-            <div className="absolute top-3 left-3 flex flex-col space-y-1">
-              {product.isNew && (
-                <span className="bg-green-500 text-white px-2 py-1 rounded-md text-xs font-bold">
-                  NEW
-                </span>
-              )}
-              {product.isSale && (
-                <span className="bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold">
-                  SALE
-                </span>
-              )}
-
-            </div>
-
-            {/* Favorite Button */}
-            <button
-              onClick={() => toggleFavorite(product.id)}
-              className={`absolute top-3 right-3 p-2 rounded-full ${
-                favorites.has(product.id)
-                  ? 'text-red-500 bg-white'
-                  : 'text-gray-400 bg-white hover:text-red-500'
-              } shadow-sm`}
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-              </svg>
-            </button>
-
-            {/* Quick View Button */}
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-              <Link
-                href={`/product/${product.id}`}
-                className="bg-white text-gray-900 px-4 py-2 rounded-md font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300"
-              >
-                Quick View
-              </Link>
-            </div>
-          </div>
-
-          {/* Product Info */}
-          <div className="p-4">
-            <div className="flex items-start justify-between mb-2">
-              <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-medium text-gray-900 truncate">
-                  <Link href={`/product/${product.id}`} className="hover:text-dope-orange-600">
-                    {product.name}
-                  </Link>
-                </h3>
-                <p className="text-sm text-gray-500 mt-1">{product.brand}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-lg font-bold text-gray-900">${product.price}</span>
-                {product.originalPrice && (
-                  <span className="text-sm text-gray-500 line-through">${product.originalPrice}</span>
-                )}
-              </div>
-              
-              <div className="flex items-center space-x-1">
-                <div className={`w-2 h-2 rounded-full ${product.inStock ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                <span className={`text-xs ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
-                  {product.inStock ? 'In Stock' : 'Out of Stock'}
-                </span>
-              </div>
-            </div>
-
-            <button
-              disabled={!product.inStock}
-              className="w-full mt-3 bg-dope-orange-500 hover:bg-dope-orange-600 disabled:bg-gray-300 text-white py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      ))}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {products.map((product) => {
+        console.log('Passing to PipesProductCard:', product.name, 'image_url:', product.imageUrl);
+        return (
+          <PipesProductCard
+            key={product.id}
+            product={{
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image_url: product.imageUrl,
+              brand: product.brand,
+              brand_name: product.brand,
+              short_description: product.description,
+              description: product.description,
+              stock_quantity: product.inStock ? 10 : 0,
+              compare_at_price: product.originalPrice,
+              featured: product.featured,
+              inStock: product.inStock,
+              sku: product.sku,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
