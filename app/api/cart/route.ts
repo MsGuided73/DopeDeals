@@ -569,6 +569,9 @@ export async function DELETE(request: NextRequest) {
     const sessionId = await getSessionId(request);
     const userId = user?.id || null;
 
+    console.log('DELETE CART - Session ID:', sessionId);
+    console.log('DELETE CART - User ID:', userId);
+
     if (!userId && !sessionId) {
       return NextResponse.json(
         { error: 'Authentication required - please refresh the page to establish a session' },
@@ -578,6 +581,8 @@ export async function DELETE(request: NextRequest) {
 
     // Get the cart ID for the current user/session
     const cartId = await getOrCreateCart(sessionId, userId);
+    console.log('DELETE CART - Found cart ID:', cartId);
+
     if (!cartId) {
       return NextResponse.json(
         { error: 'No cart found to clear' },
@@ -592,6 +597,9 @@ export async function DELETE(request: NextRequest) {
       .eq('id', cartId)
       .single();
 
+    console.log('DELETE CART - Cart data:', cart);
+    console.log('DELETE CART - Cart error:', cartError);
+
     if (cartError || !cart) {
       return NextResponse.json(
         { error: 'Cart not found' },
@@ -603,6 +611,10 @@ export async function DELETE(request: NextRequest) {
     const isOwner = (userId && cart.user_id === userId) ||
                    (sessionId && cart.session_id === sessionId);
 
+    console.log('DELETE CART - Is owner:', isOwner);
+    console.log('DELETE CART - Cart user_id:', cart.user_id);
+    console.log('DELETE CART - Cart session_id:', cart.session_id);
+
     if (!isOwner) {
       return NextResponse.json(
         { error: 'Unauthorized access to cart' },
@@ -610,12 +622,24 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    // Check how many items are in the cart before deleting
+    const { data: itemsBefore, error: countError } = await supabase
+      .from('cart_items')
+      .select('id')
+      .eq('cart_id', cartId);
+
+    console.log('DELETE CART - Items before delete:', itemsBefore?.length || 0);
+
     // Delete all cart items for this specific cart
     // Since we've verified ownership above, we can safely delete
-    const { error } = await supabase
+    const { data: deleteResult, error } = await supabase
       .from('cart_items')
       .delete()
-      .eq('cart_id', cartId);
+      .eq('cart_id', cartId)
+      .select();
+
+    console.log('DELETE CART - Delete result:', deleteResult);
+    console.log('DELETE CART - Delete error:', error);
 
     if (error) {
       console.error('Error clearing cart:', error);
@@ -625,9 +649,12 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    console.log('DELETE CART - Successfully cleared', deleteResult?.length || 0, 'items');
+
     return NextResponse.json({
       success: true,
-      message: 'Cart cleared successfully'
+      message: 'Cart cleared successfully',
+      itemsCleared: deleteResult?.length || 0
     });
 
   } catch (error) {
