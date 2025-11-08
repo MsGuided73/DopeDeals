@@ -579,63 +579,48 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Get the cart ID for the current user/session
-    const cartId = await getOrCreateCart(sessionId, userId);
-    console.log('DELETE CART - Found cart ID:', cartId);
+    // Find all carts that belong to this user/session
+    let cartQuery = supabase.from('carts').select('id, user_id, session_id');
 
-    if (!cartId) {
-      return NextResponse.json(
-        { error: 'No cart found to clear' },
-        { status: 404 }
-      );
+    if (userId) {
+      // For authenticated users, find all their carts (across all sessions)
+      cartQuery = cartQuery.eq('user_id', userId);
+    } else if (sessionId) {
+      // For anonymous users, find cart from current session
+      cartQuery = cartQuery.eq('session_id', sessionId);
     }
 
-    // Verify cart ownership before deleting (bypass RLS issues)
-    const { data: cart, error: cartError } = await supabase
-      .from('carts')
-      .select('id, user_id, session_id')
-      .eq('id', cartId)
-      .single();
+    const { data: userCarts, error: cartQueryError } = await cartQuery;
 
-    console.log('DELETE CART - Cart data:', cart);
-    console.log('DELETE CART - Cart error:', cartError);
+    console.log('DELETE CART - Found carts:', userCarts);
+    console.log('DELETE CART - Cart query error:', cartQueryError);
 
-    if (cartError || !cart) {
-      return NextResponse.json(
-        { error: 'Cart not found' },
-        { status: 404 }
-      );
+    if (cartQueryError || !userCarts || userCarts.length === 0) {
+      console.log('DELETE CART - No carts found to clear');
+      return NextResponse.json({
+        success: true,
+        message: 'Cart cleared successfully',
+        itemsCleared: 0
+      });
     }
 
-    // Verify ownership
-    const isOwner = (userId && cart.user_id === userId) ||
-                   (sessionId && cart.session_id === sessionId);
+    // Get all cart IDs for this user/session
+    const cartIds = userCarts.map(cart => cart.id);
+    console.log('DELETE CART - Cart IDs to clear:', cartIds);
 
-    console.log('DELETE CART - Is owner:', isOwner);
-    console.log('DELETE CART - Cart user_id:', cart.user_id);
-    console.log('DELETE CART - Cart session_id:', cart.session_id);
-
-    if (!isOwner) {
-      return NextResponse.json(
-        { error: 'Unauthorized access to cart' },
-        { status: 403 }
-      );
-    }
-
-    // Check how many items are in the cart before deleting
+    // Check how many items are in all these carts before deleting
     const { data: itemsBefore, error: countError } = await supabase
       .from('cart_items')
-      .select('id')
-      .eq('cart_id', cartId);
+      .select('id, cart_id')
+      .in('cart_id', cartIds);
 
     console.log('DELETE CART - Items before delete:', itemsBefore?.length || 0);
 
-    // Delete all cart items for this specific cart
-    // Since we've verified ownership above, we can safely delete
+    // Delete all cart items for all user's carts
     const { data: deleteResult, error } = await supabase
       .from('cart_items')
       .delete()
-      .eq('cart_id', cartId)
+      .in('cart_id', cartIds)
       .select();
 
     console.log('DELETE CART - Delete result:', deleteResult);
