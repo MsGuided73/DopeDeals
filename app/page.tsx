@@ -48,7 +48,7 @@ export default function HomePage() {
 
           {/* Customer Reviews Section - Moved above footer */}
           <section className="mt-24 mb-16">
-            <div className="text-center mb-12">
+            <div className="text-left mb-12">
               <h1 className="text-4xl md:text-5xl font-chalets font-bold mb-4" style={{
                 letterSpacing: '-0.02em',
                 color: '#000000'
@@ -178,7 +178,7 @@ export default function HomePage() {
         {/* Blog Articles Section - Just above footer */}
         <section className="mt-24 mb-16">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
+            <div className="text-left mb-12">
               <h2 className="text-4xl md:text-5xl font-chalets font-bold mb-4" style={{
                 letterSpacing: '-0.02em',
                 color: '#000000'

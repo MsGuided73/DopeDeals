@@ -98,7 +98,7 @@ export default function NewProductsSection() {
   if (loading) {
     return (
       <section className="mt-16">
-        <div className="text-center mb-12">
+        <div className="text-left mb-12">
           <h1 className="text-4xl md:text-5xl text-black mb-4" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
             FRESH DROPS
           </h1>
@@ -124,7 +124,7 @@ export default function NewProductsSection() {
   if (error) {
     return (
       <section className="mt-16">
-        <div className="text-center mb-12">
+        <div className="text-left mb-12">
           <h1 className="text-4xl md:text-5xl text-black mb-4" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
             FRESH DROPS
           </h1>
@@ -140,7 +140,7 @@ export default function NewProductsSection() {
     <section className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-left mb-12">
           <h1 className="text-4xl md:text-5xl text-black mb-4" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
             FRESH DROPS
           </h1>
