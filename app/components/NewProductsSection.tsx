@@ -148,14 +148,14 @@ export default function NewProductsSection() {
 
         {/* Mobile: Grid layout */}
         <div className="block lg:hidden">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
             {productsToShow.slice(0, 6).map((product) => {
             const transformedProduct = transformProductForCard(product);
             return (
               <Link
                 key={product.id}
                 href={`/product/${product.id}`}
-                className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 block"
+                className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 block"
               >
                 <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                   {transformedProduct.image_url ? (
@@ -256,7 +256,7 @@ export default function NewProductsSection() {
                 <Link
                   key={product.id}
                   href={`/product/${product.id}`}
-                  className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-96"
+                  className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-96"
                 >
                   <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
                     {transformedProduct.image_url ? (

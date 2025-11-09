@@ -157,7 +157,7 @@ export default function FeaturedProductsSection() {
   const renderProductCard = (product: Product, variant: 'mobile' | 'desktop') => {
     const transformedProduct = transformProductForCard(product);
     const isFavorite = favorites.has(product.id);
-    const cardClassName = `group bg-white dark:bg-gray-900 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${
+    const cardClassName = `group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${
       variant === 'desktop' ? 'flex-shrink-0 w-96' : 'block'
     }`;
 
@@ -314,7 +314,7 @@ export default function FeaturedProductsSection() {
         </div>
 
         <div className="block lg:hidden">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
             {productsToShow.map((product) => renderProductCard(product, 'mobile'))}
           </div>
         </div>
