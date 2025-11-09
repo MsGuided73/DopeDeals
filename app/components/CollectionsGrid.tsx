@@ -73,7 +73,7 @@ export default function CollectionsGrid() {
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               {/* Title layer — non-interactive */}
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
-                <div className="bg-black/20 backdrop-blur-md rounded-xl px-3 py-2">
+                <div className="bg-black/20 rounded-xl px-3 py-2">
                   <h1
                     className="text-white text-xl sm:text-2xl font-bold text-left leading-tight whitespace-pre-line"
                     style={{
@@ -139,7 +139,7 @@ export default function CollectionsGrid() {
 
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               <div className="absolute inset-0 flex items-end justify-start p-4 z-10 pointer-events-none">
-                <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-2">
+                <div className="bg-black/30 rounded-lg px-3 py-2">
                   <h1
                     className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold text-left leading-tight whitespace-pre-line"
                     style={{
