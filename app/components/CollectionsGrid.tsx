@@ -5,10 +5,10 @@ import React from "react";
 export default function CollectionsGrid() {
   const categories = [
     { name: "Legal\nTHCA Flower", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
-    { name: "Shrooms & Stuff", route: "/shrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
+    { name: "Shrooms & Stuff", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
     { name: "Legal THCA\nPrerolls & Vapes", route: "/thca_pnv", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg" },
-    { name: "Bongs", route: "/bongs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png" },
-    { name: "Hand Pipes", route: "/pipes", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/hand_pipes.jpg" },
+    { name: "BONGS", route: "/bongs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png" },
+    { name: "HAND PIPES", route: "/pipes", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/hand_pipes.jpg" },
     { name: "Dab-Rigs & Tools", route: "/dabsntools", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png" },
     { name: "Accessories", route: "/accessories", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
     { name: "Hookahs", route: "/hookahs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg" },
@@ -75,7 +75,7 @@ export default function CollectionsGrid() {
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
                 <div className="bg-black/20 rounded-xl px-3 py-2">
                   <h1
-                    className="text-white text-sm sm:text-base font-bold text-left leading-tight whitespace-pre-line"
+                    className="text-white text-base sm:text-lg font-bold text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow:
@@ -95,7 +95,7 @@ export default function CollectionsGrid() {
 
       {/* Desktop: Full-width grid layout */}
       <div className="hidden lg:block w-full">
-        <div className="grid grid-cols-4 gap-2 h-[65vh] max-h-[600px] w-full px-1">
+        <div className="grid grid-cols-4 gap-2 w-full px-1">
           <a
             href="/ride-with-us"
             className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group transition-transform duration-300 block bg-black"
@@ -141,7 +141,7 @@ export default function CollectionsGrid() {
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
                 <div className="bg-black/30 rounded-lg px-3 py-2">
                   <h1
-                    className="text-white text-lg xl:text-xl 2xl:text-2xl font-bold text-left leading-tight whitespace-pre-line"
+                    className="text-white text-xl xl:text-2xl 2xl:text-3xl font-bold text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow:
