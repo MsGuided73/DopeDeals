@@ -30,7 +30,8 @@ Premium cannabis culture meets street authenticity. Welcome to Highway 420 - you
 - **Styling**: Tailwind CSS, Radix UI Components
 - **Backend**: Supabase (Database & Auth)
 - **State Management**: React Query, Context API
-- **Deployment**: Vercel
+- **Deployment**: Railway/Nixpacks with Docker
+- **Package Manager**: pnpm 9.15.9
 
 ## 🚀 Getting Started
 
@@ -137,6 +138,69 @@ Highway 420 features a premium design system with:
 - Image optimization
 - Code splitting and lazy loading
 - Database query optimization
+
+## 🚀 Deployment
+
+### Docker Build Configuration
+
+This project uses a multi-stage Docker build with pnpm for optimized deployments:
+
+- **Base Image**: `ghcr.io/railwayapp/nixpacks:ubuntu-1745885067`
+- **Package Manager**: pnpm 9.15.9 (pinned for consistency)
+- **Build Output**: Next.js standalone for minimal runtime image
+- **Caching**: pnpm store cache for faster rebuilds
+
+### Environment Variables & Secrets
+
+**Important**: Secrets are NOT embedded in the Dockerfile. All sensitive configuration must be provided as environment variables at deploy time through your platform's secrets management.
+
+#### Required Runtime Environment Variables
+
+Set these in your deployment platform (Railway, Coolify, etc.):
+
+```bash
+# Supabase Configuration (Public - safe to expose to client)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Application Configuration
+NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+
+# Server-side Secrets (NEVER expose to client)
+OPENAI_API_KEY=your_openai_api_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# Additional secrets (if used):
+# ZOHO_CLIENT_ID=...
+# ZOHO_CLIENT_SECRET=...
+# KAJAPAY_API_KEY=...
+# SHIPSTATION_API_KEY=...
+# NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=...
+```
+
+#### Local Development Setup
+
+To match production pnpm version locally:
+
+```bash
+# Install and pin pnpm version
+npm install -g pnpm@9.15.9
+pnpm -v  # Should output 9.15.9
+
+# Install dependencies
+pnpm install
+
+# Verify lockfile integrity
+pnpm install --frozen-lockfile
+```
+
+### Build Process
+
+The CI/CD pipeline will:
+1. Use pnpm 9.15.9 for deterministic installs
+2. Leverage cached pnpm store for faster builds
+3. Generate Next.js standalone output
+4. Create minimal runtime image with only necessary files
 
 ## 📝 Contributing
 
