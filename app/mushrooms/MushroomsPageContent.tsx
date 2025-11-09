@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import ErrorBoundary from '../../components/ErrorBoundary';
-import LoadingState from '../../components/LoadingState';
-import PrismaticBurst from '../../components/PrismaticBurst';
+import ErrorBoundary from '../components/ErrorBoundary';
+import LoadingState from '../components/LoadingState';
+import PrismaticBurst from '../components/PrismaticBurst';
 import { addToCart } from '../lib/cart-utils';
 
 export interface ShroomsStuffProduct {
