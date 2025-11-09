@@ -44,7 +44,7 @@ export default function CollectionsGrid() {
               href={cat.route}
               className="aspect-[4/5] rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
               style={{
-                boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
+                boxShadow: "0 0 0 0 rgba(34, 197, 94, 0)",
                 transition: "box-shadow 0.3s ease, transform 0.3s ease",
               }}
               onMouseEnter={(e) => {

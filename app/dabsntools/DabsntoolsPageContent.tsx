@@ -41,6 +41,11 @@ export interface DabsntoolsProduct {
   category?: string; // For compatibility
   type?: string; // Product type (Rigs, E-Rigs, Tools)
   size?: string; // Product size specifications
+  specs?: {
+    type?: string;
+    size?: string;
+    material?: string;
+  };
 }
 
 export default function DabsntoolsPageContent() {
@@ -84,8 +89,9 @@ export default function DabsntoolsPageContent() {
     }
     if (filters.types.length > 0) {
       filtered = filtered.filter((p: DabsntoolsProduct) => {
-        // Check if product name contains the type (Glass, Electric, Portable, Tools, etc.)
-        return filters.types.some(type => p.name.toLowerCase().includes(type.toLowerCase()));
+        // Use the product type field that we set in the API
+        const productType = p.type || p.specs?.type;
+        return productType && filters.types.includes(productType);
       });
     }
 

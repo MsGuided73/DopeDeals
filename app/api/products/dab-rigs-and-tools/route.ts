@@ -27,7 +27,8 @@ export async function GET(req: NextRequest) {
 
     // For now, let's just return some active products and filter by name patterns
     const dabKeywords = [
-      'dab', 'rig', 'nail', 'banger', 'tool', 'puffco', 'e-rig', 'concentrate'
+      'dab', 'rig', 'nail', 'banger', 'tool', 'puffco', 'e-rig', 'concentrate',
+      'diamond', 'glass', 'recycler', 'portable', 'travel', 'carb cap', 'dart'
     ];
 
     // Build a simple OR condition for keywords
@@ -64,32 +65,68 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .or(dabKeywords.map(keyword => `name.ilike.%${keyword}%`).join(','));
 
+    // Get brand information for products
+    const brandIds = [...new Set(products?.map((p: any) => p.brand_id).filter(Boolean) || [])];
+    let brandsMap: Record<string, string> = {};
+
+    if (brandIds.length > 0) {
+      const { data: brands } = await supabase
+        .from('brands_new')
+        .select('id, name')
+        .in('id', brandIds);
+
+      brandsMap = (brands || []).reduce((acc, brand) => {
+        acc[brand.id] = brand.name;
+        return acc;
+      }, {} as Record<string, string>);
+    }
+
     // Transform the data to match expected format (similar to other product APIs)
-    const transformedProducts = (products || []).map((product: any) => ({
-      id: product.id,
-      name: product.name,
-      price: product.our_price || product.price,
-      compare_at_price: product.sale_price,
-      image_url: product.image_url,
-      description: product.description,
-      short_description: product.short_description,
-      sku: product.sku,
-      stock_quantity: product.stock_quantity || 0,
-      is_active: product.is_active,
-      featured: product.featured || false,
-      brand_id: product.brand_id,
-      category_id: product.category_id,
-      created_at: product.created_at,
-      updated_at: product.updated_at,
-      // Add additional fields expected by frontend
-      specs: {
-        type: product.type || 'Rigs',
-        size: product.size || 'Standard',
-        material: product.material || 'Glass'
-      },
-      isNew: product.is_new || false,
-      is_sale: !!product.sale_price
-    }));
+    const transformedProducts = (products || []).map((product: any) => {
+      // Determine product type based on name and brand
+      let productType = 'Rigs'; // default
+      const nameLower = product.name.toLowerCase();
+
+      if (nameLower.includes('puffco') || nameLower.includes('e-rig') || nameLower.includes('electric')) {
+        productType = 'E-Rigs';
+      } else if (nameLower.includes('portable') || nameLower.includes('travel')) {
+        productType = 'Portable';
+      } else if (nameLower.includes('tool') || nameLower.includes('dabber') || nameLower.includes('nail') ||
+                 nameLower.includes('banger') || nameLower.includes('carb cap') || nameLower.includes('dart')) {
+        productType = 'Tools';
+      } else if (nameLower.includes('glass') || nameLower.includes('rig') || nameLower.includes('recycler')) {
+        productType = 'Glass Rigs';
+      }
+
+      return {
+        id: product.id,
+        name: product.name,
+        price: product.our_price || product.price,
+        compare_at_price: product.sale_price,
+        image_url: product.image_url,
+        description: product.description,
+        short_description: product.short_description,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        is_active: product.is_active,
+        featured: product.featured || false,
+        brand_id: product.brand_id,
+        category_id: product.category_id,
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+        // Add brand name
+        brand: brandsMap[product.brand_id] || 'House Brand',
+        // Add additional fields expected by frontend
+        specs: {
+          type: productType,
+          size: product.size || 'Standard',
+          material: product.material || 'Glass'
+        },
+        isNew: product.is_new || false,
+        is_sale: !!product.sale_price,
+        inStock: (product.stock_quantity || 0) > 0
+      };
+    });
 
     return NextResponse.json({
       products: transformedProducts,
