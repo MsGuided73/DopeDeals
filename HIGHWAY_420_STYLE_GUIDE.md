@@ -95,6 +95,13 @@ HIGHWAY 420
 - **Color**: Gray-400, White
 - **Treatment**: Uppercase for labels
 
+#### **🚨 CRITICAL: Detailed Product Page Typography Rules**
+- **NEVER USE CHALETS FONT**: Chalets font is strictly forbidden on or near Detailed Product Pages
+- **MANDATORY FONT**: Use **Bold Faced Inter** font for all product page text
+- **Reason**: Maintains professional, readable typography for product details and specifications
+- **Implementation**: All product page components must use Inter Bold (`font-bold` or `font-semibold`)
+- **Scope**: Applies to product titles, descriptions, specifications, reviews, and all related text
+
 ### **Color Palette**
 
 #### **Primary Colors**
