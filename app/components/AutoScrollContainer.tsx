@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import { useEffect, useRef, useState, ReactNode, useMemo } from 'react';
 
 interface AutoScrollContainerProps {
   children: ReactNode;
@@ -14,8 +14,8 @@ interface AutoScrollContainerProps {
 export default function AutoScrollContainer({
   children,
   className = '',
-  autoScrollInterval = 3000,
-  scrollAmount = 400,
+  autoScrollInterval = 50, // Faster for smoother continuous scroll
+  scrollAmount = 2, // Smaller increments for smoother motion
   pauseOnHover = true,
   showControls = true,
 }: AutoScrollContainerProps) {
@@ -24,6 +24,16 @@ export default function AutoScrollContainer({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Duplicate children for seamless infinite scroll
+  const duplicatedChildren = useMemo(() => {
+    return (
+      <>
+        {children}
+        {children}
+      </>
+    );
+  }, [children]);
 
   const checkScrollButtons = () => {
     if (!containerRef.current) return;
@@ -35,12 +45,12 @@ export default function AutoScrollContainer({
 
   const scrollLeft = () => {
     if (!containerRef.current) return;
-    containerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    containerRef.current.scrollBy({ left: -scrollAmount * 10, behavior: 'smooth' });
   };
 
   const scrollRight = () => {
     if (!containerRef.current) return;
-    containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    containerRef.current.scrollBy({ left: scrollAmount * 10, behavior: 'smooth' });
   };
 
   const startAutoScroll = () => {
@@ -49,13 +59,18 @@ export default function AutoScrollContainer({
     intervalRef.current = setInterval(() => {
       if (!containerRef.current || isPaused) return;
 
-      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      const container = containerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } = container;
 
-      // If we're at the end, scroll back to the beginning
-      if (scrollLeft >= scrollWidth - clientWidth - 1) {
-        containerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      // Calculate halfway point (end of first set of children)
+      const halfwayPoint = scrollWidth / 2;
+
+      // If we've scrolled past the halfway point, reset to beginning seamlessly
+      if (scrollLeft >= halfwayPoint) {
+        container.scrollTo({ left: 0, behavior: 'auto' }); // Instant reset, no animation
       } else {
-        containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        // Normal smooth scroll
+        container.scrollBy({ left: scrollAmount, behavior: 'auto' }); // Use 'auto' for smoother continuous motion
       }
     }, autoScrollInterval);
   };
@@ -136,7 +151,7 @@ export default function AutoScrollContainer({
           msOverflowStyle: 'none', // IE/Edge
         }}
       >
-        {children}
+        {duplicatedChildren}
       </div>
 
       {/* Right Arrow */}
