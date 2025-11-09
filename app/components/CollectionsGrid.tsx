@@ -4,14 +4,14 @@ import React from "react";
 
 export default function CollectionsGrid() {
   const categories = [
-    { name: "Legal\nTHCA Flower", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
-    { name: "Shrooms & Stuff", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
-    { name: "Legal THCA\nPrerolls & Vapes", route: "/thca_pnv", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg" },
+    { name: "LEGAL\nTHCA FLOWER", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
+    { name: "SHROOMS & STUFF", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
+    { name: "LEGAL THCA\nPREROLLS & VAPES", route: "/thca_pnv", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg" },
     { name: "BONGS", route: "/bongs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png" },
     { name: "HAND PIPES", route: "/pipes", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/hand_pipes.jpg" },
-    { name: "Dab-Rigs & Tools", route: "/dabsntools", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png" },
-    { name: "Accessories", route: "/accessories", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
-    { name: "Hookahs", route: "/hookahs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg" },
+    { name: "DAB-RIGS & TOOLS", route: "/dabsntools", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png" },
+    { name: "ACCESSORIES", route: "/accessories", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
+    { name: "HOOKAHS", route: "/hookahs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg" },
   ];
 
   const logoPath =
