@@ -23,7 +23,7 @@ export default function HomePage() {
       <div>
 
         {/* Collections Grid */}
-        <main className="w-full px-0 py-0 -mt-12">
+        <main className="w-full px-0 py-0 -mt-8">
           {/* Enhanced Metallic Section Divider - Reduced spacing to move grid up */}
           <div className="w-full -mt-0 mb-1">
             {/* Top metallic line - Reduced by 50% */}
