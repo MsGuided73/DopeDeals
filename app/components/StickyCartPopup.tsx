@@ -4,34 +4,17 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ShoppingCart, X, Plus, Minus } from 'lucide-react';
 import FocusTrap from 'focus-trap-react';
-import { getCart, updateCartQuantity, removeFromCart, formatPrice, type Cart, type CartItem } from '../lib/cart-utils';
+import { updateCartQuantity, removeFromCart, formatPrice, type Cart, type CartItem } from '../lib/cart-utils';
+import { useCart } from '../contexts/CartContext';
 
 const MAX_QUANTITY = 99;
 
 export default function StickyCartPopup() {
-  const [cart, setCart] = useState<Cart | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const { cart, refreshCart } = useCart();
   const [isExpanded, setIsExpanded] = useState(false);
   const [updating, setUpdating] = useState<string | null>(null);
   const [removingItemId, setRemovingItemId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // Fetch cart data
-  const fetchCart = async () => {
-    try {
-      const cartData = await getCart();
-      if (cartData) {
-        setCart(cartData);
-        // Show popup if cart has items
-        setIsVisible(cartData.items && cartData.items.length > 0);
-        // Clear any previous error on successful fetch
-        setErrorMessage(null);
-      }
-    } catch (error) {
-      console.error('Error fetching cart:', error);
-      setErrorMessage('Unable to load cart. Please try again.');
-    }
-  };
 
   // Update cart quantity
   const updateQuantity = async (cartItemId: string, newQuantity: number) => {
@@ -45,7 +28,7 @@ export default function StickyCartPopup() {
     try {
       const success = await updateCartQuantity(cartItemId, newQuantity);
       if (success) {
-        await fetchCart(); // Refresh cart
+        await refreshCart(); // Refresh cart using context
       } else {
         setErrorMessage('Failed to update quantity. Please try again.');
       }
@@ -63,7 +46,7 @@ export default function StickyCartPopup() {
     try {
       const success = await removeFromCart(cartItemId);
       if (success) {
-        await fetchCart(); // Refresh cart
+        await refreshCart(); // Refresh cart using context
       }
     } catch (error) {
       console.error('Error removing item:', error);
@@ -72,21 +55,6 @@ export default function StickyCartPopup() {
       setRemovingItemId(null);
     }
   };
-
-  // Listen for cart updates
-  useEffect(() => {
-    fetchCart();
-
-    const handleCartUpdate = () => {
-      fetchCart();
-    };
-
-    window.addEventListener('cartUpdated', handleCartUpdate);
-
-    return () => {
-      window.removeEventListener('cartUpdated', handleCartUpdate);
-    };
-  }, []);
 
   // Handle Escape key to close popup
   useEffect(() => {
@@ -106,7 +74,7 @@ export default function StickyCartPopup() {
   }, [isExpanded]);
 
   // Don't render if no cart or empty cart
-  if (!cart || !cart.items || cart.items.length === 0 || !isVisible) {
+  if (!cart || !cart.items || cart.items.length === 0) {
     return null;
   }
 

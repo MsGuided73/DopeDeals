@@ -35,7 +35,7 @@ export default function BlogPortalPage() {
           const data = await response.json();
           // Filter for educational/higher learning content
           const educationalPosts = data.posts?.filter((post: BlogPost) =>
-            ['Education', 'Science', 'Culture', 'Technology'].includes(post.category)
+            ['How-To', 'Technique', 'Tips', 'Science', 'Culture', 'Technology'].includes(post.category)
           ) || [];
           setBlogPosts(educationalPosts);
         }
@@ -59,7 +59,7 @@ export default function BlogPortalPage() {
       excerpt: 'New to dabbing? This comprehensive guide breaks down rigs, nails, temperature control, and essential setup tips for smooth, flavorful vapor every time.',
       author: 'Highway 420 Team',
       date: '2025-10-30',
-      category: 'Education',
+      category: 'How-To',
       image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop',
       readTime: '8 min read',
       featured: true,
@@ -71,7 +71,7 @@ export default function BlogPortalPage() {
       excerpt: 'Discover how percolators, recyclers, and airflow systems work together to eliminate harshness and deliver impeccably smooth, flavorful vapor.',
       author: 'Highway 420 Team',
       date: '2025-10-30',
-      category: 'Education',
+      category: 'Technique',
       image: 'https://images.unsplash.com/photo-1586227740560-8cf2732c1531?w=600&h=400&fit=crop',
       readTime: '10 min read',
       featured: true,
@@ -83,7 +83,7 @@ export default function BlogPortalPage() {
       excerpt: 'Master temperature precision for concentrates. Learn the goldilocks zone, heat effects on vapor quality, and gear that keeps you in the flavor zone.',
       author: 'Highway 420 Team',
       date: '2025-10-30',
-      category: 'Education',
+      category: 'Tips',
       image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&h=400&fit=crop',
       readTime: '7 min read',
       featured: true,
@@ -138,7 +138,7 @@ export default function BlogPortalPage() {
     }, 1500);
   };
 
-  const categories = ['All', 'Education', 'Science', 'Culture', 'Technology'];
+  const categories = ['All', 'How-To', 'Technique', 'Tips', 'Science', 'Culture', 'Technology'];
   const featuredPosts = blogPosts.filter(post => post.featured);
   const regularPosts = blogPosts.filter(post => !post.featured);
 
@@ -164,6 +164,26 @@ export default function BlogPortalPage() {
             Level up your knowledge with in-depth articles, scientific insights, and community discussions.
             <span className="text-dope-orange font-semibold"> Only community members can comment and engage.</span>
           </p>
+
+          {/* Higher Learning Blog Link */}
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl p-6 max-w-2xl mx-auto mb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <BookOpen className="w-8 h-8" />
+              <h3 className="text-xl font-bold">Explore Higher Learning</h3>
+            </div>
+            <p className="text-blue-100 mb-4 text-center">
+              Discover our comprehensive blog with the latest news, product insights, and premium smoking culture content.
+            </p>
+            <div className="text-center">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 bg-white text-blue-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <BookOpen className="w-5 h-5" />
+                Visit Higher Learning Blog
+              </Link>
+            </div>
+          </div>
 
           {/* Community CTA */}
           <div className="bg-gradient-to-r from-dope-orange to-orange-600 text-white rounded-2xl p-6 max-w-2xl mx-auto">

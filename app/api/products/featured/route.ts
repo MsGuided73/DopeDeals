@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
 
     // Query featured products from main_site_products table
     // Filter for products with valid image URLs (either image_url or image_urls array)
+    // Exclude battery products as they are not exciting
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -55,6 +56,7 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('featured', true)
+      .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit)
       .range(offset, offset + effectiveLimit - 1);
@@ -78,12 +80,13 @@ export async function GET(req: NextRequest) {
       return hasValidImageUrl || hasValidImageUrls;
     });
 
-    // Get total count for pagination info
+    // Get total count for pagination info (excluding batteries)
     const { count } = await supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
-      .eq('featured', true);
+      .eq('featured', true)
+      .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%');
 
     return NextResponse.json({
       products: products || [],

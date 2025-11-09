@@ -19,37 +19,23 @@ export async function GET(req: NextRequest) {
     const offset = parseInt(url.searchParams.get('offset') || '0');
     const category = url.searchParams.get('category');
 
-    // Get dab rig and tool products from multiple categories
-    // First, let's check if we have a specific query for dab products in the category field
+    // Get dab rig and tool products - simplified query for testing
     let query = supabase
       .from('main_site_products')
-      .select('*');
+      .select('*')
+      .eq('is_active', true);
 
-    // Include categories: dab-rigs, e-rigs, concentrates (for concentrate-specific tools), and search by name patterns
-    const dabCategories = ['dab-rigs', 'e-rigs', 'concentrates'];
+    // For now, let's just return some active products and filter by name patterns
     const dabKeywords = [
-      'dab rig', 'dabrig', 'oil rig', 'concentrate rig', 'quartz banger',
-      'nail', 'domeless nail', 'banger', 'carb cap', 'dab tool', 'dabber',
-      'e-rig', 'erig', 'electric rig', 'puffco', 'proxy', 'peak pro',
-      'concentrate tool', 'dabbing tool', 'wax tool'
+      'dab', 'rig', 'nail', 'banger', 'tool', 'puffco', 'e-rig', 'concentrate'
     ];
 
-    if (category && dabCategories.includes(category)) {
-      // Filter by specific category
-      query = query.eq('category_id', category);
-    } else {
-      // Filter by keywords in product name or include certain categories
-      const keywordCondition = dabKeywords.map(keyword =>
-        `name.ilike.%${keyword}%`
-      ).join(',');
+    // Build a simple OR condition for keywords
+    const keywordConditions = dabKeywords.map(keyword =>
+      `name.ilike.%${keyword}%`
+    );
 
-      query = query.or(keywordCondition);
-    }
-
-    // Add category inclusion as fallback
-    if (!category) {
-      query = query.or(`category_id.in.(${dabCategories.map(c => `"${c}"`).join(',')})`);
-    }
+    query = query.or(keywordConditions.join(','));
 
     // Apply pagination
     if (limit > 0) {
@@ -72,21 +58,11 @@ export async function GET(req: NextRequest) {
     }
 
     // Get total count for pagination info
-    let countQuery = supabase
+    const { count } = await supabase
       .from('main_site_products')
-      .select('*', { count: 'exact', head: true });
-
-    if (category && dabCategories.includes(category)) {
-      countQuery = countQuery.eq('category_id', category);
-    } else if (!category) {
-      const keywordCondition = dabKeywords.map(keyword =>
-        `name.ilike.%${keyword}%`
-      ).join(',');
-      countQuery = countQuery.or(keywordCondition);
-      countQuery = countQuery.or(`category_id.in.(${dabCategories.map(c => `"${c}"`).join(',')})`);
-    }
-
-    const { count } = await countQuery;
+      .select('*', { count: 'exact', head: true })
+      .eq('is_active', true)
+      .or(dabKeywords.map(keyword => `name.ilike.%${keyword}%`).join(','));
 
     // Transform the data to match expected format (similar to other product APIs)
     const transformedProducts = (products || []).map((product: any) => ({
@@ -121,6 +97,11 @@ export async function GET(req: NextRequest) {
       limit,
       offset,
       hasMore: count ? (offset + (products?.length || 0)) < count : false
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
+      }
     });
   } catch (error) {
     console.error('API error:', error);

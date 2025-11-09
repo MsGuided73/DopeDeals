@@ -215,7 +215,7 @@ export const getCart = async (): Promise<Cart | null> => {
   const sessionId = getSessionId();
 
   try {
-    const response = await fetch(`/api/cart?sessionId=${sessionId}`, {
+    const response = await fetch('/api/cart', {
       headers: {
         'x-session-id': sessionId, // Add session ID to headers for RLS
       },

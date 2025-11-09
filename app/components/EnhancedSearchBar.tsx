@@ -161,10 +161,10 @@ export default function EnhancedSearchBar() {
       const categoryRoutes: Record<string, string> = {
         'Bongs & Water Pipes': '/bongs',
         'Hand Pipes': '/pipes',
-        'Dab Rigs & Tools': '/dab-rigs',
+        'Dab Rigs & Tools': '/dabsntools',
         'Vaporizers': '/thca_pnv',
         'Smoking Accessories': '/accessories',
-        'THCA Flower': '/thca-flower',
+        'THCA Flower': '/thca_flower',
         'Pre-Rolls & Vapes': '/thca_pnv',
         'THCA Prerolls & Vapes': '/thca_pnv',
         'THCA Prerolls': '/thca_pnv',
@@ -296,7 +296,7 @@ export default function EnhancedSearchBar() {
   const currentPlaceholder = `Search Highway 420 for ${displayText}`
 
   return (
-    <div className="relative max-w-4xl w-full mx-auto">
+    <div className="relative max-w-xl w-full mx-auto mt-2">
       <form onSubmit={handleSearch} className="flex bg-white rounded-2xl shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl">
         {/* Search Input */}
         <div className="flex-1 relative">
@@ -307,7 +307,7 @@ export default function EnhancedSearchBar() {
             onKeyDown={handleKeyDown}
             onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
             placeholder={currentPlaceholder}
-            className="w-full px-6 py-0.5 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold"
+            className="w-full px-6 py-0 h-6 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold leading-tight"
             aria-label="Search Highway 420 products"
             role="searchbox"
             autoComplete="off"
@@ -318,20 +318,20 @@ export default function EnhancedSearchBar() {
             <div
               ref={suggestionsRef}
               className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-xl z-50 max-h-96 overflow-y-auto"
-              style={{ marginTop: '1px' }}
+              style={{ marginTop: '0.5px' }}
             >
               {loadingSuggestions ? (
                 <div className="p-4 text-center text-gray-500">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 mx-auto" style={{ borderColor: '#2d8f47' }}></div>
+                  <div className="animate-spin rounded-full h-3 w-6 border-b-2 mx-auto" style={{ borderColor: '#2d8f47' }}></div>
                   <span className="text-sm mt-2 block">Searching...</span>
                 </div>
               ) : suggestions.length > 0 ? (
-                <div className="py-2">
+                <div className="py-1">
                   {suggestions.map((suggestion, index) => (
                     <button
                       key={`${suggestion.type}-${suggestion.text}-${index}`}
                       onClick={() => handleSuggestionSelect(suggestion)}
-                      className="w-full px-4 py-3 hover:bg-gray-50 transition-colors flex items-center gap-3 text-left"
+                      className="w-full px-4 py-1 hover:bg-gray-50 transition-colors flex items-center gap-3 text-left"
                     >
                       {suggestion.type === 'product' && suggestion.image_url ? (
                         <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
@@ -355,7 +355,7 @@ export default function EnhancedSearchBar() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-gray-900 truncate">
+                        <div className="font-bold text-gray-900 truncate">
                           {suggestion.text}
                         </div>
                         <div className="text-sm text-gray-500 truncate">
@@ -388,9 +388,9 @@ export default function EnhancedSearchBar() {
           type="submit"
           onClick={() => handleSearch()}
           aria-label="Search"
-          className="ml-2 mr-2 rounded-full w-10 h-10 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
+          className="ml-1 mr-1 rounded-full w-4 h-4 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
         >
-          <Search className="w-6 h-6 text-green-700 drop-shadow-lg group-hover:scale-110 transition-transform duration-200" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
+          <Search className="w-2 h-2 text-green-700 drop-shadow-lg group-hover:scale-110 transition-transform duration-200" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
         </button>
       </form>
     </div>

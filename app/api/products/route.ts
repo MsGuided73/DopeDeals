@@ -20,9 +20,13 @@ export async function GET(req: NextRequest) {
     const category = url.searchParams.get('category');
 
     // Build query - Use main_site_products table
+    // Exclude battery products as they are not exciting
     let query = supabase
       .from('main_site_products')
-      .select('*');
+      .select('*')
+      .not('name', 'ilike', '%battery%')
+      .not('description', 'ilike', '%battery%')
+      .not('short_description', 'ilike', '%battery%');
 
     // Apply category filter if provided
     if (category) {
@@ -44,10 +48,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch products', details: error.message }, { status: 500 });
     }
 
-    // Get total count for pagination info
+    // Get total count for pagination info (excluding batteries)
     const { count } = await supabase
       .from('main_site_products')
-      .select('*', { count: 'exact', head: true });
+      .select('*', { count: 'exact', head: true })
+      .not('name', 'ilike', '%battery%')
+      .not('description', 'ilike', '%battery%')
+      .not('short_description', 'ilike', '%battery%');
 
     return NextResponse.json({
       products: products || [],

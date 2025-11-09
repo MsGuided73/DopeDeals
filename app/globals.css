@@ -83,13 +83,19 @@
 .font-highway, .font-highway *,
 [class*="font-highway"],
 .highway-title, .highway-title *,
-body, p, .text-sm, .text-xs, .text-base,
-.font-chalets-legweb,
-.font-chalets-legweb * {
+body, p, .text-sm, .text-xs, .text-base {
   font-family: 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: 0.01em !important;
   text-transform: none !important;
+}
+
+/* Chalets font for hero titles */
+.font-chalets-legweb,
+.font-chalets-legweb * {
+  font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: -0.02em !important;
 }
 
 /* IMPORTANT: Force INTER font for specific blog section subtitle - do not change */

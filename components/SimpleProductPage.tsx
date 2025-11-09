@@ -1,8 +1,9 @@
- "use client";
+"use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ProductGallery from '../app/components/ProductGallery';
 import { addToCart } from '../app/lib/cart-utils';
+import { addToRecentlyViewed } from '../app/lib/recentlyViewed';
 import GlobalMasthead from '../app/components/GlobalMasthead';
 
 interface Product {
@@ -45,6 +46,9 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
         
         const productData = await response.json();
         setProduct(productData);
+
+        // Track this product as recently viewed for AI recommendations
+        addToRecentlyViewed(productId);
       } catch (err) {
         console.error('Error fetching product:', err);
         setError('Failed to load product');

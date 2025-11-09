@@ -1,5 +1,6 @@
 import SimpleProductPage from '../../../components/SimpleProductPage';
 import ProductRecommendations from '../../../components/ProductRecommendations';
+import AutosuggestRecommendations from '../../components/AutosuggestRecommendations';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,6 +17,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     <div>
       {/* Simple Product Page with Global Masthead */}
       <SimpleProductPage productId={id} />
+
+      {/* AI-Powered Recommendations based on viewing history */}
+      <AutosuggestRecommendations />
 
       {/* Related Products */}
       <section className="bg-gray-50 py-12">

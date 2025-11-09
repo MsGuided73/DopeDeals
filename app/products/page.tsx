@@ -4,9 +4,9 @@ import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
-  title: 'All Products | Highway 420 - Water Bongs, Pipes, THCA Flower & More',
-  description: 'Shop premium cannabis accessories at Highway 420. Water bongs, pipes, THCA flower, and more premium products. Free shipping on orders over $50.',
-  keywords: 'water bongs, pipes, THCA flower, cannabis accessories, premium products, CBD, hemp, glass pieces',
+  title: 'All THCA Products | Highway 420 - Premium THCA Flower, Edibles, Concentrates & More',
+  description: 'Shop premium THCA products at Highway 420. THCA flower, edibles, prerolls, concentrates, vapes, and more. Lab-tested, high-quality cannabis products with free shipping.',
+  keywords: 'THCA flower, THCA edibles, THCA prerolls, THCA concentrates, THCA vapes, THCA topicals, THCA bundles, premium cannabis, lab tested',
 };
 
 export default function ProductsPage() {

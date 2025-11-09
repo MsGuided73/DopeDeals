@@ -104,26 +104,26 @@ export default function GlobalMasthead() {
 
       <header className="z-50 relative">
         {/* Two-Row Navbar Layout */}
-        <div className="bg-black relative" style={{ minHeight: "80px" }}>
+        <div className="bg-black relative" style={{ minHeight: "60px" }}>
           {/* Top Row: Logo + Search Bar (centered) - Desktop */}
-          <div className="hidden md:flex items-center px-4 py-2 relative" style={{ height: "40px" }}>
+          <div className="hidden md:flex items-center px-4 py-2 relative" style={{ height: "30px" }}>
             {/* Logo - Left side, spans both rows */}
-            <div className="absolute left-0 top-0 z-10 flex items-center" style={{ height: "80px", width: "85px" }}>
-              <Link href="/" className="flex items-center h-full">
+            <div className="absolute left-0 top-0 z-10 flex items-center" style={{ height: "60px", maxWidth: "200px" }}>
+              <Link href="/" className="flex items-center h-full w-full">
                 <Image
                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                   alt="HIGHWAY 420 Logo"
-                  width={85}
-                  height={61}
-                  className="object-contain w-full h-auto"
-                  style={{ display: "block" }}
+                  width={200}
+                  height={43}
+                  className="object-contain w-full h-full"
+                  style={{ display: "block", maxHeight: "60px" }}
                   priority
                 />
               </Link>
             </div>
 
             {/* Search Bar - Centered horizontally in top row */}
-            <div className="flex-1 flex justify-center">
+            <div className="flex-1 flex justify-center mt-1">
               <div className="max-w-2xl w-full">
                 <EnhancedSearchBar />
               </div>
@@ -131,9 +131,9 @@ export default function GlobalMasthead() {
           </div>
 
           {/* Mobile: Logo Row - Spans full navbar height */}
-          <div className="md:hidden flex items-center px-4 py-2 relative" style={{ height: "40px" }}>
+          <div className="md:hidden flex items-center px-4 py-2 relative" style={{ height: "30px" }}>
             {/* Logo - Spans full navbar height on mobile */}
-            <div className="absolute left-0 top-0 z-10 flex items-center" style={{ height: "80px", width: "60px" }}>
+            <div className="absolute left-0 top-0 z-10 flex items-center" style={{ height: "60px", width: "60px" }}>
               <Link href="/" className="flex items-center h-full">
                 <Image
                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
@@ -149,7 +149,7 @@ export default function GlobalMasthead() {
           </div>
 
           {/* Bottom Row: Navigation Links + User Icons */}
-          <div className="flex items-center justify-between px-4" style={{ height: "40px" }}>
+          <div className="flex items-center justify-between px-4" style={{ height: "30px" }}>
             {/* Navigation Links - Centered at bottom */}
             <nav className="hidden md:flex items-center gap-6 absolute bottom-0 left-1/2 transform -translate-x-1/2">
               {/* Shop Dropdown */}

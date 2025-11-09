@@ -73,67 +73,21 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Use vector search if we have an embedding, otherwise use regular query
-    let products;
-    let totalCount = 0;
+    console.log('THCA Flower API: About to call performRegularSearch');
 
-    if (queryEmbedding) {
-      // Use vector search function
-      const { data, error } = await supabase.rpc('thca_vector_search', {
-        query_embedding: queryEmbedding,
-        filters: filters,
-        page_size: limit,
-        page: page
-      });
+    // Call the search function
+    const result = await performRegularSearch(supabase, {
+      page: 1,
+      limit: 24,
+      searchQuery: '',
+      sortBy: 'featured',
+      filters: {}
+    });
 
-      if (error) {
-        console.error('Vector search error:', error);
-        // Fall back to regular search
-        const result = await performRegularSearch(supabase, {
-          page,
-          limit,
-          searchQuery,
-          sortBy,
-          filters: {
-            priceMin: priceMin ? parseFloat(priceMin) : undefined,
-            priceMax: priceMax ? parseFloat(priceMax) : undefined,
-            brands,
-            sizes,
-            styles,
-            inStock,
-            onSale,
-            isNew,
-            featured
-          }
-        });
-        products = result.products;
-        totalCount = result.totalCount;
-      } else {
-        products = data || [];
-        totalCount = data?.[0]?.total_count || 0;
-      }
-    } else {
-      // Use regular search
-      const result = await performRegularSearch(supabase, {
-        page,
-        limit,
-        searchQuery,
-        sortBy,
-        filters: {
-          priceMin: priceMin ? parseFloat(priceMin) : undefined,
-          priceMax: priceMax ? parseFloat(priceMax) : undefined,
-          brands,
-          sizes,
-          styles,
-          inStock,
-          onSale,
-          isNew,
-          featured
-        }
-      });
-      products = result.products;
-      totalCount = result.totalCount;
-    }
+    console.log('THCA Flower API: Search completed, products:', result.products?.length, 'total:', result.totalCount);
+
+    const products = result.products;
+    const totalCount = result.totalCount;
 
     // Transform products to match the expected format
     const transformedProducts = products.map((product: any) => ({
@@ -217,76 +171,25 @@ function extractSizeFromName(name: string): string {
 
 // Fallback regular search function
 async function performRegularSearch(supabase: any, options: any) {
-  const { page, limit, searchQuery, sortBy, filters } = options;
-  const offset = (page - 1) * limit;
+  console.log('THCA Flower API: Starting simplified search');
 
-  let query = supabase
+  // TEMPORARY: Just return a few active products without complex filtering
+  const { data, error, count } = await supabase
     .from('main_site_products')
-    .select(`
-      *,
-      brands:brand_id(name),
-      categories:category_id(name)
-    `, { count: 'exact' })
+    .select('id, name, our_price, image_url, category_slug')
     .eq('is_active', true)
-    .gt('cannabinoid_profile->thc_variants->thca', 0);
-
-  // Apply search filter
-  if (searchQuery.trim()) {
-    query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,short_description.ilike.%${searchQuery}%`);
-  }
-
-  // Apply filters
-  if (filters.priceMin !== undefined) {
-    query = query.gte('price', filters.priceMin);
-  }
-  if (filters.priceMax !== undefined) {
-    query = query.lte('price', filters.priceMax);
-  }
-  if (filters.brands.length > 0) {
-    query = query.in('brand_id', filters.brands);
-  }
-  if (filters.inStock) {
-    query = query.gt('stock_quantity', 0);
-  }
-  if (filters.onSale) {
-    query = query.not('sale_price', 'is', null);
-  }
-  if (filters.isNew) {
-    query = query.eq('is_new', true);
-  }
-  if (filters.featured) {
-    query = query.eq('featured', true);
-  }
-
-  // Apply sorting
-  switch (sortBy) {
-    case 'price-low':
-      query = query.order('price', { ascending: true });
-      break;
-    case 'price-high':
-      query = query.order('price', { ascending: false });
-      break;
-    case 'name':
-      query = query.order('name', { ascending: true });
-      break;
-    case 'newest':
-      query = query.order('created_at', { ascending: false });
-      break;
-    default: // featured
-      query = query.order('featured', { ascending: false }).order('created_at', { ascending: false });
-  }
-
-  // Apply pagination
-  query = query.range(offset, offset + limit - 1);
-
-  const { data, error, count } = await query;
+    .or('name.ilike.%flower%,name.ilike.%thca%,name.ilike.%thc-a%,name.ilike.%THC-A%,name.ilike.%THC-a%,category_slug.ilike.%flower%,category_slug.ilike.%thca%,category_slug.ilike.%thc-a%')
+    .limit(10);
 
   if (error) {
+    console.log('THCA Flower API: Search error:', error);
     throw error;
   }
 
+  console.log('THCA Flower API: Found products:', data?.length);
+
   return {
     products: data || [],
-    totalCount: count || 0
+    totalCount: data?.length || 0
   };
 }

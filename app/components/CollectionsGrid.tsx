@@ -4,7 +4,7 @@ import React from "react";
 
 export default function CollectionsGrid() {
   const categories = [
-    { name: "Legal\nTHCA Flower", route: "/thca-flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
+    { name: "Legal\nTHCA Flower", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
     { name: "Shrooms & Stuff", route: "/shrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
     { name: "Legal THCA\nPrerolls & Vapes", route: "/thca_pnv", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/GiveMeAJ.jpeg" },
     { name: "Bongs", route: "/bongs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png" },
@@ -42,7 +42,7 @@ export default function CollectionsGrid() {
             <a
               key={i}
               href={cat.route}
-              className="aspect-square rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
+              className="aspect-[4/5] rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
               style={{
                 boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
                 transition: "box-shadow 0.3s ease, transform 0.3s ease",
@@ -73,17 +73,19 @@ export default function CollectionsGrid() {
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               {/* Title layer — non-interactive */}
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
-                <h1
-                  className="text-white text-xl sm:text-2xl font-bold text-left leading-tight whitespace-pre-line"
-                  style={{
-                    fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                    textShadow:
-                      "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
-                    fontWeight: "normal",
-                  }}
-                >
-                  {cat.name}
-                </h1>
+                <div className="bg-black/20 backdrop-blur-md rounded-xl px-3 py-2">
+                  <h1
+                    className="text-white text-xl sm:text-2xl font-bold text-left leading-tight whitespace-pre-line"
+                    style={{
+                      fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                      textShadow:
+                        "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    {cat.name}
+                  </h1>
+                </div>
               </div>
 
             </a>
@@ -137,17 +139,19 @@ export default function CollectionsGrid() {
 
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
               <div className="absolute inset-0 flex items-end justify-start p-4 z-10 pointer-events-none">
-                <h1
-                  className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold text-left leading-tight whitespace-pre-line"
-                  style={{
-                    fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                    textShadow:
-                      "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
-                    fontWeight: "normal",
-                  }}
-                >
-                  {cat.name}
-                </h1>
+                <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-2">
+                  <h1
+                    className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold text-left leading-tight whitespace-pre-line"
+                    style={{
+                      fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
+                      textShadow:
+                        "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    {cat.name}
+                  </h1>
+                </div>
               </div>
 
             </a>

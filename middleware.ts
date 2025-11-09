@@ -126,7 +126,7 @@ export async function middleware(request: NextRequest) {
   // Handle admin routes
   if (isAdminRoute) {
     if (!user) {
-      const redirectUrl = new URL('/(public)/auth', request.url);
+      const redirectUrl = new URL('/signin', request.url);
       redirectUrl.searchParams.set('redirectTo', pathname);
       return NextResponse.redirect(redirectUrl);
     }
@@ -157,7 +157,7 @@ export async function middleware(request: NextRequest) {
 
   // Handle protected routes
   if (isProtectedRoute && !user) {
-    const redirectUrl = new URL('/(public)/auth', request.url);
+    const redirectUrl = new URL('/signin', request.url);
     redirectUrl.searchParams.set('redirectTo', pathname);
     return NextResponse.redirect(redirectUrl);
   }

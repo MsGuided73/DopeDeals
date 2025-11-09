@@ -95,49 +95,25 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
           {/* Price Range */}
           <div>
             <h4 className="font-medium text-gray-900 dark:text-white mb-3">Price Range</h4>
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <input
-                  type="range"
-                  min="0"
-                  max="200"
-                  value={filters.priceRange[0]}
-                  onChange={(e) => updateFilter('priceRange', [parseInt(e.target.value), filters.priceRange[1]])}
-                  className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                />
-                <input
-                  type="range"
-                  min="0"
-                  max="200"
-                  value={filters.priceRange[1]}
-                  onChange={(e) => updateFilter('priceRange', [filters.priceRange[0], parseInt(e.target.value)])}
-                  className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                />
-              </div>
-              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>${filters.priceRange[0]}</span>
-                <span>${filters.priceRange[1]}</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="number"
-                  min="0"
-                  max="200"
-                  value={filters.priceRange[0]}
-                  onChange={(e) => updateFilter('priceRange', [parseInt(e.target.value) || 0, filters.priceRange[1]])}
-                  className="px-2 py-1 text-sm border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                  placeholder="Min"
-                />
-                <input
-                  type="number"
-                  min="0"
-                  max="200"
-                  value={filters.priceRange[1]}
-                  onChange={(e) => updateFilter('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 200])}
-                  className="px-2 py-1 text-sm border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                  placeholder="Max"
-                />
-              </div>
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                type="number"
+                min="0"
+                max="200"
+                value={filters.priceRange[0]}
+                onChange={(e) => updateFilter('priceRange', [parseInt(e.target.value) || 0, filters.priceRange[1]])}
+                className="px-2 py-1 text-sm border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                placeholder="Min Price"
+              />
+              <input
+                type="number"
+                min="0"
+                max="200"
+                value={filters.priceRange[1]}
+                onChange={(e) => updateFilter('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 200])}
+                className="px-2 py-1 text-sm border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                placeholder="Max Price"
+              />
             </div>
           </div>
 

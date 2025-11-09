@@ -4,6 +4,7 @@ import { useEffect, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
 
 import { addToCart } from '../lib/cart-utils';
+import AutoScrollContainer from './AutoScrollContainer';
 
 interface Product {
   id: string;
@@ -318,8 +319,10 @@ export default function FeaturedProductsSection() {
           </div>
         </div>
 
-        <div className="hidden lg:flex lg:overflow-x-auto lg:gap-6 lg:pb-4 lg:px-4">
-          {productsToShow.map((product) => renderProductCard(product, 'desktop'))}
+        <div className="hidden lg:block">
+          <AutoScrollContainer>
+            {products.map((product) => renderProductCard(product, 'desktop'))}
+          </AutoScrollContainer>
         </div>
 
         <div className="text-center mt-8">

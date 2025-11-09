@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getCart, getSessionId, ensureSessionId, type Cart } from '../lib/cart-utils';
+import { getCart, getSessionId, ensureSessionId, initializeCart, type Cart } from '../lib/cart-utils';
 
 interface CartContextType {
   cart: Cart | null;
@@ -86,13 +86,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const initCart = async () => {
       if (!mounted) return;
 
-      // Small delay to ensure hydration is complete
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Ensure session ID exists before initializing cart
+      if (typeof window !== 'undefined') {
+        ensureSessionId();
+      }
 
       if (mounted) {
         refreshCart();
       }
     };
+
+    // Initialize cart session handling (storage listeners, etc.)
+    if (typeof window !== 'undefined') {
+      initializeCart();
+    }
 
     initCart();
 
@@ -103,11 +110,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
     };
 
+    // Also listen for session changes
+    const handleSessionChange = () => {
+      if (mounted) {
+        refreshCart();
+      }
+    };
+
     window.addEventListener('cartUpdated', handleCartUpdate);
+    window.addEventListener('cartSessionChanged', handleSessionChange);
 
     return () => {
       mounted = false;
       window.removeEventListener('cartUpdated', handleCartUpdate);
+      window.removeEventListener('cartSessionChanged', handleSessionChange);
     };
   }, []);
 

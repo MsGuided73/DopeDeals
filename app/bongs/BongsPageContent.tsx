@@ -7,7 +7,7 @@ import Image from 'next/image';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import LoadingState, { useLoadingState } from '../../components/LoadingState';
 import BongsFilters from './components/BongsFilters';
-import BongsProductGrid from './components/BongsProductGrid';
+import PipesProductGrid from '../pipes/components/PipesProductGrid';
 import BongsBreadcrumb from './components/BongsBreadcrumb';
 import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
@@ -290,8 +290,42 @@ export default function BongsPageContent() {
             </div>
 
             {/* Product Grid */}
-            <BongsProductGrid
-              products={currentProducts}
+            <PipesProductGrid
+              products={currentProducts.map(product => ({
+                id: product.id,
+                name: product.name,
+                price: product.price || product.our_price,
+                vip_price: undefined,
+                compare_at_price: product.originalPrice || product.sale_price,
+                image_url: product.image_url || undefined,
+                image_urls: product.image_url ? [product.image_url] : [],
+                brand_id: product.brand_id || undefined,
+                category_id: product.category_id || undefined,
+                sku: product.sku || undefined,
+                stock_quantity: product.stock_quantity,
+                materials: product.material ? [product.material] : [],
+                vip_exclusive: false,
+                featured: product.featured,
+                is_active: product.is_active,
+                description: product.description || undefined,
+                short_description: product.short_description || undefined,
+                specs: {
+                  height: product.height,
+                  jointSize: product.jointSize,
+                  percolator: product.percolator
+                },
+                attributes: {},
+                brand: product.brand,
+                category: product.category,
+                material: product.material,
+                style: product.percolator ? 'percolator' : 'standard',
+                size: product.height?.includes('Mini') || product.height?.includes('Small') ? 'small' : 'medium',
+                inStock: product.inStock || product.stock_quantity > 0,
+                isNew: product.isNew,
+                isSale: product.isSale,
+                features: [],
+                tags: []
+              }))}
               viewMode={viewMode}
             />
 

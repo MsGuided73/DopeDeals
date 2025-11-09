@@ -79,12 +79,12 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
               <div className="flex-1 p-6">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                    <h3 className="text-lg font-semibold font-sans text-gray-900 dark:text-white mb-1">
                       <Link href={`/product/${product.id}`} className="hover:text-dope-orange-500 transition-colors">
                         {product.name}
                       </Link>
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{product.brand}</p>
+                    <p className="text-sm font-sans text-gray-600 dark:text-gray-400 mb-2">{product.brand}</p>
                   </div>
                   <button
                     onClick={() => toggleFavorite(product.id)}
@@ -287,12 +287,12 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
           <div className="p-4">
             <div className="flex items-start justify-between mb-2">
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-medium text-gray-900 truncate">
+                <h3 className="text-sm font-medium font-sans text-gray-900 truncate">
                   <Link href={`/product/${product.id}`} className="hover:text-[#2d8f47] transition-colors">
                     {product.name}
                   </Link>
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">{product.brand}</p>
+                <p className="text-sm font-sans text-gray-500 mt-1">{product.brand}</p>
               </div>
             </div>
 
