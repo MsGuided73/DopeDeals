@@ -23,15 +23,15 @@ export default function HomePage() {
       <div>
 
         {/* Collections Grid */}
-        <main className="w-full px-0 py-0">
-          {/* Enhanced Metallic Section Divider - Adjusted spacing */}
+        <main className="w-full px-0 py-0 -mt-12">
+          {/* Enhanced Metallic Section Divider - Reduced spacing to move grid up */}
           <div className="w-full -mt-0 mb-1">
             {/* Top metallic line - Reduced by 50% */}
-            <div className="h-4 bg-gradient-to-r from-transparent via-white to-transparent mb-3 shadow-lg"></div>
-            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-4"></div>
+            <div className="h-4 bg-gradient-to-r from-transparent via-white to-transparent mb-1 shadow-lg"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-1"></div>
 
             {/* Bottom metallic lines */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-2"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-1"></div>
             <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg"></div>
           </div>
 
