@@ -1,26 +1,42 @@
 'use client';
 
+import { Suspense } from 'react';
 import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
-import PrismaticBurst from '../components/PrismaticBurst';
+import MushroomsPageContent from './MushroomsPageContent';
 
 export default function MushroomsClientPage() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Mushroom Products Collection",
-    "description": "Premium mushroom products collection at Highway 420",
+    "name": "Shrooms & Stuff Collection",
+    "description": "Premium vapes, prerolls, THC-A flower, edibles, gummies and concentrates at Highway 420",
     "url": "https://highway420store.com/mushrooms",
     "mainEntity": {
       "@type": "ItemList",
-      "name": "Mushroom Products Collection",
-      "description": "High-quality mushroom products and accessories",
-      "numberOfItems": "25+",
+      "name": "Shrooms & Stuff Collection",
+      "description": "High-quality vapes, prerolls, edibles, concentrates and smoking accessories",
+      "numberOfItems": "100+",
       "itemListElement": [
         {
           "@type": "Product",
-          "name": "Premium Mushroom Products",
-          "category": "Mushrooms"
+          "name": "Premium Vapes & Cartridges",
+          "category": "Vapes"
+        },
+        {
+          "@type": "Product",
+          "name": "THC-A Flower & Prerolls",
+          "category": "Flower"
+        },
+        {
+          "@type": "Product",
+          "name": "Edibles & Gummies",
+          "category": "Edibles"
+        },
+        {
+          "@type": "Product",
+          "name": "Concentrates",
+          "category": "Concentrates"
         }
       ]
     },
@@ -42,7 +58,7 @@ export default function MushroomsClientPage() {
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Mushrooms",
+          "name": "Shrooms & Stuff",
           "item": "https://highway420store.com/mushrooms"
         }
       ]
@@ -50,16 +66,7 @@ export default function MushroomsClientPage() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <PrismaticBurst
-        animationType="hover"
-        intensity={4}
-        speed={0.3}
-        distort={1.2}
-        rayCount={32}
-        mixBlendMode="screen"
-        colors={['#ff007a', '#4d3dff', '#00ffff', '#ff1493', '#8a2be2', '#00ced1']}
-      />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Age Verification Popup */}
       <AgeVerification />
 
@@ -70,25 +77,13 @@ export default function MushroomsClientPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-
-      {/* Mushroom Products Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-lg">
-            🍄 Premium Mushrooms
-          </h2>
-          <p className="text-xl md:text-2xl mb-8 text-white drop-shadow-md">
-            Discover our curated collection of high-quality mushroom products
-          </p>
-          <div className="bg-white/10 backdrop-blur-md rounded-lg p-8 max-w-2xl mx-auto">
-            <p className="text-lg text-white">
-              Coming Soon - Our curated selection of premium mushroom products will be available here.
-              <br /><br />
-              We're working hard to bring you the highest quality products with discreet shipping and competitive prices.
-            </p>
-          </div>
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
         </div>
-      </div>
+      }>
+        <MushroomsPageContent />
+      </Suspense>
     </div>
   );
 }

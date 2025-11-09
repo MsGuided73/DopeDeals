@@ -1,215 +1,131 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import MushroomsFilters from './components/MushroomsFilters';
-import MushroomsProductGrid from './components/MushroomsProductGrid';
-import MushroomsBreadcrumb from './components/MushroomsBreadcrumb';
-import MushroomsHero from './components/MushroomsHero';
-import MushroomsSortBar from './components/MushroomsSortBar';
-import MushroomsViewToggle from './components/MushroomsViewToggle';
-import MushroomsInfoSection from './components/MushroomsInfoSection';
-import ActiveFilters from './components/ActiveFilters';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import LoadingState from '../../components/LoadingState';
+import PrismaticBurst from '../../components/PrismaticBurst';
+import { addToCart } from '../lib/cart-utils';
 
-export interface MushroomProduct {
+export interface ShroomsStuffProduct {
   id: string;
   name: string;
-  price: number;
-  vip_price?: number;
-  compare_at_price?: number;
-  image_url?: string;
-  image_urls?: string[];
-  brand_id?: string;
-  category_id?: string;
-  sku?: string;
-  stock_quantity?: number;
-  materials?: string[];
-  vip_exclusive?: boolean;
-  featured?: boolean;
-  channels: string[];
-  is_active?: boolean;
-  description?: string;
-  short_description?: string;
-  specs?: any;
-  attributes?: any;
-
-  // Mushroom-specific fields
-  type?: string; // psilocybin, lion's mane, reishi, cordyceps, etc.
-  desired_effect?: string[]; // euphoria, relaxation, focus, energy, etc.
-  strength?: string; // mild, moderate, strong, intense
-  origin?: string; // region or cultivation method
-  form?: string; // dried, capsules, gummies, tincture, etc.
-
-  // Derived/computed fields for display
+  our_price: number;
+  sale_price?: number;
+  image_url: string | null;
+  description?: string | null;
+  short_description?: string | null;
+  sku: string | null;
+  stock_quantity: number;
+  is_active: boolean;
+  featured: boolean;
   brand?: string;
-  category?: string;
-  inStock?: boolean;
+  type?: string;
+  specs?: {
+    type?: string;
+    size?: string;
+    material?: string;
+  };
   isNew?: boolean;
   isSale?: boolean;
-  features?: string[];
-  tags?: string[];
+  inStock?: boolean;
 }
 
 export default function MushroomsPageContent() {
-  const searchParams = useSearchParams();
-  const [products, setProducts] = useState<MushroomProduct[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<MushroomProduct[]>([]);
+  const [products, setProducts] = useState<ShroomsStuffProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ShroomsStuffProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
 
-  // Get search query from URL parameters
-  const searchQuery = searchParams.get('q') || '';
-
-  // Mushroom-specific filter states
+  // Filter states for shrooms & stuff products
   const [filters, setFilters] = useState({
     priceRange: [0, 200] as [number, number],
-    types: [] as string[],
-    desiredEffects: [] as string[],
-    strengths: [] as string[],
-    origins: [] as string[],
-    forms: [] as string[],
+    types: [] as string[], // Vapes, Prerolls, THC-A Flower, Edibles, Concentrates
     inStock: false,
     onSale: false,
-    isNew: false,
-    featured: false,
-    vipExclusive: false,
   });
 
   useEffect(() => {
-    // Load products from Supabase
-    loadMushroomProducts();
+    loadShroomsStuffProducts();
   }, []);
 
-  const loadMushroomProducts = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/products?mushrooms');
-      if (response.ok) {
-        const data = await response.json();
-        setProducts(data.products || []);
-        setFilteredProducts(data.products || []);
-      } else {
-        console.error('Failed to load mushroom products');
-        // Fallback to mock data for development
-        const mockProducts = generateMockMushrooms();
-        setProducts(mockProducts);
-        setFilteredProducts(mockProducts);
-      }
-    } catch (error) {
-      console.error('Error loading mushroom products:', error);
-      // Fallback to mock data
-      const mockProducts = generateMockMushrooms();
-      setProducts(mockProducts);
-      setFilteredProducts(mockProducts);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Apply filters and sorting
   useEffect(() => {
+    // Apply filters
     let filtered = [...products];
 
-    // Apply search query filter first
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(product => {
-        const searchableText = [
-          product.name,
-          product.description,
-          product.short_description,
-          product.brand,
-          product.category,
-          product.sku,
-          product.type,
-          product.origin,
-          product.form,
-          ...(product.desired_effect || []),
-          ...(product.features || []),
-          ...(product.tags || [])
-        ].filter(Boolean).join(' ').toLowerCase();
+    // Price range filter
+    filtered = filtered.filter((p: ShroomsStuffProduct) => {
+      const price = p.our_price || 0;
+      return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+    });
 
-        return searchableText.includes(query);
+    // Type filter
+    if (filters.types.length > 0) {
+      filtered = filtered.filter((p: ShroomsStuffProduct) => {
+        const productType = p.type || p.specs?.type;
+        return productType && filters.types.includes(productType);
       });
     }
 
-    // Apply filters
-    if (filters.priceRange[0] > 0 || filters.priceRange[1] < 200) {
-      filtered = filtered.filter(product =>
-        product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1]
-      );
-    }
-
-    if (filters.types.length > 0) {
-      filtered = filtered.filter(product =>
-        product.type && filters.types.includes(product.type)
-      );
-    }
-
-    if (filters.desiredEffects.length > 0) {
-      filtered = filtered.filter(product =>
-        product.desired_effect?.some(effect => filters.desiredEffects.includes(effect))
-      );
-    }
-
-    if (filters.strengths.length > 0) {
-      filtered = filtered.filter(product =>
-        product.strength && filters.strengths.includes(product.strength)
-      );
-    }
-
-    if (filters.forms.length > 0) {
-      filtered = filtered.filter(product =>
-        product.form && filters.forms.includes(product.form)
-      );
-    }
-
+    // Stock filter
     if (filters.inStock) {
-      filtered = filtered.filter(product => product.inStock);
+      filtered = filtered.filter((p: ShroomsStuffProduct) => p.stock_quantity > 0);
     }
 
+    // Sale filter
     if (filters.onSale) {
-      filtered = filtered.filter(product => product.isSale);
-    }
-
-    if (filters.isNew) {
-      filtered = filtered.filter(product => product.isNew);
-    }
-
-    if (filters.featured) {
-      filtered = filtered.filter(product => product.featured);
-    }
-
-    if (filters.vipExclusive) {
-      filtered = filtered.filter(product => product.vip_exclusive);
-    }
-
-    // Apply sorting
-    switch (sortBy) {
-      case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'newest':
-        filtered.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
-        break;
-      default: // featured
-        filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+      filtered = filtered.filter((p: ShroomsStuffProduct) => !!p.sale_price);
     }
 
     setFilteredProducts(filtered);
     setCurrentPage(1);
-  }, [products, filters, sortBy, searchQuery]);
+  }, [products, filters]);
+
+  const loadShroomsStuffProducts = async () => {
+    try {
+      setLoading(true);
+      console.log('Loading shrooms & stuff products...');
+
+      const response = await fetch('/api/products/mushrooms');
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(`✅ API returned ${data.totalCount} shrooms & stuff products`);
+
+      const transformedProducts = data.products.map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        our_price: product.price,
+        sale_price: product.compare_at_price,
+        image_url: product.image_url,
+        description: product.description,
+        short_description: product.short_description,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        is_active: product.is_active,
+        featured: product.featured || false,
+        brand: product.brand,
+        type: product.specs?.type,
+        specs: product.specs,
+        isNew: product.isNew,
+        isSale: !!product.compare_at_price,
+        inStock: (product.stock_quantity || 0) > 0
+      }));
+
+      setProducts(transformedProducts);
+      setFilteredProducts(transformedProducts);
+    } catch (error) {
+      console.error('Error loading shrooms & stuff products:', error);
+      setProducts([]);
+      setFilteredProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Pagination
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -219,143 +135,257 @@ export default function MushroomsPageContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
-      </div>
+      <LoadingState
+        loading={loading}
+        onRetry={loadShroomsStuffProducts}
+        timeout={15000}
+      >
+        <div>Loading Shrooms & Stuff...</div>
+      </LoadingState>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <MushroomsBreadcrumb />
-      <MushroomsHero />
-      <MushroomsInfoSection />
+    <ErrorBoundary>
+      <div className="min-h-screen relative">
+        {/* Prismatic Burst Background */}
+        <PrismaticBurst
+          animationType="hover"
+          intensity={4}
+          speed={0.3}
+          distort={1.2}
+          rayCount={32}
+          mixBlendMode="screen"
+          colors={['#ff007a', '#4d3dff', '#00ffff', '#ff1493', '#8a2be2', '#00ced1']}
+        />
 
-      {/* Active Filters Bar */}
-      <ActiveFilters
-        filters={filters}
-        setFilters={setFilters}
-        totalProducts={filteredProducts.length}
-      />
+        {/* Content Overlay */}
+        <div className="relative z-10">
+          {/* Hero Section */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="text-center">
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl">
+                🌿 Shrooms & Stuff
+              </h1>
+              <p className="text-xl md:text-2xl mb-8 text-white drop-shadow-lg max-w-3xl mx-auto">
+                Premium vapes, prerolls, THC-A flower, edibles, gummies & concentrates.
+                <br />Elevate your experience with our curated collection.
+              </p>
 
-      {/* Search Results Header */}
-      {searchQuery && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="bg-dope-orange-50 border border-dope-orange-200 rounded-lg p-4">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Search Results for "{searchQuery}" in Mushrooms
-            </h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Found {filteredProducts.length} matching products
-            </p>
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:w-64 flex-shrink-0">
-            <MushroomsFilters
-              filters={filters}
-              setFilters={setFilters}
-              products={products}
-            />
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1">
-            {/* Sort and View Controls */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-              <div className="flex items-center gap-4">
-                <MushroomsSortBar sortBy={sortBy} setSortBy={setSortBy} />
-                <MushroomsViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+              {/* Quick Filter Buttons */}
+              <div className="flex flex-wrap justify-center gap-4 mb-8">
+                {['Vapes', 'Prerolls', 'THC-A Flower', 'Edibles', 'Concentrates'].map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFilters(prev => ({
+                      ...prev,
+                      types: prev.types.includes(type)
+                        ? prev.types.filter(t => t !== type)
+                        : [...prev.types, type]
+                    }))}
+                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      filters.types.includes(type)
+                        ? 'bg-white text-purple-600 shadow-lg transform scale-105'
+                        : 'bg-white/20 text-white border-2 border-white/50 hover:bg-white/30 backdrop-blur-sm'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
+            </div>
+          </div>
+
+          {/* Products Section */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+            {/* Results Header */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+              <div className="text-white drop-shadow-lg">
+                <h2 className="text-2xl font-bold mb-2">Premium Selection</h2>
+                <p className="text-lg opacity-90">
+                  Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
+                </p>
+              </div>
+
+              {/* Price Range Filter */}
+              <div className="mt-4 sm:mt-0">
+                <label className="block text-white text-sm font-medium mb-2">Price Range</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={filters.priceRange[0]}
+                    onChange={(e) => setFilters(prev => ({
+                      ...prev,
+                      priceRange: [parseInt(e.target.value) || 0, prev.priceRange[1]]
+                    }))}
+                    className="w-20 px-3 py-2 bg-white/20 border border-white/50 rounded-md text-white placeholder-white/70 backdrop-blur-sm"
+                  />
+                  <span className="text-white">-</span>
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={filters.priceRange[1]}
+                    onChange={(e) => setFilters(prev => ({
+                      ...prev,
+                      priceRange: [prev.priceRange[0], parseInt(e.target.value) || 200]
+                    }))}
+                    className="w-20 px-3 py-2 bg-white/20 border border-white/50 rounded-md text-white placeholder-white/70 backdrop-blur-sm"
+                  />
+                </div>
               </div>
             </div>
 
             {/* Products Grid */}
-            <MushroomsProductGrid products={currentProducts} viewMode={viewMode} />
+            {currentProducts.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="text-white/80 text-6xl mb-4">🔍</div>
+                <h3 className="text-2xl font-bold text-white mb-4">No products found</h3>
+                <p className="text-white/70 text-lg mb-8">Try adjusting your filters to see more products.</p>
+                <button
+                  onClick={() => setFilters({
+                    priceRange: [0, 200],
+                    types: [],
+                    inStock: false,
+                    onSale: false,
+                  })}
+                  className="px-6 py-3 bg-white text-purple-600 rounded-full font-semibold hover:bg-white/90 transition-colors"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {currentProducts.map((product) => (
+                  <div key={product.id} className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden shadow-xl border border-white/20 hover:bg-white/15 transition-all duration-300 group">
+                    {/* Product Image */}
+                    <div className="relative aspect-square bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden">
+                      {product.image_url ? (
+                        <Image
+                          src={product.image_url}
+                          alt={product.name}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-white text-4xl">
+                          🌿
+                        </div>
+                      )}
+
+                      {/* Badges */}
+                      <div className="absolute top-3 left-3 flex flex-col gap-2">
+                        {product.isNew && (
+                          <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            NEW
+                          </span>
+                        )}
+                        {product.isSale && (
+                          <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            SALE
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Stock Status */}
+                      <div className="absolute top-3 right-3">
+                        <div className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                      </div>
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="p-4">
+                      <div className="mb-2">
+                        <h3 className="text-white font-semibold text-lg mb-1 line-clamp-2 group-hover:text-yellow-300 transition-colors">
+                          <Link href={`/product/${product.id}`} className="hover:underline">
+                            {product.name}
+                          </Link>
+                        </h3>
+                        <p className="text-white/70 text-sm">{product.brand || 'Premium Brand'}</p>
+                      </div>
+
+                      {/* Product Type Badge */}
+                      {product.type && (
+                        <div className="mb-3">
+                          <span className="inline-block bg-purple-500/80 text-white text-xs px-2 py-1 rounded-full font-medium">
+                            {product.type}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Price */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl font-bold text-white">${product.our_price}</span>
+                          {product.sale_price && product.sale_price > product.our_price && (
+                            <span className="text-lg text-white/60 line-through">${product.sale_price}</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Add to Cart Button */}
+                      <button
+                        onClick={async () => {
+                          if (product.inStock) {
+                            try {
+                              await addToCart(product.id, 1);
+                              // You could add a toast notification here
+                            } catch (error) {
+                              console.error('Failed to add to cart:', error);
+                            }
+                          }
+                        }}
+                        disabled={!product.inStock}
+                        className="w-full px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-500 disabled:to-gray-600 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                      >
+                        {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center mt-8">
-                <nav className="flex items-center gap-2">
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
-                  >
-                    Previous
-                  </button>
+              <div className="flex justify-center items-center mt-12 space-x-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-white/20 backdrop-blur-md border border-white/50 rounded-lg text-white hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                >
+                  Previous
+                </button>
 
-                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    const pageNum = i + 1;
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => setCurrentPage(pageNum)}
-                        className={`px-3 py-2 text-sm font-medium rounded-md ${
-                          currentPage === pageNum
-                            ? 'bg-dope-orange-500 text-white'
-                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  const pageNum = i + 1;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+                        currentPage === pageNum
+                          ? 'bg-white text-purple-600 shadow-lg'
+                          : 'bg-white/20 backdrop-blur-md border border-white/50 text-white hover:bg-white/30'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
 
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
-                  >
-                    Next
-                  </button>
-                </nav>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-white/20 backdrop-blur-md border border-white/50 rounded-lg text-white hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
-}
-
-// Mock data generator for development
-function generateMockMushrooms(): MushroomProduct[] {
-  const types = ['Psilocybin', "Lion's Mane", 'Reishi', 'Cordyceps', 'Turkey Tail', 'Chaga', 'Maitake'];
-  const effects = ['Euphoria', 'Relaxation', 'Focus', 'Energy', 'Creativity', 'Meditation', 'Sleep Support'];
-  const strengths = ['Mild', 'Moderate', 'Strong', 'Intense'];
-  const forms = ['Dried', 'Capsules', 'Gummies', 'Tincture', 'Tea', 'Extract'];
-  const origins = ['Oregon', 'California', 'British Columbia', 'Netherlands', 'Jamaica'];
-
-  return Array.from({ length: 36 }, (_, i) => ({
-    id: `mushroom-${i + 1}`,
-    name: `Premium ${types[i % types.length]} Mushroom ${i + 1}`,
-    price: Math.floor(Math.random() * 100) + 25,
-    compare_at_price: Math.random() > 0.7 ? Math.floor(Math.random() * 150) + 75 : undefined,
-    image_url: `/images/mushrooms/mushroom-${(i % 8) + 1}.jpg`,
-    image_urls: [`/images/mushrooms/mushroom-${(i % 8) + 1}.jpg`],
-    category: 'Mushrooms',
-    type: types[i % types.length],
-    desired_effect: [effects[i % effects.length], effects[(i + 1) % effects.length]],
-    strength: strengths[i % strengths.length],
-    form: forms[i % forms.length],
-    origin: origins[i % origins.length],
-    stock_quantity: Math.floor(Math.random() * 30) + 1,
-    inStock: Math.random() > 0.1,
-    channels: ['vip_smoke'],
-    is_active: true,
-    featured: Math.random() > 0.8,
-    vip_exclusive: Math.random() > 0.9,
-    isNew: Math.random() > 0.8,
-    isSale: Math.random() > 0.7,
-    description: `High-quality ${types[i % types.length].toLowerCase()} mushrooms with potent ${effects[i % effects.length].toLowerCase()} effects.`,
-    features: ['Lab Tested', 'Premium Quality', 'Discreet Packaging', 'Fast Shipping'],
-    tags: ['mushrooms', 'premium', 'lab-tested', types[i % types.length].toLowerCase()],
-  }));
 }

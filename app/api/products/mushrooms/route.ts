@@ -1,210 +1,158 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { config } from 'dotenv';
-import * as path from 'path';
-
-// Load .env.local explicitly in development
-if (process.env.NODE_ENV === 'development') {
-  const envPath = path.resolve(process.cwd(), '.env.local');
-  config({ path: envPath });
-}
 
 export async function GET(req: NextRequest) {
   try {
-    // Ensure environment variables are loaded in development
+    // Direct Supabase connection for testing
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    // Debug logging for development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Mushrooms API - Environment check:', {
-        hasUrl: !!supabaseUrl,
-        hasKey: !!supabaseKey,
-        urlPrefix: supabaseUrl?.substring(0, 20) + '...',
-        keyPrefix: supabaseKey?.substring(0, 20) + '...'
-      });
-    }
-
     if (!supabaseUrl || !supabaseKey) {
-      console.error('Mushrooms API - Missing credentials:', {
-        supabaseUrl: !!supabaseUrl,
-        supabaseKey: !!supabaseKey
-      });
-      return NextResponse.json({
-        message: 'Supabase credentials not configured',
-        debug: process.env.NODE_ENV === 'development' ? {
-          supabaseUrl: !!supabaseUrl,
-          supabaseKey: !!supabaseKey
-        } : undefined
-      }, { status: 500 });
+      return NextResponse.json({ error: 'Supabase credentials not configured' }, { status: 500 });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Search ALL products first, then filter for mushrooms with images
-    const { data: allProducts, error: allError } = await supabase
-      .from('main_site_products')
-      .select(`
-        id,
-        name,
-        description,
-        short_description,
-        our_price,
-        sale_price,
-        fire_price,
-        image_url,
-        image_urls,
-        sku,
-        stock_quantity,
-        materials,
-        featured,
-        is_active,
-        specs,
-        attributes,
-        brand_name,
-        category_id,
-        categories,
-        category_slug,
-        subcategory_slug,
-        seo_keywords,
-        created_at
-      `)
-      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-      // Add back when connecting to Zoho Inventory for automated product management
-      .not('name', 'ilike', '%test%')
-      .not('name', 'ilike', '%sample%'); // Exclude sample products
+    // Parse query parameters
+    const url = new URL(req.url);
+    const limit = parseInt(url.searchParams.get('limit') || '50');
+    const offset = parseInt(url.searchParams.get('offset') || '0');
 
-    if (allError) {
-      console.error('Error fetching all products:', allError);
-      return NextResponse.json({
-        message: 'Failed to fetch products',
-        error: allError.message
-      }, { status: 500 });
+    // Get mushroom-related products - vapes, prerolls, THC-A flower, edibles, gummies, etc.
+    let query = supabase
+      .from('main_site_products')
+      .select('*')
+      .eq('is_active', true);
+
+    // Keywords for mushroom-related products (vapes, prerolls, edibles, gummies, THC-A flower, etc.)
+    const mushroomKeywords = [
+      'vape', 'preroll', 'pre-roll', 'thc-a', 'thca', 'edible', 'gummi', 'gummy',
+      'flower', 'bud', 'cart', 'cartridge', 'disposable', 'pen', 'joint', 'blunt',
+      'capsule', 'tincture', 'oil', 'concentrate', 'extract', 'moonrock', 'caviar',
+      'diamond', 'sauce', 'rosin', 'shatter', 'wax', 'crumble', 'live resin'
+    ];
+
+    // Build a simple OR condition for keywords
+    const keywordConditions = mushroomKeywords.map(keyword =>
+      `name.ilike.%${keyword}%`
+    );
+
+    query = query.or(keywordConditions.join(','));
+
+    // Apply pagination
+    if (limit > 0) {
+      query = query.limit(limit);
+    }
+    if (offset > 0) {
+      query = query.range(offset, offset + (limit || 50) - 1);
     }
 
-    console.log(`🔍 Searching through ${allProducts?.length || 0} total products for mushrooms with images...`);
+    // Order by featured and stock quantity
+    query = query.order('featured', { ascending: false })
+                 .order('stock_quantity', { ascending: false })
+                 .order('created_at', { ascending: false });
 
-    // Filter for mushroom products that have valid images
-    const mushroomProducts = allProducts?.filter(product => {
-      // Check if it's a mushroom product using category_slug (more reliable than name matching)
-      const isMushroomProduct = product.category_slug === 'mushrooms' ||
-                               product.subcategory_slug?.includes('mushroom') ||
-                               product.subcategory_slug?.includes('shroom') ||
-                               (Array.isArray(product.categories) &&
-                                product.categories.some(cat =>
-                                  cat?.toLowerCase().includes('mushroom') ||
-                                  cat?.toLowerCase().includes('shroom') ||
-                                  cat?.toLowerCase().includes('psychedelic')
-                                ));
+    const { data: products, error } = await query;
 
-      // Check if it has a valid image URL (strict validation like pipes)
-      const hasValidImage = product.image_url &&
-                           product.image_url.trim() !== '' &&
-                           product.image_url.trim() !== 'NULL' &&
-                           product.image_url.trim() !== 'null' &&
-                           !product.image_url.includes('placehold') &&
-                           !product.image_url.includes('placeholder') &&
-                           !product.image_url.includes('example.com') &&
-                           !product.image_url.includes('test.com') &&
-                           (product.image_url.startsWith('http://') || product.image_url.startsWith('https://')) &&
-                           (product.image_url.includes('.jpg') ||
-                            product.image_url.includes('.jpeg') ||
-                            product.image_url.includes('.png') ||
-                            product.image_url.includes('.webp') ||
-                            product.image_url.includes('sigdistro.com') ||
-                            product.image_url.includes('supabase.co'));
+    if (error) {
+      console.error('Supabase query error:', error);
+      return NextResponse.json({ error: 'Failed to fetch mushroom products', details: error.message }, { status: 500 });
+    }
 
-      return isMushroomProduct && hasValidImage;
-    }) || [];
+    // Get total count for pagination info
+    const { count } = await supabase
+      .from('main_site_products')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_active', true)
+      .or(mushroomKeywords.map(keyword => `name.ilike.%${keyword}%`).join(','));
 
-    console.log(`🎯 Found ${mushroomProducts.length} mushroom products with valid images!`);
+    // Get brand information for products
+    const brandIds = [...new Set(products?.map((p: any) => p.brand_id).filter(Boolean) || [])];
+    let brandsMap: Record<string, string> = {};
 
-    // Transform products to match our interface
-    const transformedProducts = mushroomProducts.map((product: any) => {
-      // Determine mushroom type from name
-      const name = product.name.toLowerCase();
-      let type = 'Psychedelic Mushrooms';
+    if (brandIds.length > 0) {
+      const { data: brands } = await supabase
+        .from('brands_new')
+        .select('id, name')
+        .in('id', brandIds);
 
-      if (name.includes('lion') || name.includes('mane')) type = "Lion's Mane";
-      else if (name.includes('reishi')) type = 'Reishi';
-      else if (name.includes('cordyceps')) type = 'Cordyceps';
-      else if (name.includes('chaga')) type = 'Chaga';
-      else if (name.includes('turkey') || name.includes('tail')) type = 'Turkey Tail';
-      else if (name.includes('maitake')) type = 'Maitake';
-      else if (name.includes('shiitake')) type = 'Shiitake';
-      else if (name.includes('oyster')) type = 'Oyster Mushrooms';
-      else if (name.includes('porcini') || name.includes('ceps')) type = 'Porcini';
-      else if (name.includes('chanterelle')) type = 'Chanterelle';
-      else if (name.includes('morel')) type = 'Morel';
-      else if (name.includes('truffle')) type = 'Truffle';
+      brandsMap = (brands || []).reduce((acc, brand) => {
+        acc[brand.id] = brand.name;
+        return acc;
+      }, {} as Record<string, string>);
+    }
 
-      // Determine form from name
-      let form = 'Dried';
-      if (name.includes('capsule') || name.includes('pill')) form = 'Capsules';
-      else if (name.includes('powder')) form = 'Powder';
-      else if (name.includes('tincture') || name.includes('extract')) form = 'Extract/Tincture';
-      else if (name.includes('tea')) form = 'Tea';
-      else if (name.includes('fresh')) form = 'Fresh';
+    // Transform the data to match expected format
+    const transformedProducts = (products || []).map((product: any) => {
+      // Determine product type based on name
+      let productType = 'Flower'; // default
+      const nameLower = product.name.toLowerCase();
 
-      // Determine if it's on sale
-      const isSale = product.sale_price && product.sale_price > product.our_price;
-
-      // Determine if it's new (created within last 30 days)
-      const isNew = product.created_at &&
-        new Date(product.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+      if (nameLower.includes('vape') || nameLower.includes('cart') || nameLower.includes('cartridge') ||
+          nameLower.includes('pen') || nameLower.includes('disposable')) {
+        productType = 'Vapes';
+      } else if (nameLower.includes('preroll') || nameLower.includes('pre-roll') ||
+                 nameLower.includes('joint') || nameLower.includes('blunt')) {
+        productType = 'Prerolls';
+      } else if (nameLower.includes('edible') || nameLower.includes('gummi') || nameLower.includes('gummy') ||
+                 nameLower.includes('capsule') || nameLower.includes('tincture')) {
+        productType = 'Edibles';
+      } else if (nameLower.includes('thc-a') || nameLower.includes('thca') || nameLower.includes('flower') ||
+                 nameLower.includes('bud')) {
+        productType = 'THC-A Flower';
+      } else if (nameLower.includes('concentrate') || nameLower.includes('extract') ||
+                 nameLower.includes('moonrock') || nameLower.includes('caviar') ||
+                 nameLower.includes('diamond') || nameLower.includes('sauce') ||
+                 nameLower.includes('rosin') || nameLower.includes('shatter') ||
+                 nameLower.includes('wax') || nameLower.includes('crumble') ||
+                 nameLower.includes('live resin')) {
+        productType = 'Concentrates';
+      }
 
       return {
         id: product.id,
         name: product.name,
-        price: parseFloat(product.our_price),
-        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
-        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        price: product.our_price || product.price,
+        compare_at_price: product.sale_price,
         image_url: product.image_url,
-        image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
-        brand_id: product.brand_name, // Keep for backward compatibility
-        brand: product.brand_name, // Add the brand name field
-        category_id: product.category_id,
-        sku: product.sku,
-        stock_quantity: product.stock_quantity || 0,
-        materials: product.materials || [],
-        material: product.materials?.[0] || 'Organic',
-        vip_exclusive: false, // Default to false since column doesn't exist
-        featured: product.featured || false,
-
-        is_active: product.is_active,
         description: product.description,
         short_description: product.short_description,
-        specs: product.specs,
-        attributes: product.attributes,
-
-        // Computed fields
-        type,
-        form,
-        inStock: (product.stock_quantity || 0) > 0,
-        isNew,
-        isSale,
-        features: [
-          'Premium Quality',
-          'Lab Tested',
-          'Organic Sourcing',
-          'Traditional Medicine'
-        ],
-        tags: ['mushrooms', 'fungi', 'natural', 'organic', type.toLowerCase().replace(' ', '-')],
-        category: 'Mushrooms'
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        is_active: product.is_active,
+        featured: product.featured || false,
+        brand_id: product.brand_id,
+        category_id: product.category_id,
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+        // Add brand name
+        brand: brandsMap[product.brand_id] || 'House Brand',
+        // Add additional fields expected by frontend
+        specs: {
+          type: productType,
+          size: product.size || 'Standard',
+          material: product.material || 'Premium'
+        },
+        isNew: product.is_new || false,
+        is_sale: !!product.sale_price,
+        inStock: (product.stock_quantity || 0) > 0
       };
-    }) || [];
-
-    return NextResponse.json({
-      message: 'Mushroom products loaded successfully',
-      totalCount: transformedProducts.length,
-      products: transformedProducts
     });
 
-  } catch (error) {
-    console.error('Error fetching mushroom products:', error);
     return NextResponse.json({
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+      products: transformedProducts,
+      totalCount: count || 0,
+      limit,
+      offset,
+      hasMore: count ? (offset + (products?.length || 0)) < count : false
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
+      }
+    });
+  } catch (error) {
+    console.error('API error:', error);
+    return NextResponse.json({ error: 'Failed to fetch mushroom products', details: String(error) }, { status: 500 });
   }
 }
