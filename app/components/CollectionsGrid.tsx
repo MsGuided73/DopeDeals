@@ -70,12 +70,12 @@ export default function CollectionsGrid() {
               </div>
 
               {/* Dimmer overlay — non-interactive */}
-              <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
+              <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-300" />
               {/* Title layer — non-interactive */}
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
                 <div className="bg-black/20 rounded-xl px-3 py-2">
                   <h1
-                    className="text-white text-xl sm:text-2xl font-bold text-left leading-tight whitespace-pre-line"
+                    className="text-white text-sm sm:text-base font-bold text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow:
@@ -110,7 +110,7 @@ export default function CollectionsGrid() {
               href={cat.route}
               className="rounded-2xl overflow-hidden shadow-md relative group hover:scale-101 transition-all duration-300 block"
               style={{
-                boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)",
+                boxShadow: "0 0 0 0 rgba(29, 192, 35, 0.7)",
                 transition: "box-shadow 0.3s ease, transform 0.3s ease",
               }}
               onMouseEnter={(e) => {
@@ -138,10 +138,10 @@ export default function CollectionsGrid() {
               </div>
 
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
-              <div className="absolute inset-0 flex items-end justify-start p-4 z-10 pointer-events-none">
+              <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
                 <div className="bg-black/30 rounded-lg px-3 py-2">
                   <h1
-                    className="text-white text-3xl xl:text-4xl 2xl:text-5xl font-bold text-left leading-tight whitespace-pre-line"
+                    className="text-white text-lg xl:text-xl 2xl:text-2xl font-bold text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow:
