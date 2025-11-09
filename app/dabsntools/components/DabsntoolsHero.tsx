@@ -166,7 +166,7 @@ export default function DabsntoolsHero({ filters, setFilters }: DabsntoolsHeroPr
             onClick={() => {
               setActiveCategory('e-rigs');
               if (setFilters) {
-                setFilters((prev: any) => ({ ...prev, types: ['Electric', 'E-Rig'] }));
+                setFilters((prev: any) => ({ ...prev, types: ['E-Rigs'] }));
               }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
