@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, ReactNode, useMemo } from 'react';
+import { useEffect, useRef, useState, ReactNode, useCallback } from 'react';
 
 interface AutoScrollContainerProps {
   children: ReactNode;
@@ -14,8 +14,8 @@ interface AutoScrollContainerProps {
 export default function AutoScrollContainer({
   children,
   className = '',
-  autoScrollInterval = 50, // Faster for smoother continuous scroll
-  scrollAmount = 2, // Smaller increments for smoother motion
+  autoScrollInterval = 3000,
+  scrollAmount = 400,
   pauseOnHover = true,
   showControls = true,
 }: AutoScrollContainerProps) {
@@ -25,62 +25,47 @@ export default function AutoScrollContainer({
   const [canScrollRight, setCanScrollRight] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Duplicate children for seamless infinite scroll
-  const duplicatedChildren = useMemo(() => {
-    return (
-      <>
-        {children}
-        {children}
-      </>
-    );
-  }, [children]);
-
-  const checkScrollButtons = () => {
+  const checkScrollButtons = useCallback(() => {
     if (!containerRef.current) return;
 
     const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
     setCanScrollLeft(scrollLeft > 0);
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-  };
+  }, []);
 
-  const scrollLeft = () => {
+  const scrollLeft = useCallback(() => {
     if (!containerRef.current) return;
-    containerRef.current.scrollBy({ left: -scrollAmount * 10, behavior: 'smooth' });
-  };
+    containerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  }, [scrollAmount]);
 
-  const scrollRight = () => {
+  const scrollRight = useCallback(() => {
     if (!containerRef.current) return;
-    containerRef.current.scrollBy({ left: scrollAmount * 10, behavior: 'smooth' });
-  };
+    containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }, [scrollAmount]);
 
-  const startAutoScroll = () => {
+  const startAutoScroll = useCallback(() => {
     if (intervalRef.current) return;
 
     intervalRef.current = setInterval(() => {
       if (!containerRef.current || isPaused) return;
 
-      const container = containerRef.current;
-      const { scrollLeft, scrollWidth, clientWidth } = container;
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
 
-      // Calculate halfway point (end of first set of children)
-      const halfwayPoint = scrollWidth / 2;
-
-      // If we've scrolled past the halfway point, reset to beginning seamlessly
-      if (scrollLeft >= halfwayPoint) {
-        container.scrollTo({ left: 0, behavior: 'auto' }); // Instant reset, no animation
+      // If we're at the end, scroll back to the beginning smoothly
+      if (scrollLeft >= scrollWidth - clientWidth - 1) {
+        containerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
-        // Normal smooth scroll
-        container.scrollBy({ left: scrollAmount, behavior: 'auto' }); // Use 'auto' for smoother continuous motion
+        containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       }
     }, autoScrollInterval);
-  };
+  }, [isPaused, autoScrollInterval, scrollAmount]);
 
-  const stopAutoScroll = () => {
+  const stopAutoScroll = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  };
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -111,7 +96,7 @@ export default function AutoScrollContainer({
       window.removeEventListener('resize', handleResize);
       stopAutoScroll();
     };
-  }, [isPaused, autoScrollInterval, scrollAmount]);
+  }, [checkScrollButtons, startAutoScroll, stopAutoScroll]);
 
   const handleMouseEnter = () => {
     if (pauseOnHover) {
@@ -151,7 +136,7 @@ export default function AutoScrollContainer({
           msOverflowStyle: 'none', // IE/Edge
         }}
       >
-        {duplicatedChildren}
+        {children}
       </div>
 
       {/* Right Arrow */}
