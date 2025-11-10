@@ -5,6 +5,7 @@ import NewProductsSection from "./components/NewProductsSection";
 import BrandLogoScrollbar from "../components/BrandLogoScrollbar";
 import DopeDealsSection from "./components/DopeDealsSection";
 import BlogArticlesGrid from "./components/BlogArticlesGrid";
+import GlobalMasthead from "./components/GlobalMasthead";
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -13,8 +14,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Minimal page for debugging */}
-      <h1>Test Page</h1>
+      {/* Global Masthead */}
+      <GlobalMasthead />
 
       {/* Main Content */}
       <div>
