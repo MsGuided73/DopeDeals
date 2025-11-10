@@ -14,34 +14,14 @@ interface AutoScrollContainerProps {
 export default function AutoScrollContainer({
   children,
   className = '',
-  autoScrollInterval = 3000,
-  scrollAmount = 400,
+  autoScrollInterval = 50, // Faster for smooth continuous scroll
+  scrollAmount = 2, // Smaller increments for smooth scrolling
   pauseOnHover = true,
-  showControls = true,
+  showControls = false, // Hide controls for continuous loop
 }: AutoScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const checkScrollButtons = useCallback(() => {
-    if (!containerRef.current) return;
-
-    const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-    setCanScrollLeft(scrollLeft > 0);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-  }, []);
-
-  const scrollLeft = useCallback(() => {
-    if (!containerRef.current) return;
-    containerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-  }, [scrollAmount]);
-
-  const scrollRight = useCallback(() => {
-    if (!containerRef.current) return;
-    containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-  }, [scrollAmount]);
 
   const startAutoScroll = useCallback(() => {
     if (intervalRef.current) return;
@@ -49,13 +29,14 @@ export default function AutoScrollContainer({
     intervalRef.current = setInterval(() => {
       if (!containerRef.current || isPaused) return;
 
-      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      const container = containerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } = container;
 
-      // If we're at the end, scroll back to the beginning smoothly
-      if (scrollLeft >= scrollWidth - clientWidth - 1) {
-        containerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      // If we've scrolled past the first set of items, reset to beginning for seamless loop
+      if (scrollLeft >= scrollWidth / 2) {
+        container.scrollLeft = 0;
       } else {
-        containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        container.scrollLeft += scrollAmount;
       }
     }, autoScrollInterval);
   }, [isPaused, autoScrollInterval, scrollAmount]);
@@ -71,15 +52,11 @@ export default function AutoScrollContainer({
     const container = containerRef.current;
     if (!container) return;
 
-    // Check initial scroll state
-    checkScrollButtons();
-
-    // Start auto-scroll only on desktop
+    // Start continuous scroll only on desktop
     if (window.innerWidth >= 1024) {
       startAutoScroll();
     }
 
-    const handleScroll = () => checkScrollButtons();
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         startAutoScroll();
@@ -88,15 +65,13 @@ export default function AutoScrollContainer({
       }
     };
 
-    container.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
 
     return () => {
-      container.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
       stopAutoScroll();
     };
-  }, [checkScrollButtons, startAutoScroll, stopAutoScroll]);
+  }, [startAutoScroll, stopAutoScroll]);
 
   const handleMouseEnter = () => {
     if (pauseOnHover) {
@@ -112,23 +87,10 @@ export default function AutoScrollContainer({
 
   return (
     <div className={`relative ${className}`}>
-      {/* Left Arrow */}
-      {showControls && canScrollLeft && (
-        <button
-          onClick={scrollLeft}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
-          aria-label="Scroll left"
-        >
-          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-      )}
-
-      {/* Scrollable Container */}
+      {/* Scrollable Container with duplicated content for seamless loop */}
       <div
         ref={containerRef}
-        className="flex overflow-x-auto gap-6 pb-4 px-4 scrollbar-hide"
+        className="flex overflow-x-hidden gap-6 pb-4 px-4"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
@@ -136,21 +98,11 @@ export default function AutoScrollContainer({
           msOverflowStyle: 'none', // IE/Edge
         }}
       >
+        {/* Original content */}
+        {children}
+        {/* Duplicated content for seamless loop */}
         {children}
       </div>
-
-      {/* Right Arrow */}
-      {showControls && canScrollRight && (
-        <button
-          onClick={scrollRight}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
-          aria-label="Scroll right"
-        >
-          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      )}
 
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
