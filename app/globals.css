@@ -105,6 +105,32 @@ body, p, .text-sm, .text-xs, .text-base {
   letter-spacing: 0.01em !important;
 }
 
+/* FORCE INTER FONT FOR BLOG CARDS - Override global Chalets rules */
+.blog-card, .blog-card *, .blog-card h1, .blog-card h2, .blog-card h3, .blog-card h4, .blog-card h5, .blog-card h6,
+.blog-card p, .blog-card span, .blog-card div,
+.blog-card .text-xs, .blog-card .text-sm, .blog-card .text-base, .blog-card .text-lg, .blog-card .text-xl, .blog-card .text-2xl,
+.blog-card .text-3xl, .blog-card .text-4xl, .blog-card .text-5xl, .blog-card .text-6xl {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Additional blog-specific overrides */
+.blog-page, .blog-page *, .blog-article, .blog-article *,
+.blog-header, .blog-header *, .blog-content, .blog-content *,
+.blog-section, .blog-section *, .blog-grid, .blog-grid * {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Specific blog page overrides */
+[data-blog-page] *, [data-blog-page] h1, [data-blog-page] h2, [data-blog-page] h3,
+[data-blog-page] h4, [data-blog-page] h5, [data-blog-page] h6,
+[data-blog-page] p, [data-blog-page] span, [data-blog-page] div {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
 /* 4. Hero titles get automatic Chalets */
 .hero-title, .hero-title *,
 .h1, .h1 *, h1, h1 *,

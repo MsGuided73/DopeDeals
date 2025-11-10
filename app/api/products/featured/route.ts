@@ -26,8 +26,8 @@ export async function GET(req: NextRequest) {
     const parsedOffset = rawOffset ? parseInt(rawOffset, 10) : 0;
     const offset = isNaN(parsedOffset) ? 0 : Math.max(0, Math.floor(parsedOffset));
 
-    // For featured products, cap at 6 items for Hot Products section
-    const effectiveLimit = Math.min(limit, 6);
+    // Use the requested limit (no artificial cap for featured products)
+    const effectiveLimit = limit;
 
     // Query featured products from main_site_products table
     // Filter for products with valid image URLs (either image_url or image_urls array)

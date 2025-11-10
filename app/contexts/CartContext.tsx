@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { getCart, getSessionId, ensureSessionId, initializeCart, type Cart } from '../lib/cart-utils';
 
 interface CartContextType {
@@ -14,9 +14,17 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isRefreshingRef = useRef(false);
 
   const refreshCart = async () => {
+    // Prevent recursive calls
+    if (isRefreshingRef.current) {
+      return;
+    }
+
+    isRefreshingRef.current = true;
     setIsLoading(true);
+
     try {
       // Wait for window to be available
       if (typeof window === 'undefined') {
@@ -76,6 +84,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       });
     } finally {
       setIsLoading(false);
+      isRefreshingRef.current = false;
     }
   };
 

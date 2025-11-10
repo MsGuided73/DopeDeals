@@ -95,7 +95,8 @@ export default function CollectionsGrid() {
 
       {/* Desktop: Full-width grid layout */}
       <div className="hidden lg:block w-full">
-        <div className="grid grid-cols-4 gap-2 h-[90vh] w-[90vw] px-1">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-4 gap-2 h-[90vh] w-full">
           <a
             href="/ride-with-us"
             className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-lg relative group transition-transform duration-300 block bg-black"
@@ -156,6 +157,7 @@ export default function CollectionsGrid() {
 
             </a>
           ))}
+          </div>
         </div>
       </div>
     </div>

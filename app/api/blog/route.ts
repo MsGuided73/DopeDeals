@@ -6,6 +6,133 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+export async function POST(request: NextRequest) {
+  try {
+    const { query } = await request.json();
+
+    if (!query || typeof query !== 'string') {
+      return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 });
+    }
+
+    // Get all blog posts
+    const { data: dbPosts, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    let allPosts = dbPosts || [];
+
+    // If no database posts, use fallback posts
+    if (!dbPosts || dbPosts.length === 0) {
+      allPosts = [
+        {
+          id: 'dabbing-101-beginners-guide',
+          title: 'Dabbing 101: Your Beginner\'s Guide to Rigs, Nails & First Setups',
+          excerpt: 'New to dabbing? This comprehensive guide breaks down rigs, nails, temperature control, and essential setup tips for smooth, flavorful vapor every time.',
+          content: 'This guide covers everything about dabbing including rigs, nails, temperature control, and setup tips.',
+          author: 'Highway 420 Team',
+          date: '2025-10-30',
+          category: 'Education',
+          image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop',
+          readTime: '8 min read',
+          featured: true
+        },
+        {
+          id: 'anatomy-smooth-hit',
+          title: 'The Anatomy of a Smooth Hit: How Airflow & Cooling Design Transform Your Experience',
+          excerpt: 'Discover how percolators, recyclers, and airflow systems work together to eliminate harshness and deliver impeccably smooth, flavorful vapor.',
+          content: 'Learn about percolators, recyclers, and airflow systems that make hits smoother.',
+          author: 'Highway 420 Team',
+          date: '2025-10-30',
+          category: 'Education',
+          image: 'https://images.unsplash.com/photo-1586227740560-8cf2732c1531?w=600&h=400&fit=crop',
+          readTime: '10 min read',
+          featured: true
+        },
+        {
+          id: 'perfect-temperature-control',
+          title: 'Finding the Perfect Hit: Temperature Control for Maximum Flavor & Smoothness',
+          excerpt: 'Master temperature precision for concentrates. Learn the goldilocks zone, heat effects on vapor quality, and gear that keeps you in the flavor zone.',
+          content: 'Temperature control is crucial for concentrates. Learn about the optimal temperature range.',
+          author: 'Highway 420 Team',
+          date: '2025-10-30',
+          category: 'Education',
+          image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&h=400&fit=crop',
+          readTime: '7 min read',
+          featured: true
+        },
+        {
+          id: 'cannabis-history-global',
+          title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
+          excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
+          content: 'Cannabis history spans from ancient rituals to modern industry.',
+          author: 'Highway 420 Crew',
+          date: '2025-10-15',
+          category: 'Culture',
+          image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
+          readTime: '10 min read',
+          featured: false
+        },
+        {
+          id: 'ultimate-bong-guide',
+          title: 'The Ultimate Guide to Picking the Perfect Bong',
+          excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
+          content: 'Choose the perfect bong from desktop models to pocket rockets. Learn about water filtration and glass art.',
+          author: 'Highway 420 Team',
+          date: '2025-10-15',
+          category: 'Education',
+          image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
+          readTime: '12 min read',
+          featured: false
+        }
+      ];
+    }
+
+    // Simple search implementation
+    const queryLower = query.toLowerCase();
+    const relevantPosts = allPosts.filter(post => {
+      const titleMatch = post.title?.toLowerCase().includes(queryLower);
+      const excerptMatch = post.excerpt?.toLowerCase().includes(queryLower);
+      const contentMatch = post.content?.toLowerCase().includes(queryLower);
+      const categoryMatch = post.category?.toLowerCase().includes(queryLower);
+
+      return titleMatch || excerptMatch || contentMatch || categoryMatch;
+    });
+
+    // Generate AI response based on relevant posts
+    let response = `Based on our blog articles, here's what I found about "${query}":\n\n`;
+
+    if (relevantPosts.length === 0) {
+      response += `I couldn't find specific information about "${query}" in our current articles. However, I recommend checking our comprehensive guides on dabbing, bongs, and cannabis culture.\n\n`;
+      response += `Try searching for related topics like "dabbing guide", "bong selection", or "cannabis history".`;
+    } else {
+      relevantPosts.slice(0, 3).forEach(post => {
+        response += `• **${post.title}**: ${post.excerpt}\n\n`;
+      });
+
+      if (relevantPosts.length > 3) {
+        response += `• And ${relevantPosts.length - 3} more relevant articles...\n\n`;
+      }
+
+      response += `For more detailed information, I recommend reading these articles in full!`;
+    }
+
+    return NextResponse.json({
+      response,
+      relevantPosts: relevantPosts.slice(0, 5).map(post => ({
+        id: post.id,
+        title: post.title,
+        excerpt: post.excerpt,
+        category: post.category
+      }))
+    });
+
+  } catch (error) {
+    console.error('Blog search API error:', error);
+    return NextResponse.json({ error: 'Search failed' }, { status: 500 });
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     // First try to get posts from database

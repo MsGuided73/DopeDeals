@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 import { useState } from "react";
 import Link from "next/link";
 import { Instagram, Twitter, Facebook, Youtube } from "lucide-react";
@@ -229,10 +229,10 @@ export default function Highway420Footer() {
               </ul>
             </div>
 
-            {/* Keep in Touch */}
+            {/* Find Out First */}
             <div>
               <h3 className="text-green-600 font-bold text-3xl mb-6 border-b border-green-600/50 pb-3">
-                Keep in Touch
+                Find Out First
               </h3>
               <p className="text-gray-800 font-medium text-lg mb-6">
                 Sign up for our newsletter and be the first to know about coupons and special promotions.

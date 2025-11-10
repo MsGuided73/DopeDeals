@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AgeVerification from '../components/AgeVerification';
-import { MessageCircle, Sparkles, Clock, User, Search, Filter } from 'lucide-react';
+import { MessageCircle, Sparkles, Clock, User, Search, Filter, Share2, Facebook, Twitter, Instagram, Link2 } from 'lucide-react';
 
 interface BlogPost {
   id: string;
@@ -142,16 +142,51 @@ export default function BlogPage() {
     if (!aiQuery.trim()) return;
 
     setIsAiLoading(true);
-    // Simulate AI processing
-    setTimeout(() => {
-      setAiResponse(`Based on our blog articles, here's what I found about "${aiQuery}":\n\n• From "The Ultimate Guide to Picking the Perfect Bong": ${aiQuery.toLowerCase().includes('bong') ? 'We recommend starting with a basic beaker bong for beginners, or a percolator bong for smoother hits.' : 'Check our comprehensive guides for detailed information.'}\n\n• General advice: Always prioritize quality over aesthetics and consider your experience level when making purchases.\n\n• For more specific information, I recommend reading our detailed buying guides!`);
+    try {
+      const response = await fetch('/api/blog', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: aiQuery }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAiResponse(data.response);
+      } else {
+        setAiResponse(`Sorry, I couldn't search our blog articles right now. Please try again later or browse our articles manually.`);
+      }
+    } catch (error) {
+      console.error('AI search error:', error);
+      setAiResponse(`Sorry, I encountered an error while searching. Please try again or browse our articles manually.`);
+    } finally {
       setIsAiLoading(false);
-    }, 1500);
+    }
   };
 
   const categories = ['All', 'Science', 'Product News', 'Maintenance', 'Technology', 'Culture'];
   const featuredPosts = blogPosts.filter(post => post.featured);
   const regularPosts = blogPosts.filter(post => !post.featured);
+
+  // Social sharing function
+  const shareArticle = (platform: string, post: BlogPost) => {
+    const url = `${window.location.origin}/blog/${post.id}`;
+    const text = `Check out this article: ${post.title}`;
+
+    switch (platform) {
+      case 'facebook':
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        break;
+      case 'twitter':
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
+        // Could add a toast notification here
+        break;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -238,7 +273,7 @@ export default function BlogPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {featuredPosts.map((post) => (
                 <article key={post.id} className="group cursor-pointer">
-                  <div className="relative overflow-hidden rounded-xl mb-4">
+                  <div className="blog-card relative overflow-hidden rounded-xl mb-4">
                     <img
                       src={post.image}
                       alt={post.title}
@@ -275,42 +310,172 @@ export default function BlogPage() {
           </section>
         )}
 
-        {/* Regular Posts */}
-        <section>
-          <h2 className="text-2xl text-gray-900 mb-8" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-            Latest Articles
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {regularPosts.map((post) => (
-              <article key={post.id} className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-lg mb-4">
+        {/* Magazine-Style Article Grid - Highway 420 Vibes */}
+        <section className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-8 shadow-xl border border-gray-200">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl text-gray-900 mb-4" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+              🔥 Latest from the Highway
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+              Fresh insights, product breakdowns, and culture deep-dives from the Highway 420 crew
+            </p>
+          </div>
+
+          {/* Magazine Layout - Mix of sizes for visual interest */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Hero Article - Large Feature */}
+            {regularPosts.slice(0, 1).map((post) => (
+              <article key={post.id} className="lg:col-span-8 group cursor-pointer">
+                <div className="blog-card relative overflow-hidden rounded-2xl mb-6 shadow-2xl border-4 border-dope-orange/20 hover:border-dope-orange/40 transition-all duration-500">
                   <img
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <span className="px-2 py-1 bg-gray-100 rounded-full">{post.category}</span>
-                    <span>{post.readTime}</span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-dope-orange transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm line-clamp-2">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">{new Date(post.date).toLocaleDateString()}</span>
-                    <Link href={`/blog/${post.id}`} className="text-dope-orange hover:text-orange-600 font-medium text-sm">
-                      Read More →
-                    </Link>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="px-3 py-1 bg-dope-orange text-white text-sm font-bold rounded-full shadow-lg">
+                        {post.category}
+                      </span>
+                      <span className="text-white/90 text-sm font-medium">{post.readTime}</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-3 leading-tight group-hover:text-orange-200 transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-white/90 text-sm line-clamp-3 mb-4">
+                      {post.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/80 text-sm">By {post.author}</span>
+                      <div className="flex items-center gap-2">
+                        {/* Social Share Buttons */}
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); shareArticle('facebook', post); }}
+                            className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-colors"
+                          >
+                            <Facebook className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); shareArticle('twitter', post); }}
+                            className="p-2 bg-blue-400 hover:bg-blue-500 text-white rounded-full transition-colors"
+                          >
+                            <Twitter className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); shareArticle('copy', post); }}
+                            className="p-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full transition-colors"
+                          >
+                            <Link2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <Link href={`/blog/${post.id}`} className="text-orange-300 hover:text-orange-100 font-bold text-sm transition-colors">
+                          READ →
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </article>
             ))}
+
+            {/* Side Articles - Smaller cards */}
+            <div className="lg:col-span-4 space-y-6">
+              {regularPosts.slice(1, 4).map((post, index) => (
+                <article key={post.id} className="group cursor-pointer">
+                  <div className="blog-card relative overflow-hidden rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+                    <div className="aspect-video relative overflow-hidden">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <span className="px-2 py-1 bg-dope-orange text-white text-xs font-bold rounded-full">
+                          {post.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-dope-orange transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">{post.readTime}</span>
+                        <div className="flex items-center gap-1">
+                          {/* Mini social share */}
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); shareArticle('facebook', post); }}
+                              className="p-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                            >
+                              <Facebook className="w-3 h-3" />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); shareArticle('twitter', post); }}
+                              className="p-1 bg-blue-400 hover:bg-blue-500 text-white rounded transition-colors"
+                            >
+                              <Twitter className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <Link href={`/blog/${post.id}`} className="text-dope-orange hover:text-orange-600 font-medium text-xs">
+                            →
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
+
+          {/* Bottom Grid - More Articles */}
+          {regularPosts.length > 4 && (
+            <div className="mt-12">
+              <h3 className="text-xl font-bold text-gray-900 mb-6 text-center" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                More Stories
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {regularPosts.slice(4).map((post) => (
+                  <article key={post.id} className="group cursor-pointer">
+                    <div className="blog-card relative overflow-hidden rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300">
+                      <div className="aspect-video relative overflow-hidden">
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-2 left-2">
+                          <span className="px-2 py-1 bg-dope-orange text-white text-xs font-bold rounded-full">
+                            {post.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-base font-bold text-gray-900 mb-2 leading-tight group-hover:text-dope-orange transition-colors line-clamp-2">
+                          {post.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-500">{post.readTime}</span>
+                          <Link href={`/blog/${post.id}`} className="text-dope-orange hover:text-orange-600 font-medium text-xs">
+                            Read →
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Newsletter Signup */}

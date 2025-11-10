@@ -277,13 +277,11 @@ export const getCart = async (): Promise<Cart | null> => {
 export const initializeCart = () => {
   if (typeof window === 'undefined') return;
 
-  // Ensure session ID exists
-  ensureSessionId();
-
   // Listen for cart updates from other tabs/windows
+  // Note: We don't call ensureSessionId here anymore to avoid triggering storage events
   window.addEventListener('storage', (e) => {
     if (e.key === 'cart_session_id') {
-      // Session ID changed, refresh cart
+      // Session ID changed from external source (another tab/window), refresh cart
       window.dispatchEvent(new CustomEvent('cartSessionChanged'));
     }
   });

@@ -104,11 +104,27 @@ export default function GlobalMasthead() {
 
       <header className="z-50 relative">
         {/* Two-Row Navbar Layout */}
-        <div className="bg-black relative" style={{ minHeight: "60px" }}>
-          {/* Top Row: Logo + Search Bar (centered) - Desktop */}
-          <div className="hidden md:flex items-center px-4 py-2 relative" style={{ height: "30px" }}>
+        <div className="relative" style={{ minHeight: "70px" }}>
+          {/* Enhanced 3D Black Bar Background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-black to-gray-900 shadow-2xl">
+            {/* Metallic texture overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20"></div>
+            {/* Subtle pattern for depth */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                               radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px)`,
+              backgroundSize: '20px 20px'
+            }}></div>
+            {/* Top highlight for 3D effect */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+            {/* Bottom shadow for depth */}
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-black/50 to-transparent"></div>
+          </div>
+
+          {/* Top Row: Logo + Search Bar (equal padding) - Desktop */}
+          <div className="hidden md:flex items-center px-6 py-2 relative" style={{ height: "30px" }}>
             {/* Logo - Left side, spans both rows */}
-            <div className="absolute left-0 top-0 z-10 flex items-center" style={{ height: "60px", maxWidth: "200px" }}>
+            <div className="absolute left-6 top-0 z-10 flex items-center" style={{ height: "60px", maxWidth: "200px" }}>
               <Link href="/" className="flex items-center h-full w-full">
                 <Image
                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
@@ -122,9 +138,9 @@ export default function GlobalMasthead() {
               </Link>
             </div>
 
-            {/* Search Bar - Centered horizontally in top row */}
-            <div className="flex-1 flex justify-center mt-1">
-              <div className="max-w-2xl w-full">
+            {/* Search Bar - Equal padding from both sides */}
+            <div className="absolute left-1/2 top-2 transform -translate-x-1/2" style={{ width: "calc(100% - 300px)" }}>
+              <div className="max-w-2xl w-full mx-auto">
                 <EnhancedSearchBar />
               </div>
             </div>
@@ -149,9 +165,9 @@ export default function GlobalMasthead() {
           </div>
 
           {/* Bottom Row: Navigation Links + User Icons */}
-          <div className="flex items-center justify-between px-4" style={{ height: "30px" }}>
+          <div className="flex items-center justify-between px-4 group" style={{ height: "30px" }}>
             {/* Navigation Links - Centered at bottom */}
-            <nav className="hidden md:flex items-center gap-6 absolute bottom-0 left-1/2 transform -translate-x-1/2">
+            <nav className="hidden md:flex items-center gap-6 absolute bottom-0 left-1/2 transform -translate-x-1/2 group-hover:scale-105 transition-transform duration-300">
               {/* Shop Dropdown */}
               <div className="relative">
                 <button
@@ -444,8 +460,8 @@ export default function GlobalMasthead() {
               <Link href="/products?category=accessories" className="text-white text-sm font-black hover:text-yellow-400 transition-colors">
                 Accessories
               </Link>
-              <Link href="/products?category=edibles" className="text-white text-sm font-black hover:text-yellow-400 transition-colors">
-                Munchies
+              <Link href="/blog" className="text-white text-sm font-black hover:text-yellow-400 transition-colors">
+                Blog
               </Link>
             </nav>
 

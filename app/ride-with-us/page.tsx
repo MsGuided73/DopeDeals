@@ -44,7 +44,7 @@ export default function RideWithUsPage() {
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="chalets-title text-4xl font-normal mb-6 text-gray-900 dark:text-white">
+                <h2 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                   More Than Just Shopping
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed text-lg">
@@ -81,7 +81,7 @@ export default function RideWithUsPage() {
         <section className="py-16 bg-gray-50 dark:bg-gray-950">
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-12">
-              <h2 className="chalets-title text-4xl font-normal mb-4 text-gray-900 dark:text-white">
+              <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                 Membership Benefits
               </h2>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -162,7 +162,7 @@ export default function RideWithUsPage() {
         {/* Call to Action */}
         <section className="py-16 bg-gradient-to-r from-green-400 to-green-700 text-white">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="chalets-title text-4xl font-normal mb-6 highway-text-shadow">
+            <h2 className="text-4xl font-bold mb-6 highway-text-shadow" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
               Ready to Ride?
             </h2>
             <p className="text-xl mb-8 leading-relaxed max-w-2xl mx-auto">
