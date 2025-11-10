@@ -254,7 +254,7 @@ export default function FeaturedProductsSection() {
   if (loading) {
     return (
       <section className="mt-16">
-        <div className="text-left mb-12">
+        <div className="text-center mb-12">
           <h1
             className="text-4xl md:text-5xl text-black mb-4"
             style={{ fontFamily: systemFontFamily }}
@@ -299,8 +299,6 @@ export default function FeaturedProductsSection() {
     );
   }
 
-  const productsToShow = products.slice(0, 6);
-
   return (
     <section className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -314,8 +312,10 @@ export default function FeaturedProductsSection() {
         </div>
 
         <div className="block lg:hidden">
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
-            {productsToShow.map((product) => renderProductCard(product, 'mobile'))}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4 max-w-6xl">
+              {products.map((product) => renderProductCard(product, 'mobile'))}
+            </div>
           </div>
         </div>
 

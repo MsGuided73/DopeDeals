@@ -105,11 +105,11 @@ export default function DopeDealsSection() {
     return (
       <section className="mt-16 bg-white dark:bg-gray-950 py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-left mb-12">
-            <h1 className="text-4xl md:text-5xl text-black mb-4">
-              🔥 DOPE DEALS 🔥
-            </h1>
-          </div>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl text-black mb-4">
+            🔥 DOPE DEALS 🔥
+          </h1>
+        </div>
           {/* Mobile: Grid layout */}
           <div className="block lg:hidden">
             <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
@@ -152,7 +152,7 @@ export default function DopeDealsSection() {
     return (
       <section className="mt-16 bg-white dark:bg-gray-950 py-12">
         <div className="max-w-7xl mx-auto px-4">
-        <div className="text-left mb-12">
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl text-black mb-4">
             🔥 DOPE DEALS 🔥
           </h1>
@@ -171,7 +171,7 @@ export default function DopeDealsSection() {
     <section className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <div className="text-left mb-12">
+        <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl text-black mb-4">
               🔥 DOPE DEALS 🔥
             </h1>

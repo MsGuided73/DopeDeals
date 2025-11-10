@@ -92,8 +92,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {/* Scrolling Banner - DISABLED for now */}
               {/* <ScrollingBanner /> */}
 
-              {/* Global Masthead removed from layout - pages control their own masthead inclusion */}
-              {/* <GlobalMasthead /> */}
+              {/* Global Masthead */}
+              <GlobalMasthead />
 
               <main className="flex-1">
                 {children}

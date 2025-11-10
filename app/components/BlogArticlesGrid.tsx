@@ -91,7 +91,7 @@ export default function BlogArticlesGrid() {
           className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-2xl"
         >
           {/* IMPORTANT: relative + overflow-hidden keep overlays inside the card */}
-          <div className="relative overflow-hidden bg-white rounded-2xl p-6 shadow-2xl border border-gray-200 hover:shadow-3xl hover:border-green-300 transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+          <div className="blog-card relative overflow-hidden bg-white rounded-2xl p-6 shadow-2xl border border-gray-200 hover:shadow-3xl hover:border-green-300 transition-all duration-300 hover:-translate-y-2 cursor-pointer">
             {/* Image */}
             <div className="aspect-video relative overflow-hidden rounded-xl mb-6">
               {post.image ? (
@@ -106,10 +106,7 @@ export default function BlogArticlesGrid() {
                 </div>
               )}
 
-              {/* Category Badge (decorative → non-interactive) */}
-              <div className="pointer-events-none absolute top-4 left-4 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                {post.category}
-              </div>
+
 
               {/* Read Time Badge (decorative → non-interactive) */}
               <div className="pointer-events-none absolute top-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full text-sm font-medium">

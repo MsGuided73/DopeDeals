@@ -1,11 +1,10 @@
 import Link from "next/link";
-import GlobalMasthead from './components/GlobalMasthead';
-import CollectionsGrid from './components/CollectionsGrid';
-import NewProductsSection from './components/NewProductsSection';
-import BrandLogoScrollbar from '../components/BrandLogoScrollbar';
-import DopeDealsSection from './components/DopeDealsSection';
-import FeaturedProductsSection from './components/FeaturedProductsSection';
-import BlogArticlesGrid from './components/BlogArticlesGrid';
+import CollectionsGrid from "./components/CollectionsGrid";
+import FeaturedProductsSection from "./components/FeaturedProductsSection";
+import NewProductsSection from "./components/NewProductsSection";
+import BrandLogoScrollbar from "../components/BrandLogoScrollbar";
+import DopeDealsSection from "./components/DopeDealsSection";
+import BlogArticlesGrid from "./components/BlogArticlesGrid";
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -14,10 +13,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Age Verification Popup */}
-      {/* <AgeVerification /> */}
-
-      <GlobalMasthead />
+      {/* Minimal page for debugging */}
+      <h1>Test Page</h1>
 
       {/* Main Content */}
       <div>
@@ -48,7 +45,7 @@ export default function HomePage() {
 
           {/* Customer Reviews Section - Moved above footer */}
           <section className="mt-24 mb-16">
-            <div className="text-left mb-12">
+            <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-chalets font-bold mb-4" style={{
                 letterSpacing: '-0.02em',
                 color: '#000000'
@@ -178,7 +175,7 @@ export default function HomePage() {
         {/* Blog Articles Section - Just above footer */}
         <section className="mt-24 mb-16">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="text-left mb-12">
+            <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-chalets font-bold mb-4" style={{
                 letterSpacing: '-0.02em',
                 color: '#000000'
