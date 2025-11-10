@@ -12,7 +12,7 @@ import { NavigationProvider } from "./contexts/NavigationContext";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
-  description: "Life is Highway, Ride With Us 🌿 Premium glass, bongs, dab rigs & smoking accessories. Curated cannabis culture since day one. Free shipping over $75 🚚 #Highway420",
+  description: "Life is a Highway, Ride With Us 🌿 Premium glass, bongs, dab rigs & smoking accessories. Curated cannabis culture since day one. Free shipping over $75 🚚 #Highway420",
 
   // Open Graph / Facebook
   openGraph: {
@@ -20,7 +20,7 @@ export const metadata = {
     locale: 'en_US',
     url: 'https://yourdomain.com',
     siteName: 'HIGHWAY 420',
-    title: 'HIGHWAY 420 - Life is Highway, Ride With Us 🌿',
+    title: 'HIGHWAY 420 - Life is a Highway, Ride With Us 🌿',
     description: 'Premium glass art, bongs, dab rigs & smoking accessories. Curated cannabis culture essentials. Free shipping over $75. Join the movement.',
     images: [
       {
