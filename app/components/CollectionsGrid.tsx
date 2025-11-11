@@ -128,7 +128,7 @@ export default function CollectionsGrid() {
               {/* SHOP Button - Top Left */}
               <div className="absolute top-3 left-3 z-10">
                 <button
-                  className="bg-black text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg hover:bg-gray-800 transition-colors"
+                  className="bg-black text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg hover:bg-gray-800 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     window.location.href = cat.route;
