@@ -124,15 +124,15 @@ export default function GlobalMasthead() {
           {/* Top Row: Logo + Search Bar (equal padding) - Desktop */}
           <div className="hidden md:flex items-center px-6 py-2 relative" style={{ height: "30px" }}>
             {/* Logo - Left side, spans both rows */}
-            <div className="absolute left-6 top-0 z-10 flex items-center" style={{ height: "60px", maxWidth: "200px" }}>
+            <div className="absolute left-6 top-0 z-10 flex items-center" style={{ height: "120px", maxWidth: "400px" }}>
               <Link href="/" className="flex items-center h-full w-full">
                 <Image
                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                   alt="HIGHWAY 420 Logo"
-                  width={200}
-                  height={43}
+                  width={400}
+                  height={86}
                   className="object-contain w-full h-full"
-                  style={{ display: "block", maxHeight: "60px" }}
+                  style={{ display: "block", maxHeight: "120px" }}
                   priority
                 />
               </Link>
@@ -168,151 +168,62 @@ export default function GlobalMasthead() {
           <div className="flex items-center justify-between px-4 group" style={{ height: "30px" }}>
             {/* Navigation Links - Centered at bottom */}
             <nav className="hidden md:flex items-center gap-6 absolute bottom-0 left-1/2 transform -translate-x-1/2 group-hover:scale-105 transition-transform duration-300">
-              {/* Shop Dropdown */}
+              {/* Vapes Dropdown */}
               <div className="relative">
                 <button
-                  onClick={() => setOpenDropdown(openDropdown === "shop" ? null : "shop")}
+                  onClick={() => setOpenDropdown(openDropdown === "vapes" ? null : "vapes")}
                   className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
                 >
-                  Shop
+                  Vapes
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
 
-                {openDropdown === "shop" && (
+                {openDropdown === "vapes" && (
                   <div
                     className="absolute top-full left-0 mt-2 w-64 rounded-xl shadow-lg border border-gray-200 z-[50]"
                     style={{ backgroundColor: "#f4f1e8" }}
                     onMouseLeave={() => handleMouseLeaveWithDelay("main")}
                   >
                     <div className="py-2">
-                      <Link href="/products" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
-                        All Products
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        ⭐ All Vapes
                       </Link>
                       <div className="border-t border-gray-200/20 my-1" />
 
-                      {/* Categories */}
-                      <div className="relative">
-                        <button
-                          onMouseEnter={() => handleMouseEnter("submenu", "categories")}
-                          onMouseLeave={() => handleMouseLeaveWithDelay("submenu")}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
-                        >
-                          Shop by Category
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </button>
-
-                        {openSubmenu === "categories" && (
-                          <div
-                            className="absolute left-full top-0 ml-1 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-[60]"
-                            onMouseEnter={() => handleMouseEnter("submenu", "categories")}
-                            onMouseLeave={() => handleMouseLeaveWithDelay("submenu")}
-                          >
-                            <div className="py-2">
-                              {/* Nested: THCA+ */}
-                              <div className="relative">
-                                <button
-                                  onMouseEnter={() => handleMouseEnter("nested", "thca-nested-categories")}
-                                  onMouseLeave={() => handleMouseLeaveWithDelay("nested")}
-                                  className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between"
-                                >
-                                  THCA+
-                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                  </svg>
-                                </button>
-
-                                {openNestedSubmenu === "thca-nested-categories" && (
-                                  <div
-                                    className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-[70]"
-                                    onMouseEnter={() => handleMouseEnter("nested", "thca-nested-categories")}
-                                    onMouseLeave={() => handleMouseLeaveWithDelay("nested")}
-                                  >
-                                    <div className="py-2">
-                                      <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
-                                        ⭐ THCA Flower
-                                      </Link>
-                                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
-                                        ⭐ THCA Pre-Rolls
-                                      </Link>
-                                      <div className="border-t border-gray-200/20 my-1" />
-                                      <Link href="/cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                        CBD Products
-                                      </Link>
-                                      <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                        Delta Products
-                                      </Link>
-                                      <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                        Edibles
-                                      </Link>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-
-                              <div className="border-t border-gray-200/20 my-1" />
-                              <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                Bongs & Water Pipes
-                              </Link>
-                              <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                Hand Pipes
-                              </Link>
-                              <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                Dab Rigs
-                              </Link>
-                              <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                Vaporizers
-                              </Link>
-                              <Link href="/accessories" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                Accessories
-                              </Link>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      {/* THCA Products */}
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        THCA Products
+                      </Link>
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        D8 Products
+                      </Link>
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        D10 Products
+                      </Link>
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        THCp Products
+                      </Link>
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        THCv Products
+                      </Link>
 
                       <div className="border-t border-gray-200/20 my-1" />
 
-                      {/* Brands */}
-                      <div className="relative">
-                        <button
-                          onMouseEnter={() => handleMouseEnter("submenu", "brands")}
-                          onMouseLeave={() => handleMouseLeaveWithDelay("submenu")}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex items-center justify-between font-medium"
-                        >
-                          Shop by Brand
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </button>
-
-                        {openSubmenu === "brands" && (
-                          <div
-                            className="absolute left-full top-0 ml-1 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 z-[60]"
-                            onMouseEnter={() => handleMouseEnter("submenu", "brands")}
-                            onMouseLeave={() => handleMouseLeaveWithDelay("submenu")}
-                          >
-                            <div className="py-2">
-                              <Link href="/brands/raw-papers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                RAW
-                              </Link>
-                              <Link href="/brands/puffco" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                Storz & Bickel
-                              </Link>
-                              <Link href="/brands/roor" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
-                                ROOR
-                              </Link>
-                              <div className="border-t border-gray-200/20 my-1" />
-                              <Link href="/brands" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
-                                View All Brands
-                              </Link>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      {/* Vape Equipment */}
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        Vaporizers
+                      </Link>
+                      <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        E-Rigs
+                      </Link>
+                      <Link href="/products?q=cartridge" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        Cartridges
+                      </Link>
+                      <Link href="/products?q=battery" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        Batteries
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -337,34 +248,34 @@ export default function GlobalMasthead() {
                     onMouseLeave={() => handleMouseLeaveWithDelay("main")}
                   >
                     <div className="py-2">
-                      <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
+                      <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         THCA Flower
                       </Link>
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium">
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         THCA Pre-Rolls
                       </Link>
                       <div className="border-t border-gray-200/20 my-1" />
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         THCA Concentrates
                       </Link>
                       <div className="border-t border-gray-200/20 my-1" />
-                      <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         CBD Products
                       </Link>
-                      <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Delta Products
                       </Link>
-                      <Link href="/thca_edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/thca_edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Edibles
                       </Link>
                       <div className="border-t border-gray-200/20 my-1" />
-                      <Link href="/thca_shrooms" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/thca_shrooms" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         🍄 Mushrooms
                       </Link>
-                      <Link href="/nitrous-oxide" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/nitrous-oxide" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Nitrous Oxide
                       </Link>
-                      <Link href="/7-hydroxymitragynine" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/7-hydroxymitragynine" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         7-Hydroxymitragynine
                       </Link>
                     </div>
@@ -391,22 +302,22 @@ export default function GlobalMasthead() {
                     onMouseLeave={() => handleMouseLeaveWithDelay("main")}
                   >
                     <div className="py-2">
-                      <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         All Bongs
                       </Link>
-                      <Link href="/bubblers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/bubblers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Bubblers
                       </Link>
-                      <Link href="/products?q=glass+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=glass+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Glass Bongs
                       </Link>
-                      <Link href="/products?q=beaker+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=beaker+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Beaker Bongs
                       </Link>
-                      <Link href="/products?q=straight+tube" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=straight+tube" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Straight Tube
                       </Link>
-                      <Link href="/products?q=percolator" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=percolator" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Percolator Bongs
                       </Link>
                     </div>
@@ -433,19 +344,19 @@ export default function GlobalMasthead() {
                     onMouseLeave={() => handleMouseLeaveWithDelay("main")}
                   >
                     <div className="py-2">
-                      <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         All Pipes
                       </Link>
-                      <Link href="/products?q=spoon+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=spoon+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Spoon Pipes
                       </Link>
-                      <Link href="/products?q=sherlock+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=sherlock+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Sherlock Pipes
                       </Link>
-                      <Link href="/products?q=chillum" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=chillum" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Chillums
                       </Link>
-                      <Link href="/products?q=one+hitter" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors">
+                      <Link href="/products?q=one+hitter" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         One Hitters
                       </Link>
                     </div>
@@ -524,6 +435,44 @@ export default function GlobalMasthead() {
               <Link href="/products" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Shop All Products
               </Link>
+
+              {/* Vapes Section */}
+              <div className="pt-2">
+                <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">Vapes</h3>
+                <div className="space-y-2 pl-4">
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    All Vapes
+                  </Link>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    THCA Products
+                  </Link>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    D8 Products
+                  </Link>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    D10 Products
+                  </Link>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    THCp Products
+                  </Link>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    THCv Products
+                  </Link>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    Vaporizers
+                  </Link>
+                  <Link href="/dabsntools" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    E-Rigs
+                  </Link>
+                  <Link href="/products?q=cartridge" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    Cartridges
+                  </Link>
+                  <Link href="/products?q=battery" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    Batteries
+                  </Link>
+                </div>
+              </div>
+
               <Link href="/bongs" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Bongs & Water Pipes
               </Link>
@@ -532,9 +481,6 @@ export default function GlobalMasthead() {
               </Link>
               <Link href="/dabsntools" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Dab Rigs
-              </Link>
-              <Link href="/thca_pnv" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Vaporizers
               </Link>
               <Link href="/accessories" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Accessories
