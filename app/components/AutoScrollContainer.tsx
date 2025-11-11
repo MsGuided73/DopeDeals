@@ -16,7 +16,7 @@ export default function AutoScrollContainer({
   className = '',
   autoScrollInterval = 50, // Faster for smooth continuous scroll
   scrollAmount = 2, // Smaller increments for smooth scrolling
-  pauseOnHover = true,
+  pauseOnHover = false, // Changed default to false - don't pause on hover
   showControls = false, // Hide controls for continuous loop
 }: AutoScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,9 +80,13 @@ export default function AutoScrollContainer({
   };
 
   const handleMouseLeave = () => {
-    if (pauseOnHover) {
-      setIsPaused(false);
-    }
+    // Always restart scrolling when mouse leaves, regardless of pauseOnHover setting
+    setIsPaused(false);
+  };
+
+  const handleCardClick = () => {
+    // Pause scrolling when a card is clicked
+    setIsPaused(true);
   };
 
   return (
@@ -93,6 +97,7 @@ export default function AutoScrollContainer({
         className="flex overflow-x-hidden gap-6 pb-4 px-4"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handleCardClick}
         style={{
           scrollbarWidth: 'none', // Firefox
           msOverflowStyle: 'none', // IE/Edge

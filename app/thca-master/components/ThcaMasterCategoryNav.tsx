@@ -12,7 +12,7 @@ export default function ThcaMasterCategoryNav({ activeCategory, onCategoryChange
   const categories = [
     { id: 'all', name: 'All Products', icon: '🛍️', description: 'Complete collection' },
     { id: 'flower', name: 'THCA Flower', icon: '🌿', description: 'Premium cannabis flower' },
-    { id: 'prerolls', name: 'Prerolls & Vapes', icon: '🚬', description: 'Ready to smoke & vape' },
+    { id: 'prerolls', name: 'Vapes', icon: '🚬', description: 'Ready to smoke & vape' },
     { id: 'cartridges', name: 'Cartridges', icon: '💨', description: 'Vape cartridges' },
     { id: 'concentrates', name: 'Concentrates', icon: '🧪', description: 'THCA concentrates & rosin' },
     { id: 'edibles', name: 'Edibles', icon: '🍪', description: 'Cannabis edibles' },

@@ -43,7 +43,7 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
   const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
   const uniqueMaterials = [...new Set(products.map(p => p.material).filter(Boolean) as string[])].sort();
   const uniqueHeights = [...new Set(products.map(p => p.height).filter(Boolean) as string[])].sort();
-  const uniqueJointSizes = [...new Set(products.map(p => p.joint_size).filter(Boolean) as string[])].sort();
+  const uniqueJointSizes = [...new Set(products.map(p => p.jointSize).filter(Boolean) as string[])].sort();
   const uniquePercolators = [...new Set(products.map(p => p.percolator).filter(Boolean) as string[])].sort();
   const uniqueCategories = [...new Set(products.map(p => p.category).filter(Boolean) as string[])].sort();
 
@@ -133,7 +133,7 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
           <input
             type="range"
             min="0"
-            max="1000"
+            max="2000"
             step="10"
             value={filters.priceRange[1]}
             onChange={(e) => setFilters((prev: any) => ({

@@ -100,7 +100,7 @@ export default function PipesFilters({ filters, setFilters, products }: PipesFil
                 <input
                   type="range"
                   min="0"
-                  max="100"
+                  max="1000"
                   value={filters.priceRange[0]}
                   onChange={(e) => updateFilter('priceRange', [parseInt(e.target.value), filters.priceRange[1]])}
                   className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
@@ -108,7 +108,7 @@ export default function PipesFilters({ filters, setFilters, products }: PipesFil
                 <input
                   type="range"
                   min="0"
-                  max="100"
+                  max="1000"
                   value={filters.priceRange[1]}
                   onChange={(e) => updateFilter('priceRange', [filters.priceRange[0], parseInt(e.target.value)])}
                   className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
@@ -122,7 +122,7 @@ export default function PipesFilters({ filters, setFilters, products }: PipesFil
                 <input
                   type="number"
                   min="0"
-                  max="100"
+                  max="1000"
                   value={filters.priceRange[0]}
                   onChange={(e) => updateFilter('priceRange', [parseInt(e.target.value) || 0, filters.priceRange[1]])}
                   className="px-2 py-1 text-sm border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-white"
@@ -131,9 +131,9 @@ export default function PipesFilters({ filters, setFilters, products }: PipesFil
                 <input
                   type="number"
                   min="0"
-                  max="100"
+                  max="1000"
                   value={filters.priceRange[1]}
-                  onChange={(e) => updateFilter('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 100])}
+                  onChange={(e) => updateFilter('priceRange', [filters.priceRange[0], parseInt(e.target.value) || 1000])}
                   className="px-2 py-1 text-sm border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                   placeholder="Max"
                 />
