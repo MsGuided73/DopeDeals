@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * DEBUG ENDPOINT: Inspect what fields Zoho actually returns
@@ -126,13 +127,42 @@ export async function GET(request: NextRequest) {
 }
 
 async function getValidAccessToken(): Promise<string | null> {
-  const refreshToken = process.env.ZOHO_REFRESH_TOKEN;
+  // Initialize Supabase client
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const orgId = process.env.ZOHO_ORGANIZATION_ID;
+
+  // Get tokens from database (like all other endpoints)
+  const { data: tokenRow, error } = await supabase
+    .from('zoho_tokens')
+    .select('*')
+    .eq('org_id', orgId)
+    .single();
+
+  if (error || !tokenRow) {
+    throw new Error(`No Zoho tokens found in database: ${error?.message || 'Token row not found'}`);
+  }
+
+  const now = new Date();
+  const expiresAt = new Date(tokenRow.expires_at);
+
+  // Check if access token is still valid (with 5 minute buffer)
+  if (tokenRow.access_token && expiresAt > new Date(now.getTime() + 5 * 60 * 1000)) {
+    console.log('[Zoho Debug] Using existing access token from database');
+    return tokenRow.access_token;
+  }
+
+  // Access token expired or missing, refresh it
+  console.log('[Zoho Debug] Refreshing access token using stored refresh token');
+
+  const refreshToken = tokenRow.refresh_token;
   const clientId = process.env.ZOHO_CLIENT_ID;
   const clientSecret = process.env.ZOHO_CLIENT_SECRET;
-  const dc = process.env.ZOHO_DC || 'us';
+  const dc = tokenRow.dc || process.env.ZOHO_DC || 'us';
 
   if (!refreshToken || !clientId || !clientSecret) {
-    throw new Error('Missing Zoho credentials');
+    throw new Error('Missing Zoho credentials for token refresh');
   }
 
   // Use correct Zoho OAuth domain (no region prefix)
@@ -151,11 +181,26 @@ async function getValidAccessToken(): Promise<string | null> {
   });
 
   if (!res.ok) {
-    throw new Error(`Token refresh failed: ${res.status}`);
+    const errorText = await res.text();
+    console.error('[Zoho Debug] Token refresh failed:', res.status, errorText);
+    throw new Error(`Token refresh failed: ${res.status} - ${errorText}`);
   }
 
   const data = await res.json();
-  return data.access_token;
+  const newAccessToken = data.access_token;
+
+  // Update the database with the new access token
+  const newExpiresAt = new Date(now.getTime() + (data.expires_in || 3600) * 1000);
+  await supabase
+    .from('zoho_tokens')
+    .update({
+      access_token: newAccessToken,
+      expires_at: newExpiresAt.toISOString()
+    })
+    .eq('org_id', orgId);
+
+  console.log('[Zoho Debug] Successfully refreshed and stored new access token');
+  return newAccessToken;
 }
 
 function extractCustomFieldsFromProduct(item: any): any[] {

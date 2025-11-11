@@ -24,10 +24,10 @@ const supabase = createClient(
 // GET - Fetch comments for a blog post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     // First get the blog post ID from slug
     const { data: blogPost, error: blogError } = await supabase
@@ -56,10 +56,10 @@ export async function GET(
 // POST - Create a new comment (community members only)
 export async function POST(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
     const { content, userId } = body;
 

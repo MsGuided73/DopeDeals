@@ -29,14 +29,14 @@ interface UserParams {
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: UserParams }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   // Require manage_users permission (admin only)
   const auth = await requirePermission('manage_users');
   if (auth instanceof NextResponse) return auth;
 
   try {
-    const { userId } = params;
+    const { userId } = await params;
 
     // Get user profile with related data
     const { data: user, error } = await supabase
@@ -113,14 +113,14 @@ export async function GET(
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: UserParams }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   // Require manage_users permission (admin only)
   const auth = await requirePermission('manage_users');
   if (auth instanceof NextResponse) return auth;
 
   try {
-    const { userId } = params;
+    const { userId } = await params;
     const body = await req.json().catch(() => ({}));
     
     const parse = UpdateUserSchema.safeParse(body);
@@ -183,14 +183,14 @@ export async function PATCH(
  */
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: UserParams }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   // Require manage_users permission (admin only)
   const auth = await requirePermission('manage_users');
   if (auth instanceof NextResponse) return auth;
 
   try {
-    const { userId } = params;
+    const { userId } = await params;
     const { searchParams } = new URL(req.url);
     const hardDelete = searchParams.get('hard') === 'true';
 

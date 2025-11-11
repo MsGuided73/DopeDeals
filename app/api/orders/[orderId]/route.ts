@@ -53,7 +53,7 @@ interface OrderParams {
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: OrderParams }
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
   try {
     // Require authentication
@@ -61,7 +61,7 @@ export async function GET(
     if (auth instanceof NextResponse) return auth;
     const { user } = auth;
 
-    const { orderId } = params;
+    const { orderId } = await params;
 
     // Get order with all related data
     const { data: order, error } = await supabase
@@ -177,7 +177,7 @@ export async function GET(
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: OrderParams }
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
   try {
     // Require permission to update orders
@@ -185,7 +185,7 @@ export async function PATCH(
     if (auth instanceof NextResponse) return auth;
     const { user } = auth;
 
-    const { orderId } = params;
+    const { orderId } = await params;
     const body = await req.json().catch(() => ({}));
     
     const parse = UpdateOrderSchema.safeParse(body);

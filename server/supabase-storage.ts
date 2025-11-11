@@ -56,6 +56,52 @@ export class SupabaseStorage implements IStorage {
     }
   }
 
+  // IStorage interface implementation for file storage
+  async put(path: string, data: Buffer | Uint8Array, contentType?: string): Promise<{ url: string }> {
+    if (!supabaseAdmin) throw new Error('Supabase not configured');
+
+    const { error } = await supabaseAdmin.storage
+      .from('public')
+      .upload(path, data, {
+        upsert: true,
+        contentType,
+      });
+
+    if (error) throw error;
+
+    const { data: pub } = supabaseAdmin.storage
+      .from('public')
+      .getPublicUrl(path);
+
+    return { url: pub?.publicUrl ?? '' };
+  }
+
+  async get(path: string): Promise<Uint8Array | null> {
+    if (!supabaseAdmin) throw new Error('Supabase not configured');
+
+    const { data, error } = await supabaseAdmin.storage
+      .from('public')
+      .download(path);
+
+    if (error) {
+      if (error.message?.includes('Object not found')) return null;
+      throw error;
+    }
+
+    const buf = await data.arrayBuffer();
+    return new Uint8Array(buf);
+  }
+
+  async remove(path: string): Promise<void> {
+    if (!supabaseAdmin) throw new Error('Supabase not configured');
+
+    const { error } = await supabaseAdmin.storage
+      .from('public')
+      .remove([path]);
+
+    if (error) throw error;
+  }
+
   // Users - Use Supabase auth integration
   async getUser(id: string): Promise<User | undefined> {
     if (!supabaseAdmin) return undefined;
@@ -556,12 +602,40 @@ export class SupabaseStorage implements IStorage {
 
   // Shipstation methods would also use Supabase
   async getShipstationOrders(): Promise<ShipstationOrder[]> {
-    return [];
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data as ShipstationOrder[];
+  }
+
+  async getShipstationOrderByOrderId(orderId: string): Promise<ShipstationOrder | undefined> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_orders')
+      .select('*')
+      .eq('order_id', orderId)
+      .single();
+
+    if (error || !data) return undefined;
+    return data as ShipstationOrder;
+  }
+
+  async getShipstationOrderByShipstationId(shipstationOrderId: string): Promise<ShipstationOrder | undefined> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_orders')
+      .select('*')
+      .eq('shipstation_order_id', shipstationOrderId)
+      .single();
+
+    if (error || !data) return undefined;
+    return data as ShipstationOrder;
   }
 
   async insertShipstationOrder(order: InsertShipstationOrder): Promise<ShipstationOrder> {
     const { data, error } = await supabaseAdmin
-      .from('shipstationOrders')
+      .from('shipstation_orders')
       .insert(order)
       .select()
       .single();
@@ -570,9 +644,78 @@ export class SupabaseStorage implements IStorage {
     return data as ShipstationOrder;
   }
 
+  async updateShipstationOrder(id: string, updates: Partial<InsertShipstationOrder>): Promise<ShipstationOrder | undefined> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_orders')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error || !data) return undefined;
+    return data as ShipstationOrder;
+  }
+
+  async insertShipstationShipment(shipment: InsertShipstationShipment): Promise<ShipstationShipment> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_shipments')
+      .insert(shipment)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as ShipstationShipment;
+  }
+
+  async updateShipstationShipment(id: string, updates: Partial<InsertShipstationShipment>): Promise<ShipstationShipment | undefined> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_shipments')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error || !data) return undefined;
+    return data as ShipstationShipment;
+  }
+
+  async getShipstationProductByProductId(productId: string): Promise<ShipstationProduct | undefined> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_products')
+      .select('*')
+      .eq('product_id', productId)
+      .single();
+
+    if (error || !data) return undefined;
+    return data as ShipstationProduct;
+  }
+
+  async insertShipstationProduct(product: InsertShipstationProduct): Promise<ShipstationProduct> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_products')
+      .insert(product)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as ShipstationProduct;
+  }
+
+  async updateShipstationProduct(id: string, updates: Partial<InsertShipstationProduct>): Promise<ShipstationProduct | undefined> {
+    const { data, error } = await supabaseAdmin
+      .from('shipstation_products')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error || !data) return undefined;
+    return data as ShipstationProduct;
+  }
+
   async insertShipstationWebhook(webhook: InsertShipstationWebhook): Promise<ShipstationWebhook> {
     const { data, error } = await supabaseAdmin
-      .from('shipstationWebhooks')
+      .from('shipstation_webhooks')
       .insert(webhook)
       .select()
       .single();
@@ -583,13 +726,30 @@ export class SupabaseStorage implements IStorage {
 
   async insertShipstationSyncStatus(status: InsertShipstationSyncStatus): Promise<ShipstationSyncStatus> {
     const { data, error } = await supabaseAdmin
-      .from('shipstationSyncStatus')
+      .from('shipstation_sync_status')
       .insert(status)
       .select()
       .single();
 
     if (error) throw error;
     return data as ShipstationSyncStatus;
+  }
+
+  async getLatestShipstationSyncStatus(syncType?: string): Promise<ShipstationSyncStatus | null> {
+    let query = supabaseAdmin
+      .from('shipstation_sync_status')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (syncType) {
+      query = query.eq('sync_type', syncType);
+    }
+
+    const { data, error } = await query;
+
+    if (error || !data || data.length === 0) return null;
+    return data[0] as ShipstationSyncStatus;
   }
 
   // Compliance Engine Methods

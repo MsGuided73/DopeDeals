@@ -48,7 +48,7 @@ interface OrderStatusParams {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: OrderStatusParams }
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
   try {
     // Require authentication
@@ -56,7 +56,7 @@ export async function GET(
     if (auth instanceof NextResponse) return auth;
     const { user } = auth;
 
-    const { orderId } = params;
+    const { orderId } = await params;
 
     // Get order with status history
     const { data: order, error } = await supabase
@@ -148,7 +148,7 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: OrderStatusParams }
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
   try {
     // Require permission to update order status
@@ -156,7 +156,7 @@ export async function PATCH(
     if (auth instanceof NextResponse) return auth;
     const { user } = auth;
 
-    const { orderId } = params;
+    const { orderId } = await params;
 
     // Parse and validate request body
     const body = await req.json().catch(() => ({}));
@@ -185,43 +185,48 @@ export async function PATCH(
     }
 
     // Validate status transitions
-    const validTransitions = getValidStatusTransitions(order.status);
+    const validTransitions = getValidStatusTransitions(currentOrder.status);
     if (!validTransitions.includes(status)) {
-      return NextResponse.json({ 
-        error: `Invalid status transition from ${order.status} to ${status}` 
+      return NextResponse.json({
+        error: `Invalid status transition from ${currentOrder.status} to ${status}`
       }, { status: 400 });
     }
 
     // Prepare update data
     const updateData: any = {
       status,
-      updatedAt: new Date()
+      updated_at: new Date().toISOString()
     };
 
-    if (paymentStatus) updateData.paymentStatus = paymentStatus;
-    if (fulfillmentStatus) updateData.fulfillmentStatus = fulfillmentStatus;
-    if (trackingNumber) updateData.trackingNumber = trackingNumber;
+    if (paymentStatus) updateData.payment_status = paymentStatus;
+    if (fulfillmentStatus) updateData.fulfillment_status = fulfillmentStatus;
+    if (trackingNumber) updateData.tracking_number = trackingNumber;
     if (carrier) updateData.carrier = carrier;
-    if (notes) updateData.adminNotes = notes;
+    if (notes) updateData.admin_notes = notes;
 
     // Update the order
-    const updatedOrder = await storage.updateOrder(orderId, updateData);
-    if (!updatedOrder) {
+    const { data: updatedOrder, error: updateError } = await supabase
+      .from('orders')
+      .update(updateData)
+      .eq('id', orderId)
+      .select()
+      .single();
+
+    if (updateError || !updatedOrder) {
       return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
     }
 
     // Create status history entry
     try {
-      if (typeof storage.createOrderStatusHistory === 'function') {
-        await storage.createOrderStatusHistory({
-          orderId,
-          fromStatus: order.status,
-          toStatus: status,
-          notes: notes || `Status updated to ${status}`,
-          updatedBy: user.id,
-          createdAt: new Date()
+      await supabase
+        .from('order_status_history')
+        .insert({
+          order_id: orderId,
+          from_status: currentOrder.status,
+          to_status: status,
+          changed_by: user.id,
+          notes: notes || `Status updated to ${status}`
         });
-      }
     } catch (error) {
       console.warn('[Order Status] Could not create status history:', error);
     }
@@ -302,13 +307,14 @@ async function syncOrderStatusToExternalSystems(order: any, status: string): Pro
   try {
     if (status === 'shipped' && process.env.SHIPSTATION_API_KEY) {
       const { ShipstationService } = await import('../../../../../server/shipstation/service');
-      const { storage: serverStorage } = await import('../../../../../server/storage');
-      
+      const { SupabaseStorage } = await import('../../../../../server/supabase-storage');
+
+      const storage = new SupabaseStorage();
       const svc = new ShipstationService({
         apiKey: process.env.SHIPSTATION_API_KEY!,
         apiSecret: process.env.SHIPSTATION_API_SECRET!,
         webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL
-      }, serverStorage);
+      }, storage);
 
       // Update ShipStation order status
       // Implementation depends on ShipStation API
@@ -317,11 +323,9 @@ async function syncOrderStatusToExternalSystems(order: any, status: string): Pro
     console.error('[Order Status] ShipStation sync error:', error);
   }
 
-  // Sync to Zoho
+  // Sync to Zoho - TODO: Implement when Zoho integration is available
   try {
     if (process.env.ZOHO_CLIENT_ID) {
-      const { ZohoClient } = await import('../../../../../server/zoho/client');
-      
       // Map internal status to Zoho status
       const zohoStatusMap: Record<string, string> = {
         'pending': 'draft',
@@ -337,6 +341,7 @@ async function syncOrderStatusToExternalSystems(order: any, status: string): Pro
       if (zohoStatus && order.zohoOrderId) {
         // Update Zoho order status
         // Implementation depends on Zoho API integration
+        console.log(`[Order Status] Would sync to Zoho: ${zohoStatus}`);
       }
     }
   } catch (error) {
