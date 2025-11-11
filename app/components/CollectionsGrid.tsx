@@ -65,7 +65,7 @@ export default function CollectionsGrid() {
                     window.location.href = cat.route;
                   }}
                 >
-                  SHOP
+                  {cat.route === '/thca_pnv' ? 'VAPES' : 'SHOP'}
                 </button>
               </div>
 
@@ -134,7 +134,7 @@ export default function CollectionsGrid() {
                     window.location.href = cat.route;
                   }}
                 >
-                  SHOP
+                  {cat.route === '/thca_pnv' ? 'VAPES' : 'SHOP'}
                 </button>
               </div>
 
