@@ -19,7 +19,7 @@ export default function CollectionsGrid() {
 
   return (
     // Lower z-index so dropdown menus can appear on top
-    <div className="relative w-full px-2 pb-4" style={{ marginTop: '5px' }}>
+    <div className="relative w-full px-2 pb-4" style={{ marginTop: '10px' }}>
       {/* Mobile: Stack vertically */}
       <div className="block lg:hidden space-y-2">
         {/* Large hero image first on mobile */}
