@@ -220,7 +220,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
 
   // Grid view - Traditional 3-column layout
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {products.map((product) => (
         <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
           {/* Product Image */}
