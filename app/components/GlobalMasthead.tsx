@@ -146,21 +146,26 @@ export default function GlobalMasthead() {
             </div>
           </div>
 
-          {/* Mobile: Logo Row - Spans full navbar height */}
-          <div className="md:hidden flex items-center px-4 py-2 relative" style={{ height: "30px" }}>
-            {/* Logo - Spans full navbar height on mobile */}
-            <div className="absolute left-0 top-0 z-10 flex items-center" style={{ height: "60px", width: "60px" }}>
+          {/* Mobile: Logo + Search Bar Row */}
+          <div className="md:hidden flex items-center px-4 py-2 relative" style={{ height: "50px" }}>
+            {/* Logo - Left side */}
+            <div className="flex items-center z-10" style={{ width: "50px", height: "40px" }}>
               <Link href="/" className="flex items-center h-full">
                 <Image
                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                   alt="HIGHWAY 420 Logo"
-                  width={60}
-                  height={43}
+                  width={50}
+                  height={36}
                   className="object-contain w-full h-auto"
                   style={{ display: "block" }}
                   priority
                 />
               </Link>
+            </div>
+
+            {/* Search Bar - Center, takes remaining space */}
+            <div className="flex-1 mx-3">
+              <EnhancedSearchBar />
             </div>
           </div>
 
@@ -422,10 +427,7 @@ export default function GlobalMasthead() {
         </div>
       </header>
 
-      {/* Mobile Search Bar - Pops out below navbar */}
-      <div className="md:hidden bg-gray-50 border-b border-gray-200 px-4 py-3">
-        <EnhancedSearchBar />
-      </div>
+
 
       {/* Mobile Menu */}
       {isMenuOpen && (
