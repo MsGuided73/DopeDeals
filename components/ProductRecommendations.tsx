@@ -197,44 +197,39 @@ export default function ProductRecommendations({
         {recommendations.map((rec) => (
           <div
             key={rec.productId}
-            className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer p-4"
+            className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer p-4 relative"
             onClick={() => {
               trackInteraction(rec.productId, 'view');
               window.location.href = `/product/${rec.productId}`;
             }}
           >
-            <div className="pb-2">
-              <div className="flex items-start justify-between">
-                <h3 className="text-lg line-clamp-2 group-hover:text-purple-600 transition-colors font-semibold">
-                  {rec.product.name}
-                </h3>
-                <Badge
-                  variant="secondary"
-                  className={`ml-2 flex items-center gap-1 ${getCategoryColor(rec.category)}`}
-                >
-                  {getCategoryIcon(rec.category)}
-                  <span className="text-xs">
-                    {Math.round(rec.score * 100)}%
-                  </span>
-                </Badge>
-              </div>
-              <p className="text-sm text-gray-600 mt-1">
-                {rec.reason}
-              </p>
-            </div>
+            {/* Favorite Button - Top Right */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add to favorites logic here
+              }}
+              className="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
+            >
+              <Heart className="w-4 h-4 text-gray-600" />
+            </button>
 
             <div>
               {rec.product.image_url && (
                 <div className="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
-                  <img 
-                    src={rec.product.image_url} 
+                  <img
+                    src={rec.product.image_url}
                     alt={rec.product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                   />
                 </div>
               )}
-              
+
               <div className="space-y-2">
+                <h3 className="text-lg line-clamp-2 group-hover:text-purple-600 transition-colors font-semibold">
+                  {rec.product.name}
+                </h3>
+
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-green-600">
                     ${rec.product.price}
@@ -245,15 +240,12 @@ export default function ProductRecommendations({
                     </Badge>
                   )}
                 </div>
-                
-                <p className="text-sm text-gray-600 line-clamp-2">
-                  {rec.product.description}
-                </p>
-                
-                <div className="flex gap-2 pt-2">
-                  <Button 
-                    size="sm" 
-                    className="flex-1"
+
+                <div className="pt-2">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="w-full border border-gray-300 hover:bg-gray-50"
                     onClick={(e) => {
                       e.stopPropagation();
                       trackInteraction(rec.productId, 'add_to_cart');
@@ -261,17 +253,6 @@ export default function ProductRecommendations({
                     }}
                   >
                     Add to Cart
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      trackInteraction(rec.productId, 'wishlist');
-                      // Add to wishlist logic here
-                    }}
-                  >
-                    <Heart className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
