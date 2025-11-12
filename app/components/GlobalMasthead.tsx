@@ -172,12 +172,12 @@ export default function GlobalMasthead() {
           {/* Bottom Row: Navigation Links + User Icons */}
           <div className="flex items-center justify-between px-4 group" style={{ height: "30px" }}>
             {/* Navigation Links - Centered at bottom */}
-            <nav className="hidden md:flex items-center gap-6 absolute bottom-0 left-1/2 transform -translate-x-1/2 group-hover:scale-105 transition-transform duration-300">
+            <nav className="hidden md:flex items-center gap-6 absolute bottom-1 left-1/2 transform -translate-x-1/2 group-hover:scale-105 transition-transform duration-300">
               {/* Vapes Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === "vapes" ? null : "vapes")}
-                  className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
+                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
                 >
                   Vapes
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,7 +238,7 @@ export default function GlobalMasthead() {
               <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === "thca" ? null : "thca")}
-                  className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
+                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
                 >
                   THCA+
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -292,7 +292,7 @@ export default function GlobalMasthead() {
               <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === "bongs" ? null : "bongs")}
-                  className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
+                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
                 >
                   Bongs
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,7 +334,7 @@ export default function GlobalMasthead() {
               <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === "pipes" ? null : "pipes")}
-                  className="text-white text-sm font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
+                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
                 >
                   Pipes
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -370,13 +370,13 @@ export default function GlobalMasthead() {
               </div>
 
               {/* Simple links */}
-              <Link href="/dabsntools" className="text-white text-sm font-black hover:text-yellow-400 transition-colors">
+              <Link href="/dabsntools" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
                 Dab-Rigs
               </Link>
-              <Link href="/products?category=accessories" className="text-white text-sm font-black hover:text-yellow-400 transition-colors">
+              <Link href="/products?category=accessories" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
                 Accessories
               </Link>
-              <Link href="/blog" className="text-white text-sm font-black hover:text-yellow-400 transition-colors">
+              <Link href="/blog" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
                 Blog
               </Link>
             </nav>
