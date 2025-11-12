@@ -104,7 +104,7 @@ export default function GlobalMasthead() {
 
       <header className="z-50 relative">
         {/* Two-Row Navbar Layout */}
-        <div className="relative" style={{ minHeight: "110px" }}>
+        <div className="relative" style={{ minHeight: "90px" }}>
           {/* Enhanced 3D Black Bar Background */}
           <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-black to-gray-900 shadow-2xl">
             {/* Metallic texture overlay */}
