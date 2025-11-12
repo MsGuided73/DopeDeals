@@ -195,21 +195,21 @@ export default function ProductRecommendations({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {recommendations.map((rec) => (
-          <Card 
-            key={rec.productId} 
-            className="group hover:shadow-lg transition-all duration-200 cursor-pointer"
+          <div
+            key={rec.productId}
+            className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer p-4"
             onClick={() => {
               trackInteraction(rec.productId, 'view');
               window.location.href = `/product/${rec.productId}`;
             }}
           >
-            <CardHeader className="pb-2">
+            <div className="pb-2">
               <div className="flex items-start justify-between">
-                <CardTitle className="text-lg line-clamp-2 group-hover:text-purple-600 transition-colors">
+                <h3 className="text-lg line-clamp-2 group-hover:text-purple-600 transition-colors font-semibold">
                   {rec.product.name}
-                </CardTitle>
-                <Badge 
-                  variant="secondary" 
+                </h3>
+                <Badge
+                  variant="secondary"
                   className={`ml-2 flex items-center gap-1 ${getCategoryColor(rec.category)}`}
                 >
                   {getCategoryIcon(rec.category)}
@@ -218,12 +218,12 @@ export default function ProductRecommendations({
                   </span>
                 </Badge>
               </div>
-              <CardDescription className="text-sm">
+              <p className="text-sm text-gray-600 mt-1">
                 {rec.reason}
-              </CardDescription>
-            </CardHeader>
-            
-            <CardContent>
+              </p>
+            </div>
+
+            <div>
               {rec.product.image_url && (
                 <div className="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
                   <img 
@@ -275,8 +275,8 @@ export default function ProductRecommendations({
                   </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
     </div>
