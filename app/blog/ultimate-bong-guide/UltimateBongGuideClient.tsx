@@ -44,7 +44,7 @@ export default function UltimateBongGuideClient() {
         <div className="relative bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-20">
           <div className="absolute inset-0 bg-black/60"></div>
           <div className="relative max-w-4xl mx-auto px-6 text-center">
-            <h1 className="text-5xl md:text-6xl mb-6 font-chalets-legweb tracking-tight">
+            <h1 className="text-5xl md:text-6xl mb-6 font-bold tracking-tight">
               The Ultimate Guide to Picking the Perfect Bong
             </h1>
             <div className="w-32 h-1 bg-dope-orange-500 mx-auto mb-8"></div>
