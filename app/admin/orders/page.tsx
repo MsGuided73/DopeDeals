@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Eye, Package, DollarSign, TrendingUp } from 'lucide-react';
+import { Eye, Package, Search, Filter, Download, CheckSquare, Square, RefreshCw } from 'lucide-react';
 
 interface Order {
   id: string;
@@ -18,12 +18,122 @@ interface Order {
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
+  const [bulkAction, setBulkAction] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     fetchOrders();
   }, [selectedStatus]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [orders, searchTerm, dateRange]);
+
+  const applyFilters = () => {
+    let filtered = [...orders];
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(order =>
+        order.order_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.customer_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        `${order.customer_first_name} ${order.customer_last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Date range filter
+    if (dateRange.start) {
+      filtered = filtered.filter(order =>
+        new Date(order.created_at) >= new Date(dateRange.start)
+      );
+    }
+    if (dateRange.end) {
+      filtered = filtered.filter(order =>
+        new Date(order.created_at) <= new Date(dateRange.end + 'T23:59:59')
+      );
+    }
+
+    setFilteredOrders(filtered);
+  };
+
+  const handleSelectOrder = (orderId: string, checked: boolean) => {
+    const newSelected = new Set(selectedOrders);
+    if (checked) {
+      newSelected.add(orderId);
+    } else {
+      newSelected.delete(orderId);
+    }
+    setSelectedOrders(newSelected);
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedOrders(new Set(filteredOrders.map(order => order.id)));
+    } else {
+      setSelectedOrders(new Set());
+    }
+  };
+
+  const handleBulkAction = async () => {
+    if (!bulkAction || selectedOrders.size === 0) return;
+
+    try {
+      const orderIds = Array.from(selectedOrders);
+      const response = await fetch('/api/admin/orders/bulk-update', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderIds,
+          action: bulkAction,
+          status: bulkAction === 'status_update' ? 'processing' : undefined
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Bulk action failed');
+      }
+
+      // Refresh orders and clear selection
+      await fetchOrders();
+      setSelectedOrders(new Set());
+      setBulkAction('');
+      alert(`Successfully updated ${orderIds.length} orders`);
+    } catch (error) {
+      console.error('Bulk action error:', error);
+      alert('Failed to perform bulk action');
+    }
+  };
+
+  const exportOrders = () => {
+    const csvContent = [
+      ['Order Number', 'Customer', 'Email', 'Status', 'Payment Status', 'Total', 'Date'],
+      ...filteredOrders.map(order => [
+        order.order_number,
+        `${order.customer_first_name} ${order.customer_last_name}`,
+        order.customer_email,
+        order.status,
+        order.payment_status,
+        order.total_amount.toString(),
+        new Date(order.created_at).toLocaleDateString()
+      ])
+    ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `orders-export-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -101,20 +211,142 @@ export default function AdminOrdersPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Orders Management</h1>
         <div className="flex items-center gap-4">
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
           >
-            <option value="all">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+            <Filter className="w-4 h-4" />
+            Filters
+          </button>
+          <button
+            onClick={exportOrders}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
+          >
+            <Download className="w-4 h-4" />
+            Export
+          </button>
+          <button
+            onClick={fetchOrders}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Refresh
+          </button>
         </div>
       </div>
+
+      {/* Search and Filters */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Search */}
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search orders by number, customer name, or email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Status Filter */}
+          <div className="w-full lg:w-48">
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Advanced Filters */}
+        {showFilters && (
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  value={dateRange.start}
+                  onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  value={dateRange.end}
+                  onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div className="flex items-end">
+                <button
+                  onClick={() => setDateRange({ start: '', end: '' })}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  Clear Dates
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Bulk Actions */}
+      {selectedOrders.size > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <CheckSquare className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-medium text-blue-900">
+                {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <select
+                value={bulkAction}
+                onChange={(e) => setBulkAction(e.target.value)}
+                className="px-3 py-1 border border-gray-300 rounded text-sm"
+              >
+                <option value="">Choose action...</option>
+                <option value="status_processing">Mark as Processing</option>
+                <option value="status_shipped">Mark as Shipped</option>
+                <option value="status_delivered">Mark as Delivered</option>
+                <option value="status_cancelled">Cancel Orders</option>
+              </select>
+              <button
+                onClick={handleBulkAction}
+                disabled={!bulkAction}
+                className="px-4 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white text-sm rounded"
+              >
+                Apply
+              </button>
+              <button
+                onClick={() => setSelectedOrders(new Set())}
+                className="px-4 py-1 text-gray-600 hover:text-gray-800 text-sm"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Quick Stats - Temporarily disabled until we have stats endpoint */}
       {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -154,6 +386,14 @@ export default function AdminOrdersPage() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
+                  <th className="px-6 py-4 text-left">
+                    <input
+                      type="checkbox"
+                      checked={selectedOrders.size === filteredOrders.length && filteredOrders.length > 0}
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                  </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Order
                   </th>
@@ -178,8 +418,16 @@ export default function AdminOrdersPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {orders.map((order) => (
+                {filteredOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <input
+                        type="checkbox"
+                        checked={selectedOrders.has(order.id)}
+                        onChange={(e) => handleSelectOrder(order.id, e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="text-sm font-medium text-gray-900">

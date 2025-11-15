@@ -12,7 +12,7 @@ export default function ThcaPnvHero() {
           {/* Left Column - Header */}
           <div className="flex items-center space-x-4">
             <h1 className="font-chalets text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider text-black leading-tight font-bold">
-              THCA PREROLLS & VAPES
+              THCA VAPES & CONCENTRATES
             </h1>
           </div>
 
@@ -37,7 +37,7 @@ export default function ThcaPnvHero() {
 
         {/* Description */}
         <p className="text-base md:text-lg text-gray-700 mt-6 font-medium leading-relaxed max-w-3xl">
-          Discover premium THCA prerolls and vaporizer products. From perfectly rolled THCA flower prerolls to high-quality cartridges and disposable vapes, enjoy pure, potent effects in convenient, discreet formats.
+          Discover premium THCA vaporizer products. From high-quality cartridges and concentrates to disposable vapes, enjoy pure, potent effects in convenient, discreet formats.
         </p>
 
         {/* Category Navigation */}
@@ -51,16 +51,6 @@ export default function ThcaPnvHero() {
             }`}
           >
             All THCA Products
-          </button>
-          <button
-            onClick={() => setActiveCategory('prerolls')}
-            className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
-              activeCategory === 'prerolls'
-                ? 'bg-green-600 text-white transform scale-105'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border-2 border-gray-300 hover:border-green-400 hover:text-green-600'
-            }`}
-          >
-            THCA Prerolls
           </button>
           <button
             onClick={() => setActiveCategory('cartridges')}

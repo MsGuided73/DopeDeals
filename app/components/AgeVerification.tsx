@@ -51,70 +51,62 @@ export default function AgeVerification() {
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Blurred Background Overlay */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-lg"
-        style={{ backdropFilter: 'blur(12px)' }}
+        className="absolute inset-0 bg-white/95 backdrop-blur-md"
+        style={{ backdropFilter: 'blur(8px)' }}
       />
 
       {/* Modal Content */}
-      <div className="relative z-10 bg-black text-white p-6 sm:p-8 md:p-12 rounded-2xl shadow-2xl max-w-2xl mx-4 border border-green-400/30 max-h-[90vh] overflow-y-auto">
-        {/* HIGHWAY 420 Logo - PREMIUM STYLING */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-3 sm:mb-4" style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: '1.1' }}>
-            HIGHWAY 420
-          </h1>
-          <div className="w-16 sm:w-20 h-1 bg-green-400 mx-auto"></div>
+      <div className="relative z-10 bg-white text-black p-8 sm:p-10 md:p-12 rounded-2xl shadow-2xl max-w-lg mx-4 border border-gray-200">
+        {/* HIGHWAY 420 Logo */}
+        <div className="text-center mb-8">
+          <img
+            src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+            alt="HIGHWAY 420"
+            className="h-16 sm:h-20 mx-auto mb-6 object-contain"
+          />
+          <div className="w-12 h-0.5 bg-green-600 mx-auto"></div>
         </div>
 
-        {/* Highway 420 Welcome Message */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-green-400" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            WELCOME TO THE HIGHWAY
+        {/* Age Verification Content */}
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+            Age Verification Required
           </h2>
-          <p className="text-base sm:text-lg mb-3 sm:mb-4 leading-relaxed px-2" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            This ain't your corner store. We're the
-            <span className="text-green-400 font-bold"> PREMIUM </span>
-            destination for cannabis culture and craft.
+
+          <p className="text-gray-700 mb-6 text-base leading-relaxed" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+            You must be <span className="font-semibold text-green-600">21 years or older</span> to access this website.
           </p>
-          <p className="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            You gotta be <span className="text-white font-bold">21+</span> to ride this highway of excellence.
+
+          <p className="text-gray-600 mb-8 text-sm" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+            Are you 21 years of age or older?
           </p>
-          <p className="text-xs sm:text-sm text-gray-400 italic" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            "Life's a journey. Make sure you're old enough to enjoy the ride."
-          </p>
+
+          {/* Age Verification Buttons */}
+          <div className="space-y-3">
+            <button
+              onClick={() => handleVerify(true)}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-lg text-base"
+              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+            >
+              Yes, I am 21 or older
+            </button>
+
+            <button
+              onClick={() => handleVerify(false)}
+              className="w-full bg-white border-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 font-semibold py-3 px-6 rounded-lg transition-all duration-200 text-base"
+              style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+            >
+              No, I am under 21
+            </button>
+          </div>
+
+          {/* Legal Disclaimer */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-xs text-gray-500 text-center leading-relaxed" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+              By entering this website, you certify that you are 21 years of age or older and agree to our terms of service.
+            </p>
+          </div>
         </div>
-
-        {/* Age Verification Buttons */}
-        <div className="space-y-3 sm:space-y-4">
-          <button
-            onClick={() => handleVerify(true)}
-            className="w-full bg-green-400 hover:bg-green-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-base sm:text-lg uppercase tracking-wide"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-          >
-            LET'S RIDE, I'M 21+
-          </button>
-
-          <button
-            onClick={() => handleVerify(false)}
-            className="w-full bg-transparent border-2 border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-300 text-base sm:text-lg uppercase tracking-wide"
-            style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-          >
-            NOT YET, TOO YOUNG
-          </button>
-        </div>
-
-        {/* Legal Disclaimer */}
-        <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-700">
-          <p className="text-xs text-gray-500 text-center leading-relaxed px-2" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            By entering, you confirm you're 21+ and agree to our terms.
-            We're all about that <span className="text-green-400">LEGAL</span> highway.
-            <br />
-            <span className="text-gray-600">Keep it 💯, keep it legal.</span>
-          </p>
-        </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute -top-2 -right-2 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
-        <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-green-400 rounded-full animate-pulse delay-500"></div>
       </div>
     </div>
   );

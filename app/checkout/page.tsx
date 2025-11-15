@@ -42,6 +42,9 @@ interface CheckoutForm {
   // Age Verification
   dateOfBirth: string;
   ageVerified: boolean;
+
+  // Terms & Conditions
+  termsAccepted: boolean;
 }
 
 export default function CheckoutPage() {
@@ -75,7 +78,8 @@ export default function CheckoutPage() {
     cvv: '',
     savePaymentMethod: false,
     dateOfBirth: '',
-    ageVerified: false
+    ageVerified: false,
+    termsAccepted: false
   });
 
   const updateForm = (field: keyof CheckoutForm, value: any) => {
@@ -155,6 +159,12 @@ export default function CheckoutPage() {
         setCurrentStep(step);
         return;
       }
+    }
+
+    // Validate T&C acceptance
+    if (!form.termsAccepted) {
+      toast.error('Please accept the Terms & Conditions to complete your order.');
+      return;
     }
 
     setProcessing(true);
@@ -760,6 +770,39 @@ export default function CheckoutPage() {
                         <span> ending in {form.cardNumber.slice(-4)}</span>
                       )}
                     </p>
+                  </div>
+
+                  {/* Terms & Conditions */}
+                  <div className="bg-white border border-gray-200 rounded-lg p-6">
+                    <h3 className="font-medium text-gray-900 mb-4">Terms & Conditions</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          id="termsAccepted"
+                          checked={form.termsAccepted}
+                          onChange={(e) => updateForm('termsAccepted', e.target.checked)}
+                          className="mt-1"
+                        />
+                        <label htmlFor="termsAccepted" className="text-sm text-gray-700 leading-relaxed">
+                          I have read and agree to the{' '}
+                          <Link href="/terms-and-conditions" target="_blank" className="text-blue-600 hover:text-blue-800 underline">
+                            Terms & Conditions
+                          </Link>
+                          {' '}and{' '}
+                          <Link href="/privacy" target="_blank" className="text-blue-600 hover:text-blue-800 underline">
+                            Privacy Policy
+                          </Link>
+                          . I understand that cannabis products are for adult use only (21+) and may impair my ability to drive or operate machinery.
+                        </label>
+                      </div>
+                      {!form.termsAccepted && (
+                        <p className="text-sm text-red-600 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          You must accept the Terms & Conditions to complete your order
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
 

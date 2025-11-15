@@ -43,39 +43,43 @@ export default function EnhancedSearchBar() {
   // Smooth typing animation for placeholder
   useEffect(() => {
     const interval = setInterval(() => {
-      const currentWord = placeholderWords[currentPlaceholderIndex]
-      const nextIndex = (currentPlaceholderIndex + 1) % placeholderWords.length
-      const nextWord = placeholderWords[nextIndex]
+      setCurrentPlaceholderIndex(prevIndex => {
+        const currentWord = placeholderWords[prevIndex]
+        const nextIndex = (prevIndex + 1) % placeholderWords.length
+        const nextWord = placeholderWords[nextIndex]
 
-      setIsTyping(true)
+        setIsTyping(true)
 
-      // Delete current word (right to left)
-      let deleteIndex = currentWord.length
-      const deleteInterval = setInterval(() => {
-        if (deleteIndex > 0) {
-          setDisplayText(currentWord.substring(0, deleteIndex - 1))
-          deleteIndex--
-        } else {
-          clearInterval(deleteInterval)
+        // Delete current word (right to left)
+        let deleteIndex = currentWord.length
+        const deleteInterval = setInterval(() => {
+          if (deleteIndex > 0) {
+            setDisplayText(currentWord.substring(0, deleteIndex - 1))
+            deleteIndex--
+          } else {
+            clearInterval(deleteInterval)
 
-          // Type new word (left to right)
-          let typeIndex = 0
-          const typeInterval = setInterval(() => {
-            if (typeIndex <= nextWord.length) {
-              setDisplayText(nextWord.substring(0, typeIndex))
-              typeIndex++
-            } else {
-              clearInterval(typeInterval)
-              setIsTyping(false)
-              setCurrentPlaceholderIndex(nextIndex)
-            }
-          }, 50) // Typing speed
-        }
-      }, 80) // Delete speed
+            // Type new word (left to right)
+            let typeIndex = 0
+            const typeInterval = setInterval(() => {
+              if (typeIndex <= nextWord.length) {
+                setDisplayText(nextWord.substring(0, typeIndex))
+                typeIndex++
+              } else {
+                clearInterval(typeInterval)
+                setIsTyping(false)
+                return nextIndex
+              }
+            }, 50) // Typing speed
+          }
+        }, 80) // Delete speed
+
+        return prevIndex
+      })
     }, 3000) // Change word every 3 seconds
 
     return () => clearInterval(interval)
-  }, [currentPlaceholderIndex])
+  }, [])
 
   // Fetch search suggestions
   useEffect(() => {

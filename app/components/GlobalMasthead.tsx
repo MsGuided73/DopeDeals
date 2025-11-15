@@ -32,9 +32,11 @@ export default function GlobalMasthead() {
 
   useEffect(() => {
     return () => {
-      if (hoverTimeout) clearTimeout(hoverTimeout);
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
     };
-  }, [hoverTimeout]);
+  }, []);
 
   const handleDropdownLinkClick = () => {
     setOpenDropdown(null);

@@ -200,6 +200,211 @@ sign in/sign up is not working.  Need to link the auth form
 
 ---
 
+
+
+## Issue #5: 🐛 Bug Report
+
+**Date Reported:** November 13, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3000/privacy
+**Browser/Device:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Severity:** Medium
+**Status:** Open
+
+### Description
+Need to remove Dope City references within privacy page
+
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3000/privacy
+
+### Technical Details
+**User Agent:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Page URL:** http://localhost:3000/privacy
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+**Contact Info:** DB
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
+
+
+## Issue #6: 🐛 Bug Report
+
+**Date Reported:** November 13, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3000/product/72b56efd-6419-4e60-9283-af75786040fa
+**Browser/Device:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Severity:** Medium
+**Status:** Open
+
+### Description
+Need to import global highway420 footer
+
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3000/product/72b56efd-6419-4e60-9283-af75786040fa
+
+### Technical Details
+**User Agent:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Page URL:** http://localhost:3000/product/72b56efd-6419-4e60-9283-af75786040fa
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+No contact information provided
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
+
+
+## Issue #7: 🐛 Bug Report
+
+**Date Reported:** November 13, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3000/product/72b56efd-6419-4e60-9283-af75786040fa
+**Browser/Device:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Severity:** Medium
+**Status:** Open
+
+### Description
+Need to clean up descriptions
+
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3000/product/72b56efd-6419-4e60-9283-af75786040fa
+
+### Technical Details
+**User Agent:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Page URL:** http://localhost:3000/product/72b56efd-6419-4e60-9283-af75786040fa
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+No contact information provided
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
+
+
+## Issue #8: 🐛 Bug Report
+
+**Date Reported:** November 13, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3000/pipes
+**Browser/Device:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Severity:** Medium
+**Status:** Open
+
+### Description
+Change free shipping to $75.00
+
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3000/pipes
+
+### Technical Details
+**User Agent:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Page URL:** http://localhost:3000/pipes
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+No contact information provided
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
+
+
+## Issue #9: 🐛 Bug Report
+
+**Date Reported:** November 13, 2025
+**Component:** User Feedback
+**Affected Element:** http://localhost:3000/products?category=accessories
+**Browser/Device:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Severity:** Medium
+**Status:** Open
+
+### Description
+Add to cart on this products/accessories page is not working
+
+
+### Steps to Reproduce
+1. User reported via feedback form
+2. Issue occurs on: http://localhost:3000/products?category=accessories
+
+### Technical Details
+**User Agent:** Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Sa...
+**Page URL:** http://localhost:3000/products?category=accessories
+**Feedback Type:** 🐛 Bug Report
+
+### Proposed Solutions
+[To be determined by development team]
+
+### Priority
+- Medium: User-reported issue requiring attention
+- Medium: 🐛 bug report
+
+### Assigned To
+[Unassigned]
+
+### Notes
+No contact information provided
+- Submitted via user feedback form
+- Requires investigation and validation
+
+---
+
 ## Template for New Issues
 
 **Issue Title:** [Brief description]

@@ -54,24 +54,10 @@ export default function Highway420Footer() {
                   className="w-10 h-10 object-contain"
                 />
               </div>
-              <h3
-                className="text-black font-bold text-xl mb-3"
-                style={{
-                  fontSize: "1.375rem",
-                  lineHeight: "1.2",
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                }}
-              >
+              <h3 className="text-black font-bold text-xl mb-3" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
                 DISCREET SHIPPING
               </h3>
-              <p
-                className="text-black font-bold text-xl"
-                style={{
-                  fontSize: "1.375rem",
-                  lineHeight: "1.2",
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                }}
-              >
+              <p className="text-black font-bold text-xl" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
                 Nothing to see here
               </p>
             </div>
@@ -81,16 +67,12 @@ export default function Highway420Footer() {
               <div className="w-20 h-20 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <span className="text-black font-black text-2xl">$</span>
               </div>
-              <h3
-                className="text-black font-bold text-xl mb-3"
-                style={{
-                  fontSize: "1.375rem",
-                  lineHeight: "1.2",
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                }}
-              >
+              <h3 className="text-black font-bold text-xl mb-3" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
                 LOW PRICE GUARANTEE
               </h3>
+              <p className="text-black font-bold text-xl" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
+                Save on Every Item
+              </p>
             </div>
 
             {/* Fast & Free */}
@@ -116,25 +98,11 @@ export default function Highway420Footer() {
                   />
                 </svg>
               </div>
-              <h3
-                className="text-black font-bold text-xl mb-3"
-                style={{
-                  fontSize: "1.375rem",
-                  lineHeight: "1.2",
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                }}
-              >
-                FAST & FREE
+              <h3 className="text-black font-bold text-xl mb-3" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
+                FAST & FREE DELIVERY
               </h3>
-              <p
-                className="text-black font-bold text-xl"
-                style={{
-                  fontSize: "1.375rem",
-                  lineHeight: "1.2",
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                }}
-              >
-                Delivery at $75 or more
+              <p className="text-black font-bold text-xl" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
+                at $75 or more
               </p>
             </div>
           </div>
@@ -143,9 +111,9 @@ export default function Highway420Footer() {
         {/* Main Footer */}
         <div className="bg-white/50 backdrop-blur-md rounded-2xl p-8 border border-white/20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Help Section */}
+            {/* Helpful Links Section */}
             <div>
-              <h3 className="text-black font-bold text-2xl mb-6">Help</h3>
+              <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "Inter, sans-serif !important" }}>Helpful Links</h3>
               <ul className="space-y-3">
                 <li>
                   <Link href="/about" className="text-gray-800 hover:text-green-600">
@@ -177,12 +145,17 @@ export default function Highway420Footer() {
                     Privacy Policy
                   </Link>
                 </li>
+                <li>
+                  <Link href="/terms-and-conditions" className="text-gray-800 hover:text-green-600">
+                    Terms & Conditions
+                  </Link>
+                </li>
               </ul>
             </div>
 
             {/* Useful Links */}
             <div>
-              <h3 className="text-black font-bold text-2xl mb-6">Useful Links</h3>
+              <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "Inter, sans-serif !important" }}>Useful Links</h3>
               <ul className="space-y-3">
                 <li>
                   <Link href="/sale" className="text-gray-800 hover:text-green-600">
@@ -195,8 +168,8 @@ export default function Highway420Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/rewards" className="text-gray-800 hover:text-green-600">
-                    HIGHWAY 420 Rewards
+                  <Link href="/ride-with-us" className="text-gray-800 hover:text-green-600">
+                    Ride With Us
                   </Link>
                 </li>
               </ul>
@@ -204,13 +177,8 @@ export default function Highway420Footer() {
 
             {/* Shop Now */}
             <div>
-              <h3 className="text-black font-bold text-2xl mb-6">SHOP NOW</h3>
+              <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "Inter, sans-serif !important" }}>SHOP NOW</h3>
               <ul className="space-y-3">
-                <li>
-                  <Link href="/products" className="text-gray-800 hover:text-green-600">
-                    All Products
-                  </Link>
-                </li>
                 <li>
                   <Link href="/thca" className="text-gray-800 hover:text-green-600">
                     THCA & More
