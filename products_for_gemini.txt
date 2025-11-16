@@ -1,0 +1,96 @@
+Based on the product name analysis, I need to update main_site_products.category_id for products where category_id is currently NULL.
+
+Here are the distinct category_id values that already exist in the database (though most products have NULL):
+- 'beaker-bong'
+- 'bong-mini-graphic'
+- 'circle-percolator-rig'
+- 'concentrate-vaporizers'
+- 'dab-rig - e-rig'
+- 'straight-bong-percolator'
+- 'thca-concentrates'
+
+**IMPORTANT UPDATE:** We need to handle these additional subcategories:
+1. Dab tools & accessories (separate from main dab rigs)
+2. Bong attachments and replacement parts
+
+From the site routing structure, expanded categories should include:
+- bongs (main bongs)
+- bong-attachments (bong parts, attachments, replacement parts)
+- pipes
+- hookahs (hookah/shisha products)
+- dabsntools (main dab rigs)
+- dab-tools (dab accessories, tools, parts separate from main rigs)
+- thca
+- kratom
+- mushrooms
+- vaporizers
+- accessories (general accessories like grinders)
+
+Analyzing product names from the database, here are sample products and their likely categories:
+
+**Likely Bongs:**
+- "Beaker Bong W/ Ice Catcher |REF: WX-16|"
+- "Water Pipe W/ Perc |REF: L-3|"
+- "Apo Water Pipe W/ Percolator"
+- "Diamond Glass Snow Globe w/ Fritted Perc |REF: DGR 1085|" (might be a bong or dab rig)
+
+**Likely Dab Rigs (main complete rigs):**
+- "Diamond Glass Inline Recycler Rig |REF: DGR 1053|"
+- "Diamond Glass Recycler Water Pipe |REF: DGR 1121|"
+
+**Likely Dab Tools/Accessories (separate parts/tools):**
+- "Micro NC Nectar Collector Dab Kit"
+- "COOKIES 350MAH SLIM TWIST BATTERY"
+- "Nectar Collector – Black Box"
+- "E-nail Coil Replacement"
+- "Dab Mat Temperature Resistant"
+- "Carb Cap Rotating"
+- "Dab Tool Set Titanium"
+- "E-rig Bowl Adapter"
+
+**Likely Bong Attachments/Parts:**
+- "Bong Ice Catcher Replacement"
+- "Percolator Attachment for Bong"
+- "Bong Bowl Replacement"
+- "Glass Bong Stem Extension"
+- "Ash Catcher Detachable"
+- "Bong Diffuser Attachment"
+
+**Likely Pipes:**
+- "Smoking Pipe Mugs"
+
+**Likely Hookahs:**
+- "Hookah Pipe Complete Set"
+- "Hookah Bowl Ceramic"
+- "Hookah Hose Replacement"
+- "Shisha Tobacco Variety Pack"
+- "Hookah Charcoal Quick Light"
+- "Hookah Stem Extension"
+
+**Likely Grinders/Accessories:**
+- "Crave 4 Piece Classic Grinder |REF: GR 0284|"
+- "Long Magnetic 3D Cover Tray"
+- "Special Blue Turbo Curve Torch"
+
+**Likely THC-A Products:**
+- "Urth Farmacy 3.5G THC-A Jar"
+- "Twenty One Cannabis THC-A Diamonds 2G Cartridge" (THC-A Diamonds)
+- "Malibu Delta J's 1G Preroll Display"
+
+**Likely Kratom:**
+- "7-Ohmz Kratom Extract Tablets 3x14mg 6CNT Box"
+- "Pressed 3CNT Chewable Tablets 25CNT Box"
+
+**Other/Accessories:**
+- "Apo battery slim twist 650/900 mAh ( box of 20 )"
+
+Generate SQL UPDATE statements to set appropriate category_id values for products where category_id IS NULL.
+For each major category, create an UPDATE statement that uses ILIKE patterns to match product names.
+
+Example pattern for bongs:
+UPDATE main_site_products
+SET category_id = 'beaker-bong'
+WHERE category_id IS NULL
+  AND (name ILIKE '%beaker%' OR name ILIKE '%bong%' OR name ILIKE '%water pipe%');
+
+The category_id values should match the existing pattern (slug-like strings) and align with the site's routing structure.
