@@ -155,35 +155,32 @@ export default function FloatingNav() {
                 <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
                   THCA Flower
                 </Link>
-                <Link href="/thca#prerolls" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
+                <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
                   THCA Pre-Rolls
                 </Link>
                 <div className="border-t border-gray-700 my-1" />
                 <Link href="/thca#concentrates" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   THCA Concentrates
                 </Link>
-                <Link href="/thca#cartridges" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                <Link href="/thca_cartridges" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   THCA Cartridges
                 </Link>
                 <div className="border-t border-gray-700 my-1" />
-                <Link href="/thca#cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   CBD Products
                 </Link>
-                <Link href="/thca#delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   Delta Products
                 </Link>
-                <Link href="/thca#edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                <Link href="/thca_edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   Edibles
                 </Link>
                 <div className="border-t border-gray-700 my-1" />
-                <Link href="/thca#mushrooms" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                <Link href="/mushrooms" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   🍄 Mushrooms
                 </Link>
                 <Link href="/nitrous-oxide" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   Nitrous Oxide
-                </Link>
-                <Link href="/7-hydroxymitragynine" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  7-Hydroxymitragynine
                 </Link>
               </div>
             </div>
@@ -258,12 +255,6 @@ export default function FloatingNav() {
                 <Link href="/products?q=sherlock+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   Sherlock Pipes
                 </Link>
-                <Link href="/products?q=chillum" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  Chillums
-                </Link>
-                <Link href="/products?q=one+hitter" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  One Hitters
-                </Link>
               </div>
             </div>
           )}
@@ -273,7 +264,7 @@ export default function FloatingNav() {
         <Link href="/dabsntools" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">
           Dab Rigs
         </Link>
-        <Link href="/products?category=accessories" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">
+        <Link href="/accessories" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">
           Accessories
         </Link>
         <Link href="/blog" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">

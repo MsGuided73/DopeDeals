@@ -17,11 +17,11 @@ export default function PrivacyPage() {
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <h1 className="dope-city-title text-5xl md:text-6xl mb-4">
+            <h1 className="text-5xl md:text-6xl mb-4 font-sans">
               PRIVACY POLICY
             </h1>
             <div className="w-24 h-1 bg-dope-orange-500 mx-auto mb-6"></div>
-            <p className="text-xl text-gray-300">
+            <p className="text-xl text-gray-300 font-sans">
               Your privacy and data security are our top priorities
             </p>
             <p className="text-sm text-gray-400 mt-4">
@@ -35,14 +35,14 @@ export default function PrivacyPage() {
           <div className="prose prose-lg max-w-none dark:prose-invert">
             
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">1. Information We Collect</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">1. Information We Collect</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>
                   We collect information you provide directly to us, such as when you create an account, 
                   make a purchase, or contact us for support.
                 </p>
                 
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Personal Information:</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white font-sans">Personal Information:</h3>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Name, email address, phone number</li>
                   <li>Billing and shipping addresses</li>
@@ -51,7 +51,7 @@ export default function PrivacyPage() {
                   <li>Account preferences and settings</li>
                 </ul>
 
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Usage Information:</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white font-sans">Usage Information:</h3>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Pages visited, products viewed, search queries</li>
                   <li>Device information, IP address, browser type</li>
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">2. How We Use Your Information</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">2. How We Use Your Information</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>We use the information we collect to:</p>
                 <ul className="list-disc pl-6 space-y-2">
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">3. Information Sharing</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">3. Information Sharing</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>
                   We do not sell, trade, or rent your personal information to third parties. 
@@ -93,7 +93,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">4. Data Security</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">4. Data Security</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>
                   We implement appropriate technical and organizational measures to protect your personal information:
@@ -109,7 +109,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">5. Your Rights</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">5. Your Rights</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>You have the right to:</p>
                 <ul className="list-disc pl-6 space-y-2">
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">6. Cookies and Tracking</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">6. Cookies and Tracking</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>
                   We use cookies and similar technologies to enhance your experience:
@@ -144,7 +144,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">7. Age Verification</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">7. Age Verification</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>
                   Our products are intended for adults only. We collect and verify age information 
@@ -155,7 +155,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">8. Changes to This Policy</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">8. Changes to This Policy</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>
                   We may update this Privacy Policy from time to time. We will notify you of any 
@@ -166,15 +166,15 @@ export default function PrivacyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">9. Contact Us</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white font-sans">9. Contact Us</h2>
               <div className="text-gray-600 dark:text-gray-300 space-y-4">
                 <p>
                   If you have any questions about this Privacy Policy or our data practices, 
                   please contact us:
                 </p>
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
-                  <p><strong>Email:</strong> privacy@dopecity.com</p>
-                  <p><strong>Phone:</strong> 1-800-DOPE-CITY</p>
+                  <p><strong>Email:</strong> support@highway420store.com</p>
+                  <p><strong>Phone:</strong> (951) 719-7010</p>
                   <p><strong>Mail:</strong> Highway 420 Privacy Team<br />
                   [Address to be added]</p>
                 </div>

@@ -7,11 +7,11 @@ export default {
     extend: {
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'heading': ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif'],
         'highway': ['Highway Gothic', 'Arial', 'sans-serif'],
         'highway-gothic': ['Highway Gothic', 'Arial', 'sans-serif'],
         'chalets': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
-        'black': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
-        'street': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
+        'display-chalets': ['Chalets', 'Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'base': ['18px', { lineHeight: '1.6' }],

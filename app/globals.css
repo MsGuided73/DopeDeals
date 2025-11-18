@@ -57,33 +57,32 @@
   font-weight: bold !important;
 }
 
-/* 2. Size-Aware Chalets - Large Text (text-xl+) Uses Chalets (LOW PRIORITY) */
-.text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl,
-.text-6xl, .text-7xl, .text-8xl, .text-9xl,
-.chalets-title, .chalets-title *,
-.font-chalets, .font-chalets,
-.font-chalets * {
-  font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
-  font-weight: normal !important;
-  letter-spacing: -0.02em !important;
+/* 2. Heading & Display Font System */
+h1, h2, h3, h4, h5, h6,
+.font-heading,
+.font-heading *,
+.heading,
+.font-space-grotesk,
+.font-space-grotesk * {
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
 }
-
-/* Override any Tailwind font-bold on Chalets elements */
-*[style*="font-family: 'Chalets'"] { font-weight: normal !important; }
 
 /* 2. System Font Stack - Fast, Readable Font Override */
 .font-inter,
-.font-inter * {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
-  font-weight: bold !important;
+.font-inter *,
+body, p, .text-sm, .text-xs, .text-base {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+  font-weight: 400 !important;
   letter-spacing: 0.01em !important;
+  text-transform: none !important;
 }
 
 /* 3. Legacy font class support - Redirect to new hierarchy */
 .font-highway, .font-highway *,
 [class*="font-highway"],
-.highway-title, .highway-title *,
-body, p, .text-sm, .text-xs, .text-base {
+.highway-title, .highway-title * {
   font-family: 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: 0.01em !important;
@@ -91,8 +90,8 @@ body, p, .text-sm, .text-xs, .text-base {
 }
 
 /* Chalets font for hero titles */
-.font-chalets-legweb,
-.font-chalets-legweb * {
+.font-display-chalets,
+.font-display-chalets * {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.02em !important;
@@ -133,11 +132,11 @@ body, p, .text-sm, .text-xs, .text-base {
 
 /* 4. Hero titles get automatic Chalets */
 .hero-title, .hero-title *,
-.h1, .h1 *, h1, h1 *,
+.h1, .h1 *,
 .hero-text, .hero-text * {
-  font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
-  font-weight: normal !important;
-  letter-spacing: -0.02em !important;
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
 }
 
 /* 4. Search Bar Animated Glow */

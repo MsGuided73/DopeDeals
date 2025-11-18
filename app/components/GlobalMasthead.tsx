@@ -123,23 +123,23 @@ export default function GlobalMasthead() {
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-black/50 to-transparent"></div>
           </div>
 
-          {/* Top Row: Logo + Search Bar (equal padding) - Desktop */}
-          <div className="hidden md:flex items-center px-6 py-2 relative" style={{ height: "30px" }}>
-            {/* Logo - Left side, spans both rows */}
-            <div className="absolute left-6 top-0 z-10 flex items-center" style={{ height: "120px", maxWidth: "400px" }}>
-              <Link href="/" className="flex items-center h-full w-full">
-                <Image
-                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
-                  alt="HIGHWAY 420 Logo"
-                  width={400}
-                  height={86}
-                  className="object-contain w-full h-full"
-                  style={{ display: "block", maxHeight: "120px" }}
-                  priority
-                />
-              </Link>
-            </div>
+          {/* Desktop Logo - left aligned, spanning full masthead height (both rows) */}
+          <div className="hidden md:flex absolute inset-y-0 z-10 items-center" style={{ maxWidth: "400px", left: "5%" }}>
+            <Link href="/" className="flex items-center h-full w-full">
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+                alt="HIGHWAY 420 Logo"
+                width={400}
+                height={86}
+                className="object-contain h-full w-auto"
+                style={{ display: "block" }}
+                priority
+              />
+            </Link>
+          </div>
 
+          {/* Top Row: Search Bar only - Desktop */}
+          <div className="hidden md:flex items-center px-6 py-2 relative" style={{ height: "30px" }}>
             {/* Search Bar - Equal padding from both sides */}
             <div className="absolute left-1/2 top-2 transform -translate-x-1/2" style={{ width: "calc(100% - 300px)" }}>
               <div className="max-w-2xl w-full mx-auto">
@@ -150,15 +150,15 @@ export default function GlobalMasthead() {
 
           {/* Mobile: Logo + Search Bar Row */}
           <div className="md:hidden flex items-center px-4 py-2 relative" style={{ height: "50px" }}>
-            {/* Logo - Left side */}
-            <div className="flex items-center z-10" style={{ width: "50px", height: "40px" }}>
+            {/* Mobile Logo - slightly reduced but allowed to span visual height of both rows */}
+            <div className="flex items-center z-10" style={{ height: "70px" }}>
               <Link href="/" className="flex items-center h-full">
                 <Image
                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                   alt="HIGHWAY 420 Logo"
-                  width={50}
-                  height={36}
-                  className="object-contain w-full h-auto"
+                  width={200}
+                  height={70}
+                  className="object-contain h-full w-auto max-w-[80vw]"
                   style={{ display: "block" }}
                   priority
                 />
@@ -172,9 +172,12 @@ export default function GlobalMasthead() {
           </div>
 
           {/* Bottom Row: Navigation Links + User Icons */}
-          <div className="flex items-center justify-between px-4 group" style={{ height: "30px" }}>
-            {/* Navigation Links - Centered at bottom */}
-            <nav className="hidden md:flex items-center gap-6 absolute bottom-1 left-1/2 transform -translate-x-1/2 group-hover:scale-105 transition-transform duration-300">
+          <div className="relative px-4 group" style={{ height: "30px" }}>
+            {/* Navigation Links - Visually anchored to the bottom of the 2nd row of the masthead */}
+            <nav
+              className="hidden md:flex items-end gap-6 absolute left-1/2 -translate-x-1/2 group-hover:scale-105 transition-transform duration-300"
+              style={{ bottom: "-30px" }}
+            >
               {/* Vapes Dropdown */}
               <div className="relative">
                 <button
@@ -383,8 +386,11 @@ export default function GlobalMasthead() {
               </Link>
             </nav>
 
-            {/* User Icons - Right side of bottom row */}
-            <div className="absolute right-4 flex items-center gap-4 text-white">
+            {/* User Icons - Right side, visually anchored to bottom of the 2nd row and inset from edge */}
+            <div
+              className="absolute right-12 flex items-end gap-4 text-white"
+              style={{ bottom: "-30px" }}
+            >
 
               {/* Mobile Hamburger */}
               <button
@@ -392,7 +398,7 @@ export default function GlobalMasthead() {
                 className="md:hidden p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
                 title="Menu"
               >
-                <Menu className="w-6 h-6" strokeWidth={3} />
+                <Menu className="w-8 h-8" strokeWidth={3} />
               </button>
 
               {/* Profile */}
@@ -401,7 +407,7 @@ export default function GlobalMasthead() {
                 className="p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
                 title="Profile & Recommendations"
               >
-                <User className="w-6 h-6" strokeWidth={3} />
+                <User className="w-8 h-8" strokeWidth={3} />
               </button>
 
               {/* Cart */}
@@ -410,7 +416,7 @@ export default function GlobalMasthead() {
                 className="p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 relative bg-white/10 rounded-lg hover:bg-white/20"
                 title="Shopping Cart"
               >
-                <ShoppingCart className="w-6 h-6" strokeWidth={3} />
+                <ShoppingCart className="w-8 h-8" strokeWidth={3} />
                 <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
