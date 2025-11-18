@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoadingState from '../components/LoadingState';
-import PrismaticBurst from '../components/PrismaticBurst';
+import { ShaderAnimation } from '../../components/ui/shader-animation';
 import { addToCart } from '../lib/cart-utils';
 
 export interface ShroomsStuffProduct {
@@ -148,16 +148,11 @@ export default function MushroomsPageContent() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen relative">
-        {/* Prismatic Burst Background */}
-        <PrismaticBurst
-          animationType="hover"
-          intensity={4}
-          speed={0.3}
-          distort={1.2}
-          rayCount={32}
-          mixBlendMode="screen"
-          colors={['#ff007a', '#4d3dff', '#00ffff', '#ff1493', '#8a2be2', '#00ced1']}
-        />
+        {/* Shader-based psychedelic background */}
+        <div className="absolute inset-0">
+          <ShaderAnimation />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80" />
+        </div>
 
         {/* Content Overlay */}
         <div className="relative z-10">
