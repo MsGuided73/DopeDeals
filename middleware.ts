@@ -8,6 +8,36 @@ export async function middleware(request: NextRequest) {
     },
   });
 
+  const { pathname } = request.nextUrl;
+
+  // SITE-WIDE PASSWORD PROTECTION (runs before Supabase auth)
+  // Get password from environment variable, default to "Hittheroad420" for local dev
+  const SITE_PASSWORD = process.env.SITE_PASSWORD || "Hittheroad420";
+
+  // Paths that are always allowed (static assets, etc.)
+  const alwaysAllowedPaths = [
+    '/_next/',
+    '/favicon',
+    '/icons',
+    '/auth/login'
+  ];
+
+  // Check if requested path is always allowed
+  const isAlwaysAllowed = alwaysAllowedPaths.some(path => pathname.startsWith(path));
+
+  if (!isAlwaysAllowed && pathname !== '/auth/login') {
+    // Check for site-password cookie
+    const sitePasswordCookie = request.cookies.get('site-password')?.value;
+
+    if (!sitePasswordCookie || sitePasswordCookie !== SITE_PASSWORD) {
+      // Not authenticated - redirect to password gate
+      const loginUrl = new URL('/auth/login', request.url);
+      // Preserve original URL to redirect back after login
+      loginUrl.searchParams.set('redirectTo', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -56,8 +86,6 @@ export async function middleware(request: NextRequest) {
 
   // Get user session
   const { data: { user }, error } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
 
   // Define protected routes
   const protectedRoutes = [
