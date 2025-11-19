@@ -198,7 +198,10 @@ If you have questions about these Terms, please contact us:
 - Website: https://highway420store.com
 - Email: support@highway420store.com
 - Phone: 1-800-HIGHWAY (subject to availability)
-- Address: [Physical Address - Update when available]
+- Address:
+  - BMB Wholesale, Inc.
+  - 10 Manor Pkwy
+  - Salem, NH 03079
 
 ## 18. Acknowledgment
 
