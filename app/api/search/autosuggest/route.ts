@@ -70,10 +70,11 @@ export async function GET(request: NextRequest) {
     // Search products for autosuggest
     const { data: products, error: productsError } = await supabase
       .from('main_site_products')
-      .select('name, brand_name, category_slug')
+      .select('name, brand_name, category_slug, image_url')
       .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%`)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
+      .not('image_url', 'is', null)
+      .neq('image_url', '')
+      .not('image_url', 'ilike', '%,%')
       .limit(50);
 
     if (!productsError && products) {

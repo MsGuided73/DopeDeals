@@ -256,6 +256,24 @@ export default function Highway420Footer() {
               }}
             />
           </Link>
+          <p className="mt-10 text-xs leading-relaxed text-gray-900/80 max-w-5xl mx-auto" style={{ fontSize: "0.7rem", lineHeight: 1.5 }}>
+            These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose,
+            treat, cure or prevent any disease. Must be 21 years or older to purchase from this website. This product is not intended
+            for children, or pregnant or lactating women. Consult with a physician before use if you have a serious medical
+            condition or use prescription medications. A Doctor’s advice should be sought before using this and any dietary
+            supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
+            do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms & Conditions printed
+            on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
+            allowed to be shipped to the following states: HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
+            Louisiana.
+          </p>
+          <div className="mt-8 flex justify-center">
+            <img
+              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Footer%20Images/OIP.jpeg"
+              alt="Regulatory badges"
+              className="max-h-24 w-auto object-contain drop-shadow-lg"
+            />
+          </div>
         </div>
       </div>
     </footer>

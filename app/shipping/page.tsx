@@ -214,6 +214,12 @@ export default function ShippingPage() {
                 Track Order
               </button>
             </div>
+            <div className="mt-8 text-sm leading-relaxed">
+              <p className="font-semibold">Mailing Address:</p>
+              <p>BMB Wholesale, Inc</p>
+              <p>10 Manor Pkwy</p>
+              <p>Salem, NH 03079</p>
+            </div>
           </div>
 
         </div>

@@ -176,7 +176,9 @@ export default function PrivacyPage() {
                   <p><strong>Email:</strong> support@highway420store.com</p>
                   <p><strong>Phone:</strong> (951) 719-7010</p>
                   <p><strong>Mail:</strong> Highway 420 Privacy Team<br />
-                  [Address to be added]</p>
+                  BMB Wholesale, Inc<br />
+                  10 Manor Pkwy<br />
+                  Salem, NH 03079</p>
                 </div>
               </div>
             </section>

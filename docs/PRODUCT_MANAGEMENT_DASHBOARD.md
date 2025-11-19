@@ -59,6 +59,8 @@ Automatic product categorization based on keywords:
 - ⚠️ **No Images:** Products missing images
 - 🚨 **Nicotine Products:** 74 Crave products flagged
 
+> **Compliance Note:** Equipment-only products (glass, accessories, devices without consumables) must **not** be assigned Nicotine or Tobacco flags. Leave those flags for consumable nicotine/tobacco goods only.
+
 ---
 
 ## 🚀 How to Use
@@ -239,4 +241,3 @@ ORDER BY linked_products DESC;
 **Dashboard is ready for use!** 🚀
 
 Access at: `http://localhost:3000/admin/products`
-
