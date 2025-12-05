@@ -388,11 +388,25 @@ export default function GlobalMasthead() {
               <Link href="/7-hydroxymitragynine" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Kratom & 7-OH
               </Link>
-              <Link href="/edibles" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Edibles, Salves & Tinctures
-              </Link>
+
+              {/* Edibles Section */}
+              <div className="pt-2">
+                <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">Edibles</h3>
+                <div className="space-y-2 pl-4">
+                  <Link href="/edibles" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    All Edibles
+                  </Link>
+                  <Link href="/edibles#tinctures" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    CBD Tinctures
+                  </Link>
+                  <Link href="/edibles#salves" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    Salves
+                  </Link>
+                </div>
+              </div>
+
               <Link href="/nitrous-oxide" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Nitrous Oxide
+                N2O (Nitrous Oxide)
               </Link>
               <Link href="/mushrooms" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Mushrooms
@@ -400,41 +414,9 @@ export default function GlobalMasthead() {
               <Link href="/accessories" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Accessories
               </Link>
-
-              {/* THCA */}
-              <div className="pt-4">
-                <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">THCA+</h3>
-                <div className="space-y-2 pl-4">
-                  <Link href="/thca_flower" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    THCA Flower
-                  </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    THCA Pre-Rolls
-                  </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    THCA Concentrates
-                  </Link>
-                  <Link href="/cbd" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    CBD Products
-                  </Link>
-                </div>
-              </div>
-
-              {/* Brands */}
-              <div className="pt-4">
-                <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">Brands</h3>
-                <div className="space-y-2 pl-4">
-                  <Link href="/brands" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    View All Brands
-                  </Link>
-                  <Link href="/brands/raw-papers" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    RAW Papers
-                  </Link>
-                  <Link href="/brands/roor" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    ROOR
-                  </Link>
-                </div>
-              </div>
+              <Link href="/blog" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Blog
+              </Link>
 
               {/* Account */}
               <div className="pt-4 border-t border-gray-200/50">

@@ -6,7 +6,7 @@ import { Award, Users, Shield, Truck } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'About Us - Highway 420',
-  description: 'Learn about Highway 420's mission to provide premium cannabis culture products and smoking accessories with exceptional service.',
+  description: 'Learn about Highway 420\'s mission to provide premium cannabis culture products and smoking accessories with exceptional service.',
 };
 
 export default function AboutPage() {
