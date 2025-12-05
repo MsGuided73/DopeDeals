@@ -15,16 +15,21 @@ interface SearchSuggestion {
 
 
 const placeholderWords = [
-  'products',
   'pre-rolls',
+  '7-OH',
+  '7-Hydroxymitragynine',
+  'kratom',
+  'shrooms',
+  'edibles',
+  'vapes',
+  'CBD',
+  'tinctures',
+  'salves',
+  'accessories',
   'bongs',
   'brands',
   'hand pipes',
-  'hookahs',
   'dab-rigs',
-  'dab accessories',
-  'torches',
-  'edibles',
   'THCA Flower',
   'THCA Vapes'
 ]
