@@ -293,92 +293,54 @@ export default function GlobalMasthead() {
                 )}
               </div>
 
-              {/* Bongs */}
-              <div className="relative">
-                <button
-                  onClick={() => setOpenDropdown(openDropdown === "bongs" ? null : "bongs")}
-                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
-                >
-                  Bongs
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {openDropdown === "bongs" && (
-                  <div
-                    className="absolute top-full left-0 mt-2 w-48 rounded-xl shadow-lg border border-gray-200 z-[50]"
-                    style={{ backgroundColor: "#f4f1e8" }}
-                    onMouseLeave={() => handleMouseLeaveWithDelay("main")}
-                  >
-                    <div className="py-2">
-                      <Link href="/bongs" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        All Bongs
-                      </Link>
-                      <Link href="/bubblers" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Bubblers
-                      </Link>
-                      <Link href="/products?q=glass+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Glass Bongs
-                      </Link>
-                      <Link href="/products?q=beaker+bong" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Beaker Bongs
-                      </Link>
-                      <Link href="/products?q=straight+tube" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Straight Tube
-                      </Link>
-                      <Link href="/products?q=percolator" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Percolator Bongs
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Pipes */}
-              <div className="relative">
-                <button
-                  onClick={() => setOpenDropdown(openDropdown === "pipes" ? null : "pipes")}
-                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
-                >
-                  Pipes
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {openDropdown === "pipes" && (
-                  <div
-                    className="absolute top-full left-0 mt-2 w-48 rounded-xl shadow-lg border border-gray-200 z-[50]"
-                    style={{ backgroundColor: "#f4f1e8" }}
-                    onMouseLeave={() => handleMouseLeaveWithDelay("main")}
-                  >
-                    <div className="py-2">
-                      <Link href="/pipes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        All Pipes
-                      </Link>
-                      <Link href="/products?q=spoon+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Spoon Pipes
-                      </Link>
-                      <Link href="/products?q=sherlock+pipe" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Sherlock Pipes
-                      </Link>
-                      <Link href="/products?q=chillum" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Chillums
-                      </Link>
-                      <Link href="/products?q=one+hitter" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        One Hitters
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
               {/* Simple links */}
-              <Link href="/dabsntools" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
-                Dab-Rigs
+              <Link href="/pre-rolls" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
+                Pre-Rolls
               </Link>
-              <Link href="/products?category=accessories" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
+              <Link href="/7-hydroxymitragynine" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
+                Kratom & 7-OH
+              </Link>
+              
+              {/* Edibles Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setOpenDropdown(openDropdown === "edibles" ? null : "edibles")}
+                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
+                >
+                  Edibles
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {openDropdown === "edibles" && (
+                  <div
+                    className="absolute top-full left-0 mt-2 w-48 rounded-xl shadow-lg border border-gray-200 z-[50]"
+                    style={{ backgroundColor: "#f4f1e8" }}
+                    onMouseLeave={() => handleMouseLeaveWithDelay("main")}
+                  >
+                    <div className="py-2">
+                      <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        All Edibles
+                      </Link>
+                      <Link href="/edibles#tinctures" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        CBD Tinctures
+                      </Link>
+                      <Link href="/edibles#salves" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        Salves
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <Link href="/nitrous-oxide" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
+                N2O
+              </Link>
+              <Link href="/mushrooms" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
+                Mushrooms
+              </Link>
+              <Link href="/accessories" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
                 Accessories
               </Link>
               <Link href="/blog" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
@@ -474,20 +436,23 @@ export default function GlobalMasthead() {
                 </div>
               </div>
 
-              <Link href="/bongs" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Bongs & Water Pipes
+              <Link href="/pre-rolls" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Pre-Rolls
               </Link>
-              <Link href="/pipes" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Pipes
+              <Link href="/7-hydroxymitragynine" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Kratom & 7-OH
               </Link>
-              <Link href="/dabsntools" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Dab Rigs
+              <Link href="/edibles" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Edibles, Salves & Tinctures
+              </Link>
+              <Link href="/nitrous-oxide" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Nitrous Oxide
+              </Link>
+              <Link href="/mushrooms" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Mushrooms
               </Link>
               <Link href="/accessories" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Accessories
-              </Link>
-              <Link href="/edibles" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Edibles & Munchies
               </Link>
 
               {/* THCA */}
@@ -500,11 +465,11 @@ export default function GlobalMasthead() {
                   <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     THCA Pre-Rolls
                   </Link>
+                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    THCA Concentrates
+                  </Link>
                   <Link href="/cbd" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     CBD Products
-                  </Link>
-                  <Link href="/mushrooms" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    🍄 Mushrooms
                   </Link>
                 </div>
               </div>

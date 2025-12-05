@@ -5,13 +5,13 @@ import React from "react";
 export default function CollectionsGrid() {
   const categories = [
     { name: "LEGAL\nTHCA FLOWER", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
-    { name: "SHROOMS & STUFF", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
+    { name: "PRE-ROLLS", route: "/pre-rolls", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/brands/Cookies/cookies-thc-a-slim-pre-rolls-3-5g-5ct.webp" },
     { name: "THCA VAPES", route: "/thca_pnv", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/RUNTZ-3.5G-SINGLES.webp" },
-    { name: "BONGS", route: "/bongs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/RooR_6-bongs.png" },
-    { name: "HAND PIPES", route: "/pipes", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/hand_pipes.jpg" },
-    { name: "DAB-RIGS & TOOLS", route: "/dabsntools", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Puffco_Zoom.png" },
+    { name: "SHROOMS &\nSTUFF", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
+    { name: "KRATOM &\n7-OH", route: "/7-hydroxymitragynine", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
+    { name: "EDIBLES,\nSALVES &\nTINCTURES", route: "/edibles", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
+    { name: "NITROUS\nOXIDE", route: "/nitrous-oxide", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
     { name: "ACCESSORIES", route: "/accessories", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
-    { name: "HOOKAHS", route: "/hookahs", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Hookah.jpeg" },
   ];
 
   const logoPath =
@@ -75,12 +75,12 @@ export default function CollectionsGrid() {
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
                 <div className="bg-black/20 rounded-xl px-3 py-2">
                   <h1
-                    className="text-white text-base sm:text-lg font-bold text-left leading-tight whitespace-pre-line"
+                    className="text-white text-xl sm:text-2xl font-black text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow:
                         "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
-                      fontWeight: "normal",
+                      fontWeight: "900",
                     }}
                   >
                     {cat.name}
@@ -142,12 +142,12 @@ export default function CollectionsGrid() {
               <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
                 <div className="bg-black/30 rounded-lg px-3 py-2">
                   <h1
-                    className="text-white text-xl xl:text-2xl 2xl:text-3xl font-bold text-left leading-tight whitespace-pre-line"
+                    className="text-white text-2xl xl:text-3xl 2xl:text-4xl font-black text-left leading-tight whitespace-pre-line"
                     style={{
                       fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
                       textShadow:
                         "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
-                      fontWeight: "normal",
+                      fontWeight: "900",
                     }}
                   >
                     {cat.name}

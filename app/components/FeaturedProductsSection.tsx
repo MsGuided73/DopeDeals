@@ -256,7 +256,7 @@ export default function FeaturedProductsSection() {
       <section className="mt-16">
         <div className="text-center mb-12">
           <h1
-            className="text-4xl md:text-5xl text-black mb-4"
+            className="text-5xl md:text-7xl font-black text-black mb-4"
             style={{ fontFamily: systemFontFamily }}
           >
             HOT PRODUCTS
@@ -286,7 +286,7 @@ export default function FeaturedProductsSection() {
   if (error) {
     return (
       <section className="mt-16">
-        <div className="text-left mb-12">
+        <div className="text-center mb-12">
           <h1
             className="text-4xl md:text-5xl text-black mb-4"
             style={{ fontFamily: systemFontFamily }}
@@ -304,7 +304,7 @@ export default function FeaturedProductsSection() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1
-            className="text-4xl md:text-5xl text-black mb-4"
+            className="text-5xl md:text-7xl font-black text-black mb-4"
             style={{ fontFamily: systemFontFamily }}
           >
             HOT PRODUCTS

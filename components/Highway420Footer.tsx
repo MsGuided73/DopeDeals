@@ -28,15 +28,15 @@ export default function Highway420Footer() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
-              "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/ChatGPT%20Image%20Oct%2023,%202025,%2004_02_38%20PM.png')",
+              "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/sign/Highway420_assets/assets/ChatGPT%20Image%20Oct%2023,%202025,%2004_02_38%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xZDFmMmVhMi1kNjI5LTQ5MWQtOWNmYi01MTE2Y2UwMjcxNmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaWdod2F5NDIwX2Fzc2V0cy9hc3NldHMvQ2hhdEdQVCBJbWFnZSBPY3QgMjMsIDIwMjUsIDA0XzAyXzM4IFBNLnBuZyIsImlhdCI6MTc2NDkzNTU1NywiZXhwIjoxNzk2NDcxNTU3fQ.RyPalWiDNqwZxn5h7pgPFZq68YAxnmsBmiNMVt1TZEw')",
           }}
         />
         <div
           className="absolute inset-0"
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.25)",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
+            backgroundColor: "rgba(255, 255, 255, 0.35)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
           }}
         />
       </div>
