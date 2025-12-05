@@ -16,7 +16,6 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
       // Transform database price fields to API-friendly names
       price: parseFloat(rawProduct.our_price) || 0,
       compare_at_price: rawProduct.sale_price ? parseFloat(rawProduct.sale_price) : undefined,
-      vip_price: rawProduct.fire_price ? parseFloat(rawProduct.fire_price) : undefined,
 
       // Ensure consistent field names
       brand_id: rawProduct.brand_id,
