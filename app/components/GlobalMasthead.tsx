@@ -239,60 +239,6 @@ export default function GlobalMasthead() {
                 )}
               </div>
 
-              {/* THCA+ */}
-              <div className="relative">
-                <button
-                  onClick={() => setOpenDropdown(openDropdown === "thca" ? null : "thca")}
-                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
-                >
-                  THCA+
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {openDropdown === "thca" && (
-                  <div
-                    className="absolute top-full left-0 mt-2 w-64 rounded-xl shadow-lg border border-gray-200 z-[50]"
-                    style={{ backgroundColor: "#f4f1e8" }}
-                    onMouseLeave={() => handleMouseLeaveWithDelay("main")}
-                  >
-                    <div className="py-2">
-                      <Link href="/thca_flower" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        THCA Flower
-                      </Link>
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        THCA Pre-Rolls
-                      </Link>
-                      <div className="border-t border-gray-200/20 my-1" />
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        THCA Concentrates
-                      </Link>
-                      <div className="border-t border-gray-200/20 my-1" />
-                      <Link href="/thca_cbd" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        CBD Products
-                      </Link>
-                      <Link href="/thca_delta" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Delta Products
-                      </Link>
-                      <Link href="/thca_edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Edibles
-                      </Link>
-                      <div className="border-t border-gray-200/20 my-1" />
-                      <Link href="/thca_shrooms" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        🍄 Mushrooms
-                      </Link>
-                      <Link href="/nitrous-oxide" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Nitrous Oxide
-                      </Link>
-                      <Link href="/7-hydroxymitragynine" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        7-Hydroxymitragynine
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
               {/* Simple links */}
               <Link href="/pre-rolls" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
                 Pre-Rolls
