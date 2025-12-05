@@ -78,6 +78,19 @@ export default function ProductsPageContent() {
           `)
           .eq('is_active', true);
 
+        // Filter for accessories - look for common accessory keywords
+        // This will be replaced with proper category filtering once your database has category data
+        const accessoryKeywords = [
+          'grinder', 'lighter', 'paper', 'rolling', 'storage', 'ashtray',
+          'scale', 'tray', 'jar', 'container', 'cleaning', 'brush',
+          'poker', 'tool', 'case', 'smell proof', 'stash', 'humidity pack'
+        ];
+        
+        // Build an OR condition for accessory keywords
+        const keywordConditions = accessoryKeywords
+          .map(keyword => `name.ilike.%${keyword}%,description.ilike.%${keyword}%`)
+          .join(',');
+
         // If there's a search query, use database full-text search
         if (searchQuery.trim()) {
           // Use PostgreSQL full-text search with the search vector

@@ -6,7 +6,7 @@ import { Award, Users, Shield, Truck } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'About Us - Highway 420',
-  description: 'Learn about Highway 420\'s mission to provide premium cannabis culture products and smoking accessories with exceptional service.',
+  description: 'Learn about Highway 420's mission to provide premium cannabis culture products and smoking accessories with exceptional service.',
 };
 
 export default function AboutPage() {
@@ -18,7 +18,7 @@ export default function AboutPage() {
       <div className="min-h-screen bg-white dark:bg-gray-950">
         {/* Hero Section */}
         <div className="relative bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-20">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80')] bg-cover bg-center opacity-20"></div>
+          <div className="absolute inset-0 bg-[url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/sign/Highway420_assets/assets/AdobeStock_1060112988.jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xZDFmMmVhMi1kNjI5LTQ5MWQtOWNmYi01MTE2Y2UwMjcxNmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaWdod2F5NDIwX2Fzc2V0cy9hc3NldHMvQWRvYmVTdG9ja18xMDYwMTEyOTg4LmpwZWciLCJpYXQiOjE3NjQ5MjYwNTQsImV4cCI6MTc5NjQ2MjA1NH0.VzUpmWXpJO-WWhUBU0GsSg2ooUdWfgOeoqlsZhhNqVo')] bg-cover bg-center opacity-20"></div>
           <div className="relative max-w-6xl mx-auto px-6 text-center">
             <h1 className="dope-city-title text-6xl md:text-8xl mb-6">
               ABOUT Highway 420
