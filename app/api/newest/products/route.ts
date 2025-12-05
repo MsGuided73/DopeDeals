@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
     const { data: newProducts, error } = await supabase
       .from('main_site_products')
       .select(`
-        id, name, description, short_description, our_price, sale_price, fire_price,
+        id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product,
         brand_name, category_id, created_at, updated_at
       `)

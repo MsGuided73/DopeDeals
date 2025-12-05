@@ -41,7 +41,6 @@ export async function GET(req: NextRequest) {
         short_description,
         our_price,
         sale_price,
-        fire_price,
         image_url,
         image_urls,
         sku,
