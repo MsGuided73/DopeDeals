@@ -51,6 +51,13 @@ export async function getStorage() {
     },
 
     async getProduct(id: string) {
+      // Convert string ID to integer for proper database querying
+      const productId = parseInt(id, 10);
+      
+      if (isNaN(productId)) {
+        throw new Error('Invalid product ID');
+      }
+
       const { data, error } = await supabase
         .from('main_site_products')
         .select(`
@@ -58,10 +65,13 @@ export async function getStorage() {
           image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
           created_at, updated_at
         `)
-        .eq('id', id)
+        .eq('id', productId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching product:', error);
+        throw error;
+      }
       return data;
     },
 
