@@ -30,8 +30,7 @@ export async function GET(req: NextRequest) {
     const effectiveLimit = limit;
 
     // Query featured products from main_site_products table
-    // Filter for products with valid image URLs (either image_url or image_urls array)
-    // Exclude battery products as they are not exciting
+    // Fetch extra to account for duplicates
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -55,29 +54,47 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('featured', true)
-      .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%')
+      .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
       .order('created_at', { ascending: false })
-      .limit(effectiveLimit)
-      .range(offset, offset + effectiveLimit - 1);
+      .limit(effectiveLimit * 2) // Fetch extra to ensure we have enough after deduplication
+      .range(offset, offset + (effectiveLimit * 2) - 1);
 
     if (error) {
       console.error('Supabase query error:', error);
       return NextResponse.json({ error: 'Failed to fetch featured products', details: error.message }, { status: 500 });
     }
 
-    // Apply post-query filter for image validation (OR logic: valid image_url OR non-empty image_urls)
-    const products = (rawProducts || []).filter(product => {
-      const hasValidImageUrl = product.image_url &&
-        product.image_url !== '' &&
-        product.image_url !== 'null' &&
-        product.image_url !== 'undefined' &&
-        product.image_url.trim() !== '';
-
-      const hasValidImageUrls = Array.isArray(product.image_urls) &&
-        product.image_urls.length > 0;
-
-      return hasValidImageUrl || hasValidImageUrls;
+    // Remove duplicates by ID, name, and SKU (ensure unique products only)
+    const seenIds = new Set<number>();
+    const seenNames = new Set<string>();
+    const seenSkus = new Set<string>();
+    const uniqueProducts = (rawProducts || []).filter(product => {
+      // Check ID duplicates
+      if (seenIds.has(product.id)) {
+        return false;
+      }
+      
+      // Check name duplicates (normalize by trimming and lowercasing)
+      const normalizedName = product.name?.trim().toLowerCase();
+      if (normalizedName && seenNames.has(normalizedName)) {
+        return false;
+      }
+      
+      // Check SKU duplicates (if SKU exists)
+      if (product.sku && seenSkus.has(product.sku)) {
+        return false;
+      }
+      
+      // Add to tracking sets
+      seenIds.add(product.id);
+      if (normalizedName) seenNames.add(normalizedName);
+      if (product.sku) seenSkus.add(product.sku);
+      
+      return true;
     });
+
+    // Take only the requested limit
+    const products = uniqueProducts.slice(0, effectiveLimit);
 
     // Get total count for pagination info (excluding batteries)
     const { count } = await supabase
@@ -87,12 +104,14 @@ export async function GET(req: NextRequest) {
       .eq('featured', true)
       .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%');
 
+    console.log(`🎯 Featured Products API: Retrieved ${products.length} unique featured products (no batteries, no duplicates)`);
+
     return NextResponse.json({
-      products: products || [],
+      products: products,
       totalCount: count || 0,
       limit,
       offset,
-      hasMore: count ? (offset + (products?.length || 0)) < count : false
+      hasMore: count ? (offset + products.length) < count : false
     });
   } catch (error) {
     console.error('API error:', error);

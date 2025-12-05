@@ -1,13 +1,13 @@
- import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 /**
- * New Products API Route
+ * Fresh Drops API Route
  *
  * IMPORTANT: Database Implementation Pattern
  * - Uses "main_site_products" table
  * - Orders by created_at (newest first) to show the most recent products
- * - Validates images to ensure only products with valid images are returned
+ * - Filters by is_active ONLY - no other requirements
  */
 
 const supabase = createClient(
@@ -15,103 +15,72 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-function hasRealProductImage(imageUrl: string | null): boolean {
-  if (!imageUrl) return false;
-
-  // Clean the URL by removing trailing commas and whitespace
-  const cleanUrl = imageUrl.trim().replace(/,+$/, '');
-
-  const placeholderDomains = [
-    'placehold.co',
-    'placeholder.com',
-    'via.placeholder.com',
-    'picsum.photos',
-    'lorempixel.com',
-    'dummyimage.com',
-    'example.com',
-    'test.com'
-  ];
-
-  // Exclude placeholder domains
-  if (placeholderDomains.some(domain => cleanUrl.toLowerCase().includes(domain))) {
-    return false;
-  }
-
-  // Must be a valid image URL from storage or legitimate source
-  const validDomains = [
-    'qirbapivptotybspnbet.supabase.co',
-    'supabase.co',
-    'supabase.in',
-    'amazonaws.com',
-    'cloudfront.net',
-    'imgur.com',
-    'githubusercontent.com',
-    'sigdistro.com'
-  ];
-
-  return validDomains.some(domain => cleanUrl.toLowerCase().includes(domain));
-}
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '8');
 
-    // Get products specifically marked as "new arrivals" with valid images
-    const { data: newProducts, error } = await supabase
+    // Get active products only, ordered by newest first
+    // Fetch extra to account for duplicates and battery filtering
+    const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product,
         brand_name, category_id, created_at, updated_at
       `)
-
-      .eq('is_new', true) // Filter for products marked as new
+      .eq('is_active', true) // ONLY filter by active products
+      .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
       .order('created_at', { ascending: false })
-      .limit(50); // Limit since we're targeting specific products
+      .limit(limit * 2); // Fetch extra to ensure we have enough after deduplication
 
     if (error) {
-      console.error('Error fetching new products:', error);
+      console.error('Error fetching fresh drops products:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    console.log(`⏬ Fetched ${newProducts?.length || 0} products with non-null image_url`);
-
-    // Filter for products with valid image URLs (including sigdistro.com)
-    const validProducts = (newProducts || []).filter((product: any) => {
-      // Check if image_url has a valid URL (including sigdistro.com)
-      if (product.image_url && product.image_url.trim() !== '' && hasRealProductImage(product.image_url)) {
-        console.log(`✅ Valid image_url for ${product.name}: ${product.image_url}`);
-        return true;
+    // Remove duplicates by ID, name, and SKU (ensure unique products only)
+    const seenIds = new Set<number>();
+    const seenNames = new Set<string>();
+    const seenSkus = new Set<string>();
+    const uniqueProducts = (rawProducts || []).filter(product => {
+      // Check ID duplicates
+      if (seenIds.has(product.id)) {
+        return false;
       }
-
-      // Fallback: Check image_urls array for valid URLs
-      if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
-        const hasValidUrls = product.image_urls.some((url: string) =>
-          url && url.trim() !== '' && hasRealProductImage(url)
-        );
-        if (hasValidUrls) {
-          console.log(`✅ Valid image_urls for ${product.name}: ${product.image_urls}`);
-          return true;
-        }
+      
+      // Check name duplicates (normalize by trimming and lowercasing)
+      const normalizedName = product.name?.trim().toLowerCase();
+      if (normalizedName && seenNames.has(normalizedName)) {
+        return false;
       }
-
-      return false; // Strict filtering - only show products with valid image URLs
+      
+      // Check SKU duplicates (if SKU exists)
+      if (product.sku && seenSkus.has(product.sku)) {
+        return false;
+      }
+      
+      // Add to tracking sets
+      seenIds.add(product.id);
+      if (normalizedName) seenNames.add(normalizedName);
+      if (product.sku) seenSkus.add(product.sku);
+      
+      return true;
     });
 
-    console.log(`🎯 New Products API: ${validProducts.length} products with valid image URLs from ${newProducts?.length || 0} total products checked`);
+    // Take only the requested limit
+    const products = uniqueProducts.slice(0, limit);
 
-    // Take only the requested number
-    const finalProducts = validProducts.slice(0, limit);
+    console.log(`🎯 Fresh Drops API: Retrieved ${products.length} unique active products (no batteries, no duplicates)`);
 
     return NextResponse.json({
-      products: finalProducts,
-      total: finalProducts.length,
-      message: 'New products retrieved successfully'
+      products: products,
+      total: products.length,
+      message: 'Fresh drops products retrieved successfully'
     });
 
   } catch (error) {
-    console.error('Error in new products API:', error);
+    console.error('Error in fresh drops API:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
