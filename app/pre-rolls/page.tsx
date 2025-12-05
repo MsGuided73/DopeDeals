@@ -8,15 +8,17 @@ import GlobalMasthead from '../components/GlobalMasthead'
 import AgeVerification from '../components/AgeVerification'
 
 interface Product {
-  id: string
+  id: number
   name: string
-  description: string | null
-  price: string
-  vip_price: string | null
-  image_url: string | null
-  sku: string | null
-  stock_quantity: number | null
-  is_active: boolean
+  description: string
+  short_description?: string
+  our_price: number
+  sale_price?: number
+  image_url?: string
+  image_urls?: string[]
+  sku: string
+  stock_quantity: number
+  brand_name?: string
 }
 
 export default function PreRollsPage() {
@@ -28,9 +30,9 @@ export default function PreRollsPage() {
     async function fetchPreRolls() {
       try {
         const { data, error } = await supabaseBrowser
-          .from('products')
-          .select('id, name, description, price, vip_price, image_url, sku, stock_quantity, is_active')
-          .or('name.ilike.%pre-roll%, name.ilike.%preroll%, description.ilike.%pre-roll%, description.ilike.%preroll%')
+          .from('main_site_products')
+          .select('id, name, description, short_description, our_price, sale_price, image_url, image_urls, sku, stock_quantity, brand_name')
+          .or('name.ilike.%pre-roll%,name.ilike.%preroll%,description.ilike.%pre-roll%,description.ilike.%preroll%')
           .eq('is_active', true)
           .order('name')
 
@@ -179,11 +181,11 @@ export default function PreRollsPage() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <span className="text-dope-orange-500 font-bold text-xl">
-                        ${parseFloat(product.price).toFixed(2)}
+                        ${product.sale_price ? product.sale_price.toFixed(2) : product.our_price.toFixed(2)}
                       </span>
-                      {product.vip_price && (
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                          VIP: ${parseFloat(product.vip_price).toFixed(2)}
+                      {product.sale_price && product.sale_price < product.our_price && (
+                        <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                          ${product.our_price.toFixed(2)}
                         </span>
                       )}
                     </div>
