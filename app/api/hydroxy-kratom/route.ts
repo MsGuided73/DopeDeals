@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
 
     // Query products containing 7-OH, 7-Hydroxymitragynine, or kratom keywords
     // Search in name, description, and short_description fields
+    // NOTE: Removed is_active filter to show ALL kratom/hydroxy products
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -49,7 +50,6 @@ export async function GET(req: NextRequest) {
         created_at,
         updated_at
       `)
-      .eq('is_active', true)
       .or('name.ilike.%7-OH%,name.ilike.%7-Hydroxymitragynine%,name.ilike.%kratom%,description.ilike.%7-OH%,description.ilike.%7-Hydroxymitragynine%,description.ilike.%kratom%,short_description.ilike.%7-OH%,short_description.ilike.%7-Hydroxymitragynine%,short_description.ilike.%kratom%')
       .order('created_at', { ascending: false })
       .limit(limit * 2) // Fetch more to account for filtering
@@ -78,10 +78,10 @@ export async function GET(req: NextRequest) {
     const products = productsWithImages.slice(0, limit);
 
     // Get total count for pagination info
+    // NOTE: Removed is_active filter to count ALL kratom/hydroxy products
     const { count } = await supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
       .or('name.ilike.%7-OH%,name.ilike.%7-Hydroxymitragynine%,name.ilike.%kratom%,description.ilike.%7-OH%,description.ilike.%7-Hydroxymitragynine%,description.ilike.%kratom%,short_description.ilike.%7-OH%,short_description.ilike.%7-Hydroxymitragynine%,short_description.ilike.%kratom%');
 
     return NextResponse.json({
