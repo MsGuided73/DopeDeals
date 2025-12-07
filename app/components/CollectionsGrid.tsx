@@ -77,7 +77,7 @@ export default function CollectionsGrid() {
                   <h1
                     className="text-white text-xl sm:text-2xl font-black text-left leading-tight whitespace-pre-line"
                     style={{
-                      fontFamily: "'Grossura', 'Inter', system-ui, sans-serif",
+                      fontFamily: "'Juicy-Fills', 'Inter', system-ui, sans-serif",
                       textShadow:
                         "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
                       fontWeight: "900",
@@ -144,7 +144,7 @@ export default function CollectionsGrid() {
                   <h1
                     className="text-white text-2xl xl:text-3xl 2xl:text-4xl font-black text-left leading-tight whitespace-pre-line"
                     style={{
-                      fontFamily: "'Grossura', 'Inter', system-ui, sans-serif",
+                      fontFamily: "'Juicy-Fills', 'Inter', system-ui, sans-serif",
                       textShadow:
                         "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
                       fontWeight: "900",
