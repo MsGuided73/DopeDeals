@@ -26,6 +26,15 @@
   font-display: swap;
 }
 
+/* Grossura Font - For Collections Grid Labels and Section Headers */
+@font-face {
+  font-family: 'Grossura';
+  src: url('/fonts/Grossura.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @keyframes scroll-horizontal {
   0% {
     transform: translateX(0);
@@ -93,6 +102,14 @@ body, p, .text-sm, .text-xs, .text-base {
 .font-display-chalets,
 .font-display-chalets * {
   font-family: 'Chalets', 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Grossura font for section headers and collection labels */
+.font-display-grossura,
+.font-display-grossura * {
+  font-family: 'Grossura', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.02em !important;
 }
