@@ -115,6 +115,14 @@ body, p, .text-sm, .text-xs, .text-base {
   letter-spacing: -0.02em !important;
 }
 
+/* System font for section headings that should not use global font rules */
+.font-system-heading,
+.font-system-heading * {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: 0.01em !important;
+}
+
 /* IMPORTANT: Force INTER font for specific blog section subtitle - do not change */
 .blog-subtitle-inter {
   font-family: 'Inter', system-ui, sans-serif !important;
