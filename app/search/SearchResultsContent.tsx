@@ -72,6 +72,10 @@ export default function SearchResultsContent() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
+  const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [filters, setFilters] = useState<SearchFilters>({
@@ -164,10 +168,14 @@ export default function SearchResultsContent() {
         setResults(transformedResults);
         setTotal(data.total);
         setTotalPages(Math.ceil(data.total / 24));
+        setMinPrice(data.min_price);
+        setMaxPrice(data.max_price);
       } else {
         console.error('Search error:', data.error);
         setResults([]);
         setTotal(0);
+        setMinPrice(null);
+        setMaxPrice(null);
       }
     } catch (error) {
       console.error('Search request failed:', error);
@@ -216,6 +224,27 @@ export default function SearchResultsContent() {
     performSearch(searchQuery, filters, newSort);
   }, [searchQuery, filters, performSearch]);
 
+  // Fetch suggestions when no results are found
+  const fetchSuggestions = useCallback(async (query: string) => {
+    if (!query || query.length < 1) return;
+
+    setLoadingSuggestions(true);
+    try {
+      const response = await fetch(`/api/search/autosuggest?q=${encodeURIComponent(query)}&limit=6`);
+      if (response.ok) {
+        const data = await response.json();
+        setSuggestions(data.suggestions || []);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      setSuggestions([]);
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  }, []);
+
   // Initial search on mount
   useEffect(() => {
     const query = searchParams.get('q') || '';
@@ -224,6 +253,15 @@ export default function SearchResultsContent() {
       performSearch(query, filters, sortBy);
     }
   }, [searchParams, filters, sortBy, performSearch]);
+
+  // Fetch suggestions when search has no results
+  useEffect(() => {
+    if (!loading && results.length === 0 && searchQuery && searchQuery.length >= 2) {
+      fetchSuggestions(searchQuery);
+    } else {
+      setSuggestions([]);
+    }
+  }, [loading, results.length, searchQuery, fetchSuggestions]);
 
   // Get result type icon
   const getResultTypeIcon = (type: string) => {
@@ -376,7 +414,14 @@ export default function SearchResultsContent() {
 
               {/* Price Range */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Price Range
+                  {minPrice !== null && maxPrice !== null && (
+                    <span className="text-xs text-gray-500 ml-2">
+                      (${minPrice.toFixed(2)} - ${maxPrice.toFixed(2)})
+                    </span>
+                  )}
+                </label>
                 <div className="space-y-2">
                   <select
                     value={`${filters.priceMin || ''}-${filters.priceMax || ''}`}
@@ -396,17 +441,21 @@ export default function SearchResultsContent() {
                   <div className="flex gap-2">
                     <Input
                       type="number"
-                      placeholder="Min"
+                      placeholder={minPrice !== null ? `Min: $${minPrice.toFixed(2)}` : "Min"}
                       value={filters.priceMin}
                       onChange={(e) => handleFilterChange('priceMin', e.target.value)}
                       className="w-full text-sm"
+                      min={minPrice || 0}
+                      step="0.01"
                     />
                     <Input
                       type="number"
-                      placeholder="Max"
+                      placeholder={maxPrice !== null ? `Max: $${maxPrice.toFixed(2)}` : "Max"}
                       value={filters.priceMax}
                       onChange={(e) => handleFilterChange('priceMax', e.target.value)}
                       className="w-full text-sm"
+                      max={maxPrice || undefined}
+                      step="0.01"
                     />
                   </div>
                 </div>
@@ -566,12 +615,66 @@ export default function SearchResultsContent() {
           <div className="text-center py-12">
             <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No results found
+              No results found for "{searchQuery}"
             </h3>
             <p className="text-gray-600 mb-6">
-              Try adjusting your search terms or filters.
+              Try adjusting your search terms or filters, or check out these suggestions:
             </p>
-            <Button 
+
+            {/* Search Suggestions */}
+            {loadingSuggestions ? (
+              <div className="flex items-center justify-center mb-6">
+                <Loader2 className="w-5 h-5 animate-spin mr-2 text-dope-orange-500" />
+                <span className="text-sm text-gray-600">Loading suggestions...</span>
+              </div>
+            ) : suggestions.length > 0 ? (
+              <div className="mb-6">
+                <h4 className="text-sm font-medium text-gray-700 mb-3">Did you mean:</h4>
+                <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={`${suggestion.type}-${suggestion.text}-${index}`}
+                      onClick={() => {
+                        setSearchQuery(suggestion.text);
+                        performSearch(suggestion.text, filters, sortBy);
+                        updateURL(suggestion.text, filters);
+                      }}
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                    >
+                      {suggestion.type === 'product' && suggestion.image_url ? (
+                        <div className="w-4 h-4 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                          <Image
+                            src={suggestion.image_url}
+                            alt={suggestion.text}
+                            width={16}
+                            height={16}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#dcfce7' }}>
+                          {suggestion.type === 'brand' ? (
+                            <Tag className="w-3 h-3" style={{ color: '#2d8f47' }} />
+                          ) : suggestion.type === 'popular' ? (
+                            <Search className="w-3 h-3" style={{ color: '#2d8f47' }} />
+                          ) : (
+                            <Package className="w-3 h-3" style={{ color: '#2d8f47' }} />
+                          )}
+                        </div>
+                      )}
+                      <span>{suggestion.text}</span>
+                      {suggestion.count && suggestion.count > 1 && (
+                        <span className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
+                          {suggestion.count}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            <Button
               onClick={() => {
                 setSearchQuery('');
                 setFilters({

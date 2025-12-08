@@ -26,7 +26,7 @@ const Body = z.object({
   page_size: z.number().int().min(1).max(100).optional().default(24),
 });
 
-const PRICE_EXPR = "coalesce(sale_price, our_price, their_price, fire_price)";
+const PRICE_EXPR = "coalesce(sale_price, our_price)";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
@@ -67,7 +67,6 @@ export async function POST(req: Request) {
           "sale_price",
           "our_price",
           "their_price",
-          "fire_price",
           "inventory_status",
           "stock_quantity",
           "is_active",
@@ -81,12 +80,8 @@ export async function POST(req: Request) {
 
     if (category) q1 = q1.eq("category_slug", category);
 
-    if (useFts) {
-      q1 = (q1 as any).textSearch("search_vec", queryText, {
-        type: "websearch",
-        config: "english",
-      });
-    } else if (queryText) {
+    // Temporarily disable FTS until search_vec column is properly configured
+    if (queryText) {
       const like = `%${queryText}%`;
       q1 = q1.or([
         `name.ilike.${like}`,
@@ -95,7 +90,7 @@ export async function POST(req: Request) {
       ].join(","));
     }
 
-    if (filters?.brand_slug?.length) q1 = q1.in("brand_slug", filters.brand_slug);
+    if (filters?.brand_slug?.length) q1 = q1.in("brand_name", filters.brand_slug);
     if (typeof filters?.price_min === "number")
       q1 = q1.gte(PRICE_EXPR as any, filters.price_min as any);
     if (typeof filters?.price_max === "number")
@@ -135,7 +130,7 @@ export async function POST(req: Request) {
       case "relevance":
       default:
         q1 = q1
-          .order("featured_product", { ascending: false })
+          .order("featured", { ascending: false })
           .order("image_url", { ascending: false, nullsFirst: false })
           .order("created_at", { ascending: false });
     }
@@ -151,19 +146,28 @@ export async function POST(req: Request) {
       brand_name: r.brand_name ?? null,
       brand_slug: r.brand_slug ?? null,
       image_url: r.image_url ?? null,
-      price:
-        r.sale_price ?? r.our_price ?? r.their_price ?? r.fire_price ?? null,
+      price: r.sale_price ?? r.our_price ?? null,
       inventory_status: r.inventory_status ?? null,
       stock_quantity: r.stock_quantity ?? null,
       is_active: !!r.is_active,
       created_at: r.created_at ?? null,
     }));
 
+    // Calculate min and max prices from the current result set
+    const prices = items
+      .map(item => item.price)
+      .filter(price => price !== null && typeof price === 'number' && !isNaN(price));
+
+    const min_price = prices.length > 0 ? Math.min(...prices) : null;
+    const max_price = prices.length > 0 ? Math.max(...prices) : null;
+
     return NextResponse.json({
       items,
       total: count ?? items.length,
       page,
       page_size: limit,
+      min_price,
+      max_price,
     });
   } catch (e: any) {
     if (process.env.NODE_ENV !== "production") {

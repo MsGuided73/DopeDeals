@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
   // Get password from environment variable, default to "Hittheroad420" for local dev
   const SITE_PASSWORD = process.env.SITE_PASSWORD || "Hittheroad420";
 
-  // Paths that are always allowed (static assets, etc.)
+  // Paths that are always allowed (static assets, API routes, etc.)
   const alwaysAllowedPaths = [
     '/_next/',
     '/favicon',
@@ -22,8 +22,8 @@ export async function middleware(request: NextRequest) {
     '/auth/login'
   ];
 
-  // Check if requested path is always allowed
-  const isAlwaysAllowed = alwaysAllowedPaths.some(path => pathname.startsWith(path));
+  // Check if requested path is always allowed OR is an API route
+  const isAlwaysAllowed = alwaysAllowedPaths.some(path => pathname.startsWith(path)) || pathname.startsWith('/api/');
 
   if (!isAlwaysAllowed && pathname !== '/auth/login') {
     // Check for site-password cookie

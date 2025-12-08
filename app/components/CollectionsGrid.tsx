@@ -4,18 +4,18 @@ import React from "react";
 
 export default function CollectionsGrid() {
   const categories = [
-    { name: "LEGAL\nTHCA FLOWER", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
+    { name: "THCA FLOWER", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
     { name: "PRE-ROLLS", route: "/pre-rolls", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/brands/Cookies/cookies-thc-a-slim-pre-rolls-3-5g-5ct.webp" },
     { name: "THCA VAPES", route: "/thca_pnv", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/RUNTZ-3.5G-SINGLES.webp" },
-    { name: "SHROOMS &\nSTUFF", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
-    { name: "KRATOM &\n7-OH", route: "/7-hydroxymitragynine", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
-    { name: "EDIBLES,\nSALVES &\nTINCTURES", route: "/edibles", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
-    { name: "NITROUS\nOXIDE", route: "/nitrous-oxide", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
+    { name: "SHROOMS\n& STUFF", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
+    { name: "KRATOM\n& 7-OH", route: "/7-hydroxymitragynine", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
+    { name: "EDIBLES\n& MORE", route: "/edibles", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
+    { name: "N2O", route: "/nitrous-oxide", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
     { name: "ACCESSORIES", route: "/accessories", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
   ];
 
   const logoPath =
-    "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/puffco_ad3.jpg";
+    "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/AdobeStock_1060112988.jpeg";
 
   return (
     // Lower z-index so dropdown menus can appear on top
@@ -59,7 +59,7 @@ export default function CollectionsGrid() {
               {/* SHOP Button - Top Left */}
               <div className="absolute top-3 left-3 z-10">
                 <button
-                  className="bg-black text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg hover:bg-gray-800 transition-colors"
+                  className="bg-transparent text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg hover:bg-gray-800 transition-colors opacity-0"
                   onClick={(e) => {
                     e.stopPropagation();
                     window.location.href = cat.route;
@@ -71,22 +71,6 @@ export default function CollectionsGrid() {
 
               {/* Dimmer overlay — non-interactive */}
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-300" />
-              {/* Title layer — non-interactive */}
-              <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
-                <div className="bg-black/20 rounded-xl px-3 py-2">
-                  <h1
-                    className="text-white text-xl sm:text-2xl font-black text-left leading-tight whitespace-pre-line"
-                    style={{
-                      fontFamily: "'Juicy-Fills', 'Inter', system-ui, sans-serif",
-                      textShadow:
-                        "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
-                      fontWeight: "900",
-                    }}
-                  >
-                    {cat.name}
-                  </h1>
-                </div>
-              </div>
 
             </a>
           ))}
@@ -128,7 +112,7 @@ export default function CollectionsGrid() {
               {/* SHOP Button - Top Left */}
               <div className="absolute top-3 left-3 z-10">
                 <button
-                  className="bg-black text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg hover:bg-gray-800 transition-colors"
+                  className="bg-transparent text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg hover:bg-gray-800 transition-colors opacity-0"
                   onClick={(e) => {
                     e.stopPropagation();
                     window.location.href = cat.route;
@@ -139,21 +123,6 @@ export default function CollectionsGrid() {
               </div>
 
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
-              <div className="absolute inset-0 flex items-end justify-start p-2 z-10 pointer-events-none">
-                <div className="bg-black/30 rounded-lg px-3 py-2">
-                  <h1
-                    className="text-white text-2xl xl:text-3xl 2xl:text-4xl font-black text-left leading-tight whitespace-pre-line"
-                    style={{
-                      fontFamily: "'Juicy-Fills', 'Inter', system-ui, sans-serif",
-                      textShadow:
-                        "2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5)",
-                      fontWeight: "900",
-                    }}
-                  >
-                    {cat.name}
-                  </h1>
-                </div>
-              </div>
 
             </a>
           ))}
