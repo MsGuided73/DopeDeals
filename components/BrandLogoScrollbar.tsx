@@ -59,6 +59,11 @@ const brandLogos: BrandLogo[] = [
     name: "Urth Farmacy",
     logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Urth_Farmacy_logo.webp",
     alt: "Urth Farmacy Brand Logo"
+  },
+  {
+    name: "Juicy Fills Studio",
+    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/juicy-fills-logo.webp",
+    alt: "Juicy Fills Studio Brand Logo"
   }
 ];
 

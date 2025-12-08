@@ -72,7 +72,7 @@ export default function CollectionsGrid() {
               {/* Category Name Label - Bottom Center */}
               <div className="absolute bottom-0 left-0 right-0 z-10">
                 <div className="bg-black/70 backdrop-blur-sm px-3 py-2 text-center">
-                  <div className="text-white text-lg font-display-juicy-fills leading-tight">
+                  <div className="text-white text-4xl md:text-5xl font-display-juicy-fills leading-tight">
                     {cat.name.split('\n').map((line, index) => (
                       <div key={index}>{line}</div>
                     ))}
@@ -136,7 +136,7 @@ export default function CollectionsGrid() {
               {/* Category Name Label - Bottom Center */}
               <div className="absolute bottom-0 left-0 right-0 z-10">
                 <div className="bg-black/70 backdrop-blur-sm px-3 py-2 text-center">
-                  <div className="text-white text-lg font-display-juicy-fills leading-tight">
+                  <div className="text-white text-4xl md:text-5xl font-display-juicy-fills leading-tight">
                     {cat.name.split('\n').map((line, index) => (
                       <div key={index}>{line}</div>
                     ))}
