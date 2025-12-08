@@ -190,8 +190,33 @@ export default function Highway420Footer() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/thca_pnv" className="text-gray-800 hover:text-green-600">
+                    THCA VAPES
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/7-hydroxymitragynine" className="text-gray-800 hover:text-green-600">
+                    KRATOM & 7-OH
+                  </Link>
+                </li>
+                <li>
                   <Link href="/edibles" className="text-gray-800 hover:text-green-600">
                     EDIBLES & MORE
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/mushrooms" className="text-gray-800 hover:text-green-600">
+                    MUSHROOMS
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/nitrous-oxide" className="text-gray-800 hover:text-green-600">
+                    N2O
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/accessories" className="text-gray-800 hover:text-green-600">
+                    ACCESSORIES
                   </Link>
                 </li>
               </ul>
