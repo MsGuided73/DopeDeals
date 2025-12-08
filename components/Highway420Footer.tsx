@@ -180,18 +180,18 @@ export default function Highway420Footer() {
               <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "Inter, sans-serif !important" }}>SHOP NOW</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/thca" className="text-gray-800 hover:text-green-600">
-                    THCA & More
+                  <Link href="/thca_flower" className="text-gray-800 hover:text-green-600">
+                    THCA FLOWER
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bongs" className="text-gray-800 hover:text-green-600">
-                    Bongs
+                  <Link href="/pre-rolls" className="text-gray-800 hover:text-green-600">
+                    PRE-ROLLS
                   </Link>
                 </li>
                 <li>
-                  <Link href="/pipes" className="text-gray-800 hover:text-green-600">
-                    Pipes
+                  <Link href="/edibles" className="text-gray-800 hover:text-green-600">
+                    EDIBLES & MORE
                   </Link>
                 </li>
               </ul>

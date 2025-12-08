@@ -19,7 +19,7 @@ export default function CollectionsGrid() {
 
   return (
     // Lower z-index so dropdown menus can appear on top
-    <div className="relative w-full px-2 pb-4" style={{ marginTop: '15px' }}>
+    <div className="relative w-full px-0 pb-4" style={{ marginTop: '15px' }}>
       {/* Mobile: Stack vertically */}
       <div className="block lg:hidden space-y-2">
         {/* Large hero image first on mobile */}
@@ -69,6 +69,17 @@ export default function CollectionsGrid() {
                 </button>
               </div>
 
+              {/* Category Name Label - Bottom Center */}
+              <div className="absolute bottom-0 left-0 right-0 z-10">
+                <div className="bg-black/70 backdrop-blur-sm px-3 py-2 text-center">
+                  <div className="text-white text-lg font-display-juicy-fills leading-tight">
+                    {cat.name.split('\n').map((line, index) => (
+                      <div key={index}>{line}</div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {/* Dimmer overlay — non-interactive */}
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-300" />
 
@@ -79,7 +90,7 @@ export default function CollectionsGrid() {
 
       {/* Desktop: Full-width grid layout */}
       <div className="hidden lg:block w-full">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-screen-2xl mx-auto px-2">
           <div className="grid grid-cols-4 gap-2 h-[90vh] w-full">
           <a
             href="/ride-with-us"
@@ -120,6 +131,17 @@ export default function CollectionsGrid() {
                 >
                   {cat.route === '/thca_pnv' ? 'VAPES' : 'SHOP'}
                 </button>
+              </div>
+
+              {/* Category Name Label - Bottom Center */}
+              <div className="absolute bottom-0 left-0 right-0 z-10">
+                <div className="bg-black/70 backdrop-blur-sm px-3 py-2 text-center">
+                  <div className="text-white text-lg font-display-juicy-fills leading-tight">
+                    {cat.name.split('\n').map((line, index) => (
+                      <div key={index}>{line}</div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300" />
