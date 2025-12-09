@@ -118,7 +118,7 @@ export default function ContactPage() {
                     <Mail className="w-6 h-6 text-dope-orange-500 mr-4 mt-1" />
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white font-inter">Email</h3>
-                      <p className="text-gray-600 dark:text-gray-300 font-inter">support@sierrawestdistro.com</p>
+                      <p className="text-gray-600 dark:text-gray-300 font-inter">bmbwholesale2025@gmail.com</p>
                       <p className="text-sm text-gray-500 dark:text-gray-400 font-inter">We respond within 24 hours</p>
                     </div>
                   </div>
@@ -127,7 +127,7 @@ export default function ContactPage() {
                     <Phone className="w-6 h-6 text-dope-orange-500 mr-4 mt-1" />
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white font-inter">Phone</h3>
-                      <p className="text-gray-600 dark:text-gray-300 font-inter">1-800-420 HIGH</p>
+                      <p className="text-gray-600 dark:text-gray-300 font-inter">(626) 656-6287</p>
                       <p className="text-sm text-gray-500 dark:text-gray-400 font-inter">Mon-Fri 9AM-6PM EST</p>
                     </div>
                   </div>

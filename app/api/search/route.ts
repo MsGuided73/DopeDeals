@@ -70,6 +70,8 @@ export async function POST(req: Request) {
           "inventory_status",
           "stock_quantity",
           "is_active",
+          "nicotine_product",
+          "tobacco_product",
           "created_at",
         ].join(","),
         { count: "exact" }

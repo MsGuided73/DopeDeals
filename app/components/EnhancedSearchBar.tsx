@@ -242,9 +242,25 @@ export default function EnhancedSearchBar() {
 
     setShowSuggestions(false)
 
+    // Check if search query should redirect to specialized pages
+    const queryLower = searchQuery.toLowerCase().trim();
+
+    // Check for 7-hydroxy/hydroxymitragynine keywords
+    const hydroxyKeywords = ['7-oh', '7-hydroxy', '7 hydroxymitragynine', 'hydroxymitragynine', '7hydroxy'];
+    const shouldRedirectToHydroxy = hydroxyKeywords.some(keyword => queryLower.includes(keyword));
+
+    if (shouldRedirectToHydroxy) {
+      // Redirect to 7-Hydroxymitragynine page
+      if (typeof window !== 'undefined' && router) {
+        router.push('/7-hydroxymitragynine')
+      } else {
+        window.location.href = '/7-hydroxymitragynine'
+      }
+      return
+    }
+
     // Check if search query should redirect to THCA page
     const thcaKeywords = ['thca', 'prerolls', 'vapes', 'cartridges', 'disposable'];
-    const queryLower = searchQuery.toLowerCase().trim();
     const shouldRedirectToThca = thcaKeywords.some(keyword =>
       queryLower.includes(keyword) &&
       (queryLower.includes('preroll') || queryLower.includes('vape') ||
@@ -262,7 +278,7 @@ export default function EnhancedSearchBar() {
       return
     }
 
-    // Record search analytics
+    // Record search analytics (optional - ignore if endpoint doesn't exist)
     try {
       if (typeof window !== 'undefined') {
         fetch('/api/search/analytics', {
@@ -283,6 +299,7 @@ export default function EnhancedSearchBar() {
     params.set('q', searchQuery.trim())
 
     const searchUrl = `/search?${params.toString()}`
+sn
     if (typeof window !== 'undefined' && router) {
       router.push(searchUrl)
     } else {
@@ -307,8 +324,8 @@ export default function EnhancedSearchBar() {
   const currentPlaceholder = `Search Highway 420 for ${displayText}`
 
   return (
-    <div className="relative max-w-xl w-full mx-auto mt-2">
-      <form onSubmit={handleSearch} className="flex bg-white rounded-2xl shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl">
+    <div className="relative max-w-2xl w-full mx-auto mt-2 mb-6">
+      <form onSubmit={handleSearch} className="flex bg-white rounded-2xl shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl gradient-3d">
         {/* Search Input */}
         <div className="flex-1 relative">
           <input
@@ -318,7 +335,7 @@ export default function EnhancedSearchBar() {
             onKeyDown={handleKeyDown}
             onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
             placeholder={currentPlaceholder}
-            className="w-full px-6 py-0 h-6 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold leading-tight"
+            className="w-full px-6 py-4 h-9 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold leading-tight"
             aria-label="Search Highway 420 products"
             role="searchbox"
             autoComplete="off"
@@ -397,7 +414,10 @@ export default function EnhancedSearchBar() {
         {/* Search Button */}
         <button
           type="submit"
-          onClick={() => handleSearch()}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
           aria-label="Search"
           className="ml-1 mr-1 rounded-full w-6 h-6 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
         >

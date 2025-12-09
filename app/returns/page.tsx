@@ -251,18 +251,23 @@ export default function ReturnsPage() {
               Our customer service team is ready to help you with your return or exchange.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-dope-orange-500 hover:bg-gray-100 px-8 py-3 rounded-lg font-bold text-lg transition-colors">
+              <a
+                href="/returns/start"
+                className="bg-white text-dope-orange-500 hover:bg-gray-100 px-8 py-3 rounded-lg font-bold text-lg transition-colors text-center"
+              >
                 Start Return
-              </button>
+              </a>
               <button className="border-2 border-white text-white hover:bg-white hover:text-dope-orange-500 px-8 py-3 rounded-lg font-bold text-lg transition-colors">
                 Contact Support
               </button>
             </div>
             <div className="mt-8 text-sm leading-relaxed">
               <p className="font-semibold">Mailing Address:</p>
-              <p>BMB Wholesale, Inc</p>
+              <p>BMB Wholesale, Inc.</p>
               <p>10 Manor Pkwy</p>
               <p>Salem, NH 03079</p>
+              <p className="mt-2"><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
+              <p><strong>Phone:</strong> (626) 656-6287</p>
             </div>
           </div>
 

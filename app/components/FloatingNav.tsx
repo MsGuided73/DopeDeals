@@ -135,9 +135,9 @@ export default function FloatingNav() {
         </div>
 
         {/* Simple links matching GlobalMasthead */}
-        <Link href="/pre-rolls" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
-          Pre-Rolls
-        </Link>
+                <Link href="/thca_pnv" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
+                  Pre-Rolls & Vapes
+                </Link>
         <Link href="/7-hydroxymitragynine" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
           Kratom & 7-OH
         </Link>

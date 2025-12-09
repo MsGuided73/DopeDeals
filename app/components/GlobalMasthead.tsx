@@ -240,8 +240,8 @@ export default function GlobalMasthead() {
               </div>
 
               {/* Simple links */}
-              <Link href="/pre-rolls" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
-                Pre-Rolls
+              <Link href="/thca_pnv" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
+                Pre-Rolls & Vapes
               </Link>
               <Link href="/7-hydroxymitragynine" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
                 Kratom & 7-OH
@@ -382,8 +382,8 @@ export default function GlobalMasthead() {
                 </div>
               </div>
 
-              <Link href="/pre-rolls" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Pre-Rolls
+              <Link href="/thca_pnv" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Pre-Rolls & Vapes
               </Link>
               <Link href="/7-hydroxymitragynine" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Kratom & 7-OH
@@ -491,8 +491,8 @@ export default function GlobalMasthead() {
                       <Link href="/edibles" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
                         🌟 CBD Tinctures & Salves
                       </Link>
-                      <Link href="/pre-rolls" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
-                        🌟 Premium Pre-Rolls
+                      <Link href="/thca_pnv" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
+                        🌟 Premium Pre-Rolls & Vapes
                       </Link>
                       <Link href="/nitrous-oxide" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
                         🌟 Nitrous Oxide
@@ -541,9 +541,9 @@ export default function GlobalMasthead() {
                     <div className="text-2xl mb-2">🍬</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Edibles & CBD</div>
                   </Link>
-                  <Link href="/pre-rolls" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🚬</div>
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">Pre-Rolls</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Pre-Rolls & Vapes</div>
                   </Link>
                   <Link href="/nitrous-oxide" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">💫</div>

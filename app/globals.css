@@ -185,6 +185,60 @@ body, p, .text-sm, .text-xs, .text-base {
               0 15px 35px -5px rgba(0, 0, 0, 0.0 0.0 0.15);
 }
 
+/* 3D Gradient Animation for Search Bar */
+@keyframes gradient-3d {
+  0% {
+    background-position: 0% 50%;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+    box-shadow: 0 0 0 0 rgba(94, 180, 153, 0.4);
+  }
+  25% {
+    background-position: 100% 50%;
+    transform: perspective(1000px) rotateX(1deg) rotateY(-1deg);
+    box-shadow: 0 0 20px 5px rgba(94, 180, 153, 0.2);
+  }
+  50% {
+    background-position: 100% 0%;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+    box-shadow: 0 0 30px 8px rgba(94, 180, 153, 0.3);
+  }
+  75% {
+    background-position: 0% 100%;
+    transform: perspective(1000px) rotateX(-1deg) rotateY(1deg);
+    box-shadow: 0 0 20px 5px rgba(94, 180, 153, 0.2);
+  }
+  100% {
+    background-position: 0% 50%;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+    box-shadow: 0 0 0 0 rgba(94, 180, 153, 0.4);
+  }
+}
+
+.gradient-3d {
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 1),
+    rgba(94, 180, 153, 0.1),
+    rgba(255, 154, 22, 0.05),
+    rgba(94, 180, 153, 0.1),
+    rgba(255, 255, 255, 1)
+  );
+  background-size: 400% 400%;
+  animation: gradient-3d 8s ease-in-out infinite;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+.gradient-3d:hover {
+  animation-duration: 4s;
+  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateZ(10px);
+}
+
+.gradient-3d:focus-within {
+  animation-duration: 3s;
+  transform: perspective(1000px) rotateX(1deg) rotateY(-1deg) translateZ(5px);
+}
+
 @layer base {
   :root {
     /* HIGHWAY 420 Color Scheme */

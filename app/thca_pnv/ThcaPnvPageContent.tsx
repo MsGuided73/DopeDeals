@@ -53,7 +53,7 @@ export default function ThcaPnvPageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
 
-  // Filter states - cloned from BongsFilters
+  // Filter states - enhanced for THCA products
   const [filters, setFilters] = useState({
     priceRange: [0, 200] as [number, number],
     brands: [] as string[],
@@ -64,6 +64,7 @@ export default function ThcaPnvPageContent() {
     inStock: false,
     onSale: false,
     isNew: false,
+    productType: 'all' as 'all' | 'prerolls' | 'vapes', // New filter for separating prerolls and vapes
   });
 
   useEffect(() => {
@@ -75,7 +76,43 @@ export default function ThcaPnvPageContent() {
     // Apply filters and sorting
     let filtered = [...products];
 
-    // Apply filters - using available fields from API
+    // Separate prerolls and vapes first
+    let prerolls: ThcaPnvProduct[] = [];
+    let vapes: ThcaPnvProduct[] = [];
+
+    filtered.forEach(product => {
+      const nameLower = product.name.toLowerCase();
+      const type = extractTypeFromName(product.name);
+
+      if (type === 'Preroll' || nameLower.includes('preroll') || nameLower.includes('pre-roll')) {
+        prerolls.push(product);
+      } else if (type === 'Cartridge' || type === 'Disposable' || type === 'Vaporizer' ||
+                 nameLower.includes('cartridge') || nameLower.includes('disposable') ||
+                 nameLower.includes('vape') || nameLower.includes('cart')) {
+        vapes.push(product);
+      } else {
+        // If type is unclear, check if it mentions vape-related terms
+        if (nameLower.includes('thc') || nameLower.includes('cbd') ||
+            nameLower.includes('vapor') || nameLower.includes('inhale')) {
+          vapes.push(product);
+        } else {
+          // Default to preroll if unclear
+          prerolls.push(product);
+        }
+      }
+    });
+
+    // Apply product type filter (prerolls, vapes, or all)
+    if (filters.productType === 'prerolls') {
+      filtered = prerolls;
+    } else if (filters.productType === 'vapes') {
+      filtered = vapes;
+    } else {
+      // 'all' - combine both
+      filtered = [...prerolls, ...vapes];
+    }
+
+    // Apply other filters - using available fields from API
     if (filters.brands.length > 0) {
       filtered = filtered.filter((p: ThcaPnvProduct) => p.brand && filters.brands.includes(p.brand));
     }
@@ -234,11 +271,69 @@ export default function ThcaPnvPageContent() {
 
           {/* Main Content */}
           <div className="lg:w-3/4">
+            {/* Product Type Tabs */}
+            <div className="mb-6">
+              <div className="border-b border-gray-200 dark:border-gray-700">
+                <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, productType: 'all' }))}
+                    className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
+                      filters.productType === 'all'
+                        ? 'border-dope-orange-500 text-dope-orange-600 dark:text-dope-orange-400'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                    }`}
+                  >
+                    All Products ({products.length})
+                  </button>
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, productType: 'prerolls' }))}
+                    className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
+                      filters.productType === 'prerolls'
+                        ? 'border-dope-orange-500 text-dope-orange-600 dark:text-dope-orange-400'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                    }`}
+                  >
+                    🌿 Prerolls ({products.filter(p => {
+                      const nameLower = p.name.toLowerCase();
+                      return extractTypeFromName(p.name) === 'Preroll' ||
+                             nameLower.includes('preroll') ||
+                             nameLower.includes('pre-roll') ||
+                             (!nameLower.includes('cartridge') && !nameLower.includes('disposable') &&
+                              !nameLower.includes('vape') && !nameLower.includes('cart'));
+                    }).length})
+                  </button>
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, productType: 'vapes' }))}
+                    className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
+                      filters.productType === 'vapes'
+                        ? 'border-dope-orange-500 text-dope-orange-600 dark:text-dope-orange-400'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                    }`}
+                  >
+                    💨 Vapes ({products.filter(p => {
+                      const nameLower = p.name.toLowerCase();
+                      const type = extractTypeFromName(p.name);
+                      return type === 'Cartridge' || type === 'Disposable' || type === 'Vaporizer' ||
+                             nameLower.includes('cartridge') || nameLower.includes('disposable') ||
+                             nameLower.includes('vape') || nameLower.includes('cart') ||
+                             (nameLower.includes('thc') || nameLower.includes('cbd') ||
+                              nameLower.includes('vapor') || nameLower.includes('inhale'));
+                    }).length})
+                  </button>
+                </nav>
+              </div>
+            </div>
+
             {/* Sort Bar and View Toggle */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div className="flex items-center gap-4">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
+                  {filters.productType !== 'all' && (
+                    <span className="ml-2 text-dope-orange-600 font-medium">
+                      ({filters.productType === 'prerolls' ? 'Prerolls' : 'Vapes'} Only)
+                    </span>
+                  )}
                 </p>
               </div>
 

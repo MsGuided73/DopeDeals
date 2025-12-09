@@ -24,21 +24,21 @@ interface Product {
   tobacco_product: boolean;
 }
 
-export default function NitrousOxidePageContent() {
+export default function AccessoriesPageContent() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchNitrousProducts();
+    fetchAccessories();
   }, []);
 
-  const fetchNitrousProducts = async () => {
+  const fetchAccessories = async () => {
     try {
       setLoading(true);
-      console.log('Fetching nitrous oxide products...');
-      const response = await fetch('/api/products/nitrous-oxide?limit=20');
+      console.log('Fetching accessories products...');
+      const response = await fetch('/api/products/accessories?limit=20');
 
       if (!response.ok) {
         let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
@@ -48,22 +48,22 @@ export default function NitrousOxidePageContent() {
         } catch (e) {
           // If we can't parse JSON, use the status text
         }
-        console.error('Nitrous oxide API error:', errorMessage);
-        throw new Error(`Failed to fetch nitrous oxide products: ${errorMessage}`);
+        console.error('Accessories API error:', errorMessage);
+        throw new Error(`Failed to fetch accessories: ${errorMessage}`);
       }
 
       const data = await response.json();
-      console.log('Nitrous oxide data received:', data);
+      console.log('Accessories data received:', data);
 
       if (!data.products) {
-        console.warn('No nitrous oxide products data received');
+        console.warn('No accessories data received');
         setProducts([]);
         return;
       }
 
       setProducts(data.products);
     } catch (err) {
-      console.error('Error fetching nitrous oxide products:', err);
+      console.error('Error fetching accessories:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ export default function NitrousOxidePageContent() {
   };
 
   const getProductDescription = (product: Product): string => {
-    return product.short_description || product.description || 'Premium quality nitrous oxide product';
+    return product.short_description || product.description || 'Premium quality smoking accessory';
   };
 
   const transformProductForCard = (product: Product) => {
@@ -97,7 +97,7 @@ export default function NitrousOxidePageContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">
+      <div className="min-h-screen bg-gradient-to-r from-emerald-400 via-green-500 to-teal-600">
         <div className="max-w-7xl mx-auto px-4 py-16">
           {/* Hero Section Skeleton */}
           <div className="text-center mb-16">
@@ -133,13 +133,13 @@ export default function NitrousOxidePageContent() {
         <div className="max-w-7xl mx-auto px-4 py-16">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-              ⚡ Premium Nitrous Oxide
+              🔧 Premium Accessories
             </h1>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-2xl mx-auto">
               <h2 className="text-2xl font-bold text-white mb-4">Oops! Something went wrong</h2>
               <p className="text-white/90 mb-6">{error}</p>
               <button
-                onClick={fetchNitrousProducts}
+                onClick={fetchAccessories}
                 className="bg-white text-purple-600 px-6 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors"
               >
                 Try Again
@@ -153,17 +153,17 @@ export default function NitrousOxidePageContent() {
 
   if (products.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">
+      <div className="min-h-screen bg-gradient-to-r from-emerald-400 via-green-500 to-teal-600">
         <div className="max-w-7xl mx-auto px-4 py-16">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-              ⚡ Premium Nitrous Oxide
+              🔧 Premium Accessories
             </h1>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-2xl mx-auto">
               <h2 className="text-3xl font-bold text-white mb-4">Coming Soon</h2>
               <p className="text-white/90 text-lg">
-                Our premium nitrous oxide collection is currently being curated.
-                We're working hard to bring you the highest quality products with discreet shipping.
+                Our premium smoking accessories collection is currently being curated.
+                We're working hard to bring you the highest quality pipes, bongs, dab rigs, grinders, and more.
               </p>
             </div>
           </div>
@@ -173,15 +173,15 @@ export default function NitrousOxidePageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">
+    <div className="min-h-screen bg-gradient-to-r from-emerald-400 via-green-500 to-teal-600">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-            ⚡ Premium Nitrous Oxide
+            🔧 Premium Accessories
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Discover our curated collection of high-quality nitrous oxide products
+            Discover our curated collection of premium smoking accessories
           </p>
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
             <span className="text-white font-medium">{products.length} Products Available</span>
@@ -208,7 +208,7 @@ export default function NitrousOxidePageContent() {
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gradient-to-br from-gray-100 to-gray-200">
                       <div className="text-center">
-                        <div className="text-6xl mb-4">🌀</div>
+                        <div className="text-6xl mb-4">🔧</div>
                         <div className="text-sm font-medium">Image Coming Soon</div>
                       </div>
                     </div>
@@ -216,7 +216,7 @@ export default function NitrousOxidePageContent() {
 
                   {/* Featured Badge */}
                   {product.featured && (
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                    <div className="absolute top-3 left-3 bg-gradient-to-r from-emerald-400 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                       ⭐ Featured
                     </div>
                   )}
@@ -230,7 +230,7 @@ export default function NitrousOxidePageContent() {
                 </div>
 
                 <div className="p-4 flex flex-col">
-                  <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-green-600 transition-colors">
                     {transformedProduct.name}
                   </h3>
 
@@ -262,7 +262,7 @@ export default function NitrousOxidePageContent() {
                     </div>
 
                     <button
-                      className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-full transition-all duration-300 text-center text-sm hover:from-cyan-600 hover:to-blue-700 hover:scale-105 hover:shadow-lg"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold rounded-full transition-all duration-300 text-center text-sm hover:from-emerald-600 hover:to-green-700 hover:scale-105 hover:shadow-lg"
                       onClick={async (e) => {
                         e.stopPropagation();
                         await addToCart(product.id);
@@ -282,11 +282,11 @@ export default function NitrousOxidePageContent() {
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold text-white mb-4">Need More Options?</h2>
             <p className="text-white/90 mb-6">
-              Check out our full catalog of premium smoking accessories and wellness products.
+              Check out our full catalog of premium smoking products and wellness items.
             </p>
             <Link
               href="/products"
-              className="inline-block bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors"
+              className="inline-block bg-white text-green-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors"
             >
               Browse All Products →
             </Link>

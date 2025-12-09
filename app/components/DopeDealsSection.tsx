@@ -103,7 +103,7 @@ export default function DopeDealsSection() {
 
   if (loading) {
     return (
-      <section className="mt-16 bg-white dark:bg-gray-950 py-12">
+    <section className="mt-16 bg-white dark:bg-gray-950 py-12">
         <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl text-black mb-4 font-display-juicy-fills">

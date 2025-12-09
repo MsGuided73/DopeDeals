@@ -343,10 +343,10 @@ export default function TermsAndConditionsPage() {
                 <p>If you have questions about these Terms, please contact us:</p>
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg mt-4">
                   <p><strong>Website:</strong> https://highway420store.com</p>
-                  <p><strong>Email:</strong> support@highway420store.com</p>
-                  <p><strong>Phone:</strong> 1-800-HIGHWAY (subject to availability)</p>
+                  <p><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
+                  <p><strong>Phone:</strong> (626) 656-6287</p>
                   <p><strong>Address:</strong></p>
-                  <p>BMB Wholesale, Inc</p>
+                  <p>BMB Wholesale, Inc.</p>
                   <p>10 Manor Pkwy</p>
                   <p>Salem, NH 03079</p>
                 </div>

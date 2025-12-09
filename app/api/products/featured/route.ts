@@ -49,6 +49,8 @@ export async function GET(req: NextRequest) {
         brand_id,
         brand_name,
         category_id,
+        nicotine_product,
+        tobacco_product,
         created_at,
         updated_at
       `)

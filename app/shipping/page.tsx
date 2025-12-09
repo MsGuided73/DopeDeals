@@ -210,9 +210,12 @@ export default function ShippingPage() {
               <button className="bg-white text-dope-orange-500 hover:bg-gray-100 px-8 py-3 rounded-lg font-bold text-lg transition-colors">
                 Contact Support
               </button>
-              <button className="border-2 border-white text-white hover:bg-white hover:text-dope-orange-500 px-8 py-3 rounded-lg font-bold text-lg transition-colors">
+              <a
+                href="/track-order"
+                className="border-2 border-white text-white hover:bg-white hover:text-dope-orange-500 px-8 py-3 rounded-lg font-bold text-lg transition-colors text-center"
+              >
                 Track Order
-              </button>
+              </a>
             </div>
             <div className="mt-8 text-sm leading-relaxed">
               <p className="font-semibold">Mailing Address:</p>
