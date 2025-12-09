@@ -568,6 +568,15 @@ body, p, .text-sm, .text-xs, .text-base {
   .highway-collection-subtext {
     margin-top: var(--spacing-text-tight);
   }
+
+  /* Scrollbar hide utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
 }
 
 /* Metallic Shimmer Animation for Section Titles */

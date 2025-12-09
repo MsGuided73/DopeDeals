@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { supabaseBrowser } from '../app/lib/supabase-browser';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Sparkles, Heart, TrendingUp, DollarSign } from 'lucide-react';
+import { Sparkles, Heart, TrendingUp, DollarSign, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ProductRecommendation {
   productId: string;
@@ -30,6 +30,7 @@ export default function ProductRecommendations({
   const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -114,6 +115,24 @@ export default function ProductRecommendations({
     }
   };
 
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: -320, // Scroll by one card width + gap
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: 320, // Scroll by one card width + gap
+        behavior: 'smooth'
+      });
+    }
+  };
+
   if (!user) {
     return (
       <Card className={className}>
@@ -193,72 +212,97 @@ export default function ProductRecommendations({
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {recommendations.map((rec) => (
-          <div
-            key={rec.productId}
-            className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer p-4 relative"
-            onClick={() => {
-              trackInteraction(rec.productId, 'view');
-              window.location.href = `/product/${rec.productId}`;
-            }}
-          >
-            {/* Favorite Button - Top Right */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                // Add to favorites logic here
+      <div className="relative">
+        {/* Left Arrow */}
+        <button
+          onClick={scrollLeft}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-700" />
+        </button>
+
+        {/* Right Arrow */}
+        <button
+          onClick={scrollRight}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
+          aria-label="Scroll right"
+        >
+          <ChevronRight className="w-5 h-5 text-gray-700" />
+        </button>
+
+        {/* Scrollable Container */}
+        <div
+          ref={scrollContainerRef}
+          className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 px-8"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {recommendations.map((rec) => (
+            <div
+              key={rec.productId}
+              className="flex-shrink-0 w-72 group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer p-4 relative"
+              onClick={() => {
+                trackInteraction(rec.productId, 'view');
+                window.location.href = `/product/${rec.productId}`;
               }}
-              className="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
             >
-              <Heart className="w-4 h-4 text-gray-600" />
-            </button>
+              {/* Favorite Button - Top Right */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Add to favorites logic here
+                }}
+                className="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
+              >
+                <Heart className="w-4 h-4 text-gray-600" />
+              </button>
 
-            <div>
-              {rec.product.image_url && (
-                <div className="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
-                  <img
-                    src={rec.product.image_url}
-                    alt={rec.product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                  />
-                </div>
-              )}
+              <div>
+                {rec.product.image_url && (
+                  <div className="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                    <img
+                      src={rec.product.image_url}
+                      alt={rec.product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                    />
+                  </div>
+                )}
 
-              <div className="space-y-2">
-                <h3 className="text-lg line-clamp-2 group-hover:text-purple-600 transition-colors font-semibold">
-                  {rec.product.name}
-                </h3>
+                <div className="space-y-2">
+                  <h3 className="text-lg line-clamp-2 group-hover:text-purple-600 transition-colors font-semibold">
+                    {rec.product.name}
+                  </h3>
 
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-green-600">
-                    ${rec.product.price}
-                  </span>
-                  {rec.product.featured && (
-                    <Badge variant="outline" className="text-xs">
-                      Featured
-                    </Badge>
-                  )}
-                </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-green-600">
+                      ${rec.product.price}
+                    </span>
+                    {rec.product.featured && (
+                      <Badge variant="outline" className="text-xs">
+                        Featured
+                      </Badge>
+                    )}
+                  </div>
 
-                <div className="pt-2">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="w-full border border-gray-300 hover:bg-gray-50"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      trackInteraction(rec.productId, 'add_to_cart');
-                      // Add to cart logic here
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
+                  <div className="pt-2">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="w-full border border-gray-300 hover:bg-gray-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        trackInteraction(rec.productId, 'add_to_cart');
+                        // Add to cart logic here
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

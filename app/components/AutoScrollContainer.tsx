@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, ReactNode, useCallback } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface AutoScrollContainerProps {
   children: ReactNode;
@@ -89,12 +90,48 @@ export default function AutoScrollContainer({
     setIsPaused(true);
   };
 
+  const scrollLeft = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollBy({
+        left: -384, // Scroll by one card width + gap (w-96 = 384px)
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollBy({
+        left: 384, // Scroll by one card width + gap (w-96 = 384px)
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div className={`relative ${className}`}>
+      {/* Left Arrow */}
+      <button
+        onClick={scrollLeft}
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
+        aria-label="Scroll left"
+      >
+        <ChevronLeft className="w-5 h-5 text-gray-700" />
+      </button>
+
+      {/* Right Arrow */}
+      <button
+        onClick={scrollRight}
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
+        aria-label="Scroll right"
+      >
+        <ChevronRight className="w-5 h-5 text-gray-700" />
+      </button>
+
       {/* Scrollable Container with duplicated content for seamless loop */}
       <div
         ref={containerRef}
-        className="flex overflow-x-hidden gap-6 pb-4 px-4"
+        className="flex overflow-x-hidden gap-6 pb-4 px-12"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleCardClick}
