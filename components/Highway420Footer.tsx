@@ -292,30 +292,10 @@ export default function Highway420Footer() {
             allowed to be shipped to the following states: HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
             Louisiana.
           </p>
-          <div className="mt-8 flex justify-center space-x-4">
+          <div className="mt-8 flex justify-center">
             <img
-              src="/Images/PaymentBadges/visa.svg"
-              alt="Visa"
-              className="h-12 w-auto object-contain drop-shadow-lg"
-            />
-            <img
-              src="/Images/PaymentBadges/mastercard.svg"
-              alt="Mastercard"
-              className="h-12 w-auto object-contain drop-shadow-lg"
-            />
-            <img
-              src="/Images/PaymentBadges/discover.svg"
-              alt="Discover"
-              className="h-12 w-auto object-contain drop-shadow-lg"
-            />
-            <img
-              src="/Images/PaymentBadges/amex.svg"
-              alt="American Express"
-              className="h-12 w-auto object-contain drop-shadow-lg"
-            />
-            <img
-              src="/Images/PaymentBadges/paypal.svg"
-              alt="PayPal"
+              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/credit-card-brands-logos-c87zqqz38n8jbptz.jpg"
+              alt="Accepted Payment Methods"
               className="h-12 w-auto object-contain drop-shadow-lg"
             />
           </div>
