@@ -23,7 +23,7 @@ const Body = z.object({
     .optional()
     .default("relevance"),
   page: z.number().int().min(1).optional().default(1),
-  page_size: z.number().int().min(1).max(100).optional().default(24),
+  page_size: z.number().int().min(1).max(1000).optional().default(48),
 });
 
 const PRICE_EXPR = "coalesce(sale_price, our_price)";

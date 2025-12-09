@@ -18,7 +18,7 @@ function calculateRelevanceScore(item: any, searchTerm: string): number {
   const description = (item.description || '').toLowerCase();
   const shortDescription = (item.short_description || '').toLowerCase();
   const manufacturer = (item.manufacturer || '').toLowerCase();
-  const category = (item.zoho_category_name || '').toLowerCase();
+  const category = (item.category_slug || '').toLowerCase();
   const dtcDescription = (item.dtc_description || '').toLowerCase();
 
   const tagsArray: string[] = Array.isArray(item.tags) ? item.tags : [];
@@ -86,13 +86,13 @@ export async function GET(request: NextRequest) {
     const searchTerm = query.toLowerCase().trim();
 
     const { data: products, error: productsError } = await supabase
-      .from('products')
+      .from('main_site_products')
       .select(`
-        id, name, brand_name, price, image_url, featured, sku, description,
-        short_description, manufacturer, zoho_category_name, tags, materials,
+        id, name, brand_name, our_price, image_url, featured, sku, description,
+        short_description, manufacturer, category_slug, tags, materials,
         stock_quantity, dtc_description, is_active
       `)
-      .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,short_description.ilike.%${searchTerm}%,manufacturer.ilike.%${searchTerm}%,zoho_category_name.ilike.%${searchTerm}%,dtc_description.ilike.%${searchTerm}%`)
+      .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%,sku.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,short_description.ilike.%${searchTerm}%,manufacturer.ilike.%${searchTerm}%,category_slug.ilike.%${searchTerm}%,dtc_description.ilike.%${searchTerm}%`)
       .eq('is_active', true)
       .limit(limit * 2);
 
@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
         id: product.id,
         title: product.name,
         subtitle: product.brand_name || 'Unknown Brand',
-        price: product.price,
+        price: product.our_price,
         image: product.image_url,
         url: `/products/${product.id}`,
         relevanceScore: calculateRelevanceScore(product, searchTerm),

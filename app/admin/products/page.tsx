@@ -72,7 +72,7 @@ export default function AdminProductsPage() {
 
       // Load products
       const { data: productsData, error: productsError } = await supabaseBrowser
-        .from('products')
+        .from('main_site_products')
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false })
@@ -134,7 +134,7 @@ export default function AdminProductsPage() {
   async function updateProductImage(productId: string, imageUrl: string) {
     try {
       const { error } = await supabaseBrowser
-        .from('products')
+        .from('main_site_products')
         .update({ image_url: imageUrl })
         .eq('id', productId);
 
@@ -155,7 +155,7 @@ export default function AdminProductsPage() {
 
     try {
       const { error } = await supabaseBrowser
-        .from('products')
+        .from('main_site_products')
         .update({ is_active: false })
         .eq('id', productId);
 
@@ -186,7 +186,7 @@ export default function AdminProductsPage() {
 
       // Load ALL products (including inactive ones) to find duplicates
       const { data: allProducts, error } = await supabaseBrowser
-        .from('products')
+        .from('main_site_products')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -249,7 +249,7 @@ export default function AdminProductsPage() {
 
     try {
       const { error } = await supabaseBrowser
-        .from('products')
+        .from('main_site_products')
         .update({ is_active: false })
         .in('id', duplicateIds);
 
@@ -309,7 +309,7 @@ export default function AdminProductsPage() {
       }
 
       const { error } = await supabaseBrowser
-        .from('products')
+        .from('main_site_products')
         .update(updateData)
         .in('id', productIds);
 

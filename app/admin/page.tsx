@@ -12,7 +12,11 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  Eye
+  Eye,
+  Plus,
+  BarChart3,
+  Activity,
+  Zap
 } from 'lucide-react';
 
 interface DashboardStats {
@@ -186,11 +190,20 @@ export default function AdminDashboardPage() {
           <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your store today.</p>
         </div>
         <div className="flex gap-3">
+          <Link
+            href="/admin/products/new"
+            className="flex items-center gap-2 bg-dope-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Add Product
+          </Link>
           <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+            <BarChart3 className="w-4 h-4 inline mr-2" />
             Export Report
           </button>
           <button className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium">
-            Settings
+            <Activity className="w-4 h-4 inline mr-2" />
+            Analytics
           </button>
         </div>
       </div>

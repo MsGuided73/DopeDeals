@@ -75,7 +75,7 @@ export default function GlobalMasthead() {
     <>
       {/* Scrolling Banner */}
       <div
-        className="bg-gradient-to-r from-green-800 via-green-700 to-green-800 text-white text-center py-1 overflow-hidden relative"
+        className="bg-gradient-to-r from-green-800 via-green-700 to-[#33ff14] text-white text-center py-1 overflow-hidden relative"
         role="banner"
         aria-label="Promotional announcements"
       >

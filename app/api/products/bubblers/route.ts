@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
         short_description,
         our_price,
         sale_price,
-        fire_price,
+        vip_price,
         image_url,
         image_urls,
         sku,
@@ -149,7 +149,7 @@ export async function GET(req: NextRequest) {
         id: product.id,
         name: product.name,
         price: parseFloat(product.our_price),
-        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        vip_price: undefined, // fire_price column doesn't exist in main_site_products
         compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         image_url: product.image_url,
         image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),

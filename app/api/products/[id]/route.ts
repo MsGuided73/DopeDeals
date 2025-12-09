@@ -6,9 +6,28 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
   try {
     const { id } = await ctx.params;
 
+    console.log('Product API: Looking up product with ID:', id);
+
     const storage = await getStorage();
     const rawProduct = await storage.getProduct(id);
-    if (!rawProduct) return NextResponse.json({ message: 'Product not found' }, { status: 404 });
+
+    if (!rawProduct) {
+      console.log('Product API: Product not found for ID:', id);
+      // Try to find similar products or provide helpful error
+      try {
+        const allProducts = await storage.getProducts();
+        console.log('Product API: Total products in database:', allProducts.length);
+        const sampleIds = allProducts.slice(0, 5).map(p => p.id);
+        console.log('Product API: Sample product IDs:', sampleIds);
+      } catch (debugError) {
+        console.log('Product API: Could not get product list for debugging');
+      }
+      return NextResponse.json({
+        message: 'Product not found',
+        productId: id,
+        suggestion: 'This product may have been removed or the ID may be incorrect'
+      }, { status: 404 });
+    }
 
     // Transform raw database fields to match expected API format
     const product = {

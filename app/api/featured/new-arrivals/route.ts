@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     const { data: products, error } = await supabase
       .from('main_site_products')
       .select(`
-        id, name, description, short_description, our_price, fire_price,
+        id, name, description, short_description, our_price,
         image_url, sku, stock_quantity, brand_name, materials,
         featured, created_at
       `)
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       const { data: fallbackProducts, error: fallbackError } = await supabase
         .from('main_site_products')
         .select(`
-          id, name, description, short_description, our_price, fire_price,
+          id, name, description, short_description, our_price,
           image_url, sku, stock_quantity, brand_name, materials,
           featured, created_at
         `)

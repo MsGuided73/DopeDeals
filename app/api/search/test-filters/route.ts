@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const testType = searchParams.get('type') || 'all';
 
     const { data: rawProducts, error } = await supabase
-      .from('products')
+      .from('main_site_products')
       .select(PRODUCT_COLUMNS)
       .eq('is_active', true)
       .not('image_url', 'is', null)
@@ -230,7 +230,7 @@ export async function POST(request: NextRequest) {
     const { filters, query } = body;
 
     const { data: rawProducts, error } = await supabase
-      .from('products')
+      .from('main_site_products')
       .select(PRODUCT_COLUMNS)
       .eq('is_active', true)
       .not('image_url', 'is', null)

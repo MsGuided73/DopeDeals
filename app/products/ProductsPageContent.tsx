@@ -72,7 +72,7 @@ export default function ProductsPageContent() {
         let query = supabaseBrowser
           .from('main_site_products')
           .select(`
-            id, name, description, short_description, our_price, sale_price, fire_price,
+            id, name, description, short_description, our_price, sale_price,
             image_url, sku, stock_quantity, is_active, featured, brand_id, category_id,
             created_at, updated_at
           `)

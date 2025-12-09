@@ -51,11 +51,17 @@ export async function getStorage() {
     },
 
     async getProduct(id: string) {
-      // Convert string ID to integer for proper database querying
-      const productId = parseInt(id, 10);
-      
-      if (isNaN(productId)) {
-        throw new Error('Invalid product ID');
+      // Handle both UUID strings and integer IDs
+      let productId: string | number = id;
+
+      // If it's a valid UUID format, keep as string
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(id)) {
+        // Try to parse as integer for backward compatibility
+        const parsedInt = parseInt(id, 10);
+        if (!isNaN(parsedInt)) {
+          productId = parsedInt;
+        }
       }
 
       const { data, error } = await supabase
@@ -69,7 +75,7 @@ export async function getStorage() {
         .single();
 
       if (error) {
-        console.error('Error fetching product:', error);
+        console.error('Error fetching product:', error, 'ID:', productId);
         throw error;
       }
       return data;

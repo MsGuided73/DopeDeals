@@ -345,7 +345,10 @@ export default function TermsAndConditionsPage() {
                   <p><strong>Website:</strong> https://highway420store.com</p>
                   <p><strong>Email:</strong> support@highway420store.com</p>
                   <p><strong>Phone:</strong> 1-800-HIGHWAY (subject to availability)</p>
-                  <p><strong>Address:</strong> [Physical Address - Update when available]</p>
+                  <p><strong>Address:</strong></p>
+                  <p>BMB Wholesale, Inc</p>
+                  <p>10 Manor Pkwy</p>
+                  <p>Salem, NH 03079</p>
                 </div>
               </div>
             </section>
