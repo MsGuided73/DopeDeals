@@ -39,14 +39,22 @@ export interface Product {
 }
 
 export class ProductService {
-  private supabase = createSupabaseClient();
+  private supabase: any = null;
+
+  private async getSupabaseClient() {
+    if (!this.supabase) {
+      this.supabase = await createSupabaseClient();
+    }
+    return this.supabase;
+  }
 
   /**
    * Get products with proper filtering and image URL transformation
    */
   async getProducts(filters: ProductFilters = {}): Promise<Product[]> {
     try {
-      let query = this.supabase
+      const supabase = await this.getSupabaseClient();
+      let query = supabase
         .from('main_site_products')
         .select('*');
 
@@ -111,7 +119,8 @@ export class ProductService {
    */
   async getProductById(id: string): Promise<Product | null> {
     try {
-      const { data, error } = await this.supabase
+      const supabase = await this.getSupabaseClient();
+      const { data, error } = await supabase
         .from('main_site_products')
         .select('*')
         .eq('id', id)
@@ -180,7 +189,8 @@ export class ProductService {
    */
   async getProductCount(filters: ProductFilters = {}): Promise<number> {
     try {
-      let query = this.supabase
+      const supabase = await this.getSupabaseClient();
+      let query = supabase
         .from('main_site_products')
         .select('*', { count: 'exact', head: true });
 

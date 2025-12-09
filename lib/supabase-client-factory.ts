@@ -1,11 +1,8 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-
 /**
  * Centralized Supabase client factory that ensures all components
  * use the correct configuration from environment variables
  */
-export function createSupabaseClient() {
+export async function createSupabaseClient() {
   // Validate required environment variables
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -15,6 +12,10 @@ export function createSupabaseClient() {
       'Missing required Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your .env.local file.'
     );
   }
+
+  // Dynamic imports to avoid SSR issues
+  const { createServerClient } = await import('@supabase/ssr');
+  const { cookies } = await import('next/headers');
 
   return createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
