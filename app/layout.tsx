@@ -24,7 +24,7 @@ export const metadata = {
     description: 'Curated cannabis culture essentials. Free shipping over $75. Join the movement.',
     images: [
       {
-        url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg',
+        url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png',
         width: 1200,
         height: 630,
         alt: 'HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop',
