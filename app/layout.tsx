@@ -21,7 +21,7 @@ export const metadata = {
     url: 'https://yourdomain.com',
     siteName: 'HIGHWAY 420',
     title: 'HIGHWAY 420 - Life is a Highway, Ride With Us 🌿',
-    description: 'Premium glass art, bongs, dab rigs & smoking accessories. Curated cannabis culture essentials. Free shipping over $75. Join the movement.',
+    description: 'Curated cannabis culture essentials. Free shipping over $75. Join the movement.',
     images: [
       {
         url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg',
