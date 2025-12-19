@@ -102,7 +102,7 @@ export class ProductService {
       }
 
       // Transform image URLs for sigdistro.com images
-      const transformedProducts = (data || []).map(product => ({
+      const transformedProducts = (data || []).map((product: Product) => ({
         ...product,
         image_url: transformImageUrl(product.image_url)
       }));

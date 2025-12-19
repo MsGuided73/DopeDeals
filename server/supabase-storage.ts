@@ -58,9 +58,7 @@ export class SupabaseStorage implements IStorage {
 
   // IStorage interface implementation for file storage
   async put(path: string, data: Buffer | Uint8Array, contentType?: string): Promise<{ url: string }> {
-    if (!supabaseAdmin) throw new Error('Supabase not configured');
-
-    const { error } = await supabaseAdmin.storage
+    const { error } = await supabaseAdmin!.storage
       .from('public')
       .upload(path, data, {
         upsert: true,
@@ -69,7 +67,7 @@ export class SupabaseStorage implements IStorage {
 
     if (error) throw error;
 
-    const { data: pub } = supabaseAdmin.storage
+    const { data: pub } = supabaseAdmin!.storage
       .from('public')
       .getPublicUrl(path);
 
@@ -79,7 +77,7 @@ export class SupabaseStorage implements IStorage {
   async get(path: string): Promise<Uint8Array | null> {
     if (!supabaseAdmin) throw new Error('Supabase not configured');
 
-    const { data, error } = await supabaseAdmin.storage
+    const { data, error } = await supabaseAdmin!.storage
       .from('public')
       .download(path);
 
@@ -95,7 +93,7 @@ export class SupabaseStorage implements IStorage {
   async remove(path: string): Promise<void> {
     if (!supabaseAdmin) throw new Error('Supabase not configured');
 
-    const { error } = await supabaseAdmin.storage
+    const { error } = await supabaseAdmin!.storage
       .from('public')
       .remove([path]);
 
@@ -106,7 +104,7 @@ export class SupabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     if (!supabaseAdmin) return undefined;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('users')
       .select('*')
       .eq('id', id)
@@ -117,7 +115,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('users')
       .select('*')
       .eq('email', email)
@@ -128,7 +126,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createUser(user: InsertUser): Promise<User> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('users')
       .insert(user)
       .select()
@@ -138,7 +136,7 @@ export class SupabaseStorage implements IStorage {
     return data as User;
   }
 
-  // Products - Use Drizzle for complex queries, Supabase for simple operations
+  // Products - Use main_site_products table
   async getProducts(filters?: {
     categoryId?: string;
     brandId?: string;
@@ -148,16 +146,11 @@ export class SupabaseStorage implements IStorage {
     featured?: boolean;
     vipExclusive?: boolean;
   }): Promise<Product[]> {
-    let query = supabaseAdmin.from('products').select('*');
+    let query = supabaseAdmin!.from('main_site_products').select('*');
 
     // Enforce consumer-safe visibility when using service role (no RLS):
     // - is_active = true
-    // - nicotine_product = false
-    // - tobacco_product = false
-    query = query
-      .eq('is_active', true)
-      .eq('nicotine_product', false)
-      .eq('tobacco_product', false);
+    query = query.eq('is_active', true);
 
     // Database uses snake_case column names - use correct names
     if (filters?.categoryId) {
@@ -167,20 +160,18 @@ export class SupabaseStorage implements IStorage {
       query = query.eq('brand_id', filters.brandId);
     }
     if (filters?.material) {
-      query = query.eq('material', filters.material);
+      query = query.eq('materials', filters.material);
     }
     if (filters?.priceMin !== undefined) {
-      query = query.gte('price', filters.priceMin);
+      query = query.gte('our_price', filters.priceMin);
     }
     if (filters?.priceMax !== undefined) {
-      query = query.lte('price', filters.priceMax);
+      query = query.lte('our_price', filters.priceMax);
     }
     if (filters?.featured !== undefined) {
       query = query.eq('featured', filters.featured);
     }
-    if (filters?.vipExclusive !== undefined) {
-      query = query.eq('vip_exclusive', filters.vipExclusive);
-    }
+    // Note: vipExclusive not directly applicable to main_site_products structure
 
     const { data, error } = await query.order('created_at', { ascending: false });
     if (error) throw error;
@@ -189,8 +180,8 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getProduct(id: string): Promise<Product | undefined> {
-    const { data, error } = await supabaseAdmin
-      .from('products')
+    const { data, error } = await supabaseAdmin!
+      .from('main_site_products')
       .select('*')
       .eq('id', id)
       .single();
@@ -200,27 +191,90 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {
-    // Generate UUID and map only the columns that exist in the database
+    // Generate UUID and map to main_site_products schema
     const dbProduct = {
       id: crypto.randomUUID(),
       name: product.name,
       description: product.description || null,
-      price: product.price,
+      short_description: null,
       sku: product.sku,
+      our_price: product.price,
+      their_price: null,
+      sale_price: null,
+      fire_price: null,
+      cost_price: null,
+      display_price_type: 'our_price',
+      price_comparison_enabled: true,
       category_id: product.categoryId || null,
       brand_id: product.brandId || null,
-      materials: product.material ? [product.material] : null,
-      image_urls: product.imageUrl ? [product.imageUrl] : null,
       stock_quantity: 0,
-      vip_price: null,
-      channels: ['vip_smoke'],
+      low_stock_threshold: 5,
+      track_inventory: true,
+      inventory_status: 'in_stock',
+      weight: null,
+      weight_unit: 'oz',
+      dimensions: null,
+      materials: product.material ? [product.material] : null,
+      image_url: product.imageUrl || null,
+      image_urls: product.imageUrl ? [product.imageUrl] : null,
+      video_urls: null,
+      gallery_images: null,
+      attributes: {},
+      specs: {},
+      cannabinoid_profile: {
+        thc_variants: { delta9_thc: 0.0, delta8_thc: 0.0, thca: 0.0, thcp: 0.0, thcv: 0.0 },
+        other_cannabinoids: { cbd: 0.0, cbg: 0.0, cbn: 0.0, cbc: 0.0 },
+        total_cannabinoids: 0.0,
+        dominant_cannabinoid: 'cbd',
+        profile_type: 'isolate'
+      },
+      effects_profile: {
+        primary_effects: [],
+        secondary_effects: [],
+        medicinal_benefits: [],
+        best_for: [],
+        avoid_if: []
+      },
+      terpene_profile: {
+        primary_terpenes: [],
+        aroma_notes: [],
+        effects_influence: []
+      },
+      psychoactive_profile: {
+        thc_variants: { delta9_thc: 0.0, delta8_thc: 0.0, thca: 0.0, thcp: 0.0, thcv: 0.0 },
+        other_psychoactive: { '7_hydroxy_mitragynine': 0.0, mitragynine: 0.0 }
+      },
+      compliance_info: {
+        requires_age_verification: false,
+        minimum_age: 18,
+        restricted_states: [],
+        restricted_zipcodes: [],
+        requires_lab_testing: false,
+        lab_certificate_url: null,
+        product_type: 'general',
+        regulatory_category: 'unregulated'
+      },
+      variations: [],
+      parent_product_id: null,
+      seo_title: null,
+      seo_description: null,
+      seo_keywords: null,
+      meta_data: {},
       is_active: true,
       featured: product.featured || false,
-      vip_exclusive: product.vipExclusive || false
+      is_new: false,
+      is_bestseller: false,
+      is_trending: false,
+      farm_bill_compliant: true,
+      thc_compliant: true,
+      zoho_item_id: null,
+      zoho_last_sync: null,
+      search_keywords: null,
+      search_boost: 1.0
     };
 
-    const { data, error } = await supabaseAdmin
-      .from('products')
+    const { data, error } = await supabaseAdmin!
+      .from('main_site_products')
       .insert(dbProduct)
       .select()
       .single();
@@ -231,7 +285,7 @@ export class SupabaseStorage implements IStorage {
 
   // Categories
   async getCategories(): Promise<Category[]> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('categories')
       .select('*')
       .order('name');
@@ -241,7 +295,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getCategory(id: string): Promise<Category | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('categories')
       .select('*')
       .eq('id', id)
@@ -252,7 +306,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createCategory(category: InsertCategory): Promise<Category> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('categories')
       .insert(category)
       .select()
@@ -264,7 +318,7 @@ export class SupabaseStorage implements IStorage {
 
   // Brands
   async getBrands(): Promise<Brand[]> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('brands')
       .select('*')
       .order('name');
@@ -274,7 +328,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getBrand(id: string): Promise<Brand | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('brands')
       .select('*')
       .eq('id', id)
@@ -285,7 +339,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createBrand(brand: InsertBrand): Promise<Brand> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('brands')
       .insert(brand)
       .select()
@@ -297,7 +351,7 @@ export class SupabaseStorage implements IStorage {
 
   // Orders - Use Supabase with RLS for user-specific data
   async getUserOrders(userId: string): Promise<Order[]> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('orders')
       .select('*')
       .eq('userId', userId)
@@ -308,7 +362,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getOrder(id: string): Promise<Order | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('orders')
       .select('*')
       .eq('id', id)
@@ -319,7 +373,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createOrder(order: InsertOrder): Promise<Order> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('orders')
       .insert(order)
       .select()
@@ -330,7 +384,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateOrder(id: string, updates: Partial<Order>): Promise<Order | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('orders')
       .update(updates)
       .eq('id', id)
@@ -376,7 +430,7 @@ export class SupabaseStorage implements IStorage {
 
   // Cart - User-specific with real-time updates
   async getUserCartItems(userId: string): Promise<CartItem[]> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('cartItems')
       .select(`
         *,
@@ -396,7 +450,7 @@ export class SupabaseStorage implements IStorage {
 
   async addToCart(cartItem: InsertCartItem): Promise<CartItem> {
     // Check if item already exists in cart
-    const { data: existing } = await supabaseAdmin
+    const { data: existing } = await supabaseAdmin!
       .from('cartItems')
       .select('*')
       .eq('userId', cartItem.userId!)
@@ -405,7 +459,7 @@ export class SupabaseStorage implements IStorage {
 
     if (existing) {
       // Update quantity
-      const { data, error } = await supabaseAdmin
+      const { data, error } = await supabaseAdmin!
         .from('cartItems')
         .update({ quantity: existing.quantity + cartItem.quantity })
         .eq('id', existing.id)
@@ -416,7 +470,7 @@ export class SupabaseStorage implements IStorage {
       return data as CartItem;
     } else {
       // Insert new item
-      const { data, error } = await supabaseAdmin
+      const { data, error } = await supabaseAdmin!
         .from('cartItems')
         .insert(cartItem)
         .select()
@@ -428,7 +482,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateCartItem(id: string, quantity: number): Promise<CartItem | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('cartItems')
       .update({ quantity })
       .eq('id', id)
@@ -440,7 +494,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async removeFromCart(id: string): Promise<boolean> {
-    const { error } = await supabaseAdmin
+    const { error } = await supabaseAdmin!
       .from('cartItems')
       .delete()
       .eq('id', id);
@@ -449,7 +503,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async clearCart(userId: string): Promise<boolean> {
-    const { error } = await supabaseAdmin
+    const { error } = await supabaseAdmin!
       .from('cartItems')
       .delete()
       .eq('userId', userId);
@@ -459,7 +513,7 @@ export class SupabaseStorage implements IStorage {
 
   // Memberships
   async getMemberships(): Promise<Membership[]> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('memberships')
       .select('*')
       .order('monthlyPrice');
@@ -470,7 +524,7 @@ export class SupabaseStorage implements IStorage {
 
   // User Behavior & Preferences - Use Supabase for real-time analytics
   async trackUserBehavior(behavior: InsertUserBehavior): Promise<UserBehavior> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('userBehavior')
       .insert(behavior)
       .select()
@@ -496,7 +550,7 @@ export class SupabaseStorage implements IStorage {
 
   // Placeholder implementations for remaining interface methods
   async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('userPreferences')
       .select('*')
       .eq('userId', userId)
@@ -507,7 +561,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateUserPreferences(userId: string, preferences: Partial<InsertUserPreferences>): Promise<UserPreferences> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('userPreferences')
       .upsert({ userId, ...preferences, updatedAt: new Date() })
       .select()
@@ -525,7 +579,7 @@ export class SupabaseStorage implements IStorage {
 
   // Payment methods
   async getUserPaymentMethods(userId: string): Promise<PaymentMethod[]> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('paymentMethods')
       .select('*')
       .eq('userId', userId)
@@ -536,7 +590,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createPaymentMethod(paymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('paymentMethods')
       .insert(paymentMethod)
       .select()
@@ -547,7 +601,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async createTransaction(transaction: InsertPaymentTransaction): Promise<PaymentTransaction> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('paymentTransactions')
       .insert(transaction)
       .select()
@@ -558,7 +612,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateTransaction(id: string, updates: Partial<InsertPaymentTransaction>): Promise<PaymentTransaction> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('paymentTransactions')
       .update(updates)
       .eq('id', id)
@@ -575,7 +629,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateProductSimilarity(similarity: InsertProductSimilarity): Promise<ProductSimilarity> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('productSimilarity')
       .upsert(similarity)
       .select()
@@ -590,7 +644,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async setCachedRecommendations(cache: InsertRecommendationCache): Promise<RecommendationCache> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('recommendationCache')
       .upsert(cache)
       .select()
@@ -602,7 +656,7 @@ export class SupabaseStorage implements IStorage {
 
   // Shipstation methods would also use Supabase
   async getShipstationOrders(): Promise<ShipstationOrder[]> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_orders')
       .select('*')
       .order('created_at', { ascending: false });
@@ -612,7 +666,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getShipstationOrderByOrderId(orderId: string): Promise<ShipstationOrder | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_orders')
       .select('*')
       .eq('order_id', orderId)
@@ -623,7 +677,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getShipstationOrderByShipstationId(shipstationOrderId: string): Promise<ShipstationOrder | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_orders')
       .select('*')
       .eq('shipstation_order_id', shipstationOrderId)
@@ -634,7 +688,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async insertShipstationOrder(order: InsertShipstationOrder): Promise<ShipstationOrder> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_orders')
       .insert(order)
       .select()
@@ -645,7 +699,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateShipstationOrder(id: string, updates: Partial<InsertShipstationOrder>): Promise<ShipstationOrder | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_orders')
       .update(updates)
       .eq('id', id)
@@ -657,7 +711,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async insertShipstationShipment(shipment: InsertShipstationShipment): Promise<ShipstationShipment> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_shipments')
       .insert(shipment)
       .select()
@@ -668,7 +722,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateShipstationShipment(id: string, updates: Partial<InsertShipstationShipment>): Promise<ShipstationShipment | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_shipments')
       .update(updates)
       .eq('id', id)
@@ -680,7 +734,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getShipstationProductByProductId(productId: string): Promise<ShipstationProduct | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_products')
       .select('*')
       .eq('product_id', productId)
@@ -691,7 +745,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async insertShipstationProduct(product: InsertShipstationProduct): Promise<ShipstationProduct> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_products')
       .insert(product)
       .select()
@@ -702,7 +756,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateShipstationProduct(id: string, updates: Partial<InsertShipstationProduct>): Promise<ShipstationProduct | undefined> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_products')
       .update(updates)
       .eq('id', id)
@@ -714,7 +768,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async insertShipstationWebhook(webhook: InsertShipstationWebhook): Promise<ShipstationWebhook> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_webhooks')
       .insert(webhook)
       .select()
@@ -725,7 +779,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async insertShipstationSyncStatus(status: InsertShipstationSyncStatus): Promise<ShipstationSyncStatus> {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin!
       .from('shipstation_sync_status')
       .insert(status)
       .select()
@@ -736,7 +790,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async getLatestShipstationSyncStatus(syncType?: string): Promise<ShipstationSyncStatus | null> {
-    let query = supabaseAdmin
+    let query = supabaseAdmin!
       .from('shipstation_sync_status')
       .select('*')
       .order('created_at', { ascending: false })
@@ -887,7 +941,7 @@ export class SupabaseStorage implements IStorage {
 
   async updateProduct(id: string, updates: Partial<Product>): Promise<Product | undefined> {
     const { data } = await supabaseAdmin!
-      .from('products')
+      .from('main_site_products')
       .update(updates)
       .eq('id', id)
       .select()
