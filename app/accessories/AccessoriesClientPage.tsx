@@ -16,7 +16,7 @@ export default function AccessoriesClientPage() {
     "mainEntity": {
       "@type": "ItemList",
       "name": "Smoking Accessories Collection",
-      "description": "High-quality smoking accessories including pipes, bongs, dab rigs, grinders, and more",
+      "description": "High-quality smoking accessories including storage containers, rolling papers, and more",
       "numberOfItems": "100+",
       "itemListElement": [
         {
