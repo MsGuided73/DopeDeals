@@ -21,13 +21,11 @@ export default async function PuffcoPage() {
 
   // Get Puffco products
   const { data: products } = await supabaseServer
-    .from('products')
+    .from('main_site_products')
     .select('*')
     .eq('brand_name', 'Puffco')
     .eq('is_active', true)
-    .eq('nicotine_product', false)
-    .eq('tobacco_product', false)
-    .order('price', { ascending: false });
+    .order('our_price', { ascending: false });
 
   // Organize products by category
   const peakProducts = products?.filter(p => p.name.toUpperCase().includes('PEAK')) || [];

@@ -67,13 +67,11 @@ export default function CraveBrandPageContent() {
     async function fetchProducts() {
       try {
         setLoading(true);
-        const { data, error } = await supabaseBrowser
-          .from('products')
+      const { data, error } = await supabaseBrowser
+          .from('main_site_products')
           .select('*')
           .or('name.ilike.%crave%,brand_name.ilike.%crave%,sku.ilike.%crave%')
           .eq('is_active', true)
-          .eq('nicotine_product', false)
-          .eq('tobacco_product', false)
           .order('featured', { ascending: false })
           .order('created_at', { ascending: false });
 

@@ -21,13 +21,11 @@ export default async function CookiesPage() {
 
   // Get Cookies products
   const { data: products } = await supabaseServer
-    .from('products')
+    .from('main_site_products')
     .select('*')
     .eq('brand_name', 'Cookies')
     .eq('is_active', true)
-    .eq('nicotine_product', false)
-    .eq('tobacco_product', false)
-    .order('price', { ascending: false });
+    .order('our_price', { ascending: false });
 
   const featuredProducts = products?.slice(0, 8) || [];
   const productCount = products?.length || 0;
