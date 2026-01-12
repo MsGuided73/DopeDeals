@@ -489,10 +489,10 @@ export default function GlobalMasthead() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Popular Categories</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   <Link href="/thca_flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">�</div>
+                    <div className="text-2xl mb-2">🌱</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">THCA Flower</div>
                   </Link>
-                  <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/vapes" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">💨</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Vapes</div>
                   </Link>
@@ -501,19 +501,19 @@ export default function GlobalMasthead() {
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Mushrooms</div>
                   </Link>
                   <Link href="/edibles" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">�</div>
+                    <div className="text-2xl mb-2">🍬</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Edibles & CBD</div>
                   </Link>
-                  <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                  <Link href="/pre-rolls" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🚬</div>
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">Pre-Rolls & Vapes</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Pre-Rolls</div>
                   </Link>
                   <Link href="/nitrous-oxide" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">�</div>
+                    <div className="text-2xl mb-2">💫</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Nitrous Oxide</div>
                   </Link>
                   <Link href="/accessories" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">�</div>
+                    <div className="text-2xl mb-2">🔧</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Accessories</div>
                   </Link>
                 </div>

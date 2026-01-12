@@ -19,7 +19,6 @@ export default function ThcaMasterCategoryNav({ activeCategory, onCategoryChange
     { id: 'cbd', name: 'CBD & Wellness', icon: '🌱', description: 'CBD products & wellness' },
     { id: 'delta', name: 'Delta Products', icon: '⚡', description: 'Delta-8 & Delta-9' },
     { id: 'mushrooms', name: 'Mushrooms', icon: '🍄', description: 'Psychedelic mushrooms' },
-    { id: 'kratom', name: 'Kratom', icon: '🌿', description: '7-Hydroxymitragynine' },
   ];
 
   const handleCategoryClick = (categoryId: string) => {

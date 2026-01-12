@@ -63,7 +63,6 @@ const tabToMode: Record<
   delta: 'thca_all',
   mushrooms: 'thca_all',
   nitrous: 'thca_all',
-  kratom: 'thca_all',
 };
 
 // Map local sort keys → API sort keys
@@ -170,7 +169,6 @@ export default function ThcaMasterPageContent() {
   // Fetch from the universal API whenever *server-side* filters change
   useEffect(() => {
     loadFromUniversalApi();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory, filters.priceRange, filters.inStock, filters.onSale, sortBy]);
 
   // Apply *client-side* filters/sort after we fetch
