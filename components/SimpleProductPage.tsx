@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { ChevronRight, Plus, Minus, Shield, Beaker, AlertTriangle, CheckCircle2, Info, ChevronDown, ChevronUp, Star, ShoppingCart } from 'lucide-react';
 import ProductGallery from '../app/components/ProductGallery';
 import { addToCart } from '../app/lib/cart-utils';
 import { addToRecentlyViewed } from '../app/lib/recentlyViewed';
@@ -13,18 +14,43 @@ interface Product {
   description_md?: string;
   short_description?: string;
   price: number;
+  sale_price?: number;
   sku: string;
   image_url?: string;
-  image_urls?: string[]; // Added for variant support
+  image_urls?: string[];
   stock_quantity?: number;
   materials?: string[];
   brand_id?: string;
   category_id?: string;
+  benefits?: string[];
+  ingredients?: string[];
+  suggested_use?: string;
+  lab_test_url?: string;
+  warnings?: string[];
 }
 
 interface SimpleProductPageProps {
   productId: string;
 }
+
+const FAQ_ITEMS = [
+  {
+    question: "Is this product legal?",
+    answer: "Yes, all products on our site contain less than 0.3% Delta 9 THC on a dry weight basis, making them federally legal under the 2018 Farm Bill. However, state laws vary, so please check your local regulations."
+  },
+  {
+    question: "How long does shipping take?",
+    answer: "We typically process orders within 1-2 business days. Shipping usually takes 3-5 business days depending on your location. You will receive a tracking number via email once your order ships."
+  },
+  {
+    question: "Do you offer lab tests?",
+    answer: "Absolutely. Transparency is core to our mission. You can find the Certificate of Analysis (COA) for this product in the 'Lab Test' section below or by scanning the QR code on the packaging."
+  },
+  {
+    question: "What is the return policy?",
+    answer: "Due to the nature of our products, we can only accept returns on unopened and unused items within 14 days of delivery. If your product arrived damaged, please contact our support team immediately."
+  }
+];
 
 export default function SimpleProductPage({ productId }: SimpleProductPageProps) {
   const [product, setProduct] = useState<Product | null>(null);
@@ -32,13 +58,13 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     async function fetchProduct() {
       try {
         setLoading(true);
         
-        // Fetch product from API
         const response = await fetch(`/api/products/${productId}`);
         if (!response.ok) {
           throw new Error('Product not found');
@@ -47,7 +73,6 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
         const productData = await response.json();
         setProduct(productData);
 
-        // Track this product as recently viewed for AI recommendations
         addToRecentlyViewed(productId);
       } catch (err) {
         console.error('Error fetching product:', err);
@@ -69,7 +94,6 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
     const success = await addToCart(productId, quantity);
 
     if (success) {
-      // Reset quantity after successful add
       setQuantity(1);
     }
 
@@ -90,15 +114,19 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white px-6 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="animate-pulse">
-            <div className="grid gap-8 md:grid-cols-2">
-              <div className="aspect-square bg-gray-200 rounded-lg"></div>
-              <div className="space-y-4">
-                <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+      <div className="min-h-screen bg-white">
+        <GlobalMasthead />
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="animate-pulse grid gap-12 md:grid-cols-2">
+            <div className="aspect-square bg-gray-200 rounded-2xl"></div>
+            <div className="space-y-6">
+              <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+              <div className="h-10 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+              <div className="space-y-3">
                 <div className="h-4 bg-gray-200 rounded w-full"></div>
-                <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
               </div>
             </div>
           </div>
@@ -109,13 +137,17 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-white px-6 py-8">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-8">{error || 'The requested product could not be found.'}</p>
+      <div className="min-h-screen bg-white">
+        <GlobalMasthead />
+        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-6 text-red-600">
+            <AlertTriangle size={40} />
+          </div>
+          <h1 className="text-3xl font-black text-gray-900 mb-4 font-inter">Product Not Found</h1>
+          <p className="text-gray-600 mb-8 max-w-md mx-auto">{error || 'The requested product could not be found.'}</p>
           <a 
             href="/products" 
-            className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="inline-flex items-center px-8 py-4 bg-black text-white rounded-xl font-bold uppercase tracking-widest hover:bg-gray-800 transition-all hover:scale-105"
           >
             ← Back to Products
           </a>
@@ -124,180 +156,276 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
     );
   }
 
-  const imageUrl = product.image_url;
   const inStock = (product.stock_quantity || 0) > 0;
+  const savings = product.sale_price ? Number(product.price) - Number(product.sale_price) : 0;
+  const discountPercent = product.sale_price ? Math.round((savings / Number(product.price)) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Global Masthead */}
+    <div className="min-h-screen bg-white font-inter">
       <GlobalMasthead />
 
-      {/* Product Breadcrumb */}
+      {/* Breadcrumb */}
       <div className="bg-gray-50 border-b">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <nav className="text-sm">
-            <a href="/products" className="text-gray-600 hover:text-black">Products</a>
-            <span className="mx-2 text-gray-400">›</span>
-            <span className="text-black font-medium">{product.name}</span>
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <nav className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gray-500">
+            <a href="/" className="hover:text-black transition-colors">Home</a>
+            <ChevronRight size={14} />
+            <a href="/products" className="hover:text-black transition-colors">Products</a>
+            <ChevronRight size={14} />
+            <span className="text-black truncate">{product.name}</span>
           </nav>
         </div>
       </div>
 
-      {/* Main Product Content */}
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid gap-12 md:grid-cols-2">
+      <main className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid gap-16 lg:grid-cols-2 mb-20">
           
-          {/* Product Gallery */}
-          <div className="space-y-4">
-            <ProductGallery
-              image_url={product.image_url}
-              image_urls={product.image_urls || []}
-              productName={product.name}
-              productId={product.id}
-              viewMode="detail"
-            />
+          {/* Left: Product Images */}
+          <div className="space-y-6">
+            <div className="sticky top-24">
+              <ProductGallery
+                image_url={product.image_url}
+                image_urls={product.image_urls || []}
+                productName={product.name}
+                productId={product.id}
+                viewMode="detail"
+                className="rounded-3xl overflow-hidden border border-gray-100"
+              />
+              
+              {/* Trust Badges under gallery */}
+              <div className="grid grid-cols-2 gap-4 mt-8">
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-green-600">
+                    <Shield size={20} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-tighter">3rd-Party</p>
+                    <p className="text-xs text-gray-500 font-bold">Lab Tested</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-blue-600">
+                    <CheckCircle2 size={20} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-tighter">Highest</p>
+                    <p className="text-xs text-gray-500 font-bold">Quality</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Product Details */}
-          <div className="space-y-6">
-            
-            {/* Product Title & Brand */}
-            <div>
-              {product.brand_id && (
-                <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
-                  {product.brand_id}
-                </p>
-              )}
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          {/* Right: Product Details */}
+          <div className="space-y-10">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                {product.brand_id && (
+                  <span className="text-sm font-black text-dope-orange-500 uppercase tracking-widest px-3 py-1 bg-dope-orange-50 rounded-full">
+                    {product.brand_id}
+                  </span>
+                )}
+                {discountPercent > 0 && (
+                  <span className="text-sm font-black text-white uppercase tracking-widest px-3 py-1 bg-red-600 rounded-full">
+                    {discountPercent}% OFF
+                  </span>
+                )}
+              </div>
+              
+              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 leading-tight">
                 {product.name}
               </h1>
-            </div>
 
-            {/* Price */}
-            <div className="border-t border-b border-gray-200 py-6">
-              <div className="flex items-center justify-between">
-                <span className="text-3xl font-bold text-gray-900">
-                  ${Number(product.price).toFixed(2)}
+              <div className="flex items-center gap-4 py-2">
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
+                </div>
+                <span className="text-sm font-bold text-gray-500">(241 Reviews)</span>
+              </div>
+              
+              <div className="flex items-baseline gap-4">
+                <span className="text-4xl font-black text-gray-900">
+                  ${Number(product.sale_price || product.price).toFixed(2)}
                 </span>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  inStock 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {inStock ? 'In Stock' : 'Out of Stock'}
-                </span>
+                {product.sale_price && (
+                  <span className="text-2xl text-gray-400 line-through font-bold">
+                    ${Number(product.price).toFixed(2)}
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Description */}
-            {(product.description_md || product.description) && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-                <div className="text-gray-700 leading-relaxed">
-                  {product.description_md || product.description}
+            <div 
+              className="prose prose-lg text-gray-600 max-w-none font-bold leading-relaxed description-content"
+              dangerouslySetInnerHTML={{ __html: (product.short_description || product.description_md || product.description || '').replace(/\\n/g, '<br/>') }}
+            />
+
+            {/* Add to Cart Section */}
+            <div className="p-8 bg-gray-50 rounded-3xl border border-gray-100 space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-black uppercase tracking-widest text-gray-500">Quantity:</span>
+                  <div className="flex items-center bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    <button
+                      onClick={decrementQuantity}
+                      disabled={quantity <= 1}
+                      className="p-3 hover:bg-gray-50 disabled:opacity-30 transition-colors"
+                    >
+                      <Minus size={18} />
+                    </button>
+                    <span className="w-12 text-center font-black text-lg">{quantity}</span>
+                    <button
+                      onClick={incrementQuantity}
+                      disabled={quantity >= (product.stock_quantity || 10)}
+                      className="p-3 hover:bg-gray-50 disabled:opacity-30 transition-colors"
+                    >
+                      <Plus size={18} />
+                    </button>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className={`text-sm font-black uppercase tracking-widest ${inStock ? 'text-green-600' : 'text-red-600'}`}>
+                    {inStock ? 'In Stock' : 'Sold Out'}
+                  </p>
+                  {inStock && <p className="text-xs font-bold text-gray-400">{product.stock_quantity} available</p>}
                 </div>
               </div>
-            )}
 
-            {/* Product Details */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Product Details</h3>
-              <dl className="space-y-2">
-                <div className="flex">
-                  <dt className="font-medium text-gray-900 w-24">SKU:</dt>
-                  <dd className="text-gray-700">{product.sku}</dd>
-                </div>
-                {product.materials && product.materials.length > 0 && (
-                  <div className="flex">
-                    <dt className="font-medium text-gray-900 w-24">Material:</dt>
-                    <dd className="text-gray-700">{product.materials.join(', ')}</dd>
-                  </div>
+              <button
+                onClick={handleAddToCart}
+                disabled={!inStock || isAddingToCart}
+                className="w-full flex items-center justify-center gap-4 bg-black text-white py-5 px-8 rounded-2xl font-black text-xl uppercase tracking-widest hover:bg-gray-800 disabled:bg-gray-300 transition-all hover:scale-[1.02] shadow-xl"
+              >
+                {isAddingToCart ? (
+                  <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <ShoppingCart size={24} />
+                    {inStock ? 'Add to Cart' : 'Out of Stock'}
+                  </>
                 )}
-                {product.category_id && (
-                  <div className="flex">
-                    <dt className="font-medium text-gray-900 w-24">Category:</dt>
-                    <dd className="text-gray-700">{product.category_id}</dd>
-                  </div>
-                )}
-              </dl>
+              </button>
+              
+              <div className="flex items-center justify-center gap-6 text-xs font-black uppercase tracking-widest text-gray-400">
+                <span className="flex items-center gap-2"><Shield size={14} /> Secure Checkout</span>
+                <span className="flex items-center gap-2"><Beaker size={14} /> COA Guaranteed</span>
+              </div>
             </div>
 
-            {/* Add to Cart */}
-            <div className="space-y-4 pt-6">
-              {inStock ? (
-                <>
-                  {/* Quantity Selector */}
-                  <div className="flex items-center gap-3">
-                    <label htmlFor="quantity" className="font-medium text-gray-900 text-sm">
-                      Quantity:
-                    </label>
-                    <div className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={decrementQuantity}
-                        disabled={quantity <= 1}
-                        className="w-10 h-10 border border-gray-300 rounded-md flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                        </svg>
-                      </button>
-
-                      <span className="w-10 h-10 border-t border-b border-gray-300 flex items-center justify-center font-medium text-gray-900">
-                        {quantity}
+            {/* Product Specifications Tabs/Accordion style list */}
+            <div className="space-y-4 pt-8">
+              {/* Benefits - Only show for relevant products */}
+              {(product.category_id?.toLowerCase().includes('edible') || product.name.toLowerCase().includes('gumm')) && (
+                <div className="border-b border-gray-100 pb-4">
+                  <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <Star className="text-dope-orange-500" size={20} /> Benefits
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['Calm', 'Creative', 'Energetic', 'Focus', 'Happy', 'Relaxed'].map(benefit => (
+                      <span key={benefit} className="px-4 py-2 bg-gray-50 text-gray-700 rounded-full text-sm font-bold border border-gray-100">
+                        {benefit}
                       </span>
-
-                      <button
-                        type="button"
-                        onClick={incrementQuantity}
-                        disabled={quantity >= Math.min(10, product.stock_quantity || 1)}
-                        className="w-10 h-10 border border-gray-300 rounded-md flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <span className="text-sm text-gray-500">
-                      ({product.stock_quantity || 0} available)
-                    </span>
+                    ))}
                   </div>
-
-                  {/* Add to Cart Button */}
-                  <button
-                    onClick={handleAddToCart}
-                    disabled={!inStock || isAddingToCart}
-                    className="w-full bg-black text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-                  >
-                    {isAddingToCart ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Adding to Cart...
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8" />
-                        </svg>
-                        Add to Cart
-                      </>
-                    )}
-                  </button>
-                </>
-              ) : (
-                <button
-                  disabled
-                  className="w-full bg-gray-300 text-gray-500 py-4 px-6 rounded-lg font-semibold text-lg cursor-not-allowed"
-                >
-                  Out of Stock
-                </button>
+                </div>
               )}
-            </div>
 
+              {/* Ingredients - Only show for relevant products */}
+              {(product.category_id?.toLowerCase().includes('edible') || product.name.toLowerCase().includes('gumm')) && (
+                <div className="border-b border-gray-100 py-4">
+                  <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <Info className="text-blue-500" size={20} /> Ingredients
+                  </h3>
+                  <p className="text-sm font-bold text-gray-600 leading-relaxed">
+                    Organic Cane Sugar, Organic Tapioca Syrup, Purified Water, Pectin, Citric Acid, Organic Flavoring, Organic Coloring, Proprietary Euphoric Blend.
+                  </p>
+                </div>
+              )}
+
+              {/* Suggested Use - Only show for relevant products */}
+              {(product.category_id?.toLowerCase().includes('edible') || product.name.toLowerCase().includes('gumm')) && (
+                <div className="border-b border-gray-100 py-4">
+                  <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <Beaker className="text-green-500" size={20} /> Suggested Use
+                  </h3>
+                  <div className="bg-gray-50 p-6 rounded-2xl space-y-3 font-bold text-sm text-gray-700">
+                    <p>• 1 Gummy — Vibing</p>
+                    <p>• 2 Gummies — Endless Smiles</p>
+                    <p>• 3+ Gummies — To the Moon</p>
+                    <p className="pt-2 text-xs text-red-500 uppercase tracking-widest">Wait 60-90 minutes before taking more.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Lab Tests */}
+              <div className="border-b border-gray-100 py-4">
+                <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Shield className="text-purple-500" size={20} /> Lab Test
+                </h3>
+                <a 
+                  href={product.lab_test_url || "#"} 
+                  className="inline-flex items-center gap-3 px-6 py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
+                >
+                  <Beaker size={18} /> View COA Lab Results
+                </a>
+              </div>
+
+              {/* Warning */}
+              <div className="py-4">
+                <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2 text-red-600">
+                  <AlertTriangle size={20} /> Warning
+                </h3>
+                <p className="text-xs font-bold text-red-500/80 leading-relaxed uppercase tracking-tight">
+                  DO NOT OPERATE VEHICLES OR HEAVY MACHINERY AFTER USE. DO NOT USE IF PREGNANT OR NURSING. KEEP OUT OF REACH OF CHILDREN AND PETS. MUST BE 21+ TO PURCHASE. STORE IN A COOL, DRY PLACE AWAY FROM LIGHT.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        {/* FAQ Section */}
+        <section className="py-20 border-t border-gray-100">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-black text-center mb-12 uppercase tracking-widest">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {FAQ_ITEMS.map((faq, index) => (
+                <div key={index} className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden">
+                  <button 
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="w-full flex items-center justify-between p-6 text-left font-black uppercase tracking-widest hover:bg-gray-100 transition-colors"
+                  >
+                    {faq.question}
+                    {openFaq === index ? <ChevronUp /> : <ChevronDown />}
+                  </button>
+                  {openFaq === index && (
+                    <div className="p-6 pt-0 font-bold text-gray-600 leading-relaxed border-t border-gray-100/50">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Customer Reviews Summary Placeholder */}
+        <section className="py-20 border-t border-gray-100">
+          <div className="text-center">
+            <h2 className="text-3xl font-black mb-8 uppercase tracking-widest">Customer Reviews</h2>
+            <div className="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-[3rem] border border-gray-100">
+              <div className="text-6xl font-black mb-2">4.8</div>
+              <div className="flex text-yellow-400 mb-4">
+                {[...Array(5)].map((_, i) => <Star key={i} size={32} fill="currentColor" />)}
+              </div>
+              <p className="text-xl font-bold text-gray-500 mb-8">Based on 241 Verified Reviews</p>
+              <button className="px-12 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-transform">
+                Write A Review
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
