@@ -43,8 +43,8 @@ export default async function CookiesPage() {
     "makesOffer": {
       "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "lowPrice": Math.min(...(products?.map(p => p.price) || [0])),
-      "highPrice": Math.max(...(products?.map(p => p.price) || [0])),
+      "lowPrice": Math.min(...(products?.map(p => p.our_price) || [0])),
+      "highPrice": Math.max(...(products?.map(p => p.our_price) || [0])),
       "offerCount": productCount
     }
   };
