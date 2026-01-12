@@ -81,7 +81,6 @@ export function detectCategory(productName: string): string {
 export function getBrandDisplayName(brandValue: string): string {
   const brandMap: { [key: string]: string } = {
     'crave': 'Crave',
-    'cookies': 'Cookies',
     'urth-farmacy': 'Urth Farmacy',
     'geek-bar': 'Geek Bar',
     'elf-bar': 'Elf Bar',
@@ -140,7 +139,6 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
 // Available brands for filtering
 export const PRODUCT_BRANDS: ProductBrand[] = [
   { value: 'all', label: 'All Brands' },
-  { value: 'cookies', label: 'Cookies' },
   { value: 'crave', label: 'Crave' },
   { value: 'urth-farmacy', label: 'Urth Farmacy' },
   { value: 'geek-bar', label: 'Geek Bar' },
