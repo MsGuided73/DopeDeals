@@ -195,11 +195,6 @@ export default function Highway420Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/7-hydroxymitragynine" className="text-gray-800 hover:text-green-600">
-                    KRATOM & 7-OH
-                  </Link>
-                </li>
-                <li>
                   <Link href="/edibles" className="text-gray-800 hover:text-green-600">
                     EDIBLES & MORE
                   </Link>

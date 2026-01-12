@@ -20,11 +20,11 @@ export default function WishlistPage() {
     },
     {
       id: '3',
-      name: 'Cookies Pre-Roll Pack',
+      name: 'Premium THCA Pre-Roll Pack',
       price: 45.00,
-      image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/brands/Cookies/cookies-thc-a-slim-pre-rolls-3-5g-5ct.webp',
+      image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg',
       inStock: true,
-      brand: 'Cookies',
+      brand: 'Highway 420',
       addedDate: '2024-01-08'
     }
   ]);

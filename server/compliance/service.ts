@@ -48,47 +48,6 @@ export class ComplianceService {
         noInternationalShipping: true
       }
     },
-    'Kratom': {
-      category: 'Kratom',
-      substanceType: 'Mitragyna speciosa',
-      restrictedStates: ['AL', 'AR', 'IN', 'RI', 'VT', 'WI'],
-      ageRequirement: 18,
-      labTestingRequired: true,
-      batchTrackingRequired: true,
-      warningLabels: [
-        'This product has not been evaluated by the FDA',
-        'Not for human consumption',
-        'Keep out of reach of children and pets',
-        'Consult your physician before use',
-        'May cause drowsiness'
-      ],
-      shippingRestrictions: {
-        requiresAdultSignature: true,
-        maxQuantityPerOrder: 50,
-        noInternationalShipping: true
-      }
-    },
-    '7-Hydroxy': {
-      category: '7-Hydroxy',
-      substanceType: '7-Hydroxymitragynine',
-      restrictedStates: ['AL', 'AR', 'IN', 'RI', 'VT', 'WI', 'TN'],
-      ageRequirement: 21,
-      labTestingRequired: true,
-      batchTrackingRequired: true,
-      warningLabels: [
-        'This product has not been evaluated by the FDA',
-        'Extremely potent - use with caution',
-        'Not for human consumption',
-        'Keep out of reach of children and pets',
-        'For research purposes only'
-      ],
-      shippingRestrictions: {
-        requiresAdultSignature: true,
-        maxQuantityPerOrder: 5,
-        noInternationalShipping: true,
-        specialHandling: true
-      }
-    },
     'Nicotine': {
       category: 'Nicotine',
       substanceType: 'Tobacco/Nicotine Products',

@@ -79,16 +79,16 @@ export class AIClassificationService {
         messages: [
           {
             role: "system",
-            content: `You are a cannabis and hemp product compliance expert. Analyze products and classify them into compliance categories: THCA, Kratom, 7-Hydroxy, Nicotine, CBD, Hemp, or Standard.
+            content: `You are a cannabis and hemp product compliance expert. Analyze products and classify them into compliance categories: THCA, Nicotine, CBD, Hemp, or Standard.
 
 Consider these factors:
-- Product names containing "THCA", "Delta", "Kratom", "7-OH", "Hydroxy", "Nicotine", "Vape"
+- Product names containing "THCA", "Delta", "Nicotine", "Vape"
 - Descriptions mentioning psychoactive effects, lab testing, batch numbers
 - Images showing products with compliance warnings or lab labels
 - Any mention of age restrictions or state restrictions
 
 Return your analysis as JSON with these fields:
-- category: string (THCA|Kratom|7-Hydroxy|Nicotine|CBD|Hemp|Standard)
+- category: string (THCA|Nicotine|CBD|Hemp|Standard)
 - substanceType: string (detailed substance description)
 - confidence: number (0-1)
 - riskLevel: string (low|medium|high|critical)
@@ -260,7 +260,7 @@ Return JSON with:
 
     // Assign compliance if high-risk category detected
     let complianceAssigned = false;
-    if (['THCA', 'Kratom', '7-Hydroxy', 'Nicotine'].includes(classification.category)) {
+    if (['THCA', 'Nicotine'].includes(classification.category)) {
       try {
         await complianceService.assignComplianceToProduct(product.id, classification.category);
         complianceAssigned = true;
@@ -352,23 +352,21 @@ Description: "${request.description}"
     prompt += `
 
 Please classify this product into the appropriate compliance category based on:
-1. Product name keywords (THCA, Delta, Kratom, 7-OH, Hydroxy, Nicotine, Vape, etc.)
+1. Product name keywords (THCA, Delta, Nicotine, Vape, etc.)
 2. Description mentioning psychoactive effects, lab testing, age restrictions
 3. Any indication of controlled or regulated substances
 4. State restriction implications
 
 Compliance Categories:
 - THCA: Products containing THCA or Delta compounds
-- Kratom: Mitragyna speciosa products
-- 7-Hydroxy: 7-Hydroxymitragynine products  
 - Nicotine: Tobacco or nicotine-containing products
 - CBD: CBD-only products (lower risk)
 - Hemp: Industrial hemp products (lowest risk)
 - Standard: Regular smoking accessories (no special compliance)
 
 Consider these risk levels:
-- Critical: THCA, 7-Hydroxy (highest regulation)
-- High: Kratom, Nicotine (moderate regulation)
+- Critical: THCA (highest regulation)
+- High: Nicotine (moderate regulation)
 - Medium: CBD (some regulation)
 - Low: Hemp, Standard (minimal regulation)`;
 
@@ -393,27 +391,6 @@ Consider these risk levels:
       };
     }
     
-    if (text.includes('kratom') || text.includes('mitragyna')) {
-      return {
-        category: 'Kratom',
-        substanceType: 'Mitragyna speciosa',
-        confidence: 0.8,
-        riskLevel: 'high',
-        requiredCompliance: ['age_verification', 'state_restrictions'],
-        reasoning: 'Keyword-based detection: Kratom'
-      };
-    }
-    
-    if (text.includes('7-hydroxy') || text.includes('7-oh') || text.includes('hydroxymitragynine')) {
-      return {
-        category: '7-Hydroxy',
-        substanceType: '7-Hydroxymitragynine',
-        confidence: 0.8,
-        riskLevel: 'critical',
-        requiredCompliance: ['age_verification', 'state_restrictions', 'quantity_limits'],
-        reasoning: 'Keyword-based detection: 7-Hydroxy compounds'
-      };
-    }
     
     if (text.includes('nicotine') || text.includes('tobacco') || text.includes('vape') || text.includes('e-liquid')) {
       return {

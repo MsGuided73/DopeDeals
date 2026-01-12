@@ -197,39 +197,27 @@ export default function GlobalMasthead() {
                     onMouseLeave={() => handleMouseLeaveWithDelay("main")}
                   >
                     <div className="py-2">
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        ⭐ All Vapes
+                      <Link href="/vapes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        ⭐ All Vapes & Carts
                       </Link>
                       <div className="border-t border-gray-200/20 my-1" />
 
-                      {/* THCA Products */}
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        THCA Products
+                      {/* Vapes by Type */}
+                      <Link href="/vapes?type=cartridge" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        Cartridges
                       </Link>
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        D8 Products
+                      <Link href="/vapes?type=disposable" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                        Disposables
                       </Link>
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        D10 Products
-                      </Link>
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        THCp Products
-                      </Link>
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        THCv Products
-                      </Link>
-
-                      <div className="border-t border-gray-200/20 my-1" />
-
-                      {/* Vape Equipment */}
-                      <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                      <Link href="/vapes?type=vaporizer" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Vaporizers
                       </Link>
+
+                      <div className="border-t border-gray-200/20 my-1" />
+
+                      {/* Equipment */}
                       <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        E-Rigs
-                      </Link>
-                      <Link href="/products?q=cartridge" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Cartridges
+                        E-Rigs & Tools
                       </Link>
                       <Link href="/products?q=battery" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Batteries
@@ -240,11 +228,8 @@ export default function GlobalMasthead() {
               </div>
 
               {/* Simple links */}
-              <Link href="/thca_pnv" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
-                Pre-Rolls & Vapes
-              </Link>
-              <Link href="/7-hydroxymitragynine" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
-                Kratom & 7-OH
+              <Link href="/pre-rolls" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
+                Pre-Rolls
               </Link>
               
               {/* Edibles Dropdown */}
@@ -347,34 +332,22 @@ export default function GlobalMasthead() {
 
               {/* Vapes Section */}
               <div className="pt-2">
-                <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">Vapes</h3>
+                <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">Vapes & Carts</h3>
                 <div className="space-y-2 pl-4">
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/vapes" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     All Vapes
                   </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    THCA Products
+                  <Link href="/vapes?type=cartridge" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    Cartridges
                   </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    D8 Products
+                  <Link href="/vapes?type=disposable" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                    Disposables
                   </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    D10 Products
-                  </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    THCp Products
-                  </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    THCv Products
-                  </Link>
-                  <Link href="/thca_pnv" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/vapes?type=vaporizer" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     Vaporizers
                   </Link>
                   <Link href="/dabsntools" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    E-Rigs
-                  </Link>
-                  <Link href="/products?q=cartridge" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    Cartridges
+                    E-Rigs & Tools
                   </Link>
                   <Link href="/products?q=battery" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     Batteries
@@ -382,11 +355,8 @@ export default function GlobalMasthead() {
                 </div>
               </div>
 
-              <Link href="/thca_pnv" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Pre-Rolls & Vapes
-              </Link>
-              <Link href="/7-hydroxymitragynine" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Kratom & 7-OH
+              <Link href="/pre-rolls" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Pre-Rolls
               </Link>
 
               {/* Edibles Section */}
@@ -470,9 +440,6 @@ export default function GlobalMasthead() {
                       <h4 className="font-medium text-gray-900 dark:text-white">Trending Now</h4>
                     </div>
                     <div className="space-y-2">
-                      <Link href="/7-hydroxymitragynine" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                        🔥 7-OH & Kratom
-                      </Link>
                       <Link href="/mushrooms" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                         🔥 Premium Mushrooms
                       </Link>
@@ -521,12 +488,8 @@ export default function GlobalMasthead() {
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Popular Categories</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  <Link href="/7-hydroxymitragynine" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">🌿</div>
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">7-OH & Kratom</div>
-                  </Link>
                   <Link href="/thca_flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">🌱</div>
+                    <div className="text-2xl mb-2">�</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">THCA Flower</div>
                   </Link>
                   <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
@@ -538,7 +501,7 @@ export default function GlobalMasthead() {
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Mushrooms</div>
                   </Link>
                   <Link href="/edibles" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">🍬</div>
+                    <div className="text-2xl mb-2">�</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Edibles & CBD</div>
                   </Link>
                   <Link href="/thca_pnv" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
@@ -546,11 +509,11 @@ export default function GlobalMasthead() {
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Pre-Rolls & Vapes</div>
                   </Link>
                   <Link href="/nitrous-oxide" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">💫</div>
+                    <div className="text-2xl mb-2">�</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Nitrous Oxide</div>
                   </Link>
                   <Link href="/accessories" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
-                    <div className="text-2xl mb-2">🔧</div>
+                    <div className="text-2xl mb-2">�</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Accessories</div>
                   </Link>
                 </div>

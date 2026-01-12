@@ -87,14 +87,14 @@ export default function PreRollsPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-dope-orange-500 to-dope-orange-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-6">
-          <h1 className="text-5xl font-chalets-legweb mb-4">PRE-ROLLS</h1>
+          <h1 className="text-5xl font-black uppercase tracking-widest mb-4">PRE-ROLLS</h1>
           <p className="text-xl opacity-90">Ready to smoke, premium quality pre-rolls for every vibe</p>
           <div className="mt-6 flex items-center gap-4">
-            <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
+            <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold">
               {products.length} Products Available
             </span>
-            <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-              Premium THCA & More
+            <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold">
+              Premium THCA & Specialty Joints
             </span>
           </div>
         </div>

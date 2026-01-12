@@ -16,9 +16,6 @@ interface SearchSuggestion {
 
 const placeholderWords = [
   'pre-rolls',
-  '7-OH',
-  '7-Hydroxymitragynine',
-  'kratom',
   'shrooms',
   'edibles',
   'vapes',
@@ -173,14 +170,14 @@ export default function EnhancedSearchBar() {
         'Bongs & Water Pipes': '/bongs',
         'Hand Pipes': '/pipes',
         'Dab Rigs & Tools': '/dabsntools',
-        'Vaporizers': '/thca_pnv',
+        'Vaporizers': '/vapes',
         'Smoking Accessories': '/accessories',
         'THCA Flower': '/thca_flower',
-        'Pre-Rolls & Vapes': '/thca_pnv',
-        'THCA Prerolls & Vapes': '/thca_pnv',
-        'THCA Prerolls': '/thca_pnv',
-        'THCA Vapes': '/thca_pnv',
-        'THCA Cartridges': '/thca_pnv'
+        'Pre-Rolls': '/pre-rolls',
+        'Vapes & Carts': '/vapes',
+        'THCA Prerolls': '/pre-rolls',
+        'THCA Vapes': '/vapes',
+        'THCA Cartridges': '/vapes'
       }
 
       return categoryRoutes[suggestion.text] || `/search?q=${encodeURIComponent(suggestion.text)}`
@@ -245,35 +242,22 @@ export default function EnhancedSearchBar() {
     // Check if search query should redirect to specialized pages
     const queryLower = searchQuery.toLowerCase().trim();
 
-    // Check for 7-hydroxy/hydroxymitragynine keywords
-    const hydroxyKeywords = ['7-oh', '7-hydroxy', '7 hydroxymitragynine', 'hydroxymitragynine', '7hydroxy'];
-    const shouldRedirectToHydroxy = hydroxyKeywords.some(keyword => queryLower.includes(keyword));
-
-    if (shouldRedirectToHydroxy) {
-      // Redirect to 7-Hydroxymitragynine page
+    // Check if search query should redirect to Pre-Rolls page
+    if (queryLower.includes('preroll') || queryLower.includes('pre-roll') || queryLower.includes('joint')) {
       if (typeof window !== 'undefined' && router) {
-        router.push('/7-hydroxymitragynine')
+        router.push('/pre-rolls')
       } else {
-        window.location.href = '/7-hydroxymitragynine'
+        window.location.href = '/pre-rolls'
       }
       return
     }
 
-    // Check if search query should redirect to THCA page
-    const thcaKeywords = ['thca', 'prerolls', 'vapes', 'cartridges', 'disposable'];
-    const shouldRedirectToThca = thcaKeywords.some(keyword =>
-      queryLower.includes(keyword) &&
-      (queryLower.includes('preroll') || queryLower.includes('vape') ||
-       queryLower.includes('cartridge') || queryLower.includes('disposable') ||
-       (queryLower.includes('thca') && (queryLower.includes('preroll') || queryLower.includes('vape'))))
-    );
-
-    if (shouldRedirectToThca) {
-      // Redirect to THCA page instead of general search
+    // Check if search query should redirect to Vapes page
+    if (queryLower.includes('vape') || queryLower.includes('cartridge') || queryLower.includes('disposable') || queryLower.includes('cart')) {
       if (typeof window !== 'undefined' && router) {
-        router.push('/thca_pnv')
+        router.push('/vapes')
       } else {
-        window.location.href = '/thca_pnv'
+        window.location.href = '/vapes'
       }
       return
     }
@@ -299,7 +283,7 @@ export default function EnhancedSearchBar() {
     params.set('q', searchQuery.trim())
 
     const searchUrl = `/search?${params.toString()}`
-sn
+
     if (typeof window !== 'undefined' && router) {
       router.push(searchUrl)
     } else {

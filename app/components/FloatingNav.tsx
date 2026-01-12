@@ -92,33 +92,27 @@ export default function FloatingNav() {
               onMouseLeave={() => handleMouseLeaveWithDelay("main")}
             >
               <div className="py-2">
-                <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
-                  ⭐ All Vapes
+                <Link href="/vapes" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
+                  ⭐ All Vapes & Carts
                 </Link>
                 <div className="border-t border-gray-700 my-1" />
 
-                {/* THCA Products */}
-                <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  THCA Products
+                {/* Vapes by Type */}
+                <Link href="/vapes?type=cartridge" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                  Cartridges
                 </Link>
-                <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  D8 Products
+                <Link href="/vapes?type=disposable" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                  Disposables
                 </Link>
-                <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  D10 Products
-                </Link>
-                <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  THCp Products
-                </Link>
-                <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
-                  THCv Products
-                </Link>
-
-                <div className="border-t border-gray-700 my-1" />
-
-                {/* Vape Equipment */}
-                <Link href="/thca_pnv" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                <Link href="/vapes?type=vaporizer" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   Vaporizers
+                </Link>
+
+                <div className="border-t border-gray-700 my-1" />
+
+                {/* Equipment */}
+                <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                  E-Rigs & Tools
                 </Link>
                 <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   E-Rigs
@@ -135,11 +129,11 @@ export default function FloatingNav() {
         </div>
 
         {/* Simple links matching GlobalMasthead */}
-                <Link href="/thca_pnv" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
-                  Pre-Rolls & Vapes
-                </Link>
-        <Link href="/7-hydroxymitragynine" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
-          Kratom & 7-OH
+        <Link href="/vapes" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
+          Vapes
+        </Link>
+        <Link href="/pre-rolls" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
+          Pre-Rolls
         </Link>
         
         {/* Edibles Dropdown */}
