@@ -15,18 +15,14 @@ interface SearchSuggestion {
 
 
 const placeholderWords = [
-  'pre-rolls',
+  'prerolls',
   'shrooms',
   'edibles',
-  'vapes',
   'CBD',
   'tinctures',
   'salves',
   'accessories',
-  'bongs',
   'brands',
-  'hand pipes',
-  'dab-rigs',
   'THCA Flower',
   'THCA Vapes'
 ]
