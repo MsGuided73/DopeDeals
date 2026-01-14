@@ -50,23 +50,19 @@ interface AgeVerification {
 
 interface ComplianceRule {
   id: string;
-  name: string;
-  type: 'age' | 'location' | 'product' | 'purchase_limit';
-  description: string;
+  category: string;
+  substanceType: string;
+  restrictedStates: string[];
+  ageRequirement: number;
   is_active: boolean;
-  parameters: Record<string, any>;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
 }
 
 interface AuditLog {
   id: string;
-  user_id: string;
-  action: string;
-  details: string;
-  ip_address: string;
-  user_agent: string;
-  created_at: string;
+  productId: string;
+  violation: string;
+  detected_at: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
@@ -102,17 +98,6 @@ export default function AdminCompliancePage() {
       if (statsRes.ok) {
         const statsData = await statsRes.json();
         setStats(statsData);
-      } else {
-        // Mock stats
-        setStats({
-          totalUsers: 1250,
-          verifiedUsers: 1100,
-          pendingVerifications: 45,
-          rejectedVerifications: 23,
-          ageComplianceRate: 94.2,
-          locationComplianceRate: 98.1,
-          activeRestrictions: 12
-        });
       }
 
       // Load verifications
@@ -120,38 +105,6 @@ export default function AdminCompliancePage() {
       if (verificationsRes.ok) {
         const verificationsData = await verificationsRes.json();
         setVerifications(verificationsData.verifications || []);
-      } else {
-        // Mock verifications
-        setVerifications([
-          {
-            id: '1',
-            user_id: 'user-1',
-            user_email: 'john.doe@email.com',
-            user_name: 'John Doe',
-            verification_method: 'id_upload',
-            status: 'pending',
-            submitted_at: '2024-11-08T10:30:00Z',
-            date_of_birth: '1995-03-15',
-            age: 29,
-            location: 'California, USA',
-            ip_address: '192.168.1.100'
-          },
-          {
-            id: '2',
-            user_id: 'user-2',
-            user_email: 'jane.smith@email.com',
-            user_name: 'Jane Smith',
-            verification_method: 'credit_card',
-            status: 'approved',
-            submitted_at: '2024-11-07T14:20:00Z',
-            reviewed_at: '2024-11-07T15:30:00Z',
-            reviewed_by: 'Admin User',
-            date_of_birth: '1988-07-22',
-            age: 36,
-            location: 'California, USA',
-            ip_address: '192.168.1.101'
-          }
-        ]);
       }
 
       // Load rules
@@ -159,30 +112,6 @@ export default function AdminCompliancePage() {
       if (rulesRes.ok) {
         const rulesData = await rulesRes.json();
         setRules(rulesData.rules || []);
-      } else {
-        // Mock rules
-        setRules([
-          {
-            id: '1',
-            name: 'Minimum Age Requirement',
-            type: 'age',
-            description: 'Users must be 21 years or older',
-            is_active: true,
-            parameters: { minimum_age: 21 },
-            created_at: '2024-01-01T00:00:00Z',
-            updated_at: '2024-01-01T00:00:00Z'
-          },
-          {
-            id: '2',
-            name: 'California Only',
-            type: 'location',
-            description: 'Only allow users from California',
-            is_active: true,
-            parameters: { allowed_states: ['CA'] },
-            created_at: '2024-01-01T00:00:00Z',
-            updated_at: '2024-01-01T00:00:00Z'
-          }
-        ]);
       }
 
       // Load audit logs
@@ -545,8 +474,8 @@ export default function AdminCompliancePage() {
                     <div className="flex items-center gap-4">
                       <div className={`w-3 h-3 rounded-full ${rule.is_active ? 'bg-green-500' : 'bg-gray-400'}`}></div>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">{rule.name}</h3>
-                        <p className="text-sm text-gray-500">{rule.type.toUpperCase()} • {rule.description}</p>
+                        <h3 className="text-lg font-semibold text-gray-900">{rule.category}</h3>
+                        <p className="text-sm text-gray-500">{rule.substanceType?.toUpperCase()} • Age requirement: {rule.ageRequirement}+</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -571,7 +500,7 @@ export default function AdminCompliancePage() {
                         Action
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        User
+                        Product ID
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Severity
@@ -584,15 +513,15 @@ export default function AdminCompliancePage() {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {auditLogs.map((log) => (
                       <tr key={log.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm text-gray-900">{log.action}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">{log.user_id}</td>
+                        <td className="px-6 py-4 text-sm text-gray-900">{log.violation}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500 font-mono text-xs">{log.productId}</td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getSeverityColor(log.severity)}`}>
-                            {log.severity.toUpperCase()}
+                            {(log.severity || 'MEDIUM').toUpperCase()}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {new Date(log.created_at).toLocaleString()}
+                          {new Date(log.detected_at).toLocaleString()}
                         </td>
                       </tr>
                     ))}
@@ -648,7 +577,7 @@ function VerificationReviewModal({
       <div className="bg-white rounded-lg w-full max-w-2xl p-6">
         <div className="flex justify-between items-start mb-6">
           <h2 className="text-xl font-bold text-gray-900">Review Age Verification</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">×</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">×</button>
         </div>
 
         <div className="space-y-6">
@@ -666,19 +595,11 @@ function VerificationReviewModal({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                <p className="text-sm text-gray-900">{new Date(verification.date_of_birth).toLocaleDateString()}</p>
+                <p className="text-sm text-gray-900">{verification.date_of_birth ? new Date(verification.date_of_birth).toLocaleDateString() : 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Age</label>
                 <p className="text-sm text-gray-900">{verification.age} years</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Location</label>
-                <p className="text-sm text-gray-900">{verification.location}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">IP Address</label>
-                <p className="text-sm text-gray-900">{verification.ip_address}</p>
               </div>
             </div>
           </div>
@@ -695,18 +616,6 @@ function VerificationReviewModal({
                 <label className="block text-sm font-medium text-gray-700">Submitted</label>
                 <p className="text-sm text-gray-900">{new Date(verification.submitted_at).toLocaleString()}</p>
               </div>
-              {verification.reviewed_at && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Reviewed</label>
-                    <p className="text-sm text-gray-900">{new Date(verification.reviewed_at).toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Reviewed By</label>
-                    <p className="text-sm text-gray-900">{verification.reviewed_by}</p>
-                  </div>
-                </>
-              )}
             </div>
           </div>
 

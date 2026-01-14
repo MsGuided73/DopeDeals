@@ -1,82 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
+import { supabaseServer as supabase } from '@/lib/supabase-server';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status') || 'all';
+    const status = searchParams.get('status');
 
-    // Build the query
-    let ordersQuery = supabase
+    let query = supabase
       .from('orders')
       .select(`
         *,
-        order_items (
-          id,
-          quantity,
-          total_price,
-          unit_price,
-          products (
-            id,
-            name,
-            sku,
-            image_url
-          )
-        )
+        order_items (*)
       `)
       .order('created_at', { ascending: false });
 
-    // Filter by status if specified
-    if (status !== 'all') {
-      ordersQuery = ordersQuery.eq('status', status);
+    if (status && status !== 'all') {
+      query = query.eq('status', status);
     }
 
-    const { data: orders, error } = await ordersQuery;
+    const { data: orders, error } = await query;
 
     if (error) {
-      console.error('Error fetching orders:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch orders' },
-        { status: 500 }
-      );
+      console.error('[Orders API] Supabase error:', error);
+      return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
     }
 
-    // Transform the data for easier frontend consumption
-    const transformedOrders = (orders || []).map(order => ({
-      ...order,
-      // Ensure all required fields are present
-      order_number: order.order_number || `#${order.id.slice(-8)}`,
-      total_amount: parseFloat(order.total_amount) || 0,
-      order_items: order.order_items || []
-    }));
-
-    // Calculate summary statistics
-    const totalOrders = transformedOrders.length;
-    const totalRevenue = transformedOrders.reduce((sum, order) => sum + (order.total_amount || 0), 0);
-    const pendingOrders = transformedOrders.filter(order => order.status === 'pending').length;
-    const paidOrders = transformedOrders.filter(order => order.payment_status === 'paid').length;
-
-    return NextResponse.json({
-      success: true,
-      orders: transformedOrders,
-      summary: {
-        total: totalOrders,
-        revenue: totalRevenue,
-        pending: pendingOrders,
-        paid: paidOrders
-      }
-    });
-
+    return NextResponse.json({ orders: orders || [] });
   } catch (error) {
-    console.error('Admin orders API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('[Orders API] Error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

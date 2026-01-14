@@ -30,6 +30,7 @@ const navGroups = [
       { href: '/admin/assets', label: 'Assets', icon: '🖼️', description: 'File management' },
       { href: '/admin/seo', label: 'SEO', icon: '🔍', description: 'Search optimization' },
       { href: '/admin/page-builder', label: 'Pages', icon: '🎨', description: 'Content builder' },
+      { href: '/admin/customization', label: 'Design', icon: '🎨', description: 'Site visual styles' },
     ]
   },
   {

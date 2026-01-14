@@ -80,133 +80,36 @@ export default function AdminInventoryPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'movements'>('overview');
 
   useEffect(() => {
-    loadInventory();
-    loadStats();
-    loadStockMovements();
+    loadData();
   }, []);
 
-  async function loadInventory() {
+  async function loadData() {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/inventory');
-      if (response.ok) {
-        const data = await response.json();
+      const [invRes, statsRes, movRes] = await Promise.all([
+        fetch('/api/admin/inventory'),
+        fetch('/api/admin/inventory/stats'),
+        fetch('/api/admin/inventory/movements')
+      ]);
+
+      if (invRes.ok) {
+        const data = await invRes.json();
         setInventory(data.inventory || []);
-      } else {
-        // Mock data for development
-        setInventory([
-          {
-            id: '1',
-            product_id: 'prod-1',
-            name: 'Gorilla Glue Pre-Roll',
-            sku: 'GG-PR-001',
-            stock_quantity: 45,
-            reserved_quantity: 5,
-            available_quantity: 40,
-            low_stock_threshold: 10,
-            brand_name: 'Gorilla Glue',
-            category: 'Pre-Rolls',
-            price: 12.99,
-            image_url: '/placeholder.jpg',
-            last_updated: '2024-11-08T10:30:00Z',
-            status: 'in_stock'
-          },
-          {
-            id: '2',
-            product_id: 'prod-2',
-            name: 'Blue Dream Flower',
-            sku: 'BD-FL-002',
-            stock_quantity: 8,
-            reserved_quantity: 2,
-            available_quantity: 6,
-            low_stock_threshold: 15,
-            brand_name: 'Blue Dream',
-            category: 'THCA Flower',
-            price: 49.99,
-            image_url: '/placeholder.jpg',
-            last_updated: '2024-11-08T09:15:00Z',
-            status: 'low_stock'
-          },
-          {
-            id: '3',
-            product_id: 'prod-3',
-            name: 'RooR Bong',
-            sku: 'RR-BG-003',
-            stock_quantity: 0,
-            reserved_quantity: 0,
-            available_quantity: 0,
-            low_stock_threshold: 5,
-            brand_name: 'RooR',
-            category: 'Bongs',
-            price: 89.99,
-            image_url: '/placeholder.jpg',
-            last_updated: '2024-11-07T16:45:00Z',
-            status: 'out_of_stock'
-          }
-        ]);
+      }
+
+      if (statsRes.ok) {
+        const data = await statsRes.json();
+        setStats(data);
+      }
+
+      if (movRes.ok) {
+        const data = await movRes.json();
+        setStockMovements(data.movements || []);
       }
     } catch (error) {
-      console.error('Error loading inventory:', error);
+      console.error('Error loading inventory data:', error);
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function loadStats() {
-    try {
-      const response = await fetch('/api/admin/inventory/stats');
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      } else {
-        // Mock stats for development
-        setStats({
-          totalProducts: 342,
-          inStockProducts: 298,
-          lowStockProducts: 12,
-          outOfStockProducts: 32,
-          totalValue: 45678.50,
-          lowStockAlerts: 8
-        });
-      }
-    } catch (error) {
-      console.error('Error loading stats:', error);
-    }
-  }
-
-  async function loadStockMovements() {
-    try {
-      const response = await fetch('/api/admin/inventory/movements');
-      if (response.ok) {
-        const data = await response.json();
-        setStockMovements(data.movements || []);
-      } else {
-        // Mock movements for development
-        setStockMovements([
-          {
-            id: '1',
-            product_id: 'prod-1',
-            product_name: 'Gorilla Glue Pre-Roll',
-            type: 'out',
-            quantity: 5,
-            reason: 'Order fulfillment',
-            created_at: '2024-11-08T14:30:00Z',
-            created_by: 'System'
-          },
-          {
-            id: '2',
-            product_id: 'prod-2',
-            product_name: 'Blue Dream Flower',
-            type: 'in',
-            quantity: 20,
-            reason: 'Stock replenishment',
-            created_at: '2024-11-08T10:15:00Z',
-            created_by: 'Admin'
-          }
-        ]);
-      }
-    } catch (error) {
-      console.error('Error loading stock movements:', error);
     }
   }
 
@@ -219,9 +122,7 @@ export default function AdminInventoryPage() {
       });
 
       if (response.ok) {
-        await loadInventory();
-        await loadStats();
-        await loadStockMovements();
+        await loadData();
         setShowStockModal(false);
         setSelectedProduct(null);
       }
@@ -398,23 +299,25 @@ export default function AdminInventoryPage() {
           {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* Low Stock Alerts */}
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <AlertTriangle className="w-6 h-6 text-yellow-600 mr-3" />
-                    <div>
-                      <h3 className="text-lg font-semibold text-yellow-800">Low Stock Alerts</h3>
-                      <p className="text-yellow-700">{stats.lowStockAlerts} products need attention</p>
+              {stats.lowStockAlerts > 0 && (
+                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <AlertTriangle className="w-6 h-6 text-yellow-600 mr-3" />
+                      <div>
+                        <h3 className="text-lg font-semibold text-yellow-800">Low Stock Alerts</h3>
+                        <p className="text-yellow-700">{stats.lowStockAlerts} products need attention</p>
+                      </div>
                     </div>
+                    <button
+                      onClick={() => setActiveTab('products')}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg font-medium"
+                    >
+                      View Products
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setActiveTab('products')}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg font-medium"
-                  >
-                    View Products
-                  </button>
                 </div>
-              </div>
+              )}
 
               {/* Quick Actions */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -476,18 +379,6 @@ export default function AdminInventoryPage() {
                     <option value="out_of_stock">Out of Stock</option>
                     <option value="discontinued">Discontinued</option>
                   </select>
-
-                  <select
-                    value={categoryFilter}
-                    onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange focus:border-transparent"
-                  >
-                    <option value="all">All Categories</option>
-                    <option value="Pre-Rolls">Pre-Rolls</option>
-                    <option value="THCA Flower">THCA Flower</option>
-                    <option value="Bongs">Bongs</option>
-                    <option value="Vapes">Vapes</option>
-                  </select>
                 </div>
               </div>
 
@@ -526,12 +417,15 @@ export default function AdminInventoryPage() {
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-10 w-10">
                               <div className="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center">
-                                <Package className="w-6 h-6 text-gray-400" />
+                                {item.image_url ? (
+                                  <img src={item.image_url} alt="" className="h-10 w-10 rounded-lg object-cover" />
+                                ) : (
+                                  <Package className="w-6 h-6 text-gray-400" />
+                                )}
                               </div>
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                              <div className="text-sm text-gray-500">{item.brand_name} • {item.category}</div>
+                              <div className="text-sm font-medium text-gray-900 truncate max-w-xs">{item.name}</div>
                             </div>
                           </div>
                         </td>
@@ -541,7 +435,7 @@ export default function AdminInventoryPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
                             <div>Available: {item.available_quantity}</div>
-                            <div className="text-gray-500">Reserved: {item.reserved_quantity}</div>
+                            <div className="text-gray-500 text-xs">Total: {item.stock_quantity}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
