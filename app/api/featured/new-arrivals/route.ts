@@ -24,6 +24,17 @@ export async function GET(req: NextRequest) {
       // Add back when connecting to Zoho Inventory for automated product management
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .not('image_url', 'is', null)
       .order('created_at', { ascending: false })
       .limit(limit);
@@ -47,6 +58,17 @@ export async function GET(req: NextRequest) {
         // Add back when connecting to Zoho Inventory for automated product management
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
+        // STRICT: No Kratom or related substances
+        .not('name', 'ilike', '%kratom%')
+        .not('name', 'ilike', '%7-oh%')
+        .not('name', 'ilike', '%7-hydroxy%')
+        .not('name', 'ilike', '%mitragynine%')
+        .not('name', 'ilike', '%7-ohmz%')
+        .not('description', 'ilike', '%kratom%')
+        .not('description', 'ilike', '%7-oh%')
+        .not('description', 'ilike', '%7-hydroxy%')
+        .not('description', 'ilike', '%mitragynine%')
+        .not('description', 'ilike', '%7-ohmz%')
         .order('created_at', { ascending: false })
         .limit(limit);
 

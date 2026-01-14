@@ -126,6 +126,13 @@ export async function GET(request: NextRequest) {
 
     const pendingOrders = pendingOrdersData?.length || 0;
 
+    // Get products missing images
+    const { count: missingImagesCount, error: missingImagesError } = await supabase
+      .from('main_site_products')
+      .select('*', { count: 'exact', head: true })
+      .or('image_url.is.null,image_url.eq.""')
+      .eq('is_active', true);
+
     return NextResponse.json({
       totalRevenue,
       totalOrders,
@@ -133,6 +140,7 @@ export async function GET(request: NextRequest) {
       totalCustomers,
       lowStockProducts,
       pendingOrders,
+      missingImagesCount: missingImagesCount || 0,
       revenueChange: Math.round(revenueChange * 100) / 100,
       ordersChange: Math.round(ordersChange * 100) / 100,
       customersChange: Math.round(customersChange * 100) / 100

@@ -37,7 +37,18 @@ export async function getStorage() {
         image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
         nicotine_product, tobacco_product,
         created_at, updated_at
-      `);
+      `)
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%');
 
       if (filters?.categoryId) query = query.eq('category_id', filters.categoryId);
       if (filters?.brandId) query = query.eq('brand_id', filters.brandId);
@@ -80,6 +91,19 @@ export async function getStorage() {
         console.error('Error fetching product:', error, 'ID:', productId);
         throw error;
       }
+
+      // STRICT COMPLIANCE: Verify product is not Kratom-related
+      if (data) {
+        const name = data.name?.toLowerCase() || '';
+        const desc = data.description?.toLowerCase() || '';
+        const prohibited = ['kratom', '7-oh', '7-hydroxy', 'mitragynine', '7-ohmz'];
+        
+        if (prohibited.some(term => name.includes(term) || desc.includes(term))) {
+          console.warn(`🛑 COMPLIANCE: Blocked fetching prohibited product ID ${productId}: ${data.name}`);
+          return null;
+        }
+      }
+
       return data;
     },
 
@@ -99,6 +123,13 @@ export async function getStorage() {
       const { data, error } = await supabase
         .from('categories')
         .select('*')
+        // STRICT: No Kratom-related categories
+        .not('slug', 'ilike', '%kratom%')
+        .not('slug', 'ilike', '%hydroxy%')
+        .not('slug', 'ilike', '%7-oh%')
+        .not('name', 'ilike', '%kratom%')
+        .not('name', 'ilike', '%hydroxy%')
+        .not('name', 'ilike', '%7-oh%')
         .order('name');
       
       if (error) throw error;
@@ -199,10 +230,10 @@ export async function getStorage() {
       }
     },
 
-    // Get all products for recommendations (COMPLIANCE: Excludes nicotine products)
+    // Get all products for recommendations (COMPLIANCE: Excludes nicotine products and prohibited substances)
     async getAllProducts() {
       try {
-        console.log('🔒 COMPLIANCE: Fetching only non-nicotine products for recommendations');
+        console.log('🔒 COMPLIANCE: Fetching only safe products for recommendations');
 
         const { data, error } = await supabase
           .from('main_site_products')
@@ -213,6 +244,17 @@ export async function getStorage() {
             created_at, updated_at
           `)
           .eq('is_active', true)
+          // STRICT: No Kratom or related substances
+          .not('name', 'ilike', '%kratom%')
+          .not('name', 'ilike', '%7-oh%')
+          .not('name', 'ilike', '%7-hydroxy%')
+          .not('name', 'ilike', '%mitragynine%')
+          .not('name', 'ilike', '%7-ohmz%')
+          .not('description', 'ilike', '%kratom%')
+          .not('description', 'ilike', '%7-oh%')
+          .not('description', 'ilike', '%7-hydroxy%')
+          .not('description', 'ilike', '%mitragynine%')
+          .not('description', 'ilike', '%7-ohmz%')
           .limit(100);
 
         if (error) throw error;

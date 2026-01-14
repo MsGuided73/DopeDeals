@@ -57,6 +57,17 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .not('image_url', 'is', null)
       .neq('image_url', '')
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or('name.ilike.%thca%,name.ilike.%packman%,name.ilike.%crave%,name.ilike.%hidden.hills%,name.ilike.%hidden-hills%,name.ilike.%salve%,name.ilike.%tincture%,name.ilike.%flower%,name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%concentrate%,name.ilike.%edible%,brand_name.ilike.%thca%,brand_name.ilike.%packman%,brand_name.ilike.%crave%,brand_name.ilike.%hidden.hills%,brand_name.ilike.%hidden-hills%,brand_name.ilike.%salve%,brand_name.ilike.%tincture%,brand_name.ilike.%flower%,brand_name.ilike.%preroll%,brand_name.ilike.%cartridge%,brand_name.ilike.%vape%,brand_name.ilike.%concentrate%,brand_name.ilike.%edible%,description.ilike.%thca%,description.ilike.%packman%,description.ilike.%crave%,description.ilike.%hidden.hills%,description.ilike.%hidden-hills%,description.ilike.%salve%,description.ilike.%tincture%,description.ilike.%flower%,description.ilike.%preroll%,description.ilike.%cartridge%,description.ilike.%vape%,description.ilike.%concentrate%,description.ilike.%edible%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit * 2) // Fetch extra to account for duplicates
@@ -106,6 +117,17 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .not('image_url', 'is', null)
       .neq('image_url', '')
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or('name.ilike.%thca%,name.ilike.%packman%,name.ilike.%crave%,name.ilike.%hidden.hills%,name.ilike.%hidden-hills%,name.ilike.%salve%,name.ilike.%tincture%,name.ilike.%flower%,name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%concentrate%,name.ilike.%edible%,brand_name.ilike.%thca%,brand_name.ilike.%packman%,brand_name.ilike.%crave%,brand_name.ilike.%hidden.hills%,brand_name.ilike.%hidden-hills%,brand_name.ilike.%salve%,brand_name.ilike.%tincture%,brand_name.ilike.%flower%,brand_name.ilike.%preroll%,brand_name.ilike.%cartridge%,brand_name.ilike.%vape%,brand_name.ilike.%concentrate%,brand_name.ilike.%edible%,description.ilike.%thca%,description.ilike.%packman%,description.ilike.%crave%,description.ilike.%hidden.hills%,description.ilike.%hidden-hills%,description.ilike.%salve%,description.ilike.%tincture%,description.ilike.%flower%,description.ilike.%preroll%,description.ilike.%cartridge%,description.ilike.%vape%,description.ilike.%concentrate%,description.ilike.%edible%');
 
     console.log(`🌿 THCA API: Retrieved ${products.length} unique THCA products (no duplicates, images required)`);

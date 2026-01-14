@@ -20,13 +20,24 @@ export async function GET(req: NextRequest) {
     const category = url.searchParams.get('category');
 
     // Build query - Use main_site_products table
-    // Exclude battery products as they are not exciting
+    // Exclude restricted products (batteries, kratom, etc.)
     let query = supabase
       .from('main_site_products')
       .select('*')
       .not('name', 'ilike', '%battery%')
       .not('description', 'ilike', '%battery%')
-      .not('short_description', 'ilike', '%battery%');
+      .not('short_description', 'ilike', '%battery%')
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%');
 
     // Apply category filter if provided
     if (category) {
@@ -48,13 +59,24 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch products', details: error.message }, { status: 500 });
     }
 
-    // Get total count for pagination info (excluding batteries)
+    // Get total count for pagination info (excluding restricted products)
     const { count } = await supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .not('name', 'ilike', '%battery%')
       .not('description', 'ilike', '%battery%')
-      .not('short_description', 'ilike', '%battery%');
+      .not('short_description', 'ilike', '%battery%')
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%');
 
     return NextResponse.json({
       products: products || [],

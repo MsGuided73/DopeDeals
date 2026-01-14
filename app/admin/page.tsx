@@ -16,8 +16,10 @@ import {
   Plus,
   BarChart3,
   Activity,
-  Zap
+  Zap,
+  ImageIcon
 } from 'lucide-react';
+import MissingImagesTable from './_components/MissingImagesTable';
 
 interface DashboardStats {
   totalRevenue: number;
@@ -26,6 +28,7 @@ interface DashboardStats {
   totalCustomers: number;
   lowStockProducts: number;
   pendingOrders: number;
+  missingImagesCount: number;
   revenueChange: number;
   ordersChange: number;
   customersChange: number;
@@ -56,6 +59,7 @@ export default function AdminDashboardPage() {
     totalCustomers: 0,
     lowStockProducts: 0,
     pendingOrders: 0,
+    missingImagesCount: 0,
     revenueChange: 0,
     ordersChange: 0,
     customersChange: 0
@@ -101,6 +105,7 @@ export default function AdminDashboardPage() {
         totalCustomers: 892,
         lowStockProducts: 3,
         pendingOrders: 12,
+        missingImagesCount: 5,
         revenueChange: 12.5,
         ordersChange: 8.2,
         customersChange: 15.3
@@ -209,7 +214,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -247,6 +252,22 @@ export default function AdminDashboardPage() {
               </div>
             </div>
             <ShoppingCart className="w-8 h-8 text-blue-600" />
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 font-bold text-orange-600">Missing Images</p>
+              <p className="text-2xl font-bold text-gray-900">{formatNumber(stats.missingImagesCount)}</p>
+              {stats.missingImagesCount > 0 && (
+                <div className="flex items-center mt-1">
+                  <AlertTriangle className="w-4 h-4 text-orange-600 mr-1" />
+                  <p className="text-sm text-orange-600 font-medium">Needs Attention</p>
+                </div>
+              )}
+            </div>
+            <ImageIcon className="w-8 h-8 text-orange-500" />
           </div>
         </div>
 
@@ -289,6 +310,13 @@ export default function AdminDashboardPage() {
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Missing Images Alert Table */}
+        {stats.missingImagesCount > 0 && (
+          <div className="lg:col-span-3">
+            <MissingImagesTable />
+          </div>
+        )}
+
         {/* Recent Activity */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-4">

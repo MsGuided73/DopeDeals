@@ -56,6 +56,17 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('featured', true)
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
       .order('created_at', { ascending: false })
       .limit(effectiveLimit * 2) // Fetch extra to ensure we have enough after deduplication
@@ -98,12 +109,23 @@ export async function GET(req: NextRequest) {
     // Take only the requested limit
     const products = uniqueProducts.slice(0, effectiveLimit);
 
-    // Get total count for pagination info (excluding batteries)
+    // Get total count for pagination info (excluding restricted products)
     const { count } = await supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
       .eq('featured', true)
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%');
 
     console.log(`🎯 Featured Products API: Retrieved ${products.length} unique featured products (no batteries, no duplicates)`);

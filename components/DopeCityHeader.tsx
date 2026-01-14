@@ -206,13 +206,6 @@ export default function Highway420Header() {
                     >
                       ⚡ Nitrous Oxide
                     </Link>
-                    <Link
-                      href="/products?q=7-hydroxymitragynine"
-                      className="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
-                      onClick={() => setIsThcaDropdownOpen(false)}
-                    >
-                      🌿 7-Hydroxymitragynine
-                    </Link>
                   </div>
                 </div>
               )}
@@ -338,9 +331,6 @@ export default function Highway420Header() {
                 </Link>
                 <Link href="/products?q=nitrous-oxide" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   ⚡ Nitrous Oxide
-                </Link>
-                <Link href="/products?q=7-hydroxymitragynine" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
-                  🌿 7-Hydroxymitragynine
                 </Link>
               </div>
             </div>

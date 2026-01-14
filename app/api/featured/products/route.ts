@@ -94,6 +94,17 @@ export async function GET(req: NextRequest) {
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
       // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
       // Note: Removed nicotine and tobacco filters for recommendations
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or('featured_product.eq.true,featured_product.eq."YES"') // Get featured_product items (both boolean true and string "YES")
       .order('created_at', { ascending: false });
 
@@ -123,6 +134,17 @@ export async function GET(req: NextRequest) {
         // Note: Removed .eq('is_active', true) filter for current manual inventory phase
         // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
         // Note: Removed nicotine and tobacco filters for recommendations
+        // STRICT: No Kratom or related substances
+        .not('name', 'ilike', '%kratom%')
+        .not('name', 'ilike', '%7-oh%')
+        .not('name', 'ilike', '%7-hydroxy%')
+        .not('name', 'ilike', '%mitragynine%')
+        .not('name', 'ilike', '%7-ohmz%')
+        .not('description', 'ilike', '%kratom%')
+        .not('description', 'ilike', '%7-oh%')
+        .not('description', 'ilike', '%7-hydroxy%')
+        .not('description', 'ilike', '%mitragynine%')
+        .not('description', 'ilike', '%7-ohmz%')
         .eq('featured', true) // Get featured products as fallback
         .order('created_at', { ascending: false })
         .limit(Math.min(limit, 12)); // Get more featured products to ensure availability

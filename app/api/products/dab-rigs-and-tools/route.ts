@@ -23,7 +23,18 @@ export async function GET(req: NextRequest) {
     let query = supabase
       .from('main_site_products')
       .select('*')
-      .eq('is_active', true);
+      .eq('is_active', true)
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%');
 
     // For now, let's just return some active products and filter by name patterns
     const dabKeywords = [
@@ -63,6 +74,17 @@ export async function GET(req: NextRequest) {
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or(dabKeywords.map(keyword => `name.ilike.%${keyword}%`).join(','));
 
     // Get brand information for products

@@ -78,7 +78,18 @@ export async function POST(req: Request) {
       )
       .not("image_url", "is", null)
       .neq("image_url", "")
-      .not("image_url", "ilike", "%,%");
+      .not("image_url", "ilike", "%,%")
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%');
 
     if (category) q1 = q1.eq("category_slug", category);
 

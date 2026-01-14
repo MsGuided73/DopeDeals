@@ -73,6 +73,11 @@ export function detectCategory(productName: string): string {
   if (name.includes('tab') || name.includes('gummy') || name.includes('edible')) {
     return 'edibles';
   }
+
+  // STRICT: Kratom is strictly prohibited from categorization
+  if (name.includes('kratom') || name.includes('7-oh') || name.includes('mitragynine')) {
+    return 'prohibited';
+  }
   
   return 'other';
 }

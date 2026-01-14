@@ -25,6 +25,13 @@ export async function middleware(request: NextRequest) {
   // Check if requested path is always allowed OR is an API route
   const isAlwaysAllowed = alwaysAllowedPaths.some(path => pathname.startsWith(path)) || pathname.startsWith('/api/');
 
+  // STRICT COMPLIANCE: Block all Kratom-related paths
+  const kratomTerms = ['kratom', '7-oh', '7-hydroxy', 'mitragynine', '7-ohmz'];
+  if (kratomTerms.some(term => pathname.toLowerCase().includes(term))) {
+    console.warn(`🛑 COMPLIANCE: Blocked request to Kratom-related path: ${pathname}`);
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
   if (!isAlwaysAllowed && pathname !== '/auth/login') {
     // Check for site-password cookie
     const sitePasswordCookie = request.cookies.get('site-password')?.value;

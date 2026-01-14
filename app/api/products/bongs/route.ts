@@ -72,7 +72,18 @@ export async function GET(req: NextRequest) {
       // Note: Removed .eq('is_active', true) filter for current manual inventory phase
       // Add back when connecting to Zoho Inventory for automated product management
       .not('name', 'ilike', '%test%')
-      .not('name', 'ilike', '%sample%'); // Exclude sample products
+      .not('name', 'ilike', '%sample%') // Exclude sample products
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%');
 
     if (allError) {
       console.error('Error fetching all products:', allError);

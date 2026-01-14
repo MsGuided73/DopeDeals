@@ -75,6 +75,12 @@ export async function GET(request: NextRequest) {
       .not('image_url', 'is', null)
       .neq('image_url', '')
       .not('image_url', 'ilike', '%,%')
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
       .limit(50);
 
     if (!productsError && products) {

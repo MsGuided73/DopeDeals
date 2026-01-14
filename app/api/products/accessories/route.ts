@@ -58,6 +58,17 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .not('image_url', 'is', null)
       .neq('image_url', '')
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or('name.ilike.%accessor%,name.ilike.%pipe%,name.ilike.%bong%,name.ilike.%dab%,name.ilike.%rig%,name.ilike.%tool%,name.ilike.%lighter%,name.ilike.%grinder%,name.ilike.%scale%,name.ilike.%bag%,name.ilike.%case%,name.ilike.%holder%,name.ilike.%screen%,name.ilike.%bowl%,name.ilike.%stem%,brand_name.ilike.%accessor%,brand_name.ilike.%pipe%,brand_name.ilike.%bong%,brand_name.ilike.%dab%,brand_name.ilike.%rig%,brand_name.ilike.%tool%,brand_name.ilike.%lighter%,brand_name.ilike.%grinder%,brand_name.ilike.%scale%,brand_name.ilike.%bag%,brand_name.ilike.%case%,brand_name.ilike.%holder%,brand_name.ilike.%screen%,brand_name.ilike.%bowl%,brand_name.ilike.%stem%,description.ilike.%accessor%,description.ilike.%pipe%,description.ilike.%bong%,description.ilike.%dab%,description.ilike.%rig%,description.ilike.%tool%,description.ilike.%lighter%,description.ilike.%grinder%,description.ilike.%scale%,description.ilike.%bag%,description.ilike.%case%,description.ilike.%holder%,description.ilike.%screen%,description.ilike.%bowl%,description.ilike.%stem%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit * 2) // Fetch extra to account for duplicates
@@ -107,6 +118,17 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .not('image_url', 'is', null)
       .neq('image_url', '')
+      // STRICT: No Kratom or related substances
+      .not('name', 'ilike', '%kratom%')
+      .not('name', 'ilike', '%7-oh%')
+      .not('name', 'ilike', '%7-hydroxy%')
+      .not('name', 'ilike', '%mitragynine%')
+      .not('name', 'ilike', '%7-ohmz%')
+      .not('description', 'ilike', '%kratom%')
+      .not('description', 'ilike', '%7-oh%')
+      .not('description', 'ilike', '%7-hydroxy%')
+      .not('description', 'ilike', '%mitragynine%')
+      .not('description', 'ilike', '%7-ohmz%')
       .or('name.ilike.%accessor%,name.ilike.%pipe%,name.ilike.%bong%,name.ilike.%dab%,name.ilike.%rig%,name.ilike.%tool%,name.ilike.%lighter%,name.ilike.%grinder%,name.ilike.%scale%,name.ilike.%bag%,name.ilike.%case%,name.ilike.%holder%,name.ilike.%screen%,name.ilike.%bowl%,name.ilike.%stem%,brand_name.ilike.%accessor%,brand_name.ilike.%pipe%,brand_name.ilike.%bong%,brand_name.ilike.%dab%,brand_name.ilike.%rig%,brand_name.ilike.%tool%,brand_name.ilike.%lighter%,brand_name.ilike.%grinder%,brand_name.ilike.%scale%,brand_name.ilike.%bag%,brand_name.ilike.%case%,brand_name.ilike.%holder%,brand_name.ilike.%screen%,brand_name.ilike.%bowl%,brand_name.ilike.%stem%,description.ilike.%accessor%,description.ilike.%pipe%,description.ilike.%bong%,description.ilike.%dab%,description.ilike.%rig%,description.ilike.%tool%,description.ilike.%lighter%,description.ilike.%grinder%,description.ilike.%scale%,description.ilike.%bag%,description.ilike.%case%,description.ilike.%holder%,description.ilike.%screen%,description.ilike.%bowl%,description.ilike.%stem%');
 
     console.log(`🔧 Accessories API: Retrieved ${products.length} unique accessories (no duplicates, images required)`);

@@ -145,6 +145,12 @@ async function performRegularSearch(supabase: any, options: any) {
     .from('main_site_products')
     .select('id, name, our_price, image_url, category_slug')
     .eq('is_active', true)
+    // STRICT: No Kratom or related substances
+    .not('name', 'ilike', '%kratom%')
+    .not('name', 'ilike', '%7-oh%')
+    .not('name', 'ilike', '%7-hydroxy%')
+    .not('name', 'ilike', '%mitragynine%')
+    .not('name', 'ilike', '%7-ohmz%')
     .or('name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%thca%,name.ilike.%thc-a%,name.ilike.%THC-A%,name.ilike.%THC-a%')
     .limit(10);
 
