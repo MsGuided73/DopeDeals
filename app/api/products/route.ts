@@ -20,10 +20,11 @@ export async function GET(req: NextRequest) {
     const category = url.searchParams.get('category');
 
     // Build query - Use main_site_products table
-    // Exclude restricted products (batteries, kratom, etc.)
+    // Only show active products and exclude restricted products (batteries, kratom, etc.)
     let query = supabase
       .from('main_site_products')
       .select('*')
+      .eq('is_active', true)
       .not('name', 'ilike', '%battery%')
       .not('description', 'ilike', '%battery%')
       .not('short_description', 'ilike', '%battery%')
@@ -59,10 +60,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch products', details: error.message }, { status: 500 });
     }
 
-    // Get total count for pagination info (excluding restricted products)
-    const { count } = await supabase
+    // Get total count for pagination info (only active products, excluding restricted products)
+    let countQuery = supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
+      .eq('is_active', true)
       .not('name', 'ilike', '%battery%')
       .not('description', 'ilike', '%battery%')
       .not('short_description', 'ilike', '%battery%')
@@ -77,6 +79,13 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%');
+
+    // Apply category filter to count query if provided
+    if (category) {
+      countQuery = countQuery.eq('category_id', category);
+    }
+
+    const { count } = await countQuery;
 
     return NextResponse.json({
       products: products || [],

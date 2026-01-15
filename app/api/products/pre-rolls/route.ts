@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Search ALL products first, then filter for pre-rolls with images
+    // Search active products first, then filter for pre-rolls with images
     const { data: allProducts, error: allError } = await supabase
       .from('main_site_products')
       .select(`
@@ -69,8 +69,7 @@ export async function GET(req: NextRequest) {
         seo_keywords,
         created_at
       `)
-      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-      // Add back when connecting to Zoho Inventory for automated product management
+      .eq('is_active', true) // Only show active products on the site
       .not('name', 'ilike', '%test%')
       .not('name', 'ilike', '%sample%') // Exclude sample products
       // STRICT: No Kratom or related substances

@@ -19,9 +19,7 @@ export async function GET(req: NextRequest) {
         image_url, sku, stock_quantity, brand_name, materials,
         featured, created_at
       `)
-      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-      // Add back when connecting to Zoho Inventory for automated product management
+      .eq('is_active', true) // Only show active products on the site
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
       // STRICT: No Kratom or related substances
@@ -53,9 +51,7 @@ export async function GET(req: NextRequest) {
           image_url, sku, stock_quantity, brand_name, materials,
           featured, created_at
         `)
-        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-        // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-        // Add back when connecting to Zoho Inventory for automated product management
+        .eq('is_active', true) // Only show active products on the site
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
         // STRICT: No Kratom or related substances

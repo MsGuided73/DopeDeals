@@ -90,10 +90,8 @@ export async function GET(req: NextRequest) {
           id, name, description, short_description, our_price, sale_price,
           image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product, brand_name, category_id,
           created_at, updated_at
-        `)
-      // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-      // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-      // Note: Removed nicotine and tobacco filters for recommendations
+      `)
+      .eq('is_active', true) // Only show active products on the site
       // STRICT: No Kratom or related substances
       .not('name', 'ilike', '%kratom%')
       .not('name', 'ilike', '%7-oh%')
@@ -131,9 +129,7 @@ export async function GET(req: NextRequest) {
           image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product, brand_name, category_id,
           created_at, updated_at
         `)
-        // Note: Removed .eq('is_active', true) filter for current manual inventory phase
-        // Note: Removed .gt('stock_quantity', 0) filter for current manual inventory phase
-        // Note: Removed nicotine and tobacco filters for recommendations
+        .eq('is_active', true) // Only show active products on the site
         // STRICT: No Kratom or related substances
         .not('name', 'ilike', '%kratom%')
         .not('name', 'ilike', '%7-oh%')
