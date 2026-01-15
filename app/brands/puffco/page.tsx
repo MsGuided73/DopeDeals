@@ -5,6 +5,10 @@ import GlobalMasthead from '../../components/GlobalMasthead';
 import AgeVerification from '../../components/AgeVerification';
 import { supabaseServer } from '../../lib/supabase-server';
 
+// Force dynamic rendering with 90-minute cache revalidation
+export const dynamic = 'force-dynamic';
+export const revalidate = 5400; // 90 minutes in seconds
+
 export const metadata = {
   title: 'Puffco - Premium Electronic Dabbing Devices | Highway 420',
   description: 'Discover Puffco\'s revolutionary electronic dabbing devices. From the legendary Peak Pro to the portable Proxy, experience precision-engineered concentrate consumption at Highway 420.',

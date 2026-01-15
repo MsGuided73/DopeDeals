@@ -5,6 +5,10 @@ import GlobalMasthead from '../../components/GlobalMasthead';
 import AgeVerification from '../../components/AgeVerification';
 import { supabaseServer } from '../../lib/supabase-server';
 
+// Force dynamic rendering with 90-minute cache revalidation
+export const dynamic = 'force-dynamic';
+export const revalidate = 5400; // 90 minutes in seconds
+
 export const metadata = {
   title: 'Urth Farmacy - Premium THCA & Cannabis Products | Highway 420',
   description: 'Discover Urth Farmacy\'s premium THCA products, live resin cartridges, and innovative disposables. Pharmaceutical-grade extraction meets exotic genetics for exceptional cannabis experiences.',

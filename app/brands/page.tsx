@@ -6,7 +6,9 @@ export const metadata = {
   title: 'Brands | Dope Deals',
 };
 
+// Force dynamic rendering with 90-minute cache revalidation
 export const dynamic = 'force-dynamic';
+export const revalidate = 5400; // 90 minutes in seconds
 
 type Brand = {
   id?: string | number;
