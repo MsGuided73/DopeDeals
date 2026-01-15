@@ -1,8 +1,8 @@
 "use client";
 import { useState } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
-import VariantSelector, { hasProductVariants } from './VariantSelector';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { hasProductVariants } from './VariantSelector';
 
 interface ProductGalleryProps {
   // Main product image
@@ -21,7 +21,7 @@ interface ProductGalleryProps {
   viewMode?: 'detail' | 'modal' | 'sidebar';
   className?: string;
 
-  // Variant support - NEW
+  // Variant support
   onVariantChange?: (variantIndex: number, imageUrl: string) => void;
   selectedVariant?: number;
 }
@@ -38,14 +38,18 @@ export default function ProductGallery({
   onVariantChange,
   selectedVariant
 }: ProductGalleryProps) {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [internalSelectedIndex, setInternalSelectedIndex] = useState(0);
   const [isImageError, setIsImageError] = useState(false);
 
-  // Combine main image with gallery images
-  const mainImage = image_url || imageUrl || image;
-  const allImages = mainImage ? [mainImage, ...image_urls] : image_urls;
-  const hasImages = allImages.length > 0 && !isImageError;
+  // Sync with external variant selection if provided
+  const selectedImageIndex = selectedVariant !== undefined ? selectedVariant : internalSelectedIndex;
 
+  // Combine images and remove duplicates
+  const mainImage = image_url || imageUrl || image;
+  const rawImages = mainImage ? [mainImage, ...image_urls] : image_urls;
+  const allImages = Array.from(new Set(rawImages.filter(Boolean) as string[]));
+  
+  const hasImages = allImages.length > 0 && !isImageError;
   const currentImage = hasImages ? allImages[selectedImageIndex] : null;
 
   const handleImageError = () => {
@@ -53,24 +57,34 @@ export default function ProductGallery({
   };
 
   const goToPreviousImage = () => {
-    setSelectedImageIndex((prev) =>
-      prev === 0 ? allImages.length - 1 : prev - 1
-    );
+    const newIndex = selectedImageIndex === 0 ? allImages.length - 1 : selectedImageIndex - 1;
+    if (onVariantChange) {
+      onVariantChange(newIndex, allImages[newIndex]);
+    } else {
+      setInternalSelectedIndex(newIndex);
+    }
   };
 
   const goToNextImage = () => {
-    setSelectedImageIndex((prev) =>
-      prev === allImages.length - 1 ? 0 : prev + 1
-    );
+    const newIndex = selectedImageIndex === allImages.length - 1 ? 0 : selectedImageIndex + 1;
+    if (onVariantChange) {
+      onVariantChange(newIndex, allImages[newIndex]);
+    } else {
+      setInternalSelectedIndex(newIndex);
+    }
   };
 
   const goToImage = (index: number) => {
-    setSelectedImageIndex(index);
+    if (onVariantChange) {
+      onVariantChange(index, allImages[index]);
+    } else {
+      setInternalSelectedIndex(index);
+    }
   };
 
   if (!hasImages) {
     return (
-      <div className={`bg-gray-100 rounded-lg overflow-hidden ${className}`}>
+      <div className={`bg-gray-100 rounded-3xl overflow-hidden ${className}`}>
         <div className="aspect-square flex items-center justify-center text-gray-400">
           <div className="text-center">
             <div className="text-6xl mb-2">🖼️</div>
@@ -81,42 +95,20 @@ export default function ProductGallery({
     );
   }
 
-  // Handle variant changes
-  const handleVariantChange = (variantIndex: number, imageUrl: string) => {
-    setSelectedImageIndex(variantIndex);
-    // Call external callback if provided
-    if (onVariantChange) {
-      onVariantChange(variantIndex, imageUrl);
-    }
-  };
-
   // Detail view - Full product gallery
   if (viewMode === 'detail') {
     return (
-      <div className={`space-y-4 ${className}`}>
-        {/* Variant Selector */}
-        {hasProductVariants(allImages) && (
-          <div className="flex justify-center">
-            <VariantSelector
-              imageUrls={allImages}
-              onVariantChange={handleVariantChange}
-              selectedVariant={selectedImageIndex}
-              compact={false}
-              className="max-w-md"
-            />
-          </div>
-        )}
-
-        {/* Main Image Display */}
-        <div className="relative bg-gray-100 rounded-lg overflow-hidden group">
+      <div className={`space-y-6 ${className}`}>
+        {/* Main Image Display - Increased size and improved styling */}
+        <div className="relative bg-white rounded-[2.5rem] overflow-hidden group border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl">
           <div className="aspect-square relative">
             {currentImage && (
               <Image
                 src={currentImage}
                 alt={`${productName} - View ${selectedImageIndex + 1}`}
                 fill
-                className="object-contain p-8"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                className="object-contain p-4 md:p-6 transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 priority
                 onError={handleImageError}
               />
@@ -127,59 +119,54 @@ export default function ProductGallery({
               <>
                 <button
                   onClick={goToPreviousImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white text-black shadow-lg rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-x-2 group-hover:translate-x-0"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-6 h-6" />
                 </button>
 
                 <button
                   onClick={goToNextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white text-black shadow-lg rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-6 h-6" />
                 </button>
               </>
             )}
 
             {/* Image counter */}
             {allImages.length > 1 && (
-              <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+              <div className="absolute bottom-6 right-6 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase">
                 {selectedImageIndex + 1} / {allImages.length}
               </div>
             )}
           </div>
         </div>
 
-        {/* Thumbnail Gallery */}
+        {/* Thumbnail Gallery - More professional look */}
         {allImages.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
             {allImages.map((imageUrl, index) => (
               <button
                 key={index}
                 onClick={() => goToImage(index)}
-                className={`flex-shrink-0 w-16 h-16 rounded border-2 overflow-hidden transition-colors ${
+                className={`flex-shrink-0 w-24 h-24 rounded-2xl border-2 overflow-hidden transition-all duration-300 ${
                   index === selectedImageIndex
-                    ? 'border-dope-orange-500 shadow-lg'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-black ring-4 ring-black/5 scale-105 shadow-md'
+                    : 'border-transparent bg-gray-50 hover:bg-gray-100 hover:scale-102'
                 }`}
               >
                 <Image
                   src={imageUrl}
                   alt={`${productName} - Thumbnail ${index + 1}`}
-                  width={64}
-                  height={64}
-                  className="w-full h-full object-cover"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-contain p-2"
                   onError={handleImageError}
                 />
               </button>
             ))}
           </div>
         )}
-
-        {/* Image Metadata */}
-        <div className="text-xs text-gray-500 text-center">
-          Click images to see color variations and product details
-        </div>
       </div>
     );
   }
@@ -188,8 +175,7 @@ export default function ProductGallery({
   if (viewMode === 'modal') {
     return (
       <div className={`space-y-3 ${className}`}>
-        {/* Main Image */}
-        <div className="relative bg-gray-100 rounded-lg overflow-hidden">
+        <div className="relative bg-gray-50 rounded-2xl overflow-hidden">
           <div className="aspect-square relative">
             {currentImage && (
               <Image
@@ -201,52 +187,14 @@ export default function ProductGallery({
                 onError={handleImageError}
               />
             )}
-
             {allImages.length > 1 && (
               <>
-                <button
-                  onClick={goToPreviousImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={goToNextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+                <button onClick={goToPreviousImage} className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center shadow-sm"><ChevronLeft className="w-4 h-4" /></button>
+                <button onClick={goToNextImage} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center shadow-sm"><ChevronRight className="w-4 h-4" /></button>
               </>
             )}
           </div>
         </div>
-
-        {/* Thumbnail Strip */}
-        {allImages.length > 1 && (
-          <div className="flex justify-center gap-2 overflow-x-auto">
-            {allImages.map((imageUrl, index) => (
-              <button
-                key={index}
-                onClick={() => goToImage(index)}
-                className={`flex-shrink-0 w-12 h-12 rounded border ${
-                  index === selectedImageIndex
-                    ? 'border-dope-orange-500 ring-2 ring-dope-orange-200'
-                    : 'border-gray-200 hover:border-gray-300'
-                } overflow-hidden`}
-              >
-                <Image
-                  src={imageUrl}
-                  alt={`${productName} - Thumbnail ${index + 1}`}
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover"
-                  onError={handleImageError}
-                />
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     );
   }
@@ -254,8 +202,7 @@ export default function ProductGallery({
   // Sidebar view - Compact for sidebars
   return (
     <div className={`space-y-3 ${className}`}>
-      {/* Main Image */}
-      <div className="relative bg-gray-100 rounded-lg overflow-hidden">
+      <div className="relative bg-gray-50 rounded-xl overflow-hidden">
         <div className="aspect-square relative">
           {currentImage && (
             <Image
@@ -269,59 +216,6 @@ export default function ProductGallery({
           )}
         </div>
       </div>
-
-      {/* Simple thumbnails */}
-      {allImages.length > 1 && (
-        <div className="grid grid-cols-4 gap-2">
-          {allImages.slice(0, 4).map((imageUrl, index) => (
-            <button
-              key={index}
-              onClick={() => goToImage(index)}
-              className={`aspect-square rounded border overflow-hidden transition-colors ${
-                index === selectedImageIndex
-                  ? 'border-dope-orange-500'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              <Image
-                src={imageUrl}
-                alt={`${productName} - Thumbnail ${index + 1}`}
-                width={60}
-                height={60}
-                className="w-full h-full object-cover"
-                onError={handleImageError}
-              />
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
-
-// Usage example in a product component:
-/*
-
-// In product API response:
-{
-  id: "product-1",
-  name: "Premium Bong",
-  image_url: "https://cdn.example.com/bong-main.jpg",  // Primary image
-  image_urls: [
-    "https://cdn.example.com/bong-blue.jpg",    // Color variation 1
-    "https://cdn.example.com/bong-green.jpg",   // Color variation 2
-    "https://cdn.example.com/bong-purple.jpg",  // Color variation 3
-    "https://cdn.example.com/bong-detail.jpg"   // Detail view
-  ]
-}
-
-// In component:
-<ProductGallery
-  image_url={product.image_url}      // Primary photo
-  image_urls={product.image_urls}    // Gallery photos (color variations)
-  productName={product.name}
-  productId={product.id}
-  viewMode="detail"
-/>
-
-*/

@@ -10,39 +10,11 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // SITE-WIDE PASSWORD PROTECTION (runs before Supabase auth)
-  // Get password from environment variable, default to "Hittheroad420" for local dev
-  const SITE_PASSWORD = process.env.SITE_PASSWORD || "Hittheroad420";
-
-  // Paths that are always allowed (static assets, API routes, etc.)
-  const alwaysAllowedPaths = [
-    '/_next/',
-    '/favicon',
-    '/icons',
-    '/auth/login'
-  ];
-
-  // Check if requested path is always allowed OR is an API route
-  const isAlwaysAllowed = alwaysAllowedPaths.some(path => pathname.startsWith(path)) || pathname.startsWith('/api/');
-
   // STRICT COMPLIANCE: Block all Kratom-related paths
   const kratomTerms = ['kratom', '7-oh', '7-hydroxy', 'mitragynine', '7-ohmz'];
   if (kratomTerms.some(term => pathname.toLowerCase().includes(term))) {
     console.warn(`🛑 COMPLIANCE: Blocked request to Kratom-related path: ${pathname}`);
     return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  if (!isAlwaysAllowed && pathname !== '/auth/login') {
-    // Check for site-password cookie
-    const sitePasswordCookie = request.cookies.get('site-password')?.value;
-
-    if (!sitePasswordCookie || sitePasswordCookie !== SITE_PASSWORD) {
-      // Not authenticated - redirect to password gate
-      const loginUrl = new URL('/auth/login', request.url);
-      // Preserve original URL to redirect back after login
-      loginUrl.searchParams.set('redirectTo', pathname);
-      return NextResponse.redirect(loginUrl);
-    }
   }
 
   const supabase = createServerClient(

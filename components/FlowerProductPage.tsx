@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronRight, Plus, Minus, Heart, Star, ShoppingCart, Share2 } from 'lucide-react';
 import ProductGallery from '../app/components/ProductGallery';
+import FlavorSelector from '../app/components/FlavorSelector';
 import { addToCart } from '../app/lib/cart-utils';
 import { addToRecentlyViewed } from '../app/lib/recentlyViewed';
 import GlobalMasthead from '../app/components/GlobalMasthead';
@@ -41,6 +42,7 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(0);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [purchaseType, setPurchaseType] = useState<'once' | 'subscribe'>('once');
 
@@ -79,6 +81,11 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
 
   const inStock = (product.stock_quantity || 0) > 0;
 
+  // Create unique image list for gallery and dropdown to prevent duplicates
+  const mainImage = product.image_url;
+  const rawImages = mainImage ? [mainImage, ...(product.image_urls || [])] : (product.image_urls || []);
+  const allImages = Array.from(new Set(rawImages.filter(Boolean) as string[]));
+
   return (
     <div className="min-h-screen bg-white font-inter">
       <GlobalMasthead />
@@ -98,12 +105,13 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
           {/* Left: Product Gallery */}
           <div>
             <ProductGallery
-              image_url={product.image_url}
-              image_urls={product.image_urls || []}
+              image_urls={allImages}
               productName={product.name}
               productId={product.id}
               viewMode="detail"
-              className="rounded-3xl"
+              selectedVariant={selectedVariant}
+              onVariantChange={(index) => setSelectedVariant(index)}
+              className="rounded-[2.5rem] overflow-hidden"
             />
           </div>
 
@@ -152,6 +160,16 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
               className="text-gray-600 text-sm font-bold leading-relaxed description-content"
               dangerouslySetInnerHTML={{ __html: (product.description || product.short_description || '').replace(/\\n/g, '<br/>') }}
             />
+
+            {/* Variant Selector (Flavor Dropdown) */}
+            {allImages.length > 1 && (
+              <FlavorSelector
+                imageUrls={allImages}
+                selectedVariant={selectedVariant}
+                onVariantChange={(index) => setSelectedVariant(index)}
+                className="pt-4"
+              />
+            )}
 
             {/* Purchase Options */}
             <div className="space-y-4 pt-4">

@@ -29,6 +29,14 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
       }, { status: 404 });
     }
 
+    // Fetch variations
+    let variations: any[] = [];
+    try {
+      variations = await storage.getProductVariations(rawProduct);
+    } catch (varError) {
+      console.error('Error fetching variations:', varError);
+    }
+
     // Transform raw database fields to match expected API format
     const product = {
       ...rawProduct,
@@ -50,6 +58,16 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
         new Date(rawProduct.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
         : false,
       isSale: rawProduct.sale_price && parseFloat(rawProduct.sale_price) < parseFloat(rawProduct.our_price),
+      
+      // Include variations
+      variations: variations.map((v: any) => ({
+        id: v.id,
+        name: v.name,
+        image_url: v.image_url,
+        price: parseFloat(v.our_price) || 0,
+        sale_price: v.sale_price ? parseFloat(v.sale_price) : undefined,
+        inStock: (v.stock_quantity || 0) > 0
+      }))
     };
 
     return NextResponse.json(product);

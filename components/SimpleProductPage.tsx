@@ -1,11 +1,20 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { ChevronRight, Plus, Minus, Shield, Beaker, AlertTriangle, CheckCircle2, Info, ChevronDown, ChevronUp, Star, ShoppingCart } from 'lucide-react';
 import ProductGallery from '../app/components/ProductGallery';
+import FlavorSelector from '../app/components/FlavorSelector';
 import { addToCart } from '../app/lib/cart-utils';
 import { addToRecentlyViewed } from '../app/lib/recentlyViewed';
 import GlobalMasthead from '../app/components/GlobalMasthead';
+
+interface Variation {
+  id: string;
+  name: string;
+  image_url?: string;
+  price: number;
+  sale_price?: number;
+  inStock: boolean;
+}
 
 interface Product {
   id: string;
@@ -27,6 +36,7 @@ interface Product {
   suggested_use?: string;
   lab_test_url?: string;
   warnings?: string[];
+  variations?: Variation[];
 }
 
 interface SimpleProductPageProps {
@@ -57,6 +67,7 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(0);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -160,6 +171,11 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
   const savings = product.sale_price ? Number(product.price) - Number(product.sale_price) : 0;
   const discountPercent = product.sale_price ? Math.round((savings / Number(product.price)) * 100) : 0;
 
+  // Create unique image list for gallery to prevent duplicates
+  const mainImage = product.image_url;
+  const rawImages = mainImage ? [mainImage, ...(product.image_urls || [])] : (product.image_urls || []);
+  const allImages = Array.from(new Set(rawImages.filter(Boolean) as string[]));
+
   return (
     <div className="min-h-screen bg-white font-inter">
       <GlobalMasthead />
@@ -180,19 +196,30 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
       <main className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid gap-16 lg:grid-cols-2 mb-20">
           
-          {/* Left: Product Images */}
+          {/* Left: Product Images & Variants */}
           <div className="space-y-6">
             <div className="sticky top-24">
               <ProductGallery
-                image_url={product.image_url}
-                image_urls={product.image_urls || []}
+                image_urls={allImages}
                 productName={product.name}
                 productId={product.id}
                 viewMode="detail"
-                className="rounded-3xl overflow-hidden border border-gray-100"
+                selectedVariant={selectedVariant}
+                onVariantChange={(index) => setSelectedVariant(index)}
+                className="rounded-[2.5rem] overflow-hidden"
               />
+
+              {/* Variant Selector (Flavor List) - NOW UNDER THE IMAGE */}
+              {product.variations && product.variations.length > 0 && (
+                <div className="mt-8 p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                  <FlavorSelector
+                    variations={product.variations}
+                    currentProductId={product.id}
+                  />
+                </div>
+              )}
               
-              {/* Trust Badges under gallery */}
+              {/* Trust Badges under gallery/selector */}
               <div className="grid grid-cols-2 gap-4 mt-8">
                 <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
                   <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-green-600">

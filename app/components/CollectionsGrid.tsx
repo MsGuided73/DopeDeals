@@ -4,13 +4,46 @@ import React from "react";
 
 export default function CollectionsGrid() {
   const categories = [
-    { name: "THCA FLOWER", route: "/thca_flower", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
-    { name: "PRE-ROLLS", route: "/pre-rolls", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/THCA_flower.jpeg" },
-    { name: "VAPES\n& CARTS", route: "/vapes", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/RUNTZ-3.5G-SINGLES.webp" },
-    { name: "SHROOMS\n& STUFF", route: "/mushrooms", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Shrooms.jpg" },
-    { name: "EDIBLES\n& MORE", route: "/edibles", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
-    { name: "N2O", route: "/nitrous-oxide", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
-    { name: "ACCESSORIES", route: "/accessories", image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" },
+    { 
+      name: "THCA FLOWER", 
+      route: "/thca_flower", 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/thca_flower_no_text.png" 
+    },
+    { 
+      name: "PRE-ROLLS", 
+      route: "/pre-rolls", 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/prerolls_no_text.png" 
+    },
+    { 
+      name: "VAPES\n& CARTS", 
+      route: "/vapes", 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/vapesncarts_no_text.png" 
+    },
+    { 
+      name: "SHROOMS\n& MORE", 
+      route: "/mushrooms", 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/edibles_no_text.png" 
+    },
+    { 
+      name: "N2O", 
+      route: "/nitrous-oxide", 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/nitrous_no_text.png" 
+    },
+    { 
+      name: "EDIBLES", 
+      route: "/edibles", 
+      image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=2000&auto=format&fit=crop" 
+    },
+    { 
+      name: "CBD\nTINCTURES", 
+      route: "/cbd-tinctures", 
+      image: "https://images.unsplash.com/photo-1619918884931-155be5530263?q=80&w=2000&auto=format&fit=crop" 
+    },
+    { 
+      name: "ACCESSORIES", 
+      route: "/accessories", 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg" 
+    },
   ];
 
   const logoPath =
@@ -55,7 +88,7 @@ export default function CollectionsGrid() {
             >
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
 
-              {/* SHOP Button - Top Left */}
+              {/* SHOP Button - Moved to keep track but hidden as requested previously if needed, actually user said SHOP button opacity 0 */}
               <div className="absolute top-3 left-3 z-10">
                 <button
                   className="bg-transparent text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg hover:bg-gray-800 transition-colors opacity-0"
@@ -68,14 +101,12 @@ export default function CollectionsGrid() {
                 </button>
               </div>
 
-              {/* Category Name Label - Bottom Center */}
-              <div className="absolute bottom-0 left-0 right-0 z-10">
-                <div className="bg-black/70 backdrop-blur-sm px-3 py-2 text-center">
-                  <div className="text-white text-4xl md:text-5xl font-display-juicy-fills leading-tight">
-                    {cat.name.split('\n').map((line, index) => (
-                      <div key={index}>{line}</div>
-                    ))}
-                  </div>
+              {/* Category Name Label - Top Left, No Backdrop */}
+              <div className="absolute top-4 left-4 z-10 pointer-events-none">
+                <div className="text-white text-3xl md:text-4xl font-display-juicy-fills leading-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                  {cat.name.split('\n').map((line, index) => (
+                    <div key={index}>{line}</div>
+                  ))}
                 </div>
               </div>
 
@@ -119,7 +150,7 @@ export default function CollectionsGrid() {
             >
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
 
-              {/* SHOP Button - Top Left */}
+              {/* SHOP Button - Hidden */}
               <div className="absolute top-3 left-3 z-10">
                 <button
                   className="bg-transparent text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg hover:bg-gray-800 transition-colors opacity-0"
@@ -132,14 +163,12 @@ export default function CollectionsGrid() {
                 </button>
               </div>
 
-              {/* Category Name Label - Bottom Center */}
-              <div className="absolute bottom-0 left-0 right-0 z-10">
-                <div className="bg-black/70 backdrop-blur-sm px-3 py-2 text-center">
-                  <div className="text-white text-4xl md:text-5xl font-display-juicy-fills leading-tight">
-                    {cat.name.split('\n').map((line, index) => (
-                      <div key={index}>{line}</div>
-                    ))}
-                  </div>
+              {/* Category Name Label - Top Left, No Backdrop */}
+              <div className="absolute top-6 left-6 z-10 pointer-events-none">
+                <div className="text-white text-4xl xl:text-5xl font-display-juicy-fills leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  {cat.name.split('\n').map((line, index) => (
+                    <div key={index}>{line}</div>
+                  ))}
                 </div>
               </div>
 

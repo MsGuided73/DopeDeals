@@ -35,7 +35,7 @@ export async function getStorage() {
       let query = supabase.from('main_site_products').select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
-        nicotine_product, tobacco_product,
+        nicotine_product, tobacco_product, source_id, source_parent,
         created_at, updated_at
       `)
       // STRICT: No Kratom or related substances
@@ -81,7 +81,7 @@ export async function getStorage() {
         .select(`
           id, name, description, short_description, our_price, sale_price,
           image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
-          nicotine_product, tobacco_product,
+          nicotine_product, tobacco_product, source_id, source_parent,
           created_at, updated_at
         `)
         .eq('id', productId)
@@ -105,6 +105,29 @@ export async function getStorage() {
       }
 
       return data;
+    },
+
+    async getProductVariations(product: any) {
+      if (!product) return [];
+
+      const parentId = product.source_parent || product.source_id;
+      if (!parentId) return [];
+
+      const { data, error } = await supabase
+        .from('main_site_products')
+        .select(`
+          id, name, image_url, image_urls, our_price, sale_price, stock_quantity, source_id, source_parent
+        `)
+        .or(`source_id.eq.${parentId},source_parent.eq.${parentId}`)
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) {
+        console.error('Error fetching variations:', error);
+        return [];
+      }
+
+      return data || [];
     },
 
     async createProduct(product: any) {
@@ -240,7 +263,7 @@ export async function getStorage() {
           .select(`
             id, name, description, short_description, our_price, sale_price,
             image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
-            nicotine_product, tobacco_product,
+            nicotine_product, tobacco_product, source_id, source_parent,
             created_at, updated_at
           `)
           .eq('is_active', true)
