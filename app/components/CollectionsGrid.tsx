@@ -20,19 +20,19 @@ export default function CollectionsGrid() {
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/vapesncarts_no_text.png" 
     },
     { 
-      name: "SHROOMS\n& MORE", 
+      name: "SHROOMS", 
       route: "/mushrooms", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/edibles_no_text.png" 
     },
     { 
       name: "N2O", 
       route: "/nitrous-oxide", 
-      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/nitrous_no_text.png" 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/nitrous_no_text_revised.png" 
     },
     { 
       name: "EDIBLES", 
       route: "/edibles", 
-      image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=2000&auto=format&fit=crop" 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Edibles_non-mush.png" 
     },
     { 
       name: "CBD\nTINCTURES", 
@@ -103,7 +103,7 @@ export default function CollectionsGrid() {
 
               {/* Category Name Label - Top Left, No Backdrop */}
               <div className="absolute top-4 left-4 z-10 pointer-events-none">
-                <div className="text-white text-3xl md:text-4xl font-display-juicy-fills leading-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                <div className="text-white text-xl md:text-2xl font-display-juicy-fills leading-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                   {cat.name.split('\n').map((line, index) => (
                     <div key={index}>{line}</div>
                   ))}
@@ -165,7 +165,7 @@ export default function CollectionsGrid() {
 
               {/* Category Name Label - Top Left, No Backdrop */}
               <div className="absolute top-6 left-6 z-10 pointer-events-none">
-                <div className="text-white text-4xl xl:text-5xl font-display-juicy-fills leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <div className="text-white text-2xl xl:text-3xl font-display-juicy-fills leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                   {cat.name.split('\n').map((line, index) => (
                     <div key={index}>{line}</div>
                   ))}

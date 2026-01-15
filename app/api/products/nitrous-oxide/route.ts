@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%,description.ilike.%whip%,description.ilike.%n2o%,description.ilike.%nitrous%,description.ilike.%nos%,description.ilike.%laughing%')
+      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit * 2) // Fetch extra to account for duplicates
       .range(offset, offset + (effectiveLimit * 2) - 1);
@@ -124,7 +124,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%,description.ilike.%whip%,description.ilike.%n2o%,description.ilike.%nitrous%,description.ilike.%nos%,description.ilike.%laughing%');
+      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%');
 
     console.log(`🌀 Nitrous Oxide API: Retrieved ${products.length} unique nitrous oxide products (no duplicates)`);
 

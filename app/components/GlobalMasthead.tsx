@@ -212,16 +212,6 @@ export default function GlobalMasthead() {
                       <Link href="/vapes?type=vaporizer" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Vaporizers
                       </Link>
-
-                      <div className="border-t border-gray-200/20 my-1" />
-
-                      {/* Equipment */}
-                      <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        E-Rigs & Tools
-                      </Link>
-                      <Link href="/products?q=battery" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
-                        Batteries
-                      </Link>
                     </div>
                   </div>
                 )}
@@ -345,12 +335,6 @@ export default function GlobalMasthead() {
                   </Link>
                   <Link href="/vapes?type=vaporizer" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     Vaporizers
-                  </Link>
-                  <Link href="/dabsntools" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    E-Rigs & Tools
-                  </Link>
-                  <Link href="/products?q=battery" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
-                    Batteries
                   </Link>
                 </div>
               </div>

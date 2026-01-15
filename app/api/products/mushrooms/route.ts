@@ -35,12 +35,10 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%');
 
-    // Keywords for mushroom-related products (vapes, prerolls, edibles, gummies, THC-A flower, etc.)
+    // Keywords for MUSHROOM products ONLY
     const mushroomKeywords = [
-      'vape', 'preroll', 'pre-roll', 'thc-a', 'thca', 'edible', 'gummi', 'gummy',
-      'flower', 'bud', 'cart', 'cartridge', 'disposable', 'pen', 'joint', 'blunt',
-      'capsule', 'tincture', 'oil', 'concentrate', 'extract', 'moonrock', 'caviar',
-      'diamond', 'sauce', 'rosin', 'shatter', 'wax', 'crumble', 'live resin'
+      'mushroom', 'shroom', 'psilocybin', 'psychedelic', 'fungus', 'fungi',
+      'magic mushroom', 'amanita', 'cordyceps', 'lions mane', 'reishi'
     ];
 
     // Build a simple OR condition for keywords
@@ -106,29 +104,20 @@ export async function GET(req: NextRequest) {
 
     // Transform the data to match expected format
     const transformedProducts = (products || []).map((product: any) => {
-      // Determine product type based on name
-      let productType = 'Flower'; // default
+      // Determine mushroom product type
+      let productType = 'Mushrooms'; // default
       const nameLower = product.name.toLowerCase();
 
-      if (nameLower.includes('vape') || nameLower.includes('cart') || nameLower.includes('cartridge') ||
-          nameLower.includes('pen') || nameLower.includes('disposable')) {
-        productType = 'Vapes';
-      } else if (nameLower.includes('preroll') || nameLower.includes('pre-roll') ||
-                 nameLower.includes('joint') || nameLower.includes('blunt')) {
-        productType = 'Prerolls';
-      } else if (nameLower.includes('edible') || nameLower.includes('gummi') || nameLower.includes('gummy') ||
-                 nameLower.includes('capsule') || nameLower.includes('tincture')) {
+      if (nameLower.includes('capsule') || nameLower.includes('pill')) {
+        productType = 'Capsules';
+      } else if (nameLower.includes('gummi') || nameLower.includes('gummy') ||
+                 nameLower.includes('edible') || nameLower.includes('chocolate') ||
+                 nameLower.includes('bar')) {
         productType = 'Edibles';
-      } else if (nameLower.includes('thc-a') || nameLower.includes('thca') || nameLower.includes('flower') ||
-                 nameLower.includes('bud')) {
-        productType = 'THC-A Flower';
-      } else if (nameLower.includes('concentrate') || nameLower.includes('extract') ||
-                 nameLower.includes('moonrock') || nameLower.includes('caviar') ||
-                 nameLower.includes('diamond') || nameLower.includes('sauce') ||
-                 nameLower.includes('rosin') || nameLower.includes('shatter') ||
-                 nameLower.includes('wax') || nameLower.includes('crumble') ||
-                 nameLower.includes('live resin')) {
-        productType = 'Concentrates';
+      } else if (nameLower.includes('powder') || nameLower.includes('extract')) {
+        productType = 'Extracts';
+      } else if (nameLower.includes('dried') || nameLower.includes('whole')) {
+        productType = 'Dried Mushrooms';
       }
 
       return {
