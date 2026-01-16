@@ -390,8 +390,8 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
                 <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
                   <Shield className="text-purple-500" size={20} /> Lab Test
                 </h3>
-                <a 
-                  href={product.lab_test_url || "#"} 
+                <a
+                  href="/lab-results"
                   className="inline-flex items-center gap-3 px-6 py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
                 >
                   <Beaker size={18} /> View COA Lab Results

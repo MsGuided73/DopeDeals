@@ -172,6 +172,11 @@ export default function Highway420Footer() {
                     Ride With Us
                   </Link>
                 </li>
+                <li>
+                  <Link href="/lab-results" className="text-gray-800 hover:text-green-600">
+                    Lab Results
+                  </Link>
+                </li>
               </ul>
             </div>
 
