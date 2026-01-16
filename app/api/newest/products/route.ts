@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '8');
 
-    // Get active products only, ordered by newest first
+    // Get active products only with images, ordered by newest first
     // Fetch extra to account for duplicates and battery filtering
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
@@ -29,7 +29,9 @@ export async function GET(req: NextRequest) {
         image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product,
         brand_name, category_id, created_at, updated_at
       `)
-      .eq('is_active', true) // ONLY filter by active products
+      .eq('is_active', true) // ONLY active products
+      .not('image_url', 'is', null) // Must have image_url
+      .neq('image_url', '') // Must not be empty string
       .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
       .order('created_at', { ascending: false })
       .limit(limit * 2); // Fetch extra to ensure we have enough after deduplication

@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '20');
 
-    // Get products that have active dope deal flags
+    // Get products that have active dope deal flags and images
     // Fetch extra to account for duplicates and battery filtering
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
@@ -29,6 +29,8 @@ export async function GET(req: NextRequest) {
       `)
       .or('DD10.eq.true,DD15.eq.true') // Products with either DD10 or DD15 flag
       .eq('is_active', true) // Only active products
+      .not('image_url', 'is', null) // Must have image_url
+      .neq('image_url', '') // Must not be empty string
       .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
       .order('created_at', { ascending: false })
       .limit(limit * 2); // Fetch extra to ensure we have enough after deduplication
