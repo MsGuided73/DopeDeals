@@ -29,15 +29,21 @@ export default function PreRollsPage() {
   useEffect(() => {
     async function fetchPreRolls() {
       try {
-        const { data, error } = await supabaseBrowser
-          .from('main_site_products')
-          .select('id, name, description, short_description, our_price, sale_price, image_url, image_urls, sku, stock_quantity, brand_name')
-          .or('name.ilike.%pre-roll%,name.ilike.%preroll%,description.ilike.%pre-roll%,description.ilike.%preroll%')
-          .eq('is_active', true)
-          .order('name')
+        const response = await fetch('/api/products/pre-rolls?limit=50')
 
-        if (error) throw error
-        setProducts(data || [])
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        }
+
+        const data = await response.json()
+
+        if (!data.products) {
+          console.warn('No pre-roll products data received')
+          setProducts([])
+          return
+        }
+
+        setProducts(data.products)
       } catch (err) {
         console.error('Error fetching pre-rolls:', err)
         setError('Failed to load pre-roll products')
