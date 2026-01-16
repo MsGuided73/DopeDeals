@@ -45,17 +45,30 @@ export default function LabResultsPage() {
   };
 
   // Grouping logic for the sections with normalization safety
-  const brands = [...new Set(coaFiles.map(coa => String(coa.brand_name)))].sort();
+  const brands = [...new Set(coaFiles.map(coa => {
+    const b = Array.isArray(coa.brand_name) ? coa.brand_name[0] : coa.brand_name;
+    return String(b || 'Highway 420');
+  }))].sort();
   
   const groupedData = brands.map(brand => {
-    const brandCoas = coaFiles.filter(coa => String(coa.brand_name) === brand);
-    const categories = [...new Set(brandCoas.map(coa => String(coa.category_name)))].sort();
+    const brandCoas = coaFiles.filter(coa => {
+      const b = Array.isArray(coa.brand_name) ? coa.brand_name[0] : coa.brand_name;
+      return String(b || 'Highway 420') === brand;
+    });
+    
+    const categories = [...new Set(brandCoas.map(coa => {
+      const c = Array.isArray(coa.category_name) ? coa.category_name[0] : coa.category_name;
+      return String(c || 'General');
+    }))].sort();
     
     return {
       brand,
       categories: categories.map(cat => ({
         name: cat,
-        items: brandCoas.filter(coa => String(coa.category_name) === cat).sort((a, b) => a.product_name.localeCompare(b.product_name))
+        items: brandCoas.filter(coa => {
+          const c = Array.isArray(coa.category_name) ? coa.category_name[0] : coa.category_name;
+          return String(c || 'General') === cat;
+        }).sort((a, b) => a.product_name.localeCompare(b.product_name))
       }))
     };
   });
@@ -72,6 +85,7 @@ export default function LabResultsPage() {
           </div>
           <h1 className="text-4xl lg:text-6xl font-black text-gray-900 mb-6 uppercase tracking-widest">
             Certificate of Analysis
+            <span className="block text-xs font-normal opacity-20 mt-2">v1.0.4-grouped</span>
           </h1>
           <p className="text-xl text-gray-600 font-bold max-w-3xl mx-auto leading-relaxed">
             Transparency is our promise. Every product undergoes rigorous third-party lab testing.
