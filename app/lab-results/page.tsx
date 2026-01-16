@@ -44,18 +44,18 @@ export default function LabResultsPage() {
     }
   };
 
-  // Grouping logic for the sections
-  const brands = [...new Set(coaFiles.map(coa => coa.brand_name))].sort();
+  // Grouping logic for the sections with normalization safety
+  const brands = [...new Set(coaFiles.map(coa => String(coa.brand_name)))].sort();
   
   const groupedData = brands.map(brand => {
-    const brandCoas = coaFiles.filter(coa => coa.brand_name === brand);
-    const categories = [...new Set(brandCoas.map(coa => coa.category_name))].sort();
+    const brandCoas = coaFiles.filter(coa => String(coa.brand_name) === brand);
+    const categories = [...new Set(brandCoas.map(coa => String(coa.category_name)))].sort();
     
     return {
       brand,
       categories: categories.map(cat => ({
         name: cat,
-        items: brandCoas.filter(coa => coa.category_name === cat).sort((a, b) => a.product_name.localeCompare(b.product_name))
+        items: brandCoas.filter(coa => String(coa.category_name) === cat).sort((a, b) => a.product_name.localeCompare(b.product_name))
       }))
     };
   });
@@ -198,34 +198,34 @@ export default function LabResultsPage() {
       {/* Why Lab Testing Matters - Restored original copy and styling */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-12 uppercase tracking-widest">
+          <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-8 uppercase tracking-widest">
             Why Lab Testing Matters
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white p-8 rounded-2xl shadow-sm">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Shield className="w-8 h-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-black text-gray-900 mb-4">Safety First</h3>
-              <p className="text-gray-600 font-bold leading-relaxed text-sm">
+              <p className="text-gray-600 font-bold leading-relaxed">
                 Every product is tested for contaminants, pesticides, heavy metals, and microbial impurities to ensure your safety.
               </p>
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white p-8 rounded-2xl shadow-sm">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Beaker className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-black text-gray-900 mb-4">Accurate Potency</h3>
-              <p className="text-gray-600 font-bold leading-relaxed text-sm">
-                Precise cannabinoid and terpene profiles so you know exactly what you're getting in every product.
+              <p className="text-gray-600 font-bold leading-relaxed">
+                {"Precise cannabinoid and terpene profiles so you know exactly what you're getting in every product."}
               </p>
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white p-8 rounded-2xl shadow-sm">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <FileText className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-black text-gray-900 mb-4">Full Transparency</h3>
-              <p className="text-gray-600 font-bold leading-relaxed text-sm">
+              <p className="text-gray-600 font-bold leading-relaxed">
                 Complete access to all lab results. No hidden information, just pure transparency you can trust.
               </p>
             </div>

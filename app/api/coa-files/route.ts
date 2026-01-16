@@ -65,12 +65,19 @@ export async function GET(req: NextRequest) {
     }
 
     // 2. Try fetching from main_site_products (compliance_info.lab_certificate_url)
+    // Filter for active products and exclude prohibited substances
     try {
       let query = supabase
         .from('main_site_products')
         .select('id, name, sku, brand_name, categories, compliance_info, updated_at')
+        .eq('is_active', true)
         .not('compliance_info->lab_certificate_url', 'is', null)
-        .limit(limit);
+        .not('name', 'ilike', '%kratom%')
+        .not('name', 'ilike', '%7-oh%')
+        .not('name', 'ilike', '%7-hydroxy%')
+        .not('name', 'ilike', '%mitragynine%')
+        .not('name', 'ilike', '%7-ohmz%')
+        .limit(500); // Increase limit to show all active COAs
 
       const { data: prods, error: prodError } = await query;
 
@@ -78,12 +85,16 @@ export async function GET(req: NextRequest) {
         prods.forEach(p => {
           const info = p.compliance_info;
           if (info && info.lab_certificate_url) {
+            // Ensure brand_name and category_name are strings for proper grouping
+            const brandStr = Array.isArray(p.brand_name) ? p.brand_name[0] : (p.brand_name || 'Highway 420');
+            const catStr = Array.isArray(p.categories) ? p.categories[0] : (p.categories || 'General');
+
             allCoas.push({
               id: `prod-${p.id}`,
               product_name: p.name,
               product_sku: p.sku,
-              brand_name: p.brand_name || 'Highway 420',
-              category_name: p.categories || 'General',
+              brand_name: String(brandStr),
+              category_name: String(catStr),
               lab_name: info.lab_name || 'Third-Party Lab',
               test_date: p.updated_at,
               file_url: info.lab_certificate_url,
