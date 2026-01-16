@@ -85,7 +85,7 @@ export default function LabResultsPage() {
           </div>
           <h1 className="text-4xl lg:text-6xl font-black text-gray-900 mb-6 uppercase tracking-widest">
             Certificate of Analysis
-            <span className="block text-xs font-normal opacity-20 mt-2">v1.0.4-grouped</span>
+            <span className="block text-xs font-normal opacity-20 mt-2">v1.0.5-production-sync</span>
           </h1>
           <p className="text-xl text-gray-600 font-bold max-w-3xl mx-auto leading-relaxed">
             Transparency is our promise. Every product undergoes rigorous third-party lab testing.
