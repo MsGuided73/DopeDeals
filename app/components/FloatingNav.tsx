@@ -110,13 +110,13 @@ export default function FloatingNav() {
 
                 <div className="border-t border-gray-700 my-1" />
 
-                {/* Equipment */}
-                <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                {/* Equipment - Temporarily disabled */}
+                {/* <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   E-Rigs & Tools
                 </Link>
                 <Link href="/dabsntools" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   E-Rigs
-                </Link>
+                </Link> */}
                 <Link href="/products?q=cartridge" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   Cartridges
                 </Link>
@@ -129,9 +129,6 @@ export default function FloatingNav() {
         </div>
 
         {/* Simple links matching GlobalMasthead */}
-        <Link href="/vapes" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
-          Vapes
-        </Link>
         <Link href="/pre-rolls" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
           Pre-Rolls
         </Link>
