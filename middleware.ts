@@ -105,6 +105,7 @@ export async function middleware(request: NextRequest) {
     '/affiliate',
     '/age-verification',
     '/compliance',
+    '/lab-results',
     '/gift-cards',
     '/rewards',
     '/sitemap-page',
