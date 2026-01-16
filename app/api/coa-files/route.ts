@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { STATIC_COA_DATA } from '../../../lib/coa-data';
 
 export async function GET(req: NextRequest) {
   try {
-    // Direct Supabase connection
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -13,68 +13,108 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get query parameters
     const url = new URL(req.url);
     const searchQuery = url.searchParams.get('search') || '';
-    const limit = parseInt(url.searchParams.get('limit') || '50');
+    const limit = parseInt(url.searchParams.get('limit') || '100');
 
-    // List files from the COA storage bucket
-    // Note: You'll need to create a dedicated bucket for COA files in Supabase Storage
-    // Bucket name should be something like 'coa-files'
-    const { data: files, error } = await supabase.storage
-      .from('coa-files') // Replace with your actual bucket name
-      .list('', {
-        limit: limit,
-        sortBy: { column: 'created_at', order: 'desc' }
-      });
+    let allCoas: any[] = [...STATIC_COA_DATA];
 
-    if (error) {
-      console.error('Error fetching COA files:', error);
-      // Return empty array if bucket doesn't exist yet or has no files
-      return NextResponse.json({
-        coaFiles: [],
-        message: 'COA files will be displayed here once uploaded to Supabase storage'
-      });
+    // 1. Try fetching from lab_certificates table (structured data)
+    try {
+      let query = supabase
+        .from('lab_certificates')
+        .select(`
+          id,
+          batch_number,
+          lab_name,
+          tested_at,
+          url,
+          product:product_id (
+            name,
+            sku,
+            brand:brand_id (name),
+            category:category_id (name)
+          )
+        `)
+        .limit(limit);
+
+      const { data: certs, error: certError } = await query;
+
+      if (!certError && certs) {
+        certs.forEach((cert: any) => {
+          const product = Array.isArray(cert.product) ? cert.product[0] : cert.product;
+          const brand = product && Array.isArray(product.brand) ? product.brand[0] : product?.brand;
+          const category = product && Array.isArray(product.category) ? product.category[0] : product?.category;
+
+          allCoas.push({
+            id: cert.id,
+            product_name: product?.name || 'Unknown Product',
+            product_sku: cert.batch_number || product?.sku || 'N/A',
+            brand_name: brand?.name || 'Highway 420',
+            category_name: category?.name || 'General',
+            lab_name: cert.lab_name || 'Third-Party Lab',
+            test_date: cert.tested_at,
+            file_url: cert.url,
+            file_name: `COA-${cert.batch_number}.pdf`,
+            created_at: cert.tested_at
+          });
+        });
+      }
+    } catch (e) {
+      console.warn('Error fetching lab_certificates:', e);
     }
 
-    // Filter files by search query if provided
-    let filteredFiles = files || [];
+    // 2. Try fetching from main_site_products (compliance_info.lab_certificate_url)
+    try {
+      let query = supabase
+        .from('main_site_products')
+        .select('id, name, sku, brand_name, categories, compliance_info, updated_at')
+        .not('compliance_info->lab_certificate_url', 'is', null)
+        .limit(limit);
 
+      const { data: prods, error: prodError } = await query;
+
+      if (!prodError && prods) {
+        prods.forEach(p => {
+          const info = p.compliance_info;
+          if (info && info.lab_certificate_url) {
+            allCoas.push({
+              id: `prod-${p.id}`,
+              product_name: p.name,
+              product_sku: p.sku,
+              brand_name: p.brand_name || 'Highway 420',
+              category_name: p.categories || 'General',
+              lab_name: info.lab_name || 'Third-Party Lab',
+              test_date: p.updated_at,
+              file_url: info.lab_certificate_url,
+              file_name: `${p.sku}-COA.pdf`,
+              created_at: p.updated_at
+            });
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('Error fetching products with COAs:', e);
+    }
+
+    // Filter by search query if provided
     if (searchQuery) {
-      filteredFiles = filteredFiles.filter(file =>
-        file.name.toLowerCase().includes(searchQuery.toLowerCase())
+      const lowerQuery = searchQuery.toLowerCase();
+      allCoas = allCoas.filter(coa => 
+        coa.product_name.toLowerCase().includes(lowerQuery) ||
+        (coa.product_sku && coa.product_sku.toLowerCase().includes(lowerQuery)) ||
+        coa.brand_name.toLowerCase().includes(lowerQuery) ||
+        coa.category_name.toLowerCase().includes(lowerQuery)
       );
     }
 
-    // Transform files to match the expected COA format
-    const coaFiles = filteredFiles.map(file => {
-      // Parse filename to extract product info
-      // Expected format: PRODUCT-SKU-COA.pdf or similar
-      const fileName = file.name.replace('.pdf', '').replace('.PDF', '');
-      const parts = fileName.split('-');
-
-      // Get public URL for the file
-      const { data: { publicUrl } } = supabase.storage
-        .from('coa-files')
-        .getPublicUrl(file.name);
-
-      return {
-        id: file.id || file.name,
-        product_name: parts.slice(0, -2).join(' ') || 'Unknown Product',
-        product_sku: parts[parts.length - 2] || file.name,
-        brand_name: 'Highway 420', // Default brand, could be extracted from filename
-        lab_name: parts[parts.length - 1] || 'Third-Party Lab',
-        test_date: file.created_at ? new Date(file.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-        file_url: publicUrl,
-        file_name: file.name,
-        created_at: file.created_at || new Date().toISOString()
-      };
-    });
+    // De-duplicate by URL
+    const uniqueCoas = Array.from(new Map(allCoas.map(item => [item.file_url, item])).values());
 
     return NextResponse.json({
-      coaFiles,
-      total: coaFiles.length,
-      message: coaFiles.length > 0 ? 'COA files loaded successfully' : 'No COA files found. Upload files to your Supabase storage bucket to display them here.'
+      coaFiles: uniqueCoas,
+      total: uniqueCoas.length,
+      message: uniqueCoas.length > 0 ? 'COA files loaded successfully' : 'No COA files found.'
     });
 
   } catch (error) {

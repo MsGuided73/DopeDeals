@@ -40,6 +40,7 @@ export async function GET(req: NextRequest) {
         short_description,
         our_price,
         sale_price,
+        fire_price,
         image_url,
         image_urls,
         sku,
@@ -49,6 +50,8 @@ export async function GET(req: NextRequest) {
         brand_id,
         brand_name,
         category_id,
+        category_slug,
+        subcategory_slug,
         nicotine_product,
         tobacco_product,
         created_at,
@@ -66,7 +69,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%')
+      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%,category_slug.ilike.%nitrous%,category_slug.ilike.%n2o%,subcategory_slug.ilike.%nitrous%,subcategory_slug.ilike.%n2o%,categories.cs.["nitrous"]')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit * 2) // Fetch extra to account for duplicates
       .range(offset, offset + (effectiveLimit * 2) - 1);
@@ -76,37 +79,20 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch nitrous oxide products', details: error.message }, { status: 500 });
     }
 
-    // Remove duplicates by ID, name, and SKU (ensure unique products only)
-    const seenIds = new Set<number>();
-    const seenNames = new Set<string>();
-    const seenSkus = new Set<string>();
-    const uniqueProducts = (rawProducts || []).filter(product => {
-      // Check ID duplicates
-      if (seenIds.has(product.id)) {
-        return false;
-      }
+    console.log('DEBUG - Raw Nitrous Products Count:', rawProducts?.length || 0);
+    if (rawProducts && rawProducts.length > 0) {
+      console.log('DEBUG - Sample Nitrous Names:', rawProducts.slice(0, 5).map(p => p.name));
+    }
 
-      // Check name duplicates (normalize by trimming and lowercasing)
-      const normalizedName = product.name?.trim().toLowerCase();
-      if (normalizedName && seenNames.has(normalizedName)) {
-        return false;
-      }
-
-      // Check SKU duplicates (if SKU exists)
-      if (product.sku && seenSkus.has(product.sku)) {
-        return false;
-      }
-
-      // Add to tracking sets
-      seenIds.add(product.id);
-      if (normalizedName) seenNames.add(normalizedName);
-      if (product.sku) seenSkus.add(product.sku);
-
-      return true;
-    });
-
-    // Take only the requested limit
-    const products = uniqueProducts.slice(0, effectiveLimit);
+    // Map products to include consistent pricing fields
+    const products = (rawProducts || []).map((product: any) => ({
+      ...product,
+      price: parseFloat(product.our_price || 0),
+      our_price: parseFloat(product.our_price || 0),
+      vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+      sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+      compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined
+    }));
 
     // Get total count for pagination info
     const { count } = await supabase
@@ -124,7 +110,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%');
+      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,brand_name.ilike.%whip%,brand_name.ilike.%n2o%,brand_name.ilike.%nitrous%,brand_name.ilike.%nos%,brand_name.ilike.%laughing%,category_slug.ilike.%nitrous%,category_slug.ilike.%n2o%,subcategory_slug.ilike.%nitrous%,subcategory_slug.ilike.%n2o%,categories.cs.{"nitrous"}');
 
     console.log(`🌀 Nitrous Oxide API: Retrieved ${products.length} unique nitrous oxide products (no duplicates)`);
 

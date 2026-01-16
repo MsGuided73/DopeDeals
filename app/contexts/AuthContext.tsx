@@ -39,13 +39,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Check profile table
     try {
+      // Use a more resilient approach in case columns are missing
       const { data: profile } = await supabaseBrowser
         .from('users')
-        .select('role')
+        .select('*')
         .eq('id', authUser.id)
         .single();
 
-      if (profile?.role) {
+      if (profile && 'role' in profile && profile.role) {
         return profile.role as UserRole;
       }
     } catch (error) {
@@ -58,13 +59,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Get VIP status
   const getVipStatus = async (userId: string): Promise<boolean> => {
     try {
+      // Use a more resilient approach in case columns or relationships are missing
       const { data: profile } = await supabaseBrowser
         .from('users')
-        .select('membershipTierId, memberships(*)')
+        .select('*')
         .eq('id', userId)
         .single();
 
-      return !!(profile?.membershipTierId && profile.memberships);
+      if (!profile) return false;
+
+      // Check both snake_case and camelCase for compatibility
+      const tierId = profile.membership_tier_id || profile.membershipTierId;
+      
+      return !!tierId;
     } catch (error) {
       console.warn('[AuthContext] Could not fetch VIP status:', error);
       return false;

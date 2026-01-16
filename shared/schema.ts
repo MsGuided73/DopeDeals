@@ -8,7 +8,9 @@ export const users = pgTable("users", {
   firstName: text("first_name"),
   lastName: text("last_name"),
   fullName: text("full_name"), // Computed field for backward compatibility
+  role: text("role").notNull().default("user"),
   membershipTierId: uuid("membership_tier_id"),
+  isActive: boolean("is_active").default(true),
   ageVerificationStatus: text("age_verification_status").notNull().default("not_verified"), // not_verified, pending, verified, failed
   lastVerificationCheck: timestamp("last_verification_check", { withTimezone: true }),
 

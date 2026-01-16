@@ -8,6 +8,7 @@ interface COAFile {
   product_name: string;
   product_sku: string;
   brand_name: string;
+  category_name: string;
   lab_name: string;
   test_date: string;
   file_url: string;
@@ -19,7 +20,6 @@ export default function LabResultsPage() {
   const [coaFiles, setCoaFiles] = useState<COAFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCoa, setSelectedCoa] = useState<COAFile | null>(null);
 
   useEffect(() => {
     fetchCOAFiles();
@@ -34,7 +34,6 @@ export default function LabResultsPage() {
       if (data.coaFiles) {
         setCoaFiles(data.coaFiles);
       } else {
-        // Fallback to empty array if no files
         setCoaFiles([]);
       }
     } catch (error) {
@@ -45,17 +44,27 @@ export default function LabResultsPage() {
     }
   };
 
-  const filteredCoas = coaFiles.filter(coa =>
-    coa.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    coa.brand_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    coa.product_sku.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Grouping logic for the sections
+  const brands = [...new Set(coaFiles.map(coa => coa.brand_name))].sort();
+  
+  const groupedData = brands.map(brand => {
+    const brandCoas = coaFiles.filter(coa => coa.brand_name === brand);
+    const categories = [...new Set(brandCoas.map(coa => coa.category_name))].sort();
+    
+    return {
+      brand,
+      categories: categories.map(cat => ({
+        name: cat,
+        items: brandCoas.filter(coa => coa.category_name === cat).sort((a, b) => a.product_name.localeCompare(b.product_name))
+      }))
+    };
+  });
 
   return (
     <div className="min-h-screen bg-white">
       <GlobalMasthead />
 
-      {/* Hero Section */}
+      {/* Hero Section - Restored original copy and styling */}
       <section className="bg-gradient-to-br from-green-50 to-blue-50 py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
@@ -71,7 +80,7 @@ export default function LabResultsPage() {
         </div>
       </section>
 
-      {/* Search and Stats */}
+      {/* Search and Stats - Restored original styling */}
       <section className="py-12 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
@@ -99,7 +108,7 @@ export default function LabResultsPage() {
         </div>
       </section>
 
-      {/* COA Files Grid */}
+      {/* COA Files Section - Structured by Brand and Category with Light Styling */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4">
           {loading ? (
@@ -107,7 +116,7 @@ export default function LabResultsPage() {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
               <p className="text-gray-600 font-bold">Loading lab results...</p>
             </div>
-          ) : filteredCoas.length === 0 ? (
+          ) : coaFiles.length === 0 ? (
             <div className="text-center py-20">
               <FileText className="w-16 h-16 text-gray-300 mx-auto mb-6" />
               <h3 className="text-2xl font-black text-gray-900 mb-4">No Results Found</h3>
@@ -116,56 +125,68 @@ export default function LabResultsPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCoas.map((coa) => (
-                <div
-                  key={coa.id}
-                  className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all hover:scale-105"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="font-black text-lg text-gray-900 mb-2 leading-tight">
-                        {coa.product_name}
-                      </h3>
-                      <p className="text-sm font-bold text-gray-500 mb-1">{coa.brand_name}</p>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                        SKU: {coa.product_sku}
-                      </p>
-                    </div>
-                    <div className="ml-4">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <Shield className="w-6 h-6 text-green-600" />
+            <div className="space-y-16">
+              {groupedData.map((brandGroup) => (
+                <div key={brandGroup.brand}>
+                  {/* Brand Header */}
+                  <div className="flex items-center gap-4 mb-8">
+                    <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">
+                      {brandGroup.brand}
+                    </h2>
+                    <div className="h-px flex-1 bg-gray-100"></div>
+                  </div>
+
+                  {/* Categories */}
+                  <div className="space-y-12">
+                    {brandGroup.categories.map((category) => (
+                      <div key={category.name} className="pl-0 lg:pl-4">
+                        <h3 className="text-sm font-black text-green-600 mb-6 uppercase tracking-[0.2em] flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          {category.name}
+                        </h3>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {category.items.map((coa) => (
+                            <div
+                              key={coa.id}
+                              className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all"
+                            >
+                              <div className="flex items-start justify-between mb-4">
+                                <div className="flex-1">
+                                  <h3 className="font-black text-lg text-gray-900 mb-2 leading-tight">
+                                    {coa.product_name}
+                                  </h3>
+                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                                    {coa.lab_name} • {new Date(coa.test_date).getFullYear()}
+                                  </p>
+                                </div>
+                                <div className="ml-4">
+                                  <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                                    <Shield className="w-5 h-5 text-green-600" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex gap-3">
+                                <button
+                                  onClick={() => window.open(coa.file_url, '_blank')}
+                                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-xl font-bold text-sm hover:bg-green-700 transition-colors"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                  View PDF
+                                </button>
+                                <button
+                                  onClick={() => window.open(coa.file_url, '_blank')}
+                                  className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors"
+                                >
+                                  <Download className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-bold text-gray-600">Lab:</span>
-                      <span className="text-sm font-black text-gray-900">{coa.lab_name}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-bold text-gray-600">Test Date:</span>
-                      <span className="text-sm font-black text-gray-900">
-                        {new Date(coa.test_date).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => window.open(coa.file_url, '_blank')}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-xl font-bold text-sm hover:bg-green-700 transition-colors"
-                    >
-                      <Eye className="w-4 h-4" />
-                      View PDF
-                    </button>
-                    <button
-                      onClick={() => window.open(coa.file_url, '_blank')}
-                      className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors"
-                    >
-                      <Download className="w-4 h-4" />
-                    </button>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -174,37 +195,37 @@ export default function LabResultsPage() {
         </div>
       </section>
 
-      {/* About Lab Testing Section */}
+      {/* Why Lab Testing Matters - Restored original copy and styling */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-8 uppercase tracking-widest">
+          <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-12 uppercase tracking-widest">
             Why Lab Testing Matters
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white p-8 rounded-2xl shadow-sm">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Shield className="w-8 h-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-black text-gray-900 mb-4">Safety First</h3>
-              <p className="text-gray-600 font-bold leading-relaxed">
+              <p className="text-gray-600 font-bold leading-relaxed text-sm">
                 Every product is tested for contaminants, pesticides, heavy metals, and microbial impurities to ensure your safety.
               </p>
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Beaker className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-black text-gray-900 mb-4">Accurate Potency</h3>
-              <p className="text-gray-600 font-bold leading-relaxed">
+              <p className="text-gray-600 font-bold leading-relaxed text-sm">
                 Precise cannabinoid and terpene profiles so you know exactly what you're getting in every product.
               </p>
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <FileText className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-black text-gray-900 mb-4">Full Transparency</h3>
-              <p className="text-gray-600 font-bold leading-relaxed">
+              <p className="text-gray-600 font-bold leading-relaxed text-sm">
                 Complete access to all lab results. No hidden information, just pure transparency you can trust.
               </p>
             </div>
@@ -215,33 +236,6 @@ export default function LabResultsPage() {
           </p>
         </div>
       </section>
-
-      {/* Modal for viewing COA (placeholder) */}
-      {selectedCoa && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-black text-gray-900">{selectedCoa.product_name}</h3>
-                <button
-                  onClick={() => setSelectedCoa(null)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="bg-gray-100 rounded-xl p-8 text-center">
-                <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 font-bold">
-                  COA viewer would be embedded here. In production, this would display the PDF inline or provide download options.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
         short_description,
         our_price,
         sale_price,
-        vip_price,
+        fire_price,
         image_url,
         image_urls,
         sku,
@@ -94,39 +94,35 @@ export async function GET(req: NextRequest) {
 
     console.log(`🔍 Searching through ${allProducts?.length || 0} total products for pre-rolls with images...`);
 
-    // Filter for pre-roll products that have valid images
+    // Filter for pre-roll products using a broad matching strategy
     const prerollProducts = allProducts?.filter(product => {
-      // Check if it's a pre-roll product using category_slug (more reliable than name matching)
-      const isPrerollProduct = product.category_slug === 'pre-rolls' ||
-                              product.subcategory_slug?.includes('pre-roll') ||
-                              product.subcategory_slug?.includes('preroll') ||
-                              product.subcategory_slug?.includes('joint') ||
-                              (Array.isArray(product.categories) &&
-                               product.categories.some(cat =>
-                                 cat?.toLowerCase().includes('pre-roll') ||
-                                 cat?.toLowerCase().includes('preroll') ||
-                                 cat?.toLowerCase().includes('joint') ||
-                                 cat?.toLowerCase().includes('cannabis')
-                               ));
+      const name = product.name?.toLowerCase() || '';
+      const cat = (product.category_slug || '').toLowerCase();
+      const sub = (product.subcategory_slug || '').toLowerCase();
+      
+      // Keywords that indicate a pre-roll product
+      const keywords = ['pre-roll', 'preroll', 'joint', 'blunt', 'infused'];
+      
+      // Categories that likely contain pre-rolls even if the slug isn't "pre-roll"
+      const likelyCategories = ['prerolls', 'packman', 'pure', 'mellow', 'truemoola', 'rrr', 'moji'];
 
-      // Check if it has a valid image URL (strict validation like pipes)
-      const hasValidImage = product.image_url &&
-                           product.image_url.trim() !== '' &&
-                           product.image_url.trim() !== 'NULL' &&
-                           product.image_url.trim() !== 'null' &&
-                           !product.image_url.includes('placehold') &&
-                           !product.image_url.includes('placeholder') &&
-                           !product.image_url.includes('example.com') &&
-                           !product.image_url.includes('test.com') &&
-                           (product.image_url.startsWith('http://') || product.image_url.startsWith('https://')) &&
-                           (product.image_url.includes('.jpg') ||
-                            product.image_url.includes('.jpeg') ||
-                            product.image_url.includes('.png') ||
-                            product.image_url.includes('.webp') ||
-                            product.image_url.includes('sigdistro.com') ||
-                            product.image_url.includes('supabase.co'));
+      const hasKeyword = keywords.some(k => name.includes(k) || cat.includes(k) || sub.includes(k));
+      const inLikelyCategory = likelyCategories.some(c => cat === c || sub === c);
+      
+      // Broad check for category array
+      const inCategoriesArray = Array.isArray(product.categories) && 
+        product.categories.some(c => 
+          keywords.some(k => c?.toLowerCase().includes(k)) || 
+          c?.toLowerCase().includes('cannabis')
+        );
 
-      return isPrerollProduct && hasValidImage;
+      const isPrerollProduct = hasKeyword || inLikelyCategory || inCategoriesArray;
+
+      // EXCLUSION: Ensure we don't accidentally pick up accessories like trays or batteries unless they are explicitly infused products
+      const excludedKeywords = ['tray', 'battery', 'glass', 'pipe', 'bong', 'grinder'];
+      const isExcluded = excludedKeywords.some(k => name.includes(k) && !name.includes('infused'));
+
+      return isPrerollProduct && !isExcluded;
     }) || [];
 
     console.log(`🎯 Found ${prerollProducts.length} pre-roll products with valid images!`);
@@ -171,7 +167,9 @@ export async function GET(req: NextRequest) {
         id: product.id,
         name: product.name,
         price: parseFloat(product.our_price),
-        vip_price: undefined, // fire_price column doesn't exist in main_site_products
+        our_price: parseFloat(product.our_price),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         image_url: product.image_url,
         image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),

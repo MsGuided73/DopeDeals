@@ -93,9 +93,11 @@ export async function GET(request: NextRequest) {
     const transformedProducts = products.map((product: any) => ({
       id: product.id,
       name: product.name,
-      price: product.price || 0,
-      vip_price: product.vip_price,
-      compare_at_price: product.compare_at_price,
+      price: parseFloat(product.our_price || 0),
+      our_price: parseFloat(product.our_price || 0),
+      vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+      sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+      compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
       image_url: product.image_url,
       image_urls: product.image_urls || [product.image_url].filter(Boolean),
       brand_id: product.brand_id,
@@ -176,7 +178,7 @@ async function performRegularSearch(supabase: any, options: any) {
   // TEMPORARY: Just return a few active products without complex filtering
   const { data, error, count } = await supabase
     .from('main_site_products')
-    .select('id, name, our_price, image_url, category_slug')
+    .select('id, name, our_price, sale_price, fire_price, image_url, category_slug')
     .eq('is_active', true)
     // STRICT: No Kratom or related substances
     .not('name', 'ilike', '%kratom%')
