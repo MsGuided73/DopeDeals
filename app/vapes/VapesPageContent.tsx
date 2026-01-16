@@ -148,8 +148,8 @@ export default function VapesPageContent() {
     try {
       setLoading(true);
 
-      // Use the API endpoint for THCA products
-      const response = await fetch('/api/products/thca-pre-rolls');
+      // Use the API endpoint for vapes products
+      const response = await fetch('/api/products/vapes');
 
       if (!response.ok) {
         throw new Error(`API request failed: ${response.status} ${response.statusText}`);

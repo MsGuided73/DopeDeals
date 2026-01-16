@@ -28,11 +28,11 @@ export default function EdiblesPageContent() {
   const loadEdibleProducts = async () => {
     try {
       setLoading(true);
-      // Fetch products that match edibles, tinctures, salves keywords
-      const response = await fetch('/api/products?q=edible,tincture,salve,cbd');
-      
+      // Fetch products with category_slug filtering for edibles
+      const response = await fetch('/api/products/edibles');
+
       if (!response.ok) throw new Error('Failed to load products');
-      
+
       const data = await response.json();
       setProducts(data.products || []);
     } catch (error) {

@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 /**
- * Accessories API Route
+ * Vapes API Route
  *
- * Returns products with category_slug in: "ashtrays", "torch", "storage", "lighters"
+ * Returns products with category_slug = "vapes"
  * Filters: Active products only, valid images, no batteries
  */
 
@@ -18,30 +18,29 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    // Get accessories products with category_slug filtering
+    // Get vapes products with category_slug filtering
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured,
-        brand_name, category_id, category_slug, nicotine_product, tobacco_product,
-        created_at, updated_at
+        brand_name, category_id, category_slug, created_at, updated_at
       `)
       .eq('is_active', true) // Only active products
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
-      .or('category_slug.eq.ashtrays,category_slug.eq.torch,category_slug.eq.storage,category_slug.eq.lighters') // Category slug filtering
+      .eq('category_slug', 'vapes') // Category slug filtering
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
       .order('created_at', { ascending: false })
       .limit(limit);
 
     if (error) {
-      console.error('Error fetching accessories products:', error);
+      console.error('Error fetching vapes products:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    console.log(`🔧 Accessories API: Retrieved ${rawProducts?.length || 0} active accessories products with valid images`);
+    console.log(`🎯 Vapes API: Retrieved ${rawProducts?.length || 0} active vapes products with valid images`);
 
     // Transform products to match expected interface
     const transformedProducts = (rawProducts || []).map((product: any) => ({
@@ -60,8 +59,6 @@ export async function GET(req: NextRequest) {
       brand_name: product.brand_name,
       category_id: product.category_id,
       category_slug: product.category_slug,
-      nicotine_product: product.nicotine_product,
-      tobacco_product: product.tobacco_product,
       created_at: product.created_at,
       updated_at: product.updated_at
     }));
@@ -69,11 +66,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       products: transformedProducts,
       total: transformedProducts.length,
-      message: 'Accessories products retrieved successfully'
+      message: 'Vapes products retrieved successfully'
     });
 
   } catch (error) {
-    console.error('Error in accessories API:', error);
+    console.error('Error in vapes API:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

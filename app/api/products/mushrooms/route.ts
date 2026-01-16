@@ -1,93 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+/**
+ * Mushrooms API Route
+ *
+ * Returns products with category_slug in: "mush-gummies", "mush-chocolate", "mushrooms"
+ * Filters: Active products only, valid images, no batteries
+ */
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
 export async function GET(req: NextRequest) {
   try {
-    // Direct Supabase connection for testing
-    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const { searchParams } = new URL(req.url);
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ error: 'Supabase credentials not configured' }, { status: 500 });
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    // Parse query parameters
-    const url = new URL(req.url);
-    const limit = parseInt(url.searchParams.get('limit') || '50');
-    const offset = parseInt(url.searchParams.get('offset') || '0');
-
-    // Get mushroom-related products - vapes, prerolls, THC-A flower, edibles, gummies, etc.
-    let query = supabase
+    // Get mushrooms products with category_slug filtering
+    const { data: rawProducts, error } = await supabase
       .from('main_site_products')
-      .select('*')
-      .eq('is_active', true)
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%');
-
-    // Keywords for MUSHROOM products ONLY
-    const mushroomKeywords = [
-      'mushroom', 'shroom', 'psilocybin', 'psychedelic', 'fungus', 'fungi',
-      'magic mushroom', 'amanita', 'cordyceps', 'lions mane', 'reishi'
-    ];
-
-    // Build a simple OR condition for keywords
-    const keywordConditions = mushroomKeywords.map(keyword =>
-      `name.ilike.%${keyword}%`
-    );
-
-    query = query.or(keywordConditions.join(','));
-
-    // Apply pagination
-    if (limit > 0) {
-      query = query.limit(limit);
-    }
-    if (offset > 0) {
-      query = query.range(offset, offset + (limit || 50) - 1);
-    }
-
-    // Order by featured and stock quantity
-    query = query.order('featured', { ascending: false })
-                 .order('stock_quantity', { ascending: false })
-                 .order('created_at', { ascending: false });
-
-    const { data: products, error } = await query;
+      .select(`
+        id, name, description, short_description, our_price, sale_price,
+        image_url, image_urls, sku, stock_quantity, is_active, featured,
+        brand_name, category_id, category_slug, created_at, updated_at
+      `)
+      .eq('is_active', true) // Only active products
+      .not('image_url', 'is', null) // Must have image_url
+      .neq('image_url', '') // Must not be empty string
+      .or('category_slug.eq.mush-gummies,category_slug.eq.mush-chocolate,category_slug.eq.mushrooms') // Category slug filtering
+      .not('name', 'ilike', '%battery%') // No batteries
+      .not('description', 'ilike', '%battery%')
+      .order('created_at', { ascending: false })
+      .limit(limit);
 
     if (error) {
-      console.error('Supabase query error:', error);
-      return NextResponse.json({ error: 'Failed to fetch mushroom products', details: error.message }, { status: 500 });
+      console.error('Error fetching mushrooms products:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    console.log(`🎯 Mushrooms API: Retrieved ${rawProducts?.length || 0} active mushrooms products with valid images`);
 
     // Get total count for pagination info
     const { count } = await supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
-      .or(mushroomKeywords.map(keyword => `name.ilike.%${keyword}%`).join(','));
+      .not('image_url', 'is', null)
+      .neq('image_url', '')
+      .or('category_slug.eq.mush-gummies,category_slug.eq.mush-chocolate,category_slug.eq.mushrooms')
+      .not('name', 'ilike', '%battery%')
+      .not('description', 'ilike', '%battery%');
 
     // Get brand information for products
-    const brandIds = [...new Set(products?.map((p: any) => p.brand_id).filter(Boolean) || [])];
+    const brandIds = [...new Set(rawProducts?.map((p: any) => p.brand_id).filter(Boolean) || [])];
     let brandsMap: Record<string, string> = {};
 
     if (brandIds.length > 0) {
@@ -103,7 +71,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Transform the data to match expected format
-    const transformedProducts = (products || []).map((product: any) => {
+    const transformedProducts = (rawProducts || []).map((product: any) => {
       // Determine mushroom product type
       let productType = 'Mushrooms'; // default
       const nameLower = product.name.toLowerCase();
@@ -134,6 +102,7 @@ export async function GET(req: NextRequest) {
         featured: product.featured || false,
         brand_id: product.brand_id,
         category_id: product.category_id,
+        category_slug: product.category_slug,
         created_at: product.created_at,
         updated_at: product.updated_at,
         // Add brand name
@@ -155,7 +124,7 @@ export async function GET(req: NextRequest) {
       totalCount: count || 0,
       limit,
       offset,
-      hasMore: count ? (offset + (products?.length || 0)) < count : false
+      hasMore: count ? (offset + (rawProducts?.length || 0)) < count : false
     }, {
       headers: {
         'Content-Type': 'application/json',
