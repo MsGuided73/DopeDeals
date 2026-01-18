@@ -103,7 +103,7 @@ export default function CollectionsGrid() {
 
               {/* Category Name Label - Top Left, No Backdrop */}
               <div className="absolute top-4 left-4 z-10 pointer-events-none">
-                <div className="text-white text-3xl md:text-4xl font-display-juicy-fills leading-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                <div className="text-white text-2xl md:text-3xl font-display-juicy-fills leading-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                   {cat.name.split('\n').map((line, index) => (
                     <div key={index}>{line}</div>
                   ))}
@@ -165,7 +165,7 @@ export default function CollectionsGrid() {
 
               {/* Category Name Label - Top Left, No Backdrop */}
               <div className="absolute top-6 left-6 z-10 pointer-events-none">
-                <div className="text-white text-4xl xl:text-5xl font-display-juicy-fills leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <div className="text-white text-3xl xl:text-4xl font-display-juicy-fills leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                   {cat.name.split('\n').map((line, index) => (
                     <div key={index}>{line}</div>
                   ))}
