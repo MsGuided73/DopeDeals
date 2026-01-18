@@ -16,7 +16,8 @@ const supabase = createClient(
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get('limit') || '50');
+    // NO LIMIT: Return all products
+    const limit = 5000;
 
     // Get flower products with category_slug filtering
     const { data: rawProducts, error } = await supabase
@@ -29,9 +30,19 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true) // Only active products
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
-      .eq('category_slug', 'flower') // Category slug filtering
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
+      .or(
+        `category_slug.eq.flower,` +
+        `name.ilike.%flower%,` +
+        `name.ilike.%thca%,` +
+        `name.ilike.%thc-a%,` +
+        `name.ilike.%THC-A%,` +
+        `name.ilike.%THC-a%,` +
+        `category_slug.ilike.%flower%,` +
+        `category_slug.ilike.%thca%,` +
+        `category_slug.ilike.%thc-a%`
+      )
       .order('created_at', { ascending: false })
       .limit(limit);
 

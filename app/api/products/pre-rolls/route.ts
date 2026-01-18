@@ -41,6 +41,9 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // NO LIMIT: Return all products
+    const limit = 5000;
+
     // Search active products first, then filter for pre-rolls with images
     const { data: allProducts, error: allError } = await supabase
       .from('main_site_products')
@@ -82,7 +85,8 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-oh%')
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%');
+      .not('description', 'ilike', '%7-ohmz%')
+      .limit(limit);
 
     if (allError) {
       console.error('Error fetching all products:', allError);

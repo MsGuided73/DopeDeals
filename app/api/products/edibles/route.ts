@@ -16,9 +16,10 @@ const supabase = createClient(
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get('limit') || '50');
+    // NO LIMIT: Return all products for the category
+    const limit = 5000;
 
-    // Get edibles products with category_slug filtering
+    // Get edibles products with comprehensive filtering
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -29,9 +30,54 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true) // Only active products
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
-      .or('category_slug.eq.gummies,category_slug.eq.edibles') // Category slug filtering
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
+      // Include products with category_slug = 'gummies' OR 'edibles' OR name/description contains edible terms
+      .or(
+        `category_slug.eq.gummies,` +
+        `category_slug.eq.edibles,` +
+        `category_slug.ilike.%gummies%,` +
+        `category_slug.ilike.%edibles%,` +
+        `name.ilike.%gummy%,` +
+        `name.ilike.%gummies%,` +
+        `name.ilike.%edible%,` +
+        `name.ilike.%edibles%,` +
+        `name.ilike.%candy%,` +
+        `name.ilike.%chocolate%,` +
+        `name.ilike.%brownie%,` +
+        `name.ilike.%cookie%,` +
+        `name.ilike.%lollipop%,` +
+        `name.ilike.%sour%,` +
+        `name.ilike.%sweet%,` +
+        `name.ilike.%treat%,` +
+        `name.ilike.%snack%,` +
+        `brand_name.ilike.%gummy%,` +
+        `brand_name.ilike.%gummies%,` +
+        `brand_name.ilike.%edible%,` +
+        `brand_name.ilike.%edibles%,` +
+        `brand_name.ilike.%candy%,` +
+        `brand_name.ilike.%chocolate%,` +
+        `brand_name.ilike.%brownie%,` +
+        `brand_name.ilike.%cookie%,` +
+        `brand_name.ilike.%lollipop%,` +
+        `brand_name.ilike.%sour%,` +
+        `brand_name.ilike.%sweet%,` +
+        `brand_name.ilike.%treat%,` +
+        `brand_name.ilike.%snack%,` +
+        `description.ilike.%gummy%,` +
+        `description.ilike.%gummies%,` +
+        `description.ilike.%edible%,` +
+        `description.ilike.%edibles%,` +
+        `description.ilike.%candy%,` +
+        `description.ilike.%chocolate%,` +
+        `description.ilike.%brownie%,` +
+        `description.ilike.%cookie%,` +
+        `description.ilike.%lollipop%,` +
+        `description.ilike.%sour%,` +
+        `description.ilike.%sweet%,` +
+        `description.ilike.%treat%,` +
+        `description.ilike.%snack%`
+      )
       .order('created_at', { ascending: false })
       .limit(limit);
 

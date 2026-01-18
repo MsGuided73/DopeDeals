@@ -15,7 +15,8 @@ export async function GET(req: NextRequest) {
 
     // Parse query parameters
     const url = new URL(req.url);
-    const limit = parseInt(url.searchParams.get('limit') || '50');
+    // NO LIMIT: Return all products
+    const limit = 5000;
     const offset = parseInt(url.searchParams.get('offset') || '0');
     const category = url.searchParams.get('category');
 

@@ -16,9 +16,10 @@ const supabase = createClient(
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get('limit') || '50');
+    // NO LIMIT: Return all products for the category
+    const limit = 5000;
 
-    // Get vapes products with category_slug filtering
+    // Get vapes products with comprehensive filtering
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -29,9 +30,20 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true) // Only active products
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
-      .eq('category_slug', 'vapes') // Category slug filtering
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
+      // Include products with category_slug = 'vapes' OR name/description contains vape/cartridge terms
+      .or(
+        `category_slug.eq.vapes,` +
+        `name.ilike.%vape%,` +
+        `name.ilike.%cartridge%,` +
+        `name.ilike.%disposable%,` +
+        `name.ilike.%cart%,` +
+        `description.ilike.%vape%,` +
+        `description.ilike.%cartridge%,` +
+        `description.ilike.%disposable%,` +
+        `description.ilike.%cart%`
+      )
       .order('created_at', { ascending: false })
       .limit(limit);
 

@@ -15,11 +15,11 @@ export async function GET(req: NextRequest) {
 
     // Parse query parameters
     const url = new URL(req.url);
-    const limit = parseInt(url.searchParams.get('limit') || '50');
+    // NO LIMIT: Return all products
+    const limit = 5000;
     const offset = parseInt(url.searchParams.get('offset') || '0');
-    const category = url.searchParams.get('category');
 
-    // Get dab rig and tool products - simplified query for testing
+    // Get dab rig and tool products
     let query = supabase
       .from('main_site_products')
       .select('*')
@@ -36,13 +36,11 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%');
 
-    // For now, let's just return some active products and filter by name patterns
     const dabKeywords = [
       'dab', 'rig', 'nail', 'banger', 'tool', 'puffco', 'e-rig', 'concentrate',
       'diamond', 'glass', 'recycler', 'portable', 'travel', 'carb cap', 'dart'
     ];
 
-    // Build a simple OR condition for keywords
     const keywordConditions = dabKeywords.map(keyword =>
       `name.ilike.%${keyword}%`
     );
@@ -50,11 +48,9 @@ export async function GET(req: NextRequest) {
     query = query.or(keywordConditions.join(','));
 
     // Apply pagination
-    if (limit > 0) {
-      query = query.limit(limit);
-    }
+    query = query.limit(limit);
     if (offset > 0) {
-      query = query.range(offset, offset + (limit || 50) - 1);
+      query = query.range(offset, offset + limit - 1);
     }
 
     // Order by featured and stock quantity
@@ -69,25 +65,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch dab products', details: error.message }, { status: 500 });
     }
 
-    // Get total count for pagination info
+    // Get total count
     const { count } = await supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
-      // STRICT: No Kratom or related substances
       .not('name', 'ilike', '%kratom%')
       .not('name', 'ilike', '%7-oh%')
       .not('name', 'ilike', '%7-hydroxy%')
       .not('name', 'ilike', '%mitragynine%')
       .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
       .or(dabKeywords.map(keyword => `name.ilike.%${keyword}%`).join(','));
 
-    // Get brand information for products
     const brandIds = [...new Set(products?.map((p: any) => p.brand_id).filter(Boolean) || [])];
     let brandsMap: Record<string, string> = {};
 
@@ -103,10 +92,8 @@ export async function GET(req: NextRequest) {
       }, {} as Record<string, string>);
     }
 
-    // Transform the data to match expected format (similar to other product APIs)
     const transformedProducts = (products || []).map((product: any) => {
-      // Determine product type based on name and brand
-      let productType = 'Rigs'; // default
+      let productType = 'Rigs';
       const nameLower = product.name.toLowerCase();
 
       if (nameLower.includes('puffco') || nameLower.includes('e-rig') || nameLower.includes('electric')) {
@@ -121,31 +108,13 @@ export async function GET(req: NextRequest) {
       }
 
       return {
-        id: product.id,
-        name: product.name,
-        price: product.our_price || product.price,
-        compare_at_price: product.sale_price,
-        image_url: product.image_url,
-        description: product.description,
-        short_description: product.short_description,
-        sku: product.sku,
-        stock_quantity: product.stock_quantity || 0,
-        is_active: product.is_active,
-        featured: product.featured || false,
-        brand_id: product.brand_id,
-        category_id: product.category_id,
-        created_at: product.created_at,
-        updated_at: product.updated_at,
-        // Add brand name
+        ...product,
         brand: brandsMap[product.brand_id] || 'House Brand',
-        // Add additional fields expected by frontend
         specs: {
           type: productType,
           size: product.size || 'Standard',
           material: product.material || 'Glass'
         },
-        isNew: product.is_new || false,
-        is_sale: !!product.sale_price,
         inStock: (product.stock_quantity || 0) > 0
       };
     });
@@ -156,11 +125,6 @@ export async function GET(req: NextRequest) {
       limit,
       offset,
       hasMore: count ? (offset + (products?.length || 0)) < count : false
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
-      }
     });
   } catch (error) {
     console.error('API error:', error);

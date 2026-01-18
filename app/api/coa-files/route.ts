@@ -4,7 +4,7 @@ import { STATIC_COA_DATA } from '../../../lib/coa-data';
 
 export async function GET(req: NextRequest) {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
@@ -122,11 +122,18 @@ export async function GET(req: NextRequest) {
     // De-duplicate by URL
     const uniqueCoas = Array.from(new Map(allCoas.map(item => [item.file_url, item])).values());
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       coaFiles: uniqueCoas,
       total: uniqueCoas.length,
       message: uniqueCoas.length > 0 ? 'COA files loaded successfully' : 'No COA files found.'
     });
+
+    // Add CORS headers
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    return response;
 
   } catch (error) {
     console.error('API error:', error);
@@ -135,4 +142,12 @@ export async function GET(req: NextRequest) {
       details: String(error)
     }, { status: 500 });
   }
+}
+
+export async function OPTIONS() {
+  const response = new NextResponse(null, { status: 200 });
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return response;
 }

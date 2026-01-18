@@ -16,7 +16,8 @@ const supabase = createClient(
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get('limit') || '50');
+    // NO LIMIT: Return all products
+    const limit = 5000;
 
     // Get accessories products with category_slug filtering
     const { data: rawProducts, error } = await supabase
@@ -30,7 +31,7 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true) // Only active products
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
-      .or('category_slug.eq.ashtrays,category_slug.eq.torch,category_slug.eq.storage,category_slug.eq.lighters') // Category slug filtering
+      .or('category_slug.eq.ashtrays,category_slug.eq.torch,category_slug.eq.storage,category_slug.eq.lighters,category_slug.eq.accessories,category_slug.eq.accessory') // Category slug filtering
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
       .order('created_at', { ascending: false })
@@ -40,8 +41,6 @@ export async function GET(req: NextRequest) {
       console.error('Error fetching accessories products:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
-    console.log(`🔧 Accessories API: Retrieved ${rawProducts?.length || 0} active accessories products with valid images`);
 
     // Transform products to match expected interface
     const transformedProducts = (rawProducts || []).map((product: any) => ({

@@ -27,7 +27,14 @@ export interface ComplianceReport {
 const NICOTINE_FREE_CATEGORIES = [
   'pipes', 'bongs', 'dab-rigs', 'bowls-stems', 'percolators', 'downstems',
   'carb caps', 'nails', 'grinders', 'screens', 'storage', 'screens',
-  'tools', 'accessories', 'hookahs', 'shisha', 'water adapters'
+  'tools', 'accessories', 'hookahs', 'shisha', 'water adapters',
+  'edibles', 'gummies', 'cereal bar', 'nitrous', 'n2o', 'mushroom',
+  'chocolate', 'candy', 'brownies', 'cookies', 'lollipops', 'sour',
+  'sweet', 'treats', 'snacks', 'gummy', 'gummy bears', 'gummy worms',
+  'gummy rings', 'gummy candy', 'gummy edibles',
+  'mushroom chocolate', 'mushroom gummies', 'magic mushrooms', 'psilocybin',
+  'psilocybin mushrooms', 'shrooms', 'zoomers', 'zoomies', 'mushroom treats',
+  'infusion', 'tincture', 'topical', 'salve', 'lotion', 'balm'
 ];
 
 /**
@@ -35,23 +42,13 @@ const NICOTINE_FREE_CATEGORIES = [
  */
 const HIGH_RISK_PATTERNS = {
   nicotine: [
-    'nicotine', 'tobacco', 'cigarette', 'cigar', 'vape', 'e-liquid',
+    'nicotine', 'tobacco', 'cigarette', 'cigar', 'e-liquid',
     'e-juice', 'salt nic', 'freebase', 'synthetic nicotine',
-    'tobacco leaf', 'nic salt', 'vaporizer', 'e-cigarette'
+    'tobacco leaf', 'nic salt', 'e-cigarette'
   ],
   kratom: [
     'kratom', 'mitragyna', 'speciosa', '7-hydroxy', '7hydroxymitragynine',
     '7-oh', 'hydroxymitragynine', 'mitragynine'
-  ],
-  delta8: [
-    'delta 8', 'delta-8', 'd8', 'delta8', 'delta 8 thc', 'd8 thc'
-  ],
-  delta10: [
-    'delta 10', 'delta-10', 'd10', 'delta10', 'delta 10 thc', 'd10 thc'
-  ],
-  thca: [
-    'thca', 'thc-a', 'tetrahydrocannabinolic acid', 'thca flower',
-    'thca concentrate', 'thca diamond'
   ]
 };
 
@@ -61,10 +58,7 @@ const HIGH_RISK_PATTERNS = {
 const VIOLATION_SEVERITY = {
   nicotine: 'critical',
   tobacco: 'critical',
-  kratom: 'high',
-  delta8: 'high',
-  delta10: 'high',
-  thca: 'medium'
+  kratom: 'high'
 };
 
 /**
@@ -94,18 +88,40 @@ export function isNicotineProduct(product: {
     return true;
   }
 
-  // Check product name and description
+  // Check product name and description with more intelligent filtering
   const searchText = `${product.name} ${product.description || ''}`.toLowerCase();
 
-  // Check for nicotine/tobacco keywords
+  // Check for nicotine/tobacco keywords with context awareness
   const nicotineKeywords = HIGH_RISK_PATTERNS.nicotine;
-  const hasNicotineKeywords = nicotineKeywords.some(keyword =>
-    searchText.includes(keyword.toLowerCase())
-  );
-
-  if (hasNicotineKeywords) {
-    console.warn(`🚨 COMPLIANCE VIOLATION: Product ${product.name} contains nicotine keywords`);
-    return true;
+  
+  // Enhanced keyword checking with context to avoid false positives
+  for (const keyword of nicotineKeywords) {
+    const keywordLower = keyword.toLowerCase();
+    
+    // Skip if this is clearly a cannabis product (not nicotine)
+    if (searchText.includes('cannabis') || searchText.includes('hemp') || 
+        searchText.includes('cbd') || searchText.includes('thc') ||
+        searchText.includes('delta') || searchText.includes('thca')) {
+      // These are cannabis products, not nicotine
+      continue;
+    }
+    
+    // Check for nicotine keywords but exclude cannabis-related contexts
+    if (searchText.includes(keywordLower)) {
+      // Additional context checks to avoid false positives
+      const isCannabisContext = searchText.includes('cannabis') || 
+                               searchText.includes('hemp') || 
+                               searchText.includes('cbd') ||
+                               searchText.includes('thc') ||
+                               searchText.includes('delta') ||
+                               searchText.includes('thca') ||
+                               searchText.includes('cannabinoid');
+      
+      if (!isCannabisContext) {
+        console.warn(`🚨 COMPLIANCE VIOLATION: Product ${product.name} contains nicotine keywords: ${keyword}`);
+        return true;
+      }
+    }
   }
 
   return false;

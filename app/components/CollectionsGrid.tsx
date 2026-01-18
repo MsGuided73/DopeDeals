@@ -5,12 +5,12 @@ import React from "react";
 export default function CollectionsGrid() {
   const categories = [
     { 
-      name: "THCA FLOWER", 
+      name: "FLOWER", 
       route: "/thca_flower", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/thca_flower_no_text.png" 
     },
     { 
-      name: "PRE-ROLLS", 
+      name: "PREROLLS", 
       route: "/pre-rolls", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/prerolls_no_text.png" 
     },
@@ -35,9 +35,9 @@ export default function CollectionsGrid() {
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Edibles_non-mush.png" 
     },
     { 
-      name: "CBD\nTINCTURES", 
+      name: "CBD", 
       route: "/cbd-tinctures", 
-      image: "https://images.unsplash.com/photo-1619918884931-155be5530263?q=80&w=2000&auto=format&fit=crop" 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Close%20up%20and%20Right.png" 
     },
     { 
       name: "ACCESSORIES", 

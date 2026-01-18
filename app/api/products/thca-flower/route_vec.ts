@@ -50,11 +50,14 @@ export async function GET(request: NextRequest) {
       featured: searchParams.get('featured') === 'true'
     };
 
+    // NO LIMIT: Return all products
+    const limit = 5000;
+
     // Use the thca_vector_search RPC function
     const { data, error } = await supabase.rpc('thca_vector_search', {
       query_embedding: queryEmbedding,
       filters: filters,
-      page_size: parseInt(searchParams.get('limit') || '24'),
+      page_size: limit,
       page: parseInt(searchParams.get('page') || '1')
     });
 
@@ -65,6 +68,7 @@ export async function GET(request: NextRequest) {
 
     // Transform the data to match expected format
     const transformedProducts = (data || []).map((product: any) => ({
+      ...product,
       id: product.id,
       name: product.name,
       price: product.price || 0,
@@ -100,7 +104,6 @@ export async function GET(request: NextRequest) {
 
     const totalCount = data?.[0]?.total_count || 0;
     const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '24');
 
     return NextResponse.json({
       products: transformedProducts,

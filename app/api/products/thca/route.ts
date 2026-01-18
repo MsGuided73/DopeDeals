@@ -13,24 +13,17 @@ export async function GET(req: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Parse query parameters with validation
+    // Parse query parameters
     const url = new URL(req.url);
-    const rawLimit = url.searchParams.get('limit');
     const rawOffset = url.searchParams.get('offset');
 
-    // Parse and validate limit: default 20, clamp to 1-100
-    const parsedLimit = rawLimit ? parseInt(rawLimit, 10) : 20;
-    const limit = isNaN(parsedLimit) ? 20 : Math.max(1, Math.min(100, parsedLimit));
+    // NO LIMIT: Return all products
+    const limit = 5000;
+    const offset = isNaN(parseInt(rawOffset || '0')) ? 0 : Math.max(0, parseInt(rawOffset || '0'));
 
-    // Parse and validate offset: default 0, ensure non-negative
-    const parsedOffset = rawOffset ? parseInt(rawOffset, 10) : 0;
-    const offset = isNaN(parsedOffset) ? 0 : Math.max(0, Math.floor(parsedOffset));
-
-    // Use the requested limit
     const effectiveLimit = limit;
 
     // Query THCA products from main_site_products table
-    // Search for THCA-related terms and specific brands/products mentioned
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -40,6 +33,7 @@ export async function GET(req: NextRequest) {
         short_description,
         our_price,
         sale_price,
+        fire_price,
         image_url,
         image_urls,
         sku,
@@ -70,74 +64,43 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-ohmz%')
       .or('name.ilike.%thca%,name.ilike.%packman%,name.ilike.%crave%,name.ilike.%hidden.hills%,name.ilike.%hidden-hills%,name.ilike.%salve%,name.ilike.%tincture%,name.ilike.%flower%,name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%concentrate%,name.ilike.%edible%,brand_name.ilike.%thca%,brand_name.ilike.%packman%,brand_name.ilike.%crave%,brand_name.ilike.%hidden.hills%,brand_name.ilike.%hidden-hills%,brand_name.ilike.%salve%,brand_name.ilike.%tincture%,brand_name.ilike.%flower%,brand_name.ilike.%preroll%,brand_name.ilike.%cartridge%,brand_name.ilike.%vape%,brand_name.ilike.%concentrate%,brand_name.ilike.%edible%,description.ilike.%thca%,description.ilike.%packman%,description.ilike.%crave%,description.ilike.%hidden.hills%,description.ilike.%hidden-hills%,description.ilike.%salve%,description.ilike.%tincture%,description.ilike.%flower%,description.ilike.%preroll%,description.ilike.%cartridge%,description.ilike.%vape%,description.ilike.%concentrate%,description.ilike.%edible%')
       .order('created_at', { ascending: false })
-      .limit(effectiveLimit * 2) // Fetch extra to account for duplicates
-      .range(offset, offset + (effectiveLimit * 2) - 1);
+      .limit(effectiveLimit);
 
     if (error) {
       console.error('Supabase query error:', error);
       return NextResponse.json({ error: 'Failed to fetch THCA products', details: error.message }, { status: 500 });
     }
 
-    // Remove duplicates by ID, name, and SKU (ensure unique products only)
-    const seenIds = new Set<number>();
-    const seenNames = new Set<string>();
-    const seenSkus = new Set<string>();
-    const uniqueProducts = (rawProducts || []).filter(product => {
-      // Check ID duplicates
-      if (seenIds.has(product.id)) {
-        return false;
-      }
-
-      // Check name duplicates (normalize by trimming and lowercasing)
+    // Remove duplicates by ID, name, and SKU
+    const seenIds = new Set();
+    const seenNames = new Set();
+    const seenSkus = new Set();
+    const products = (rawProducts || []).filter(product => {
+      if (seenIds.has(product.id)) return false;
       const normalizedName = product.name?.trim().toLowerCase();
-      if (normalizedName && seenNames.has(normalizedName)) {
-        return false;
-      }
-
-      // Check SKU duplicates (if SKU exists)
-      if (product.sku && seenSkus.has(product.sku)) {
-        return false;
-      }
-
-      // Add to tracking sets
+      if (normalizedName && seenNames.has(normalizedName)) return false;
+      if (product.sku && seenSkus.has(product.sku)) return false;
       seenIds.add(product.id);
       if (normalizedName) seenNames.add(normalizedName);
       if (product.sku) seenSkus.add(product.sku);
-
       return true;
     });
 
-    // Take only the requested limit
-    const products = uniqueProducts.slice(0, effectiveLimit);
-
-    // Get total count for pagination info
+    // Get total count
     const { count } = await supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
       .not('image_url', 'is', null)
       .neq('image_url', '')
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
       .or('name.ilike.%thca%,name.ilike.%packman%,name.ilike.%crave%,name.ilike.%hidden.hills%,name.ilike.%hidden-hills%,name.ilike.%salve%,name.ilike.%tincture%,name.ilike.%flower%,name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%concentrate%,name.ilike.%edible%,brand_name.ilike.%thca%,brand_name.ilike.%packman%,brand_name.ilike.%crave%,brand_name.ilike.%hidden.hills%,brand_name.ilike.%hidden-hills%,brand_name.ilike.%salve%,brand_name.ilike.%tincture%,brand_name.ilike.%flower%,brand_name.ilike.%preroll%,brand_name.ilike.%cartridge%,brand_name.ilike.%vape%,brand_name.ilike.%concentrate%,brand_name.ilike.%edible%,description.ilike.%thca%,description.ilike.%packman%,description.ilike.%crave%,description.ilike.%hidden.hills%,description.ilike.%hidden-hills%,description.ilike.%salve%,description.ilike.%tincture%,description.ilike.%flower%,description.ilike.%preroll%,description.ilike.%cartridge%,description.ilike.%vape%,description.ilike.%concentrate%,description.ilike.%edible%');
-
-    console.log(`🌿 THCA API: Retrieved ${products.length} unique THCA products (no duplicates, images required)`);
 
     return NextResponse.json({
       products: products,
       totalCount: count || 0,
-      limit,
+      limit: products.length,
       offset,
-      hasMore: count ? (offset + products.length) < count : false
+      hasMore: false
     });
   } catch (error) {
     console.error('API error:', error);
