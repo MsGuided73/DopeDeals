@@ -35,7 +35,7 @@ export default function CollectionsGrid() {
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Edibles_non-mush.png" 
     },
     { 
-      name: "CBD", 
+      name: "CBD & More", 
       route: "/cbd-tinctures", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Close%20up%20and%20Right.png" 
     },
