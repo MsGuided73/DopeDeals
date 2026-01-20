@@ -31,9 +31,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ user: data.user });
     }
 
+    if (type === 'forgotPassword') {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
+      });
+      if (error) throw error;
+      return NextResponse.json({ message: 'Password reset email sent' });
+    }
+
     return NextResponse.json({ error: 'Unsupported type' }, { status: 400 });
   } catch (err: unknown) {
     return NextResponse.json({ error: (err as Error)?.message || 'Auth error' }, { status: 400 });
   }
 }
-

@@ -27,11 +27,11 @@
   font-display: swap;
 }
 
-/* Juicy-Fills - For Collections Grid Labels and Section Headers */
+/* Chalets - For Collections Grid Labels and Section Headers */
 @font-face {
-  font-family: 'Juicy-Fills';
-src: url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/juicy-fills/Juicy-Fills.woff') format('woff'),
-     url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/juicy-fills/Juicy-Fills.woff2') format('woff2'); 
+  font-family: 'Chalets';
+  src: url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Chalets/chalets-webfont.woff') format('woff'),
+       url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Chalets/chalets-webfont.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -50,10 +50,7 @@ src: url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/High
   animation: scroll-horizontal 60s linear infinite;
 }
 
-
-
-
-
+/* Tailwind CSS directives must come after @import statements but before any other CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -251,7 +248,7 @@ body, p, .text-sm, .text-xs, .text-base {
     /* Legacy DOPE CITY colors for backward compatibility (now uses Highway 420 Green) */
     --dope-orange:  #16a34a; /* Primary accent color - Highway 420 Green */
     --dope-orange-dark: #16a34a; /* Hover states, darker green */
-    --dope-orange-light: #08bb4aa6; /* Light green for subtle accents */
+    --dope-orange-light: #0be45ad5; /* Light green for subtle accents */
     --dope-black: #000000;
     --dope-gray-900: #111827;
     --dope-gray-800: #1f2937;
