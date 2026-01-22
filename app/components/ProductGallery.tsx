@@ -44,10 +44,21 @@ export default function ProductGallery({
   // Sync with external variant selection if provided
   const selectedImageIndex = selectedVariant !== undefined ? selectedVariant : internalSelectedIndex;
 
+  const sanitizeImageUrl = (value?: string) => {
+    if (!value) return null;
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+    if (trimmed.startsWith('/')) return trimmed;
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return `/${trimmed}`;
+  };
+
   // Combine images and remove duplicates
   const mainImage = image_url || imageUrl || image;
   const rawImages = mainImage ? [mainImage, ...image_urls] : image_urls;
-  const allImages = Array.from(new Set(rawImages.filter(Boolean) as string[]));
+  const allImages = Array.from(
+    new Set(rawImages.map(sanitizeImageUrl).filter(Boolean) as string[])
+  );
   
   const hasImages = allImages.length > 0 && !isImageError;
   const currentImage = hasImages ? allImages[selectedImageIndex] : null;

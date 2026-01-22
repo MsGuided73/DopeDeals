@@ -98,29 +98,12 @@ export async function GET(req: NextRequest) {
 
     console.log(`🔍 Searching through ${allProducts?.length || 0} total products for pre-rolls with images...`);
 
-    // Filter for pre-roll products using a broad matching strategy
+    // Filter for pre-roll products using category_slug = 'prerolls'
     const prerollProducts = allProducts?.filter(product => {
       const name = product.name?.toLowerCase() || '';
       const cat = (product.category_slug || '').toLowerCase();
-      const sub = (product.subcategory_slug || '').toLowerCase();
-      
-      // Keywords that indicate a pre-roll product
-      const keywords = ['pre-roll', 'preroll', 'joint', 'blunt', 'infused'];
-      
-      // Categories that likely contain pre-rolls even if the slug isn't "pre-roll"
-      const likelyCategories = ['prerolls', 'packman', 'pure', 'mellow', 'truemoola', 'rrr', 'moji'];
 
-      const hasKeyword = keywords.some(k => name.includes(k) || cat.includes(k) || sub.includes(k));
-      const inLikelyCategory = likelyCategories.some(c => cat === c || sub === c);
-      
-      // Broad check for category array
-      const inCategoriesArray = Array.isArray(product.categories) && 
-        product.categories.some(c => 
-          keywords.some(k => c?.toLowerCase().includes(k)) || 
-          c?.toLowerCase().includes('cannabis')
-        );
-
-      const isPrerollProduct = hasKeyword || inLikelyCategory || inCategoriesArray;
+      const isPrerollProduct = cat === 'prerolls';
 
       // EXCLUSION: Ensure we don't accidentally pick up accessories like trays or batteries unless they are explicitly infused products
       const excludedKeywords = ['tray', 'battery', 'glass', 'pipe', 'bong', 'grinder'];

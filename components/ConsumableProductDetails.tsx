@@ -13,6 +13,7 @@ interface ConsumableProductDetailsProps {
     sku?: string;
     brand_id?: string;
     category_id?: string;
+    category_slug?: string;
     materials?: string[];
     thca_pct?: string;
     effects?: string[];
@@ -65,10 +66,19 @@ export function ConsumableProductDetails({ product }: ConsumableProductDetailsPr
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
 
   const benefits = product.benefits && product.benefits.length > 0 ? product.benefits : DEFAULT_BENEFITS;
-  const ingredients = product.ingredients && product.ingredients.length > 0 ? product.ingredients : DEFAULT_INGREDIENTS;
-  const suggestedUse = product.suggested_use
-    ? product.suggested_use.split('\n').filter(Boolean)
-    : DEFAULT_SUGGESTED_USE;
+  const nameLower = product.name.toLowerCase();
+  const categoryLower = (product.category_slug || product.category_id || '').toLowerCase();
+  const isGummy = nameLower.includes('gumm') || categoryLower.includes('gumm');
+  const ingredients = isGummy
+    ? product.ingredients && product.ingredients.length > 0
+      ? product.ingredients
+      : DEFAULT_INGREDIENTS
+    : [];
+  const suggestedUse = isGummy
+    ? product.suggested_use
+      ? product.suggested_use.split('\n').filter(Boolean)
+      : DEFAULT_SUGGESTED_USE
+    : [];
   const warnings = product.warnings && product.warnings.length > 0 ? product.warnings : DEFAULT_WARNINGS;
 
   const descriptionHtml = useMemo(() => {
@@ -105,26 +115,30 @@ export function ConsumableProductDetails({ product }: ConsumableProductDetailsPr
         </div>
       )
     },
-    {
-      key: 'ingredients',
-      title: 'Ingredients',
-      content: (
-        <p className="text-sm font-bold text-gray-600 leading-relaxed">
-          {ingredients.join(', ')}
-        </p>
-      )
-    },
-    {
-      key: 'suggested',
-      title: 'Suggested Use',
-      content: (
-        <div className="bg-gray-50 p-6 rounded-2xl space-y-2 font-bold text-sm text-gray-700">
-          {suggestedUse.map((item) => (
-            <p key={item}>{item}</p>
-          ))}
-        </div>
-      )
-    },
+    isGummy
+      ? {
+          key: 'ingredients',
+          title: 'Ingredients',
+          content: (
+            <p className="text-sm font-bold text-gray-600 leading-relaxed">
+              {ingredients.join(', ')}
+            </p>
+          )
+        }
+      : null,
+    isGummy
+      ? {
+          key: 'suggested',
+          title: 'Suggested Use',
+          content: (
+            <div className="bg-gray-50 p-6 rounded-2xl space-y-2 font-bold text-sm text-gray-700">
+              {suggestedUse.map((item) => (
+                <p key={item}>{item}</p>
+              ))}
+            </div>
+          )
+        }
+      : null,
     {
       key: 'lab',
       title: 'Lab Test',
@@ -148,7 +162,7 @@ export function ConsumableProductDetails({ product }: ConsumableProductDetailsPr
         </ul>
       )
     }
-  ];
+  ].filter(Boolean) as Array<{ key: string; title: string; content: React.ReactNode }>;
 
   return (
     <section className="pt-12 border-t border-gray-100 space-y-12">

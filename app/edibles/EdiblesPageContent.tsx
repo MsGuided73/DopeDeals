@@ -15,6 +15,7 @@ interface EdibleProduct {
   sku: string | null;
   stock_quantity: number;
   brand_name?: string | null;
+  category_slug?: string | null;
 }
 
 export default function EdiblesPageContent() {
@@ -44,24 +45,20 @@ export default function EdiblesPageContent() {
   };
 
   // Group products by type
-  const tinctures = products.filter((p) => 
-    p.name?.toLowerCase().includes('tincture') || 
-    p.description?.toLowerCase().includes('tincture')
-  );
+  const tinctures = products.filter((p) => {
+    const slug = p.category_slug?.toLowerCase();
+    return slug === 'tincture' || slug === 'tinctures';
+  });
   
-  const salves = products.filter((p) => 
-    p.name?.toLowerCase().includes('salve') || 
-    p.description?.toLowerCase().includes('salve') ||
-    p.name?.toLowerCase().includes('balm')
-  );
+  const salves = products.filter((p) => {
+    const slug = p.category_slug?.toLowerCase();
+    return slug === 'salve' || slug === 'salves';
+  });
   
-  const edibles = products.filter((p) => 
-    (p.name?.toLowerCase().includes('edible') || 
-     p.name?.toLowerCase().includes('gummies') ||
-     p.name?.toLowerCase().includes('candy')) &&
-    !tinctures.includes(p) && 
-    !salves.includes(p)
-  );
+  const edibles = products.filter((p) => {
+    const slug = p.category_slug?.toLowerCase();
+    return slug === 'edibles' || slug === 'gummies' || slug === 'cereal bar';
+  });
 
   const renderProductCard = (product: EdibleProduct) => (
     <Link

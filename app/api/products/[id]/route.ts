@@ -68,6 +68,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
       brand_name: rawProduct.brand_id, // Use brand_id as brand_name for consistency
       image_url: normalizedImages[0] || rawProduct.image_url,
       image_urls: normalizedImages,
+      category_slug: (rawProduct as { category_slug?: string }).category_slug,
 
       // Stock consistency
       inStock: (rawProduct.stock_quantity || 0) > 0,

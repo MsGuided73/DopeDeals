@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 /**
  * Edibles API Route
  *
- * Returns products with category_slug in: "gummies", "edibles"
+ * Returns products with category_slug in: "edibles", "gummies", "cereal bar", "salves/salve", "tinctures/tincture"
  * Filters: Active products only, valid images, no batteries
  */
 
@@ -32,52 +32,15 @@ export async function GET(req: NextRequest) {
       .neq('image_url', '') // Must not be empty string
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
-      // Include products with category_slug = 'gummies' OR 'edibles' OR name/description contains edible terms
-      .or(
-        `category_slug.eq.gummies,` +
-        `category_slug.eq.edibles,` +
-        `category_slug.ilike.%gummies%,` +
-        `category_slug.ilike.%edibles%,` +
-        `name.ilike.%gummy%,` +
-        `name.ilike.%gummies%,` +
-        `name.ilike.%edible%,` +
-        `name.ilike.%edibles%,` +
-        `name.ilike.%candy%,` +
-        `name.ilike.%chocolate%,` +
-        `name.ilike.%brownie%,` +
-        `name.ilike.%cookie%,` +
-        `name.ilike.%lollipop%,` +
-        `name.ilike.%sour%,` +
-        `name.ilike.%sweet%,` +
-        `name.ilike.%treat%,` +
-        `name.ilike.%snack%,` +
-        `brand_name.ilike.%gummy%,` +
-        `brand_name.ilike.%gummies%,` +
-        `brand_name.ilike.%edible%,` +
-        `brand_name.ilike.%edibles%,` +
-        `brand_name.ilike.%candy%,` +
-        `brand_name.ilike.%chocolate%,` +
-        `brand_name.ilike.%brownie%,` +
-        `brand_name.ilike.%cookie%,` +
-        `brand_name.ilike.%lollipop%,` +
-        `brand_name.ilike.%sour%,` +
-        `brand_name.ilike.%sweet%,` +
-        `brand_name.ilike.%treat%,` +
-        `brand_name.ilike.%snack%,` +
-        `description.ilike.%gummy%,` +
-        `description.ilike.%gummies%,` +
-        `description.ilike.%edible%,` +
-        `description.ilike.%edibles%,` +
-        `description.ilike.%candy%,` +
-        `description.ilike.%chocolate%,` +
-        `description.ilike.%brownie%,` +
-        `description.ilike.%cookie%,` +
-        `description.ilike.%lollipop%,` +
-        `description.ilike.%sour%,` +
-        `description.ilike.%sweet%,` +
-        `description.ilike.%treat%,` +
-        `description.ilike.%snack%`
-      )
+      .in('category_slug', [
+        'edibles',
+        'gummies',
+        'cereal bar',
+        'salves',
+        'salve',
+        'tinctures',
+        'tincture'
+      ])
       .order('created_at', { ascending: false })
       .limit(limit);
 

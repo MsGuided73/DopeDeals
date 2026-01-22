@@ -30,6 +30,14 @@ export default function FlavorSelector({
 }: FlavorSelectorProps) {
   // Handle variations-based selection (new usage)
   if (variations && variations.length > 1) {
+    const uniqueVariations = Array.from(
+      new Map(variations.map((variation) => [variation.name.trim().toLowerCase(), variation])).values()
+    );
+
+    if (uniqueVariations.length <= 1) {
+      return null;
+    }
+
     return (
       <div className={`space-y-2 ${className}`}>
         <label className="text-sm font-black uppercase tracking-widest text-gray-500">
@@ -39,7 +47,7 @@ export default function FlavorSelector({
           <select
             className="w-full bg-white border-2 border-gray-200 rounded-xl px-5 py-4 font-bold text-lg appearance-none focus:border-black focus:outline-none transition-colors cursor-pointer"
           >
-            {variations.map((variation, index) => (
+            {uniqueVariations.map((variation, index) => (
               <option key={variation.id} value={index}>
                 {variation.name}
               </option>

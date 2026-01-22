@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 /**
  * Vapes API Route
  *
- * Returns products with category_slug = "vapes"
+ * Returns products with category_slug for vapes/carts only
  * Filters: Active products only, valid images, no batteries
  */
 
@@ -32,19 +32,10 @@ export async function GET(req: NextRequest) {
       .neq('image_url', '') // Must not be empty string
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
-      // Include products with category_slug = 'vapes' OR name/description contains vape/cartridge terms
-      .or(
-        `category_slug.eq.vapes,` +
-        `name.ilike.%vape%,` +
-        `name.ilike.%cartridge%,` +
-        `name.ilike.%disposable%,` +
-        `name.ilike.%cart%,` +
-        `description.ilike.%vape%,` +
-        `description.ilike.%cartridge%,` +
-        `description.ilike.%disposable%,` +
-        `description.ilike.%cart%`
-      )
-      .order('created_at', { ascending: false })
+      .in('category_slug', ['vapes', 'disposables', 'carts', 'cartridges'])
+      .order('category_slug', { ascending: true })
+      .order('brand_name', { ascending: true })
+      .order('name', { ascending: true })
       .limit(limit);
 
     if (error) {

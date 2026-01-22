@@ -66,8 +66,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      // More inclusive search for nitrous oxide products
-      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,name.ilike.%laughing-gas%,name.ilike.%whippit%,name.ilike.%whippet%,name.ilike.%cream%,name.ilike.%charger%,name.ilike.%whip-it%,name.ilike.%nangs%,name.ilike.%balloon%,brand_name.ilike.%Doodlez%,brand_name.ilike.%Savage%,brand_name.ilike.%Best%Whip%,brand_name.ilike.%Whip%Trip%,brand_name.ilike.%Infuzed%,brand_name.ilike.%NOS%,brand_name.ilike.%Nitrous%,brand_name.ilike.%Whip%,category_slug.ilike.%nitrous%,category_slug.ilike.%n2o%,category_slug.ilike.%nos%,category_slug.ilike.%whip%,subcategory_slug.ilike.%nitrous%,subcategory_slug.ilike.%n2o%,subcategory_slug.ilike.%nos%,subcategory_slug.ilike.%whip%,categories.cs.["nitrous"],categories.cs.["n2o"],categories.cs.["nos"],categories.cs.["whip"],description.ilike.%nitrous%,description.ilike.%n2o%,description.ilike.%laughing%,description.ilike.%whip%,description.ilike.%cream%,description.ilike.%charger%')
+      .eq('category_slug', 'nitrous')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit)
       .range(offset, offset + effectiveLimit - 1);
@@ -102,8 +101,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      // More inclusive search for nitrous oxide products
-      .or('name.ilike.%whip%,name.ilike.%n2o%,name.ilike.%nitrous%,name.ilike.%nos%,name.ilike.%laughing%,name.ilike.%laughing-gas%,name.ilike.%whippit%,name.ilike.%whippet%,name.ilike.%cream%,name.ilike.%charger%,name.ilike.%whip-it%,name.ilike.%nangs%,name.ilike.%balloon%,brand_name.ilike.%Doodlez%,brand_name.ilike.%Savage%,brand_name.ilike.%Best%Whip%,brand_name.ilike.%Whip%Trip%,brand_name.ilike.%Infuzed%,brand_name.ilike.%NOS%,brand_name.ilike.%Nitrous%,brand_name.ilike.%Whip%,category_slug.ilike.%nitrous%,category_slug.ilike.%n2o%,category_slug.ilike.%nos%,category_slug.ilike.%whip%,subcategory_slug.ilike.%nitrous%,subcategory_slug.ilike.%n2o%,subcategory_slug.ilike.%nos%,subcategory_slug.ilike.%whip%,categories.cs.["nitrous"],categories.cs.["n2o"],categories.cs.["nos"],categories.cs.["whip"],description.ilike.%nitrous%,description.ilike.%n2o%,description.ilike.%laughing%,description.ilike.%whip%,description.ilike.%cream%,description.ilike.%charger%');
+      .eq('category_slug', 'nitrous');
 
     return NextResponse.json({
       products: products,

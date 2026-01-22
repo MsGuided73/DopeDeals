@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     // NO LIMIT: Return all products
     const limit = 5000;
 
-    // Get mushroom products with comprehensive filtering
+    // Get mushroom products with strict category_slug + brand filtering
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
@@ -27,18 +27,8 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .not('image_url', 'is', null)
       .neq('image_url', '')
-      .or(
-        `category_slug.ilike.%mushroom%,` +
-        `category_slug.ilike.%shroom%,` +
-        `name.ilike.%mushroom%,` +
-        `name.ilike.%shroom%,` +
-        `name.ilike.%amanita%,` +
-        `name.ilike.%psilocybin%,` +
-        `description.ilike.%mushroom%,` +
-        `description.ilike.%shroom%,` +
-        `description.ilike.%amanita%,` +
-        `description.ilike.%psilocybin%`
-      )
+      .in('category_slug', ['mushrooms', 'mush-gummies', 'mush-chocolate'])
+      .in('brand_name', ['mMelt', 'Zoomers'])
       .order('created_at', { ascending: false })
       .limit(limit);
 

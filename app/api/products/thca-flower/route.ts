@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      .or('name.ilike.%flower%,name.ilike.%thca%,name.ilike.%thc-a%,name.ilike.%THC-A%,name.ilike.%THC-a%,category_slug.ilike.%flower%,category_slug.ilike.%thca%,category_slug.ilike.%thc-a%')
+      .eq('category_slug', 'flower')
       .order('created_at', { ascending: false })
       .limit(limit);
 

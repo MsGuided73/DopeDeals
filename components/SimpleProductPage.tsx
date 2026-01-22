@@ -212,7 +212,7 @@ export default function SimpleProductPage({ productId, isConsumable = false }: S
               />
 
               {/* Variant Selector (Flavor List) - NOW UNDER THE IMAGE */}
-              {product.variations && product.variations.length > 0 && (
+              {product.variations && product.variations.length > 1 && (
                 <div className="mt-8 p-6 bg-gray-50 rounded-3xl border border-gray-100">
                   <FlavorSelector
                     variations={product.variations}

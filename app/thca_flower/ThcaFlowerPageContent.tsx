@@ -245,38 +245,6 @@ export default function ThcaFlowerPageContent() {
       <ThcaFlowerHero />
       <ThcaFlowerInfoSection />
 
-      {/* COMING SOON Banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-gradient-to-r from-dope-orange-500 to-dope-orange-600 rounded-2xl shadow-2xl p-8 md:p-12 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              🌿 COMING SOON 🌿
-            </h2>
-            <p className="text-xl md:text-2xl text-white/90 mb-6">
-              Our premium THCA Flower collection is on its way!
-            </p>
-            <p className="text-lg text-white/80 mb-8">
-              We're carefully curating the finest selection of THCA flower products for you. 
-              Check back soon for an incredible variety of premium strains and sizes.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link 
-                href="/products" 
-                className="inline-flex items-center px-6 py-3 bg-white text-dope-orange-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors duration-200 shadow-lg"
-              >
-                Browse Other Products
-              </Link>
-              <Link 
-                href="/join-community" 
-                className="inline-flex items-center px-6 py-3 bg-dope-orange-700 text-white font-semibold rounded-lg hover:bg-dope-orange-800 transition-colors duration-200 shadow-lg"
-              >
-                Join Our Community
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Search Results Header */}
       {searchQuery && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
