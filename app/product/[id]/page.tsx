@@ -42,13 +42,36 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                            product?.category_id?.toLowerCase().includes('flower') ||
                            product?.category_id?.toLowerCase().includes('preroll');
 
+  const nameLower = product?.name?.toLowerCase() || '';
+  const categoryLower = product?.category_id?.toLowerCase() || '';
+  const consumableKeywords = [
+    'flower',
+    'preroll',
+    'pre-roll',
+    'vape',
+    'cartridge',
+    'cart',
+    'concentrate',
+    'edible',
+    'gumm',
+    'mush',
+    'shroom',
+    'chocolate',
+    'nitrous',
+    'thca'
+  ];
+
+  const isConsumable = isFlowerOrPreroll || consumableKeywords.some((keyword) =>
+    nameLower.includes(keyword) || categoryLower.includes(keyword)
+  );
+
   return (
     <div className="bg-white">
       {/* Conditionally render the appropriate layout based on product type */}
       {isFlowerOrPreroll ? (
         <FlowerProductPage productId={id} />
       ) : (
-        <SimpleProductPage productId={id} />
+        <SimpleProductPage productId={id} isConsumable={isConsumable} />
       )}
 
       {/* Recommendations Sections */}

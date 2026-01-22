@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Plus, Minus, Shield, Beaker, AlertTriangle, CheckCircle2, Info, ChevronDown, ChevronUp, Star, ShoppingCart } from 'lucide-react';
+import { ChevronRight, Plus, Minus, Shield, Beaker, AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Star, ShoppingCart } from 'lucide-react';
 import ProductGallery from '../app/components/ProductGallery';
 import FlavorSelector from '../app/components/FlavorSelector';
 import { addToCart } from '../app/lib/cart-utils';
 import { addToRecentlyViewed } from '../app/lib/recentlyViewed';
 import GlobalMasthead from '../app/components/GlobalMasthead';
+import { ConsumableProductDetails } from './ConsumableProductDetails';
 
 interface Variation {
   id: string;
@@ -41,6 +42,7 @@ interface Product {
 
 interface SimpleProductPageProps {
   productId: string;
+  isConsumable?: boolean;
 }
 
 const FAQ_ITEMS = [
@@ -62,7 +64,7 @@ const FAQ_ITEMS = [
   }
 ];
 
-export default function SimpleProductPage({ productId }: SimpleProductPageProps) {
+export default function SimpleProductPage({ productId, isConsumable = false }: SimpleProductPageProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -340,76 +342,10 @@ export default function SimpleProductPage({ productId }: SimpleProductPageProps)
               </div>
             </div>
 
-            {/* Product Specifications Tabs/Accordion style list */}
-            <div className="space-y-4 pt-8">
-              {/* Benefits - Only show for relevant products */}
-              {(product.category_id?.toLowerCase().includes('edible') || product.name.toLowerCase().includes('gumm')) && (
-                <div className="border-b border-gray-100 pb-4">
-                  <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Star className="text-dope-orange-500" size={20} /> Benefits
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {['Calm', 'Creative', 'Energetic', 'Focus', 'Happy', 'Relaxed'].map(benefit => (
-                      <span key={benefit} className="px-4 py-2 bg-gray-50 text-gray-700 rounded-full text-sm font-bold border border-gray-100">
-                        {benefit}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Ingredients - Only show for relevant products */}
-              {(product.category_id?.toLowerCase().includes('edible') || product.name.toLowerCase().includes('gumm')) && (
-                <div className="border-b border-gray-100 py-4">
-                  <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Info className="text-blue-500" size={20} /> Ingredients
-                  </h3>
-                  <p className="text-sm font-bold text-gray-600 leading-relaxed">
-                    Organic Cane Sugar, Organic Tapioca Syrup, Purified Water, Pectin, Citric Acid, Organic Flavoring, Organic Coloring, Proprietary Euphoric Blend.
-                  </p>
-                </div>
-              )}
-
-              {/* Suggested Use - Only show for relevant products */}
-              {(product.category_id?.toLowerCase().includes('edible') || product.name.toLowerCase().includes('gumm')) && (
-                <div className="border-b border-gray-100 py-4">
-                  <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Beaker className="text-green-500" size={20} /> Suggested Use
-                  </h3>
-                  <div className="bg-gray-50 p-6 rounded-2xl space-y-3 font-bold text-sm text-gray-700">
-                    <p>• 1 Gummy — Vibing</p>
-                    <p>• 2 Gummies — Endless Smiles</p>
-                    <p>• 3+ Gummies — To the Moon</p>
-                    <p className="pt-2 text-xs text-red-500 uppercase tracking-widest">Wait 60-90 minutes before taking more.</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Lab Tests */}
-              <div className="border-b border-gray-100 py-4">
-                <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <Shield className="text-purple-500" size={20} /> Lab Test
-                </h3>
-                <a
-                  href="/lab-results"
-                  className="inline-flex items-center gap-3 px-6 py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
-                >
-                  <Beaker size={18} /> View COA Lab Results
-                </a>
-              </div>
-
-              {/* Warning */}
-              <div className="py-4">
-                <h3 className="text-lg font-black uppercase tracking-widest mb-4 flex items-center gap-2 text-red-600">
-                  <AlertTriangle size={20} /> Warning
-                </h3>
-                <p className="text-xs font-bold text-red-500/80 leading-relaxed uppercase tracking-tight">
-                  DO NOT OPERATE VEHICLES OR HEAVY MACHINERY AFTER USE. DO NOT USE IF PREGNANT OR NURSING. KEEP OUT OF REACH OF CHILDREN AND PETS. MUST BE 21+ TO PURCHASE. STORE IN A COOL, DRY PLACE AWAY FROM LIGHT.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
+
+        {isConsumable && <ConsumableProductDetails product={product} />}
 
         {/* FAQ Section */}
         <section className="py-20 border-t border-gray-100">

@@ -7,6 +7,7 @@ import FlavorSelector from '../app/components/FlavorSelector';
 import { addToCart } from '../app/lib/cart-utils';
 import { addToRecentlyViewed } from '../app/lib/recentlyViewed';
 import GlobalMasthead from '../app/components/GlobalMasthead';
+import { ConsumableProductDetails } from './ConsumableProductDetails';
 
 interface Product {
   id: string;
@@ -227,6 +228,8 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
             </div>
           </div>
         </div>
+
+        <ConsumableProductDetails product={product} />
       </main>
     </div>
   );

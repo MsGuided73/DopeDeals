@@ -37,6 +37,25 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
       console.error('Error fetching variations:', varError);
     }
 
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => entry.split(','))
+          .map((entry) => entry.trim())
+          .filter(Boolean);
+      }
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
+    const normalizedImages = Array.from(new Set([
+      ...parseImageUrls(rawProduct.image_urls),
+      ...parseImageUrls(rawProduct.image_url)
+    ]));
+
     // Transform raw database fields to match expected API format
     const product = {
       ...rawProduct,
@@ -47,7 +66,8 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
       // Ensure consistent field names
       brand_id: rawProduct.brand_id,
       brand_name: rawProduct.brand_id, // Use brand_id as brand_name for consistency
-      image_urls: rawProduct.image_urls || (rawProduct.image_url ? [rawProduct.image_url] : []),
+      image_url: normalizedImages[0] || rawProduct.image_url,
+      image_urls: normalizedImages,
 
       // Stock consistency
       inStock: (rawProduct.stock_quantity || 0) > 0,
