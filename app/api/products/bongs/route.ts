@@ -87,8 +87,29 @@ export async function GET(req: NextRequest) {
       }, { status: 500 });
     }
 
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
     // Transform products to match our interface
     const transformedProducts = (rawProducts || []).map((product: any) => {
+      const normalizedImages = Array.from(new Set([
+        ...parseImageUrls(product.image_urls),
+        ...parseImageUrls(product.image_url)
+      ]));
+
       // Determine bong style from name
       const name = product.name.toLowerCase();
       let style = 'Water Bong';
@@ -113,6 +134,8 @@ export async function GET(req: NextRequest) {
         vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
         sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        image_url: normalizedImages[0] || product.image_url,
+        image_urls: normalizedImages,
         brand: product.brand_name,
         material: product.materials?.[0] || 'Glass',
         style,

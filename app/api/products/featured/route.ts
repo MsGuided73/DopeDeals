@@ -70,13 +70,42 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch featured products', details: error.message }, { status: 500 });
     }
 
-    // Remove duplicates
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
+    // Remove duplicates while normalizing data
     const seenIds = new Set();
-    const products = (rawProducts || []).filter(product => {
-      if (seenIds.has(product.id)) return false;
-      seenIds.add(product.id);
-      return true;
-    });
+    const products = (rawProducts || [])
+      .filter(product => {
+        if (seenIds.has(product.id)) return false;
+        seenIds.add(product.id);
+        return true;
+      })
+      .map((product: any) => {
+        const normalizedImages = Array.from(new Set([
+          ...parseImageUrls(product.image_urls),
+          ...parseImageUrls(product.image_url)
+        ]));
+
+        return {
+          ...product,
+          image_url: normalizedImages[0] || product.image_url,
+          image_urls: normalizedImages
+        };
+      });
 
     // Get total count
     const { count } = await supabase

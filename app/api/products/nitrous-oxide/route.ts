@@ -76,15 +76,40 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch nitrous oxide products', details: error.message }, { status: 500 });
     }
 
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
     // Map products to include consistent pricing fields
-    const products = (rawProducts || []).map((product: any) => ({
-      ...product,
-      price: parseFloat(product.our_price || 0),
-      our_price: parseFloat(product.our_price || 0),
-      vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
-      sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-      compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined
-    }));
+    const products = (rawProducts || []).map((product: any) => {
+      const normalizedImages = Array.from(new Set([
+        ...parseImageUrls(product.image_urls),
+        ...parseImageUrls(product.image_url)
+      ]));
+
+      return {
+        ...product,
+        price: parseFloat(product.our_price || 0),
+        our_price: parseFloat(product.our_price || 0),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        image_url: normalizedImages[0] || product.image_url,
+        image_urls: normalizedImages
+      };
+    });
 
     // Get total count for pagination info
     const { count } = await supabase

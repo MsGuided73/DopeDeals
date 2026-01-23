@@ -61,12 +61,41 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    const filtered = (products || []).filter((p: any) => {
-      const avail = available[p.id] ?? p.stock_quantity ?? 0;
-      if (avail <= 0) return false;
-      // TODO: If product->compliance category mapping exists, exclude by restrictedCategories
-      return true;
-    });
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
+    const filtered = (products || [])
+      .filter((p: any) => {
+        const avail = available[p.id] ?? p.stock_quantity ?? 0;
+        if (avail <= 0) return false;
+        // TODO: If product->compliance category mapping exists, exclude by restrictedCategories
+        return true;
+      })
+      .map((product: any) => {
+        const normalizedImages = Array.from(new Set([
+          ...parseImageUrls(product.image_urls),
+          ...parseImageUrls(product.image_url)
+        ]));
+
+        return {
+          ...product,
+          image_url: normalizedImages[0] || product.image_url,
+          image_urls: normalizedImages
+        };
+      });
 
     return NextResponse.json({
       state,
@@ -78,4 +107,3 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Eligible products query failed' }, { status: 500 });
   }
 }
-

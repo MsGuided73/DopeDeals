@@ -50,26 +50,49 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
     // Transform products to match expected interface
-    const transformedProducts = (rawProducts || []).map((product: any) => ({
-      id: product.id,
-      name: product.name,
-      our_price: product.our_price,
-      sale_price: product.sale_price,
-      image_url: product.image_url,
-      image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
-      description: product.description,
-      short_description: product.short_description,
-      sku: product.sku,
-      stock_quantity: product.stock_quantity || 0,
-      is_active: product.is_active,
-      featured: product.featured || false,
-      brand_name: product.brand_name,
-      category_id: product.category_id,
-      category_slug: product.category_slug,
-      created_at: product.created_at,
-      updated_at: product.updated_at
-    }));
+    const transformedProducts = (rawProducts || []).map((product: any) => {
+      const normalizedImages = Array.from(new Set([
+        ...parseImageUrls(product.image_urls),
+        ...parseImageUrls(product.image_url)
+      ]));
+
+      return {
+        id: product.id,
+        name: product.name,
+        our_price: product.our_price,
+        sale_price: product.sale_price,
+        image_url: normalizedImages[0] || product.image_url,
+        image_urls: normalizedImages,
+        description: product.description,
+        short_description: product.short_description,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        is_active: product.is_active,
+        featured: product.featured || false,
+        brand_name: product.brand_name,
+        category_id: product.category_id,
+        category_slug: product.category_slug,
+        created_at: product.created_at,
+        updated_at: product.updated_at
+      };
+    });
 
     return NextResponse.json({
       products: transformedProducts,

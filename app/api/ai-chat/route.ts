@@ -174,22 +174,42 @@ async function getProductRecommendations(
 
   if (!products) return [];
 
+  // Helper to parse image URLs that might be comma-separated strings
+  const parseImageUrls = (value?: string[] | string | null) => {
+    if (!value) return [] as string[];
+    if (Array.isArray(value)) {
+      return value
+        .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+        .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+        .filter(Boolean);
+    }
+    if (typeof value !== 'string') return [value].filter(Boolean);
+    return value
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+  };
+
   // Convert to recommendations with reasoning
-  return products.map(product => ({
-    id: product.id,
-    name: product.name,
-    sku: product.sku,
-    price: product.price,
-    image_url: product.image_url,
-    short_description: product.short_description,
-    in_stock: (product.stock_quantity || 0) > 0,
-    estimated_delivery: product.estimated_delivery || calculateEstimatedDelivery(product),
-    dimensions: formatDimensions(product),
-    weight: formatWeight(product),
-    sales_velocity: product.sales_velocity,
-    profit_margin: product.profit_margin,
-    why_recommended: generateRecommendationReason(product, intent, keywords)
-  }));
+  return products.map(product => {
+    const normalizedImages = parseImageUrls(product.image_url);
+
+    return {
+      id: product.id,
+      name: product.name,
+      sku: product.sku,
+      price: product.price,
+      image_url: normalizedImages[0] || product.image_url,
+      short_description: product.short_description,
+      in_stock: (product.stock_quantity || 0) > 0,
+      estimated_delivery: product.estimated_delivery || calculateEstimatedDelivery(product),
+      dimensions: formatDimensions(product),
+      weight: formatWeight(product),
+      sales_velocity: product.sales_velocity,
+      profit_margin: product.profit_margin,
+      why_recommended: generateRecommendationReason(product, intent, keywords)
+    };
+  });
 }
 
 function calculateEstimatedDelivery(product: any): number {

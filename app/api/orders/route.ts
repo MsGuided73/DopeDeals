@@ -126,15 +126,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
     // Create order items
     const orderItems = cartItems.map(item => {
       const product = Array.isArray(item.products) ? item.products[0] : item.products;
+      const normalizedImages = parseImageUrls(product?.image_url);
+      
       return {
         order_id: order.id,
         product_id: item.product_id,
         product_name: product?.name || 'Unknown Product',
         product_sku: product?.sku || 'N/A',
-        product_image_url: product?.image_url || null,
+        product_image_url: normalizedImages[0] || product?.image_url || null,
         unit_price: parseFloat(item.price_at_time),
         quantity: item.quantity,
         total_price: parseFloat((parseFloat(item.price_at_time) * item.quantity).toFixed(2)),

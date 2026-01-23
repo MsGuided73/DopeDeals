@@ -114,6 +114,22 @@ export async function GET(req: NextRequest) {
 
     console.log(`🎯 Found ${prerollProducts.length} pre-roll products with valid images!`);
 
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
     // Transform products to match our interface
     const transformedProducts = prerollProducts.map((product: any) => {
       // Determine pre-roll type from name
@@ -150,6 +166,11 @@ export async function GET(req: NextRequest) {
       const isNew = product.created_at &&
         new Date(product.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
+      const normalizedImages = Array.from(new Set([
+        ...parseImageUrls(product.image_urls),
+        ...parseImageUrls(product.image_url)
+      ]));
+
       return {
         id: product.id,
         name: product.name,
@@ -158,8 +179,8 @@ export async function GET(req: NextRequest) {
         vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
         sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-        image_url: product.image_url,
-        image_urls: product.image_urls || (product.image_url ? [product.image_url] : []),
+        image_url: normalizedImages[0] || product.image_url,
+        image_urls: normalizedImages,
         brand_id: product.brand_name, // Keep for backward compatibility
         brand: product.brand_name, // Add the brand name field
         category_id: product.category_id,

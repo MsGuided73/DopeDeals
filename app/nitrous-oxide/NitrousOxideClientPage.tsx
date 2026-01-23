@@ -38,12 +38,6 @@ export default function NitrousOxideClientPage() {
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Products",
-          "item": "https://highway420store.com/products"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": "Nitrous Oxide",
           "item": "https://highway420store.com/nitrous-oxide"
         }

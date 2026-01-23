@@ -69,8 +69,35 @@ export async function GET(req: NextRequest) {
       return true;
     });
 
-    // Take only the requested limit
-    const products = uniqueProducts.slice(0, limit);
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
+    // Take only the requested limit and normalize image data
+    const products = uniqueProducts.slice(0, limit).map((product: any) => {
+      const normalizedImages = Array.from(new Set([
+        ...parseImageUrls(product.image_urls),
+        ...parseImageUrls(product.image_url)
+      ]));
+
+      return {
+        ...product,
+        image_url: normalizedImages[0] || product.image_url,
+        image_urls: normalizedImages
+      };
+    });
 
     console.log(`🎯 Dope Deals API: Retrieved ${products.length} unique active deal products (no batteries, no duplicates)`);
 

@@ -27,22 +27,46 @@ export async function GET(req: NextRequest) {
 
     console.log('THCA API: Search completed, products:', result.products?.length, 'total:', result.totalCount);
 
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
     // Transform products to match the expected format
-    const transformedProducts = result.products.map((product: any) => ({
-      id: product.id,
-      name: product.name,
-      price: parseFloat(product.our_price || 0),
-      our_price: parseFloat(product.our_price || 0),
-      vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
-      sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-      compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-      image_url: product.image_url,
-      category: 'THCA Prerolls & Vapes',
-      type: 'Preroll', // Default type
-      inStock: true,
-      isNew: false,
-      isSale: false
-    }));
+    const transformedProducts = result.products.map((product: any) => {
+      const normalizedImages = Array.from(new Set([
+        ...parseImageUrls(product.image_urls),
+        ...parseImageUrls(product.image_url)
+      ]));
+
+      return {
+        id: product.id,
+        name: product.name,
+        price: parseFloat(product.our_price || 0),
+        our_price: parseFloat(product.our_price || 0),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        image_url: normalizedImages[0] || product.image_url,
+        image_urls: normalizedImages,
+        category: 'THCA Prerolls & Vapes',
+        type: 'Preroll', // Default type
+        inStock: true,
+        isNew: false,
+        isSale: false
+      };
+    });
 
     return NextResponse.json({
       message: 'THCA preroll/vape products loaded successfully',
@@ -65,7 +89,7 @@ async function performRegularSearch(supabase: any, options: any) {
 
   const { data, error } = await supabase
     .from('main_site_products')
-    .select('id, name, our_price, sale_price, fire_price, image_url, category_slug')
+    .select('id, name, our_price, sale_price, fire_price, image_url, image_urls, category_slug')
     .eq('is_active', true)
     // STRICT: No Kratom or related substances
     .not('name', 'ilike', '%kratom%')

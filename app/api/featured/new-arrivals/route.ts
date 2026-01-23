@@ -6,23 +6,53 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// Helper to parse image URLs that might be comma-separated strings
+const parseImageUrls = (value?: string[] | string | null) => {
+  if (!value) return [] as string[];
+  if (Array.isArray(value)) {
+    return value
+      .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+      .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+      .filter(Boolean);
+  }
+  if (typeof value !== 'string') return [value].filter(Boolean);
+  return value
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+};
+
+const normalizeProducts = (productList: any[]) => {
+  return productList.map((product) => {
+    const normalizedImages = Array.from(new Set([
+      ...parseImageUrls(product.image_urls),
+      ...parseImageUrls(product.image_url)
+    ]));
+
+    return {
+      ...product,
+      image_url: normalizedImages[0] || product.image_url,
+      image_urls: normalizedImages
+    };
+  });
+};
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '4');
 
-    // Get newest products with images - NO stock filtering during manual phase
+    // Get newest products with images
     const { data: products, error } = await supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price,
-        image_url, sku, stock_quantity, brand_name, materials,
+        image_url, image_urls, sku, stock_quantity, brand_name, materials,
         featured, created_at
       `)
-      .eq('is_active', true) // Only show active products on the site
+      .eq('is_active', true)
       .eq('nicotine_product', false)
       .eq('tobacco_product', false)
-      // STRICT: No Kratom or related substances
       .not('name', 'ilike', '%kratom%')
       .not('name', 'ilike', '%7-oh%')
       .not('name', 'ilike', '%7-hydroxy%')
@@ -48,13 +78,12 @@ export async function GET(req: NextRequest) {
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price,
-          image_url, sku, stock_quantity, brand_name, materials,
+          image_url, image_urls, sku, stock_quantity, brand_name, materials,
           featured, created_at
         `)
-        .eq('is_active', true) // Only show active products on the site
+        .eq('is_active', true)
         .eq('nicotine_product', false)
         .eq('tobacco_product', false)
-        // STRICT: No Kratom or related substances
         .not('name', 'ilike', '%kratom%')
         .not('name', 'ilike', '%7-oh%')
         .not('name', 'ilike', '%7-hydroxy%')
@@ -73,17 +102,21 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: fallbackError.message }, { status: 500 });
       }
 
+      const normalizedFallback = normalizeProducts(fallbackProducts || []);
+
       return NextResponse.json({
-        products: fallbackProducts || [],
+        products: normalizedFallback,
         message: 'Using fallback products (some may not have images)',
-        total: fallbackProducts?.length || 0
+        total: normalizedFallback.length
       });
     }
 
+    const normalizedArrivals = normalizeProducts(products || []);
+
     return NextResponse.json({
-      products: products || [],
+      products: normalizedArrivals,
       message: 'New arrivals fetched successfully',
-      total: products?.length || 0
+      total: normalizedArrivals.length
     });
 
   } catch (error) {

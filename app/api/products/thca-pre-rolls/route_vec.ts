@@ -76,42 +76,65 @@ export async function GET(req: NextRequest) {
 
     console.log(`THCA Vector API: Found ${data?.length || 0} products`);
 
-    // Transform products to match the expected format
-    const transformedProducts = (data || []).map((product: any) => ({
-      ...product,
-      id: product.id,
-      name: product.name,
-      price: parseFloat(product.price || 0),
-      vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
-      compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-      image_url: product.image_url,
-      image_urls: product.image_urls || [product.image_url].filter(Boolean),
-      brand_id: product.brand,
-      category_id: product.category,
-      sku: product.sku,
-      stock_quantity: product.stock_quantity || 0,
-      materials: product.materials || [],
-      vip_exclusive: false,
-      featured: product.featured || false,
-      is_active: product.is_active,
-      description: product.description,
-      short_description: product.short_description,
-      specs: product.specs,
-      attributes: product.attributes,
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
 
-      // Computed fields
-      brand: product.brand || '',
-      category: product.category || 'THCA Prerolls & Vapes',
-      material: product.material || '',
-      style: product.style || 'preroll',
-      size: product.size || '',
-      inStock: (product.stock_quantity || 0) > 0,
-      isNew: product.is_new || false,
-      isSale: product.sale_price && product.sale_price < (product.price || 0),
-      features: product.features || [],
-      tags: product.tags || [],
-      type: 'Preroll'
-    }));
+    // Transform products to match the expected format
+    const transformedProducts = (data || []).map((product: any) => {
+      const normalizedImages = Array.from(new Set([
+        ...parseImageUrls(product.image_urls),
+        ...parseImageUrls(product.image_url)
+      ]));
+
+      return {
+        ...product,
+        id: product.id,
+        name: product.name,
+        price: parseFloat(product.price || 0),
+        vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
+        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        image_url: normalizedImages[0] || product.image_url,
+        image_urls: normalizedImages,
+        brand_id: product.brand,
+        category_id: product.category,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        materials: product.materials || [],
+        vip_exclusive: false,
+        featured: product.featured || false,
+        is_active: product.is_active,
+        description: product.description,
+        short_description: product.short_description,
+        specs: product.specs,
+        attributes: product.attributes,
+
+        // Computed fields
+        brand: product.brand || '',
+        category: product.category || 'THCA Prerolls & Vapes',
+        material: product.material || '',
+        style: product.style || 'preroll',
+        size: product.size || '',
+        inStock: (product.stock_quantity || 0) > 0,
+        isNew: product.is_new || false,
+        isSale: product.sale_price && product.sale_price < (product.price || 0),
+        features: product.features || [],
+        tags: product.tags || [],
+        type: 'Preroll'
+      };
+    });
 
     const totalCount = data?.[0]?.total_count || 0;
 

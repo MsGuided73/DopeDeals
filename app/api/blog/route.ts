@@ -142,18 +142,37 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (!error && dbPosts && dbPosts.length > 0) {
+      // Helper to parse image URLs that might be comma-separated strings
+      const parseImageUrls = (value?: string[] | string | null) => {
+        if (!value) return [] as string[];
+        if (Array.isArray(value)) {
+          return value
+            .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+            .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+            .filter(Boolean);
+        }
+        if (typeof value !== 'string') return [value].filter(Boolean);
+        return value
+          .split(',')
+          .map((entry) => entry.trim())
+          .filter(Boolean);
+      };
+
       // Transform database posts to match old format
-      const transformedPosts = dbPosts.map(dbPost => ({
-        id: dbPost.slug,
-        title: dbPost.title,
-        excerpt: dbPost.excerpt,
-        author: dbPost.author,
-        date: dbPost.created_at,
-        category: dbPost.category,
-        image: dbPost.image_url,
-        readTime: '5 min read', // Default, could be calculated from content length
-        featured: dbPost.featured
-      }));
+      const transformedPosts = dbPosts.map(dbPost => {
+        const normalizedImages = parseImageUrls(dbPost.image_url);
+        return {
+          id: dbPost.slug,
+          title: dbPost.title,
+          excerpt: dbPost.excerpt,
+          author: dbPost.author,
+          date: dbPost.created_at,
+          category: dbPost.category,
+          image: normalizedImages[0] || dbPost.image_url,
+          readTime: '5 min read', // Default, could be calculated from content length
+          featured: dbPost.featured
+        };
+      });
 
       return NextResponse.json({ posts: transformedPosts });
     }

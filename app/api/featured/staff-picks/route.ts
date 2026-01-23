@@ -6,9 +6,26 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// Helper to parse image URLs that might be comma-separated strings
+const parseImageUrls = (value?: string[] | string | null) => {
+  if (!value) return [] as string[];
+  if (Array.isArray(value)) {
+    return value
+      .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+      .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+      .filter(Boolean);
+  }
+  if (typeof value !== 'string') return [value].filter(Boolean);
+  return value
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+};
+
 // Helper function to get image URL from either field name
 function getImageUrl(product: any): string | null {
-  return product.imageUrl || product.image_url || null;
+  const urls = parseImageUrls(product.imageUrl || product.image_url);
+  return urls[0] || null;
 }
 
 export async function GET(req: NextRequest) {
@@ -81,13 +98,17 @@ export async function GET(req: NextRequest) {
       }
 
       // Add discount calculations for staff picks
-      const staffPicks = (fallbackProducts || []).map(product => ({
-        ...product,
-        image_url: product.image_url, // Add snake_case version for legacy compatibility
-        original_price: product.our_price * 1.5, // Simulate original price
-        discount_percentage: Math.floor(Math.random() * 30) + 20, // 20-50% off
-        is_staff_pick: true
-      }));
+      const staffPicks = (fallbackProducts || []).map(product => {
+        const normalizedImages = parseImageUrls(product.image_url);
+        return {
+          ...product,
+          image_url: normalizedImages[0] || product.image_url, // Add snake_case version for legacy compatibility
+          image_urls: normalizedImages,
+          original_price: product.our_price * 1.5, // Simulate original price
+          discount_percentage: Math.floor(Math.random() * 30) + 20, // 20-50% off
+          is_staff_pick: true
+        };
+      });
 
       return NextResponse.json({
         products: staffPicks,
@@ -97,13 +118,17 @@ export async function GET(req: NextRequest) {
     }
 
     // Add discount calculations for featured products
-    const staffPicks = products.map(product => ({
-      ...product,
-      image_url: product.image_url, // Add snake_case version for legacy compatibility
-      original_price: product.our_price * 1.4,
-      discount_percentage: Math.floor(Math.random() * 25) + 25, // 25-50% off
-      is_staff_pick: true
-    }));
+    const staffPicks = products.map(product => {
+      const normalizedImages = parseImageUrls(product.image_url);
+      return {
+        ...product,
+        image_url: normalizedImages[0] || product.image_url, // Add snake_case version for legacy compatibility
+        image_urls: normalizedImages,
+        original_price: product.our_price * 1.4,
+        discount_percentage: Math.floor(Math.random() * 25) + 25, // 25-50% off
+        is_staff_pick: true
+      };
+    });
 
     return NextResponse.json({
       products: staffPicks,

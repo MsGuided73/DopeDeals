@@ -71,20 +71,49 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch THCA products', details: error.message }, { status: 500 });
     }
 
-    // Remove duplicates by ID, name, and SKU
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
+    // Remove duplicates by ID, name, and SKU while normalizing data
     const seenIds = new Set();
     const seenNames = new Set();
     const seenSkus = new Set();
-    const products = (rawProducts || []).filter(product => {
-      if (seenIds.has(product.id)) return false;
-      const normalizedName = product.name?.trim().toLowerCase();
-      if (normalizedName && seenNames.has(normalizedName)) return false;
-      if (product.sku && seenSkus.has(product.sku)) return false;
-      seenIds.add(product.id);
-      if (normalizedName) seenNames.add(normalizedName);
-      if (product.sku) seenSkus.add(product.sku);
-      return true;
-    });
+    const products = (rawProducts || [])
+      .filter(product => {
+        if (seenIds.has(product.id)) return false;
+        const normalizedName = product.name?.trim().toLowerCase();
+        if (normalizedName && seenNames.has(normalizedName)) return false;
+        if (product.sku && seenSkus.has(product.sku)) return false;
+        seenIds.add(product.id);
+        if (normalizedName) seenNames.add(normalizedName);
+        if (product.sku) seenSkus.add(product.sku);
+        return true;
+      })
+      .map((product: any) => {
+        const normalizedImages = Array.from(new Set([
+          ...parseImageUrls(product.image_urls),
+          ...parseImageUrls(product.image_url)
+        ]));
+
+        return {
+          ...product,
+          image_url: normalizedImages[0] || product.image_url,
+          image_urls: normalizedImages
+        };
+      });
 
     // Get total count
     const { count } = await supabase

@@ -133,10 +133,14 @@ export default function AutosuggestRecommendations() {
     const primaryImageUrl = product.image_url ||
                            (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
 
+    // Use our_price as the primary price, fallback to price if our_price is not available
+    // Ensure we handle both potential property names from different API responses
+    const displayPrice = product.our_price || (product as any).price || 0;
+
     return {
       id: product.id,
       name: product.name,
-      price: product.our_price.toString(),
+      price: displayPrice.toString(),
       image_url: primaryImageUrl || undefined,
       featured: product.featured,
       stock_quantity: product.stock_quantity,

@@ -275,9 +275,9 @@ export default function ProductRecommendations({
 
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold text-green-600">
-                      ${rec.product.price}
+                      ${rec.product.price || rec.product.our_price || '0.00'}
                     </span>
-                    {rec.product.featured && (
+                    {(rec.product.featured || rec.product.featured_product) && (
                       <Badge variant="outline" className="text-xs">
                         Featured
                       </Badge>

@@ -7,7 +7,7 @@ const supabase = createClient(
 );
 
 const hasValidImage = (image?: string | null) =>
-  typeof image === 'string' && image.trim() !== '' && !image.includes(',');
+  typeof image === 'string' && image.trim() !== '';
 
 // Enhanced relevance scoring for comprehensive search
 function calculateRelevanceScore(item: any, searchTerm: string): number {
@@ -125,16 +125,36 @@ export async function GET(request: NextRequest) {
     }
 
     const productSuggestions = filteredProducts
-      .map((product) => ({
-        type: 'product',
-        id: product.id,
-        title: product.name,
-        subtitle: product.brand_name || 'Unknown Brand',
-        price: product.our_price,
-        image: product.image_url,
-        url: `/products/${product.id}`,
-        relevanceScore: calculateRelevanceScore(product, searchTerm),
-      }))
+      .map((product) => {
+        // Helper to parse image URLs that might be comma-separated strings
+        const parseImageUrls = (value?: string[] | string | null) => {
+          if (!value) return [] as string[];
+          if (Array.isArray(value)) {
+            return value
+              .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+              .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+              .filter(Boolean);
+          }
+          if (typeof value !== 'string') return [value].filter(Boolean);
+          return value
+            .split(',')
+            .map((entry) => entry.trim())
+            .filter(Boolean);
+        };
+
+        const urls = parseImageUrls(product.image_url);
+
+        return {
+          type: 'product',
+          id: product.id,
+          title: product.name,
+          subtitle: product.brand_name || 'Unknown Brand',
+          price: product.our_price,
+          image: urls[0] || product.image_url,
+          url: `/products/${product.id}`,
+          relevanceScore: calculateRelevanceScore(product, searchTerm),
+        };
+      })
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
       .slice(0, limit);
 

@@ -151,7 +151,23 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Calculate order summary
+    // Helper to parse image URLs that might be comma-separated strings
+    const parseImageUrls = (value?: string[] | string | null) => {
+      if (!value) return [] as string[];
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+          .filter(Boolean);
+      }
+      if (typeof value !== 'string') return [value].filter(Boolean);
+      return value
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    };
+
+    // Calculate order summary and normalize product images
     const orderSummary = {
       itemCount: order.order_items?.length || 0,
       totalQuantity: order.order_items?.reduce((sum: number, item: any) => sum + item.quantity, 0) || 0,
@@ -159,9 +175,24 @@ export async function GET(
       statusChangeCount: order.order_status_history?.length || 0
     };
 
+    const normalizedOrderItems = (order.order_items || []).map((item: any) => {
+      const itemImages = parseImageUrls(item.product_image_url);
+      const productImages = parseImageUrls(item.products?.image_url);
+
+      return {
+        ...item,
+        product_image_url: itemImages[0] || item.product_image_url,
+        products: item.products ? {
+          ...item.products,
+          image_url: productImages[0] || item.products.image_url
+        } : null
+      };
+    });
+
     return NextResponse.json({
       order: {
         ...order,
+        order_items: normalizedOrderItems,
         summary: orderSummary
       }
     });

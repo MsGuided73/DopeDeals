@@ -74,7 +74,6 @@ export async function GET(request: NextRequest) {
       .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%`)
       .not('image_url', 'is', null)
       .neq('image_url', '')
-      .not('image_url', 'ilike', '%,%')
       // STRICT: No Kratom or related substances
       .not('name', 'ilike', '%kratom%')
       .not('name', 'ilike', '%7-oh%')

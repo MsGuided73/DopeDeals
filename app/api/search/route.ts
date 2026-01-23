@@ -78,7 +78,6 @@ export async function POST(req: Request) {
       )
       .not("image_url", "is", null)
       .neq("image_url", "")
-      .not("image_url", "ilike", "%,%")
       // STRICT: No Kratom or related substances
       .not('name', 'ilike', '%kratom%')
       .not('name', 'ilike', '%7-oh%')
@@ -153,18 +152,38 @@ export async function POST(req: Request) {
     const { data, error, count } = await q1;
     if (error) throw error;
 
-    const items = (data ?? []).map((r: any) => ({
-      id: r.id,
-      name: r.name,
-      brand_name: r.brand_name ?? null,
-      brand_slug: r.brand_slug ?? null,
-      image_url: r.image_url ?? null,
-      price: r.sale_price ?? r.our_price ?? null,
-      inventory_status: r.inventory_status ?? null,
-      stock_quantity: r.stock_quantity ?? null,
-      is_active: !!r.is_active,
-      created_at: r.created_at ?? null,
-    }));
+    const items = (data ?? []).map((r: any) => {
+      // Helper to parse image URLs that might be comma-separated strings
+      const parseImageUrls = (value?: string[] | string | null) => {
+        if (!value) return [] as string[];
+        if (Array.isArray(value)) {
+          return value
+            .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
+            .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
+            .filter(Boolean);
+        }
+        if (typeof value !== 'string') return [value].filter(Boolean);
+        return value
+          .split(',')
+          .map((entry) => entry.trim())
+          .filter(Boolean);
+      };
+
+      const normalizedImages = parseImageUrls(r.image_url);
+
+      return {
+        id: r.id,
+        name: r.name,
+        brand_name: r.brand_name ?? null,
+        brand_slug: r.brand_slug ?? null,
+        image_url: normalizedImages[0] || r.image_url || null,
+        price: r.sale_price ?? r.our_price ?? null,
+        inventory_status: r.inventory_status ?? null,
+        stock_quantity: r.stock_quantity ?? null,
+        is_active: !!r.is_active,
+        created_at: r.created_at ?? null,
+      };
+    });
 
     // Calculate min and max prices from the current result set
     const prices = items

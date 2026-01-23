@@ -29,21 +29,8 @@ interface ConsumableProductDetailsProps {
 }
 
 const DEFAULT_BENEFITS = ['Calm', 'Creative', 'Energetic', 'Focus', 'Happy', 'Relaxed'];
-const DEFAULT_INGREDIENTS = [
-  'Organic Cane Sugar',
-  'Organic Tapioca Syrup',
-  'Purified Water',
-  'Pectin',
-  'Citric Acid',
-  'Natural Flavoring',
-  'Natural Coloring'
-];
-const DEFAULT_SUGGESTED_USE = [
-  '1 Gummy — Vibing',
-  '2 Gummies — Endless Smiles',
-  '3+ Gummies — To the Moon',
-  'Wait 60-90 minutes before taking more.'
-];
+const DEFAULT_INGREDIENTS: string[] = [];
+const DEFAULT_SUGGESTED_USE: string[] = [];
 const DEFAULT_WARNINGS = [
   'Do not operate vehicles or heavy machinery after use.',
   'Do not use if pregnant or nursing.',
@@ -69,15 +56,11 @@ export function ConsumableProductDetails({ product }: ConsumableProductDetailsPr
   const nameLower = product.name.toLowerCase();
   const categoryLower = (product.category_slug || product.category_id || '').toLowerCase();
   const isGummy = nameLower.includes('gumm') || categoryLower.includes('gumm');
-  const ingredients = isGummy
-    ? product.ingredients && product.ingredients.length > 0
-      ? product.ingredients
-      : DEFAULT_INGREDIENTS
+  const ingredients = product.ingredients && product.ingredients.length > 0
+    ? product.ingredients
     : [];
-  const suggestedUse = isGummy
-    ? product.suggested_use
-      ? product.suggested_use.split('\n').filter(Boolean)
-      : DEFAULT_SUGGESTED_USE
+  const suggestedUse = product.suggested_use
+    ? product.suggested_use.split('\n').filter(Boolean)
     : [];
   const warnings = product.warnings && product.warnings.length > 0 ? product.warnings : DEFAULT_WARNINGS;
 
@@ -115,7 +98,7 @@ export function ConsumableProductDetails({ product }: ConsumableProductDetailsPr
         </div>
       )
     },
-    isGummy
+    ingredients.length > 0
       ? {
           key: 'ingredients',
           title: 'Ingredients',
@@ -126,7 +109,7 @@ export function ConsumableProductDetails({ product }: ConsumableProductDetailsPr
           )
         }
       : null,
-    isGummy
+    suggestedUse.length > 0
       ? {
           key: 'suggested',
           title: 'Suggested Use',
