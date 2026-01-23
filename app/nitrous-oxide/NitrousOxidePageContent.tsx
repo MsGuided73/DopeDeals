@@ -277,21 +277,6 @@ export default function NitrousOxidePageContent() {
           })}
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-white mb-4">Need More Options?</h2>
-            <p className="text-white/90 mb-6">
-              Check out our full catalog of premium smoking accessories and wellness products.
-            </p>
-            <Link
-              href="/products"
-              className="inline-block bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors"
-            >
-              Browse All Products →
-            </Link>
-          </div>
-        </div>
       </div>
     </div>
   );
