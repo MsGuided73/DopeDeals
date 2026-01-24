@@ -16,19 +16,26 @@ export async function GET(req: NextRequest) {
     // NO LIMIT: Return all products
     const limit = 5000;
 
-    // Get mushroom products with strict category_slug + brand filtering
+    // Get mushroom products with expanded category_slug filtering
+    const mushroomSlugs = [
+      'mushrooms',
+      'mushroom',
+      'mush-gummies',
+      'mush-chocolate',
+      'mush',
+      'shrooms'
+    ];
+
     const { data: rawProducts, error } = await supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured,
-        brand_name, category_id, category_slug, created_at, updated_at
+        brand_name, category_id, category_slug, created_at, updated_at,
+        specs, meta_data
       `)
       .eq('is_active', true)
-      .not('image_url', 'is', null)
-      .neq('image_url', '')
-      .in('category_slug', ['mushrooms', 'mush-gummies', 'mush-chocolate'])
-      .in('brand_name', ['mMelt', 'Zoomers'])
+      .in('category_slug', mushroomSlugs)
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -40,17 +47,28 @@ export async function GET(req: NextRequest) {
     // Helper to parse image URLs that might be comma-separated strings
     const parseImageUrls = (value?: string[] | string | null) => {
       if (!value) return [] as string[];
+      
+      let urls: string[] = [];
       if (Array.isArray(value)) {
-        return value
-          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
-          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
-          .filter(Boolean);
+        urls = value
+          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [String(entry)]));
+      } else if (typeof value === 'string') {
+        urls = value.split(',');
+      } else {
+        urls = [String(value)];
       }
-      if (typeof value !== 'string') return [value].filter(Boolean);
-      return value
-        .split(',')
+
+      return urls
         .map((entry) => entry.trim())
-        .filter(Boolean);
+        // Ensure it's a valid URL or path and not "null", "undefined", etc.
+        .filter(url => 
+          url && 
+          url !== '' && 
+          url !== 'null' && 
+          url !== 'undefined' && 
+          url !== '[object Object]' &&
+          (url.startsWith('http') || url.startsWith('/') || url.startsWith('./'))
+        );
     };
 
     const transformedProducts = (rawProducts || []).map((product: any) => {
@@ -59,18 +77,31 @@ export async function GET(req: NextRequest) {
         ...parseImageUrls(product.image_url)
       ]));
 
+      const finalImageUrl = normalizedImages[0] || null;
+
+      // Determine if product is "new" (created in the last 30 days)
+      const isNew = product.created_at 
+        ? (new Date().getTime() - new Date(product.created_at).getTime()) < (30 * 24 * 60 * 60 * 1000)
+        : false;
+
       return {
         ...product,
         price: product.our_price,
-        image: normalizedImages[0] || product.image_url,
-        image_url: normalizedImages[0] || product.image_url,
-        image_urls: normalizedImages
+        compare_at_price: product.sale_price,
+        brand: product.brand_name,
+        image: finalImageUrl,
+        image_url: finalImageUrl,
+        image_urls: normalizedImages,
+        isNew,
+        // Ensure specs object exists for frontend filtering
+        specs: product.specs || {},
+        inStock: (product.stock_quantity || 0) > 0
       };
     });
 
     return NextResponse.json({
       products: transformedProducts,
-      total: transformedProducts.length
+      totalCount: transformedProducts.length
     });
 
   } catch (error) {

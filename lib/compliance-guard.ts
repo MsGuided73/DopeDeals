@@ -29,6 +29,7 @@ const NICOTINE_FREE_CATEGORIES = [
   'carb caps', 'nails', 'grinders', 'screens', 'storage', 'screens',
   'tools', 'accessories', 'hookahs', 'shisha', 'water adapters',
   'edibles', 'gummies', 'cereal bar', 'nitrous', 'n2o', 'mushroom',
+  'mushrooms', 'mush', 'shrooms',
   'chocolate', 'candy', 'brownies', 'cookies', 'lollipops', 'sour',
   'sweet', 'treats', 'snacks', 'gummy', 'gummy bears', 'gummy worms',
   'gummy rings', 'gummy candy', 'gummy edibles',

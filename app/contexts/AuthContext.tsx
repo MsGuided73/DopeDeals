@@ -40,14 +40,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Check profile table
     try {
       // Use a more resilient approach in case columns are missing
-      const { data: profile } = await supabaseBrowser
+      // Try to select role specifically, but handle failure
+      const { data: profile, error } = await supabaseBrowser
         .from('users')
-        .select('*')
+        .select('id')
         .eq('id', authUser.id)
         .single();
 
-      if (profile && 'role' in profile && profile.role) {
-        return profile.role as UserRole;
+      if (error) throw error;
+
+      // If we got here, the table exists and the user exists.
+      // Now try to get the role if it exists
+      const { data: roleData } = await supabaseBrowser
+        .from('users')
+        .select('role')
+        .eq('id', authUser.id)
+        .single();
+      
+      if (roleData && roleData.role) {
+        return roleData.role as UserRole;
       }
     } catch (error) {
       console.warn('[AuthContext] Could not fetch user profile for role:', error);
@@ -60,18 +71,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const getVipStatus = async (userId: string): Promise<boolean> => {
     try {
       // Use a more resilient approach in case columns or relationships are missing
-      const { data: profile } = await supabaseBrowser
+      // First check if user exists
+      const { data: profile, error } = await supabaseBrowser
         .from('users')
-        .select('*')
+        .select('id')
         .eq('id', userId)
         .single();
 
-      if (!profile) return false;
+      if (error || !profile) return false;
 
-      // Check both snake_case and camelCase for compatibility
-      const tierId = profile.membership_tier_id || profile.membershipTierId;
+      // Try to fetch membership info safely
+      const { data: tierData } = await supabaseBrowser
+        .from('users')
+        .select('membership_tier_id')
+        .eq('id', userId)
+        .single();
       
-      return !!tierId;
+      if (tierData?.membership_tier_id) return true;
+
+      const { data: tierDataCamel } = await supabaseBrowser
+        .from('users')
+        .select('membershipTierId')
+        .eq('id', userId)
+        .single();
+
+      return !!tierDataCamel?.membershipTierId;
     } catch (error) {
       console.warn('[AuthContext] Could not fetch VIP status:', error);
       return false;

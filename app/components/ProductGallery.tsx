@@ -121,6 +121,7 @@ export default function ProductGallery({
                 className="object-contain p-4 md:p-6 transition-transform duration-700 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 priority
+                unoptimized={currentImage.includes('sigdistro.com') || currentImage.includes('zohoapis.com')}
                 onError={handleImageError}
               />
             )}
@@ -172,6 +173,7 @@ export default function ProductGallery({
                   width={96}
                   height={96}
                   className="w-full h-full object-contain p-2"
+                  unoptimized={imageUrl.includes('sigdistro.com') || imageUrl.includes('zohoapis.com')}
                   onError={handleImageError}
                 />
               </button>
