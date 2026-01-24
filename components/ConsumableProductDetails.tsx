@@ -43,7 +43,6 @@ const BADGES = [
   { title: 'Beyond CBD & THC', icon: Shield },
   { title: 'Highest Quality', icon: CheckCircle2 },
   { title: 'Pure Hemp Extract', icon: Beaker },
-  { title: 'No Cutting Agents', icon: AlertTriangle },
   { title: '3rd-Party Lab Tested', icon: Shield },
   { title: 'Benefits You Can Feel', icon: Star }
 ];
