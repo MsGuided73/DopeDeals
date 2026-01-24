@@ -71,31 +71,31 @@ export async function GET(req: NextRequest) {
         );
     };
 
-    const transformedProducts = (rawProducts || []).map((product: any) => {
+    const transformedProducts = (rawProducts || []).map((p: any) => {
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(p.image_urls),
+        ...parseImageUrls(p.image_url)
       ]));
 
       const finalImageUrl = normalizedImages[0] || null;
 
       // Determine if product is "new" (created in the last 30 days)
-      const isNew = product.created_at 
-        ? (new Date().getTime() - new Date(product.created_at).getTime()) < (30 * 24 * 60 * 60 * 1000)
+      const isNew = p.created_at 
+        ? (new Date().getTime() - new Date(p.created_at).getTime()) < (30 * 24 * 60 * 60 * 1000)
         : false;
 
       return {
-        ...product,
-        price: product.our_price,
-        compare_at_price: product.sale_price,
-        brand: product.brand_name,
+        ...p,
+        price: p.our_price,
+        compare_at_price: p.sale_price,
+        brand: p.brand_name,
         image: finalImageUrl,
         image_url: finalImageUrl,
         image_urls: normalizedImages,
         isNew,
         // Ensure specs object exists for frontend filtering
-        specs: product.specs || {},
-        inStock: (product.stock_quantity || 0) > 0
+        specs: p.specs || {},
+        inStock: (p.stock_quantity || 0) > 0
       };
     });
 
