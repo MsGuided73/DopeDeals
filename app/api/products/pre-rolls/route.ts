@@ -128,6 +128,29 @@ export async function GET(req: NextRequest) {
         .split(',')
         .map((entry) => entry.trim())
         .filter(Boolean);
+
+      // NOTE: Safer normalization (commented out for testing baseline behavior)
+      // let urls: string[] = [];
+      // if (Array.isArray(value)) {
+      //   urls = value
+      //     .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [String(entry)]));
+      // } else if (typeof value === 'string') {
+      //   urls = value.split(',');
+      // } else {
+      //   urls = [String(value)];
+      // }
+      //
+      // return urls
+      //   .map((entry) => entry.trim())
+      //   // Ensure it's a valid URL or path and not "null", "undefined", etc.
+      //   .filter((url) =>
+      //     url &&
+      //     url !== '' &&
+      //     url !== 'null' &&
+      //     url !== 'undefined' &&
+      //     url !== '[object Object]' &&
+      //     (url.startsWith('http') || url.startsWith('/') || url.startsWith('./'))
+      //   );
     };
 
     // Transform products to match our interface
