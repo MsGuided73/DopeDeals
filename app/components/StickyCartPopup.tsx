@@ -5,12 +5,14 @@ import Link from 'next/link';
 import { ShoppingCart, X, Plus, Minus } from 'lucide-react';
 import FocusTrap from 'focus-trap-react';
 import { updateCartQuantity, removeFromCart, formatPrice, type Cart, type CartItem } from '../lib/cart-utils';
+import { usePathname } from 'next/navigation';
 import { useCart } from '../contexts/CartContext';
 
 const MAX_QUANTITY = 99;
 
 export default function StickyCartPopup() {
   const { cart, refreshCart } = useCart();
+  const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(false);
   const [updating, setUpdating] = useState<string | null>(null);
   const [removingItemId, setRemovingItemId] = useState<string | null>(null);
@@ -74,7 +76,7 @@ export default function StickyCartPopup() {
   }, [isExpanded]);
 
   // Don't render if no cart or empty cart
-  if (!cart || !cart.items || cart.items.length === 0) {
+  if (!cart || !cart.items || cart.items.length === 0 || pathname === '/cart' || pathname === '/checkout') {
     return null;
   }
 

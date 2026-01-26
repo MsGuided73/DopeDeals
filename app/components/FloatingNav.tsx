@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useNavigation } from "../contexts/NavigationContext";
 
 export default function FloatingNav() {
   const { hasMasthead } = useNavigation();
+  const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
@@ -67,7 +69,7 @@ export default function FloatingNav() {
   };
 
   // Only show floating nav when scrolled past 200px
-  if (!isScrolled) {
+  if (!isScrolled || pathname === "/cart" || pathname === "/checkout") {
     return null;
   }
 
