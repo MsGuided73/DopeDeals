@@ -39,7 +39,43 @@ export async function GET(req: NextRequest) {
       }, { status: 500 });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const shouldLogSupabase = process.env.NODE_ENV === 'development';
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: {
+        fetch: async (input, init) => {
+          const url = typeof input === 'string' ? input : input.url;
+          const method = init?.method || (typeof input !== 'string' ? input.method : 'GET');
+          const headers = new Headers(init?.headers || (typeof input !== 'string' ? input.headers : undefined));
+          const redactedHeaders = Object.fromEntries(
+            Array.from(headers.entries()).map(([key, value]) => [
+              key,
+              ['apikey', 'authorization'].includes(key.toLowerCase()) ? '[redacted]' : value
+            ])
+          );
+
+          if (shouldLogSupabase) {
+            console.log('[Supabase Fetch][Request]', {
+              method,
+              url,
+              headers: redactedHeaders
+            });
+          }
+
+          const response = await fetch(input, init);
+
+          if (shouldLogSupabase) {
+            const responseHeaders = Object.fromEntries(response.headers.entries());
+            console.log('[Supabase Fetch][Response]', {
+              status: response.status,
+              statusText: response.statusText,
+              headers: responseHeaders
+            });
+          }
+
+          return response;
+        }
+      }
+    });
 
     // NO LIMIT: Return all products
     const limit = 5000;
