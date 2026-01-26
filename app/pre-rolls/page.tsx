@@ -138,7 +138,7 @@ export default function PreRollsPage() {
                       src={product.image_url}
                       alt={product.name}
                       fill
-                      unoptimized={product.image_url?.includes('sigdistro.com')}
+                      unoptimized={product.image_url.includes('sigdistro.com')}
                       className="object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                   ) : (
