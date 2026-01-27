@@ -143,7 +143,7 @@ export default function BrandLogoScrollbar() {
       <div className="absolute inset-0 bg-white" />
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-10 px-4">
         <div className="text-center">
-          <h1 className="text-4xl md:text-5xl text-black">TRUSTED BRANDS</h1>
+          <h1 className="text-4xl md:text-5xl text-black font-display-twilight">TRUSTED BRANDS</h1>
           <div className="mx-auto mt-4 h-px w-32 bg-gradient-to-r from-transparent via-[#fafcfa] to-transparent opacity-80" />
           <p className="mt-3 text-sm text-gray-600 md:text-base">
             Scroll down to bring our brand partners together.

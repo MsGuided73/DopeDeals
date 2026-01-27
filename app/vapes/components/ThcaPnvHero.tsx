@@ -11,7 +11,7 @@ export default function ThcaPnvHero() {
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left Column - Header */}
           <div className="flex items-center space-x-4">
-            <h1 className="font-chalets text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider text-black leading-tight font-bold">
+            <h1 className="font-display-twilight text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider text-black leading-tight font-bold">
               THCA VAPES & CONCENTRATES
             </h1>
           </div>

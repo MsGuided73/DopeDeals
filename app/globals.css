@@ -37,6 +37,16 @@
   font-display: swap;
 }
 
+/* Twilight Font - Limited Use Display Font */
+@font-face {
+  font-family: 'Twilight Font Regular';
+  src: url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Twilight/FontsFree-Net-TwilightFont-Regular.woff') format('woff'),
+       url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Twilight/FontsFree-Net-TwilightFont-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @keyframes scroll-horizontal {
   0% {
     transform: translateX(0);
@@ -109,6 +119,14 @@ body, p, .text-sm, .text-xs, .text-base {
 .font-display-juicy-fills,
 .font-display-juicy-fills * {
   font-family: 'Juicy-Fills', 'Inter', system-ui, sans-serif !important;
+  font-weight: normal !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Twilight font for collection labels and select section headers */
+.font-display-twilight,
+.font-display-twilight * {
+  font-family: 'Twilight Font Regular', 'Inter', system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: -0.02em !important;
 }

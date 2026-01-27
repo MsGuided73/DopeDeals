@@ -143,7 +143,7 @@ export default function EdiblesPageContent() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-5xl md:text-7xl font-black text-black mb-6">
+        <h1 className="text-5xl md:text-7xl font-black text-black mb-6 font-display-twilight">
           EDIBLES, SALVES & TINCTURES
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
