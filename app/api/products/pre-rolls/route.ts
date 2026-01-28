@@ -9,6 +9,14 @@ if (process.env.NODE_ENV === 'development') {
   config({ path: envPath });
 }
 
+/**
+ * Serve a JSON list of normalized pre-roll products filtered from the product catalog.
+ *
+ * Queries the product store, filters active items in the "prerolls" category (excluding accessory items),
+ * normalizes image URLs and product fields, computes derived attributes (type, size, THC, sale/new/inStock),
+ * and returns the transformed product collection and a total count.
+ *
+ * @returns A JSON response containing `message`, `totalCount`, and `products` (an array of normalized pre-roll product objects). On failure returns a 500 JSON response with `message` and an `error` description.
 export async function GET(req: NextRequest) {
   try {
     // Ensure environment variables are loaded in development
@@ -267,4 +275,3 @@ export async function GET(req: NextRequest) {
     }, { status: 500 });
   }
 }
-

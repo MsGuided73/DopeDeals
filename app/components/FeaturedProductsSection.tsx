@@ -49,6 +49,13 @@ const formatPrice = (value: string | number): string => {
   return Number.isFinite(numeric) ? numeric.toFixed(2) : '0.00';
 };
 
+/**
+ * Render a featured products section with responsive product cards, loading/error states, and basic interactions.
+ *
+ * This component fetches featured products on mount and presents one of three UI states: a loading skeleton grid, an error message, or the populated product display. Product cards show brand, name, image (or placeholder), pricing with optional compare-at price and discount, a favorite toggle (local state only), and an "Add to Cart" action (delegated to `addToCart`).
+ *
+ * @returns The rendered section element containing the featured products UI.
+ */
 export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

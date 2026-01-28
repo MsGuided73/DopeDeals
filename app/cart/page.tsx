@@ -16,6 +16,13 @@ import {
   type CartItem
 } from '../lib/cart-utils';
 
+/**
+ * Renders the Shopping Cart page with item list, order summary, suggestions, and a clear-cart confirmation modal.
+ *
+ * Displays loading and empty states, item quantity controls and removal, free-shipping progress, subtotal/tax/shipping/total rows, checkout actions, and informational notices. Manages cart fetching and mutations (update quantity, remove item, clear cart) and keeps UI state for loading, updating, and errors.
+ *
+ * @returns The cart page JSX element
+ */
 export default function CartPage() {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);

@@ -24,6 +24,15 @@ interface Product {
   tobacco_product: boolean;
 }
 
+/**
+ * Render the Nitrous Oxide products page including hero, product grid, and loading/error/empty states.
+ *
+ * The component fetches a curated list of nitrous oxide products on mount, shows skeleton UI while loading,
+ * displays an error panel with retry on failure, shows a "Coming Soon" message when no products are available,
+ * and renders a responsive grid of product cards (each linking to its detail page) when products are present.
+ *
+ * @returns A React element containing the page content, including hero section, product grid, and UI states.
+ */
 export default function NitrousOxidePageContent() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);

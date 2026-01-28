@@ -10,6 +10,11 @@ import GlobalMasthead from "./components/GlobalMasthead";
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
 
+/**
+ * Renders the homepage layout including the global masthead, collections grid, featured and new products, brand logo scrollbar, customer reviews carousel, dope deals, and blog articles sections.
+ *
+ * @returns The homepage JSX element containing the assembled page layout and sections.
+ */
 export default function HomePage() {
 
   return (

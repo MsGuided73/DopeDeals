@@ -3,6 +3,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
+/**
+ * Render a responsive hero section promoting premium THCA flower products.
+ *
+ * The component displays a headline, descriptive copy, primary and secondary action links,
+ * key feature badges, and a product image with floating decorative badges. Styles adapt for
+ * light and dark themes and the layout collapses to a single column on small screens.
+ *
+ * @returns A React element representing the THCA Flower hero section.
+ */
 export default function ThcaFlowerHero() {
   return (
     <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800">

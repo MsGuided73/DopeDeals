@@ -24,6 +24,13 @@ interface Product {
   tobacco_product: boolean;
 }
 
+/**
+ * Renders the THCA Pre-Rolls & Vapes page, including data fetching, loading and error states, product cards, and add-to-cart actions.
+ *
+ * The component fetches the THCA product list on mount and displays a skeleton while loading, an error screen on failure, a "Coming Soon" hero when no products exist, or a grid of product cards when data is available. Each card shows image/brand/featured badges, pricing (including sale and discount display), description, and an Add to Cart button.
+ *
+ * @returns The page content as a JSX element
+ */
 export default function ThcaPnvPageContent() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);

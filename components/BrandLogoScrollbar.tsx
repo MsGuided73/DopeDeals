@@ -122,6 +122,15 @@ function BrandLogoTile({
   );
 }
 
+/**
+ * Render a scroll-interactive grid of brand logos with animated entrance tied to vertical scroll.
+ *
+ * The component displays a header, a responsive grid of brand logo tiles that animate (horizontal offset, opacity, and scale)
+ * in response to the section's vertical scroll progress, and a "SHOP BY BRAND" call-to-action. Animations are disabled
+ * when the user's reduce-motion preference is detected.
+ *
+ * @returns A section element containing the titled header, the responsive animated brand logo grid, and the CTA link.
+ */
 export default function BrandLogoScrollbar() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const reduceMotion = useReducedMotion();

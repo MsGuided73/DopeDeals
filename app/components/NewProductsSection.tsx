@@ -26,6 +26,16 @@ interface Product {
   updated_at: string;
 }
 
+/**
+ * Render the "FRESH DROPS" section that surfaces the newest products.
+ *
+ * Fetches up to 12 newest products and displays:
+ * - a skeleton grid while loading,
+ * - an error message if the fetch fails,
+ * - product cards (mobile: grid of up to 6; desktop: horizontally scrollable) showing image, brand, name, price and discount, and an "Add to Cart" action.
+ *
+ * @returns The section's JSX element displaying newest products, loading placeholders, or an error message.
+ */
 export default function NewProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

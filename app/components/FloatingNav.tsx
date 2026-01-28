@@ -6,6 +6,13 @@ import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useNavigation } from "../contexts/NavigationContext";
 
+/**
+ * Render a top floating navigation bar that appears after the page is scrolled beyond 200px and is hidden on the /cart and /checkout routes.
+ *
+ * The bar provides hover-driven dropdown menus (with a short delayed close) for multi-level navigation and mirrors site sections like Vapes, Edibles, Pre-Rolls, N2O, Mushrooms, Accessories, and Blog.
+ *
+ * @returns The floating navigation JSX element when it should be visible, `null` otherwise.
+ */
 export default function FloatingNav() {
   const { hasMasthead } = useNavigation();
   const pathname = usePathname();

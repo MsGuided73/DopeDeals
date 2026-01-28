@@ -2,6 +2,13 @@
 
 import React from "react";
 
+/**
+ * Renders a responsive collections grid with a hero link and clickable category tiles.
+ *
+ * Mobile shows a stacked hero image and a 2-column category grid; desktop shows a 4-column layout with a large hero tile spanning two columns and rows. Each category tile links to its route, displays an image and multi-line label, and uses decorative non-interactive overlays and hover effects.
+ *
+ * @returns The rendered collections grid as a JSX element.
+ */
 export default function CollectionsGrid() {
   const categories = [
     { 

@@ -18,6 +18,15 @@ interface EdibleProduct {
   category_slug?: string | null;
 }
 
+/**
+ * Render the Edibles page content with product lists for tinctures, salves, and edibles.
+ *
+ * Fetches edible products on mount from `/api/products/edibles`, shows a loading state while fetching,
+ * groups fetched products into tinctures, salves, and edibles by `category_slug`, and renders responsive
+ * product grids with pricing and an "Add to Cart" action for each product.
+ *
+ * @returns The rendered JSX for the Edibles, Salves & Tinctures page
+ */
 export default function EdiblesPageContent() {
   const [products, setProducts] = useState<EdibleProduct[]>([]);
   const [loading, setLoading] = useState(true);

@@ -4,6 +4,11 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Instagram, Twitter, Facebook, Youtube } from "lucide-react";
 
+/**
+ * Renders the site's footer, switching to a minimal checkout footer when the current path is "/cart" or "/checkout" and otherwise rendering the full site footer with feature highlights, navigation links, newsletter signup, social icons, and legal notices.
+ *
+ * @returns The footer JSX element appropriate for the current route.
+ */
 export default function Highway420Footer() {
   const [email, setEmail] = useState("");
   const pathname = usePathname();

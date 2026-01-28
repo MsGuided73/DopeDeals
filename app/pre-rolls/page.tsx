@@ -21,6 +21,16 @@ interface Product {
   brand_name?: string
 }
 
+/**
+ * Renders the Pre-Rolls page with product listing, loading and error states.
+ *
+ * Fetches up to 50 pre-roll products on mount and displays an age verification prompt,
+ * global masthead, header with product count, breadcrumb, and a responsive product grid.
+ * While fetching, shows a centered loading spinner; on fetch failure, shows an error message
+ * with a retry button. When no products are available, shows an empty state with a link to browse all products.
+ *
+ * @returns The React element for the Pre-Rolls page.
+ */
 export default function PreRollsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)

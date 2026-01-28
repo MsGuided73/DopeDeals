@@ -24,6 +24,20 @@ interface Product {
   tobacco_product: boolean;
 }
 
+/**
+ * Render the THCA product listing page with loading, error, empty, and product-grid states.
+ *
+ * This component fetches THCA products from the `/api/products/thca?limit=30` endpoint on mount,
+ * transforms product data for the UI, and conditionally renders:
+ * - a loading skeleton while fetching,
+ * - an error panel with a retry button when fetching fails,
+ * - a "Coming Soon" panel when no products are available,
+ * - a hero and responsive grid of product cards when products are present.
+ *
+ * Clicking a product card navigates to its product page; clicking "Add to Cart" calls `addToCart` with the product id.
+ *
+ * @returns The React element for the THCA products page.
+ */
 export default function ThcaPageContent() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);

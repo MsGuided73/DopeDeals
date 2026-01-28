@@ -1,5 +1,10 @@
 'use client';
 
+/**
+ * Renders the hero section for the "Premium Mushrooms" landing area.
+ *
+ * @returns The JSX element for a centered, responsive hero with a purple-to-blue gradient background, prominent heading, and two descriptive paragraphs.
+ */
 export default function MushroomsHero() {
   return (
     <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">

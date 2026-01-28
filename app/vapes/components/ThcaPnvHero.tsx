@@ -2,6 +2,13 @@
 
 import { useState } from 'react';
 
+/**
+ * Hero section for THCA vapes and concentrates with headline, stats, description, and category controls.
+ *
+ * Renders a styled hero area that displays the title "THCA VAPES & CONCENTRATES", three statistic blocks, a descriptive paragraph, and a set of category buttons that toggle the component's active category state.
+ *
+ * @returns The JSX element for the hero section.
+ */
 export default function ThcaPnvHero() {
   const [activeCategory, setActiveCategory] = useState('all-thca');
 

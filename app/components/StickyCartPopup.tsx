@@ -10,6 +10,17 @@ import { useCart } from '../contexts/CartContext';
 
 const MAX_QUANTITY = 99;
 
+/**
+ * Renders a sticky cart UI anchored to the right side of the viewport that lets users view and manage cart items.
+ *
+ * The component reads cart state from the cart context and renders a compact floating cart button when collapsed
+ * and an accessible cart dialog when expanded. The dialog lists items with quantity controls and remove actions,
+ * displays a total and action links to the full cart and checkout, shows an inline error banner when present,
+ * and closes on Escape. The component returns null (renders nothing) when there is no cart, the cart is empty,
+ * or the current route is `/cart` or `/checkout`.
+ *
+ * @returns The sticky cart button or expanded cart dialog UI, or `null` when it should not render.
+ */
 export default function StickyCartPopup() {
   const { cart, refreshCart } = useCart();
   const pathname = usePathname();

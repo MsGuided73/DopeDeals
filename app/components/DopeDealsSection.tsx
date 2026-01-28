@@ -26,6 +26,13 @@ interface Product {
   updated_at: string;
 }
 
+/**
+ * Render the "Dope Deals" product section with responsive layouts, loading and error states, and per-product add-to-cart interactions.
+ *
+ * This component fetches up to 20 curated promotional products, displays a skeleton while loading, shows an error message on failure, and renders mobile grid and desktop auto-scrolling product cards when data is available. Each card includes image fallback, brand and price display (with discount handling), a favorite button (UI only), and an Add to Cart button that invokes the cart helper.
+ *
+ * @returns The section JSX for the Dope Deals feature, or `null` when no deals are available.
+ */
 export default function DopeDealsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

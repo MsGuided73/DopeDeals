@@ -16,6 +16,13 @@ interface BlogPost {
   featured: boolean;
 }
 
+/**
+ * Renders the "Higher Learning" blog page with AI-assisted search, category filtering, featured and regular posts, social sharing, newsletter signup, and popular topics.
+ *
+ * On mount and when the selected category changes, the component fetches blog posts from `/api/blog`. The AI assistant sends POST requests to `/api/blog` for query handling.
+ *
+ * @returns The page's JSX element.
+ */
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [showAIAssistant, setShowAIAssistant] = useState(false);
