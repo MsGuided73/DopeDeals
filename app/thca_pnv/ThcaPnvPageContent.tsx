@@ -132,7 +132,7 @@ export default function ThcaPnvPageContent() {
       <div className="min-h-screen bg-gradient-to-r from-red-400 via-pink-500 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 py-16">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-display-twilight">
               🌿 Premium THCA Pre-Rolls & Vapes
             </h1>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-2xl mx-auto">
@@ -156,7 +156,7 @@ export default function ThcaPnvPageContent() {
       <div className="min-h-screen bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600">
         <div className="max-w-7xl mx-auto px-4 py-16">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-display-twilight">
               🌿 Premium THCA Pre-Rolls & Vapes
             </h1>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-2xl mx-auto">
@@ -177,7 +177,7 @@ export default function ThcaPnvPageContent() {
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-display-twilight">
             🌿 Premium THCA Pre-Rolls & Vapes
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">

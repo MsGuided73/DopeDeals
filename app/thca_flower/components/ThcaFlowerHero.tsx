@@ -14,7 +14,7 @@ export default function ThcaFlowerHero() {
               🌿 Premium THCA Flower Collection
             </div>
 
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white font-display-twilight">
               Premium THCA Flower
               <span className="block text-dope-orange-500">Hemp-Derived Wellness</span>
             </h1>

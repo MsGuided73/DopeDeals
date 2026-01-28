@@ -9,6 +9,11 @@ if (process.env.NODE_ENV === 'development') {
   config({ path: envPath });
 }
 
+/**
+ * Handles GET requests to fetch pre-roll products from Supabase
+  * @param req The incoming NextRequest object containing request parameters
+   * @returns NextResponse with pre-roll product data or error status
+    */
 export async function GET(req: NextRequest) {
   try {
     // Ensure environment variables are loaded in development
@@ -39,7 +44,43 @@ export async function GET(req: NextRequest) {
       }, { status: 500 });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const shouldLogSupabase = process.env.NODE_ENV === 'development';
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: {
+        fetch: async (input, init) => {
+          const url = typeof input === 'string' ? input : input.url;
+          const method = init?.method || (typeof input !== 'string' ? input.method : 'GET');
+          const headers = new Headers(init?.headers || (typeof input !== 'string' ? input.headers : undefined));
+          const redactedHeaders = Object.fromEntries(
+            Array.from(headers.entries()).map(([key, value]) => [
+              key,
+              ['apikey', 'authorization'].includes(key.toLowerCase()) ? '[redacted]' : value
+            ])
+          );
+
+          if (shouldLogSupabase) {
+            console.log('[Supabase Fetch][Request]', {
+              method,
+              url,
+              headers: redactedHeaders
+            });
+          }
+
+          const response = await fetch(input, init);
+
+          if (shouldLogSupabase) {
+            const responseHeaders = Object.fromEntries(response.headers.entries());
+            console.log('[Supabase Fetch][Response]', {
+              status: response.status,
+              statusText: response.statusText,
+              headers: responseHeaders
+            });
+          }
+
+          return response;
+        }
+      }
+    });
 
     // NO LIMIT: Return all products
     const limit = 5000;
@@ -129,28 +170,7 @@ export async function GET(req: NextRequest) {
         .map((entry) => entry.trim())
         .filter(Boolean);
 
-      // NOTE: Safer normalization (commented out for testing baseline behavior)
-      // let urls: string[] = [];
-      // if (Array.isArray(value)) {
-      //   urls = value
-      //     .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [String(entry)]));
-      // } else if (typeof value === 'string') {
-      //   urls = value.split(',');
-      // } else {
-      //   urls = [String(value)];
-      // }
-      //
-      // return urls
-      //   .map((entry) => entry.trim())
-      //   // Ensure it's a valid URL or path and not "null", "undefined", etc.
-      //   .filter((url) =>
-      //     url &&
-      //     url !== '' &&
-      //     url !== 'null' &&
-      //     url !== 'undefined' &&
-      //     url !== '[object Object]' &&
-      //     (url.startsWith('http') || url.startsWith('/') || url.startsWith('./'))
-      //   );
+
     };
 
     // Transform products to match our interface
@@ -252,3 +272,5 @@ export async function GET(req: NextRequest) {
     }, { status: 500 });
   }
 }
+
+

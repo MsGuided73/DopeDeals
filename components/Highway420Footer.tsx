@@ -1,10 +1,13 @@
 "use client"; 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Instagram, Twitter, Facebook, Youtube } from "lucide-react";
 
 export default function Highway420Footer() {
   const [email, setEmail] = useState("");
+  const pathname = usePathname();
+  const isCheckoutFlow = pathname === "/cart" || pathname === "/checkout";
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +22,32 @@ export default function Highway420Footer() {
       alert("Something went wrong. Please try again.");
     }
   };
+
+  if (isCheckoutFlow) {
+    return (
+      <footer className="bg-white border-t border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href="/shipping" className="hover:text-gray-900">Shipping</Link>
+              <Link href="/returns" className="hover:text-gray-900">Returns</Link>
+              <Link href="/privacy" className="hover:text-gray-900">Privacy</Link>
+              <Link href="/terms-and-conditions" className="hover:text-gray-900">Terms</Link>
+              <Link href="/help" className="hover:text-gray-900">Support</Link>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-gray-400">Secure payments</span>
+              <img
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/credit-card-brands-logos-c87zqqz38n8jbptz.jpg"
+                alt="Accepted Payment Methods"
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="relative bg-black">

@@ -195,7 +195,7 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl text-gray-900 mb-4" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+          <h1 className="text-4xl text-gray-900 mb-4 font-display-twilight" style={{ letterSpacing: '-0.02em' }}>
             Higher Learning
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
