@@ -1,41 +1,29 @@
 {
+  "extends": "./tsconfig.json",
   "include": [
-    "app/**/*",
-    "shared/**/*",
+    "next-env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "shared/**/*.ts",
+    "shared/**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
+    ".next",
+    "out",
     "build",
     "dist",
-    "server/**/*",
-    "**/*.test.ts",
-    "**/server/storage.ts",
-    "**/server/supabase-storage.ts"
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/__tests__/**",
+    "**/__mocks__/**",
+    "server/**"
   ],
   "compilerOptions": {
-    "incremental": false,
     "noEmit": true,
-    "module": "ESNext",
-    "strict": true,
-    "lib": ["esnext", "dom", "dom.iterable"],
-    "jsx": "preserve",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "moduleResolution": "bundler",
-    "baseUrl": ".",
-    "types": ["node"],
-    "paths": {
-      "@/*": ["./app/*"],
-      "@shared/*": ["./shared/*"],
-      "@assets/*": ["./attached_assets/*"]
-    },
-    "target": "ES2017",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "plugins": [{ "name": "next" }]
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "target": "ES2022"
   }
 }
-
