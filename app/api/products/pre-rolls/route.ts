@@ -9,6 +9,11 @@ if (process.env.NODE_ENV === 'development') {
   config({ path: envPath });
 }
 
+/**
+ * Handles GET requests to fetch pre-roll products from Supabase
+  * @param req The incoming NextRequest object containing request parameters
+   * @returns NextResponse with pre-roll product data or error status
+    */
 export async function GET(req: NextRequest) {
   try {
     // Ensure environment variables are loaded in development
@@ -267,4 +272,5 @@ export async function GET(req: NextRequest) {
     }, { status: 500 });
   }
 }
+
 
