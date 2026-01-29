@@ -62,7 +62,9 @@ export default function CanvasArea({
     <div className="h-full flex">
       {/* Canvas */}
       <div 
-        ref={drop}
+        ref={(node) => {
+          drop(node);
+        }}
         className={`flex-1 bg-white m-4 rounded-lg shadow-sm border-2 border-dashed transition-colors ${
           isOver ? 'border-dope-orange-400 bg-dope-orange-50' : 'border-gray-200'
         }`}

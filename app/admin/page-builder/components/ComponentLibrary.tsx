@@ -253,7 +253,9 @@ function DraggableComponent({ component, onAdd }: { component: ComponentItem; on
 
   return (
     <div
-      ref={drag}
+      ref={(node) => {
+        drag(node);
+      }}
       className={`p-3 border border-gray-200 rounded-lg cursor-move hover:border-dope-orange-300 hover:bg-dope-orange-50 transition-colors ${
         isDragging ? 'opacity-50' : ''
       }`}
