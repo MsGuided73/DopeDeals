@@ -238,7 +238,7 @@ export default function AdminSettingsPage() {
           <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3>Order #{{order_number}}</h3>
             <p><strong>Date:</strong> {{order_date}}</p>
-            <p><strong>Total:</strong> ${{order_total}}</p>
+            <p><strong>Total:</strong> {{order_total}}</p>
           </div>
 
           <h3>Items Ordered:</h3>
@@ -284,7 +284,7 @@ export default function AdminSettingsPage() {
           <div style="background: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3>Your Saved Items:</h3>
             {{cart_items}}
-            <p><strong>Total: ${{cart_total}}</strong></p>
+            <p><strong>Total: {{cart_total}}</strong></p>
           </div>
 
           <div style="background: #ecfdf5; padding: 15px; border-radius: 8px; margin: 20px 0;">

@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   if (auth instanceof NextResponse) return auth;
 
   // Rate limiting
-  const userId = auth.id;
+  const userId = auth.user.id;
   const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip');
   const identifier = getRateLimitIdentifier(userId, ip || undefined);
   const rateLimit = checkRateLimit(identifier, RATE_LIMITS.delete);

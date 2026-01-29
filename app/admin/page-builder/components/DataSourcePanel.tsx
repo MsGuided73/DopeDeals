@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabaseBrowser } from '../../../lib/supabase-browser';
+import { supabaseBrowser } from '@/lib/supabase-browser';
 
 interface DataSourcePanelProps {
   selectedComponent: string | null;
@@ -50,7 +50,7 @@ export default function DataSourcePanel({ selectedComponent, onDataSourceUpdate 
   const loadTableFields = async (tableName: string) => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await supabaseBrowser
         .from(tableName)
         .select('*')
         .limit(1);
