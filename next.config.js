@@ -3,6 +3,10 @@ if (typeof require !== 'undefined') {
   require('dotenv').config({ path: 'env.local' });
 }
 
+// CI/build safety: avoid crashing when optional server-only secrets are not present.
+// Runtime requests that need these secrets should validate and fail gracefully.
+process.env.SUPABASE_SERVICE_ROLE_KEY ||= 'ci-placeholder';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,

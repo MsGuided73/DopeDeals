@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('users')
         .select('id')
         .eq('id', authUser.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('users')
         .select('role')
         .eq('id', authUser.id)
-        .single();
+        .maybeSingle();
       
       if (roleData && roleData.role) {
         return roleData.role as UserRole;
@@ -76,16 +76,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('users')
         .select('id')
         .eq('id', userId)
-        .single();
-
-      if (error || !profile) return false;
-
+        .maybeSingle();
       // Try to fetch membership info safely
       const { data: tierData } = await supabaseBrowser
         .from('users')
         .select('membership_tier_id')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
       
       if (tierData?.membership_tier_id) return true;
 
@@ -93,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('users')
         .select('membershipTierId')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       return !!tierDataCamel?.membershipTierId;
     } catch (error) {
