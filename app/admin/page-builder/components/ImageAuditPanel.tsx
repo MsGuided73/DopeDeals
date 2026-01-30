@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase-browser';
+import { supabaseBrowser } from '@/lib/supabase-browser';
 
 interface ImageAuditPanelProps {
   onImageSelect?: (imageUrl: string, productInfo: any) => void;
@@ -39,14 +39,14 @@ export default function ImageAuditPanel({ onImageSelect }: ImageAuditPanelProps)
       setLoading(true);
 
       // Get all products with their image data
-      const { data: allProducts, error } = await supabase
+      const { data: allProducts, error } = await supabaseBrowser
         .from('products')
         .select('id, name, sku, image_url, image_urls, brand_id, category_id')
         .eq('is_active', true);
 
       if (error) throw error;
 
-      const productsWithImages = allProducts?.filter(p => 
+      const productsWithImages = allProducts?.filter((p: any) =>
         p.image_url || (p.image_urls && p.image_urls.length > 0)
       ) || [];
 

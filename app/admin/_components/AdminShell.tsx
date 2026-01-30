@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useState } from 'react';
+import type { AuthenticatedUser } from '@/app/types/auth';
 import ImageUploadModal from './ImageUploadModal';
 import { ChevronDown, ChevronRight, Search, Bell, User, Settings, LogOut } from 'lucide-react';
 
@@ -44,7 +45,7 @@ const navGroups = [
   }
 ];
 
-export default function AdminShell({ children }: { children: ReactNode }) {
+export default function AdminShell({ children, user }: { children: ReactNode; user: AuthenticatedUser }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [showUpload, setShowUpload] = useState(false);

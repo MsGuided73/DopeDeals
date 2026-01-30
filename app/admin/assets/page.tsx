@@ -253,7 +253,7 @@ export default function AssetManagerPage() {
               key={asset.id}
               asset={asset}
               selected={selectedAssets.has(asset.id)}
-              onSelect={(id) => {
+              onSelect={(id: string) => {
                 const newSelected = new Set(selectedAssets);
                 if (newSelected.has(id)) {
                   newSelected.delete(id);
