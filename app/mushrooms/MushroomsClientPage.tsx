@@ -1,12 +1,10 @@
 'use client';
 
 import { Suspense } from 'react';
-import AgeVerification from '../components/AgeVerification';
-import GlobalMasthead from '../components/GlobalMasthead';
 import MushroomsPageContent from './MushroomsPageContent';
 
 export default function MushroomsClientPage() {
-  const structuredData = {
+    const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Shrooms & Stuff Collection",
@@ -66,13 +64,7 @@ export default function MushroomsClientPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
-      {/* Universal Layout Components */}
-      <GlobalMasthead />
-
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -84,6 +76,6 @@ export default function MushroomsClientPage() {
       }>
         <MushroomsPageContent />
       </Suspense>
-    </div>
+    </>
   );
 }

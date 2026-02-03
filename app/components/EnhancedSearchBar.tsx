@@ -27,7 +27,7 @@ const placeholderWords = [
   'THCA Vapes'
 ]
 
-export default function EnhancedSearchBar() {
+export default function EnhancedSearchBar({ compact = false }: { compact?: boolean }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [displayText, setDisplayText] = useState(placeholderWords[0])
@@ -304,8 +304,8 @@ export default function EnhancedSearchBar() {
   const currentPlaceholder = `Search Highway 420 for ${displayText}`
 
   return (
-    <div className="relative max-w-2xl w-full mx-auto mt-2 mb-6">
-      <form onSubmit={handleSearch} className="flex bg-white rounded-2xl shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl gradient-3d">
+    <div className={`relative w-full mx-auto ${compact ? 'm-0' : 'max-w-2xl mt-2 mb-6'}`}>
+      <form onSubmit={handleSearch} className={`flex bg-white shadow-lg relative overflow-hidden search-bar-glow transition-all duration-300 hover:shadow-xl focus-within:shadow-xl gradient-3d ${compact ? 'rounded-lg' : 'rounded-2xl'}`}>
         {/* Search Input */}
         <div className="flex-1 relative">
           <input
@@ -314,8 +314,8 @@ export default function EnhancedSearchBar() {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
-            placeholder={currentPlaceholder}
-            className="w-full px-6 py-4 h-9 text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold leading-tight"
+            placeholder={compact ? 'Search...' : currentPlaceholder}
+            className={`w-full text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 font-semibold leading-tight ${compact ? 'px-3 py-2 text-sm h-9' : 'px-6 py-4 h-9'}`}
             aria-label="Search Highway 420 products"
             role="searchbox"
             autoComplete="off"
@@ -399,9 +399,9 @@ export default function EnhancedSearchBar() {
             handleSearch();
           }}
           aria-label="Search"
-          className="ml-1 mr-1 rounded-full w-6 h-6 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl hover:bg-white/30 transition-all duration-300 flex items-center justify-center group"
+          className={`flex items-center justify-center group ${compact ? 'mr-1 px-2' : 'ml-1 mr-1 rounded-full w-6 h-6 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl hover:bg-white/30 transition-all duration-300'}`}
         >
-          <Search className="w-5 h-5 text-green-700 drop-shadow-lg group-hover:scale-110 transition-transform duration-200" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
+          <Search className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-green-700 drop-shadow-lg group-hover:scale-110 transition-transform duration-200`} style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }} />
         </button>
       </form>
     </div>

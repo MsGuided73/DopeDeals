@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { addToCart } from '../../lib/cart-utils';
-import type { ThcaPnvProduct } from '../ThcaPnvPageContent';
+import type { ThcaPnvProduct } from '../VapesPageContent';
 
 interface ThcaPnvProductGridProps {
   products: ThcaPnvProduct[];

@@ -92,16 +92,16 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
       <GlobalMasthead />
 
       {/* Navigation Breadcrumb */}
-      <div className="bg-[#f8f9f8] border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest">
-          <a href="/">Home</a> <ChevronRight size={12} /> 
-          <a href="/products">Products</a> <ChevronRight size={12} /> 
-          <span className="text-black">{product.name}</span>
+      <div className="bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600 pt-4">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-2 text-xs font-bold text-white/80 uppercase tracking-widest">
+          <a href="/" className="hover:text-white transition-colors">Home</a> <ChevronRight size={12} /> 
+          <a href="/thca-flower" className="hover:text-white transition-colors">THCA Flower</a> <ChevronRight size={12} /> 
+          <span className="text-white font-black">{product.name}</span>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 py-12 lg:py-20">
-        <div className="grid gap-16 lg:grid-cols-2">
+      <main className="max-w-7xl mx-auto px-4 py-8 md:py-12 lg:py-16">
+        <div className="grid gap-8 md:gap-12 lg:gap-16 lg:grid-cols-2">
           
           {/* Left: Product Gallery */}
           <div>
@@ -117,19 +117,24 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
           </div>
 
           {/* Right: Product Content */}
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-medium text-gray-900">
-                Premium | {product.name} | {product.size}
+          <div className="space-y-6 md:space-y-8">
+            <div className="space-y-3">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-gray-900 leading-tight">
+                {product.name}
               </h1>
-              <div className="text-2xl font-bold text-gray-900">
-                ${Number(product.sale_price || product.price).toFixed(2)}
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 font-bold text-sm rounded-full">
+                  Premium {product.size}
+                </span>
+                <div className="flex items-center gap-2">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+                  </div>
+                  <span className="text-xs font-bold text-gray-500">(74 reviews)</span>
                 </div>
-                <span className="text-xs font-bold text-gray-400">(74 customer reviews)</span>
+              </div>
+              <div className="text-3xl md:text-4xl font-black text-gray-900">
+                ${Number(product.sale_price || product.price).toFixed(2)}
               </div>
             </div>
 
@@ -205,7 +210,7 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
                 </div>
                 <button 
                   onClick={() => addToCart(product.id, quantity)}
-                  className="flex-1 bg-[#3d4c3d] hover:bg-[#2d3a2d] text-white h-12 rounded-lg font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-black/10"
+                  className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white h-12 md:h-14 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-500/30 hover:scale-[1.02]"
                 >
                   <ShoppingCart size={18} /> Add to Cart
                 </button>

@@ -229,18 +229,6 @@ export default function VapesPageContent() {
   return (
     <ErrorBoundary>
       <div className="relative">
-      <div className="hidden xl:flex fixed left-6 top-1/2 -translate-y-1/2 z-40">
-        <div className="bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-800/70 shadow-lg p-4">
-          <Image
-            src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
-            alt="Highway 420"
-            width={180}
-            height={180}
-            className="h-auto w-[180px]"
-            priority={false}
-          />
-        </div>
-      </div>
       {/* Breadcrumb */}
       <ThcaPnvBreadcrumb />
 

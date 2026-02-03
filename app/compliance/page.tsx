@@ -216,9 +216,14 @@ export default function CompliancePage() {
                   If you have questions about our compliance practices or need clarification on any regulations, our compliance team is here to help.
                 </p>
                 <div className="space-y-2">
-                  <p><strong>Compliance Email:</strong> compliance@dopecity.com</p>
-                  <p><strong>Legal Department:</strong> legal@dopecity.com</p>
-                  <p><strong>Phone:</strong> 1-800-DOPE-CITY</p>
+                  <p><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
+                  <p><strong>Phone:</strong> (626) 656-6287</p>
+                  <p className="mt-4"><strong>Business Address:</strong></p>
+                  <p className="text-gray-300">
+                    BMB Wholesale, Inc.<br />
+                    10 Manor Pkwy<br />
+                    Salem, NH 03079
+                  </p>
                 </div>
               </div>
               <div>

@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu } from "lucide-react";
+import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu, Search } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import { useNavigation } from "../contexts/NavigationContext";
 import EnhancedSearchBar from "./EnhancedSearchBar";
@@ -13,6 +13,7 @@ const PROMO_TEXT = "🚀 FREE SHIPPING ON ORDERS OVER $75 • 🔥 HOT DEALS DAI
 
 export default function GlobalMasthead() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
@@ -148,27 +149,76 @@ export default function GlobalMasthead() {
             </div>
           </div>
 
-          {/* Mobile: Logo + Search Bar Row */}
-          <div className="md:hidden flex items-center px-4 py-2 relative" style={{ height: "50px" }}>
-            {/* Mobile Logo - slightly reduced but allowed to span visual height of both rows */}
-            <div className="flex items-center z-10" style={{ height: "70px" }}>
-              <Link href="/" className="flex items-center h-full">
-                <Image
-                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
-                  alt="HIGHWAY 420 Logo"
-                  width={200}
-                  height={70}
-                  className="object-contain h-full w-auto max-w-[80vw]"
-                  style={{ display: "block" }}
-                  priority
-                />
-              </Link>
-            </div>
+          {/* Mobile Header: Logo + Icons */}
+          <div className="md:hidden relative flex items-center justify-between px-4 py-1 bg-black h-[70px] z-50">
+            {isMobileSearchOpen ? (
+              <div className="w-full h-full flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="flex-grow">
+                  <EnhancedSearchBar compact />
+                </div>
+                <button 
+                  onClick={() => setIsMobileSearchOpen(false)}
+                  className="p-2 text-white hover:text-red-400 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Left: Logo */}
+                <Link href="/" className="flex-shrink-0 flex items-center h-full">
+                  <Image
+                    src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+                    alt="H420"
+                    width={180}
+                    height={60}
+                    className="object-contain h-full w-auto py-1"
+                    priority
+                  />
+                </Link>
 
-            {/* Search Bar - Center, takes remaining space */}
-            <div className="flex-1 mx-3">
-              <EnhancedSearchBar />
-            </div>
+                {/* Right: 4 Icons (Search, User, Cart, Menu) */}
+                <div className="flex items-center gap-3 text-white">
+                  {/* Search Toggle */}
+                  <button
+                    onClick={() => setIsMobileSearchOpen(true)}
+                    className="p-1 hover:text-yellow-400 transition-colors"
+                    aria-label="Search"
+                  >
+                    <Search className="w-5 h-5" strokeWidth={2.5} />
+                  </button>
+
+                  <button
+                    onClick={() => setShowProfileModal(true)}
+                    className="p-1 hover:text-yellow-400 transition-colors"
+                    aria-label="Profile"
+                  >
+                    <User className="w-5 h-5" strokeWidth={2.5} />
+                  </button>
+
+                  <Link
+                    href="/cart"
+                    className="p-1 hover:text-yellow-400 transition-colors relative"
+                    aria-label="Cart"
+                  >
+                    <ShoppingCart className="w-5 h-5" strokeWidth={2.5} />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 bg-yellow-400 text-black text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center border border-black leading-none">
+                        {cartCount > 99 ? "99+" : cartCount}
+                      </span>
+                    )}
+                  </Link>
+                  
+                  <button
+                    onClick={() => setIsMenuOpen((v) => !v)}
+                    className="p-1 hover:text-yellow-400 transition-colors"
+                    aria-label="Menu"
+                  >
+                    <Menu className="w-5 h-5" strokeWidth={2.5} />
+                  </button>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Bottom Row: Navigation Links + User Icons */}
@@ -271,18 +321,11 @@ export default function GlobalMasthead() {
 
             {/* User Icons - Right side, visually anchored to bottom of the 2nd row and inset from edge */}
             <div
-              className="absolute right-12 flex items-end gap-4 text-white"
+              className="hidden md:flex absolute right-12 items-end gap-4 text-white"
               style={{ bottom: "-30px" }}
             >
 
-              {/* Mobile Hamburger */}
-              <button
-                onClick={() => setIsMenuOpen((v) => !v)}
-                className="md:hidden p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
-                title="Menu"
-              >
-                <Menu className="w-8 h-8" strokeWidth={3} />
-              </button>
+
 
               {/* Profile */}
               <button

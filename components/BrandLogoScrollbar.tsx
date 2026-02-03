@@ -1,18 +1,12 @@
 "use client";
 
-import { useMemo, useRef } from "react";
-import {
-  motion,
-  type MotionValue,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import Link from "next/link";
 
 interface BrandLogo {
   name: string;
   logo: string;
   alt: string;
+  featured?: boolean;
 }
 
 const brandLogos: BrandLogo[] = [
@@ -20,6 +14,7 @@ const brandLogos: BrandLogo[] = [
     name: "Cookies",
     logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Cookies%20Logo.webp",
     alt: "Cookies Brand Logo",
+    featured: true,
   },
   {
     name: "RooR",
@@ -30,6 +25,7 @@ const brandLogos: BrandLogo[] = [
     name: "Puffco",
     logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/puffco_logo.webp",
     alt: "Puffco Brand Logo",
+    featured: true,
   },
   {
     name: "Crave",
@@ -50,6 +46,7 @@ const brandLogos: BrandLogo[] = [
     name: "Hidden Hills",
     logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Hidden-Hills_logo.webp",
     alt: "Hidden Hills Brand Logo",
+    featured: true,
   },
   {
     name: "Doodlez",
@@ -73,102 +70,81 @@ const brandLogos: BrandLogo[] = [
   },
 ];
 
-const springEase = [0.16, 1, 0.3, 1];
-
-function BrandLogoTile({
-  brand,
-  direction,
-  scrollYProgress,
-  reduceMotion,
-}: {
-  brand: BrandLogo;
-  direction: -1 | 1;
-  scrollYProgress: MotionValue<number>;
-  reduceMotion: boolean;
-}) {
-  const xOffset = useTransform(scrollYProgress, [0, 1], [direction * 180, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-  const scale = useTransform(scrollYProgress, [0, 0.7], [0.94, 1]);
-
-  return (
-    <motion.div
-      className="relative flex h-full items-center justify-center rounded-xl border border-black/10 bg-white/70 p-6 shadow-sm backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md"
-      style={
-        reduceMotion
-          ? undefined
-          : {
-              x: xOffset,
-              opacity,
-              scale,
-            }
-      }
-      transition={{ duration: 0.6, ease: springEase }}
-    >
-      <img
-        src={brand.logo}
-        alt={brand.alt}
-        className="max-h-20 w-full object-contain md:max-h-24"
-        loading="lazy"
-        style={{
-          filter: "brightness(1.4) contrast(1.25) saturate(1.1)",
-          WebkitFilter: "brightness(1.4) contrast(1.25) saturate(1.1)",
-        }}
-        onError={(event) => {
-          const target = event.target as HTMLImageElement;
-          target.style.display = "none";
-        }}
-      />
-    </motion.div>
-  );
-}
-
 export default function BrandLogoScrollbar() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "center center"],
-  });
-
-  const logoDirections = useMemo(() => {
-    const midpoint = Math.ceil(brandLogos.length / 2);
-    return brandLogos.map((_, index) => (index < midpoint ? -1 : 1));
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative w-full overflow-hidden bg-white py-12"
-    >
-      <div className="absolute inset-0 bg-white" />
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-10 px-4">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-5xl text-black font-display-twilight">TRUSTED BRANDS</h1>
-          <div className="mx-auto mt-4 h-px w-32 bg-gradient-to-r from-transparent via-[#fafcfa] to-transparent opacity-80" />
-          <p className="mt-3 text-sm text-gray-600 md:text-base">
-            Scroll down to bring our brand partners together.
+    <section className="py-12 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Section Title */}
+        <div className="text-center mb-10">
+          <h2 className="text-4xl md:text-5xl font-black text-black font-display-twilight mb-2">
+            TRUSTED BRANDS
+          </h2>
+          <p className="text-gray-600 text-lg">
+            Premium products from industry-leading manufacturers
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+        {/* Staggered Masonry Grid */}
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
           {brandLogos.map((brand, index) => (
-            <BrandLogoTile
+            <div
               key={brand.name}
-              brand={brand}
-              direction={logoDirections[index]}
-              scrollYProgress={scrollYProgress}
-              reduceMotion={!!reduceMotion}
-            />
+              className={`
+                group relative flex items-center justify-center p-4 md:p-6 
+                rounded-xl transition-all duration-500 cursor-pointer
+                bg-transparent border-none
+                ${brand.featured ? 'col-span-1 md:col-span-2 row-span-1 md:row-span-2' : ''}
+                hover:shadow-2xl hover:shadow-green-500/20
+              `}
+              style={{
+                // Create staggered effect with varying heights
+                minHeight: brand.featured ? '180px' : '100px',
+              }}
+            >
+              {/* Logo with grayscale to color on hover */}
+              <img
+                src={brand.logo}
+                alt={brand.alt}
+                className={`
+                  object-contain transition-all duration-500
+                  filter grayscale opacity-70
+                  group-hover:grayscale-0 group-hover:opacity-100
+                  group-hover:scale-110
+                  ${brand.featured ? 'max-h-28 md:max-h-36' : 'max-h-16 md:max-h-20'}
+                  w-full
+                `}
+                loading="lazy"
+                onError={(event) => {
+                  const target = event.target as HTMLImageElement;
+                  target.style.display = "none";
+                }}
+              />
+
+              {/* Glow effect on hover - positioned behind */}
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-emerald-300/10 to-transparent rounded-xl" />
+              </div>
+
+              {/* Brand name tooltip on hover */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
+                <span className="text-xs font-bold text-gray-700 bg-white/90 px-2 py-1 rounded-full shadow-sm whitespace-nowrap">
+                  {brand.name}
+                </span>
+              </div>
+            </div>
           ))}
         </div>
 
-        <div className="text-center">
-          <a
+        {/* Shop by Brand CTA */}
+        <div className="text-center mt-10">
+          <Link
             href="/brands"
-            className="inline-flex items-center justify-center rounded-lg border-2 border-green-600 px-6 py-3 text-base font-bold text-green-600 transition-all duration-300 hover:scale-105 hover:bg-green-600 hover:text-white hover:shadow-lg hover:shadow-green-600/25"
+            className="inline-block px-8 py-3 bg-black text-white font-bold rounded-full
+                       hover:bg-green-600 hover:scale-105 transition-all duration-300
+                       hover:shadow-lg hover:shadow-green-500/30"
           >
             SHOP BY BRAND →
-          </a>
+          </Link>
         </div>
       </div>
     </section>

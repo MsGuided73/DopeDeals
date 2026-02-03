@@ -14,15 +14,8 @@ export default function ThcaPnvBreadcrumb() {
             Home
           </Link>
           <span className="text-gray-400">/</span>
-          <Link
-            href="/products"
-            className="text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            Products
-          </Link>
-          <span className="text-gray-400">/</span>
           <span className="text-gray-900 font-medium">
-            THCA Prerolls & Vapes
+            Vapes & Concentrates
           </span>
         </nav>
       </div>

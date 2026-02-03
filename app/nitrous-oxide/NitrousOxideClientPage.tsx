@@ -1,10 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import AgeVerification from '../components/AgeVerification';
 import NitrousOxidePageContent from './NitrousOxidePageContent';
-import PrismaticBurst from '../components/PrismaticBurst';
-import GlobalMasthead from '../components/GlobalMasthead';
 
 export default function NitrousOxideClientPage() {
   const structuredData = {
@@ -46,24 +43,11 @@ export default function NitrousOxideClientPage() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <PrismaticBurst
-        intensity={4}
-        speed={0.8}
-        colors={['#ff007a', '#4d3dff', '#ffffff']}
-      />
-
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
-      {/* Universal Layout Components */}
-      <GlobalMasthead />
-
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-
       <Suspense fallback={
         <div className="min-h-screen flex items-center justify-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
@@ -71,6 +55,6 @@ export default function NitrousOxideClientPage() {
       }>
         <NitrousOxidePageContent />
       </Suspense>
-    </div>
+    </>
   );
 }

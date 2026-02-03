@@ -131,10 +131,10 @@ export default function ProductDetailsPage({
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
           <p className="text-gray-600 mb-8">{error || 'The requested product could not be found.'}</p>
           <a 
-            href="/products" 
+            href="/" 
             className="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
           >
-            ← Back to Products
+            ← Back to Shop
           </a>
         </div>
       </div>

@@ -32,6 +32,7 @@ interface Product {
   materials?: string[];
   brand_id?: string;
   category_id?: string;
+  category_slug?: string;
   benefits?: string[];
   ingredients?: string[];
   suggested_use?: string;
@@ -63,6 +64,37 @@ const FAQ_ITEMS = [
     answer: "Due to the nature of our products, we can only accept returns on unopened and unused items within 14 days of delivery. If your product arrived damaged, please contact our support team immediately."
   }
 ];
+
+// Helper to map category slugs to collection pages
+const getCategoryBreadcrumb = (categorySlug?: string): { name: string; href: string } => {
+  const categoryMap: Record<string, { name: string; href: string }> = {
+    'vapes': { name: 'Vapes', href: '/vapes' },
+    'pre-rolls': { name: 'Pre-Rolls', href: '/pre-rolls' },
+    'mushrooms': { name: 'Mushrooms', href: '/mushrooms' },
+    'edibles': { name: 'Edibles', href: '/edibles' },
+    'cbd-tinctures': { name: 'CBD & Tinctures', href: '/cbd-tinctures' },
+    'nitrous-oxide': { name: 'Nitrous Oxide', href: '/nitrous-oxide' },
+    'thca-flower': { name: 'THCA Flower', href: '/thca-flower' },
+    'accessories': { name: 'Accessories', href: '/accessories' },
+    'flower': { name: 'Flower', href: '/flower' },
+    'concentrates': { name: 'Vapes', href: '/vapes' },
+  };
+  
+  if (categorySlug && categoryMap[categorySlug]) {
+    return categoryMap[categorySlug];
+  }
+  
+  // Fallback - try to match partial slugs
+  if (categorySlug) {
+    for (const [key, value] of Object.entries(categoryMap)) {
+      if (categorySlug.toLowerCase().includes(key) || key.includes(categorySlug.toLowerCase())) {
+        return value;
+      }
+    }
+  }
+  
+  return { name: 'Shop', href: '/' };
+};
 
 export default function SimpleProductPage({ productId, isConsumable = false }: SimpleProductPageProps) {
   const [product, setProduct] = useState<Product | null>(null);
@@ -182,21 +214,26 @@ export default function SimpleProductPage({ productId, isConsumable = false }: S
     <div className="min-h-screen bg-white font-inter">
       <GlobalMasthead />
 
-      {/* Breadcrumb */}
-      <div className="bg-gray-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <nav className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gray-500">
-            <a href="/" className="hover:text-black transition-colors">Home</a>
+      {/* Breadcrumb with Gradient */}
+      <div className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600 pt-4">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-white/80">
+            <a href="/" className="hover:text-white transition-colors">Home</a>
             <ChevronRight size={14} />
-            <a href="/products" className="hover:text-black transition-colors">Products</a>
+            {(() => {
+              const category = getCategoryBreadcrumb(product.category_slug);
+              return (
+                <a href={category.href} className="hover:text-white transition-colors">{category.name}</a>
+              );
+            })()}
             <ChevronRight size={14} />
-            <span className="text-black truncate">{product.name}</span>
+            <span className="text-white font-black truncate">{product.name}</span>
           </nav>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid gap-16 lg:grid-cols-2 mb-20">
+      <main className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        <div className="grid gap-8 md:gap-12 lg:gap-16 lg:grid-cols-2 mb-16">
           
           {/* Left: Product Images & Variants */}
           <div className="space-y-6">
@@ -272,12 +309,12 @@ export default function SimpleProductPage({ productId, isConsumable = false }: S
                 <span className="text-sm font-bold text-gray-500">(241 Reviews)</span>
               </div>
               
-              <div className="flex items-baseline gap-4">
-                <span className="text-4xl font-black text-gray-900">
+              <div className="flex items-baseline gap-4 flex-wrap">
+                <span className="text-3xl md:text-4xl font-black text-gray-900">
                   ${Number(product.sale_price || product.price).toFixed(2)}
                 </span>
                 {product.sale_price && (
-                  <span className="text-2xl text-gray-400 line-through font-bold">
+                  <span className="text-xl md:text-2xl text-gray-400 line-through font-bold">
                     ${Number(product.price).toFixed(2)}
                   </span>
                 )}
@@ -324,7 +361,7 @@ export default function SimpleProductPage({ productId, isConsumable = false }: S
               <button
                 onClick={handleAddToCart}
                 disabled={!inStock || isAddingToCart}
-                className="w-full flex items-center justify-center gap-4 bg-black text-white py-5 px-8 rounded-2xl font-black text-xl uppercase tracking-widest hover:bg-gray-800 disabled:bg-gray-300 transition-all hover:scale-[1.02] shadow-xl"
+                className="w-full flex items-center justify-center gap-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 md:py-5 px-8 rounded-2xl font-black text-lg md:text-xl uppercase tracking-widest disabled:bg-gray-300 disabled:from-gray-300 disabled:to-gray-300 transition-all hover:scale-[1.02] shadow-xl shadow-green-500/30"
               >
                 {isAddingToCart ? (
                   <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin" />

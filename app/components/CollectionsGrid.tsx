@@ -35,7 +35,7 @@ export default function CollectionsGrid() {
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Edibles_non-mush.png" 
     },
     { 
-      name: "CBD & More", 
+      name: "CBD & MORE", 
       route: "/cbd-tinctures", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Close%20up%20and%20Right.png" 
     },
@@ -52,6 +52,9 @@ export default function CollectionsGrid() {
   return (
     // Lower z-index so dropdown menus can appear on top
     <div className="relative w-full px-0 pb-4" style={{ marginTop: '15px' }}>
+      {/* Section Title */}
+      {/* Section Title removed to avoid duplication with Homepage title - FORCE UPDATE */}
+
       {/* Mobile: Stack vertically */}
       <div className="block lg:hidden space-y-2">
         {/* Large hero image first on mobile */}
@@ -68,8 +71,8 @@ export default function CollectionsGrid() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-transparent to-transparent group-hover:from-black/50 group-hover:to-transparent transition-all duration-300" />
         </a>
 
-        {/* Categories in 2-column grid on mobile */}
-        <div className="grid grid-cols-2 gap-2">
+        {/* Categories in 3-column grid on mobile */}
+        <div className="grid grid-cols-3 gap-2">
           {categories.map((cat, i) => (
             <a
               key={i}

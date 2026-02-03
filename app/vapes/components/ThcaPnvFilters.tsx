@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import type { ThcaPnvProduct } from '../ThcaPnvPageContent';
+import type { ThcaPnvProduct } from '../VapesPageContent';
 
 interface ThcaPnvFiltersProps {
   filters: {
@@ -24,9 +24,12 @@ export default function ThcaPnvFilters({ filters, setFilters, products }: ThcaPn
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Extract unique values from products
-  const brands = Array.from(new Set(products.map(p => p.brand).filter(Boolean))).sort();
-  const types = Array.from(new Set(products.map(p => p.type).filter(Boolean))).sort();
-  const sizes = Array.from(new Set(products.map(p => p.size).filter(Boolean))).sort();
+  const brands = Array.from(new Set(products.map(p => p.brand).filter((b): b is string => Boolean(b)))).sort();
+  // Filter out preroll types - they have their own page
+  const types = Array.from(new Set(products.map(p => p.type).filter((t): t is string => Boolean(t))))
+    .filter(type => !type.toLowerCase().includes('preroll') && !type.toLowerCase().includes('pre-roll'))
+    .sort();
+  const sizes = Array.from(new Set(products.map(p => p.size).filter((s): s is string => Boolean(s)))).sort();
 
   const handlePriceRangeChange = (min: number, max: number) => {
     setFilters({ ...filters, priceRange: [min, max] as [number, number] });
