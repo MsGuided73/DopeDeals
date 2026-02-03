@@ -8,30 +8,12 @@ export default function ThcaPnvHero() {
   return (
     <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50 text-black overflow-hidden min-h-[300px] md:min-h-[250px] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          {/* Left Column - Header */}
-          <div className="flex items-center space-x-4">
+        <div className="grid lg:grid-cols-1 gap-8 items-center">
+          {/* Header */}
+          <div className="flex items-center justify-center lg:justify-start space-x-4">
             <h1 className="font-display-twilight text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider text-black leading-tight font-bold">
               THCA VAPES & CONCENTRATES
             </h1>
-          </div>
-
-          {/* Right Column - Stats */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="flex items-center space-x-8 text-base">
-              <div className="text-center">
-                <div className="text-xl font-bold text-green-600">200+</div>
-                <div className="text-sm text-gray-600 font-medium">Products</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-green-600">25+</div>
-                <div className="text-sm text-gray-600 font-medium">Brands</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-green-600">FREE</div>
-                <div className="text-sm text-gray-600 font-medium">Shipping $50+</div>
-              </div>
-            </div>
           </div>
         </div>
 

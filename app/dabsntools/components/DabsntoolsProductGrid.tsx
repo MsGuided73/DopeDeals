@@ -255,7 +255,7 @@ export default function DabsntoolsProductGrid({ products, viewMode }: Dabsntools
                 href={`/product/${product.id}`}
                 className="flex-1 px-3 py-2 bg-transparent border-2 border-dope-orange-600 text-dope-orange-600 hover:bg-dope-orange-600 hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
               >
-                Quick View
+                View Product
               </Link>
               <button
                 onClick={async () => {

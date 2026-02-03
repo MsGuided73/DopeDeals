@@ -188,7 +188,7 @@ export default function BongsProductGrid({ products, viewMode }: BongsProductGri
                   href={`/product/${product.id}`}
                   className="px-4 py-2 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                 >
-                  Quick View
+                  View Product
                 </Link>
                 <button className="px-4 py-2 bg-dope-orange-500 hover:bg-dope-orange-600 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
