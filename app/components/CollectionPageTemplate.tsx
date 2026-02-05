@@ -34,6 +34,23 @@ interface CollectionPageTemplateProps {
   breadcrumbName?: string;
 }
 
+/**
+ * Render a product collection page with filtering, sorting, and a responsive product grid.
+ *
+ * Renders a hero section, breadcrumb, sidebar filters (price, brands, quick filters), sort controls,
+ * and a products grid that supports featured and sale badges, stock indication, and add-to-cart actions.
+ *
+ * @param title - Page title displayed in the hero and breadcrumb.
+ * @param subtitle - Optional subtitle shown beneath the hero title.
+ * @param apiEndpoint - URL used to fetch product data for the collection.
+ * @param gradientFrom - Tailwind gradient "from" class for the hero background (default: 'from-green-400').
+ * @param gradientVia - Tailwind gradient "via" class for the hero background (default: 'via-emerald-500').
+ * @param gradientTo - Tailwind gradient "to" class for the hero background (default: 'to-teal-600').
+ * @param icon - Emoji or short string shown alongside the title in the hero (default: '🌿').
+ * @param emptyMessage - Message displayed when the collection has no products (default: 'Products coming soon!').
+ * @param breadcrumbName - Optional override for the breadcrumb label; falls back to `title` when absent.
+ * @returns The JSX element for the collection page UI.
+ */
 export default function CollectionPageTemplate({
   title,
   subtitle,

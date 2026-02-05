@@ -13,6 +13,18 @@ interface PipesProductGridProps {
   viewMode: 'grid' | 'list' | 'sidebar';
 }
 
+/**
+ * Render a responsive product listing for pipes supporting grid, list, and sidebar layouts.
+ *
+ * Renders an empty-state message when no products are provided. In "list" mode it displays
+ * detailed vertical product rows; in "sidebar" mode it renders a two-column sidebar-style card grid
+ * using UniversalProductCard; otherwise it displays a responsive product grid. Manages an internal
+ * set of favorite product IDs and wires favorite toggles and Add to Cart actions for each product.
+ *
+ * @param products - Array of products to display
+ * @param viewMode - Layout mode: "grid", "list", or "sidebar"
+ * @returns The rendered React element containing the product listing
+ */
 export default function PipesProductGrid({ products, viewMode }: PipesProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 

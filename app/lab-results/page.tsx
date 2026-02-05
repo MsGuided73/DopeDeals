@@ -17,6 +17,14 @@ interface COAFile {
   created_at: string;
 }
 
+/**
+ * Render the lab results page displaying searchable Certificates of Analysis (COAs) grouped by brand and category.
+ *
+ * Fetches COA files from `/api/coa-files` whenever the search term changes, displays a loading state and empty-state UI,
+ * formats report dates, groups results by brand and category (with sensible defaults), and provides actions to view or download each COA PDF.
+ *
+ * @returns The React element for the lab results page UI.
+ */
 export default function LabResultsPage() {
   const [coaFiles, setCoaFiles] = useState<COAFile[]>([]);
   const [loading, setLoading] = useState(true);

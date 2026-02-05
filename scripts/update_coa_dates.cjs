@@ -11,6 +11,10 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+/**
+ * Update the `coa_date` field in `compliance_info` to 2025-02-06T12:00:00Z for products whose `brand_name` contains "Truemoola".
+ *
+ * Fetches matching rows from the `main_site_products` table (selecting `id`, `name`, and `compliance_info`) and updates each row's `compliance_info.coa_date`. Logs overall progress and reports fetch or per-product update errors. */
 async function updateTruemoolaDates() {
   console.log('Fetching Truemoola products...');
   

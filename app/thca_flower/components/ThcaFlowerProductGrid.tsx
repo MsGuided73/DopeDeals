@@ -12,6 +12,13 @@ interface ThcaFlowerProductGridProps {
   viewMode: 'grid' | 'list';
 }
 
+/**
+ * Render a responsive grid or list of THCA flower product cards with favorite toggles and add-to-cart actions.
+ *
+ * @param products - Array of THCA flower products to display.
+ * @param viewMode - Layout mode: `'grid'` renders a responsive card grid, `'list'` renders a full-width vertical list.
+ * @returns The JSX element containing the product listing or an empty-state message when no products are provided.
+ */
 export default function ThcaFlowerProductGrid({ products, viewMode }: ThcaFlowerProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 

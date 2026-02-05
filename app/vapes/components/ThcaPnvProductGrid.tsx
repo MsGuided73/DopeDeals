@@ -11,6 +11,15 @@ interface ThcaPnvProductGridProps {
   viewMode: 'grid' | 'list';
 }
 
+/**
+ * Render a responsive product listing for THCA products, showing either a grid or a detailed list with favorite toggles and add-to-cart actions.
+ *
+ * The component maintains local favorite state, displays an empty-state message when no products are provided, and uses product fields (image_url, isNew, isSale, price/our_price/sale_price, inStock, type, size, brand, description) to drive badges, pricing, stock indicators, and fallback content. Clicking "Add to Cart" attempts to add one unit via the imported addToCart helper only when the product is in stock.
+ *
+ * @param products - Array of THCA products to render
+ * @param viewMode - Display mode: `'grid'` for a responsive grid (default) or `'list'` for a vertical detailed list
+ * @returns The component's rendered JSX element representing the products in the selected view
+ */
 export default function ThcaPnvProductGrid({ products, viewMode }: ThcaPnvProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 

@@ -10,6 +10,16 @@ interface BongsProductGridProps {
   viewMode: 'grid' | 'list';
 }
 
+/**
+ * Render a collection of bong products either as a grid or a list with per-item actions and favorite toggling.
+ *
+ * The component maintains local favorite state and exposes per-product controls (view, add to cart, toggle favorite),
+ * image fallbacks, and conditional UI for badges, original price, and stock status.
+ *
+ * @param products - The array of products to display.
+ * @param viewMode - Layout mode to use: `"grid"` or `"list"`.
+ * @returns The rendered React element containing the products in the selected layout.
+ */
 export default function BongsProductGrid({ products, viewMode }: BongsProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 

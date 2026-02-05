@@ -65,6 +65,13 @@ const MetalDivider = () => (
    <hr className="border-gray-200 my-6" />
 );
 
+/**
+ * Renders a product details page for a given product id, including images, pricing, stock, specifications, and purchase controls.
+ *
+ * @param productId - The ID of the product to display.
+ * @param showRecommendations - Whether to display recommendation UI (defaults to `true`).
+ * @returns A JSX element containing the full product details view.
+ */
 export default function ProductDetailsPage({ 
   productId, 
   showRecommendations = true 

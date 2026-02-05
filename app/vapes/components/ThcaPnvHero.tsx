@@ -2,6 +2,11 @@
 
 import { useState } from 'react';
 
+/**
+ * Renders the THCA Vapes & Concentrates hero section including a description and three category buttons that toggle which category is active.
+ *
+ * @returns The JSX element for the hero section. Clicking a category button updates the component's active category and updates the button styles to reflect the selection.
+ */
 export default function ThcaPnvHero() {
   const [activeCategory, setActiveCategory] = useState('all-thca');
 

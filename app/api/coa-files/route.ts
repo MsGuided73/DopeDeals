@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { STATIC_COA_DATA } from '../../../lib/coa-data';
 
+/**
+ * Aggregate and return Certificate of Analysis (COA) file records from static data and Supabase sources, optionally filtered by a search query.
+ *
+ * This endpoint reads Supabase credentials from NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY, queries structured lab_certificates and main_site_products for COA references, merges results with STATIC_COA_DATA, filters by the `search` query parameter when present, removes duplicate entries by file URL, and returns the combined list with CORS headers set.
+ *
+ * @returns A JSON object with:
+ *  - `coaFiles`: an array of COA records (each includes fields like `id`, `product_name`, `product_sku`, `brand_name`, `category_name`, `lab_name`, `test_date`, `file_url`, `file_name`, `created_at`)
+ *  - `total`: the number of unique COA records returned
+ *  - `message`: a human-readable status message
+ * 
+ * If Supabase credentials are not configured or an internal error occurs, the function returns a 500 response with an `error` and `details` field.
+ */
 export async function GET(req: NextRequest) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

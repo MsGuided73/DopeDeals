@@ -11,6 +11,15 @@ interface DabsntoolsProductGridProps {
   viewMode: 'grid' | 'list';
 }
 
+/**
+ * Renders a responsive product listing in either grid or list layout with product actions.
+ *
+ * Maintains an internal set of favorite product IDs and provides a toggle action; supports viewing details and adding in-stock items to the cart. When `products` is empty, renders a centered empty-state message.
+ *
+ * @param products - Array of products to display.
+ * @param viewMode - Layout mode: `'grid'` or `'list'`.
+ * @returns The rendered React element containing the product list or grid.
+ */
 export default function DabsntoolsProductGrid({ products, viewMode }: DabsntoolsProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 

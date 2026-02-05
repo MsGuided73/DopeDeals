@@ -1,4 +1,3 @@
-
 const { createClient } = require('@supabase/supabase-js');
 const dotenv = require('dotenv');
 const path = require('path');
@@ -16,6 +15,11 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+/**
+ * Retrieve up to five products whose name contains "Truemoola" and log each product's ingredients, specs, compliance_info, and category details to the console.
+ *
+ * Queries the products table with a case-insensitive name match, fetches categories to resolve category names and slugs, and prints a readable summary for each found product. If a fetch error occurs or no products are found, logs an appropriate message and exits early.
+ */
 async function checkProductIngredients() {
   console.log('Searching for Truemoola products...');
   

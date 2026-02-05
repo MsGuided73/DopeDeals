@@ -11,6 +11,14 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+/**
+ * Prepare SQL for creating the user_behavior table and its associated indexes, then log a placeholder message.
+ *
+ * Constructs a multi-statement SQL string containing a CREATE TABLE IF NOT EXISTS for `user_behavior`
+ * (with columns for id, user_id, product_id, action_type, session_id, metadata, created_at) and two
+ * CREATE INDEX IF NOT EXISTS statements for `user_id` and `product_id`. The function does not execute
+ * the SQL; it only prepares the string and logs a message indicating a placeholder/migration strategy.
+ */
 async function createTable() {
   const sql = `
     CREATE TABLE IF NOT EXISTS user_behavior (

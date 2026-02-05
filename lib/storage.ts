@@ -18,7 +18,28 @@ import { createClient } from '@supabase/supabase-js';
  * - Both fields are text type, image_urls supports arrays
  */
 
-// Storage abstraction layer for Next.js
+/**
+ * Create and initialize a Supabase-backed storage abstraction for application data.
+ *
+ * Reads Supabase credentials from environment variables and validates configuration.
+ *
+ * @returns An object exposing asynchronous data-access methods:
+ * - getProducts(filters?): retrieve products with optional filtering and compliance exclusions
+ * - getProduct(id): fetch a single product by UUID or numeric ID, returns `null` for prohibited items
+ * - getProductVariations(product): list variations for a product
+ * - createProduct(product): insert a new product
+ * - getCategories(): list categories excluding prohibited entries
+ * - getBrands(): list brands
+ * - getUser(id): fetch a user by id
+ * - createUser(user): insert a new user
+ * - updateUser(id, updates): update a user record
+ * - trackUserBehavior(behavior): record user behavior (graceful no-op if tracking table missing)
+ * - getUserBehavior(userId, limit?): fetch recent behavior records (returns empty array if table missing)
+ * - getAllProducts(): fetch active, compliance-filtered products for recommendations
+ * - getUserOrders(userId): fetch a user's orders with nested items and product details
+ * - getProductSimilarity(productId): fetch similarity records for a product
+ * - createProductSimilarity(similarity): insert a product similarity record
+ */
 export async function getStorage() {
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
