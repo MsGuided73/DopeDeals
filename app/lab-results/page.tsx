@@ -170,8 +170,11 @@ export default function LabResultsPage() {
                                   <h3 className="font-black text-lg text-gray-900 mb-2 leading-tight">
                                     {coa.product_name}
                                   </h3>
-                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                                    {coa.lab_name} • {format(new Date(coa.test_date), 'MMMM d, yyyy')}
+                                  <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+                                    {coa.lab_name}
+                                  </p>
+                                  <p className="text-sm font-bold text-gray-800">
+                                    Report Date: {format(new Date(coa.test_date), 'MMMM d, yyyy')}
                                   </p>
                                 </div>
                                 <div className="ml-4">
