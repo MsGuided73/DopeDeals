@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getStorage } from '../lib/storage';
 
 // Universal Product interface that handles all product types
 export interface UniversalProduct {
@@ -29,6 +30,7 @@ export interface UniversalProduct {
   video_urls?: string[];
   weight_g?: number;
   dim_mm?: any;
+  ingredients?: string;
   
   // Compliance fields
   nicotine_product?: boolean;
@@ -53,6 +55,16 @@ interface ProductDetailsPageProps {
   showRecommendations?: boolean;
 }
 
+const Panel = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <div className={`bg-white rounded-lg shadow-sm border border-gray-100 ${className}`}>
+    {children}
+  </div>
+);
+
+const MetalDivider = () => (
+   <hr className="border-gray-200 my-6" />
+);
+
 export default function ProductDetailsPage({ 
   productId, 
   showRecommendations = true 
@@ -70,7 +82,10 @@ export default function ProductDetailsPage({
         setError(null);
         
         const storage = getStorage();
-        const productData = await storage.getProduct(productId);
+        // Ensure getProduct is awaited if it returns a promise, or the method itself returns a promise
+        // lib/storage implementation of getStorage() returns an object with async methods
+        const storageInstance = await storage; 
+        const productData = await storageInstance.getProduct(productId);
         
         if (!productData) {
           setError('Product not found');
@@ -80,6 +95,7 @@ export default function ProductDetailsPage({
         // Transform and enrich product data
         const enrichedProduct: UniversalProduct = {
           ...productData,
+          price: productData.our_price,
           // Compute display fields
           brand: productData.brand_id || 'DOPE CITY',
           category: productData.category_id || 'Accessories',
@@ -88,8 +104,8 @@ export default function ProductDetailsPage({
             : productData.materials || 'Premium Quality',
           inStock: (productData.stock_quantity || 0) > 0,
           isNew: productData.featured || false,
-          isSale: productData.compare_at_price ? productData.price < productData.compare_at_price : false,
-          originalPrice: productData.compare_at_price || undefined,
+          isSale: productData.sale_price ? productData.sale_price < productData.our_price : false,
+          originalPrice: productData.sale_price || undefined,
         };
 
         setProduct(enrichedProduct);
@@ -141,12 +157,17 @@ export default function ProductDetailsPage({
     );
   }
 
-  // Get all available images - use imageUrl from products table
+  // Get all available images - use image_url from products table
   const allImages = [
-    product.imageUrl
-  ].filter(Boolean);
+    product.image_url,
+    ...(product.image_urls || [])
+  ].filter(Boolean) as string[];
 
-  const currentImage = allImages[selectedImageIndex] || null;
+  // Deduplicate images
+  const uniqueImages = Array.from(new Set(allImages));
+  const displayImages = uniqueImages.length > 0 ? uniqueImages : [];
+
+  const currentImage = displayImages[selectedImageIndex] || null;
 
   const handleAddToCart = () => {
     // TODO: Implement cart functionality
@@ -195,9 +216,9 @@ export default function ProductDetailsPage({
           </div>
           
           {/* Image Thumbnails */}
-          {allImages.length > 1 && (
+          {displayImages.length > 1 && (
             <div className="flex gap-2 overflow-x-auto">
-              {allImages.map((imageUrl, index) => (
+              {displayImages.map((imageUrl, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
@@ -315,6 +336,13 @@ export default function ProductDetailsPage({
               <div>
                 <h3 className="font-semibold mb-2">Description</h3>
                 <p className="text-sm text-gray-700 leading-relaxed">{product.description}</p>
+              </div>
+            )}
+
+            {product.ingredients && (
+              <div>
+                <h3 className="font-semibold mb-2">Ingredients</h3>
+                <p className="text-sm text-gray-700 leading-relaxed">{product.ingredients}</p>
               </div>
             )}
 

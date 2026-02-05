@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Search, Download, Eye, FileText, Shield, Beaker } from 'lucide-react';
+import { format } from 'date-fns';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 interface COAFile {
@@ -170,7 +171,7 @@ export default function LabResultsPage() {
                                     {coa.product_name}
                                   </h3>
                                   <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                                    {coa.lab_name} • {new Date(coa.test_date).getFullYear()}
+                                    {coa.lab_name} • {format(new Date(coa.test_date), 'MMMM d, yyyy')}
                                   </p>
                                 </div>
                                 <div className="ml-4">

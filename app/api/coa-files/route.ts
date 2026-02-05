@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
               brand_name: String(brandStr),
               category_name: String(catStr),
               lab_name: info.lab_name || 'Third-Party Lab',
-              test_date: p.updated_at,
+              test_date: info.coa_date || info.test_date || p.updated_at,
               file_url: info.lab_certificate_url,
               file_name: `${p.sku}-COA.pdf`,
               created_at: p.updated_at
