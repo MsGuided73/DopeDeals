@@ -259,6 +259,7 @@ export default function SignUpForm() {
               <Link href="/privacy" className="text-green-600 hover:text-green-500 underline">
                 Privacy Policy
               </Link>
+              . By checking this box, you are confirming that you are 21 or older.
             </label>
           </div>
 
