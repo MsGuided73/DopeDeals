@@ -18,7 +18,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "Cookies",
     category_name: "Flower",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-03-21",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/Cookies%20COAs/COA-Cookies-apples&bananas.pdf",
     file_name: "COA-Cookies-apples&bananas.pdf"
   },
@@ -28,7 +28,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "Cookies",
     category_name: "Flower",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-03-20",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/Cookies%20COAs/COA-Cookies-berry_pie.pdf",
     file_name: "COA-Cookies-berry_pie.pdf"
   },
@@ -38,7 +38,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "Cookies",
     category_name: "Flower",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-03-20",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/Cookies%20COAs/COA-Cookies-cheetah_piss.pdf",
     file_name: "COA-Cookies-cheetah_piss.pdf"
   },
@@ -48,7 +48,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "Cookies",
     category_name: "Flower",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-03-21",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/Cookies%20COAs/COA-Cookies-honey_buns.pdf",
     file_name: "COA-Cookies-honey_buns.pdf"
   },
@@ -58,7 +58,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "Cookies",
     category_name: "Flower",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-03-20",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/Cookies%20COAs/COA-Cookies-laughing_gas.pdf",
     file_name: "COA-Cookies-laughing_gas.pdf"
   },
@@ -68,7 +68,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "Cookies",
     category_name: "Flower",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-04-03",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/Cookies%20COAs/COA-Cookies-london_pound_cake.pdf",
     file_name: "COA-Cookies-london_pound_cake.pdf"
   },
@@ -78,7 +78,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "Cookies",
     category_name: "Flower",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-03-20",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/Cookies%20COAs/COA-Cookies=gelatti.pdf",
     file_name: "COA-Cookies=gelatti.pdf"
   },
@@ -92,7 +92,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "TrueMoola",
     category_name: "Blue Lotus Gummies",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-02-06",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/TrueMoola%20COAs/TrueMoola_lab_blue_lotus_strawberry_acai_gummies.pdf",
     file_name: "TrueMoola_lab_blue_lotus_strawberry_acai_gummies.pdf"
   },
@@ -102,7 +102,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "TrueMoola",
     category_name: "Blue Lotus Gummies",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-02-06",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/TrueMoola%20COAs/TrueMoola_lab_blue_lotus_watermelon_gummies.pdf",
     file_name: "TrueMoola_lab_blue_lotus_watermelon_gummies.pdf"
   },
@@ -112,7 +112,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "TrueMoola",
     category_name: "Blue Lotus Gummies",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-02-06",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/TrueMoola%20COAs/TrueMoola_lab_blue_lotus-bluerazz_gummies.pdf",
     file_name: "TrueMoola_lab_blue_lotus-bluerazz_gummies.pdf"
   },
@@ -152,7 +152,7 @@ export const STATIC_COA_DATA: COAItem[] = [
     brand_name: "TrueMoola",
     category_name: "HHC Prerolls",
     lab_name: "Third-Party Lab",
-    test_date: "2024-01-01",
+    test_date: "2025-01-29",
     file_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/reference/COAs/TrueMoola%20COAs/TrueMoola_lab_Unicorn_Poop-HHC-preroll.pdf",
     file_name: "TrueMoola_lab_Unicorn_Poop-HHC-preroll.pdf"
   },

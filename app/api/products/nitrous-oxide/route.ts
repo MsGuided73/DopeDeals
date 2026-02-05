@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      .in('category_slug', ['nitrous', 'nitrous-oxide', 'nitrous oxide', 'n2o'])
+      .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit)
       .range(offset, offset + effectiveLimit - 1);
@@ -126,7 +126,7 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
-      .in('category_slug', ['nitrous', 'nitrous-oxide', 'nitrous oxide', 'n2o']);
+      .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
 
     return NextResponse.json({
       products: products,
