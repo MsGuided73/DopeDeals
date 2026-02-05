@@ -90,6 +90,8 @@ export default function CollectionsGrid() {
               }}
             >
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+              {/* Text Visibility Gradient */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black/80 via-transparent to-transparent" />
 
               {/* SHOP Button - Moved to keep track but hidden as requested previously if needed, actually user said SHOP button opacity 0 */}
               <div className="absolute top-3 left-3 z-10">
@@ -152,6 +154,8 @@ export default function CollectionsGrid() {
               }}
             >
               <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+              {/* Text Visibility Gradient */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black/80 via-transparent to-transparent" />
 
               {/* SHOP Button - Hidden */}
               <div className="absolute top-3 left-3 z-10">
