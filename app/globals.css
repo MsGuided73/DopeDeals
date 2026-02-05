@@ -177,7 +177,7 @@ p,
   font-family:
     "Twilight Font Regular", "Inter", system-ui, sans-serif !important;
   font-weight: normal !important;
-  letter-spacing: 0.1em !important;
+  letter-spacing: 0.02em !important;
 }
 
 /* System font for section headings that should not use global font rules */
