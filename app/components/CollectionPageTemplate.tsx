@@ -282,9 +282,6 @@ export default function CollectionPageTemplate({
               {subtitle}
             </p>
           )}
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2">
-            <span className="text-white font-bold tracking-wide">{filteredProducts.length} Products</span>
-          </div>
         </div>
       </div>
 
@@ -486,7 +483,7 @@ export default function CollectionPageTemplate({
                           href={`/product/${product.id}`}
                           className="flex-1 px-3 py-2 bg-transparent border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
                         >
-                          Quick View
+                          View Product
                         </Link>
                         <button
                           onClick={async () => {

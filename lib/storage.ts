@@ -35,7 +35,7 @@ export async function getStorage() {
       let query = supabase.from('main_site_products').select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
-        nicotine_product, tobacco_product, source_id, source_parent,
+        nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
         created_at, updated_at
       `)
       // STRICT: No Kratom or related substances
@@ -81,7 +81,7 @@ export async function getStorage() {
         .select(`
           id, name, description, short_description, our_price, sale_price,
           image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
-          nicotine_product, tobacco_product, source_id, source_parent,
+          nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
           created_at, updated_at
         `)
         .eq('id', productId)
@@ -263,7 +263,7 @@ export async function getStorage() {
           .select(`
             id, name, description, short_description, our_price, sale_price,
             image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
-            nicotine_product, tobacco_product, source_id, source_parent,
+            nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
             created_at, updated_at
           `)
           .eq('is_active', true)

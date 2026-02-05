@@ -318,7 +318,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                 href={`/product/${product.id}`}
                 className="flex-1 px-3 py-2 bg-transparent border-2 border-[#2d8f47] text-[#2d8f47] hover:bg-[#2d8f47] hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
               >
-                Quick View
+                View Product
               </Link>
               <button
                 onClick={async () => {
