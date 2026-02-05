@@ -56,16 +56,7 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+
       .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit)
@@ -116,16 +107,7 @@ export async function GET(req: NextRequest) {
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+
       .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
 
     return NextResponse.json({
