@@ -79,9 +79,12 @@ export async function getStorage() {
       const { data, error } = await supabase
         .from('main_site_products')
         .select(`
-          id, name, description, short_description, our_price, sale_price,
-          image_url, image_urls, sku, stock_quantity, is_active, featured, brand_id, category_id,
+          id, name, display_name, description, short_description, our_price, sale_price,
+          image_url, image_urls, gallery_images, sku, stock_quantity, is_active, featured, 
+          brand_id, brand_name, category_id, category_slug, product_type,
           nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
+          "coa-url", ship_restrictions, cannabinoid_profile, compliance_info,
+          farm_bill_compliant, age_restricted, minimum_age,
           created_at, updated_at
         `)
         .eq('id', productId)
