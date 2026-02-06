@@ -53,7 +53,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { user, updateUserMetadata } = useAuth();
+  const { user, updateUserMetadata, updateProfile } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -272,21 +272,21 @@ export default function ProfilePage() {
                   
                   const formData = new FormData(e.currentTarget);
                   const updates = {
-                    data: {
-                      firstName: formData.get('firstName'),
-                      lastName: formData.get('lastName'),
-                      phone: formData.get('phone')
-                    }
+                    first_name: formData.get('firstName'),
+                    last_name: formData.get('lastName'),
+                    phone: formData.get('phone')
                   };
                   
-                  const { error } = await updateUserMetadata(updates.data);
+                  // Use updateProfile for public.users table updates
+                  // Cast to any to bypass strict type checking for now, as types need updating but DB is ready
+                  const { error } = await useAuth().updateProfile(updates);
                   
                   if (error) {
                     setError(error);
                     alert(`Error: ${error}`);
                   } else {
                     alert('Profile updated successfully!');
-                    // Force reload/re-fetch would be ideal but AuthContext handles user state updates
+                    // Force reload logic if needed, or rely on realtime subscription
                   }
                   setLoading(false);
                 }}>
@@ -346,15 +346,17 @@ export default function ProfilePage() {
                     setLoading(true);
                     
                     const formData = new FormData(e.currentTarget);
-                    const shippingAddress = {
-                      address1: formData.get('address1'),
-                      address2: formData.get('address2'),
-                      city: formData.get('city'),
-                      state: formData.get('state'),
-                      zipcode: formData.get('zipcode')
+                    
+                    // Map form fields to DB columns
+                    const updates = {
+                      shipping_address_line1: formData.get('address1'),
+                      shipping_address_line2: formData.get('address2'),
+                      shipping_city: formData.get('city'),
+                      shipping_state: formData.get('state'),
+                      shipping_zipcode: formData.get('zipcode')
                     };
                     
-                    const { error } = await updateUserMetadata({ shippingAddress });
+                    const { error } = await updateProfile(updates);
                     
                     if (error) {
                       setError(error);

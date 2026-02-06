@@ -27,77 +27,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   // Get user role from multiple sources
-  const getUserRole = async (authUser: User): Promise<UserRole> => {
-    // Check app_metadata first
-    if (authUser.app_metadata?.role) {
-      return authUser.app_metadata.role as UserRole;
-    }
-
-    // Check user_metadata
-    if (authUser.user_metadata?.role) {
-      return authUser.user_metadata.role as UserRole;
-    }
-
+  // Get user role from multiple sources
+  const getUserRole = async (authUser: User): Promise<{ role: UserRole, profile: any }> => {
     // Check profile table
     try {
       // Use a more resilient approach in case columns are missing
       // Try to select role specifically, but handle failure
       const { data: profile, error } = await supabaseBrowser
         .from('users')
-        .select('id')
+        .select('*') // Select all columns now that we use them
         .eq('id', authUser.id)
         .maybeSingle();
 
-      if (error) throw error;
-
-      // If we got here, the table exists and the user exists.
-      // Now try to get the role if it exists
-      const { data: roleData } = await supabaseBrowser
-        .from('users')
-        .select('role')
-        .eq('id', authUser.id)
-        .maybeSingle();
-      
-      if (roleData && roleData.role) {
-        return roleData.role as UserRole;
+      if (error && error.code !== 'PGRST116') {
+         console.warn('[AuthContext] Error fetching profile:', error);
       }
-    } catch (error) {
-      console.warn('[AuthContext] Could not fetch user profile for role:', error);
-    }
 
-    return UserRole.USER;
+      return {
+         role: (profile?.role as UserRole) || UserRole.USER,
+         profile: profile
+      };
+    } catch (error) {
+      console.warn('[AuthContext] Could not fetch user profile:', error);
+      return { role: UserRole.USER, profile: null };
+    }
   };
 
-  // Get VIP status
-  const getVipStatus = async (userId: string): Promise<boolean> => {
-    try {
-      // Use a more resilient approach in case columns or relationships are missing
-      // First check if user exists
-      const { data: profile, error } = await supabaseBrowser
-        .from('users')
-        .select('id')
-        .eq('id', userId)
-        .maybeSingle();
-      // Try to fetch membership info safely
-      const { data: tierData } = await supabaseBrowser
-        .from('users')
-        .select('membership_tier_id')
-        .eq('id', userId)
-        .maybeSingle();
-      
-      if (tierData?.membership_tier_id) return true;
-
-      const { data: tierDataCamel } = await supabaseBrowser
-        .from('users')
-        .select('membershipTierId')
-        .eq('id', userId)
-        .maybeSingle();
-
-      return !!tierDataCamel?.membershipTierId;
-    } catch (error) {
-      console.warn('[AuthContext] Could not fetch VIP status:', error);
-      return false;
-    }
+  // Get VIP status (Simplified now that we fetch full profile)
+  const getVipStatus = (profile: any): boolean => {
+      // Check both snake_case and camelCase just in case
+      return !!(profile?.membership_tier_id || profile?.membershipTierId);
   };
 
   // Initialize auth state
@@ -107,13 +66,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { data: { session: initialSession } } = await supabaseBrowser.auth.getSession();
         
         if (initialSession?.user) {
-          const role = await getUserRole(initialSession.user);
-          const isVip = await getVipStatus(initialSession.user.id);
+          const { role, profile } = await getUserRole(initialSession.user);
+          const isVip = getVipStatus(profile);
           
           const authenticatedUser: AuthenticatedUser = {
             ...initialSession.user,
             role,
-            isVip
+            isVip,
+            // Merge profile data directly onto user object for easier access
+            phone: profile?.phone || initialSession.user.phone,
+            user_metadata: {
+                ...initialSession.user.user_metadata,
+                ...profile // Spread profile table data over metadata
+            }
           } as AuthenticatedUser;
 
           setUser(authenticatedUser);
@@ -132,13 +97,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: { subscription } } = supabaseBrowser.auth.onAuthStateChange(
       async (event, session) => {
         if (session?.user) {
-          const role = await getUserRole(session.user);
-          const isVip = await getVipStatus(session.user.id);
+          const { role, profile } = await getUserRole(session.user);
+          const isVip = getVipStatus(profile);
           
           const authenticatedUser: AuthenticatedUser = {
             ...session.user,
             role,
-            isVip
+            isVip,
+            phone: profile?.phone || session.user.phone,
+             user_metadata: {
+                ...session.user.user_metadata,
+                ...profile
+            }
           } as AuthenticatedUser;
 
           setUser(authenticatedUser);
