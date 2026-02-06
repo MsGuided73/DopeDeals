@@ -136,7 +136,7 @@ export default function BrandLogoScrollbar() {
         </div>
 
         {/* Shop by Brand CTA */}
-        <div className="text-center mt-10">
+        {/* <div className="text-center mt-10">
           <Link
             href="/brands"
             className="inline-block px-8 py-3 bg-black text-white font-bold rounded-full
@@ -145,7 +145,7 @@ export default function BrandLogoScrollbar() {
           >
             SHOP BY BRAND →
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );
