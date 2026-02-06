@@ -186,8 +186,8 @@ export default function CollectionsGrid() {
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black/30 via-transparent to-transparent z-10" />
 
                 {/* Category Name Label - Top Left, Big Typography */}
-                <div className="absolute top-6 left-6 z-20 pointer-events-none mix-blend-overlay group-hover:mix-blend-normal transition-all duration-300">
-                  <div className={`text-white text-[32px] xl:text-[40px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] opacity-90 group-hover:opacity-100 group-hover:text-[${cat.color}] shadow-black`}>
+                <div className="absolute top-6 left-6 z-20 pointer-events-none transition-all duration-300">
+                  <div className={`text-white text-[32px] xl:text-[40px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black`}>
                     {cat.name.split('\n').map((line, index) => (
                       <div key={index}>{line}</div>
                     ))}
