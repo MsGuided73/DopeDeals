@@ -98,7 +98,8 @@ export async function GET(req: NextRequest) {
         sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
         image_url: normalizedImages[0] || product.image_url,
-        image_urls: normalizedImages
+        image_urls: normalizedImages,
+        inStock: (product.stock_quantity || 0) > 0
       };
     });
 

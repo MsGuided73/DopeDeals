@@ -111,7 +111,8 @@ export async function GET(req: NextRequest) {
         return {
           ...product,
           image_url: normalizedImages[0] || product.image_url,
-          image_urls: normalizedImages
+          image_urls: normalizedImages,
+          inStock: (product.stock_quantity || 0) > 0
         };
       });
 

@@ -91,7 +91,8 @@ export async function GET(req: NextRequest) {
         category_id: product.category_id,
         category_slug: product.category_slug,
         created_at: product.created_at,
-        updated_at: product.updated_at
+        updated_at: product.updated_at,
+        inStock: (product.stock_quantity || 0) > 0
       };
     });
 
