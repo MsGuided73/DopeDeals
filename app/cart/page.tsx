@@ -351,7 +351,7 @@ export default function CartPage() {
                 <div className="mt-6 space-y-3">
                   <Link
                     href="/checkout"
-                    className="w-full bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white py-4 px-4 rounded-xl font-semibold hover:from-green-700 hover:via-green-600 hover:to-emerald-600 transition-colors text-center block shadow-lg flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white py-4 px-4 rounded-xl font-semibold hover:from-green-700 hover:via-green-600 hover:to-emerald-600 transition-colors shadow-lg flex items-center justify-center gap-2"
                   >
                     <Lock className="w-4 h-4" />
                     Secure Checkout
@@ -365,6 +365,10 @@ export default function CartPage() {
                     <div className="flex items-center gap-2">
                       <span className="inline-flex h-2 w-2 rounded-full bg-green-500"></span>
                       Encrypted checkout & secure payments
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                      Billing Descriptor: H420
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="inline-flex h-2 w-2 rounded-full bg-green-500"></span>

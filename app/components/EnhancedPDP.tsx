@@ -27,8 +27,11 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import { useNavigation } from '../contexts/NavigationContext';
 import { addToCart } from '../lib/cart-utils';
 import { ShippingSection } from './ShippingSection';
+import GlobalMasthead from './GlobalMasthead';
+import EssentialsFooter from './EssentialsFooter';
 
 // Types match your stack
 interface EnhancedPDPProps {
@@ -47,6 +50,7 @@ interface EnhancedPDPProps {
 
 export default function EnhancedPDP(props: EnhancedPDPProps) {
   const { refreshCart } = useCart();
+  const { setHasCustomFooter } = useNavigation();
   const [loading, setLoading] = useState(!props.product);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any>(props.product ? props : null);
@@ -68,6 +72,11 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const [activeTab, setActiveTab] = useState<'details' | 'ingredients' | 'lab' | 'reviews'>('details');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+
+  React.useEffect(() => {
+    setHasCustomFooter(true);
+    return () => setHasCustomFooter(false);
+  }, [setHasCustomFooter]);
 
   React.useEffect(() => {
     if (!props.product && props.productId) {
@@ -144,13 +153,15 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 font-sans">
+    <div className="min-h-screen flex flex-col font-sans">
+      <GlobalMasthead />
+      <div className="flex-grow bg-gradient-to-br from-slate-50 via-white to-emerald-50">
       {/* Breadcrumb - Adapted to Next.js Link */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center space-x-2 text-sm text-slate-600">
           <Link href="/" className="hover:text-emerald-600 cursor-pointer transition-colors">Home</Link>
           <ChevronRight className="w-4 h-4" />
-          <Link href="/products" className="hover:text-emerald-600 cursor-pointer transition-colors">Products</Link>
+          <span className="text-slate-400 cursor-default">Products</span>
           <ChevronRight className="w-4 h-4" />
           <span className="text-slate-900 font-medium truncate">{product.display_name}</span>
         </div>
@@ -522,6 +533,8 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
         </div>
 
       </div>
+      </div>
+      <EssentialsFooter />
     </div>
   );
 }

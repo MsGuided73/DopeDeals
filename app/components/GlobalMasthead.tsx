@@ -359,10 +359,6 @@ export default function GlobalMasthead() {
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg" style={{ backgroundColor: "#f4f1e8" }}>
           <div className="px-4 py-6 space-y-4">
             <div className="space-y-3">
-              <Link href="/products" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
-                Shop All Products
-              </Link>
-
               {/* Vapes Section */}
               <div className="pt-2">
                 <h3 className="text-black text-sm font-bold uppercase tracking-wide mb-3">Vapes & Carts</h3>

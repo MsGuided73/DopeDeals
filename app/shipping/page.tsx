@@ -126,10 +126,7 @@ export default function ShippingPage() {
                   <p>We can ship to PO Boxes for most items. Military APO/FPO addresses are supported with standard shipping only.</p>
                 </div>
                 
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">International Shipping</h3>
-                  <p>Currently, we only ship within the United States. International shipping may be available in the future.</p>
-                </div>
+
               </div>
             </div>
 

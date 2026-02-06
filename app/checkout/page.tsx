@@ -770,6 +770,9 @@ export default function CheckoutPage() {
                         <span> ending in {form.cardNumber.slice(-4)}</span>
                       )}
                     </p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Billing Descriptor: H420
+                    </p>
                   </div>
 
                   {/* Terms & Conditions */}

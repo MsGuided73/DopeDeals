@@ -5,15 +5,18 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 interface NavigationContextType {
   hasMasthead: boolean;
   setHasMasthead: (hasMasthead: boolean) => void;
+  hasCustomFooter: boolean;
+  setHasCustomFooter: (hasCustomFooter: boolean) => void;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
   const [hasMasthead, setHasMasthead] = useState(false);
+  const [hasCustomFooter, setHasCustomFooter] = useState(false);
 
   return (
-    <NavigationContext.Provider value={{ hasMasthead, setHasMasthead }}>
+    <NavigationContext.Provider value={{ hasMasthead, setHasMasthead, hasCustomFooter, setHasCustomFooter }}>
       {children}
     </NavigationContext.Provider>
   );

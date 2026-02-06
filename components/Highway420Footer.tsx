@@ -3,11 +3,15 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Instagram, Twitter, Facebook, Youtube } from "lucide-react";
+import { useNavigation } from "../app/contexts/NavigationContext";
 
 export default function Highway420Footer() {
   const [email, setEmail] = useState("");
   const pathname = usePathname();
+  const { hasCustomFooter } = useNavigation();
   const isCheckoutFlow = pathname === "/cart" || pathname === "/checkout";
+
+  if (hasCustomFooter) return null;
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
