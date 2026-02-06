@@ -370,8 +370,7 @@ export default function DopeDealsSection() {
         {/* View All Button */}
         <div className="text-center mt-8">
           <Link
-            href="/products"
-            className="inline-block px-6 py-3 bg black-600 hover:bg- text-white rounded-full font-medium transition-colors duration-200">
+            className="inline-block px-6 py-3 bg-neutral-900 hover:bg-black text-white rounded-full font-medium transition-colors duration-200">
             Shop All Deals
           </Link>
         </div>
