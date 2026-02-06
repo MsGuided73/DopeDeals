@@ -48,11 +48,11 @@ export default function CollectionsGrid() {
       bgGradient: "from-orange-900/40 via-black to-black"
     },
     { 
-      name: "CBD & MORE", 
-      route: "/cbd-tinctures", 
-      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Close%20up%20and%20Right.png",
-      color: "#14b8a6", // Teal
-      bgGradient: "from-teal-900/40 via-black to-black"
+      name: "DOPE DEALS\nCLICK HERE", 
+      route: "/#dope-deals", 
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Close%20up%20and%20Right.png", // Keeping the image for now, or we can change it
+      color: "#ef4444", // Red for Deals
+      bgGradient: "from-red-900/40 via-black to-black"
     },
     { 
       name: "ACCESSORIES", 

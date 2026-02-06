@@ -168,7 +168,7 @@ export default function DopeDealsSection() {
   }
 
   return (
-    <section className="mt-16 bg-white dark:bg-gray-950 py-12">
+    <section id="dope-deals" className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">

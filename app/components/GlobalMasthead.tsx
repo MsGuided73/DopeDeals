@@ -294,12 +294,12 @@ export default function GlobalMasthead() {
                       <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         All Edibles
                       </Link>
-                      <Link href="/cbd-tinctures" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
+                      {/* <Link href="/cbd-tinctures" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         CBD Tinctures
-                  </Link>
+                      </Link>
                       <Link href="/cbd-tinctures#salves" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-bold">
                         Salves
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 )}
@@ -389,12 +389,12 @@ export default function GlobalMasthead() {
                   <Link href="/edibles" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     All Edibles
                   </Link>
-                  <Link href="/cbd-tinctures" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
+                  {/* <Link href="/cbd-tinctures" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     CBD Tinctures
                   </Link>
                   <Link href="/cbd-tinctures#salves" className="block text-gray-800 hover:text-yellow-500 transition-colors text-base" onClick={() => setIsMenuOpen(false)}>
                     Salves
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
 
@@ -478,9 +478,9 @@ export default function GlobalMasthead() {
                       <h4 className="font-medium text-gray-900 dark:text-white">Staff Favorites</h4>
                     </div>
                     <div className="space-y-2">
-                      <Link href="/cbd-tinctures" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
+                      {/* <Link href="/cbd-tinctures" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
                         🌟 CBD Tinctures & Salves
-                      </Link>
+                      </Link> */}
                       <Link href="/thca_pnv" className="block text-sm text-green-600 dark:text-green-400 hover:underline">
                         🌟 Premium Pre-Rolls & Vapes
                       </Link>
