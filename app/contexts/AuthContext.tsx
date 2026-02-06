@@ -13,6 +13,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: any) => Promise<{ error?: string }>;
+  updateUserMetadata: (updates: any) => Promise<{ error?: string }>;
   hasPermission: (permission: string) => boolean;
   isAdmin: boolean;
   isVip: boolean;
@@ -208,7 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await supabaseBrowser.auth.signOut();
   };
 
-  // Update profile function
+  // Update profile function (public.users table)
   const updateProfile = async (updates: any) => {
     try {
       if (!user) {
@@ -223,6 +224,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) {
         return { error: error.message };
       }
+
+      return {};
+    } catch (error) {
+      return { error: 'An unexpected error occurred' };
+    }
+  };
+
+  // Update user metadata (auth.users metadata)
+  const updateUserMetadata = async (updates: any) => {
+    try {
+      const { data, error } = await supabaseBrowser.auth.updateUser({
+        data: updates
+      });
+
+      if (error) {
+        return { error: error.message };
+      }
+      
+      // Update local state is handled by onAuthStateChange logic, 
+      // but we might want to ensure it reflects immediately if needed.
+      // The subscription should catch it.
 
       return {};
     } catch (error) {
@@ -301,6 +323,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signOut,
     updateProfile,
+    updateUserMetadata,
     hasPermission,
     isAdmin: user?.role === UserRole.ADMIN,
     isVip: user?.isVip || false

@@ -53,7 +53,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { user } = useAuth();
+  const { user, updateUserMetadata } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -259,6 +259,190 @@ export default function ProfilePage() {
                   </button>
                 </div>
               </div>
+            )}
+
+            {/* Account Settings */}
+            {activeTab === 'settings' && (
+              <div className="bg-white border rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">Account Settings</h2>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  setLoading(true);
+                  setError(null);
+                  
+                  const formData = new FormData(e.currentTarget);
+                  const updates = {
+                    data: {
+                      firstName: formData.get('firstName'),
+                      lastName: formData.get('lastName'),
+                      phone: formData.get('phone')
+                    }
+                  };
+                  
+                  const { error } = await updateUserMetadata(updates.data);
+                  
+                  if (error) {
+                    setError(error);
+                    alert(`Error: ${error}`);
+                  } else {
+                    alert('Profile updated successfully!');
+                    // Force reload/re-fetch would be ideal but AuthContext handles user state updates
+                  }
+                  setLoading(false);
+                }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                      <input 
+                        type="text" 
+                        name="firstName"
+                        defaultValue={profile?.firstName}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                        placeholder="First Name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                      <input 
+                        type="text" 
+                        name="lastName"
+                        defaultValue={profile?.lastName}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                        placeholder="Last Name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                      <input 
+                        type="tel" 
+                        name="phone"
+                        defaultValue={profile?.phone}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                        placeholder="(555) 555-5555"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end pt-4 border-t">
+                    <button 
+                      type="submit" 
+                      disabled={loading}
+                      className="px-6 py-2.5 bg-black text-white font-medium rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {loading ? 'Saving Changes...' : 'Save Profile'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Addresses */}
+            {activeTab === 'addresses' && (
+              <div className="space-y-6">
+                <div className="bg-white border rounded-lg p-6 shadow-sm">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Shipping Address</h2>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    setLoading(true);
+                    
+                    const formData = new FormData(e.currentTarget);
+                    const shippingAddress = {
+                      address1: formData.get('address1'),
+                      address2: formData.get('address2'),
+                      city: formData.get('city'),
+                      state: formData.get('state'),
+                      zipcode: formData.get('zipcode')
+                    };
+                    
+                    const { error } = await updateUserMetadata({ shippingAddress });
+                    
+                    if (error) {
+                      setError(error);
+                      alert(`Error: ${error}`);
+                    } else {
+                      alert('Address updated successfully!');
+                    }
+                    setLoading(false);
+                  }}>
+                    <div className="space-y-4 mb-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 1</label>
+                        <input 
+                          type="text" 
+                          name="address1"
+                          defaultValue={profile?.shippingAddress?.address1}
+                          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                          placeholder="Street Address"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 2 (Optional)</label>
+                        <input 
+                          type="text" 
+                          name="address2"
+                          defaultValue={profile?.shippingAddress?.address2}
+                          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                          placeholder="Apt, Suite, Floor, etc."
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                          <input 
+                            type="text" 
+                            name="city"
+                            defaultValue={profile?.shippingAddress?.city}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                            placeholder="City"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
+                          <input 
+                            type="text" 
+                            name="state"
+                            defaultValue={profile?.shippingAddress?.state}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                            placeholder="State"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Zip Code</label>
+                        <input 
+                          type="text" 
+                          name="zipcode"
+                          defaultValue={profile?.shippingAddress?.zipcode}
+                          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
+                          placeholder="Zip Code"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-end pt-4 border-t">
+                      <button 
+                        type="submit" 
+                        disabled={loading}
+                        className="px-6 py-2.5 bg-black text-white font-medium rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        {loading ? 'Saving...' : 'Save Address'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+            
+            {/* Orders Tab Placeholder if empty */}
+            {activeTab === 'orders' && orders.length === 0 && (
+                <div className="bg-gray-50 rounded-lg p-8 text-center">
+                    <Package className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
+                    <p className="text-gray-500 mb-6">When you place an order, it will appear here.</p>
+                    <Link href="/products" className="inline-block px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
+                        Start Shopping
+                    </Link>
+                </div>
             )}
           </div>
         </div>
