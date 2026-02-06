@@ -187,7 +187,7 @@ export default function CollectionsGrid() {
 
                 {/* Category Name Label - Top Left, Big Typography */}
                 <div className="absolute top-6 left-6 z-20 pointer-events-none transition-all duration-300">
-                  <div className={`text-white text-[32px] xl:text-[40px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black`}>
+                  <div className={`text-white text-[32px] xl:text-[40px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black group-hover:text-[${cat.color}]`}>
                     {cat.name.split('\n').map((line, index) => (
                       <div key={index}>{line}</div>
                     ))}
