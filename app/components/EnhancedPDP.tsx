@@ -306,7 +306,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
             {/* Description Short */}
             <div className="text-slate-600 text-lg leading-relaxed space-y-4">
               {/* If we have a short description, use it. Otherwise truncate regular description */}
-              <p>{product.short_description || "Experience the Highway Standard v2.0."}</p>
+              <p>{product.short_description || "Experience the Highway Standard."}</p>
             </div>
 
             {/* Shipping Restrictions Card (Your Brain) */}
