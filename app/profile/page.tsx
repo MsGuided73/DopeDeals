@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { User, Package, MapPin, CreditCard, Settings, LogOut } from 'lucide-react';
 import GlobalMasthead from '../components/GlobalMasthead';
+import { useAuth } from '../contexts/AuthContext';
 interface Order {
   id: string;
   orderNumber: string;
@@ -52,84 +53,27 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Mock data for now - replace with actual auth integration
-  const mockProfile: UserProfile = {
-    id: 'user_123',
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '(555) 123-4567',
-    dateOfBirth: '1990-01-15',
-    shippingAddress: {
-      address1: '123 Main St',
-      address2: 'Apt 4B',
-      city: 'Los Angeles',
-      state: 'CA',
-      zipcode: '90210'
-    },
-    billingAddress: {
-      address1: '123 Main St',
-      address2: 'Apt 4B',
-      city: 'Los Angeles',
-      state: 'CA',
-      zipcode: '90210'
-    },
-    marketingEmails: true,
-    smsNotifications: false
-  };
-
-  const mockOrders: Order[] = [
-    {
-      id: 'order_1',
-      orderNumber: 'DC20250117001',
-      status: 'delivered',
-      paymentStatus: 'paid',
-      fulfillmentStatus: 'fulfilled',
-      total: 89.99,
-      createdAt: '2025-01-15T10:30:00Z',
-      items: [
-        {
-          id: 'item_1',
-          productName: 'Premium Glass Bong - 12"',
-          productImageUrl: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=100&h=100&fit=crop',
-          quantity: 1,
-          unitPrice: 79.99
-        }
-      ]
-    },
-    {
-      id: 'order_2',
-      orderNumber: 'DC20250110002',
-      status: 'processing',
-      paymentStatus: 'paid',
-      fulfillmentStatus: 'partial',
-      total: 156.47,
-      createdAt: '2025-01-10T14:20:00Z',
-      items: [
-        {
-          id: 'item_2',
-          productName: 'Rolling Papers Bundle',
-          quantity: 3,
-          unitPrice: 12.99
-        },
-        {
-          id: 'item_3',
-          productName: 'Grinder - 4 Piece',
-          quantity: 1,
-          unitPrice: 45.99
-        }
-      ]
-    }
-  ];
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Simulate loading
-    setTimeout(() => {
-      setProfile(mockProfile);
-      setOrders(mockOrders);
-      setLoading(false);
-    }, 1000);
-  }, []);
+    if (user) {
+      setProfile({
+        id: user.id,
+        firstName: user.user_metadata?.firstName || user.user_metadata?.full_name?.split(' ')[0] || '',
+        lastName: user.user_metadata?.lastName || user.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '',
+        email: user.email || '',
+        phone: user.phone || user.user_metadata?.phone || '',
+        dateOfBirth: user.user_metadata?.dateOfBirth,
+        shippingAddress: user.user_metadata?.shippingAddress,
+        billingAddress: user.user_metadata?.billingAddress,
+        marketingEmails: user.user_metadata?.marketingEmails || false,
+        smsNotifications: user.user_metadata?.smsNotifications || false
+      });
+    }
+    // Set empty orders for now as we don't have order fetching logic yet
+    setOrders([]);
+    setLoading(false);
+  }, [user]);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -276,7 +220,11 @@ export default function ProfilePage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Member Since</p>
-                      <p className="font-medium">January 2025</p>
+                      <p className="font-medium">
+                        {user?.created_at 
+                          ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                          : 'Recent Member'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -284,20 +232,24 @@ export default function ProfilePage() {
                 <div className="bg-gray-50 rounded-lg p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Orders</h2>
                   <div className="space-y-4">
-                    {orders.slice(0, 3).map((order) => (
-                      <div key={order.id} className="flex items-center justify-between p-4 bg-white rounded-lg border">
-                        <div>
-                          <p className="font-medium">Order #{order.orderNumber}</p>
-                          <p className="text-sm text-gray-600">{formatDate(order.createdAt)}</p>
+                    {orders.length === 0 ? (
+                      <div className="text-gray-500 italic">No recent orders found.</div>
+                    ) : (
+                      orders.slice(0, 3).map((order) => (
+                        <div key={order.id} className="flex items-center justify-between p-4 bg-white rounded-lg border">
+                          <div>
+                            <p className="font-medium">Order #{order.orderNumber}</p>
+                            <p className="text-sm text-gray-600">{formatDate(order.createdAt)}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium">${order.total.toFixed(2)}</p>
+                            <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
+                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </span>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-medium">${order.total.toFixed(2)}</p>
-                          <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                   <button
                     onClick={() => setActiveTab('orders')}

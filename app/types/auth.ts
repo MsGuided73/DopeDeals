@@ -10,6 +10,7 @@ export enum UserRole {
 export interface AuthenticatedUser {
   id: string;
   email?: string;
+  phone?: string;
   role: UserRole;
   profile?: any;
   app_metadata?: any;
