@@ -3,6 +3,8 @@ import { supabaseServer } from '@/lib/supabase-server';
 import { requireAdmin } from '@/lib/requireAdmin';
 import { checkRateLimit, getRateLimitIdentifier, getRateLimitHeaders, RATE_LIMITS } from '../rate-limit';
 
+export const dynamic = 'force-dynamic';
+
 const BUCKETS = new Set(['products', 'website-images', 'ads']);
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
