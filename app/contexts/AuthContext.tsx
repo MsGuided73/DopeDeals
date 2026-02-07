@@ -127,15 +127,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Sign in function
   const signIn = async (email: string, password: string, rememberMe?: boolean) => {
     try {
+      console.log('Attempting sign in with email:', email);
       const { error } = await supabaseBrowser.auth.signInWithPassword({
         email,
         password
       });
+      console.log('Supabase sign in response received:', { error });
 
       if (error) {
+        console.error('Supabase auth error:', error.message);
         return { error: error.message };
       }
 
+      console.log('Sign in successful');
+      
       // Store remember me preference for client-side persistence logic
       if (rememberMe) {
         localStorage.setItem('rememberMe', 'true');
@@ -145,7 +150,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       return {};
     } catch (error) {
-      console.error('SignIn error details:', error);
+      console.error('SignIn fatal error:', error);
       return { error: 'An unexpected error occurred' };
     }
   };

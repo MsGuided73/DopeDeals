@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
+import { supabaseBrowser } from '../lib/supabase-browser';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -221,6 +222,20 @@ export default function SignInForm() {
           </p>
         </div>
       </form>
+      <button
+        type="button"
+        onClick={async () => {
+          console.log('--- DEBUG: Checking Auth State ---');
+          const { data: { session } } = await supabaseBrowser.auth.getSession();
+          console.log('Current Session:', session);
+          const { data: user } = await supabaseBrowser.auth.getUser();
+          console.log('Current User:', user);
+          console.log('--------------------------------');
+        }}
+        className="mt-4 text-xs text-gray-400 hover:text-gray-600 block mx-auto underline"
+      >
+        Debug: Check Auth State
+      </button>
     </div>
   );
 }
