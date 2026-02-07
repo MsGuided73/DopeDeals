@@ -157,30 +157,32 @@ export default function FeaturedProductsSection() {
   const renderProductCard = (product: Product, variant: 'mobile' | 'desktop') => {
     const transformedProduct = transformProductForCard(product);
     const isFavorite = favorites.has(product.id);
-    const cardClassName = `group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${
+    const cardClassName = `group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative ${
       variant === 'desktop' ? 'flex-shrink-0 w-96' : 'block'
     }`;
 
     return (
-      <Link key={product.id} href={`/product/${product.id}`} className={cardClassName}>
+      <div key={product.id} className={cardClassName}>
         <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
-          {transformedProduct.image_url ? (
-            <img
-              src={transformedProduct.image_url}
-              alt={transformedProduct.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800">
-              <div className="text-center">
-                <div className="text-4xl mb-2">📦</div>
-                <div className="text-sm font-medium">No Image</div>
+          <Link href={`/product/${product.id}`} className="block w-full h-full">
+            {transformedProduct.image_url ? (
+              <img
+                src={transformedProduct.image_url}
+                alt={transformedProduct.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800">
+                <div className="text-center">
+                  <div className="text-4xl mb-2">📦</div>
+                  <div className="text-sm font-medium">No Image</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </Link>
 
           <button
-            className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+            className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
             aria-pressed={isFavorite}
             aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             onClick={(event) => handleFavorite(product.id, event)}
@@ -201,24 +203,26 @@ export default function FeaturedProductsSection() {
         </div>
 
         <div className="p-4 flex flex-col">
-          {transformedProduct.brand_name && (
-            <p
-              className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight"
+          <Link href={`/product/${product.id}`} className="block">
+            {transformedProduct.brand_name && (
+              <p
+                className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight"
+                style={{ fontFamily: systemFontFamily }}
+              >
+                {transformedProduct.brand_name}
+              </p>
+            )}
+
+            <h3
+              className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors"
               style={{ fontFamily: systemFontFamily }}
             >
-              {transformedProduct.brand_name}
-            </p>
-          )}
-
-          <h3
-            className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors"
-            style={{ fontFamily: systemFontFamily }}
-          >
-            {transformedProduct.name}
-          </h3>
+              {transformedProduct.name}
+            </h3>
+          </Link>
 
           <div className="mt-auto">
-            <div className="mb-4">
+            <Link href={`/product/${product.id}`} className="block mb-4">
               {transformedProduct.compare_at_price ? (
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -236,10 +240,10 @@ export default function FeaturedProductsSection() {
                   ${formatPrice(transformedProduct.price)}
                 </div>
               )}
-            </div>
+            </Link>
 
             <button
-              className="w-full px-4 py-3 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-sm hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg"
+              className="w-full px-4 py-3 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-sm hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg relative z-10"
               style={{ fontFamily: systemFontFamily, letterSpacing: '0.05em' }}
               onClick={(event) => handleAddToCart(product.id, event)}
             >
@@ -247,7 +251,7 @@ export default function FeaturedProductsSection() {
             </button>
           </div>
         </div>
-      </Link>
+      </div>
     );
   };
 
