@@ -44,6 +44,7 @@ export default function SignInForm() {
         router.push('/account');
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       toast.error('An unexpected error occurred');
     } finally {
       setLoading(false);

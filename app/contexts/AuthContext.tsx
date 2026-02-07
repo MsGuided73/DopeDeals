@@ -145,6 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       return {};
     } catch (error) {
+      console.error('SignIn error details:', error);
       return { error: 'An unexpected error occurred' };
     }
   };

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { FALLBACK_POSTS } from '../../../lib/blog-data';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,43 +25,9 @@ export async function POST(request: NextRequest) {
 
     // If no database posts, use fallback posts
     if (!dbPosts || dbPosts.length === 0) {
+      // Use shared fallback data + extended list for search if needed
       allPosts = [
-        {
-          id: 'dabbing-101-beginners-guide',
-          title: 'Dabbing 101: Your Beginner\'s Guide to Rigs, Nails & First Setups',
-          excerpt: 'New to dabbing? This comprehensive guide breaks down rigs, nails, temperature control, and essential setup tips for smooth, flavorful vapor every time.',
-          content: 'This guide covers everything about dabbing including rigs, nails, temperature control, and setup tips.',
-          author: 'Highway 420 Team',
-          date: '2025-10-30',
-          category: 'Education',
-          image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop',
-          readTime: '8 min read',
-          featured: true
-        },
-        {
-          id: 'anatomy-smooth-hit',
-          title: 'The Anatomy of a Smooth Hit: How Airflow & Cooling Design Transform Your Experience',
-          excerpt: 'Discover how percolators, recyclers, and airflow systems work together to eliminate harshness and deliver impeccably smooth, flavorful vapor.',
-          content: 'Learn about percolators, recyclers, and airflow systems that make hits smoother.',
-          author: 'Highway 420 Team',
-          date: '2025-10-30',
-          category: 'Education',
-          image: 'https://images.unsplash.com/photo-1586227740560-8cf2732c1531?w=600&h=400&fit=crop',
-          readTime: '10 min read',
-          featured: true
-        },
-        {
-          id: 'perfect-temperature-control',
-          title: 'Finding the Perfect Hit: Temperature Control for Maximum Flavor & Smoothness',
-          excerpt: 'Master temperature precision for concentrates. Learn the goldilocks zone, heat effects on vapor quality, and gear that keeps you in the flavor zone.',
-          content: 'Temperature control is crucial for concentrates. Learn about the optimal temperature range.',
-          author: 'Highway 420 Team',
-          date: '2025-10-30',
-          category: 'Education',
-          image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&h=400&fit=crop',
-          readTime: '7 min read',
-          featured: true
-        },
+        ...FALLBACK_POSTS,
         {
           id: 'cannabis-history-global',
           title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
@@ -178,42 +145,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Fallback to hardcoded posts if database is empty or unavailable
+    // Fallback to hardcoded posts if database is empty or unavailable
     // Featured blog articles for homepage display
-    const featuredPosts = [
-      {
-        id: 'dabbing-101-beginners-guide',
-        title: 'Dabbing 101: Your Beginner\'s Guide to Rigs, Nails & First Setups',
-        excerpt: 'New to dabbing? This comprehensive guide breaks down rigs, nails, temperature control, and essential setup tips for smooth, flavorful vapor every time.',
-        author: 'Highway 420 Team',
-        date: '2025-10-30',
-        category: 'Education',
-        image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop',
-        readTime: '8 min read',
-        featured: true
-      },
-      {
-        id: 'anatomy-smooth-hit',
-        title: 'The Anatomy of a Smooth Hit: How Airflow & Cooling Design Transform Your Experience',
-        excerpt: 'Discover how percolators, recyclers, and airflow systems work together to eliminate harshness and deliver impeccably smooth, flavorful vapor.',
-        author: 'Highway 420 Team',
-        date: '2025-10-30',
-        category: 'Education',
-        image: 'https://images.unsplash.com/photo-1586227740560-8cf2732c1531?w=600&h=400&fit=crop',
-        readTime: '10 min read',
-        featured: true
-      },
-      {
-        id: 'perfect-temperature-control',
-        title: 'Finding the Perfect Hit: Temperature Control for Maximum Flavor & Smoothness',
-        excerpt: 'Master temperature precision for concentrates. Learn the goldilocks zone, heat effects on vapor quality, and gear that keeps you in the flavor zone.',
-        author: 'Highway 420 Team',
-        date: '2025-10-30',
-        category: 'Education',
-        image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&h=400&fit=crop',
-        readTime: '7 min read',
-        featured: true
-      }
-    ];
+    const featuredPosts = FALLBACK_POSTS;
 
     // Additional blog posts
     const additionalPosts = [
