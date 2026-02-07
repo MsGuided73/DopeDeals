@@ -29,7 +29,7 @@ export default function CollectionsGrid() {
     { 
       name: "SHROOMS", 
       route: "/mushrooms", 
-      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Mushrooms-transparent.png",
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/edibles_no_text.png",
       color: "#a855f7", // Purple
       bgGradient: "from-purple-900/40 via-black to-black"
     },

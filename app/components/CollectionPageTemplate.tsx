@@ -20,6 +20,14 @@ interface Product {
   is_active: boolean;
   featured: boolean;
   brand_name: string | null;
+  flavor?: string | null;
+  strain_type?: string | null;
+  color?: string | null;
+  cannabinoid_profile?: {
+    dominant_cannabinoid?: string;
+    thc_variants?: Record<string, number>;
+    other_cannabinoids?: Record<string, number>;
+  };
 }
 
 interface CollectionPageTemplateProps {
@@ -52,9 +60,20 @@ export default function CollectionPageTemplate({
   // Filter states
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
+  const [selectedStrains, setSelectedStrains] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedCannabinoids, setSelectedCannabinoids] = useState<string[]>([]);
+  
   const [inStockOnly, setInStockOnly] = useState(false);
   const [onSaleOnly, setOnSaleOnly] = useState(false);
+  
+  // UI Expansion States
   const [brandsExpanded, setBrandsExpanded] = useState(false);
+  const [flavorsExpanded, setFlavorsExpanded] = useState(false);
+  const [strainsExpanded, setStrainsExpanded] = useState(true); // Default open for flower pages
+  const [colorsExpanded, setColorsExpanded] = useState(false);
+  const [cannabinoidsExpanded, setCannabinoidsExpanded] = useState(true); // Default open as it's a key feature
   
   // Sort state
   const [sortBy, setSortBy] = useState('featured');
@@ -95,10 +114,6 @@ export default function CollectionPageTemplate({
     }
   };
 
-  // Extract unique brands from products
-  const brands = useMemo(() => {
-    return Array.from(new Set(products.map(p => p.brand_name).filter(Boolean))).sort() as string[];
-  }, [products]);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -110,6 +125,32 @@ export default function CollectionPageTemplate({
     // Brand filter
     if (selectedBrands.length > 0) {
       result = result.filter(p => p.brand_name && selectedBrands.includes(p.brand_name));
+    }
+
+    // Flavor filter
+    if (selectedFlavors.length > 0) {
+      result = result.filter(p => p.flavor && selectedFlavors.includes(p.flavor));
+    }
+
+    // Strain Type filter
+    if (selectedStrains.length > 0) {
+      result = result.filter(p => p.strain_type && selectedStrains.includes(p.strain_type));
+    }
+
+    // Color filter
+    if (selectedColors.length > 0) {
+      result = result.filter(p => p.color && selectedColors.includes(p.color));
+    }
+
+    // Cannabinoid filter
+    if (selectedCannabinoids.length > 0) {
+      result = result.filter(p => {
+        if (!p.cannabinoid_profile) return false;
+        // Check if product contains ANY of the selected cannabinoids with > 0 content
+        // This checks keys in thc_variants and other_cannabinoids
+        const variants = { ...p.cannabinoid_profile.thc_variants, ...p.cannabinoid_profile.other_cannabinoids };
+        return selectedCannabinoids.some(c => (variants[c as keyof typeof variants] || 0) > 0);
+      });
     }
     
     // In stock filter
@@ -138,28 +179,186 @@ export default function CollectionPageTemplate({
     }
     
     return result;
-  }, [products, priceRange, selectedBrands, inStockOnly, onSaleOnly, sortBy]);
+  }, [
+    products, priceRange, selectedBrands, selectedFlavors, selectedStrains, selectedColors, selectedCannabinoids,
+    inStockOnly, onSaleOnly, sortBy
+  ]);
+
+  // Derived state for Smart Filters
+  
+  // 1. Calculate Min/Max Price from actual products
+  const { minProductPrice, maxProductPrice } = useMemo(() => {
+    if (products.length === 0) return { minProductPrice: 0, maxProductPrice: 500 };
+    const prices = products.map(p => p.our_price);
+    return {
+      minProductPrice: Math.floor(Math.min(...prices)),
+      maxProductPrice: Math.ceil(Math.max(...prices))
+    };
+  }, [products]);
+
+  // Initialize Price Range when products load
+  useEffect(() => {
+    if (products.length > 0) {
+      setPriceRange([minProductPrice, maxProductPrice]);
+    }
+  }, [minProductPrice, maxProductPrice, products.length]);
+
+  // Helper derived stats for filters
+  const { smartBrands, smartFlavors, smartStrains, smartColors, smartCannabinoids, smartQuickFilters } = useMemo(() => {
+    
+    // Helper: does product match ALL OTHER filters except the current category being calculated?
+    const matchesFiltersExcluding = (p: Product, excludeType: 'brand' | 'flavor' | 'strain' | 'color' | 'cannabinoid' | 'quick') => {
+      const matchesPrice = p.our_price >= priceRange[0] && p.our_price <= priceRange[1];
+      
+      const matchesBrand = excludeType === 'brand' ? true : (selectedBrands.length === 0 || (p.brand_name && selectedBrands.includes(p.brand_name)));
+      const matchesFlavor = excludeType === 'flavor' ? true : (selectedFlavors.length === 0 || (p.flavor && selectedFlavors.includes(p.flavor)));
+      const matchesStrain = excludeType === 'strain' ? true : (selectedStrains.length === 0 || (p.strain_type && selectedStrains.includes(p.strain_type)));
+      const matchesColor = excludeType === 'color' ? true : (selectedColors.length === 0 || (p.color && selectedColors.includes(p.color)));
+      
+      const matchesCannabinoid = excludeType === 'cannabinoid' ? true : (
+        selectedCannabinoids.length === 0 || (p.cannabinoid_profile && (() => {
+          const variants = { ...p.cannabinoid_profile?.thc_variants, ...p.cannabinoid_profile?.other_cannabinoids };
+          return selectedCannabinoids.some(c => (variants[c as keyof typeof variants] || 0) > 0);
+        })())
+      );
+
+      // Quick filters are usually "AND" filters on top of attribute filters
+      // If we are calculating attributes, we generally want to respect the Quick Filters (Stock/Sale)
+      // UNLESS we are calculating counts FOR the Quick Filters themselves.
+      const matchesStock = excludeType === 'quick' ? true : (inStockOnly ? p.stock_quantity > 0 : true);
+      const matchesSale = excludeType === 'quick' ? true : (onSaleOnly ? (p.sale_price && p.sale_price < p.our_price) : true);
+
+      return matchesPrice && matchesBrand && matchesFlavor && matchesStrain && matchesColor && matchesCannabinoid && matchesStock && matchesSale;
+    };
+
+    // --- BRANDS ---
+    const brandCounts: Record<string, number> = {};
+    products.forEach(p => {
+      if (p.brand_name && matchesFiltersExcluding(p, 'brand')) {
+        brandCounts[p.brand_name] = (brandCounts[p.brand_name] || 0) + 1;
+      }
+    });
+
+    const smartBrands = Object.entries(brandCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+    // --- FLAVORS ---
+    const flavorCounts: Record<string, number> = {};
+    products.forEach(p => {
+      if (p.flavor && matchesFiltersExcluding(p, 'flavor')) {
+        flavorCounts[p.flavor] = (flavorCounts[p.flavor] || 0) + 1;
+      }
+    });
+
+    const smartFlavors = Object.entries(flavorCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+    // --- STRAINS (Indica/Sativa/Hybrid) ---
+    const strainCounts: Record<string, number> = {};
+    products.forEach(p => {
+      if (p.strain_type && matchesFiltersExcluding(p, 'strain')) {
+        strainCounts[p.strain_type] = (strainCounts[p.strain_type] || 0) + 1;
+      }
+    });
+
+    const smartStrains = Object.entries(strainCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+    // --- COLORS ---
+    const colorCounts: Record<string, number> = {};
+    products.forEach(p => {
+      if (p.color && matchesFiltersExcluding(p, 'color')) {
+        colorCounts[p.color] = (colorCounts[p.color] || 0) + 1;
+      }
+    });
+
+    const smartColors = Object.entries(colorCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+    // --- CANNABINOIDS ---
+    const cannabinoidCounts: Record<string, number> = {};
+    products.forEach(p => {
+      if (p.cannabinoid_profile && matchesFiltersExcluding(p, 'cannabinoid')) {
+        // Extract all cannabinoids with > 0 values
+        const variants = { ...p.cannabinoid_profile.thc_variants, ...p.cannabinoid_profile.other_cannabinoids };
+        Object.entries(variants).forEach(([key, val]) => {
+          if (typeof val === 'number' && val > 0) {
+            // Normalize keys for display (e.g. delta9_thc -> Delta-9 THC)
+            cannabinoidCounts[key] = (cannabinoidCounts[key] || 0) + 1;
+          }
+        });
+      }
+    });
+
+    const smartCannabinoids = Object.entries(cannabinoidCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+    // --- QUICK FILTERS ---
+    let inStockCount = 0;
+    let onSaleCount = 0;
+
+    products.forEach(p => {
+      if (matchesFiltersExcluding(p, 'quick')) {
+        // Only count if it matches all other attribute filters
+        const matchesSales = onSaleOnly ? (p.sale_price && p.sale_price < p.our_price) : true;
+        if (matchesSales && p.stock_quantity > 0) inStockCount++;
+
+        const matchesStock = inStockOnly ? p.stock_quantity > 0 : true;
+        if (matchesStock && (p.sale_price && p.sale_price < p.our_price)) onSaleCount++;
+      }
+    });
+
+    const smartQuickFilters = { inStockCount, onSaleCount };
+
+    return { smartBrands, smartFlavors, smartStrains, smartColors, smartCannabinoids, smartQuickFilters };
+
+  }, [products, priceRange, selectedBrands, selectedFlavors, selectedStrains, selectedColors, selectedCannabinoids, inStockOnly, onSaleOnly]);
 
   const handleBrandToggle = (brand: string) => {
-    setSelectedBrands(prev => 
-      prev.includes(brand) 
-        ? prev.filter(b => b !== brand)
-        : [...prev, brand]
-    );
+    setSelectedBrands(prev => prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]);
+  };
+
+  const handleFlavorToggle = (flavor: string) => {
+    setSelectedFlavors(prev => prev.includes(flavor) ? prev.filter(f => f !== flavor) : [...prev, flavor]);
+  };
+
+  const handleStrainToggle = (strain: string) => {
+    setSelectedStrains(prev => prev.includes(strain) ? prev.filter(s => s !== strain) : [...prev, strain]);
+  };
+
+  const handleColorToggle = (color: string) => {
+    setSelectedColors(prev => prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]);
+  };
+
+  const handleCannabinoidToggle = (cannabinoid: string) => {
+    setSelectedCannabinoids(prev => prev.includes(cannabinoid) ? prev.filter(c => c !== cannabinoid) : [...prev, cannabinoid]);
   };
 
   const clearAllFilters = () => {
-    setPriceRange([0, 500]);
+    setPriceRange([minProductPrice, maxProductPrice]);
     setSelectedBrands([]);
+    setSelectedFlavors([]);
+    setSelectedStrains([]);
+    setSelectedColors([]);
+    setSelectedCannabinoids([]);
     setInStockOnly(false);
     setOnSaleOnly(false);
   };
 
   const activeFiltersCount = 
     selectedBrands.length + 
+    selectedFlavors.length + 
+    selectedStrains.length + 
+    selectedColors.length + 
+    selectedCannabinoids.length + 
     (inStockOnly ? 1 : 0) + 
     (onSaleOnly ? 1 : 0) +
-    (priceRange[0] > 0 || priceRange[1] < 500 ? 1 : 0);
+    (priceRange[0] > minProductPrice || priceRange[1] < maxProductPrice ? 1 : 0);
 
   const transformProductForCard = (product: Product) => {
     const primaryImageUrl = product.image_url ||
@@ -309,30 +508,34 @@ export default function CollectionPageTemplate({
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
-                    placeholder="Min"
-                    value={priceRange[0] === 0 ? '' : priceRange[0]}
+                    placeholder={`Min ($${minProductPrice})`}
+                    value={priceRange[0]}
+                    min={minProductPrice}
+                    max={maxProductPrice}
                     onChange={(e) => setPriceRange([Number(e.target.value) || 0, priceRange[1]])}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-green-500 focus:outline-none"
                   />
                   <span className="text-gray-500">-</span>
                   <input
                     type="number"
-                    placeholder="Max"
-                    value={priceRange[1] === 500 ? '' : priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value) || 500])}
+                    placeholder={`Max ($${maxProductPrice})`}
+                    value={priceRange[1]}
+                    min={minProductPrice}
+                    max={maxProductPrice}
+                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value) || 0])}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-green-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Brands */}
-              {brands.length > 0 && (
+              {smartBrands.length > 0 && (
                 <div className="mb-6">
                   <button
                     onClick={() => setBrandsExpanded(!brandsExpanded)}
                     className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 mb-3"
                   >
-                    Brands ({brands.length})
+                    Brands ({smartBrands.length})
                     {brandsExpanded ? (
                       <ChevronUp className="h-4 w-4" />
                     ) : (
@@ -341,17 +544,166 @@ export default function CollectionPageTemplate({
                   </button>
 
                   <div className={`space-y-2 overflow-hidden transition-all duration-300 ${
-                    brandsExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                    brandsExpanded ? 'max-h-96 opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'
                   }`}>
-                    {brands.map((brand) => (
-                      <label key={brand} className="flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedBrands.includes(brand)}
-                          onChange={() => handleBrandToggle(brand)}
-                          className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                        />
-                        <span className="text-sm text-gray-700">{brand}</span>
+                    {smartBrands.map(({ name, count }) => (
+                      <label key={name} className="flex items-center cursor-pointer justify-between group">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedBrands.includes(name)}
+                            onChange={() => handleBrandToggle(name)}
+                            className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700 group-hover:text-green-700 transition-colors">{name}</span>
+                        </div>
+                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{count}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Smart Filters: Cannabinoids (Key Feature) */}
+              {smartCannabinoids.length > 0 && (
+                <div className="mb-6">
+                  <button
+                    onClick={() => setCannabinoidsExpanded(!cannabinoidsExpanded)}
+                    className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 mb-3"
+                  >
+                    Cannabinoids ({smartCannabinoids.length})
+                    {cannabinoidsExpanded ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </button>
+
+                  <div className={`space-y-2 overflow-hidden transition-all duration-300 ${
+                    cannabinoidsExpanded ? 'max-h-96 opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'
+                  }`}>
+                    {smartCannabinoids.map(({ name, count }) => (
+                      <label key={name} className="flex items-center cursor-pointer justify-between group">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedCannabinoids.includes(name)}
+                            onChange={() => handleCannabinoidToggle(name)}
+                            className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700 group-hover:text-green-700 transition-colors uppercase">
+                            {name.replace(/_/g, ' ')}
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{count}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Smart Filters: Strain Type */}
+              {smartStrains.length > 0 && (
+                <div className="mb-6">
+                  <button
+                    onClick={() => setStrainsExpanded(!strainsExpanded)}
+                    className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 mb-3"
+                  >
+                    Strain Type ({smartStrains.length})
+                    {strainsExpanded ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </button>
+
+                  <div className={`space-y-2 overflow-hidden transition-all duration-300 ${
+                    strainsExpanded ? 'max-h-96 opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'
+                  }`}>
+                    {smartStrains.map(({ name, count }) => (
+                      <label key={name} className="flex items-center cursor-pointer justify-between group">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedStrains.includes(name)}
+                            onChange={() => handleStrainToggle(name)}
+                            className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700 group-hover:text-green-700 transition-colors capitalize">{name}</span>
+                        </div>
+                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{count}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Smart Filters: Flavors */}
+              {smartFlavors.length > 0 && (
+                <div className="mb-6">
+                  <button
+                    onClick={() => setFlavorsExpanded(!flavorsExpanded)}
+                    className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 mb-3"
+                  >
+                    Flavors ({smartFlavors.length})
+                    {flavorsExpanded ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </button>
+
+                  <div className={`space-y-2 overflow-hidden transition-all duration-300 ${
+                    flavorsExpanded ? 'max-h-96 opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'
+                  }`}>
+                    {smartFlavors.map(({ name, count }) => (
+                      <label key={name} className="flex items-center cursor-pointer justify-between group">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedFlavors.includes(name)}
+                            onChange={() => handleFlavorToggle(name)}
+                            className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700 group-hover:text-green-700 transition-colors capitalize">{name}</span>
+                        </div>
+                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{count}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Smart Filters: Colors */}
+              {smartColors.length > 0 && (
+                <div className="mb-6">
+                  <button
+                    onClick={() => setColorsExpanded(!colorsExpanded)}
+                    className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 mb-3"
+                  >
+                    Colors ({smartColors.length})
+                    {colorsExpanded ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </button>
+
+                  <div className={`space-y-2 overflow-hidden transition-all duration-300 ${
+                    colorsExpanded ? 'max-h-96 opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'
+                  }`}>
+                    {smartColors.map(({ name, count }) => (
+                      <label key={name} className="flex items-center cursor-pointer justify-between group">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedColors.includes(name)}
+                            onChange={() => handleColorToggle(name)}
+                            className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700 group-hover:text-green-700 transition-colors capitalize">{name}</span>
+                        </div>
+                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{count}</span>
                       </label>
                     ))}
                   </div>
@@ -362,24 +714,30 @@ export default function CollectionPageTemplate({
               <div className="space-y-3">
                 <h4 className="text-sm font-medium text-gray-900">Quick Filters</h4>
 
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={inStockOnly}
-                    onChange={(e) => setInStockOnly(e.target.checked)}
-                    className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">In Stock</span>
+                <label className="flex items-center cursor-pointer justify-between group">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={inStockOnly}
+                      onChange={(e) => setInStockOnly(e.target.checked)}
+                      className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                    />
+                    <span className="text-sm text-gray-700 group-hover:text-green-700 transition-colors">In Stock</span>
+                  </div>
+                  <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{smartQuickFilters.inStockCount}</span>
                 </label>
 
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={onSaleOnly}
-                    onChange={(e) => setOnSaleOnly(e.target.checked)}
-                    className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                  />
-                  <span className="text-sm text-gray-700">On Sale</span>
+                <label className="flex items-center cursor-pointer justify-between group">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={onSaleOnly}
+                      onChange={(e) => setOnSaleOnly(e.target.checked)}
+                      className="mr-2 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                    />
+                    <span className="text-sm text-gray-700 group-hover:text-green-700 transition-colors">On Sale</span>
+                  </div>
+                   <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{smartQuickFilters.onSaleCount}</span>
                 </label>
               </div>
             </div>
