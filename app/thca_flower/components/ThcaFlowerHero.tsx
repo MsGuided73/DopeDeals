@@ -64,7 +64,7 @@ export default function ThcaFlowerHero() {
           <div className="relative">
             <div className="aspect-square relative rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/images/thca-flower/thca-flower-hero.jpg"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Flower_hero_image.png"
                 alt="Premium THCA Flower Collection"
                 fill
                 className="object-cover"
