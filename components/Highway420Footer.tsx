@@ -184,6 +184,13 @@ export default function Highway420Footer() {
                   </Link>
                 </li>
               </ul>
+
+              <div className="mt-8 text-gray-800">
+                <h4 className="font-bold text-lg mb-2">Contact Us:</h4>
+                <p className="font-medium">BMB Wholesale, Inc.</p>
+                <p>10 Manor Pkwy</p>
+                <p>Salem, NH 03079 USA</p>
+              </div>
             </div>
 
             {/* Useful Links */}
