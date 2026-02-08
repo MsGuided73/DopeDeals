@@ -131,7 +131,7 @@ export default function CollectionsGrid() {
       <div className="hidden lg:block w-full">
         <div className="max-w-screen-2xl mx-auto px-2">
           {/* Main Grid: 4 Columns, Mosaic Layout */}
-          <div className="grid grid-cols-4 gap-3 h-[85vh] w-full">
+          <div className="grid grid-cols-4 gap-3 w-full">
             
             {/* Hero Tile - Spans 2x2 */}
             <Link
@@ -158,7 +158,7 @@ export default function CollectionsGrid() {
               <Link
                 key={i}
                 href={cat.route}
-                className="rounded-2xl overflow-hidden shadow-xl relative group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 block"
+                className="aspect-square rounded-2xl overflow-hidden shadow-xl relative group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 block"
                 style={{
                   // Dynamic Premium Background
                   background: `radial-gradient(circle at center, ${cat.color}40 0%, #050505 100%)`, 
