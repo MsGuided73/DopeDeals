@@ -131,8 +131,7 @@ export default function CollectionsGrid() {
       <div className="hidden lg:block w-full">
         <div className="max-w-screen-2xl mx-auto px-2">
           {/* Main Grid: 4 Columns, Mosaic Layout */}
-          {/* Using aspect-[5/3] approximates the desktop 85vh layout on a 16:9 screen while scaling down responsively */}
-          <div className="grid grid-cols-4 gap-3 w-full aspect-[5/3]">
+          <div className="grid grid-cols-4 gap-3 h-[85vh] w-full">
             
             {/* Hero Tile - Spans 2x2 */}
             <Link
