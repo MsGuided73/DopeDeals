@@ -279,7 +279,7 @@ export default function ProfilePage() {
                   
                   // Use updateProfile for public.users table updates
                   // Cast to any to bypass strict type checking for now, as types need updating but DB is ready
-                  const { error } = await useAuth().updateProfile(updates);
+                  const { error } = await updateProfile(updates);
                   
                   if (error) {
                     setError(error);

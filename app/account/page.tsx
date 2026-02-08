@@ -155,7 +155,7 @@ export default function AccountPage() {
             </Link>
 
             {/* Address Book */}
-            <Link href="/addresses" className="group">
+            <Link href="/account/addresses" className="group">
               <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-dope-orange-300 group-hover:transform group-hover:scale-105">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center mr-4">
@@ -173,7 +173,7 @@ export default function AccountPage() {
             </Link>
 
             {/* Account Settings */}
-            <Link href="/settings" className="group">
+            <Link href="/profile" className="group">
               <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-dope-orange-300 group-hover:transform group-hover:scale-105">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-800 rounded-full flex items-center justify-center mr-4">
