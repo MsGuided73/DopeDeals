@@ -48,7 +48,11 @@ export async function getStorage() {
       .not('description', 'ilike', '%7-oh%')
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%');
+      .not('description', 'ilike', '%7-ohmz%')
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%')
+      .not('description', 'ilike', '%tincture%')
+      .not('description', 'ilike', '%salve%');
 
       if (filters?.categoryId) query = query.eq('category_id', filters.categoryId);
       if (filters?.brandId) query = query.eq('brand_id', filters.brandId);
@@ -156,6 +160,10 @@ export async function getStorage() {
         .not('name', 'ilike', '%kratom%')
         .not('name', 'ilike', '%hydroxy%')
         .not('name', 'ilike', '%7-oh%')
+        .not('slug', 'ilike', '%tincture%')
+        .not('slug', 'ilike', '%salve%')
+        .not('name', 'ilike', '%tincture%')
+        .not('name', 'ilike', '%salve%')
         .order('name');
       
       if (error) throw error;
@@ -281,6 +289,10 @@ export async function getStorage() {
           .not('description', 'ilike', '%7-hydroxy%')
           .not('description', 'ilike', '%mitragynine%')
           .not('description', 'ilike', '%7-ohmz%')
+          .not('name', 'ilike', '%tincture%')
+          .not('name', 'ilike', '%salve%')
+          .not('description', 'ilike', '%tincture%')
+          .not('description', 'ilike', '%salve%')
           .limit(100);
 
         if (error) throw error;

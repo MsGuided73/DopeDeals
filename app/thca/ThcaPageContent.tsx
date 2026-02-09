@@ -163,7 +163,7 @@ export default function ThcaPageContent() {
               <h2 className="text-3xl font-bold text-white mb-4">Coming Soon</h2>
               <p className="text-white/90 text-lg">
                 Our premium THCA collection is currently being curated.
-                We're working hard to bring you the highest quality THCA flower, prerolls, salves, tinctures, and more.
+                We're working hard to bring you the highest quality THCA flower, prerolls, and more.
               </p>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function ThcaPageContent() {
             🌿 Premium THCA
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Discover our curated collection of premium THCA products including salves, tinctures, flower, prerolls, and more
+            Discover our curated collection of premium THCA products including flower, prerolls, and more
           </p>
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
             <span className="text-white font-medium">{products.length} Products Available</span>

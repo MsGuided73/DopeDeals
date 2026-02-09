@@ -72,7 +72,7 @@ const getCategoryBreadcrumb = (categorySlug?: string): { name: string; href: str
     'pre-rolls': { name: 'Pre-Rolls', href: '/pre-rolls' },
     'mushrooms': { name: 'Mushrooms', href: '/mushrooms' },
     'edibles': { name: 'Edibles', href: '/edibles' },
-    'cbd-tinctures': { name: 'CBD & Tinctures', href: '/cbd-tinctures' },
+
     'nitrous-oxide': { name: 'Nitrous Oxide', href: '/nitrous-oxide' },
     'thca-flower': { name: 'THCA Flower', href: '/thca-flower' },
     'accessories': { name: 'Accessories', href: '/accessories' },

@@ -88,7 +88,11 @@ export async function POST(req: Request) {
       .not('description', 'ilike', '%7-oh%')
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%');
+      .not('description', 'ilike', '%7-ohmz%')
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%')
+      .not('description', 'ilike', '%tincture%')
+      .not('description', 'ilike', '%salve%');
 
     if (category) q1 = q1.eq("category_slug", category);
 

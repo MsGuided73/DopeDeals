@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 /**
  * Edibles API Route
  *
- * Returns products with category_slug in: "edibles", "gummies", "cereal bar", "salves/salve", "tinctures/tincture"
+ * Returns products with category_slug in: "edibles", "gummies", "cereal bar"
  * Filters: Active products only, valid images, no batteries
  */
 
@@ -35,11 +35,8 @@ export async function GET(req: NextRequest) {
       .in('category_slug', [
         'edibles',
         'gummies',
-        'cereal bar',
-        'salves',
-        'salve',
-        'tinctures',
-        'tincture'
+        'gummies',
+        'cereal bar'
       ])
       .order('created_at', { ascending: false })
       .limit(limit);

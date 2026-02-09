@@ -35,7 +35,14 @@ export async function GET(req: NextRequest) {
       console.error('[msp_search_category] error:', error);
       return NextResponse.json({ products: [], error: error.message }, { status: 500 });
     }
-    return NextResponse.json({ products: data ?? [] });
+
+    // Filter out tinctures and salves from the results
+    const filteredProducts = (data ?? []).filter((p: any) => {
+       const text = (p.name + ' ' + (p.description || '')).toLowerCase();
+       return !text.includes('tincture') && !text.includes('salve');
+    });
+
+    return NextResponse.json({ products: filteredProducts });
   } catch (err: any) {
     console.error(err);
     return NextResponse.json({ products: [], error: err.message }, { status: 500 });

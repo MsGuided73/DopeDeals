@@ -80,6 +80,8 @@ export async function GET(request: NextRequest) {
       .not('name', 'ilike', '%7-hydroxy%')
       .not('name', 'ilike', '%mitragynine%')
       .not('name', 'ilike', '%7-ohmz%')
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%')
       .limit(50);
 
     if (!productsError && products) {

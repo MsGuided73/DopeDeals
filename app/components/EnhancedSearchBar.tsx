@@ -19,8 +19,7 @@ const placeholderWords = [
   'shrooms',
   'edibles',
   'CBD',
-  'tinctures',
-  'salves',
+
   'accessories',
   'brands',
   'THCA Flower',

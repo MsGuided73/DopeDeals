@@ -33,6 +33,10 @@ export async function GET(req: NextRequest) {
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
       .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%')
+      .not('description', 'ilike', '%tincture%')
+      .not('description', 'ilike', '%salve%')
       .order('created_at', { ascending: false })
       .limit(limit * 2); // Fetch extra to ensure we have enough after deduplication
 

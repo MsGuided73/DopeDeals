@@ -62,6 +62,10 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%mitragynine%')
       .not('description', 'ilike', '%7-ohmz%')
       .not('name', 'ilike', '%battery%')
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%')
+      .not('description', 'ilike', '%tincture%')
+      .not('description', 'ilike', '%salve%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit);
 
@@ -118,7 +122,9 @@ export async function GET(req: NextRequest) {
       .not('name', 'ilike', '%7-hydroxy%')
       .not('name', 'ilike', '%mitragynine%')
       .not('name', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%battery%');
+      .not('name', 'ilike', '%battery%')
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%');
 
     return NextResponse.json({
       products: products,

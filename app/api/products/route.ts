@@ -39,7 +39,13 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-oh%')
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%');
+      .not('description', 'ilike', '%7-ohmz%')
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%')
+      .not('description', 'ilike', '%tincture%')
+      .not('description', 'ilike', '%salve%')
+      .not('short_description', 'ilike', '%tincture%')
+      .not('short_description', 'ilike', '%salve%');
 
     // Apply category filter if provided
     if (category) {
@@ -79,7 +85,13 @@ export async function GET(req: NextRequest) {
       .not('description', 'ilike', '%7-oh%')
       .not('description', 'ilike', '%7-hydroxy%')
       .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%');
+      .not('description', 'ilike', '%7-ohmz%')
+      .not('name', 'ilike', '%tincture%')
+      .not('name', 'ilike', '%salve%')
+      .not('description', 'ilike', '%tincture%')
+      .not('description', 'ilike', '%salve%')
+      .not('short_description', 'ilike', '%tincture%')
+      .not('short_description', 'ilike', '%salve%');
 
     // Apply category filter to count query if provided
     if (category) {
