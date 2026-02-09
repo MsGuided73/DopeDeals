@@ -328,7 +328,7 @@ export default function FeaturedProductsSection() {
 
         <div className="text-center mt-8">
           <Link
-            href="/products"
+            href="/hot-products"
             className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
           >
             VIEW ALL HOT PRODUCTS →

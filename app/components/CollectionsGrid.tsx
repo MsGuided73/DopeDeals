@@ -34,9 +34,9 @@ export default function CollectionsGrid() {
       bgGradient: "from-purple-900/40 via-black to-black"
     },
     { 
-      name: "N2O", 
+      name: "NITROUS", 
       route: "/nitrous-oxide", 
-      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/nitrous_no_text_revised.png",
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/nitrous_no_text%20(1).png",
       color: "#3b82f6", // Blue
       bgGradient: "from-blue-900/40 via-black to-black"
     },
@@ -83,7 +83,7 @@ export default function CollectionsGrid() {
           <img
             src={logoPath}
             alt="Highway 420"
-            className="w-full h-full object-cover max-w-full mx-auto relative z-10 opacity-90 group-hover:opacity-100 transition-opacity"
+            className="w-full h-full object-cover max-w-full mx-auto relative z-10 transition-transform duration-300"
           />
           {/* Decorative overlay */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 to-transparent group-hover:from-black/30 transition-all duration-300 z-20" />
@@ -95,11 +95,11 @@ export default function CollectionsGrid() {
             <Link
               key={i}
               href={cat.route}
-              className="aspect-[4/5] rounded-2xl overflow-hidden shadow-md relative group active:scale-95 transition-all duration-300 block"
+              className="aspect-square rounded-2xl overflow-hidden shadow-md relative group active:scale-95 transition-all duration-300 block"
               style={{
-                // Premium Radial Gradient Background to Replace "Solid Black"
-                background: `radial-gradient(circle at center, ${cat.color}33 0%, #000000 100%)`, 
-                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                // Black Stainless Steel Effect - Dark metallic with subtle gradient
+                background: `linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #121212 100%)`, 
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.4)",
               }}
             >
               {/* Dynamic Border Glow (Border is actually inset shadow or border property) */}
@@ -142,7 +142,7 @@ export default function CollectionsGrid() {
               <img 
                 src={logoPath} 
                 alt="Highway 420" 
-                className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-500" 
+                className="w-full h-full object-cover relative z-10 transition-all duration-500" 
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent group-hover:from-black/40 transition-all duration-500" />
               
@@ -160,8 +160,8 @@ export default function CollectionsGrid() {
                 href={cat.route}
                 className="rounded-2xl overflow-hidden shadow-xl relative group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 block"
                 style={{
-                  // Dynamic Premium Background
-                  background: `radial-gradient(circle at center, ${cat.color}40 0%, #050505 100%)`, 
+                  // Black Stainless Steel Effect - Dark metallic with subtle gradient
+                  background: `linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #121212 100%)`, 
                   transition: "box-shadow 0.3s ease, transform 0.3s ease",
                 }}
                 onMouseEnter={(e) => {

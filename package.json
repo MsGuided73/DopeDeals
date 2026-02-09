@@ -9,19 +9,15 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-
-  "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
-  "test": "vitest run",
-
-  "typecheck": "tsc -p tsconfig.typecheck.json",
-  "typecheck:server": "tsc -p tsconfig.server.json",
-
-  "sync:airtable": "tsx scripts/sync_airtable_to_supabase.ts"
-},
-
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.typecheck.json",
+    "typecheck:server": "tsc -p tsconfig.server.json",
+    "sync:airtable": "tsx scripts/sync_airtable_to_supabase.ts"
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
@@ -74,6 +70,7 @@
     "input-otp": "^1.4.2",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.453.0",
+    "motion": "^12.33.0",
     "multer": "^2.0.2",
     "next": "^15.4.6",
     "next-themes": "^0.4.6",
