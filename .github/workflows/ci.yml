@@ -44,7 +44,7 @@ jobs:
       # Informational only (won't fail the workflow)
       - name: Type-check (informational)
         continue-on-error: true
-        run: pnpm check
+        run: pnpm typecheck
 
       - name: Lint (informational)
         continue-on-error: true
@@ -64,3 +64,5 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+                  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+                          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
