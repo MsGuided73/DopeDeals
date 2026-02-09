@@ -20,6 +20,21 @@ interface Product {
   stock_quantity?: number;
 }
 
+interface RawProduct {
+  id: number;
+  name: string;
+  sale_price: number | null;
+  our_price: number | null;
+  image_url: string | null;
+  category_id: string | null;
+  featured: boolean;
+  is_active: boolean;
+  slug: string | null;
+  brand_name: string | null;
+  short_description: string | null;
+  stock_quantity: number | null;
+}
+
 export default function FreshDropsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,22 +51,22 @@ export default function FreshDropsPage() {
         
         const data = await response.json();
         // Handle response format { products: [...] }
-        const rawProducts = Array.isArray(data) ? data : (data.products || []);
+        const rawProducts: RawProduct[] = Array.isArray(data) ? data : (data.products || []);
         
-        const mappedProducts = rawProducts.map((p: any) => ({
+        const mappedProducts = rawProducts.map((p) => ({
           id: String(p.id),
           title: p.name || 'Unknown Product',
           price: Number(p.sale_price || p.our_price || 0),
-          image: p.image_url || null,
+          image: p.image_url || '',
           category: p.category_id || 'Fresh Drop',
           rating: 5, // New products start high!
-          reviews: Math.floor(Math.random() * 5), // Few reviews for new items
+          reviews: 0, // Fresh drops have no reviews yet
           is_featured: p.featured || false,
           is_active: p.is_active || false,
           slug: p.slug || String(p.id),
-          brand_name: p.brand_name,
-          short_description: p.short_description,
-          stock_quantity: p.stock_quantity
+          brand_name: p.brand_name || undefined,
+          short_description: p.short_description || undefined,
+          stock_quantity: p.stock_quantity || 0
         }));
         
         setProducts(mappedProducts);
