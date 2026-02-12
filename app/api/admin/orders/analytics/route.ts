@@ -32,9 +32,8 @@ export async function GET(req: NextRequest) {
     
     // Handle metrics array parameter
     if (queryParams.metrics) {
-      queryParams.metrics = queryParams.metrics.split(',');
-    }
-    
+const metricsArray = queryParams.metrics.split(',');
+              queryParams.metrics = metricsArray;
     const parse = AnalyticsQuerySchema.safeParse(queryParams);
     if (!parse.success) {
       return NextResponse.json({ 
