@@ -71,7 +71,7 @@ async function createCarouselTableDirect(): Promise<void> {
         id: crypto.randomUUID(),
         title: 'Enjoy the Ride',
         subtitle: 'TRE HOUSE',
-        description: 'Experience the magic of our 100% Legal Shrooms. For a trip you will never forget!
+        description: 'Experience the magic of our 100% Legal Shrooms. For a trip you will never forget!',
         cta_text: 'SHOP SHROOMS',
         cta_link: '/mushrooms',
         background_image_url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Bongs.jpeg',

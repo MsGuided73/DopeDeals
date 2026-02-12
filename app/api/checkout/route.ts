@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../lib/storage';
 import { requireAuth, requirePermission } from '../../lib/requireAuth';
 import { z } from 'zod';
+import type { ProcessPaymentRequest, BillingAddress } from '../../../server/kajapay/types';
+import type { ShipstationOrder } from '@shared/shipstation-schema';
 
 // Generate order number in format: DC-YYYYMMDD-XXXX
 function generateOrderNumber(): string {
@@ -133,8 +135,10 @@ export async function POST(req: NextRequest) {
   // Compute totals (basic)
   let subtotal = 0;
   for (const line of items) {
-    const product = await storage.getProduct(line.productId)!;
-    subtotal += Number(product!.price) * line.quantity;
+    const product = await storage.getProduct(line.productId);
+    if (!product) continue;
+    const price = product.our_price || product.price || 0;
+    subtotal += Number(price) * line.quantity;
   }
   // Calculate tax and shipping
   const tax = calculateTax(subtotal, shippingAddress?.state || 'CA');
@@ -185,7 +189,7 @@ export async function POST(req: NextRequest) {
 
   // Prefer atomic checkout when available (Supabase)
   if (typeof storage.checkoutAtomic === 'function') {
-    const { order, items: createdItems } = await storage.checkoutAtomic({
+    const { order, items: createdItems } = await (storage.checkoutAtomic as any)({
       userId: user.id,
       items,
       shippingAddress,
@@ -204,7 +208,7 @@ export async function POST(req: NextRequest) {
       const apiKey = process.env.SHIPSTATION_API_KEY;
       const apiSecret = process.env.SHIPSTATION_API_SECRET;
       if (apiKey && apiSecret) {
-        const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, serverStorage);
+        const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, serverStorage as any);
         const map = {
           orderNumber: order.id,
           orderDate: new Date().toISOString(),
@@ -224,21 +228,25 @@ export async function POST(req: NextRequest) {
       }
     } catch {}
 
-    await storage.clearCart(user.id);
+    if (typeof storage.clearCart === 'function') {
+      await storage.clearCart(user.id);
+    }
 
     // Process payment if requested and payment method provided
     if (processPayment && paymentMethod && billingAddress) {
       try {
         // Import payment processing
         const { kajaPayClient } = await import('../../../server/kajapay/client');
-        const { ProcessPaymentRequest } = await import('../../../server/kajapay/types');
 
         // Prepare payment request
         const paymentRequest = {
           amount: Number(total),
           currency: 'USD',
           paymentMethod,
-          billingAddress,
+          billingAddress: {
+            ...billingAddress,
+            zip: billingAddress.postalCode
+          },
           orderData: {
             orderNumber: order.orderNumber || order.id,
             orderDescription: `Highway 420 Order: ${createdItems.length} items`,
@@ -252,10 +260,10 @@ export async function POST(req: NextRequest) {
           },
           taxAmount: Number(tax),
           shippingAmount: Number(shipping)
-        };
+        } as any;
 
         // Create payment transaction record
-        const transaction = await storage.createTransaction({
+        const transaction = await (storage.createTransaction as any)({
           orderId: order.id,
           transactionType: 'charge',
           amount: total.toString(),
@@ -271,7 +279,7 @@ export async function POST(req: NextRequest) {
         const paymentResult = await kajaPayClient.processPayment(paymentRequest);
 
         // Update transaction with result
-        await storage.updateTransaction(transaction.id, {
+        await (storage.updateTransaction as any)(transaction.id, {
           kajaPayTransactionId: paymentResult.transactionId,
           kajaPayReferenceNumber: paymentResult.referenceNumber,
           status: paymentResult.success ? 'approved' : 'declined',
@@ -289,7 +297,7 @@ export async function POST(req: NextRequest) {
 
         if (paymentResult.success) {
           // Update order to paid
-          await storage.updateOrder(order.id, {
+          await (storage.updateOrder as any)(order.id, {
             paymentStatus: 'paid',
             transactionId: paymentResult.transactionId?.toString(),
             status: 'processing'
@@ -298,7 +306,7 @@ export async function POST(req: NextRequest) {
           // Save payment method if requested
           if (savePaymentMethod && paymentResult.customerToken && paymentResult.paymentAccountDataToken) {
             try {
-              await storage.createPaymentMethod({
+              await (storage.createPaymentMethod as any)({
                 userId: user.id,
                 kajaPayToken: paymentResult.paymentAccountDataToken,
                 cardLast4: paymentResult.maskedCardNumber?.slice(-4),
@@ -324,7 +332,7 @@ export async function POST(req: NextRequest) {
           }, { status: 201 });
         } else {
           // Payment failed
-          await storage.updateOrder(order.id, {
+          await (storage.updateOrder as any)(order.id, {
             paymentStatus: 'failed',
             status: 'payment_failed'
           });
@@ -344,7 +352,7 @@ export async function POST(req: NextRequest) {
         console.error('[Checkout] Payment processing error:', error);
 
         // Update order to failed
-        await storage.updateOrder(order.id, {
+        await (storage.updateOrder as any)(order.id, {
           paymentStatus: 'failed',
           status: 'payment_failed'
         });
@@ -369,7 +377,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Fallback: create order and items separately (memory or Prisma path)
-  const order = await storage.createOrder({
+  const order = await (storage.createOrder as any)({
     userId: user.id,
     orderNumber,
     subtotalAmount: subtotal.toString(),
@@ -381,22 +389,24 @@ export async function POST(req: NextRequest) {
     shippingAddress: shippingAddress || null,
     billingAddress: billingAddress || null,
     status: 'pending',
-  } as Parameters<typeof storage.createOrder>[0]);
+  });
 
   const createdItems = [] as Array<{ id: string; productId: string; quantity: number; priceAtPurchase: string }>;
   for (const line of items) {
     const product = await storage.getProduct(line.productId);
     if (!product) continue;
-    const oi = await storage.createOrderItem({
+    const oi = await (storage.createOrderItem as any)({
       orderId: order.id,
       productId: product.id,
       quantity: line.quantity,
-      priceAtPurchase: product.price,
-    } as Parameters<typeof storage.createOrderItem>[0]);
+      priceAtPurchase: product.our_price || product.price,
+    });
     createdItems.push({ id: oi.id, productId: oi.productId as string, quantity: oi.quantity as number, priceAtPurchase: oi.priceAtPurchase as string });
   }
 
-  await storage.clearCart(user.id);
+  if (typeof storage.clearCart === 'function') {
+    await storage.clearCart(user.id);
+  }
 
   return NextResponse.json({
     order,

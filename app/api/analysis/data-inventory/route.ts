@@ -15,10 +15,10 @@ export async function GET() {
 
     const analysis = {
       timestamp: new Date().toISOString(),
-      supabase_analysis: {},
-      airtable_analysis: {},
-      recommendations: [],
-      next_steps: []
+      supabase_analysis: {} as any,
+      airtable_analysis: {} as any,
+      recommendations: [] as any[],
+      next_steps: [] as string[]
     };
 
     // === SUPABASE ANALYSIS ===
@@ -117,7 +117,7 @@ export async function GET() {
               sample_record_count: records.length,
               available_fields: Object.keys(fieldAnalysis),
               field_analysis: fieldAnalysis,
-              sample_records: records.slice(0, 2).map(r => ({
+              sample_records: records.slice(0, 2).map((r: any) => ({
                 id: r.id,
                 fields: r.fields
               }))

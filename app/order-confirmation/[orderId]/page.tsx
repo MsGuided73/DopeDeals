@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import GlobalMasthead from '../../components/GlobalMasthead';
 import { CheckCircle, Package, Truck, CreditCard } from 'lucide-react';
 interface Order {
   id: string;

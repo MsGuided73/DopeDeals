@@ -231,7 +231,7 @@ export default function AssetExamplesPage() {
           <div>
             <h3 className="font-semibold mb-2">Code:</h3>
             <pre className="bg-gray-900 text-green-400 p-4 rounded text-sm overflow-x-auto">
-{`import { useAsset, useAssetVariants } from '@/app/hooks/useAssets';
+{`import { useAsset, useAssetVariants } from '@/hooks/useAssets';
 
 const { url, loading } = useAsset(
   'website-images',

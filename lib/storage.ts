@@ -18,8 +18,38 @@ import { createClient } from '@supabase/supabase-js';
  * - Both fields are text type, image_urls supports arrays
  */
 
+// Storage interface for consistency
+export interface IStorage {
+  getProducts(filters?: any): Promise<any[]>;
+  getProduct(id: string): Promise<any>;
+  getProductVariations(product: any): Promise<any[]>;
+  createProduct(product: any): Promise<any>;
+  getCategories(): Promise<any[]>;
+  getBrands(): Promise<any[]>;
+  getUser(id: string): Promise<any>;
+  createUser(user: any): Promise<any>;
+  updateUser(id: string, updates: any): Promise<any>;
+  trackUserBehavior(behavior: any): Promise<any>;
+  getUserBehavior(userId: string, limit?: number): Promise<any[]>;
+  getAllProducts(): Promise<any[]>;
+  getUserOrders(userId: string): Promise<any[]>;
+  getProductSimilarity(productId: string): Promise<any[]>;
+  createProductSimilarity(similarity: any): Promise<any>;
+  
+  // Optional operations for database persistence
+  checkoutAtomic?(data: any): Promise<any>;
+  createOrder?(order: any): Promise<any>;
+  createOrderItem?(item: any): Promise<any>;
+  clearCart?(userId: string): Promise<void>;
+  createTransaction?(tx: any): Promise<any>;
+  updateTransaction?(id: string, updates: any): Promise<any>;
+  updateOrder?(id: string, updates: any): Promise<any>;
+  createPaymentMethod?(pm: any): Promise<any>;
+  [key: string]: any;
+}
+
 // Storage abstraction layer for Next.js
-export async function getStorage() {
+export async function getStorage(): Promise<IStorage> {
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 

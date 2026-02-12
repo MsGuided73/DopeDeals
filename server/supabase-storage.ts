@@ -354,8 +354,8 @@ export class SupabaseStorage implements IStorage {
     const { data, error } = await supabaseAdmin!
       .from('orders')
       .select('*')
-      .eq('userId', userId)
-      .order('createdAt', { ascending: false });
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
     return data as Order[];

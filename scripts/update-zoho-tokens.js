@@ -12,8 +12,8 @@ async function updateTokens() {
   const orgId = process.env.ZOHO_ORGANIZATION_ID;
 
   // New tokens from OAuth exchange
-  const accessToken = ;
-  const refreshToken = ;
+  const accessToken = '';
+  const refreshToken = '';
   const expiresIn = 3600; // 1 hour
   const expiresAt = new Date(Date.now() + (expiresIn * 1000)).toISOString();
   const dc = 'us';

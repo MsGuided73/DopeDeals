@@ -9,7 +9,7 @@ interface DabsntoolsFiltersProps {
     priceRange: [number, number];
     brands: string[];
     materials: string[];
-    types: string[]; // Glass Rigs, E-Rigs, Portable, Tools, Accessories
+    equipmentTypes: string[]; // Glass Rigs, E-Rigs, Portable, Tools, Accessories
     sizes: string[];
     categories: string[];
     inStock: boolean;
@@ -24,9 +24,9 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Extract unique values from products
-  const brands = Array.from(new Set(products.map(p => p.brand).filter(Boolean))).sort();
-  const types = Array.from(new Set(products.map(p => p.type).filter(Boolean))).sort();
-  const sizes = Array.from(new Set(products.map(p => p.size).filter(Boolean))).sort();
+  const brands = Array.from(new Set(products.map(p => p.brand).filter(Boolean) as string[])).sort();
+  const availableTypes = Array.from(new Set(products.map(p => p.type).filter(Boolean) as string[])).sort();
+  const sizes = Array.from(new Set(products.map(p => p.size).filter(Boolean) as string[])).sort();
 
   const handlePriceRangeChange = (min: number, max: number) => {
     setFilters({ ...filters, priceRange: [min, max] as [number, number] });
@@ -40,10 +40,10 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
   };
 
   const handleTypeToggle = (type: string) => {
-    const newTypes = filters.types.includes(type)
-      ? filters.types.filter(t => t !== type)
-      : [...filters.types, type];
-    setFilters({ ...filters, types: newTypes });
+    const newTypes = filters.equipmentTypes.includes(type)
+      ? filters.equipmentTypes.filter(t => t !== type)
+      : [...filters.equipmentTypes, type];
+    setFilters({ ...filters, equipmentTypes: newTypes });
   };
 
   const handleSizeToggle = (size: string) => {
@@ -58,7 +58,7 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
       priceRange: [0, 300],
       brands: [],
       materials: [],
-      types: [],
+      equipmentTypes: [],
       sizes: [],
       categories: [],
       inStock: false,
@@ -69,7 +69,7 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
 
   const activeFiltersCount =
     filters.brands.length +
-    filters.types.length +
+    filters.equipmentTypes.length +
     filters.sizes.length +
     (filters.inStock ? 1 : 0) +
     (filters.onSale ? 1 : 0) +
@@ -116,11 +116,11 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
       <div className="mb-6">
         <h4 className="text-sm font-medium text-gray-900 mb-3">Equipment Type</h4>
         <div className="space-y-2">
-          {types.map((type) => (
+          {availableTypes.map((type) => (
             <label key={type} className="flex items-center">
               <input
                 type="checkbox"
-                checked={filters.types.includes(type)}
+                checked={filters.equipmentTypes.includes(type)}
                 onChange={() => handleTypeToggle(type)}
                 className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
               />
@@ -129,12 +129,12 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
           ))}
 
           {/* Add default equipment types if none are available yet */}
-          {types.length === 0 && (
+          {availableTypes.length === 0 && (
             <>
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={filters.types.includes('Glass Rigs')}
+                  checked={filters.equipmentTypes.includes('Glass Rigs')}
                   onChange={() => handleTypeToggle('Glass Rigs')}
                   className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
                 />
@@ -143,7 +143,7 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={filters.types.includes('E-Rigs')}
+                  checked={filters.equipmentTypes.includes('E-Rigs')}
                   onChange={() => handleTypeToggle('E-Rigs')}
                   className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
                 />
@@ -152,7 +152,7 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={filters.types.includes('Portable')}
+                  checked={filters.equipmentTypes.includes('Portable')}
                   onChange={() => handleTypeToggle('Portable')}
                   className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
                 />
@@ -161,7 +161,7 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={filters.types.includes('Tools')}
+                  checked={filters.equipmentTypes.includes('Tools')}
                   onChange={() => handleTypeToggle('Tools')}
                   className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
                 />

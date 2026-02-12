@@ -26,5 +26,7 @@
   "workbench.colorTheme": "Visual Studio Light",
   "coderabbit.agentType": "Cline",
   "coderabbit.autoReviewMode": "auto",
-  "coderabbit.selfHostedUrl": ""
+  "coderabbit.selfHostedUrl": "",
+  "tfa.cache.autoClean": true,
+  "tfa.cache.warningSize": 300
 }

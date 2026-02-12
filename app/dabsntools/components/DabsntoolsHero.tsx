@@ -3,7 +3,8 @@ import { useState } from 'react';
 
 interface DabsntoolsHeroProps {
   filters?: {
-    types: string[];
+    equipmentTypes: string[];
+    [key: string]: any;
   };
   setFilters?: (filters: any) => void;
 }
@@ -136,7 +137,7 @@ export default function DabsntoolsHero({ filters, setFilters }: DabsntoolsHeroPr
             onClick={() => {
               setActiveCategory('all-dabsntools');
               if (setFilters) {
-                setFilters((prev: any) => ({ ...prev, types: [] }));
+                setFilters((prev: any) => ({ ...prev, equipmentTypes: [] }));
               }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
@@ -151,7 +152,7 @@ export default function DabsntoolsHero({ filters, setFilters }: DabsntoolsHeroPr
             onClick={() => {
               setActiveCategory('glass-rigs');
               if (setFilters) {
-                setFilters((prev: any) => ({ ...prev, types: ['Glass'] }));
+                setFilters((prev: any) => ({ ...prev, equipmentTypes: ['Glass Rigs'] }));
               }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
@@ -166,7 +167,7 @@ export default function DabsntoolsHero({ filters, setFilters }: DabsntoolsHeroPr
             onClick={() => {
               setActiveCategory('e-rigs');
               if (setFilters) {
-                setFilters((prev: any) => ({ ...prev, types: ['E-Rigs'] }));
+                setFilters((prev: any) => ({ ...prev, equipmentTypes: ['E-Rigs'] }));
               }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
@@ -181,7 +182,7 @@ export default function DabsntoolsHero({ filters, setFilters }: DabsntoolsHeroPr
             onClick={() => {
               setActiveCategory('portable-rigs');
               if (setFilters) {
-                setFilters((prev: any) => ({ ...prev, types: ['Portable'] }));
+                setFilters((prev: any) => ({ ...prev, equipmentTypes: ['Portable'] }));
               }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${
@@ -196,7 +197,7 @@ export default function DabsntoolsHero({ filters, setFilters }: DabsntoolsHeroPr
             onClick={() => {
               setActiveCategory('concentrate-tools');
               if (setFilters) {
-                setFilters((prev: any) => ({ ...prev, types: ['Tool', 'Dabber', 'Nail', 'Carb Cap'] }));
+                setFilters((prev: any) => ({ ...prev, equipmentTypes: ['Tools'] }));
               }
             }}
             className={`px-6 py-3 text-base rounded-lg font-semibold transition-all duration-300 ${

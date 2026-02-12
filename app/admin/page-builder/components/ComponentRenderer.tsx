@@ -25,7 +25,7 @@ export default function ComponentRenderer({ component, isSelected, onUpdate }: C
 
     try {
       setLoading(true);
-      let query = supabaseBrowser.from(component.dataSource.sourceType).select('*');
+      let query: any = supabaseBrowser.from(component.dataSource.sourceType).select('*');
 
       // Apply filters
       if (component.dataSource.filters) {

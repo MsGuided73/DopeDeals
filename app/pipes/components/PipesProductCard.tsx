@@ -56,9 +56,9 @@ export default function PipesProductCard({ product }: PipesProductCardProps) {
   // Safely parse price to ensure it's always a valid number
   const rawPrice = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
   const price = Number.isFinite(rawPrice) ? rawPrice : 0;
-  const hasDiscount = product.compare_at_price && Number.isFinite(product.compare_at_price) && product.compare_at_price > price;
+  const hasDiscount = !!(product.compare_at_price && Number.isFinite(product.compare_at_price) && product.compare_at_price > price);
   const discountPercentage = hasDiscount
-    ? Math.round(((product.compare_at_price - price) / product.compare_at_price) * 100)
+    ? Math.round(((product.compare_at_price! - price) / product.compare_at_price!) * 100)
     : product.discount_percentage;
 
   const hasVariantIndicators = product.image_urls && product.image_urls.length > 1;

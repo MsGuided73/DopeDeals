@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useState } from 'react';
-import type { AuthenticatedUser } from '@/app/types/auth';
+import type { AuthenticatedUser } from '@/types/auth';
 import ImageUploadModal from './ImageUploadModal';
 import { ChevronDown, ChevronRight, Search, Bell, User, Settings, LogOut } from 'lucide-react';
 

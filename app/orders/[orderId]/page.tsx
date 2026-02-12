@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import GlobalMasthead from '../../components/GlobalMasthead';
 import AgeVerification from '../../components/AgeVerification';
 
 export default function OrderDetailPage({ params }: { params: { orderId: string } }) {

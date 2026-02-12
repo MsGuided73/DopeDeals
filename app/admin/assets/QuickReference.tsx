@@ -67,7 +67,7 @@ const { url, loading } = useAsset('website-images', 'hero/cityscape.jpg', {
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-2">Optimized Image:</p>
                 <pre className="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-x-auto">
-{`import OptimizedImage from '@/app/components/OptimizedImage';
+{`import OptimizedImage from '@/components/OptimizedImage';
 
 <OptimizedImage
   bucket="website-images"

@@ -63,7 +63,7 @@ export default function DabsntoolsPageContent() {
     priceRange: [0, 300] as [number, number],
     brands: [] as string[],
     materials: [] as string[],
-    types: [] as string[], // Glass Rigs, E-Rigs, Portable, Tools
+    equipmentTypes: [] as string[], // Glass Rigs, E-Rigs, Portable, Tools
     sizes: [] as string[],
     categories: [] as string[],
     inStock: false,
@@ -87,11 +87,11 @@ export default function DabsntoolsPageContent() {
     if (filters.inStock) {
       filtered = filtered.filter((p: DabsntoolsProduct) => p.stock_quantity > 0);
     }
-    if (filters.types.length > 0) {
+    if (filters.equipmentTypes.length > 0) {
       filtered = filtered.filter((p: DabsntoolsProduct) => {
         // Use the product type field that we set in the API
         const productType = p.type || p.specs?.type;
-        return productType && filters.types.includes(productType);
+        return productType && filters.equipmentTypes.includes(productType);
       });
     }
 
@@ -176,17 +176,16 @@ export default function DabsntoolsPageContent() {
         created_at: product.created_at,
         updated_at: product.updated_at,
         // Add compatibility fields
-        price: product.price,
+        type: extractTypeFromName(product.name) || product.type || product.specs?.type || 'Rigs',
+        size: product.specs?.size || product.size || 'Standard',
+        material: product.material || 'Glass',
+        price: product.our_price,
         isNew: product.isNew,
         isSale: product.isSale,
         originalPrice: product.compare_at_price,
         inStock: product.inStock,
         brand: product.brand,
-        category: 'Dab Rigs & Tools',
-        // Add additional fields that the grid expects
-        type: extractTypeFromName(product.name) || 'Rigs',
-        size: product.specs?.size || 'Standard',
-        material: product.material || 'Glass'
+        category: 'Dab Rigs & Tools'
       }));
 
       setProducts(transformedProducts);

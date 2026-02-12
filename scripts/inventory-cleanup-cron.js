@@ -7,7 +7,7 @@
  * inventory health monitoring. It should be run every 5 minutes via cron.
  * 
  * Cron configuration:
- * */5 * * * * /usr/bin/node /path/to/scripts/inventory-cleanup-cron.js
+ * every 5 minutes (* / 5 * * * * /usr/bin/node /path/to/scripts/inventory-cleanup-cron.js)
  * 
  * Environment variables required:
  * - NEXT_PUBLIC_SITE_URL: Base URL of the application

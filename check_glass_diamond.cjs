@@ -1,4 +1,4 @@
-dconst { createClient } = require('@supabase/supabase-js');
+const { createClient } = require('@supabase/supabase-js');
 
 async function checkGlassDiamond() {
   try {

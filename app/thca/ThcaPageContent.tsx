@@ -6,12 +6,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { addToCart } from '../lib/cart-utils';
 
-interface Product {
+export interface ThcaProduct {
   id: string;
   name: string;
   description: string | null;
   short_description: string | null;
   our_price: number;
+  price?: number; // Alias for our_price
   sale_price?: number | null;
   image_url: string | null;
   image_urls?: string[] | null;
@@ -20,13 +21,16 @@ interface Product {
   is_active: boolean;
   featured: boolean;
   brand_name: string | null;
+  brand?: string; // Alias for brand_name
+  category?: string;
+  subcategory?: string;
   nicotine_product: boolean;
   tobacco_product: boolean;
 }
 
 export default function ThcaPageContent() {
   const searchParams = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ThcaProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,11 +74,11 @@ export default function ThcaPageContent() {
     }
   };
 
-  const getProductDescription = (product: Product): string => {
+  const getProductDescription = (product: ThcaProduct): string => {
     return product.short_description || product.description || 'Premium quality THCA product';
   };
 
-  const transformProductForCard = (product: Product) => {
+  const transformProductForCard = (product: ThcaProduct) => {
     const primaryImageUrl = product.image_url ||
                            (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
 

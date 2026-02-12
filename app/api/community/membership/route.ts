@@ -14,7 +14,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if the authenticated user is a community member
-br
+    const { data: subscribers, error: dbError } = await supabaseServer
+      .from('community_subscribers')
+      .select('*')
+      .eq('email', user.email)
+      .eq('status', 'active');
+
     if (dbError) {
       console.error('Database error checking membership:', dbError);
       return NextResponse.json(

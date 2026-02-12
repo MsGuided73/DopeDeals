@@ -1,8 +1,13 @@
-// File Storage Interface for Supabase Storage Operations
+import { type Order } from "@shared/schema";
+
+// File Storage Interface for Supabase Storage Operations (Extended to support orders)
 export interface IStorage {
   put(path: string, data: Buffer | Uint8Array, contentType?: string): Promise<{ url: string }>;
   get(path: string): Promise<Uint8Array | null>;
   remove(path: string): Promise<void>;
+  getUserOrders(userId: string): Promise<Order[]>;
+  // Explicitly allowing extra properties for compatibility with different storage implementations
+  [key: string]: any;
 }
 
 // In-memory file storage implementation for testing
@@ -21,6 +26,10 @@ export class MemoryStorage implements IStorage {
 
   async remove(path: string): Promise<void> {
     this.files.delete(path);
+  }
+
+  async getUserOrders(userId: string): Promise<Order[]> {
+    return [];
   }
 }
 
@@ -83,6 +92,17 @@ export class SupabaseStorage implements IStorage {
       .remove([path]);
 
     if (error) throw error;
+  }
+
+  async getUserOrders(userId: string): Promise<Order[]> {
+    const { data, error } = await this.supabaseAdmin
+      .from('orders')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
   }
 }
 

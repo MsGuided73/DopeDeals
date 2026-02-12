@@ -110,6 +110,10 @@ export async function GET(req: NextRequest) {
 
         return {
           ...product,
+          brand: product.brand_name,
+          category: 'THCA',
+          subcategory: product.short_description || 'Premium THCA',
+          price: product.our_price,
           image_url: normalizedImages[0] || product.image_url,
           image_urls: normalizedImages,
           inStock: (product.stock_quantity || 0) > 0

@@ -212,7 +212,7 @@ export class RecommendationAgent {
       try {
         const brandProducts = await this.storage.getProducts({ brandId: currentProduct.brand_id });
 
-        brandProducts.forEach(product => {
+        (brandProducts as any[]).forEach((product: any) => {
           if (product.id !== currentProduct.id && !excludeProductIds.includes(product.id)) {
             const categoryMatch = product.category_id === currentProduct.category_id ? 1 : 0.5;
             const score = 0.8 * categoryMatch;
@@ -238,7 +238,7 @@ export class RecommendationAgent {
       try {
         const categoryProducts = await this.storage.getProducts({ categoryId: currentProduct.category_id });
 
-        categoryProducts.forEach(product => {
+        (categoryProducts as any[]).forEach((product: any) => {
           if (product.id !== currentProduct.id && !excludeProductIds.includes(product.id)) {
             const brandMatchBoost = userPreferences.favoriteBrands.get(product.brand_id) ? 0.2 : 0;
             const score = 0.6 + brandMatchBoost;
@@ -474,7 +474,7 @@ export class RecommendationAgent {
     const recommendations: ProductRecommendation[] = [];
 
     // Get top flavor preferences
-    const topFlavors = Array.from(preferences.flavorProfiles.entries())
+    const topFlavors = (Array.from(preferences.flavorProfiles.entries()) as [string, number][])
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3)
       .map(([flavor]) => flavor);
@@ -518,7 +518,7 @@ export class RecommendationAgent {
     const recommendations: ProductRecommendation[] = [];
 
     // Get top brands
-    const topBrands = Array.from(preferences.favoriteBrands.entries())
+    const topBrands = (Array.from(preferences.favoriteBrands.entries()) as [string, number][])
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3)
       .map(([brandId]) => brandId);
@@ -686,7 +686,7 @@ Analyze user preferences and suggest specific product types they would love base
       if (!allProducts || allProducts.length === 0) return [];
 
       // Strategy 1: Recommend from favorite categories
-      const topCategories = Array.from(preferences.favoriteCategories.entries())
+      const topCategories = (Array.from(preferences.favoriteCategories.entries()) as [string, number][])
         .sort(([,a], [,b]) => b - a)
         .slice(0, 2)
         .map(([cat]) => cat);
@@ -730,7 +730,7 @@ Analyze user preferences and suggest specific product types they would love base
       }
 
       // Strategy 3: Brand loyalty
-      const topBrands = Array.from(preferences.favoriteBrands.entries())
+      const topBrands = (Array.from(preferences.favoriteBrands.entries()) as [string, number][])
         .sort(([,a], [,b]) => b - a)
         .slice(0, 1)
         .map(([brand]) => brand);
@@ -759,17 +759,17 @@ Analyze user preferences and suggest specific product types they would love base
   }
 
   private buildAIRecommendationPrompt(userProfile: any, preferences: any, currentProduct: any): string {
-    const topCategories = Array.from(preferences.favoriteCategories.entries())
+    const topCategories = (Array.from(preferences.favoriteCategories.entries()) as [string, number][])
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3)
       .map(([cat, count]) => `${cat} (${count} purchases)`);
-
-    const topBrands = Array.from(preferences.favoriteBrands.entries())
+ 
+    const topBrands = (Array.from(preferences.favoriteBrands.entries()) as [string, number][])
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3)
       .map(([brand, count]) => `${brand} (${count} purchases)`);
-
-    const topFlavors = Array.from(preferences.flavorProfiles.entries())
+ 
+    const topFlavors = (Array.from(preferences.flavorProfiles.entries()) as [string, number][])
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
       .map((entry) => entry[0]);

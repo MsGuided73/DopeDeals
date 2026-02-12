@@ -37,3 +37,19 @@ for (const p of candidates) {
   if (loadEnvFile(p)) break;
 }
 
+// Fallback dummy values for tests if not provided via .env files
+const requiredEnvs: Record<string, string> = {
+  'NEXT_PUBLIC_SUPABASE_URL': 'https://placeholder-project.supabase.co',
+  'SUPABASE_URL': 'https://placeholder-project.supabase.co',
+  'NEXT_PUBLIC_SUPABASE_ANON_KEY': 'placeholder-key',
+  'SUPABASE_SERVICE_ROLE_KEY': 'placeholder-key',
+  'NEXT_PUBLIC_SITE_URL': 'http://localhost:3000',
+  'INTERNAL_API_KEY': 'test-internal-key'
+};
+
+for (const [key, value] of Object.entries(requiredEnvs)) {
+  if (process.env[key] === undefined || process.env[key] === '') {
+    process.env[key] = value;
+  }
+}
+

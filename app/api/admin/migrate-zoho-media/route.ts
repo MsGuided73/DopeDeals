@@ -19,6 +19,7 @@ interface ZohoProduct {
   description?: string;
   sku: string;
   images?: ZohoImage[];
+  [key: string]: any;
 }
 
 interface MigrationResult {
@@ -346,7 +347,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<MigrationResu
         // Get detailed product info from Zoho
         const zohoProduct = await fetchZohoProductDetails(accessToken, product.zoho_item_id);
         
-        let primaryImageUrl: string | null = null;
+        let primaryImageUrl: string | undefined = undefined;
 
         // Process images if they exist
         if (zohoProduct.images && zohoProduct.images.length > 0) {
