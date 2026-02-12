@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Instagram, Twitter, Facebook, Youtube } from "lucide-react";
+import { Instagram, Twitter, Facebook, Youtube, Phone, Truck, RotateCcw, Building2 } from "lucide-react";
 import { useNavigation } from "../app/contexts/NavigationContext";
 
 export default function Highway420Footer() {
@@ -29,22 +29,108 @@ export default function Highway420Footer() {
 
   if (isCheckoutFlow) {
     return (
-      <footer className="bg-white border-t border-gray-200">
+      <footer className="bg-white border-t border-gray-100">
+        {/* Checkout Support & Billing Info Section */}
+        <div className="bg-gray-50/50 py-12 border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+              {/* Help Box */}
+              <div className="bg-white p-6 border border-gray-100 shadow-sm rounded-xl">
+                <div className="flex gap-4">
+                  <div className="mt-1">
+                    <Phone className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Help</h3>
+                    <p className="text-sm text-gray-600 mb-1">
+                      Call us on <a href="tel:6266566287" className="text-gray-900 font-medium hover:underline underline-offset-4">(626) 656-6287</a>
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Monday - Friday: 9am - 6pm EST
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Box */}
+              <div className="bg-white p-6 border border-gray-100 shadow-sm rounded-xl">
+                <div className="flex gap-4">
+                  <div className="mt-1">
+                    <Truck className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Delivery</h3>
+                    <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                      Track the progress of your order in real time.
+                    </p>
+                    <Link href="/shipping" className="text-sm font-medium text-gray-900 border-b border-gray-300 pb-0.5 hover:border-gray-900 transition-colors">
+                      Find out more
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Returns Box */}
+              <div className="bg-white p-6 border border-gray-100 shadow-sm rounded-xl">
+                <div className="flex gap-4">
+                  <div className="mt-1">
+                    <RotateCcw className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Returns</h3>
+                    <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                      14 day money-back returns if you change your mind.
+                    </p>
+                    <Link href="/returns" className="text-sm font-medium text-gray-900 border-b border-gray-300 pb-0.5 hover:border-gray-900 transition-colors">
+                      Find out more
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Merchant Identifier / Billing Note */}
+            <div className="bg-gray-900 text-white p-6 md:p-8 rounded-2xl shadow-xl overflow-hidden relative group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-green-500/20 transition-all duration-700" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full -ml-12 -mb-12 blur-xl group-hover:bg-blue-500/20 transition-all duration-700" />
+              
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+                <div className="w-14 h-14 bg-white/10 flex items-center justify-center rounded-xl backdrop-blur-sm border border-white/20">
+                  <Building2 className="w-7 h-7 text-green-400" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h4 className="text-lg font-bold text-white mb-2 tracking-tight">Important Billing Information</h4>
+                  <p className="text-gray-300 text-sm leading-relaxed max-w-2xl">
+                    To prevent confusion on your bank statement, please note that all transactions will appear as 
+                    <span className="text-white font-bold mx-1.5 px-2 py-0.5 bg-white/10 rounded border border-white/10">HIGHWAY</span>
+                    from our business location at <span className="text-white font-medium">10 Manor Pkwy, Salem, NH 03079</span>.
+                  </p>
+                </div>
+                <div className="hidden lg:block">
+                  <div className="text-xs text-gray-500 font-mono tracking-widest uppercase opacity-50 [writing-mode:vertical-lr] rotate-180">
+                    Trusted Merchant
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/shipping" className="hover:text-gray-900">Shipping</Link>
-              <Link href="/returns" className="hover:text-gray-900">Returns</Link>
-              <Link href="/privacy" className="hover:text-gray-900">Privacy</Link>
-              <Link href="/terms-and-conditions" className="hover:text-gray-900">Terms</Link>
-              <Link href="/help" className="hover:text-gray-900">Support</Link>
+            <div className="flex flex-wrap justify-center gap-4 font-medium">
+              <Link href="/shipping" className="hover:text-gray-900 transition-colors">Shipping</Link>
+              <Link href="/returns" className="hover:text-gray-900 transition-colors">Returns</Link>
+              <Link href="/privacy" className="hover:text-gray-900 transition-colors">Privacy</Link>
+              <Link href="/terms-and-conditions" className="hover:text-gray-900 transition-colors">Terms</Link>
+              <Link href="/help" className="hover:text-gray-900 transition-colors">Support</Link>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-xs text-gray-400">Secure payments</span>
+            <div className="flex items-center gap-6">
+              <span className="text-xs font-semibold tracking-wide uppercase text-gray-400">Secure Checkout</span>
               <img
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/credit-card-brands-logos-c87zqqz38n8jbptz.jpg"
                 alt="Accepted Payment Methods"
-                className="h-7 w-auto object-contain"
+                className="h-7 w-auto object-contain greyscale opacity-80 hover:opacity-100 transition-all duration-300"
               />
             </div>
           </div>
