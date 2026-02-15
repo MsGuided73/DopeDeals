@@ -67,7 +67,13 @@ export default function CartPage() {
     setShopReferer(getShopReferer());
   }, []);
 
-  if (isLoading) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
         <Loader2 className="w-12 h-12 text-black animate-spin mb-4" />
@@ -101,6 +107,10 @@ export default function CartPage() {
     );
   }
 
+  const freeShippingThreshold = 75;
+  const progress = Math.min((cart.subtotal / freeShippingThreshold) * 100, 100);
+  const remainingForFreeShipping = Math.max(freeShippingThreshold - cart.subtotal, 0);
+
   return (
     <div className="min-h-screen bg-gray-50 pt-12 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -113,6 +123,24 @@ export default function CartPage() {
             <Trash2 className="w-4 h-4" />
             Clear Cart
           </button>
+        </div>
+
+        {/* Free Shipping Progress Bar */}
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
+            <div className="flex justify-between items-center mb-2">
+                <span className="font-medium text-gray-900">
+                    {remainingForFreeShipping > 0 
+                        ? <span>Spend <span className="font-bold text-green-600">${remainingForFreeShipping.toFixed(2)}</span> more for free shipping!</span>
+                        : "🎉 You've unlocked FREE shipping!"}
+                </span>
+                <span className="text-sm font-medium text-gray-500">{Math.round(progress)}%</span>
+            </div>
+            <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                <div 
+                    className={`h-2.5 rounded-full transition-all duration-500 ${remainingForFreeShipping > 0 ? 'bg-black' : 'bg-green-500'}`} 
+                    style={{ width: `${progress}%` }}
+                ></div>
+            </div>
         </div>
 
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
@@ -243,11 +271,17 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
-                  <span className="text-green-600 font-medium">Calculated at checkout</span>
+                  <span className="text-gray-900 font-medium">
+                    {cart.shippingAmount === 0 ? (
+                      <span className="text-green-600">Free</span>
+                    ) : (
+                      `$${cart.shippingAmount.toFixed(2)}`
+                    )}
+                  </span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Tax</span>
-                  <span className="text-gray-500">Calculated at checkout</span>
+                  <span className="text-gray-900 font-medium">${cart.taxAmount.toFixed(2)}</span>
                 </div>
                 
                 <div className="border-t border-gray-100 pt-4 flex justify-between items-end">
@@ -273,7 +307,7 @@ export default function CartPage() {
               </div>
               
               <div className="mt-4 text-xs text-center text-gray-400">
-                <p>Shipping & taxes calculated at checkout.</p>
+                <p>Shipping & taxes are implementing estimates based on standard rates.</p>
               </div>
             </div>
           </div>

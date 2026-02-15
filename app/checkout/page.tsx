@@ -442,7 +442,7 @@ export default function CheckoutPage() {
                       type="date"
                       value={form.dateOfBirth}
                       onChange={(e) => updateForm('dateOfBirth', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-colors ${
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-colors text-gray-900 ${
                         errors.dateOfBirth ? 'border-red-300' : 'border-gray-300'
                       }`}
                     />

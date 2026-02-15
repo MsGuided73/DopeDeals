@@ -337,7 +337,7 @@ export const calculateCartTotals = (items: CartItem[]) => {
   const subtotal = items.reduce((sum, item) => sum + item.itemTotal, 0);
   const taxRate = 0.08; // 8% tax rate - adjust as needed
   const taxAmount = subtotal * taxRate;
-  const shippingAmount = subtotal > 50 ? 0 : 9.99; // Free shipping over $50
+  const shippingAmount = subtotal > 75 ? 0 : 9.99; // Free shipping over $75
   const total = subtotal + taxAmount + shippingAmount;
 
   return {

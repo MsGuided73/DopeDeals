@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef, useCallback, useMemo } from 'react';
 import { getCart, getSessionId, ensureSessionId, initializeCart, type Cart } from '../lib/cart-utils';
 
 interface CartContextType {
@@ -16,7 +16,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const isRefreshingRef = useRef(false);
 
-  const refreshCart = async () => {
+  const refreshCart = useCallback(async () => {
     // Prevent recursive calls
     if (isRefreshingRef.current) {
       return;
@@ -86,7 +86,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
       isRefreshingRef.current = false;
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Only run on client side after hydration
@@ -138,8 +138,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const cartCount = cart?.itemCount || 0;
 
+  const contextValue = useMemo(() => ({
+    cart,
+    cartCount,
+    isLoading,
+    refreshCart
+  }), [cart, cartCount, isLoading, refreshCart]);
+
   return (
-    <CartContext.Provider value={{ cart, cartCount, isLoading, refreshCart }}>
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );
