@@ -83,23 +83,26 @@ export default function CheckoutPage() {
   });
 
   const updateForm = (field: keyof CheckoutForm, value: any) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setForm(prev => {
+      const newForm = { ...prev, [field]: value };
+      
+      // Auto-sync billing address if same as shipping
+      if (field.startsWith('shipping') && prev.billingSameAsShipping) {
+        const billingField = field.replace('shipping', 'billing') as keyof CheckoutForm;
+        if (billingField in prev) {
+          return { ...newForm, [billingField]: value };
+        }
+      }
+      return newForm;
+    });
 
     // Clear error when field is updated
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
-
-    // Auto-sync billing address if same as shipping
-    if (field.startsWith('shipping') && form.billingSameAsShipping) {
-      const billingField = field.replace('shipping', 'billing') as keyof CheckoutForm;
-      if (billingField in form) {
-        setForm(prev => ({ ...prev, [billingField]: value }));
-      }
-    }
   };
 
-  const validateStep = (step: number): boolean => {
+  const getStepErrors = (step: number): Record<string, string> => {
     const newErrors: Record<string, string> = {};
 
     switch (step) {
@@ -122,6 +125,10 @@ export default function CheckoutPage() {
         if (!form.shippingZip.trim()) newErrors.shippingZip = 'ZIP code is required';
         break;
 
+        break;
+
+        break;
+
       case 3: // Payment
         if (!form.paymentMethod) newErrors.paymentMethod = 'Payment method is required';
         if (form.paymentMethod === 'card') {
@@ -131,10 +138,27 @@ export default function CheckoutPage() {
           if (!form.cvv.trim()) newErrors.cvv = 'CVV is required';
         }
         break;
+
+      case 4: // Order Review & Terms
+        if (!form.termsAccepted) newErrors.termsAccepted = 'You must agree to the Terms & Conditions';
+        break;
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
+  };
+
+  const isStepValid = (step: number): boolean => {
+    return Object.keys(getStepErrors(step)).length === 0;
+  };
+
+  const nextStep = () => {
+    const stepErrors = getStepErrors(currentStep);
+    if (Object.keys(stepErrors).length === 0) {
+      setCurrentStep(prev => prev + 1);
+      setErrors({});
+    } else {
+      setErrors(stepErrors);
+    }
   };
 
   const calculateAge = (dateOfBirth: string): number => {
@@ -155,7 +179,9 @@ export default function CheckoutPage() {
 
     // Validate all steps
     for (let step = 1; step <= 3; step++) {
-      if (!validateStep(step)) {
+      const stepErrors = getStepErrors(step);
+      if (Object.keys(stepErrors).length > 0) {
+        setErrors(stepErrors);
         setCurrentStep(step);
         return;
       }
@@ -434,8 +460,8 @@ export default function CheckoutPage() {
 
                 <div className="mt-8 flex justify-end">
                   <button
-                    onClick={() => setCurrentStep(2)}
-                    disabled={!validateStep(1)}
+                    onClick={nextStep}
+                    disabled={!isStepValid(1)}
                     className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
                   >
                     Continue to Shipping
@@ -559,8 +585,8 @@ export default function CheckoutPage() {
                     Back
                   </button>
                   <button
-                    onClick={() => setCurrentStep(3)}
-                    disabled={!validateStep(2)}
+                    onClick={nextStep}
+                    disabled={!isStepValid(2)}
                     className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
                   >
                     Continue to Payment
@@ -724,8 +750,8 @@ export default function CheckoutPage() {
                     Back
                   </button>
                   <button
-                    onClick={() => setCurrentStep(4)}
-                    disabled={!validateStep(3)}
+                    onClick={nextStep}
+                    disabled={!isStepValid(3)}
                     className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
                   >
                     Review Order
@@ -770,42 +796,46 @@ export default function CheckoutPage() {
                         <span> ending in {form.cardNumber.slice(-4)}</span>
                       )}
                     </p>
-                    <p className="text-xs text-gray-500 mt-2">
-                      Billing Descriptor: H420
-                    </p>
                   </div>
 
-                  {/* Terms & Conditions */}
-                  <div className="bg-white border border-gray-200 rounded-lg p-6">
-                    <h3 className="font-medium text-gray-900 mb-4">Terms & Conditions</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
+                  {/* Merchant Notice & Terms */}
+                  <div className="border-t border-gray-100 pt-6">
+                    <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-xl mb-6">
+                      <div className="flex-shrink-0 mt-0.5">
+                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-blue-800 leading-relaxed font-medium">
+                        Charges will appear as <span className="font-bold underline text-blue-900">"THE HIGHWAY"</span> on your statement.
+                      </p>
+                    </div>
+
+                    <label className="flex items-start gap-3 cursor-pointer group hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                      <div className="flex-shrink-0 mt-1">
                         <input
                           type="checkbox"
-                          id="termsAccepted"
                           checked={form.termsAccepted}
                           onChange={(e) => updateForm('termsAccepted', e.target.checked)}
-                          className="mt-1"
+                          className="w-5 h-5 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
                         />
-                        <label htmlFor="termsAccepted" className="text-sm text-gray-700 leading-relaxed">
-                          I have read and agree to the{' '}
-                          <Link href="/terms-and-conditions" target="_blank" className="text-blue-600 hover:text-blue-800 underline">
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-sm text-gray-600 select-none">
+                          I confirm that I have reviewed and I accept the{' '}
+                          <Link href="/terms-and-conditions" target="_blank" className="font-semibold text-black hover:underline decoration-2">
                             Terms & Conditions
                           </Link>
-                          {' '}and{' '}
-                          <Link href="/privacy" target="_blank" className="text-blue-600 hover:text-blue-800 underline">
-                            Privacy Policy
-                          </Link>
-                          . I understand that cannabis products are for adult use only (21+) and may impair my ability to drive or operate machinery.
-                        </label>
+                          {' '}of our website. I understand that cannabis products are for adult use only (21+) and may impair my ability to drive or operate machinery.
+                        </span>
+                        {errors.termsAccepted && (
+                          <p className="mt-2 text-sm text-red-600 font-medium flex items-center gap-1">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.termsAccepted}
+                          </p>
+                        )}
                       </div>
-                      {!form.termsAccepted && (
-                        <p className="text-sm text-red-600 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" />
-                          You must accept the Terms & Conditions to complete your order
-                        </p>
-                      )}
-                    </div>
+                    </label>
                   </div>
                 </div>
 
@@ -896,9 +926,13 @@ export default function CheckoutPage() {
                   <CheckCircle className="w-4 h-4 text-green-600" />
                   <span>Age Verification Required (21+)</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                   <Truck className="w-4 h-4 text-blue-600" />
                   <span>Fast & Discreet Shipping</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Shield className="w-4 h-4 text-green-600" />
+                  <span>Billing Descriptor: Charges will appear as "THE HIGHWAY"</span>
                 </div>
               </div>
             </div>

@@ -32,8 +32,10 @@ export async function GET(req: NextRequest) {
     
     // Handle metrics array parameter
     if (queryParams.metrics) {
-const metricsArray = queryParams.metrics.split(',');
-              queryParams.metrics = metricsArray;
+      const metricsArray = queryParams.metrics.split(',');
+      queryParams.metrics = metricsArray as any;
+    }
+    
     const parse = AnalyticsQuerySchema.safeParse(queryParams);
     if (!parse.success) {
       return NextResponse.json({ 
@@ -191,11 +193,12 @@ const metricsArray = queryParams.metrics.split(',');
 
     const customerInsights = customerStats?.reduce((acc: any, order) => {
       const key = order.user_id;
+      const user = Array.isArray(order.users) ? order.users[0] : order.users;
       if (!acc[key]) {
         acc[key] = {
           customerId: order.user_id,
-          customerName: order.users ? `${order.users.first_name} ${order.users.last_name}`.trim() : 'Unknown',
-          customerEmail: order.users?.email || 'Unknown',
+          customerName: user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : 'Unknown',
+          customerEmail: user?.email || 'Unknown',
           orderCount: 0,
           totalSpent: 0,
           avgOrderValue: 0,

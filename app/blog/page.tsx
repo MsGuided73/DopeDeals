@@ -1,8 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import AgeVerification from '../components/AgeVerification';
-import { MessageCircle, Sparkles, Clock, User, Search, Filter, Share2, Facebook, Twitter, Instagram, Link2 } from 'lucide-react';
+import Image from 'next/image';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowUpRight, Flame, Zap, Search } from 'lucide-react';
+import BlogArticlesGrid from '../components/BlogArticlesGrid';
 
 interface BlogPost {
   id: string;
@@ -18,506 +21,236 @@ interface BlogPost {
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
-  const [aiQuery, setAiQuery] = useState('');
-  const [aiResponse, setAiResponse] = useState('');
-  const [isAiLoading, setIsAiLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroTextRef = useRef<HTMLHeadingElement>(null);
+  const [featuredPost, setFeaturedPost] = useState<BlogPost | null>(null);
 
-  // Fetch blog posts on component mount
+  // Parallax setup for Hero
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -100]);
+
+  // FETCH DATA
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
         const response = await fetch('/api/blog');
         if (response.ok) {
-          const data = await response.json();
-          setBlogPosts(data.posts || []);
+           const data = await response.json();
+           const posts = data.posts || [];
+           setBlogPosts(posts);
+           const featured = posts.find((p: BlogPost) => p.featured) || posts[0];
+           setFeaturedPost(featured);
         }
       } catch (error) {
         console.error('Error fetching blog posts:', error);
+      } finally {
         setLoading(false);
-        return; // Exit early, no hardcoded fallback needed since database is available
       }
-
-      setLoading(false);
     };
-
     fetchBlogPosts();
-  }, [selectedCategory]);
-
-  // Fallback hardcoded posts (only shown until database has posts)
-  const fallbackPosts: BlogPost[] = [
-    {
-      id: 'cannabis-history-global',
-      title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
-      excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
-      author: 'Highway 420 Crew',
-      date: '2024-01-15',
-      category: 'Culture',
-      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
-      readTime: '10 min read',
-      featured: true
-    },
-    {
-      id: 'ultimate-bong-guide',
-      title: 'The Ultimate Guide to Picking the Perfect Bong',
-      excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
-      author: 'Highway 420 Team',
-      date: '2024-01-15',
-      category: 'Product News',
-      image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
-      readTime: '12 min read',
-      featured: true
-    },
-    {
-      id: '1',
-      title: 'The Ultimate Guide to Choosing Your First Dab Rig',
-      excerpt: 'Everything you need to know about selecting the perfect dab rig for your concentrate experience. From materials to size, we cover it all.',
-      author: 'Highway 420 Team',
-      date: '2024-01-15',
-      category: 'Product News',
-      image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
-      readTime: '8 min read',
-      featured: true
-    },
-    {
-      id: '2',
-      title: 'THCA vs THC: Understanding the Difference',
-      excerpt: 'Learn about the key differences between THCA and THC, their effects, and why THCA products are gaining popularity in the hemp industry.',
-      author: 'Dr. Cannabis',
-      date: '2024-01-12',
-      category: 'Science',
-      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
-      readTime: '6 min read',
-      featured: true
-    },
-    {
-      id: '3',
-      title: 'New Arrivals: Premium Glass Collection',
-      excerpt: 'Check out our latest collection of premium glass pieces from top artists. Limited edition designs now available.',
-      author: 'Highway 420 Team',
-      date: '2024-01-10',
-      category: 'Product News',
-      image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=400&fit=crop',
-      readTime: '4 min read',
-      featured: false
-    },
-    {
-      id: '4',
-      title: 'Proper Cleaning and Maintenance for Your Glass',
-      excerpt: 'Keep your glass pieces in pristine condition with our comprehensive cleaning guide. Tips from the pros.',
-      author: 'Glass Expert',
-      date: '2024-01-08',
-      category: 'Maintenance',
-      image: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&h=400&fit=crop',
-      readTime: '7 min read',
-      featured: false
-    },
-    {
-      id: '5',
-      title: 'The Rise of Electric Dab Rigs: E-Rigs Explained',
-      excerpt: 'Discover why electric dab rigs are revolutionizing the concentrate experience. Technology meets tradition.',
-      author: 'Tech Reviewer',
-      date: '2024-01-05',
-      category: 'Technology',
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&h=400&fit=crop',
-      readTime: '9 min read',
-      featured: false
-    },
-    {
-      id: '6',
-      title: 'Cannabis Culture: A Brief History',
-      excerpt: 'Explore the rich history of cannabis culture and how it has evolved over the decades to become mainstream.',
-      author: 'Culture Historian',
-      date: '2024-01-03',
-      category: 'Culture',
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
-      readTime: '12 min read',
-      featured: false
-    }
-  ];
-
-  const handleAIQuery = async () => {
-    if (!aiQuery.trim()) return;
-
-    setIsAiLoading(true);
-    try {
-      const response = await fetch('/api/blog', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: aiQuery }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setAiResponse(data.response);
-      } else {
-        setAiResponse(`Sorry, I couldn't search our blog articles right now. Please try again later or browse our articles manually.`);
-      }
-    } catch (error) {
-      console.error('AI search error:', error);
-      setAiResponse(`Sorry, I encountered an error while searching. Please try again or browse our articles manually.`);
-    } finally {
-      setIsAiLoading(false);
-    }
-  };
-
-  const categories = ['All', 'Science', 'Product News', 'Maintenance', 'Technology', 'Culture'];
-  const featuredPosts = blogPosts.filter(post => post.featured);
-  const regularPosts = blogPosts.filter(post => !post.featured);
-
-  // Social sharing function
-  const shareArticle = (platform: string, post: BlogPost) => {
-    const url = `${window.location.origin}/blog/${post.id}`;
-    const text = `Check out this article: ${post.title}`;
-
-    switch (platform) {
-      case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-        break;
-      case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-        break;
-      case 'copy':
-        navigator.clipboard.writeText(url);
-        // Could add a toast notification here
-        break;
-    }
-  };
+  }, []);
 
   return (
-    <div className="min-h-screen bg-white">
-      <AgeVerification />
+    <div ref={containerRef} className="min-h-screen bg-[#000] text-white selection:bg-[#ff6b35] selection:text-black overflow-x-hidden font-sans pb-20">
       
-      <div className="max-w-7xl mx-auto py-12 px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl text-gray-900 mb-4 font-display-twilight" style={{ letterSpacing: '-0.02em' }}>
-            Higher Learning
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-            Stay informed with the latest news and insights from the world of premium smoking culture.
-          </p>
-        </div>
+      {/* NOISE OVERLAY */}
+      <div className="fixed inset-0 opacity-[0.05] pointer-events-none z-50 mix-blend-overlay"
+           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
+      />
 
-        {/* AI Assistant & Category Filter */}
-        <div className="flex flex-col md:flex-row gap-6 mb-12">
-          {/* AI Assistant */}
-          <div className="flex-1 max-w-md">
-            <div className="bg-gradient-to-br from-dope-orange to-orange-600 text-white rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">DOPE AI Assistant</h3>
-                  <p className="text-orange-100 text-sm">Ask me anything about our articles!</p>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  value={aiQuery}
-                  onChange={(e) => setAiQuery(e.target.value)}
-                  placeholder="e.g., 'best bong for beginners'"
-                  className="w-full px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-white/50 focus:outline-none"
-                  onKeyPress={(e) => e.key === 'Enter' && handleAIQuery()}
-                />
-                <button
-                  onClick={handleAIQuery}
-                  disabled={isAiLoading || !aiQuery.trim()}
-                  className="w-full bg-white text-dope-orange font-semibold py-3 px-4 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
-                >
-                  {isAiLoading ? '🤔 Thinking...' : '✨ Ask AI'}
-                </button>
-              </div>
-
-              {aiResponse && (
-                <div className="mt-4 p-4 bg-white/10 rounded-lg">
-                  <p className="text-sm text-orange-100 whitespace-pre-line">{aiResponse}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Category Filter */}
-          <div className="flex-1">
-            <div className="flex flex-wrap justify-center gap-3">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full border transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-dope-orange text-white border-dope-orange'
-                      : 'border-gray-300 text-gray-700 hover:border-dope-orange hover:text-dope-orange'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Featured Posts */}
-        {featuredPosts.length > 0 && (
-          <section className="mb-16">
-            <h2 className="text-2xl text-gray-900 mb-8" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-              Featured Articles
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {featuredPosts.map((post) => (
-                <article key={post.id} className="group cursor-pointer">
-                  <div className="blog-card relative overflow-hidden rounded-xl mb-4">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-dope-orange text-white text-sm font-medium rounded-full">
-                        Featured
-                      </span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-4 text-sm text-gray-600">
-                      <span className="px-2 py-1 bg-gray-100 rounded-full">{post.category}</span>
-                      <span>{post.readTime}</span>
-                      <span>{new Date(post.date).toLocaleDateString()}</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-dope-orange transition-colors">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-600 line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">By {post.author}</span>
-                      <Link href={`/blog/${post.id}`} className="text-dope-orange hover:text-orange-600 font-medium">
-                        Read More →
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Magazine-Style Article Grid - Highway 420 Vibes */}
-        <section className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-8 shadow-xl border border-gray-200">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl text-gray-900 mb-4" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-              🔥 Latest from the Highway
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-              Fresh insights, product breakdowns, and culture deep-dives from the Highway 420 crew
-            </p>
-          </div>
-
-          {/* Magazine Layout - Mix of sizes for visual interest */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Hero Article - Large Feature */}
-            {regularPosts.slice(0, 1).map((post) => (
-              <article key={post.id} className="lg:col-span-8 group cursor-pointer">
-                <div className="blog-card relative overflow-hidden rounded-2xl mb-6 shadow-2xl border-4 border-dope-orange/20 hover:border-dope-orange/40 transition-all duration-500">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="px-3 py-1 bg-dope-orange text-white text-sm font-bold rounded-full shadow-lg">
-                        {post.category}
-                      </span>
-                      <span className="text-white/90 text-sm font-medium">{post.readTime}</span>
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-3 leading-tight group-hover:text-orange-200 transition-colors line-clamp-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-white/90 text-sm line-clamp-3 mb-4">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/80 text-sm">By {post.author}</span>
-                      <div className="flex items-center gap-2">
-                        {/* Social Share Buttons */}
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <button
-                            onClick={(e) => { e.stopPropagation(); shareArticle('facebook', post); }}
-                            className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-colors"
-                          >
-                            <Facebook className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); shareArticle('twitter', post); }}
-                            className="p-2 bg-blue-400 hover:bg-blue-500 text-white rounded-full transition-colors"
-                          >
-                            <Twitter className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); shareArticle('copy', post); }}
-                            className="p-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full transition-colors"
-                          >
-                            <Link2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                        <Link href={`/blog/${post.id}`} className="text-orange-300 hover:text-orange-100 font-bold text-sm transition-colors">
-                          READ →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
+      {/* HEADER / NAV AREA */}
+      <header className="fixed top-0 left-0 w-full z-40 px-6 py-6 flex justify-between items-center mix-blend-difference text-white">
+        <Link href="/" className="font-bold tracking-tighter text-2xl uppercase hover:scale-105 transition-transform">Highway<span className="text-[#ff6b35]">420</span></Link>
+        <div className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest">
+            {['Latest', 'Culture', 'Products', 'Events'].map((item) => (
+                <Link key={item} href="#" className="relative group overflow-hidden">
+                    <span className="block group-hover:-translate-y-full transition-transform duration-300">{item}</span>
+                    <span className="absolute top-0 left-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 text-[#ff6b35]">{item}</span>
+                </Link>
             ))}
+        </div>
+      </header>
 
-            {/* Side Articles - Smaller cards */}
-            <div className="lg:col-span-4 space-y-6">
-              {regularPosts.slice(1, 4).map((post, index) => (
-                <article key={post.id} className="group cursor-pointer">
-                  <div className="blog-card relative overflow-hidden rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
-                    <div className="aspect-video relative overflow-hidden">
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2 py-1 bg-dope-orange text-white text-xs font-bold rounded-full">
-                          {post.category}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-dope-orange transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm line-clamp-2 mb-3">
-                        {post.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">{post.readTime}</span>
-                        <div className="flex items-center gap-1">
-                          {/* Mini social share */}
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button
-                              onClick={(e) => { e.stopPropagation(); shareArticle('facebook', post); }}
-                              className="p-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
-                            >
-                              <Facebook className="w-3 h-3" />
-                            </button>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); shareArticle('twitter', post); }}
-                              className="p-1 bg-blue-400 hover:bg-blue-500 text-white rounded transition-colors"
-                            >
-                              <Twitter className="w-3 h-3" />
-                            </button>
-                          </div>
-                          <Link href={`/blog/${post.id}`} className="text-dope-orange hover:text-orange-600 font-medium text-xs">
-                            →
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
+      {/* HERO SECTION */}
+      <section className="relative h-[90vh] flex flex-col justify-center items-center px-4 pt-20 overflow-hidden">
+        <div className="absolute top-0 w-full h-full left-0 overflow-hidden -z-10">
+           {/* Abstract Gradient Blob */}
+           <motion.div style={{ y: y1 }} className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#ff6b35] rounded-full blur-[150px] opacity-10 animate-pulse" />
+           <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-900 rounded-full blur-[150px] opacity-20" />
+        </div>
 
-          {/* Bottom Grid - More Articles */}
-          {regularPosts.length > 4 && (
-            <div className="mt-12">
-              <h3 className="text-xl font-bold text-gray-900 mb-6 text-center" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-                More Stories
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {regularPosts.slice(4).map((post) => (
-                  <article key={post.id} className="group cursor-pointer">
-                    <div className="blog-card relative overflow-hidden rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300">
-                      <div className="aspect-video relative overflow-hidden">
-                        <img
-                          src={post.image}
-                          alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute top-2 left-2">
-                          <span className="px-2 py-1 bg-dope-orange text-white text-xs font-bold rounded-full">
-                            {post.category}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-4">
-                        <h3 className="text-base font-bold text-gray-900 mb-2 leading-tight group-hover:text-dope-orange transition-colors line-clamp-2">
-                          {post.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm line-clamp-2 mb-3">
-                          {post.excerpt}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-500">{post.readTime}</span>
-                          <Link href={`/blog/${post.id}`} className="text-dope-orange hover:text-orange-600 font-medium text-xs">
-                            Read →
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
+        <motion.h1 
+          ref={heroTextRef}
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="text-[12vw] leading-[0.85] font-black uppercase tracking-tighter text-center flex flex-col items-center mix-blend-normal z-10"
+        >
+          <span className="hero-word block bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500">The High</span>
+          <span className="hero-word block text-[#ff6b35] drop-shadow-[0_0_30px_rgba(255,107,53,0.3)]">Chronicles</span>
+        </motion.h1>
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="hero-sub mt-12 max-w-lg text-center text-gray-400 font-medium text-lg md:text-xl leading-relaxed border-l-2 border-[#ff6b35] pl-6 ml-6"
+        >
+          Premium cannabis culture, industry insights, and the latest drops from the underground.
+        </motion.div>
+
+        <motion.div 
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+        >
+          <span className="text-[10px] uppercase tracking-[0.3em] text-gray-500">Scroll to Explore</span>
+          <div className="scroll-indicator w-[1px] h-16 bg-gradient-to-b from-[#ff6b35] to-transparent origin-top" />
+        </motion.div>
+      </section>
+
+      {/* MARQUEE BAR */}
+      <div className="relative w-full overflow-hidden bg-[#ff6b35] text-black py-4 z-20 rotate-1 scale-105 border-y-4 border-black shadow-[0_0_50px_rgba(255,107,53,0.2)]">
+        <div className="flex w-fit animate-scroll-horizontal whitespace-nowrap">
+            {[...Array(2)].map((_, i) => ( // Duplicate for infinite scroll
+                <div key={i} className="flex gap-16 font-black text-2xl uppercase tracking-tight px-8">
+                {[...Array(4)].map((_, j) => (
+                    <span key={j} className="flex items-center gap-4">
+                    Latest Drops <Zap className="fill-black w-6 h-6" /> Industry News <Flame className="fill-black w-6 h-6" /> Vibe Check
+                    </span>
                 ))}
+                </div>
+            ))}
+        </div>
+      </div>
+
+      {/* FEATURED POST - CINEMATIC */}
+      {featuredPost && (
+        <section className="py-32 px-4 md:px-8 max-w-[1920px] mx-auto">
+          <div className="flex items-baseline justify-between mb-12 border-b border-white/10 pb-4">
+             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white">
+               Featured <span className="text-stroke-1 text-transparent stroke-white" style={{ WebkitTextStroke: '1px white' }}>Story</span>
+             </h2>
+             <span className="hidden md:block text-[#ff6b35] font-mono text-sm">[01]</span>
+          </div>
+
+          <Link href={`/blog/${featuredPost.id}`} className="group relative block w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden rounded-sm border border-white/10">
+            <div className="featured-img-container absolute inset-0 w-full h-[120%] -top-[10%]">
+                {featuredPost.image ? (
+                   <Image 
+                        src={featuredPost.image} 
+                        alt={featuredPost.title}
+                        fill
+                        className="object-cover opacity-60 transition-opacity duration-700 group-hover:opacity-100 grayscale group-hover:grayscale-0"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-zinc-900" />
+                )}
+            </div>
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-8 md:p-16">
+              <div className="max-w-4xl transform transition-transform duration-500 group-hover:-translate-y-4">
+                <div className="flex items-center gap-4 mb-4">
+                   <span className="bg-[#ff6b35] text-black px-3 py-1 text-xs font-bold uppercase tracking-widest">Featured</span>
+                   <span className="text-white/60 text-sm font-mono">{featuredPost.readTime || '5 min'} READ</span>
+                </div>
+                <h3 className="text-4xl md:text-7xl font-black uppercase leading-[0.9] mb-6 group-hover:text-[#ff6b35] transition-colors duration-300">
+                  {featuredPost.title}
+                </h3>
+                <p className="text-lg md:text-2xl text-gray-300 max-w-2xl font-light leading-relaxed mb-8 line-clamp-3">
+                  {featuredPost.excerpt}
+                </p>
+                <div className="flex items-center gap-3 text-white font-bold uppercase tracking-widest text-sm group-hover:gap-6 transition-all">
+                  Read Article <ArrowUpRight className="w-5 h-5 text-[#ff6b35]" />
+                </div>
               </div>
             </div>
-          )}
+          </Link>
         </section>
+      )}
 
-        {/* Newsletter Signup */}
-        <section className="mt-16 bg-gray-900 rounded-2xl p-8 text-center text-white">
-          <h2 className="text-2xl mb-4" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-            Stay in the Loop
-          </h2>
-          <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            Subscribe to our newsletter for the latest articles, product updates, and exclusive insights from the Highway 420 team.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-dope-orange focus:outline-none"
-            />
-            <button className="px-6 py-3 bg-dope-orange text-white rounded-lg hover:bg-orange-600 transition-colors font-medium">
-              Subscribe
-            </button>
-          </div>
-          <p className="text-xs text-gray-400 mt-4">
-            We respect your privacy. Unsubscribe at any time.
-          </p>
-        </section>
+      {/* MAIN CONTENT SPLIT */}
+      <section className="py-20 px-4 md:px-8 max-w-[1920px] mx-auto min-h-screen">
+        <div className="grid lg:grid-cols-12 gap-12">
+           
+           {/* SIDEBAR / FILTERS */}
+           <div className="lg:col-span-3 hidden lg:block">
+              <div className="sticky top-32">
+                <div className="border-t border-white/20 pt-6 mb-12">
+                  <h4 className="text-xs font-bold text-[#ff6b35] uppercase tracking-widest mb-8">Categories</h4>
+                  <nav className="flex flex-col gap-4 text-xl font-bold uppercase text-gray-500">
+                    {['Latest', 'Culture', 'Education', 'Business', 'Events'].map((cat) => (
+                      <button key={cat} className="text-left hover:text-white hover:pl-4 transition-all duration-300 flex items-center group">
+                        <span className="w-0 overflow-hidden group-hover:w-4 transition-all text-[#ff6b35] mr-0 group-hover:mr-2">/</span>
+                        {cat}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
 
-        {/* Popular Tags */}
-        <section className="mt-16">
-          <h2 className="text-2xl text-gray-900 mb-6" style={{ letterSpacing: '-0.02em', fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-            Popular Topics
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {['Dab Rigs', 'THCA', 'Glass Care', 'Vaporizers', 'Cannabis Culture', 'Product Reviews', 'Beginner Guides', 'Industry News'].map((tag) => (
-              <span
-                key={tag}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-dope-orange hover:text-white transition-colors cursor-pointer"
-              >
-                #{tag.replace(' ', '').toLowerCase()}
-              </span>
-            ))}
-          </div>
-        </section>
-      </div>
+                <div className="border-t border-white/20 pt-6">
+                   <h4 className="text-xs font-bold text-[#ff6b35] uppercase tracking-widest mb-8">Newsletter</h4>
+                   <p className="text-gray-400 text-sm mb-4">Join the inner circle.</p>
+                   <div className="flex border-b border-white/30 pb-2 group focus-within:border-[#ff6b35] transition-colors">
+                      <input type="email" placeholder="EMAIL ADDRESS" className="bg-transparent w-full outline-none text-white placeholder-gray-700 uppercase text-xs font-bold" />
+                      <button className="text-[#ff6b35] hover:text-white transition-colors"><ArrowUpRight className="w-4 h-4" /></button>
+                   </div>
+                </div>
+              </div>
+           </div>
+
+           {/* FEED */}
+           <div className="lg:col-span-9">
+             <div className="flex items-baseline justify-between mb-12 border-b border-white/10 pb-4">
+                <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+                  The <span className="text-[#ff6b35]">Feed</span>
+                </h2>
+                <div className="flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full focus-within:border-[#ff6b35] transition-colors">
+                   <Search className="w-4 h-4 text-gray-400" />
+                   <input className="bg-transparent outline-none text-sm text-white placeholder-gray-500 uppercase w-24 md:w-auto" placeholder="Search..." />
+                </div>
+             </div>
+             
+             {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-pulse">
+                   {[1,2,3,4].map(n => <div key={n} className="bg-white/5 h-96 w-full rounded-sm" />)}
+                </div>
+             ) : (
+                <BlogArticlesGrid />
+             )}
+
+             <div className="mt-24 flex justify-center">
+                <button className="group relative px-12 py-5 bg-transparent border border-white/20 hover:border-[#ff6b35] transition-colors uppercase font-bold tracking-widest text-sm overflow-hidden">
+                   <span className="relative z-10 group-hover:text-black transition-colors duration-300 flex items-center gap-2">Load More <ArrowUpRight className="w-4 h-4" /></span>
+                   <div className="absolute inset-0 bg-[#ff6b35] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                </button>
+             </div>
+           </div>
+        </div>
+      </section>
+
+      {/* FOOTER CALLOUT */}
+      <section className="py-40 bg-zinc-900 border-t border-white/10 text-center relative overflow-hidden group">
+         <div className="absolute inset-x-0 bottom-0 h-1 bg-[#ff6b35] scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out" />
+         
+         {/* Background Text */}
+         <h2 className="text-[15vw] font-black uppercase text-white/5 leading-[0.8] tracking-tighter select-none pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap blur-sm group-hover:blur-0 transition-all duration-700">
+            Highway 420
+         </h2>
+         
+         <div className="relative z-10 px-6">
+           <h3 className="text-3xl md:text-5xl font-bold uppercase mb-8 tracking-tight">Ready to ride?</h3>
+           <p className="text-gray-400 max-w-xl mx-auto mb-12 text-lg">
+             Create an account to unlock exclusive drops, member pricing, and community features.
+           </p>
+           <button className="bg-[#ff6b35] text-black text-xl font-black uppercase tracking-wide px-12 py-5 hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(255,107,53,0.3)] [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)]">
+             Get Started
+           </button>
+         </div>
+      </section>
     </div>
   );
 }
