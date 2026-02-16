@@ -9,7 +9,7 @@ export default function Highway420Footer() {
   const [email, setEmail] = useState("");
   const pathname = usePathname();
   const { hasCustomFooter } = useNavigation();
-  const isCheckoutFlow = pathname === "/cart" || pathname === "/checkout";
+  const isCheckoutFlow = pathname?.startsWith("/cart") || pathname?.startsWith("/checkout");
 
   if (hasCustomFooter) return null;
 
@@ -89,30 +89,7 @@ export default function Highway420Footer() {
               </div>
             </div>
 
-            {/* Merchant Identifier / Billing Note */}
-            <div className="bg-gray-900 text-white p-6 md:p-8 rounded-2xl shadow-xl overflow-hidden relative group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-green-500/20 transition-all duration-700" />
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full -ml-12 -mb-12 blur-xl group-hover:bg-blue-500/20 transition-all duration-700" />
-              
-              <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                <div className="w-14 h-14 bg-white/10 flex items-center justify-center rounded-xl backdrop-blur-sm border border-white/20">
-                  <Building2 className="w-7 h-7 text-green-400" />
-                </div>
-                <div className="flex-1 text-center md:text-left">
-                  <h4 className="text-lg font-bold text-white mb-2 tracking-tight">Important Billing Information</h4>
-                  <p className="text-gray-300 text-sm leading-relaxed max-w-2xl">
-                    To prevent confusion on your bank statement, please note that all transactions will appear as 
-                    <span className="text-white font-bold mx-1.5 px-2 py-0.5 bg-white/10 rounded border border-white/10">HIGHWAY</span>
-                    from our business location at <span className="text-white font-medium">10 Manor Pkwy, Salem, NH 03079</span>.
-                  </p>
-                </div>
-                <div className="hidden lg:block">
-                  <div className="text-xs text-gray-500 font-mono tracking-widest uppercase opacity-50 [writing-mode:vertical-lr] rotate-180">
-                    Trusted Merchant
-                  </div>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
 

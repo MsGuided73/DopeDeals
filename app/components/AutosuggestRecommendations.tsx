@@ -26,14 +26,24 @@ interface Product {
   updated_at: string;
 }
 
-export default function AutosuggestRecommendations() {
+export default function AutosuggestRecommendations({ 
+  limit = 8, 
+  layout = 'scroll',
+  showTitle = true,
+  compact = false
+}: { 
+  limit?: number; 
+  layout?: 'scroll' | 'grid';
+  showTitle?: boolean;
+  compact?: boolean;
+}) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchRecommendedProducts();
-  }, []);
+  }, [limit]); // Re-fetch if limit changes
 
   const fetchRecommendedProducts = async () => {
     try {
@@ -68,11 +78,11 @@ export default function AutosuggestRecommendations() {
               const queryParams = [categoryQuery, brandQuery].filter(Boolean).join('&');
 
               if (queryParams) {
-                const similarResponse = await fetch(`/api/products?${queryParams}&limit=8&exclude=${recentIds.join(',')}`);
+                const similarResponse = await fetch(`/api/products?${queryParams}&limit=${limit}&exclude=${recentIds.join(',')}`);
                 if (similarResponse.ok) {
                   const similarData = await similarResponse.json();
                   if (similarData.products && similarData.products.length > 0) {
-                    recommendedProducts = similarData.products.slice(0, 6);
+                    recommendedProducts = similarData.products.slice(0, limit);
                   }
                 }
               }
@@ -84,8 +94,8 @@ export default function AutosuggestRecommendations() {
       }
 
       // If we don't have enough personalized recommendations, fill with featured products
-      if (recommendedProducts.length < 6) {
-        const featuredResponse = await fetch('/api/products/featured?limit=8');
+      if (recommendedProducts.length < limit) {
+        const featuredResponse = await fetch(`/api/products/featured?limit=${limit}`);
 
         if (featuredResponse.ok) {
           const featuredData = await featuredResponse.json();
@@ -98,7 +108,7 @@ export default function AutosuggestRecommendations() {
 
             const additionalProducts = featuredData.products
               .filter((p: Product) => !existingIds.has(p.id))
-              .slice(0, 8 - recommendedProducts.length);
+              .slice(0, limit - recommendedProducts.length);
 
             recommendedProducts = [...recommendedProducts, ...additionalProducts];
           }
@@ -111,7 +121,7 @@ export default function AutosuggestRecommendations() {
       setError(err instanceof Error ? err.message : 'Unknown error');
       // Fallback to featured products on error
       try {
-        const fallbackResponse = await fetch('/api/products/featured?limit=8');
+        const fallbackResponse = await fetch(`/api/products/featured?limit=${limit}`);
         if (fallbackResponse.ok) {
           const fallbackData = await fallbackResponse.json();
           setProducts(fallbackData.products || []);
@@ -155,25 +165,127 @@ export default function AutosuggestRecommendations() {
     };
   };
 
+  const renderProductCard = (product: Product) => {
+     const transformedProduct = transformProductForCard(product);
+     const cardClasses = compact 
+        ? "group bg-white rounded-lg border border-gray-100 hover:border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full"
+        : "group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-96";
+     
+     const imageClasses = compact
+        ? "relative w-full aspect-square bg-gray-50 overflow-hidden"
+        : "relative w-full aspect-square bg-white overflow-hidden";
+        
+     return (
+        <Link
+          key={product.id}
+          href={`/products/${product.sku || product.id}`} // Updated link construction to match other parts of app if possible, or just /product/[id]
+          className={cardClasses}
+        >
+          <div className={imageClasses}>
+            {transformedProduct.image_url ? (
+              <img
+                src={transformedProduct.image_url}
+                alt={transformedProduct.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                <div className="text-center">
+                  <div className="text-2xl mb-1">📦</div>
+                  {!compact && <div className="text-sm font-medium">No Image</div>}
+                </div>
+              </div>
+            )}
+
+            {/* Favorite Button - hide on compact */}
+            {!compact && (
+              <button
+                className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                onClick={(e) => e.stopPropagation()}>
+                <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          <div className={`flex flex-col flex-1 ${compact ? 'p-3' : 'p-4'}`}>
+            {transformedProduct.brand_name && (
+              <p className="text-[10px] font-black text-dope-orange-600 mb-1 uppercase tracking-wide leading-tight" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                {transformedProduct.brand_name}
+              </p>
+            )}
+
+            <h3 className={`font-bold text-gray-900 leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors ${compact ? 'text-sm' : 'text-lg'}`} style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+              {transformedProduct.name}
+            </h3>
+
+            <div className="mt-auto">
+              <div className={compact ? "mb-2" : "mb-4"}>
+                {transformedProduct.compare_at_price ? (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 line-through">
+                        ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
+                      </span>
+                    </div>
+                    <div className={`${compact ? 'text-sm' : 'text-xl'} font-bold text-green-600`}>
+                      ${parseFloat(transformedProduct.price).toFixed(2)}
+                    </div>
+                  </div>
+                ) : (
+                  <div className={`${compact ? 'text-base' : 'text-xl'} font-bold text-gray-900`}>
+                    ${parseFloat(transformedProduct.price).toFixed(2)}
+                  </div>
+                )}
+              </div>
+
+              <button
+                className={`w-full bg-transparent text-green-800 border border-green-800 font-bold rounded-full transition-all duration-300 text-center hover:bg-green-800 hover:text-white ${compact ? 'py-1.5 text-xs' : 'py-3 text-sm hover:scale-105 hover:shadow-lg'}`}
+                style={{
+                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                  letterSpacing: '0.05em',
+                }}
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  e.preventDefault(); // Prevent link navigation
+                  try {
+                    const success = await addToCart(product.id, 1);
+                    if (success) {
+                      // Success flow is handled by addToCart function with toast notifications
+                      // and cart state updates via window.dispatchEvent
+                    }
+                  } catch (error) {
+                    console.error('Error adding item to cart:', error);
+                    // Error handling is already done by addToCart function with toast notifications
+                  }
+                }}
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </Link>
+     );
+  }
+
   if (loading) {
     return (
-      <section className="bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl text-black font-bold" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-              RECOMMENDED FOR YOU
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse">
+      <section className={compact ? "" : "bg-gray-50 py-8"}>
+        <div className={compact ? "" : "max-w-7xl mx-auto px-4"}>
+          {showTitle && (
+              <div className="text-center mb-6">
+                <h2 className="text-2xl md:text-3xl text-black font-bold" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                  RECOMMENDED FOR YOU
+                </h2>
+              </div>
+          )}
+          <div className={`grid gap-4 ${limit <= 4 ? `grid-cols-${limit}` : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'}`}>
+            {Array.from({ length: Math.min(limit, 4) }).map((_, i) => (
+              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse h-64">
                 <div className="aspect-square bg-muted"></div>
                 <div className="p-3">
                   <div className="h-3 bg-muted-foreground/30 rounded mb-2"></div>
-                  <div className="h-4 bg-muted-foreground/20 rounded mb-3"></div>
-                  <div className="flex items-center justify-between">
-                    <div className="h-4 bg-muted-foreground/20 rounded w-12"></div>
-                  </div>
                 </div>
               </div>
             ))}
@@ -188,117 +300,32 @@ export default function AutosuggestRecommendations() {
   }
 
   return (
-    <section className="bg-gray-50 py-8 border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className={compact ? "" : "bg-gray-50 py-8 border-t border-gray-200"}>
+      <div className={compact ? "" : "max-w-7xl mx-auto px-4"}>
         {/* Section Header */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl text-black font-bold" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-            RECOMMENDED FOR YOU
-          </h2>
-        </div>
+        {showTitle && (
+            <div className="text-center mb-6">
+              <h2 className="text-2xl md:text-3xl text-black font-bold" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
+                RECOMMENDED FOR YOU
+              </h2>
+            </div>
+        )}
 
-        {/* Auto-scrolling container with 4 products visible */}
-        <AutoScrollContainer
-          autoScrollInterval={4000}
-          scrollAmount={384} // Approximately width of one card (96 * 4)
-          className="max-w-6xl mx-auto"
-        >
-          {products.slice(0, 8).map((product) => {
-            const transformedProduct = transformProductForCard(product);
-            return (
-              <Link
-                key={product.id}
-                href={`/product/${product.id}`}
-                className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-96"
-              >
-                <div className="relative w-full aspect-square bg-white overflow-hidden">
-                  {transformedProduct.image_url ? (
-                    <img
-                      src={transformedProduct.image_url}
-                      alt={transformedProduct.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                      <div className="text-center">
-                        <div className="text-4xl mb-2">📦</div>
-                        <div className="text-sm font-medium">No Image</div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Favorite Button */}
-                  <button
-                    className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
-                    onClick={(e) => e.stopPropagation()}>
-                    <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="p-4 flex flex-col">
-                  {transformedProduct.brand_name && (
-                    <p className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-                      {transformedProduct.brand_name}
-                    </p>
-                  )}
-
-                  <h3 className="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-                    {transformedProduct.name}
-                  </h3>
-
-                  <div className="mt-auto">
-                    <div className="mb-4">
-                      {transformedProduct.compare_at_price ? (
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-500 line-through">
-                              ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
-                            </span>
-                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                              -{transformedProduct.discount_percentage}%
-                            </span>
-                          </div>
-                          <div className="text-xl font-bold text-green-600">
-                            ${parseFloat(transformedProduct.price).toFixed(2)}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-xl font-bold text-gray-900">
-                          ${parseFloat(transformedProduct.price).toFixed(2)}
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      className="w-full px-4 py-3 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-sm hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg"
-                      style={{
-                        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                        letterSpacing: '0.05em',
-                      }}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        try {
-                          const success = await addToCart(product.id, 1);
-                          if (success) {
-                            // Success flow is handled by addToCart function with toast notifications
-                            // and cart state updates via window.dispatchEvent
-                          }
-                        } catch (error) {
-                          console.error('Error adding item to cart:', error);
-                          // Error handling is already done by addToCart function with toast notifications
-                        }
-                      }}
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </AutoScrollContainer>
+        {layout === 'scroll' ? (
+            /* Auto-scrolling container */
+            <AutoScrollContainer
+              autoScrollInterval={4000}
+              scrollAmount={384} // Approximately width of one card (96 * 4)
+              className="max-w-6xl mx-auto"
+            >
+              {products.slice(0, 8).map(renderProductCard)}
+            </AutoScrollContainer>
+        ) : (
+            /* Grid layout */
+            <div className={`grid grid-cols-2 ${limit === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-3 lg:grid-cols-4'} gap-4`}>
+                {products.slice(0, limit).map(renderProductCard)}
+            </div>
+        )}
       </div>
     </section>
   );
