@@ -312,7 +312,7 @@ export async function GET(request: NextRequest) {
 
     const taxRate = 0.08; // 8% tax
     const taxAmount = subtotal * taxRate;
-    const shippingAmount = subtotal > 50 ? 0 : 9.99;
+    const shippingAmount = subtotal >= 75 ? 0 : 9.99;
     const total = subtotal + taxAmount + shippingAmount;
 
     return NextResponse.json({

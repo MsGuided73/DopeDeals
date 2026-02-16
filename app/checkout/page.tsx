@@ -897,22 +897,24 @@ export default function CheckoutPage() {
               </div>
 
               {/* Order Totals */}
-              <div className="space-y-2 pt-4 border-t border-gray-200">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">${cart?.subtotal.toFixed(2)}</span>
+              <div className="space-y-3 pt-4 border-t border-gray-200">
+                <div className="flex justify-between text-base">
+                  <span className="text-gray-800">Subtotal</span>
+                  <span className="font-semibold text-gray-900">${cart?.subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Tax</span>
-                  <span className="font-medium">${cart?.taxAmount.toFixed(2)}</span>
+                <div className="flex justify-between text-base">
+                  <span className="text-gray-800">Tax</span>
+                  <span className="font-semibold text-gray-900">${cart?.taxAmount.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Shipping</span>
-                  <span className="font-medium">${cart?.shippingAmount.toFixed(2)}</span>
+                <div className="flex justify-between text-base">
+                  <span className="text-gray-800">Shipping</span>
+                  <span className="font-semibold text-green-600">
+                    {cart?.shippingAmount === 0 ? 'Free' : `$${cart?.shippingAmount.toFixed(2)}`}
+                  </span>
                 </div>
-                <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-300">
-                  <span>Total</span>
-                  <span>${cart?.total.toFixed(2)}</span>
+                <div className="flex justify-between text-xl font-bold pt-4 border-t border-gray-300 mt-2">
+                  <span className="text-black">Total</span>
+                  <span className="text-black">${cart?.total.toFixed(2)}</span>
                 </div>
               </div>
 

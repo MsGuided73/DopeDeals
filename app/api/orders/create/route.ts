@@ -65,8 +65,7 @@ function calculateTax(subtotal: number, shippingState: string): number {
 
 // Calculate shipping based on order total and location
 function calculateShipping(subtotal: number, shippingState: string): number {
-  // Free shipping over $100
-  if (subtotal >= 100) return 0;
+  if (subtotal >= 75) return 0;
   
   // Different rates for different regions
   const shippingRates: Record<string, number> = {
