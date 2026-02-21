@@ -377,6 +377,68 @@ export async function getStorage(): Promise<IStorage> {
       
       if (error) throw error;
       return data;
-    }
+    },
+
+    async createOrder(order: any) {
+      const { data, error } = await supabase
+        .from('orders')
+        .insert({
+          user_id: order.userId,
+          order_number: order.orderNumber,
+          status: order.status ?? 'pending',
+          payment_status: order.paymentStatus ?? 'pending',
+          payment_method: order.paymentMethod ?? null,
+          subtotal_amount: order.subtotalAmount,
+          tax_amount: order.taxAmount,
+          shipping_amount: order.shippingAmount,
+          total_amount: order.totalAmount,
+          shipping_address: order.shippingAddress,
+          billing_address: order.billingAddress,
+          customer_notes: order.customerNotes ?? null,
+          gift_message: order.giftMessage ?? null,
+          is_gift: order.isGift ?? false,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+
+    async createOrderItem(item: any) {
+      const { data, error } = await supabase
+        .from('order_items')
+        .insert({
+          order_id: item.orderId,
+          product_id: item.productId,
+          product_name: item.productName,
+          product_sku: item.productSku ?? null,
+          product_image_url: item.productImageUrl ?? null,
+          quantity: item.quantity,
+          price_at_purchase: item.priceAtPurchase,
+          total_price: item.totalPrice,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+
+    async clearCart(userId: string) {
+      // Find the user's cart, then delete its items
+      const { data: cart } = await supabase
+        .from('carts')
+        .select('id')
+        .eq('user_id', userId)
+        .single();
+
+      if (cart?.id) {
+        await supabase
+          .from('cart_items')
+          .delete()
+          .eq('cart_id', cart.id);
+      }
+    },
   };
 }

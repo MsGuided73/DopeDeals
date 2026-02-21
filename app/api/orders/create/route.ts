@@ -113,26 +113,26 @@ export async function POST(req: NextRequest) {
         }, { status: 404 });
       }
 
-      if (product.inStock === false) {
+      if (product.is_active === false) {
         return NextResponse.json({ 
           error: `Product out of stock: ${product.name}` 
         }, { status: 409 });
       }
 
       // Check if we have enough stock (if stock tracking is enabled)
-      if (product.stockQuantity !== null && product.stockQuantity < item.quantity) {
+      if (product.stock_quantity !== null && product.stock_quantity < item.quantity) {
         return NextResponse.json({ 
-          error: `Insufficient stock for ${product.name}. Available: ${product.stockQuantity}, Requested: ${item.quantity}` 
+          error: `Insufficient stock for ${product.name}. Available: ${product.stock_quantity}, Requested: ${item.quantity}` 
         }, { status: 409 });
       }
 
-      const itemTotal = Number(product.price) * item.quantity;
+      const itemTotal = Number(product.our_price) * item.quantity;
       subtotal += itemTotal;
 
       productDetails.push({
         product,
         quantity: item.quantity,
-        unitPrice: Number(product.price),
+        unitPrice: Number(product.our_price),
         totalPrice: itemTotal
       });
     }
@@ -218,7 +218,7 @@ export async function POST(req: NextRequest) {
             total,
             createdAt: order.createdAt
           },
-          items: createdItems.map(item => ({
+          items: createdItems.map((item: { id: any; productId: any; productName: any; quantity: number; priceAtPurchase: any; }) => ({
             id: item.id,
             productId: item.productId,
             productName: item.productName,
@@ -237,6 +237,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Manual order creation (fallback)
+    if (typeof storage.createOrder !== 'function') {
+      return NextResponse.json({
+        success: false,
+        error: 'Order creation is not supported by the current storage backend'
+      }, { status: 501 });
+    }
+
     const order = await storage.createOrder({
       userId: user.id,
       orderNumber,
@@ -257,12 +264,15 @@ export async function POST(req: NextRequest) {
     // Create order items
     const createdItems = [];
     for (const detail of productDetails) {
+      if (typeof storage.createOrderItem !== 'function') {
+        throw new Error('createOrderItem is not supported by the current storage backend');
+      }
       const orderItem = await storage.createOrderItem({
         orderId: order.id,
         productId: detail.product.id,
         productName: detail.product.name,
         productSku: detail.product.sku,
-        productImageUrl: detail.product.imageUrl,
+        productImageUrl: detail.product.image_url,
         quantity: detail.quantity,
         priceAtPurchase: detail.unitPrice.toString(),
         totalPrice: detail.totalPrice.toString()
@@ -279,7 +289,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Clear user's cart
-    await storage.clearCart(user.id);
+    await storage.clearCart?.(user.id);
 
     return NextResponse.json({
       success: true,

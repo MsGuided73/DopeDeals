@@ -178,7 +178,7 @@ export default function AutosuggestRecommendations({
      return (
         <Link
           key={product.id}
-          href={`/products/${product.sku || product.id}`} // Updated link construction to match other parts of app if possible, or just /product/[id]
+          href={`/product/${product.id}`}
           className={cardClasses}
         >
           <div className={imageClasses}>

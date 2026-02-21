@@ -83,7 +83,7 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
                     <Link 
-                      href={`/products/${product.id}`}
+                      href={`/product/${product.id}`}
                       className="hover:text-dope-orange-500 transition-colors"
                     >
                       {product.name}
@@ -127,7 +127,7 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
 
                   <div className="flex items-center space-x-2">
                     <Link
-                      href={`/products/${product.id}`}
+                      href={`/product/${product.id}`}
                       className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center"
                     >
                       <Eye className="w-4 h-4 mr-2" />
@@ -195,7 +195,7 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
           <div className="p-4">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 line-clamp-2">
               <Link 
-                href={`/products/${product.id}`}
+                href={`/product/${product.id}`}
                 className="hover:text-dope-orange-500 transition-colors"
               >
                 {product.name}
@@ -230,7 +230,7 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
             {/* Action Buttons */}
             <div className="flex space-x-2">
               <Link
-                href={`/products/${product.id}`}
+                href={`/product/${product.id}`}
                 className="flex-1 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-center text-sm font-medium"
               >
                 View Details

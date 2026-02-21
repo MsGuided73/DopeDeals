@@ -151,7 +151,7 @@ export async function GET(request: NextRequest) {
           subtitle: product.brand_name || 'Unknown Brand',
           price: product.our_price,
           image: urls[0] || product.image_url,
-          url: `/products/${product.id}`,
+          url: `/product/${product.id}`,
           relevanceScore: calculateRelevanceScore(product, searchTerm),
         };
       })

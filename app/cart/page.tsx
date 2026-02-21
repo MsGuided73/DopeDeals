@@ -62,7 +62,7 @@ export default function CartPage() {
   };
 
   // Get Shop Referer to control back button behavior
-  const [shopReferer, setShopReferer] = useState<string>('/products');
+  const [shopReferer, setShopReferer] = useState<string>('/');
   
   useEffect(() => {
     setShopReferer(getShopReferer());
@@ -169,7 +169,7 @@ export default function CartPage() {
                         {/* Details */}
                         <div className="flex-1 w-full">
                             <div className="flex justify-between items-start mb-2">
-                                <Link href={`/products/${product.sku}`} className="text-lg font-bold text-gray-900 hover:text-green-700 transition-colors line-clamp-2">
+                                <Link href={`/product/${product.id}`} className="text-lg font-bold text-gray-900 hover:text-green-700 transition-colors line-clamp-2">
                                     {product.name}
                                 </Link>
                                 <p className="text-lg font-bold text-gray-900">
@@ -234,21 +234,21 @@ export default function CartPage() {
             <div className="mt-12">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-gray-900">You may also like</h2>
-                    <Link href="/products" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">
+                    <Link href="/" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">
                         Browse more
                     </Link>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
-                     <Link href="/products?category=pre-rolls" className="group bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-gray-300 transition-all">
+                     <Link href="/pre-rolls" className="group bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-gray-300 transition-all">
                         <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Trending now</span>
                         <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-700 transition-colors mt-1">Premium Pre-Rolls</h3>
                      </Link>
-                      <Link href="/products?category=vapes" className="group bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-gray-300 transition-all">
+                      <Link href="/vapes" className="group bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-gray-300 transition-all">
                         <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Trending now</span>
                         <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-700 transition-colors mt-1">Top Shelf Vapes</h3>
                      </Link>
-                      <Link href="/products?sort=newest" className="group bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-gray-300 transition-all">
+                      <Link href="/fresh-drops" className="group bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-gray-300 transition-all">
                         <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Trending now</span>
                         <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-700 transition-colors mt-1">New Arrivals</h3>
                      </Link>
@@ -257,7 +257,7 @@ export default function CartPage() {
                 <div className="mb-0">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-lg font-bold text-gray-900">Popular add-ons</h3>
-                         <Link href="/products?price_max=15" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">
+                         <Link href="/sale" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">
                             View all under $15
                         </Link>
                     </div>
