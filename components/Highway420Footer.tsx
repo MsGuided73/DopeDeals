@@ -312,6 +312,7 @@ export default function Highway420Footer() {
                     MUSHROOMS
                   </Link>
                 </li>
+                {/*
                 <li>
                   <Link href="/nitrous-oxide" className="text-gray-800 hover:text-green-600">
                     N2O
@@ -322,6 +323,7 @@ export default function Highway420Footer() {
                     ACCESSORIES
                   </Link>
                 </li>
+                */}
               </ul>
             </div>
 

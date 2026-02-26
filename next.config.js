@@ -17,6 +17,22 @@ const nextConfig = {
   // Enable standalone output for Docker deployment
   output: 'standalone',
 
+  // Redirects to hide N2O and Accessories temporarily
+  async redirects() {
+    return [
+      {
+        source: '/nitrous-oxide',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/accessories',
+        destination: '/',
+        permanent: false,
+      },
+    ];
+  },
+
   // Configure external image domains with optimization
   images: {
     remotePatterns: [

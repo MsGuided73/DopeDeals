@@ -162,15 +162,19 @@ export default function FloatingNav() {
           )}
         </div>
         
+        {/*
         <Link href="/nitrous-oxide" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors whitespace-nowrap">
           N2O
         </Link>
+        */}
         <Link href="/mushrooms" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">
           Mushrooms
         </Link>
+        {/*
         <Link href="/accessories" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">
           Accessories
         </Link>
+        */}
         <Link href="/blog" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">
           Blog
         </Link>

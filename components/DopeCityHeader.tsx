@@ -121,6 +121,7 @@ export default function Highway420Header() {
                     >
                       🌿 Dry Herb Vaporizers
                     </Link>
+                    {/*
                     <Link
                       href="/products?category=accessories"
                       className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
@@ -128,6 +129,7 @@ export default function Highway420Header() {
                     >
                       🔧 Accessories
                     </Link>
+                    */}
                     <Link
                       href="/products?category=munchies"
                       className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
@@ -199,6 +201,7 @@ export default function Highway420Header() {
                     >
                       🍄 Mushrooms
                     </Link>
+                    {/*
                     <Link
                       href="/products?q=nitrous-oxide"
                       className="block px-4 py-3 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
@@ -206,6 +209,7 @@ export default function Highway420Header() {
                     >
                       ⚡ Nitrous Oxide
                     </Link>
+                    */}
                   </div>
                 </div>
               )}
@@ -290,9 +294,11 @@ export default function Highway420Header() {
                 <Link href="/products?category=dry-herb-vaporizers" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   🌿 Dry Herb Vaporizers
                 </Link>
+                {/*
                 <Link href="/products?category=accessories" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   🔧 Accessories
                 </Link>
+                */}
                 <Link href="/products?category=munchies" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   🍪 Munchies
                 </Link>
@@ -329,9 +335,11 @@ export default function Highway420Header() {
                 <Link href="/products?q=mushrooms" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   🍄 Mushrooms
                 </Link>
+                {/*
                 <Link href="/products?q=nitrous-oxide" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   ⚡ Nitrous Oxide
                 </Link>
+                */}
               </div>
             </div>
           </nav>

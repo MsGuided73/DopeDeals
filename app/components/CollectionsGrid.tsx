@@ -12,56 +12,61 @@ export default function CollectionsGrid() {
       route: "/thca_flower", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/thca_flower_no_text.png",
       color: "#10b981", // Emerald
-      bgGradient: "from-emerald-900/40 via-black to-black"
+      bgGradient: "from-emerald-900/40 via-black to-black",
+      isPromo: false
     },
     { 
       name: "PREROLLS", 
       route: "/pre-rolls", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/prerolls_no_text.png",
       color: "#f59e0b", // Amber
-      bgGradient: "from-amber-900/40 via-black to-black"
+      bgGradient: "from-amber-900/40 via-black to-black",
+      isPromo: false
     },
     { 
       name: "VAPES\n& CARTS", 
       route: "/vapes", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/vapesncarts_no_text.png",
       color: "#06b6d4", // Cyan
-      bgGradient: "from-cyan-900/40 via-black to-black"
+      bgGradient: "from-cyan-900/40 via-black to-black",
+      isPromo: false
     },
     { 
       name: "SHROOMS", 
       route: "/mushrooms", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/edibles_no_text.png",
       color: "#a855f7", // Purple
-      bgGradient: "from-purple-900/40 via-black to-black"
+      bgGradient: "from-purple-900/40 via-black to-black",
+      isPromo: false
     },
     { 
-      name: "NITROUS", 
-      route: "/nitrous-oxide", 
-      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/nitrous_no_text%20(1).png",
-      color: "#3b82f6", // Blue
-      bgGradient: "from-blue-900/40 via-black to-black"
+      name: "HOT\nPRODUCTS", 
+      route: "/hot-products",
+      color: "#f43f5e", // Rose
+      bgGradient: "from-rose-600 via-rose-900 to-black", 
+      isPromo: true
+    },
+    { 
+      name: "FRESH\nDROPS", 
+      route: "/fresh-drops", 
+      color: "#14b8a6", // Teal
+      bgGradient: "from-teal-600 via-teal-900 to-black",
+      isPromo: true
+    },
+    { 
+      name: "DOPE\nDEALS", 
+      route: "/#dope-deals", 
+      color: "#ef4444", // Red for Deals
+      bgGradient: "from-red-600 via-red-900 to-black",
+      isPromo: true
     },
     { 
       name: "EDIBLES", 
       route: "/edibles", 
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Edibles_non-mush.png",
       color: "#f97316", // Orange
-      bgGradient: "from-orange-900/40 via-black to-black"
-    },
-    { 
-      name: "DOPE DEALS\nCLICK HERE", 
-      route: "/#dope-deals", 
-      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/Close%20up%20and%20Right.png", // Keeping the image for now, or we can change it
-      color: "#ef4444", // Red for Deals
-      bgGradient: "from-red-900/40 via-black to-black"
-    },
-    { 
-      name: "ACCESSORIES", 
-      route: "/accessories", 
-      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/collections/Torch_Bowl.jpeg",
-      color: "#9ca3af", // Gray
-      bgGradient: "from-gray-800 via-gray-950 to-black"
+      bgGradient: "from-orange-900/40 via-black to-black",
+      isPromo: false
     },
   ];
 
@@ -99,31 +104,49 @@ export default function CollectionsGrid() {
               href={cat.route}
               className="aspect-square rounded-2xl overflow-hidden shadow-md relative group active:scale-95 transition-all duration-300 block"
               style={{
-                // Black Stainless Steel Effect - Dark metallic with subtle gradient
-                background: `linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #121212 100%)`, 
+                background: cat.isPromo 
+                  ? "" // Use utility class for gradient if it's promo
+                  : `linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #121212 100%)`, 
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.4)",
               }}
             >
-              {/* Dynamic Border Glow (Border is actually inset shadow or border property) */}
-              <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/20 transition-colors z-20 pointer-events-none" />
+              {/* Promo Background Class (if applicable) */}
+              {cat.isPromo && (
+                <div className={`absolute inset-0 bg-gradient-to-br ${cat.bgGradient} opacity-90 group-hover:opacity-100 transition-opacity z-0`} />
+              )}
 
-              <img 
-                src={cat.image} 
-                alt={cat.name} 
-                className="w-full h-full object-contain p-2 relative z-10 group-hover:scale-110 transition-transform duration-500 ease-out" 
-              />
-              
-              {/* Text Visibility Gradient (Subtle at bottom) */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent z-10" />
+              {/* Dynamic Border Glow */}
+              <div className={`absolute inset-0 rounded-2xl border ${cat.isPromo ? 'border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.2)] animate-pulse' : 'border-white/10 group-hover:border-white/20'} transition-all duration-300 z-20 pointer-events-none`} />
 
-              {/* Category Name Label - Scaled for Mobile */}
-              <div className="absolute top-2 left-2 z-20 pointer-events-none">
-                <div className="text-white text-[16px] xs:text-[20px] font-display-twilight leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">
-                  {cat.name.split('\n').map((line, index) => (
-                    <div key={index}>{line}</div>
-                  ))}
+              {cat.isPromo ? (
+                // Promo Tile Content (Mobile - Massive Typography, No Image)
+                <div className="absolute inset-0 flex items-center justify-center p-2 z-20 pointer-events-none">
+                  <div className={`text-white text-center text-[28px] xs:text-[34px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-widest shadow-black group-hover:text-[${cat.color}] transition-colors duration-300`}>
+                    {cat.name.split('\n').map((line, index) => (
+                      <div key={index}>{line}</div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                // Regular Tile Content (Mobile)
+                <>
+                  <img 
+                    src={cat.image} 
+                    alt={cat.name} 
+                    className="w-full h-full object-contain p-2 relative z-10 group-hover:scale-110 transition-transform duration-500 ease-out" 
+                  />
+                  {/* Text Visibility Gradient */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent z-10" />
+                  {/* Category Name Label */}
+                  <div className="absolute top-2 left-2 z-20 pointer-events-none">
+                    <div className="text-white text-[16px] xs:text-[20px] font-display-twilight leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">
+                      {cat.name.split('\n').map((line, index) => (
+                        <div key={index}>{line}</div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </Link>
           ))}
         </div>
@@ -162,39 +185,60 @@ export default function CollectionsGrid() {
                 href={cat.route}
                 className="rounded-2xl overflow-hidden shadow-xl relative group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 block"
                 style={{
-                  // Black Stainless Steel Effect - Dark metallic with subtle gradient
-                  background: `linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #121212 100%)`, 
+                  background: cat.isPromo 
+                    ? "" 
+                    : `linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #121212 100%)`, 
                   transition: "box-shadow 0.3s ease, transform 0.3s ease",
                 }}
                 onMouseEnter={(e) => {
-                  // Dynamic Colored Glow on Hover - "AMAZING" Effect
                   e.currentTarget.style.boxShadow = `0 15px 30px -5px ${cat.color}66`; // 66 = 40% opacity
                 }}
                 onMouseLeave={(e) => {
                    e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                {/* Glassy Border */}
-                <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/30 transition-colors z-20 pointer-events-none" />
+                {/* Promo Background Class */}
+                {cat.isPromo && (
+                    <div className={`absolute inset-0 bg-gradient-to-br ${cat.bgGradient} opacity-90 group-hover:opacity-100 transition-opacity duration-500 z-0`} />
+                )}
 
-                <img 
-                  src={cat.image} 
-                  alt={cat.name} 
-                  // Object Contain enables the gradient to be seen nicely behind the cutout
-                  className="w-full h-full object-contain p-6 relative z-10 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-500 ease-out" 
-                />
-                
-                {/* Text Visibility Gradient */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black/30 via-transparent to-transparent z-10" />
+                {/* Glassy Border with Pulse for Promo */}
+                <div className={`absolute inset-0 rounded-2xl border ${cat.isPromo ? 'border-white/30 shadow-[0_0_20px_rgba(255,255,255,0.15)] animate-pulse' : 'border-white/10 group-hover:border-white/30'} transition-all duration-300 z-20 pointer-events-none`} />
 
-                {/* Category Name Label - Top Left, Big Typography */}
-                <div className="absolute top-6 left-6 z-20 pointer-events-none transition-all duration-300">
-                  <div className={`text-white text-[32px] xl:text-[40px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black group-hover:text-[${cat.color}]`}>
-                    {cat.name.split('\n').map((line, index) => (
-                      <div key={index}>{line}</div>
-                    ))}
-                  </div>
-                </div>
+                {cat.isPromo ? (
+                   // Promo Tile Content (Desktop - Massive Typography, No Image)
+                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 p-4">
+                      {/* Slow pulsing glow behind text */}
+                      <div className="absolute w-48 h-48 rounded-full blur-[60px] opacity-40 group-hover:opacity-70 group-hover:scale-125 transition-all duration-700" style={{ backgroundColor: cat.color }}></div>
+                      
+                      <div className={`text-white text-center text-[54px] xl:text-[68px] font-display-twilight leading-[0.9] drop-shadow-[0_6px_6px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black group-hover:scale-110 group-hover:text-[${cat.color}] transition-all duration-500 relative z-20`}>
+                        {cat.name.split('\n').map((line, index) => (
+                          <div key={index}>{line}</div>
+                        ))}
+                      </div>
+                   </div>
+                ) : (
+                  // Regular Tile Content (Desktop)
+                  <>
+                    <img 
+                      src={cat.image} 
+                      alt={cat.name} 
+                      className="w-full h-full object-contain p-6 relative z-10 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-500 ease-out" 
+                    />
+                    
+                    {/* Text Visibility Gradient */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black/30 via-transparent to-transparent z-10" />
+
+                    {/* Category Name Label */}
+                    <div className="absolute top-6 left-6 z-20 pointer-events-none transition-all duration-300">
+                      <div className={`text-white text-[32px] xl:text-[40px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black group-hover:text-[${cat.color}]`}>
+                        {cat.name.split('\n').map((line, index) => (
+                          <div key={index}>{line}</div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
                 
                 {/* Hover Flash Effect */}
                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-200 pointer-events-none z-10" />
