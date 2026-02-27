@@ -45,6 +45,8 @@
     "app/**/*.tsx",
     "shared/**/*.ts",
     "shared/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "exclude": [

@@ -27,31 +27,7 @@ export async function POST(request: NextRequest) {
     if (!dbPosts || dbPosts.length === 0) {
       // Use shared fallback data + extended list for search if needed
       allPosts = [
-        ...FALLBACK_POSTS,
-        {
-          id: 'cannabis-history-global',
-          title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
-          excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
-          content: 'Cannabis history spans from ancient rituals to modern industry.',
-          author: 'Highway 420 Crew',
-          date: '2025-10-15',
-          category: 'Culture',
-          image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
-          readTime: '10 min read',
-          featured: false
-        },
-        {
-          id: 'ultimate-bong-guide',
-          title: 'The Ultimate Guide to Picking the Perfect Bong',
-          excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
-          content: 'Choose the perfect bong from desktop models to pocket rockets. Learn about water filtration and glass art.',
-          author: 'Highway 420 Team',
-          date: '2025-10-15',
-          category: 'Education',
-          image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
-          readTime: '12 min read',
-          featured: false
-        }
+        ...FALLBACK_POSTS
       ];
     }
 
@@ -145,37 +121,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Fallback to hardcoded posts if database is empty or unavailable
-    // Fallback to hardcoded posts if database is empty or unavailable
     // Featured blog articles for homepage display
     const featuredPosts = FALLBACK_POSTS;
 
-    // Additional blog posts
-    const additionalPosts = [
-      {
-        id: 'cannabis-history-global',
-        title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
-        excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
-        author: 'Highway 420 Crew',
-        date: '2025-10-15',
-        category: 'Culture',
-        image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
-        readTime: '10 min read',
-        featured: false
-      },
-      {
-        id: 'ultimate-bong-guide',
-        title: 'The Ultimate Guide to Picking the Perfect Bong',
-        excerpt: 'From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).',
-        author: 'Highway 420 Team',
-        date: '2025-10-15',
-        category: 'Education',
-        image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600&h=400&fit=crop',
-        readTime: '12 min read',
-        featured: false
-      }
-    ];
-
-    const fallbackPosts = [...featuredPosts, ...additionalPosts];
+    const fallbackPosts = [...featuredPosts];
 
     return NextResponse.json({ posts: fallbackPosts });
 

@@ -101,7 +101,7 @@ export default function BrandLogoScrollbar() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Title */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-black font-display-twilight mb-2 tracking-wide">
+          <h2 className="text-4xl md:text-6xl font-black text-black font-display-twilight mb-2 tracking-wide">
             TRUSTED BRANDS
           </h2>
           <p className="text-gray-500 uppercase tracking-widest font-sans text-sm font-semibold">

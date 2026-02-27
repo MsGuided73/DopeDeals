@@ -9,18 +9,23 @@ const supabase = createClient(
 export async function GET() {
   try {
     // Test that all new Zoho columns exist and are accessible
-    const { data: columns, error: columnsError } = await supabase
-      .rpc('get_table_columns', { table_name: 'products' })
-      .then(() => supabase
+    let columns, columnsError;
+    try {
+      const { data, error } = await supabase
+        .rpc('get_table_columns', { table_name: 'products' });
+      if (error) throw error;
+      const res = await supabase
         .from('information_schema.columns')
         .select('column_name, data_type, is_nullable')
         .eq('table_name', 'products')
-        .order('ordinal_position')
-      )
-      .catch(() => 
-        // Fallback query
-        supabase.from('products').select('*').limit(1)
-      );
+        .order('ordinal_position');
+      columns = res.data;
+      columnsError = res.error;
+    } catch (e) {
+      const res = await supabase.from('products').select('*').limit(1);
+      columns = res.data;
+      columnsError = res.error;
+    }
 
     if (columnsError) {
       console.error('Error fetching columns:', columnsError);
@@ -207,7 +212,7 @@ export async function GET() {
       database_stats: {
         total_products: totalProductsCount,
         products_with_zoho_id: zohoProductsCount,
-        ready_for_migration: zohoProductsCount > 0
+        ready_for_migration: (zohoProductsCount || 0) > 0
       },
       new_columns_available: [
         'unit', 'item_type', 'product_type', 'status', 'source',

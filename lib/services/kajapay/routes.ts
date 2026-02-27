@@ -1,8 +1,8 @@
 import express from 'express';
 import { z } from 'zod';
 import { kajaPayClient } from './client';
-import { createPaymentService } from './service';
-import { IStorage } from '../storage';
+import { createPaymentService, PaymentService } from './service';
+import { IStorage } from '../../storage';
 
 const router = express.Router();
 
@@ -206,7 +206,7 @@ router.get('/payment-methods/:userId', async (req, res) => {
     const paymentMethods = await paymentService.getUserPaymentMethods(userId);
     
     // Return safe data (no tokens)
-    const safePaymentMethods = paymentMethods.map(pm => ({
+    const safePaymentMethods = paymentMethods.map((pm: any) => ({
       id: pm.id,
       cardLast4: pm.cardLast4,
       cardType: pm.cardType,
@@ -343,7 +343,7 @@ router.post('/webhook', async (req, res) => {
     }
 
     // Store webhook event for processing
-    await paymentService.storage.createWebhookEvent({
+    await (paymentService as any).storage.createWebhookEvent({
       eventType: payload.eventType,
       kajaPayTransactionId: payload.transactionId,
       payload: payload,

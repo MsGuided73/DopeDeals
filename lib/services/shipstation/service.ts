@@ -1,5 +1,5 @@
 import { ShipstationClient, ShipstationConfig, ShipstationApiResponse } from './client';
-import { SupabaseStorage } from '../supabase-storage';
+import { SupabaseStorage } from '../../../server/supabase-storage';
 import {
   ShipstationOrder,
   InsertShipstationOrder,

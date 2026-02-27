@@ -10,7 +10,7 @@ import {
   CategoryMapping,
   OrderMapping
 } from './types.js';
-import { storage } from '../storage.js';
+import { getStorage } from '../../storage';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import type {
@@ -22,7 +22,7 @@ import type {
   InsertOrder,
   User,
   InsertUser
-} from '../../shared/schema.js';
+} from '../../../shared/schema';
 
 export class ZohoSyncManager {
   private zohoClient: ZohoInventoryClient;
@@ -77,9 +77,10 @@ export class ZohoSyncManager {
     const localProduct = this.mapZohoProductToLocal(zohoProduct);
 
     // Check if product already exists in local database
+    const storage = await getStorage();
     const existingProducts = await storage.getProducts();
 
-    const existingProduct = existingProducts.find(p => p.sku === localProduct.sku);
+    const existingProduct = existingProducts.find((p: any) => p.sku === localProduct.sku);
 
     let localId: string;
     if (existingProduct) {
@@ -195,7 +196,7 @@ export class ZohoSyncManager {
 
       // Phase 3: Automatic Background AI Classification for imported products
       try {
-        const { backgroundClassificationService } = await import('../services/backgroundClassifier.js');
+        const { backgroundClassificationService } = await import('../../../server/services/backgroundClassifier.js');
         await backgroundClassificationService.queueProduct(data.id);
         console.log(`[Zoho Sync] Queued product for background AI classification: ${dbProduct.name}`);
       } catch (error) {
@@ -248,8 +249,9 @@ export class ZohoSyncManager {
     const localCategory = this.mapZohoCategoryToLocalCategory(zohoCategory);
 
     // Check if category already exists
+    const storage = await getStorage();
     const existingCategories = await storage.getCategories();
-    const existing = existingCategories.find(cat => cat.slug === localCategory.slug);
+    const existing = existingCategories.find((cat: any) => cat.slug === localCategory.slug);
 
     if (!existing) {
       await storage.createCategory(localCategory);
@@ -316,11 +318,12 @@ export class ZohoSyncManager {
     const localOrder = this.mapZohoOrderToLocal(zohoOrder, localUserId);
 
     // Check if order already exists
+    const storage = await getStorage();
     const existingOrders = await storage.getUserOrders(localUserId);
-    const existing = existingOrders.find(order => order.id === zohoOrder.salesorder_id);
+    const existing = existingOrders.find((order: any) => order.id === zohoOrder.salesorder_id);
 
     if (!existing) {
-      await storage.createOrder(localOrder);
+      await (storage.createOrder as any)(localOrder);
       console.log(`[Zoho Sync] Created local order: ${zohoOrder.salesorder_number}`);
     }
 
@@ -329,6 +332,7 @@ export class ZohoSyncManager {
 
   private async ensureCustomerExists(zohoOrder: ZohoOrder): Promise<string> {
     // Check if customer exists in local database
+    const storage = await getStorage();
     const existingUser = await storage.getUserByEmail(zohoOrder.customer_email || '');
 
     if (existingUser) {
@@ -349,6 +353,10 @@ export class ZohoSyncManager {
   private mapZohoOrderToLocal(zohoOrder: ZohoOrder, userId: string): InsertOrder {
     return {
       userId,
+      customerEmail: zohoOrder.customer_email || '',
+      customerFirstName: zohoOrder.customer_name?.split(' ')[0] || '',
+      customerLastName: zohoOrder.customer_name?.split(' ').slice(1).join(' ') || '',
+      subtotalAmount: String(zohoOrder.sub_total || 0),
       totalAmount: String(zohoOrder.total),
       status: this.mapZohoOrderStatus(zohoOrder.status),
       shippingAddress: this.formatAddress(zohoOrder.shipping_address),
@@ -380,6 +388,7 @@ export class ZohoSyncManager {
     const results = { success: 0, failed: 0, errors: [] as string[] };
 
     try {
+      const storage = await getStorage();
       const localProducts = await storage.getProducts();
 
       for (const product of localProducts) {

@@ -14,6 +14,18 @@ export interface BlogPost {
 
 export const FALLBACK_POSTS: BlogPost[] = [
   {
+    id: 'cannabis-history-global',
+    title: 'The Wild Ride of Weed: From Ancient Rituals to Modern Revolution',
+    excerpt: 'Look, cannabis has been getting people lifted for longer than most countries have been on maps. From ancient Chinese medicine to underground counterculture to today\'s multi-billion dollar industry – this plant has seen some serious history.',
+    author: 'Highway 420 Crew',
+    date: '2025-10-15',
+    category: 'Culture',
+    image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/History%20of%20Cannabis.jpg',
+    readTime: '10 min read',
+    featured: true
+  },
+  /* Temporarily commenting out paraphernalia articles
+  {
     id: 'dabbing-101-beginners-guide',
     title: 'Dabbing 101: Your Beginner\'s Guide to Rigs, Nails & First Setups',
     excerpt: 'New to dabbing? This comprehensive guide breaks down rigs, nails, temperature control, and essential setup tips for smooth, flavorful vapor every time.',
@@ -46,7 +58,7 @@ export const FALLBACK_POSTS: BlogPost[] = [
     category: 'Education',
     image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop',
     readTime: '8 min read',
-    featured: true
+    featured: false
   },
   {
     id: 'anatomy-smooth-hit',
@@ -72,7 +84,7 @@ export const FALLBACK_POSTS: BlogPost[] = [
     category: 'Education',
     image: 'https://images.unsplash.com/photo-1586227740560-8cf2732c1531?w=600&h=400&fit=crop',
     readTime: '10 min read',
-    featured: true
+    featured: false
   },
   {
     id: 'perfect-temperature-control',
@@ -97,6 +109,7 @@ export const FALLBACK_POSTS: BlogPost[] = [
     category: 'Education',
     image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&h=400&fit=crop',
     readTime: '7 min read',
-    featured: true
+    featured: false
   }
+  */
 ];

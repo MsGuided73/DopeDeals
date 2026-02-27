@@ -9,6 +9,7 @@ import StickyCartPopup from "./components/StickyCartPopup";
 import AutosuggestRecommendations from "./components/AutosuggestRecommendations";
 import RecentlyViewed from "./components/RecentlyViewed";
 import { NavigationProvider } from "./contexts/NavigationContext";
+import AgeGateModal from "./components/AgeGateModal";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
@@ -87,6 +88,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-white">
         <AppProviders>
+          {/* Age Gate — renders as fixed overlay on first visit. Blurs page behind it. */}
+          <AgeGateModal />
           <NavigationProvider>
             <div className="min-h-screen flex flex-col">
               {/* Scrolling Banner - DISABLED for now */}

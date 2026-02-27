@@ -11,91 +11,127 @@ export default function CannabisHistoryArticle() {
   const [showShareMenu, setShowShareMenu] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white">
-      <GlobalMasthead />
+    <div className="min-h-screen bg-[#000] text-white selection:bg-[#ff6b35] selection:text-black overflow-x-hidden font-sans pb-0 relative">
+      {/* NOISE OVERLAY */}
+      <div className="fixed inset-0 opacity-[0.05] pointer-events-none z-0 mix-blend-overlay"
+           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
+      />
+
+      <div className="relative z-10 mix-blend-difference">
+        <GlobalMasthead />
+      </div>
       <AgeVerification />
 
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Back Button */}
-        <div className="mb-8">
-          <Link
-            href="/blog"
-            className="inline-flex items-center text-dope-orange hover:text-orange-600 font-medium transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Blog
-          </Link>
-        </div>
-
-        {/* Article Header */}
-        <header className="mb-12">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="px-3 py-1 bg-dope-orange text-white text-sm font-semibold rounded-full">
-              Culture
-            </span>
-            <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
-              History
-            </span>
+      {/* FULL WIDTH HERO BACKGROUND */}
+      <div className="relative w-full pt-16 pb-48 flex flex-col items-center">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center z-0"
+          style={{ backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/History%20of%20Cannabis.jpg')" }}
+        />
+        {/* Gradient Overlay for text readability & merging into black */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black z-10 pointer-events-none" />
+        
+        {/* Content Container */}
+        <div className="relative z-20 w-full mt-16">
+          {/* Back Button */}
+          <div className="mb-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Link
+              href="/blog"
+              className="inline-flex items-center text-[#ff6b35] hover:text-white font-bold tracking-widest uppercase text-xs transition-colors group bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+              Back to Blog
+            </Link>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            The Wild Ride of Weed: From Ancient Rituals to Modern Revolution
-          </h1>
+          {/* Article Header Container */}
+          <header className="relative mb-0 py-20 md:py-28 flex justify-center">
+            {/* Constrained width wrapper — glass panel + text both live here */}
+            <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-8">
+              {/* Glassmorphic Panel — same width as wrapper, fades out left & right */}
+              <div 
+                className="absolute -inset-x-40 -inset-y-28 bg-black/75 backdrop-blur-2xl"
+                style={{
+                  maskImage: 'radial-gradient(ellipse 70% 65% at 50% 50%, black 45%, transparent 80%)',
+                  WebkitMaskImage: 'radial-gradient(ellipse 70% 65% at 50% 50%, black 45%, transparent 80%)',
+                }}
+              />
 
-          <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-            Look, cannabis has been getting people lifted for longer than most countries have been on maps.
-            From ancient Chinese medicine to underground counterculture to today's multi-billion dollar industry –
-            this plant has seen some serious history. Let's break down the wild journey of weed.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600 border-b border-gray-200 pb-8">
-            <div className="flex items-center gap-2">
-              <User className="w-4 h-4" />
-              <span>Highway 420 Crew</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
-              <span>January 15, 2024 • 10 min read</span>
-            </div>
-            <div className="flex items-center gap-2 ml-auto">
-              <button
-                onClick={() => setIsBookmarked(!isBookmarked)}
-                className={`p-2 rounded-full transition-colors ${
-                  isBookmarked ? 'text-dope-orange bg-orange-100' : 'text-gray-600 hover:text-dope-orange hover:bg-gray-100'
-                }`}
-              >
-                <Bookmark className="w-4 h-4" />
-              </button>
-              <div className="relative">
-                <button
-                  onClick={() => setShowShareMenu(!showShareMenu)}
-                  className="p-2 rounded-full text-gray-600 hover:text-dope-orange hover:bg-gray-100 transition-colors"
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
-                {showShareMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
-                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Share on Twitter
-                    </button>
-                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Share on Facebook
-                    </button>
-                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Copy Link
-                    </button>
-                  </div>
-                )}
+            {/* Text Content — sits on top of the glass */}
+            <div className="relative z-10 pl-8 md:pl-16">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="px-3 py-1 bg-dope-orange text-white text-sm font-semibold rounded-full">
+                  Culture
+                </span>
+                <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
+                  History
+                </span>
               </div>
-            </div>
-          </div>
-        </header>
 
-        {/* Article Content */}
-        <div className="prose prose-lg prose-gray max-w-none">
-          {/* Ancient Section */}
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-6 leading-[0.9]">
+                The Wild Ride of <span className="text-[#ff6b35]">Weed</span>
+              </h1>
+
+              <p className="text-xl md:text-2xl text-gray-400 mb-12 font-light leading-relaxed border-l-2 border-[#ff6b35] pl-6 max-w-4xl">
+                Look, cannabis has been getting people lifted for longer than most countries have been on maps.
+                From ancient Chinese medicine to underground counterculture to today's multi-billion dollar industry –
+                this plant has seen some serious history. Let's break down the wild journey of weed.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-6 text-sm font-bold uppercase tracking-widest text-gray-500 border-b border-white/10 pb-8">
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  <span>Highway 420 Crew</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span>January 15, 2024 • 10 min read</span>
+                </div>
+                <div className="flex items-center gap-2 ml-auto">
+                  <button
+                    onClick={() => setIsBookmarked(!isBookmarked)}
+                    className={`p-2 rounded-full transition-colors ${
+                      isBookmarked ? 'text-dope-orange bg-orange-100' : 'text-gray-600 hover:text-dope-orange hover:bg-gray-100'
+                    }`}
+                  >
+                    <Bookmark className="w-4 h-4" />
+                  </button>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowShareMenu(!showShareMenu)}
+                      className="p-2 rounded-full text-gray-600 hover:text-dope-orange hover:bg-gray-100 transition-colors"
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </button>
+                    {showShareMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+                        <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          Share on Twitter
+                        </button>
+                        <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          Share on Facebook
+                        </button>
+                        <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          Copy Link
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>  {/* end text content div */}
+            </div>  {/* end constrained wrapper div */}
+          </header>
+        </div>
+      </div>
+
+      <main className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 relative z-20 -mt-24">
+        {/* Article Frame */}
+        <div className="bg-white text-black p-8 md:p-12 lg:p-16 rounded-sm shadow-[0_0_40px_rgba(255,107,53,0.1)] border-4 border-[#ff6b35] relative mb-20 overflow-hidden">
+          <article className="prose prose-lg prose-gray max-w-none">            {/* Ancient Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Ancient Beginnings: The OG Days</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 mt-0">Ancient Beginnings: The OG Days</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               We're talking way back – like 10,000+ years ago. Archaeological evidence shows humans have been cultivating cannabis longer than we've had written language. This plant didn't just grow; it was one of our first agricultural experiments.
             </p>
@@ -118,7 +154,7 @@ export default function CannabisHistoryArticle() {
               </div>
             </div>
           </div>
-
+          
           {/* Colonial Section */}
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Colonial America: Hemp Hustle</h2>
@@ -266,21 +302,21 @@ export default function CannabisHistoryArticle() {
           </div>
 
           {/* Conclusion */}
-          <div className="bg-gray-900 text-white p-8 rounded-lg text-center">
+          <div className="bg-gray-900 text-white p-8 rounded-lg text-center mt-12 mb-8">
             <h2 className="text-2xl font-bold mb-4">One Thing's Clear: Cannabis is Here to Stay</h2>
             <p className="text-lg text-gray-300 leading-relaxed">
               After 10,000+ years of human relationship with this plant, one thing is crystal clear:
               cannabis isn't going anywhere. It's evolved from ancient medicine to modern industry,
-              survived prohibition, and emerged stronger than ever.
             </p>
           </div>
-        </div>
+        </article>
+      </div>
 
         {/* NEW BLOG FOOTER */}
         <div className="-mx-4 sm:-mx-6 lg:-mx-8">
           <BlogFooter />
         </div>
-      </article>
+      </main>
     </div>
   );
 }

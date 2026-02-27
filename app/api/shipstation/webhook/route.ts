@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ShipstationService } from '../../../../server/shipstation/service';
+import { ShipstationService } from '../../../../lib/services/shipstation/service';
 
 // Lightweight initializer (avoids importing Express router)
 async function getService(): Promise<ShipstationService | null> {
   const apiKey = process.env.SHIPSTATION_API_KEY;
   const apiSecret = process.env.SHIPSTATION_API_SECRET;
   if (!apiKey || !apiSecret) return null;
-  const storage = await (await import('../../../../server/storage')).storage;
-  const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, storage);
+  const storage = await (await import('../../../../lib/storage')).getStorage();
+  const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, storage as any);
   return svc;
 }
 

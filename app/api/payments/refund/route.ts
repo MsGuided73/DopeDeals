@@ -4,8 +4,8 @@ import { requireAuth } from '../../../lib/requireAuth';
 import { z } from 'zod';
 
 // Import KajaPay client and types
-import { kajaPayClient } from '../../../../server/kajapay/client';
-import { RefundResult } from '../../../../server/kajapay/types';
+import { kajaPayClient } from '../../../../lib/services/kajapay/client';
+import { RefundResult } from '../../../../lib/services/kajapay/types';
 
 const RefundSchema = z.object({
   orderId: z.string().uuid(),
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     // Get the original payment transaction
     const originalTransaction = await storage.getOrderTransactions(orderId);
-    const chargeTransaction = originalTransaction.find(t => t.transactionType === 'charge' && t.status === 'approved');
+    const chargeTransaction = originalTransaction.find((t: any) => t.transactionType === 'charge' && t.status === 'approved');
     
     if (!chargeTransaction || !chargeTransaction.kajaPayTransactionId) {
       return NextResponse.json({ error: 'Original payment transaction not found' }, { status: 404 });
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create refund transaction record (pending)
-    const refundTransaction = await storage.createTransaction({
+    const refundTransaction = await (storage as any).createTransaction({
       orderId: order.id,
       transactionType: 'refund',
       amount: refundAmount.toString(),
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     );
 
     // Update refund transaction with result
-    await storage.updateTransaction(refundTransaction.id, {
+    await (storage as any).updateTransaction(refundTransaction.id, {
       kajaPayTransactionId: refundResult.transactionId,
       kajaPayReferenceNumber: refundResult.referenceNumber,
       status: refundResult.success ? 'approved' : 'declined',
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
     if (refundResult.success) {
       // Update order status
       const isFullRefund = refundAmount >= Number(order.totalAmount);
-      await storage.updateOrder(order.id, {
+      await (storage as any).updateOrder(order.id, {
         paymentStatus: isFullRefund ? 'refunded' : 'partially_refunded',
         status: isFullRefund ? 'refunded' : order.status
       });

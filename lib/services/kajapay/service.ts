@@ -1,5 +1,5 @@
 import { kajaPayClient } from './client';
-import { IStorage } from '../storage';
+import { IStorage } from '../../storage';
 import {
   PaymentResult,
   RefundResult,
@@ -42,7 +42,7 @@ export class PaymentService {
         }
       };
 
-      const transaction = await this.storage.createTransaction(transactionData);
+      const transaction = await (this.storage as any).createTransaction(transactionData);
 
       // Prepare KajaPay request
       const paymentRequest: ProcessPaymentRequest = {
@@ -77,7 +77,7 @@ export class PaymentService {
         }
       };
 
-      await this.storage.updateTransaction(transaction.id, updateData);
+      await (this.storage as any).updateTransaction(transaction.id, updateData);
 
       // If successful and card should be saved, save payment method
       if (result.success && result.customerToken && orderData.paymentMethod.type === 'card') {
@@ -142,7 +142,7 @@ export class PaymentService {
         isDefault: false
       };
 
-      return await this.storage.createPaymentMethod(paymentMethodData);
+      return await (this.storage as any).createPaymentMethod(paymentMethodData);
     } catch (error: any) {
       console.error('[PaymentService] Save payment method error:', error);
       return null;
@@ -161,7 +161,7 @@ export class PaymentService {
     }
   ): Promise<PaymentResult> {
     try {
-      const paymentMethod = await this.storage.getPaymentMethod(paymentMethodId);
+      const paymentMethod = await (this.storage as any).getPaymentMethod(paymentMethodId);
       if (!paymentMethod) {
         throw new Error('Payment method not found');
       }
@@ -199,7 +199,7 @@ export class PaymentService {
     reason?: string
   ): Promise<RefundResult> {
     try {
-      const transaction = await this.storage.getTransaction(transactionId);
+      const transaction = await (this.storage as any).getTransaction(transactionId);
       if (!transaction || !transaction.kajaPayTransactionId) {
         throw new Error('Transaction not found or invalid');
       }
@@ -226,10 +226,10 @@ export class PaymentService {
           }
         };
 
-        await this.storage.createTransaction(refundData);
+        await (this.storage as any).createTransaction(refundData);
 
         // Update original transaction status
-        await this.storage.updateTransaction(transactionId, {
+        await (this.storage as any).updateTransaction(transactionId, {
           status: amount ? 'partially_refunded' : 'refunded'
         });
       }
@@ -249,7 +249,7 @@ export class PaymentService {
   // Get transaction status
   async getTransactionStatus(transactionId: string): Promise<TransactionStatus | null> {
     try {
-      const transaction = await this.storage.getTransaction(transactionId);
+      const transaction = await (this.storage as any).getTransaction(transactionId);
       if (!transaction || !transaction.kajaPayTransactionId) {
         return null;
       }
@@ -263,12 +263,12 @@ export class PaymentService {
 
   // Get user payment methods
   async getUserPaymentMethods(userId: string): Promise<PaymentMethod[]> {
-    return await this.storage.getUserPaymentMethods(userId);
+    return await (this.storage as any).getUserPaymentMethods(userId);
   }
 
   // Delete payment method
   async deletePaymentMethod(paymentMethodId: string): Promise<boolean> {
-    return await this.storage.deletePaymentMethod(paymentMethodId);
+    return await (this.storage as any).deletePaymentMethod(paymentMethodId);
   }
 
   // Validate payment configuration
@@ -301,7 +301,7 @@ export class PaymentService {
         isDefault: false
       };
 
-      return await this.storage.createPaymentMethod(paymentMethodData);
+      return await (this.storage as any).createPaymentMethod(paymentMethodData);
     } catch (error: any) {
       console.error('[PaymentService] Auto-save payment method error:', error);
       return null;

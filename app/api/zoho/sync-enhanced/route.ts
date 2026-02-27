@@ -382,7 +382,7 @@ async function syncSingleProductWithAllData(
   }
 
   // Sync to zohoProducts table (upsert) - this stores all the Zoho-specific data
-  zohoProductData.localProductId = productId;
+  (zohoProductData as any).localProductId = productId;
   const { error: zohoError } = await supabase
     .from('zohoProducts')
     .upsert(zohoProductData, { onConflict: 'zohoItemId' });

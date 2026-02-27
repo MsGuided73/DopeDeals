@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { ShipstationService } from './service';
-import { storage } from '../storage';
+import { getStorage } from '../../storage';
 import { insertShipstationOrderSchema, insertShipstationWebhookSchema } from '@shared/shipstation-schema';
 
 export function createShipstationRoutes(shipstationService: ShipstationService | null): Router {
@@ -75,7 +75,7 @@ export function createShipstationRoutes(shipstationService: ShipstationService |
       }
 
       const orderData = insertShipstationOrderSchema.parse(req.body);
-      const result = await shipstationService.createShipstationOrder(orderData);
+      const result = await shipstationService.createShipstationOrder(orderData as any);
       
       if (!result.success) {
         return res.status(400).json(result);
@@ -137,6 +137,7 @@ export function createShipstationRoutes(shipstationService: ShipstationService |
   router.get('/orders/:orderId', async (req, res) => {
     try {
       const { orderId } = req.params;
+      const storage = await getStorage();
       const order = await storage.getShipstationOrderByOrderId(orderId);
       
       if (!order) {
@@ -336,6 +337,7 @@ export function createShipstationRoutes(shipstationService: ShipstationService |
   router.get('/sync/status', async (req, res) => {
     try {
       const { syncType } = req.query;
+      const storage = await getStorage();
       const status = await storage.getLatestShipstationSyncStatus(syncType as string);
       
       res.json({

@@ -40,64 +40,103 @@ export default function UltimateBongGuideClient() {
       <AgeVerification />
       <GlobalMasthead />
 
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        {/* Hero Section */}
-        <div className="relative bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-20">
-          <div className="absolute inset-0 bg-black/60"></div>
-          <div className="relative max-w-4xl mx-auto px-6 text-center">
-            <h1 className="text-5xl md:text-6xl mb-6 font-bold tracking-tight">
-              The Ultimate Guide to Picking the Perfect Bong
-            </h1>
-            <div className="w-32 h-1 bg-dope-orange-500 mx-auto mb-8"></div>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).
-            </p>
-            <div className="flex items-center justify-center gap-6 text-sm text-gray-400 mt-8">
-              <span className="flex items-center gap-2">
-                <span className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">👤</span>
-                DOPE CITY Team
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                📖 12 min read
-              </span>
-              <span>•</span>
-              <span>January 15, 2024</span>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen bg-[#000] text-white selection:bg-[#ff6b35] selection:text-black overflow-x-hidden font-sans pb-0 relative">
+        {/* NOISE OVERLAY */}
+        <div className="fixed inset-0 opacity-[0.05] pointer-events-none z-0 mix-blend-overlay"
+             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
+        />
 
-        {/* Article Content */}
-        <div className="max-w-4xl mx-auto px-6 py-16">
+        {/* FULL WIDTH HERO BACKGROUND */}
+        <div className="relative w-full pt-32 pb-48 mt-[-100px] flex flex-col items-center">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center z-0"
+            style={{ backgroundImage: "url('/images/blog/bong-guide-hero.jpg')" }}
+          />
+          {/* Gradient Overlay for text readability & merging into black */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black z-10 pointer-events-none" />
+          
+        {/* Content Container */}
+        <div className="relative z-20 w-full mt-16">
           {/* Back Navigation */}
-          <div className="mb-8">
-            <Link href="/blog" className="inline-flex items-center gap-2 text-dope-orange hover:text-orange-600 transition-colors">
-              <ChevronLeft className="w-4 h-4" />
+          <div className="mb-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Link
+              href="/blog"
+              className="inline-flex items-center text-[#ff6b35] hover:text-white font-bold tracking-widest uppercase text-xs transition-colors group bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10"
+            >
+              <ChevronLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
               Back to Blog
             </Link>
           </div>
 
-          {/* Social Share & Actions */}
-          <div className="flex justify-between items-center mb-12 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm">
-            <div className="flex items-center gap-4">
-              <button className="flex items-center gap-2 text-gray-600 hover:text-dope-orange transition-colors">
-                <ThumbsUp className="w-5 h-5" />
-                <span className="text-sm">Helpful</span>
-              </button>
-              <button className="flex items-center gap-2 text-gray-600 hover:text-dope-orange transition-colors">
-                <Share2 className="w-5 h-5" />
-                <span className="text-sm">Share</span>
-              </button>
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-500">
-              <span>Education</span>
-              <span>•</span>
-              <span>📖 Updated January 15, 2024</span>
-            </div>
-          </div>
+          {/* Article Header Container */}
+          <header className="relative mb-0 py-16 md:py-24 flex justify-center">
+            {/* Extended Glassmorphic Background with Soft Edges */}
+            <div 
+              className="absolute inset-0 bg-black/60 backdrop-blur-2xl -z-10"
+              style={{
+                maskImage: 'radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%)'
+              }}
+            />
+            
+            {/* Constrained Text Content */}
+            <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="px-3 py-1 bg-dope-orange text-white text-sm font-semibold rounded-full shadow-md">
+                  Education
+                </span>
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full shadow-md">
+                  Gear Guide
+                </span>
+              </div>
 
-          {/* Article Body */}
-          <article className="prose prose-lg max-w-none dark:prose-invert">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-6 leading-[0.9] drop-shadow-lg">
+                The Ultimate Guide to Picking the Perfect <span className="text-[#ff6b35]">Bong</span>
+              </h1>
+
+              <p className="text-xl md:text-2xl text-gray-400 mb-12 font-light leading-relaxed border-l-2 border-[#ff6b35] pl-6 max-w-3xl">
+                From desktop beasts to pocket rockets — bongs that hit different. Water filtration, massive rips, and glass art that belongs in museums (or your living room).
+              </p>
+
+              <div className="flex flex-wrap items-center gap-6 text-sm font-bold uppercase tracking-widest text-gray-300 border-b border-white/10 pb-8">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 bg-[#ff6b35] text-black rounded-full flex items-center justify-center text-xs">DC</span>
+                  <span className="text-white">DOPE CITY Team</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[#ff6b35]">🕒</span>
+                  <span>Jan 15, 2024 • 12 min read</span>
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
+        </div>
+
+        {/* Article Content */}
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 -mt-24">
+          {/* Article Card Wrapper */}
+          <div className="bg-white text-black rounded-sm shadow-[0_0_40px_rgba(255,107,53,0.1)] border-4 border-[#ff6b35] relative mb-20 overflow-hidden">
+            
+            {/* Article Main Body */}
+            <div className="p-8 md:p-12 lg:p-16">
+              {/* Social Share & Actions */}
+              <div className="flex justify-end items-center mb-12 pb-6 border-b border-gray-200">
+                <div className="flex items-center gap-4">
+                  <button className="flex items-center gap-2 text-gray-500 hover:text-[#ff6b35] transition-colors font-bold uppercase text-xs tracking-wider">
+                    <ThumbsUp className="w-5 h-5" />
+                    <span>Helpful</span>
+                  </button>
+                  <button className="flex items-center gap-2 text-gray-500 hover:text-[#ff6b35] transition-colors font-bold uppercase text-xs tracking-wider">
+                    <Share2 className="w-5 h-5" />
+                    <span>Share</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Article Prose */}
+              <article className="prose prose-lg prose-gray max-w-none">
             <h2>Types of Bongs Explained</h2>
             <p>The world of bongs is surprisingly vast. Here's the breakdown you need to navigate it successfully.</p>
 
@@ -231,17 +270,19 @@ export default function UltimateBongGuideClient() {
                 Shop Bongs at DOPE CITY
               </Link>
             </p>
-          </article>
+            </article>
 
-          {/* Comments Section */}
-          <div className="mt-16">
-            <BlogComments
-              blogSlug="ultimate-bong-guide"
-              isCommunityMember={isCommunityMember}
-              userId={userId}
-            />
+            {/* Comments Section */}
+            <div className="mt-16 pt-8 border-t border-gray-200">
+              <BlogComments
+                blogSlug="ultimate-bong-guide"
+                isCommunityMember={isCommunityMember}
+                userId={userId}
+              />
+            </div>
           </div>
         </div>
+      </div>
       </div>
       <BlogFooter />
     </>

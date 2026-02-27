@@ -140,7 +140,7 @@ async function syncCategoriesFromZoho(supabase: any, accessToken: string) {
           console.log(`[Zoho Category Sync] Updated category: ${zohoCategory.category_name} (${zohoCategory.category_id})`);
         } else {
           // Create new category
-          categoryData.created_at = new Date().toISOString();
+          (categoryData as any).created_at = new Date().toISOString();
           
           const { error: insertError } = await supabase
             .from('categories')

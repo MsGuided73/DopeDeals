@@ -4,7 +4,7 @@ import { requireAuth } from '../../../lib/requireAuth';
 import { z } from 'zod';
 
 // Import KajaPay client and types
-import { kajaPayClient } from '../../../../server/kajapay/client';
+import { kajaPayClient } from '../../../../lib/services/kajapay/client';
 
 const VoidSchema = z.object({
   orderId: z.string().uuid(),
@@ -70,14 +70,14 @@ export async function POST(req: NextRequest) {
 
     // Get the original payment transaction
     const originalTransactions = await storage.getOrderTransactions(orderId);
-    const chargeTransaction = originalTransactions.find(t => t.transactionType === 'charge' && t.status === 'approved');
+    const chargeTransaction = originalTransactions.find((t: any) => t.transactionType === 'charge' && t.status === 'approved');
     
     if (!chargeTransaction || !chargeTransaction.kajaPayTransactionId) {
       return NextResponse.json({ error: 'Original payment transaction not found' }, { status: 404 });
     }
 
     // Create void transaction record (pending)
-    const voidTransaction = await storage.createTransaction({
+    const voidTransaction = await (storage as any).createTransaction({
       orderId: order.id,
       transactionType: 'void',
       amount: order.totalAmount,
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     const voidResult = await kajaPayClient.voidTransaction(chargeTransaction.kajaPayTransactionId);
 
     // Update void transaction with result
-    await storage.updateTransaction(voidTransaction.id, {
+    await (storage as any).updateTransaction(voidTransaction.id, {
       kajaPayTransactionId: voidResult.transactionId,
       kajaPayReferenceNumber: voidResult.referenceNumber,
       status: voidResult.success ? 'approved' : 'declined',
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
 
     if (voidResult.success) {
       // Update order status
-      await storage.updateOrder(order.id, {
+      await (storage as any).updateOrder(order.id, {
         paymentStatus: 'voided',
         status: 'cancelled'
       });

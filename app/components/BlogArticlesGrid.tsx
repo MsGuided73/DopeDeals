@@ -49,12 +49,8 @@ export default function BlogArticlesGrid() {
       const data = await response.json();
       if (!data.posts) throw new Error("Invalid response format");
 
-      // Filter out the featured post if needed, or just show all
-      // For now, let's show all except the very first one if it's already shown in Hero
-      // But based on current design, we might want to just show the latest feed
-      const feedPosts = (data.posts as BlogPost[]).filter(p => !p.featured).slice(0, 9);
-      
-      setPosts(feedPosts.length > 0 ? feedPosts : (data.posts as BlogPost[]).slice(1, 10));
+      // Show all posts in the grid (including featured ones)
+      setPosts((data.posts as BlogPost[]).slice(0, 9));
     } catch (err) {
       console.error("Error fetching blog posts:", err);
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -65,9 +61,21 @@ export default function BlogArticlesGrid() {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="bg-zinc-900/50 h-[400px] rounded-sm animate-pulse border border-white/5" />
+          <div key={i} className="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] border border-gray-100 dark:border-white/5 animate-pulse">
+            <div className="relative aspect-[4/3] w-full bg-gray-200 dark:bg-zinc-800 border-b border-gray-100 dark:border-white/5" />
+            <div className="flex-1 flex flex-col p-6 md:p-8">
+              <div className="h-4 w-1/3 bg-gray-200 dark:bg-zinc-800 rounded mb-4" />
+              <div className="h-8 w-3/4 bg-gray-200 dark:bg-zinc-800 rounded mb-4" />
+              <div className="h-8 w-1/2 bg-gray-200 dark:bg-zinc-800 rounded mb-8" />
+              <div className="h-20 w-full bg-gray-200 dark:bg-zinc-800 rounded mb-8" />
+              <div className="mt-auto pt-6 border-t border-gray-100 dark:border-white/10 flex justify-between items-center">
+                <div className="h-4 w-24 bg-gray-200 dark:bg-zinc-800 rounded" />
+                <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-zinc-800" />
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     );
@@ -96,52 +104,54 @@ export default function BlogArticlesGrid() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true }}
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12"
+      className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10"
     >
       {posts.map((post) => (
         <motion.div key={post.id} variants={item}>
             <Link
             href={`/blog/${post.id}`}
-            className="group h-full flex flex-col"
+            className="group flex flex-col h-full bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_50px_rgba(255,107,53,0.15)] hover:-translate-y-2 transition-all duration-500 border border-gray-100 dark:border-white/5"
             >
-            <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900 border border-white/10 mb-6">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950 border-b border-gray-100 dark:border-white/5">
                 {post.image ? (
                     <img
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale group-hover:grayscale-0"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-zinc-800">
-                        <span className="text-zinc-700 font-black text-4xl">PH</span>
+                    <div className="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-800">
+                        <span className="text-gray-300 dark:text-zinc-700 font-black text-4xl">PH</span>
                     </div>
                 )}
                 
                 <div className="absolute top-4 left-4">
-                    <span className="bg-[#ff6b35] text-black text-[10px] font-bold uppercase tracking-widest px-2 py-1">
+                    <span className="bg-[#ff6b35] text-black text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm shadow-md shadow-[#ff6b35]/20">
                         {post.category || 'News'}
                     </span>
                 </div>
             </div>
 
-            <div className="flex-1 flex flex-col">
-                <div className="flex items-center gap-3 text-xs text-gray-500 font-mono mb-3 uppercase tracking-wider">
+            <div className="flex-1 flex flex-col p-5 md:p-6">
+                <div className="flex items-center gap-3 text-xs text-gray-500 font-mono mb-4 uppercase tracking-wider">
                    <span>{new Date(post.date).toLocaleDateString()}</span>
                    <span className="text-[#ff6b35]">•</span>
                    <span>{post.readTime || '3 MIN'}</span>
                 </div>
                 
-                <h3 className="text-2xl font-bold text-white uppercase leading-none mb-4 group-hover:text-[#ff6b35] transition-colors line-clamp-2">
+                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4 group-hover:text-[#ff6b35] transition-colors line-clamp-2" style={{ letterSpacing: '-0.02em' }}>
                 {post.title}
                 </h3>
                 
-                <p className="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-3">
+                <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed mb-8 line-clamp-3">
                 {post.excerpt}
                 </p>
 
-                <div className="mt-auto pt-4 border-t border-white/10 flex justify-between items-center group-hover:border-[#ff6b35]/50 transition-colors">
-                   <span className="text-xs font-bold uppercase tracking-widest text-[#ff6b35] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Read Now</span>
-                   <ArrowUpRight className="w-4 h-4 text-gray-500 group-hover:text-[#ff6b35] group-hover:rotate-45 transition-all duration-300" />
+                <div className="mt-auto pt-6 border-t border-gray-100 dark:border-white/10 flex justify-between items-center group-hover:border-[#ff6b35]/30 transition-colors">
+                   <span className="text-sm font-bold uppercase tracking-widest text-[#ff6b35] transition-all duration-300">Read Article</span>
+                   <div className="w-8 h-8 rounded-full bg-gray-50 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-[#ff6b35] transition-all duration-300 shadow-sm">
+                     <ArrowUpRight className="w-4 h-4 text-[#ff6b35] group-hover:text-black group-hover:rotate-45 transition-all duration-300" />
+                   </div>
                 </div>
             </div>
             </Link>
