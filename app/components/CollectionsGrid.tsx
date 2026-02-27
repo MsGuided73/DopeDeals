@@ -42,20 +42,23 @@ export default function CollectionsGrid() {
     { 
       name: "HOT\nPRODUCTS", 
       route: "/hot-products",
+      image: "/images/promo/hot_products_bg.png",
       color: "#f43f5e", // Rose
       bgGradient: "from-rose-600 via-rose-900 to-black", 
       isPromo: true
     },
     { 
       name: "FRESH\nDROPS", 
-      route: "/fresh-drops", 
+      route: "/fresh-drops",
+      image: "/images/promo/fresh_drops_bg.png",
       color: "#14b8a6", // Teal
       bgGradient: "from-teal-600 via-teal-900 to-black",
       isPromo: true
     },
     { 
       name: "DOPE\nDEALS", 
-      route: "/#dope-deals", 
+      route: "/#dope-deals",
+      image: "/images/promo/dope_deals_bg.png",
       color: "#ef4444", // Red for Deals
       bgGradient: "from-red-600 via-red-900 to-black",
       isPromo: true
@@ -110,36 +113,47 @@ export default function CollectionsGrid() {
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.4)",
               }}
             >
-              {/* Promo Background Class (if applicable) */}
-              {cat.isPromo && (
-                <div className={`absolute inset-0 bg-gradient-to-br ${cat.bgGradient} opacity-90 group-hover:opacity-100 transition-opacity z-0`} />
-              )}
-
               {/* Dynamic Border Glow */}
-              <div className={`absolute inset-0 rounded-2xl border ${cat.isPromo ? 'border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.2)] animate-pulse' : 'border-white/10 group-hover:border-white/20'} transition-all duration-300 z-20 pointer-events-none`} />
+              <div className={`absolute inset-0 rounded-2xl border ${cat.isPromo ? 'border-white/20' : 'border-white/10 group-hover:border-white/20'} transition-all duration-300 z-30 pointer-events-none`} />
 
               {cat.isPromo ? (
-                // Promo Tile Content (Mobile - Massive Typography, No Image)
-                <div className="absolute inset-0 flex items-center justify-center p-2 z-20 pointer-events-none">
-                  <div className={`text-white text-center text-[28px] xs:text-[34px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-widest shadow-black group-hover:text-[${cat.color}] transition-colors duration-300`}>
-                    {cat.name.split('\n').map((line, index) => (
-                      <div key={index}>{line}</div>
-                    ))}
+                // Promo Tile Content (Mobile - Option 3 Editorial Lifestyle)
+                <>
+                  <div className="absolute inset-0 bg-neutral-900 z-0" />
+                  {cat.image && (
+                    <img 
+                      src={cat.image} 
+                      alt={cat.name} 
+                      className="absolute inset-0 w-full h-full object-cover z-10 opacity-70 group-hover:opacity-90 transition-opacity duration-300 pointer-events-none" 
+                    />
+                  )}
+                  {/* Overlay for text readability */}
+                  <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-50 mix-blend-multiply z-10 pointer-events-none`} />
+                  <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-20 pointer-events-none" />
+                  
+                  {/* Text alignment to bottom-left */}
+                  <div className="absolute bottom-3 left-3 z-30 pointer-events-none flex flex-col justify-end">
+                    <div className="w-5 h-[3px] mb-1.5 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-all duration-300 group-hover:w-8" style={{ backgroundColor: cat.color }}></div>
+                    <div className={`text-white text-left text-[24px] xs:text-[28px] font-display-twilight leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,1)] tracking-widest group-hover:text-[${cat.color}] transition-colors duration-300`}>
+                      {cat.name.split('\n').map((line, index) => (
+                        <div key={index}>{line}</div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                </>
               ) : (
                 // Regular Tile Content (Mobile)
                 <>
                   <img 
                     src={cat.image} 
                     alt={cat.name} 
-                    className="w-full h-full object-contain p-2 relative z-10 group-hover:scale-110 transition-transform duration-500 ease-out" 
+                    className="absolute bottom-2 right-2 w-[85%] max-h-[85%] object-contain z-10 group-hover:scale-110 transition-transform duration-500 ease-out" 
                   />
                   {/* Text Visibility Gradient */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent z-10" />
                   {/* Category Name Label */}
                   <div className="absolute top-2 left-2 z-20 pointer-events-none">
-                    <div className="text-white text-[16px] xs:text-[20px] font-display-twilight leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">
+                    <div className="text-white text-[24px] xs:text-[28px] font-display-twilight leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">
                       {cat.name.split('\n').map((line, index) => (
                         <div key={index}>{line}</div>
                       ))}
@@ -156,7 +170,7 @@ export default function CollectionsGrid() {
       <div className="hidden lg:block w-full">
         <div className="max-w-screen-2xl mx-auto px-2">
           {/* Main Grid: 4 Columns, Mosaic Layout */}
-          <div className="grid grid-cols-4 gap-3 h-[85vh] w-full">
+          <div className="grid grid-cols-4 grid-rows-3 gap-3 h-[85vh] w-full">
             
             {/* Hero Tile - Spans 2x2 */}
             <Link
@@ -197,33 +211,46 @@ export default function CollectionsGrid() {
                    e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                {/* Promo Background Class */}
-                {cat.isPromo && (
-                    <div className={`absolute inset-0 bg-gradient-to-br ${cat.bgGradient} opacity-90 group-hover:opacity-100 transition-opacity duration-500 z-0`} />
-                )}
-
                 {/* Glassy Border with Pulse for Promo */}
-                <div className={`absolute inset-0 rounded-2xl border ${cat.isPromo ? 'border-white/30 shadow-[0_0_20px_rgba(255,255,255,0.15)] animate-pulse' : 'border-white/10 group-hover:border-white/30'} transition-all duration-300 z-20 pointer-events-none`} />
+                <div className={`absolute inset-0 rounded-2xl border ${cat.isPromo ? 'border-white/20' : 'border-white/10 group-hover:border-white/30'} transition-all duration-300 z-30 pointer-events-none`} />
 
                 {cat.isPromo ? (
-                   // Promo Tile Content (Desktop - Massive Typography, No Image)
-                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 p-4">
-                      {/* Slow pulsing glow behind text */}
-                      <div className="absolute w-48 h-48 rounded-full blur-[60px] opacity-40 group-hover:opacity-70 group-hover:scale-125 transition-all duration-700" style={{ backgroundColor: cat.color }}></div>
-                      
-                      <div className={`text-white text-center text-[54px] xl:text-[68px] font-display-twilight leading-[0.9] drop-shadow-[0_6px_6px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black group-hover:scale-110 group-hover:text-[${cat.color}] transition-all duration-500 relative z-20`}>
-                        {cat.name.split('\n').map((line, index) => (
-                          <div key={index}>{line}</div>
-                        ))}
-                      </div>
-                   </div>
+                   // Promo Tile Content (Desktop - Option 3 Editorial Lifestyle)
+                   <>
+                     {/* Base Background */}
+                     <div className="absolute inset-0 bg-neutral-900 z-0" />
+                     {cat.image && (
+                       <img 
+                         src={cat.image} 
+                         alt={cat.name} 
+                         className="absolute inset-0 w-full h-full object-cover z-10 opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 pointer-events-none" 
+                       />
+                     )}
+                     
+                     {/* Rich Gradient Overlays */}
+                     <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-50 mix-blend-multiply z-10 transition-opacity duration-500 pointer-events-none`} />
+                     <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-20 pointer-events-none group-hover:h-full group-hover:via-black/70 transition-all duration-500" />
+
+                     {/* Editorial Text Block */}
+                     <div className="absolute bottom-6 left-6 z-30 pointer-events-none flex flex-col justify-end">
+                        <div className="w-8 h-1 mb-3 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.4)] transition-all duration-500 group-hover:w-16" style={{ backgroundColor: cat.color }}></div>
+                        <div className={`text-white text-left text-[42px] xl:text-[52px] font-display-twilight leading-[0.9] drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] tracking-[0.1em] group-hover:text-[${cat.color}] transition-all duration-500`}>
+                          {cat.name.split('\n').map((line, index) => (
+                            <div key={index}>{line}</div>
+                          ))}
+                        </div>
+                     </div>
+                     
+                     {/* Dark pulsing glow on hover for mood */}
+                     <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full blur-[80px] opacity-0 group-hover:opacity-40 transition-all duration-700 z-10 pointer-events-none" style={{ backgroundColor: cat.color }}></div>
+                   </>
                 ) : (
                   // Regular Tile Content (Desktop)
                   <>
                     <img 
                       src={cat.image} 
                       alt={cat.name} 
-                      className="w-full h-full object-contain p-6 relative z-10 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-500 ease-out" 
+                      className="absolute bottom-4 right-4 w-[75%] max-h-[75%] object-contain z-10 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-500 ease-out" 
                     />
                     
                     {/* Text Visibility Gradient */}
@@ -231,7 +258,7 @@ export default function CollectionsGrid() {
 
                     {/* Category Name Label */}
                     <div className="absolute top-6 left-6 z-20 pointer-events-none transition-all duration-300">
-                      <div className={`text-white text-[32px] xl:text-[40px] font-display-twilight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black group-hover:text-[${cat.color}]`}>
+                      <div className={`text-white text-[42px] xl:text-[52px] font-display-twilight leading-[0.9] drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-[0.1em] shadow-black group-hover:text-[${cat.color}]`}>
                         {cat.name.split('\n').map((line, index) => (
                           <div key={index}>{line}</div>
                         ))}

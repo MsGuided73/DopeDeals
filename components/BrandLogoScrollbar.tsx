@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
+import { motion, useAnimation, useAnimationFrame } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 interface BrandLogo {
   name: string;
   logo: string;
   alt: string;
   featured?: boolean;
+  scaleClass?: string;
 }
 
 const brandLogos: BrandLogo[] = [
@@ -14,18 +16,7 @@ const brandLogos: BrandLogo[] = [
     name: "Cookies",
     logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Cookies%20Logo.webp",
     alt: "Cookies Brand Logo",
-    featured: true,
-  },
-  {
-    name: "RooR",
-    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/RooR%20Logo.avif",
-    alt: "RooR Brand Logo",
-  },
-  {
-    name: "Puffco",
-    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/puffco_logo.webp",
-    alt: "Puffco Brand Logo",
-    featured: true,
+    scaleClass: "scale-[1.5] group-hover:scale-[1.65]",
   },
   {
     name: "Crave",
@@ -33,25 +24,16 @@ const brandLogos: BrandLogo[] = [
     alt: "Crave Brand Logo",
   },
   {
-    name: "Diamond Glass",
-    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/diamond-glass_logo.webp",
-    alt: "Diamond Glass Brand Logo",
-  },
-  {
     name: "Mush Caps",
     logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Mush-Caps-Logo.webp",
     alt: "Mush Caps Brand Logo",
+    scaleClass: "scale-[1.4] group-hover:scale-[1.55]",
   },
   {
     name: "Hidden Hills",
     logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Hidden-Hills_logo.webp",
     alt: "Hidden Hills Brand Logo",
-    featured: true,
-  },
-  {
-    name: "Doodlez",
-    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Doodlez.webp",
-    alt: "Doodlez Brand Logo",
+    scaleClass: "scale-[1.4] group-hover:scale-[1.55]",
   },
   {
     name: "Truemoola",
@@ -64,88 +46,123 @@ const brandLogos: BrandLogo[] = [
     alt: "Urth Farmacy Brand Logo",
   },
   {
-    name: "Juicy Fills Studio",
-    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/juicy-fills-logo.webp",
-    alt: "Juicy Fills Studio Brand Logo",
+    name: "Zoomers",
+    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Zoomers.png",
+    alt: "Zoomers Brand Logo",
+  },
+  {
+    name: "Astro Eight",
+    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Astro%20Eight.png",
+    alt: "Astro Eight Brand Logo",
+  },
+  {
+    name: "mmelt",
+    logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/mmelt%20logo.png",
+    alt: "mmelt Brand Logo",
   },
 ];
 
 export default function BrandLogoScrollbar() {
+  const [isHovered, setIsHovered] = useState(false);
+  const rotationRef = useRef(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [radius, setRadius] = useState(450); // Default radius for desktop
+
+  // Adjust cylinder radius based on screen size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setRadius(250); // smaller radius for mobile
+      } else if (window.innerWidth < 1024) {
+        setRadius(350); // medium radius for tablet
+      } else {
+        setRadius(450); // large radius for desktop
+      }
+    };
+    
+    handleResize(); // Initial call
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Custom animation loop for continuous rotation that pauses on hover
+  useAnimationFrame((time, delta) => {
+    if (!isHovered) {
+      // Rotate 10 degrees per second (slowed down from 15)
+      rotationRef.current -= (delta / 1000) * 10; 
+      if (containerRef.current) {
+        containerRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
+      }
+    }
+  });
+
   return (
-    <section className="py-12 bg-white">
+    <section className="py-20 bg-white overflow-hidden bg-gradient-to-b from-white to-gray-50/50">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Title */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-black text-black font-display-twilight mb-2">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-black text-black font-display-twilight mb-2 tracking-wide">
             TRUSTED BRANDS
           </h2>
-          <p className="text-gray-600 text-lg">
-            Premium products from industry-leading manufacturers
+          <p className="text-gray-500 uppercase tracking-widest font-sans text-sm font-semibold">
+            Premium products from industry leaders
           </p>
         </div>
 
-        {/* Staggered Masonry Grid */}
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-          {brandLogos.map((brand, index) => (
-            <div
-              key={brand.name}
-              className={`
-                group relative flex items-center justify-center p-4 md:p-6 
-                rounded-xl transition-all duration-500 cursor-pointer
-                bg-transparent border-none
-                ${brand.featured ? 'col-span-1 md:col-span-2 row-span-1 md:row-span-2' : ''}
-                hover:shadow-2xl hover:shadow-green-500/20
-              `}
-              style={{
-                // Create staggered effect with varying heights
-                minHeight: brand.featured ? '180px' : '100px',
-              }}
-            >
-              {/* Logo with grayscale to color on hover */}
-              <img
-                src={brand.logo}
-                alt={brand.alt}
-                className={`
-                  object-contain transition-all duration-500
-                  filter grayscale opacity-70
-                  group-hover:grayscale-0 group-hover:opacity-100
-                  group-hover:scale-110
-                  ${brand.featured ? 'max-h-28 md:max-h-36' : 'max-h-16 md:max-h-20'}
-                  w-full
-                `}
-                loading="lazy"
-                onError={(event) => {
-                  const target = event.target as HTMLImageElement;
-                  target.style.display = "none";
-                }}
-              />
+        {/* 3D Carousel Stage */}
+        <div 
+          className="relative w-full h-[300px] flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing"
+          style={{ perspective: "1200px" }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Fader edges to hide cards clipping out of view */}
+          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-20 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none" />
 
-              {/* Glow effect on hover - positioned behind */}
-              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-emerald-300/10 to-transparent rounded-xl" />
-              </div>
-
-              {/* Brand name tooltip on hover */}
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
-                <span className="text-xs font-bold text-gray-700 bg-white/90 px-2 py-1 rounded-full shadow-sm whitespace-nowrap">
-                  {brand.name}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Shop by Brand CTA */}
-        {/* <div className="text-center mt-10">
-          <Link
-            href="/brands"
-            className="inline-block px-8 py-3 bg-black text-white font-bold rounded-full
-                       hover:bg-green-600 hover:scale-105 transition-all duration-300
-                       hover:shadow-lg hover:shadow-green-500/30"
+          {/* Rotating Container */}
+          <div
+            ref={containerRef}
+            className="relative w-full h-full flex items-center justify-center transform-style-[preserve-3d]"
+            style={{ transformStyle: "preserve-3d" }}
           >
-            SHOP BY BRAND →
-          </Link>
-        </div> */}
+            {brandLogos.map((brand, i) => {
+              // Calculate angles to evenly distribute cards in 360 degrees
+              const angle = (360 / brandLogos.length) * i;
+              
+              return (
+                <div
+                  key={brand.name}
+                  className="absolute left-1/2 top-1/2 -ml-[130px] -mt-[75px] w-[260px] h-[150px]"
+                  style={{
+                    transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
+                    backfaceVisibility: "hidden", // Hide cards facing backwards
+                  }}
+                >
+                  {/* Floating Brand Card */}
+                  <div className="w-full h-full p-4 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100/50 flex items-center justify-center group hover:shadow-[0_15px_40px_rgba(34,197,94,0.15)] hover:-translate-y-2 transition-all duration-500 relative overflow-hidden backdrop-blur-xl bg-white/80">
+                    
+                    {/* Hover Glow Background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-emerald-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    {/* Brand Logo */}
+                    <img
+                      src={brand.logo}
+                      alt={brand.alt}
+                      className={`w-full h-full object-contain transition-all duration-500 relative z-10 ${brand.scaleClass || 'group-hover:scale-110'}`}
+                      draggable="false"
+                    />
+
+                    {/* Tooltip Name */}
+                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-xs font-bold py-1 px-3 rounded-full opacity-0 group-hover:opacity-100 group-hover:bottom-3 transition-all duration-300 z-20 whitespace-nowrap shadow-xl">
+                      {brand.name}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
