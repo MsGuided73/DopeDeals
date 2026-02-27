@@ -10,8 +10,9 @@ export default function Highway420Footer() {
   const pathname = usePathname();
   const { hasCustomFooter } = useNavigation();
   const isCheckoutFlow = pathname?.startsWith("/cart") || pathname?.startsWith("/checkout");
+  const isBlogFlow = pathname?.startsWith("/blog");
 
-  if (hasCustomFooter) return null;
+  if (hasCustomFooter || isBlogFlow) return null;
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

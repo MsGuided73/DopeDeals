@@ -5,6 +5,7 @@ import Link from 'next/link';
 import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import BlogComments from '../../components/comments/BlogComments';
+import BlogFooter from '../../components/BlogFooter';
 
 export default function UltimateBongGuideClient() {
   const [isCommunityMember, setIsCommunityMember] = useState(false);
@@ -242,6 +243,7 @@ export default function UltimateBongGuideClient() {
           </div>
         </div>
       </div>
+      <BlogFooter />
     </>
   );
 }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle } from 'lucide-react';
+import BlogFooter from '../../components/BlogFooter';
 
 export default function CannabisHistoryArticle() {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -275,32 +276,10 @@ export default function CannabisHistoryArticle() {
           </div>
         </div>
 
-        {/* Article Footer */}
-        <footer className="mt-12 pt-8 border-t border-gray-200">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div>
-              <h3 className="font-bold text-gray-900 mb-2">Share this article</h3>
-              <div className="flex gap-4">
-                <button className="text-gray-600 hover:text-blue-600 transition-colors">
-                  <MessageCircle className="w-5 h-5" />
-                </button>
-                <button className="text-gray-600 hover:text-blue-600 transition-colors">
-                  <Share2 className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            <div className="text-center md:text-right">
-              <p className="text-gray-600 mb-2">Found this article helpful?</p>
-              <Link
-                href="/blog"
-                className="inline-flex items-center text-dope-orange hover:text-orange-600 font-medium transition-colors"
-              >
-                Read more articles →
-              </Link>
-            </div>
-          </div>
-        </footer>
+        {/* NEW BLOG FOOTER */}
+        <div className="-mx-4 sm:-mx-6 lg:-mx-8">
+          <BlogFooter />
+        </div>
       </article>
     </div>
   );

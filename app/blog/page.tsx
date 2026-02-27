@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, Flame, Zap, Search } from 'lucide-react';
 import BlogArticlesGrid from '../components/BlogArticlesGrid';
+import BlogFooter from '../components/BlogFooter';
 
 interface BlogPost {
   id: string;
@@ -232,25 +233,8 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* FOOTER CALLOUT */}
-      <section className="py-40 bg-zinc-900 border-t border-white/10 text-center relative overflow-hidden group">
-         <div className="absolute inset-x-0 bottom-0 h-1 bg-[#ff6b35] scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out" />
-         
-         {/* Background Text */}
-         <h2 className="text-[15vw] font-black uppercase text-white/5 leading-[0.8] tracking-tighter select-none pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap blur-sm group-hover:blur-0 transition-all duration-700">
-            Highway 420
-         </h2>
-         
-         <div className="relative z-10 px-6">
-           <h3 className="text-3xl md:text-5xl font-bold uppercase mb-8 tracking-tight">Ready to ride?</h3>
-           <p className="text-gray-400 max-w-xl mx-auto mb-12 text-lg">
-             Create an account to unlock exclusive drops, member pricing, and community features.
-           </p>
-           <button className="bg-[#ff6b35] text-black text-xl font-black uppercase tracking-wide px-12 py-5 hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(255,107,53,0.3)] [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)]">
-             Get Started
-           </button>
-         </div>
-      </section>
+      {/* NEW BLOG FOOTER */}
+      <BlogFooter />
     </div>
   );
 }
