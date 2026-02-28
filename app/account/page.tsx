@@ -1,17 +1,113 @@
-'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '../contexts/AuthContext';
 import {
   User, Settings, Package, Heart, CreditCard, MapPin, LogOut,
   Star, Gift, ShoppingBag, Bell, Shield, HelpCircle,
-  TrendingUp, Award, Clock, Edit, Eye, Trash2
+  TrendingUp, Award, Clock, Edit, Eye, Trash2, Loader2
 } from 'lucide-react';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
 
 export default function AccountPage() {
+  const { user, isVip, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  const [stats, setStats] = useState({
+    ordersCount: 0,
+    totalSpent: 0,
+    favoritesCount: 0,
+    isVip: false
+  });
+  const [orders, setOrders] = useState<any[]>([]);
+  const [wishlist, setWishlist] = useState<any[]>([]);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchStats() {
+      if (!user) return;
+      
+      try {
+        const response = await fetch('/api/account/stats');
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error('Error fetching account stats:', error);
+      } finally {
+        setStatsLoading(false);
+      }
+    }
+
+    async function fetchOrders() {
+        if (!user) return;
+        setOrdersLoading(true);
+        try {
+            const response = await fetch('/api/orders');
+            if (response.ok) {
+                const data = await response.json();
+                setOrders(data.orders || []);
+            }
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        } finally {
+            setOrdersLoading(false);
+        }
+    }
+
+    async function fetchWishlist() {
+        if (!user) return;
+        setWishlistLoading(true);
+        try {
+            const response = await fetch('/api/favorites/details');
+            if (response.ok) {
+                const data = await response.json();
+                setWishlist(data.products || []);
+            }
+        } catch (error) {
+            console.error('Error fetching wishlist:', error);
+        } finally {
+            setWishlistLoading(false);
+        }
+    }
+
+    if (!authLoading && user) {
+      fetchStats();
+      fetchOrders();
+      fetchWishlist();
+    } else if (!authLoading && !user) {
+      setStatsLoading(false);
+    }
+  }, [user, authLoading]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="w-12 h-12 text-dope-orange-500 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6 text-center">
+        <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mb-6">
+          <User className="w-10 h-10 text-gray-400" />
+        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 font-chalets">PLEASE SIGN IN</h1>
+        <p className="text-gray-600 mb-8 max-w-md">You need to be signed in to view your account statistics and manage your profile.</p>
+        <Link 
+          href="/auth" 
+          className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-all"
+        >
+          Sign In / Sign Up
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -34,19 +130,27 @@ export default function AccountPage() {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-              <div className="text-3xl font-bold text-dope-orange-500 mb-2">12</div>
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">
+                {statsLoading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : stats.ordersCount}
+              </div>
               <div className="text-gray-700 text-sm font-medium">Total Orders</div>
             </div>
             <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-              <div className="text-3xl font-bold text-dope-orange-500 mb-2">$2,450</div>
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">
+                {statsLoading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : `$${stats.totalSpent.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              </div>
               <div className="text-gray-700 text-sm font-medium">Total Spent</div>
             </div>
             <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-              <div className="text-3xl font-bold text-dope-orange-500 mb-2">VIP</div>
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">
+                {statsLoading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : (stats.isVip ? 'VIP' : 'Standard')}
+              </div>
               <div className="text-gray-700 text-sm font-medium">Member Status</div>
             </div>
             <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-              <div className="text-3xl font-bold text-dope-orange-500 mb-2">5</div>
+              <div className="text-3xl font-bold text-dope-orange-500 mb-2">
+                {statsLoading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : stats.favoritesCount}
+              </div>
               <div className="text-gray-700 text-sm font-medium">Saved Items</div>
             </div>
           </div>
@@ -195,39 +299,73 @@ export default function AccountPage() {
         {activeTab === 'orders' && (
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Orders</h2>
-            <div className="space-y-4">
-              {[1, 2, 3].map((order) => (
-                <div key={order} className="border border-gray-200 rounded-lg p-4 hover:border-dope-orange-300 transition-colors">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Order #{2024001 + order}</h3>
-                      <p className="text-sm text-gray-600">Placed on {new Date(Date.now() - order * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-gray-900">${(Math.random() * 200 + 50).toFixed(2)}</p>
-                      <span className="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Delivered</span>
-                    </div>
-                  </div>
+            {ordersLoading ? (
+                <div className="flex justify-center p-12">
+                    <Loader2 className="w-10 h-10 text-dope-orange-500 animate-spin" />
                 </div>
-              ))}
-            </div>
+            ) : orders.length > 0 ? (
+                <div className="space-y-4">
+                {orders.map((order) => (
+                    <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:border-dope-orange-300 transition-colors">
+                    <div className="flex justify-between items-center">
+                        <div>
+                        <h3 className="font-semibold text-gray-900">Order #{order.order_number || order.id.slice(0, 8)}</h3>
+                        <p className="text-sm text-gray-600">Placed on {new Date(order.created_at).toLocaleDateString()}</p>
+                        </div>
+                        <div className="text-right">
+                        <p className="font-semibold text-gray-900">${Number(order.total_amount).toFixed(2)}</p>
+                        <span className={`inline-block px-2 py-1 text-xs rounded-full ${
+                            order.status === 'delivered' ? 'bg-green-100 text-green-800' : 
+                            order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                            'bg-blue-100 text-blue-800'
+                        }`}>
+                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                ))}
+                </div>
+            ) : (
+                <div className="text-center py-12">
+                    <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 text-lg">No orders found.</p>
+                    <Link href="/shop" className="text-dope-orange-500 font-bold hover:underline mt-2 inline-block">Start Shopping</Link>
+                </div>
+            )}
           </div>
         )}
 
         {activeTab === 'wishlist' && (
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">My Wishlist</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={item} className="border border-gray-200 rounded-lg p-4 hover:border-dope-orange-300 transition-colors">
-                  <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-                    <Package className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 text-sm mb-1">Premium Glass Bong #{item}</h3>
-                  <p className="text-dope-orange-600 font-bold">${(Math.random() * 100 + 50).toFixed(2)}</p>
+            {wishlistLoading ? (
+                <div className="flex justify-center p-12">
+                    <Loader2 className="w-10 h-10 text-dope-orange-500 animate-spin" />
                 </div>
-              ))}
-            </div>
+            ) : wishlist.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {wishlist.map((item) => (
+                    <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:border-dope-orange-300 transition-colors">
+                    <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                        {item.image_url ? (
+                            <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                        ) : (
+                            <Package className="w-8 h-8 text-gray-400" />
+                        )}
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm mb-1">{item.name}</h3>
+                    <p className="text-dope-orange-600 font-bold">${Number(item.our_price).toFixed(2)}</p>
+                    <Link href={`/product/${item.id}`} className="text-xs text-dope-orange-500 hover:underline mt-2 inline-block">View Product</Link>
+                    </div>
+                ))}
+                </div>
+            ) : (
+                <div className="text-center py-12">
+                    <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 text-lg">Your wishlist is empty.</p>
+                </div>
+            )}
           </div>
         )}
 

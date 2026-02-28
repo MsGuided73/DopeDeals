@@ -149,6 +149,38 @@ export class ProductService {
   }
 
   /**
+   * Get multiple products by IDs with image URL transformation
+   */
+  async getProductsByIds(ids: string[]): Promise<Product[]> {
+    if (!ids || ids.length === 0) return [];
+    
+    try {
+      const supabase = await this.getSupabaseClient();
+      const { data, error } = await supabase
+        .from('main_site_products')
+        .select('*')
+        .in('id', ids);
+
+      if (error) {
+        console.error('Error fetching products by IDs:', error);
+        throw new Error(`Failed to fetch products: ${error.message}`);
+      }
+
+      // Transform image URLs for sigdistro.com images
+      const transformedProducts = (data || []).map((product: any) => ({
+        ...product,
+        image_url: transformImageUrl(product.image_url)
+      }));
+
+      return transformedProducts;
+    } catch (error) {
+      console.error('ProductService.getProductsByIds error:', error);
+      throw error;
+    }
+  }
+
+
+  /**
    * Get products by category with image URL transformation
    */
   async getProductsByCategory(category: string, limit?: number): Promise<Product[]> {
