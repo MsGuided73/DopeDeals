@@ -99,7 +99,7 @@ export default function NewProductsSection() {
     return (
       <section className="mt-16">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-black text-black mb-4 font-display-twilight">
+          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight">
             FRESH DROPS
           </h1>
         </div>
@@ -125,7 +125,7 @@ export default function NewProductsSection() {
     return (
       <section className="mt-16">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl text-black mb-4 font-display-twilight">
+          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight">
             FRESH DROPS
           </h1>
           <p className="text-red-500 mt-6">Error loading fresh drops: {error}</p>
@@ -266,7 +266,7 @@ export default function NewProductsSection() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-black text-black mb-4 font-display-twilight">
+          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight">
             FRESH DROPS
           </h1>
         </div>
