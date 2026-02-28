@@ -106,7 +106,7 @@ export default function DopeDealsSection() {
     <section className="mt-16 bg-white dark:bg-gray-950 py-12">
         <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-            <h1 className="text-5xl md:text-7xl font-black text-black mb-4 font-display-twilight">
+            <h1 className="text-3xl md:text-4xl font-black text-black mb-4 font-display-twilight">
               🔥 DOPE DEALS 🔥
             </h1>
         </div>
@@ -153,7 +153,7 @@ export default function DopeDealsSection() {
       <section className="mt-16 bg-white dark:bg-gray-950 py-12">
         <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-7xl font-black text-black mb-4 font-display-twilight">
+          <h1 className="text-3xl md:text-4xl font-black text-black mb-4 font-display-twilight">
             🔥 DOPE DEALS 🔥
           </h1>
             <p className="text-red-500 mt-6">Error loading dope deals: {error}</p>
@@ -172,7 +172,7 @@ export default function DopeDealsSection() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-            <h1 className="text-5xl md:text-7xl font-black text-black mb-4 font-display-twilight">
+            <h1 className="text-3xl md:text-4xl font-black text-black mb-4 font-display-twilight">
               🔥 DOPE DEALS 🔥
             </h1>
           <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
