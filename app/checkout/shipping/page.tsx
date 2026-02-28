@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../contexts/CartContext';
 import { ArrowRight, Truck } from 'lucide-react';
@@ -10,7 +10,7 @@ export default function ShippingPage() {
   const { cart, isLoading } = useCart();
   const router = useRouter();
 
-  // Basic form state (you can expand this to match the previous monolithic form)
+  // Basic form state
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -24,6 +24,37 @@ export default function ShippingPage() {
     shippingCountry: 'US',
   });
 
+  const [isAgeVerified, setIsAgeVerified] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  useEffect(() => {
+    // Check if formally verified in this session
+    const verified = localStorage.getItem('hw420_age_verified_formal') === 'true';
+    if (verified) setIsAgeVerified(true);
+
+    // Load AgeChecker script if not present
+    if (!document.getElementById('agechecker-script')) {
+      const script = document.createElement('script');
+      script.id = 'agechecker-script';
+      script.src = 'https://cdn.agechecker.net/static/popup/v1/popup.js';
+      script.setAttribute('data-agecheck-api-key', '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ');
+      script.setAttribute('data-agecheck-disable-auto', 'true');
+      document.head.appendChild(script);
+    }
+
+    // Handle AgeChecker verification success
+    const handleVerified = () => {
+      console.log('[AgeChecker] Verification successful');
+      localStorage.setItem('hw420_age_verified_formal', 'true');
+      setIsAgeVerified(true);
+      setIsVerifying(false);
+      toast.success('Age verified successfully!');
+    };
+
+    window.addEventListener('agechecker:verified', handleVerified);
+    return () => window.removeEventListener('agechecker:verified', handleVerified);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -33,8 +64,33 @@ export default function ShippingPage() {
       return;
     }
 
-    // Save shipping info to context, local storage, or a backend session
-    // For now, we'll use sessionStorage to pass it into the review page
+    // Enforce Age Verification for checkout
+    if (!isAgeVerified) {
+      const ac = (window as any).AgeChecker;
+      if (ac) {
+        setIsVerifying(true);
+        // Pass data to AgeChecker
+        (window as any).ageCheckerConfig = {
+          apiKey: '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
+          customerEmail: form.email,
+          customerFirstName: form.firstName,
+          customerLastName: form.lastName,
+          shippingAddress: {
+            address: form.shippingAddress1,
+            city: form.shippingCity,
+            state: form.shippingState,
+            zip: form.shippingZip,
+            country: 'US'
+          }
+        };
+        ac.verify();
+      } else {
+        toast.error('Age verification service is loading. Please try again.');
+      }
+      return;
+    }
+
+    // Save shipping info to sessionStorage to pass it into the review page
     sessionStorage.setItem('checkout_shipping', JSON.stringify(form));
     
     // Proceed to the review page step
@@ -57,7 +113,8 @@ export default function ShippingPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 lg:py-12 max-w-4xl">
+    <div className="min-h-screen bg-black text-white py-8 lg:py-12">
+      <div className="container mx-auto px-4 max-w-4xl">
       <div className="flex items-center gap-4 mb-8 text-sm text-gray-400">
         <span className="text-white font-medium flex items-center gap-2"><Truck className="w-4 h-4" /> Shipping</span>
         <ArrowRight className="w-4 h-4" />
@@ -171,12 +228,14 @@ export default function ShippingPage() {
           
           <button 
             type="submit"
-            className="px-8 py-3 bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-widest rounded transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)]"
+            className="px-8 py-3 bg-black hover:bg-zinc-900 text-white font-bold uppercase tracking-widest rounded transition-all border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5"
+            style={{ color: 'white' }}
           >
             Continue to Review
           </button>
         </div>
       </form>
     </div>
+  </div>
   );
 }

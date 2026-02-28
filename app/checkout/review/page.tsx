@@ -14,6 +14,14 @@ export default function ReviewPage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
+    // Check for age verification
+    const isAgeVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
+    if (!isAgeVerified) {
+      toast.error('Please complete age verification first');
+      router.push('/checkout/shipping');
+      return;
+    }
+
     // Load shipping data from session
     const data = sessionStorage.getItem('checkout_shipping');
     if (data) {
@@ -124,7 +132,8 @@ export default function ReviewPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 lg:py-12 max-w-6xl">
+    <div className="min-h-screen bg-black text-white py-8 lg:py-12">
+      <div className="container mx-auto px-4 max-w-6xl">
        <div className="flex items-center gap-4 mb-8 text-sm text-gray-400">
         <button onClick={() => router.push('/checkout/shipping')} className="text-gray-400 hover:text-white flex items-center gap-2">
           <Truck className="w-4 h-4" /> Shipping
@@ -204,11 +213,12 @@ export default function ReviewPage() {
            </div>
 
            <div className="space-y-4">
-              <button 
-                onClick={handleCreateOrderAndPay}
-                disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-widest rounded-lg transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] disabled:opacity-50"
-              >
+            <button 
+              onClick={handleCreateOrderAndPay}
+              disabled={isProcessing}
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-black hover:bg-zinc-900 font-bold uppercase tracking-widest rounded-lg transition-all border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] disabled:opacity-50 text-white"
+              style={{ color: 'white' }}
+            >
                 {isProcessing ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -230,5 +240,6 @@ export default function ReviewPage() {
         </div>
       </div>
     </div>
+  </div>
   );
 }
