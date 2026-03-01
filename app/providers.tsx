@@ -6,15 +6,18 @@ import { queryClient } from "../lib/queryClient";
 import ToastProvider from "./components/ToastProvider";
 import { CartProvider } from "./contexts/CartContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ComplianceProvider } from "./contexts/ComplianceContext";
 
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CartProvider>
-          {children}
-          <ToastProvider />
-        </CartProvider>
+        <ComplianceProvider>
+          <CartProvider>
+            {children}
+            <ToastProvider />
+          </CartProvider>
+        </ComplianceProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

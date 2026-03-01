@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
@@ -24,6 +24,8 @@ export default function SignInForm() {
 
   const { signIn } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') || '/account';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ export default function SignInForm() {
         toast.error(result.error);
       } else {
         toast.success('Welcome back!');
-        router.push('/account');
+        router.push(redirectTo);
       }
     } catch (error) {
       console.error('Form submission error:', error);

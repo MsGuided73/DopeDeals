@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Plus, Minus } from 'lucide-react';
 import { addToCart } from '../lib/cart-utils';
+import { useCompliance } from '../contexts/ComplianceContext';
 
 interface AddToCartButtonProps {
   productId: string;
@@ -25,8 +26,11 @@ export default function AddToCartButton({
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
 
+  const { restrictedProductIds } = useCompliance();
+  const isRestricted = restrictedProductIds.includes(productId);
+
   const handleAddToCart = async () => {
-    if (!inStock || isAdding) return;
+    if (!inStock || isAdding || isRestricted) return;
     
     setIsAdding(true);
     const success = await addToCart(productId, quantity);
@@ -71,7 +75,7 @@ export default function AddToCartButton({
     lg: 'w-12 h-12 text-lg'
   };
 
-  if (!inStock) {
+  if (!inStock || isRestricted) {
     return (
       <div className={`flex flex-col gap-2 ${className}`}>
         <button
@@ -81,9 +85,10 @@ export default function AddToCartButton({
             ${variantClasses.primary}
             rounded-lg font-semibold transition-colors cursor-not-allowed
             flex items-center justify-center gap-2
+            opacity-50
           `}
         >
-          Out of Stock
+          {isRestricted ? 'Restricted in your area' : 'Out of Stock'}
         </button>
       </div>
     );
@@ -100,7 +105,7 @@ export default function AddToCartButton({
           <button
             type="button"
             onClick={decrementQuantity}
-            disabled={quantity <= 1}
+            disabled={quantity <= 1 || isRestricted}
             className={`
               ${quantityButtonClasses[size]}
               border border-gray-300 rounded-md 
@@ -124,7 +129,7 @@ export default function AddToCartButton({
           <button
             type="button"
             onClick={incrementQuantity}
-            disabled={quantity >= Math.min(10, stockQuantity)}
+            disabled={quantity >= Math.min(10, stockQuantity) || isRestricted}
             className={`
               ${quantityButtonClasses[size]}
               border border-gray-300 rounded-md 
@@ -145,7 +150,7 @@ export default function AddToCartButton({
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        disabled={!inStock || isAdding}
+        disabled={!inStock || isAdding || isRestricted}
         className={`
           ${sizeClasses[size]} 
           ${variantClasses[variant]}

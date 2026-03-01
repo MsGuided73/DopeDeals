@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, X } from 'lucide-react';
+import { useCompliance } from '../contexts/ComplianceContext';
 
 interface RecentlyViewedProduct {
   id: string;
@@ -16,6 +17,8 @@ interface RecentlyViewedProduct {
 export default function RecentlyViewedProducts() {
   const [recentlyViewed, setRecentlyViewed] = useState<RecentlyViewedProduct[]>([]);
   const [isVisible, setIsVisible] = useState(true);
+
+  const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 
   useEffect(() => {
     // Load recently viewed products from localStorage
@@ -33,6 +36,16 @@ export default function RecentlyViewedProducts() {
 
     loadRecentlyViewed();
   }, []);
+
+  // Pre-fetch eligibility for all products once they are loaded
+  useEffect(() => {
+    if (userZipCode && recentlyViewed.length > 0) {
+      const idsToCheck = recentlyViewed.map(p => p.id).filter(id => !restrictedProductIds.includes(id));
+      if (idsToCheck.length > 0) {
+        checkProductEligibility(idsToCheck);
+      }
+    }
+  }, [userZipCode, recentlyViewed, restrictedProductIds, checkProductEligibility]);
 
   const removeFromRecentlyViewed = (productId: string) => {
     const updated = recentlyViewed.filter(product => product.id !== productId);
@@ -79,50 +92,67 @@ export default function RecentlyViewedProducts() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {recentlyViewed.map((product) => (
-            <div key={product.id} className="group relative">
-              <Link
-                href={`/product/${product.id}`}
-                className="block bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-all duration-300"
-              >
-                <div className="aspect-square relative">
-                  {product.image_url ? (
-                    <Image
-                      src={product.image_url}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="200px"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <Clock className="w-8 h-8" />
-                    </div>
-                  )}
-                </div>
+          {recentlyViewed.map((product) => {
+            const isRestricted = restrictedProductIds.includes(product.id);
+            return (
+              <div key={product.id} className="group relative">
+                <Link
+                  href={isRestricted ? '#' : `/product/${product.id}`}
+                  className={`block bg-gray-50 rounded-lg overflow-hidden transition-all duration-300 relative ${
+                    isRestricted 
+                      ? 'opacity-60 grayscale cursor-not-allowed' 
+                      : 'hover:shadow-md'
+                  }`}
+                >
+                  <div className="aspect-square relative">
+                    {product.image_url ? (
+                      <Image
+                        src={product.image_url}
+                        alt={product.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="200px"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <Clock className="w-8 h-8" />
+                      </div>
+                    )}
 
-                <div className="p-3">
-                  <h3 className="font-medium text-sm text-gray-900 line-clamp-2 group-hover:text-dope-orange-600 transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm font-bold text-dope-orange-600 mt-1">
-                    ${product.price.toFixed(2)}
-                  </p>
-                </div>
-              </Link>
+                    {/* Restriction Overlay */}
+                    {isRestricted && (
+                      <div className="absolute inset-0 z-20 flex items-center justify-center p-4 pointer-events-none">
+                        <div className="bg-black/90 backdrop-blur-md border border-red-500/50 rounded-xl p-3 flex flex-col items-center text-center shadow-xl transform rotate-[-3deg]">
+                          <div className="text-2xl mb-1 text-red-500">🚫</div>
+                          <span className="text-white font-black uppercase tracking-tighter text-[10px] leading-none whitespace-nowrap">Local Restriction</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-              {/* Remove button */}
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  removeFromRecentlyViewed(product.id);
-                }}
-                className="absolute top-2 right-2 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <X className="w-3 h-3 text-gray-600" />
-              </button>
-            </div>
-          ))}
+                  <div className="p-3">
+                    <h3 className="font-medium text-sm text-gray-900 line-clamp-2 group-hover:text-dope-orange-600 transition-colors">
+                      {product.name}
+                    </h3>
+                    <p className="text-sm font-bold text-dope-orange-600 mt-1">
+                      ${product.price.toFixed(2)}
+                    </p>
+                  </div>
+                </Link>
+
+                {/* Remove button */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    removeFromRecentlyViewed(product.id);
+                  }}
+                  className="absolute top-2 right-2 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                >
+                  <X className="w-3 h-3 text-gray-600" />
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {/* Show message if no products */}

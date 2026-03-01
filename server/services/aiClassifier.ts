@@ -1,29 +1,26 @@
-import { storage } from '../storage.js';
-import { chatJSON } from './openaiClient.js';
+import { storage } from '../supabase-storage.js';
+import { chatJSON as openAIChatJSON } from './openaiClient.js';
+import { geminiChatJSON } from './geminiClient.js';
 import { z } from 'zod';
 
 const classificationSchema = z.object({
-  categories: z.array(z.enum(["THCA", "Kratom", "7-Hydroxy", "Nicotine", "Other"])),
+  categories: z.array(z.enum(["THCA", "Nicotine", "CBD", "Other"])),
   nicotineProduct: z.boolean(),
   requiresLabTest: z.boolean(),
-  hiddenReason: z.string().nullable()
+  hiddenReason: z.string().nullable().optional()
 });
 
-export async function classifyProduct(productId: string) {
+export async function classifyProduct(productId: string, useGemini = true) {
   const product = await storage.getProduct(productId);
   if (!product) throw new Error("Product not found");
 
-  console.log(`[AI Classifier] Processing product: ${product.name}`);
+  console.log(`[AI Classifier] Processing product: ${product.name} using ${useGemini ? 'Gemini' : 'OpenAI'}`);
 
-  try {
-    const { choices: [{ message: { content } }] } = await chatJSON([
-      {
-        role: "system",
-        content: `You are a compliance-classification agent for VIP Smoke.
+  const systemPrompt = `You are a compliance-classification agent for VIP Smoke.
 Return JSON matching this schema:
 
 {
-  "categories": ["THCA" | "Kratom" | "7-Hydroxy" | "Nicotine" | "Other"...],
+  "categories": ["THCA" | "Nicotine" | "CBD" | "Other"...],
   "nicotineProduct": boolean,
   "requiresLabTest": boolean,
   "hiddenReason": string?    // if product must be hidden on main site
@@ -31,15 +28,17 @@ Return JSON matching this schema:
 
 Rules:
 • Any cannabinoid (delta-8, delta-9, THCA, THCP) => category THCA, requiresLabTest true.
-• "Kratom" or "Mitragyna" => Kratom.
-• "7-Hydroxy" => 7-Hydroxy.
 • "Nicotine", "Tobacco", "Cigar", "Vape" => Nicotine, nicotineProduct true, hiddenReason "Nicotine products restricted to tobacco site".
-Respond ONLY with JSON.`
-      },
-      {
-        role: "user",
-        content: `TITLE: ${product.name}\nDESCRIPTION: ${product.description || 'No description'}`
-      }
+• "CBD" or "Cannabidiol" => CBD.
+Respond ONLY with JSON.`;
+
+  const userPrompt = `TITLE: ${product.name}\nDESCRIPTION: ${product.description || 'No description'}`;
+
+  try {
+    const chatFn = useGemini ? geminiChatJSON : openAIChatJSON;
+    const { choices: [{ message: { content } }] } = await chatFn([
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt }
     ]);
 
     if (!content) {
@@ -102,7 +101,7 @@ export async function bulkClassifyProducts(productIds?: string[], limit = 100) {
     ? await Promise.all(productIds.map(id => storage.getProduct(id)))
     : (await storage.getProducts()).slice(0, limit);
   
-  const validProducts = products.filter(p => p !== undefined);
+  const validProducts = products.filter((p): p is NonNullable<typeof p> => p !== undefined);
   
   let processed = 0;
   let classified = 0;

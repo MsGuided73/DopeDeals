@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '../../products/components/ProductCard';
 import GlobalMasthead from '../../components/GlobalMasthead';
-import AgeVerification from '../../components/AgeVerification';
 import { supabaseServer } from '../../lib/supabase-server';
 
 // Force dynamic rendering with 90-minute cache revalidation
@@ -51,13 +50,11 @@ export default async function UrthFarmacyPage() {
   };
 
   return (
-    <>
+    <main className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      
-      <AgeVerification />
       <GlobalMasthead />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -245,7 +242,7 @@ export default async function UrthFarmacyPage() {
             </div>
           </div>
         </section>
-      </div>
-    </>
+    </div>
+    </main>
   );
 }

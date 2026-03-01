@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer from './AutoScrollContainer';
+import { useCompliance } from '../contexts/ComplianceContext';
 
 interface Product {
   id: string;
@@ -54,10 +55,22 @@ export default function FeaturedProductsSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  
+  const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 
   useEffect(() => {
     void fetchProducts();
   }, []);
+
+  // Pre-fetch eligibility for all products once they are loaded
+  useEffect(() => {
+    if (userZipCode && products.length > 0) {
+      const idsToCheck = products.map(p => p.id).filter(id => !restrictedProductIds.includes(id));
+      if (idsToCheck.length > 0) {
+        checkProductEligibility(idsToCheck);
+      }
+    }
+  }, [userZipCode, products, restrictedProductIds, checkProductEligibility]);
 
   const fetchProducts = async () => {
     try {
@@ -157,14 +170,20 @@ export default function FeaturedProductsSection() {
   const renderProductCard = (product: Product, variant: 'mobile' | 'desktop') => {
     const transformedProduct = transformProductForCard(product);
     const isFavorite = favorites.has(product.id);
-    const cardClassName = `group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative ${
+    const isRestricted = restrictedProductIds.includes(product.id);
+
+    const cardClassName = `group bg-white rounded-xl overflow-hidden transition-all duration-300 relative ${
       variant === 'desktop' ? 'flex-shrink-0 w-96' : 'block'
+    } ${
+      isRestricted 
+        ? 'opacity-60 grayscale cursor-not-allowed pointer-events-none' 
+        : 'hover:shadow-xl hover:border-dope-orange-300 hover:-translate-y-2'
     }`;
 
     return (
       <div key={product.id} className={cardClassName}>
         <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
-          <Link href={`/product/${product.id}`} className="block w-full h-full">
+          <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
             {transformedProduct.image_url ? (
               <img
                 src={transformedProduct.image_url}
@@ -181,29 +200,42 @@ export default function FeaturedProductsSection() {
             )}
           </Link>
 
-          <button
-            className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
-            aria-pressed={isFavorite}
-            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-            onClick={(event) => handleFavorite(product.id, event)}
-          >
-            <svg
-              className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-current' : 'text-gray-700'}`}
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {!isRestricted && (
+            <button
+              className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
+              aria-pressed={isFavorite}
+              aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              onClick={(event) => handleFavorite(product.id, event)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-          </button>
+              <svg
+                className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-current' : 'text-gray-700'}`}
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
+          )}
+
+          {/* Restriction Overlay */}
+          {isRestricted && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center p-8 pointer-events-none">
+              <div className="bg-black/90 backdrop-blur-md border border-red-500/50 rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl transform rotate-[-3deg]">
+                <div className="text-3xl mb-2 text-red-500">🚫</div>
+                <span className="text-white font-black uppercase tracking-tighter text-xl leading-none">Local Restriction</span>
+                <span className="text-red-400 text-xs font-bold uppercase tracking-widest mt-1">Limited Availability</span>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="p-4 flex flex-col">
-          <Link href={`/product/${product.id}`} className="block">
+          <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block">
             {transformedProduct.brand_name && (
               <p
                 className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight"
@@ -222,7 +254,7 @@ export default function FeaturedProductsSection() {
           </Link>
 
           <div className="mt-auto">
-            <Link href={`/product/${product.id}`} className="block mb-4">
+            <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block mb-4">
               {transformedProduct.compare_at_price ? (
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -243,11 +275,16 @@ export default function FeaturedProductsSection() {
             </Link>
 
             <button
-              className="w-full px-4 py-3 bg-transparent text-green-800 border-2 border-green-800 font-bold rounded-full transition-all duration-300 text-center text-sm hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg relative z-10"
+              className={`w-full px-4 py-3 font-bold rounded-full transition-all duration-300 text-center text-sm relative z-10 ${
+                isRestricted
+                  ? 'bg-zinc-200 text-zinc-500 cursor-not-allowed'
+                  : 'bg-transparent text-green-800 border-2 border-green-800 hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg'
+              }`}
               style={{ fontFamily: systemFontFamily, letterSpacing: '0.05em' }}
-              onClick={(event) => handleAddToCart(product.id, event)}
+              onClick={(event) => !isRestricted && handleAddToCart(product.id, event)}
+              disabled={isRestricted}
             >
-              Add to Cart
+              {isRestricted ? 'Unavailable in your ZIP' : 'Add to Cart'}
             </button>
           </div>
         </div>

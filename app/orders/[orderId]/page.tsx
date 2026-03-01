@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import GlobalMasthead from '../../components/GlobalMasthead';
-import AgeVerification from '../../components/AgeVerification';
 
 export default function OrderDetailPage({ params }: { params: { orderId: string } }) {
   const { orderId } = params;
@@ -17,9 +16,6 @@ export default function OrderDetailPage({ params }: { params: { orderId: string 
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
       {/* Universal Layout Components */}
       <GlobalMasthead />
 

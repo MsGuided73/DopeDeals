@@ -13,6 +13,7 @@ import {
 } from '../lib/product-utils';
 import toast from 'react-hot-toast';
 import { VariantIndicator, hasProductVariants } from './VariantSelector';
+import { useCompliance } from '../contexts/ComplianceContext';
 
 interface UniversalProductCardProps {
   product: {
@@ -88,6 +89,9 @@ export default function UniversalProductCard({
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const { restrictedProductIds } = useCompliance();
+  const isRestricted = restrictedProductIds.includes(product.id);
 
   // Handle multiple images for variant switching
   const imageUrls = product.image_urls || [];
@@ -199,8 +203,10 @@ export default function UniversalProductCard({
   if (viewMode === 'compact') {
     return (
       <Link 
-        href={`/product/${product.id}`} 
-        className={`group flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 ${className}`}
+        href={isRestricted ? '#' : `/product/${product.id}`} 
+        className={`group flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg transition-all duration-200 ${
+          isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-md'
+        } ${className}`}
       >
         <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-md overflow-hidden">
           {hasImage ? (
@@ -242,8 +248,10 @@ export default function UniversalProductCard({
   if (viewMode === 'sidebar') {
     return (
       <Link
-        href={`/product/${product.id}`}
-        className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}
+        href={isRestricted ? '#' : `/product/${product.id}`}
+        className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 relative ${
+          isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-lg'
+        } ${config.container} ${className}`}
       >
         {/* Large Product Image - Left Side */}
         <div className="relative w-48 h-48 flex-shrink-0 bg-white overflow-hidden">
@@ -368,7 +376,7 @@ export default function UniversalProductCard({
               {showAddToCart && (
                 <button
                   onClick={handleAddToCart}
-                  disabled={!isInStock || isAddingToCart}
+                  disabled={!isInStock || isAddingToCart || isRestricted}
                   className={`bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
                 >
                   <ShoppingCart className="w-4 h-4" />
@@ -386,8 +394,10 @@ export default function UniversalProductCard({
   if (viewMode === 'list') {
     return (
       <Link 
-        href={`/product/${product.id}`} 
-        className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${className}`}
+        href={isRestricted ? '#' : `/product/${product.id}`} 
+        className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 relative ${
+          isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-lg'
+        } ${className}`}
       >
         <div className="flex">
           {/* Product Image */}
@@ -508,7 +518,7 @@ export default function UniversalProductCard({
                 {showAddToCart && (
                   <button
                     onClick={handleAddToCart}
-                    disabled={!isInStock || isAddingToCart}
+                    disabled={!isInStock || isAddingToCart || isRestricted}
                     className={`bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
                   >
                     <ShoppingCart className="w-4 h-4" />
@@ -526,7 +536,9 @@ export default function UniversalProductCard({
   // Homepage featured view - Image on left, content on right with full height image
   if (viewMode === 'homepage-featured') {
     return (
-      <div className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}>
+      <div className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 relative ${
+        isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-lg'
+      } ${config.container} ${className}`}>
         {/* Large Product Image - Left Side - Full Height */}
         <div className="relative w-64 h-80 flex-shrink-0 bg-white overflow-hidden">
           {hasImage ? (
@@ -650,7 +662,7 @@ export default function UniversalProductCard({
               {showAddToCart && (
                 <button
                   onClick={handleAddToCart}
-                  disabled={!isInStock || isAddingToCart}
+                  disabled={!isInStock || isAddingToCart || isRestricted}
                   className="glassmorphic-medium hover:bg-dope-orange-500 hover:text-white text-dope-orange-600 border border-dope-orange-400 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-dope-orange-500/30 flex items-center gap-2"
                 >
                   <ShoppingCart className="w-4 h-4" />
@@ -666,7 +678,20 @@ export default function UniversalProductCard({
 
   // Default grid view
   return (
-    <div className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 ${config.container} ${className}`}>
+    <div className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 relative ${
+      isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-lg'
+    } ${config.container} ${className}`}>
+      
+      {/* Universal Restriction Overlay for all view modes */}
+      {isRestricted && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center p-8 pointer-events-none">
+          <div className="bg-black/90 backdrop-blur-md border border-red-500/50 rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl transform rotate-[-3deg]">
+            <div className="text-3xl mb-2 text-red-500">🚫</div>
+            <span className="text-white font-black uppercase tracking-tighter text-xl leading-none">Local Restriction</span>
+            <span className="text-red-400 text-xs font-bold uppercase tracking-widest mt-1">Limited Availability</span>
+          </div>
+        </div>
+      )}
       {/* Product Image */}
       <div className={`relative ${config.image} bg-white overflow-hidden`}>
         {hasImage ? (
@@ -800,7 +825,7 @@ export default function UniversalProductCard({
           <div className="mt-auto">
             <button
               onClick={handleAddToCart}
-              disabled={!isInStock || isAddingToCart}
+              disabled={!isInStock || isAddingToCart || isRestricted}
               className={`w-full bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`}
             >
               <ShoppingCart className="w-4 h-4" />

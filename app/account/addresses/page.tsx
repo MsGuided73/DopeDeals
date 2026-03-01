@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 
 interface Address {
@@ -68,7 +67,6 @@ export default function AddressBookPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <GlobalMasthead />
-      <AgeVerification />
       
       <div className="max-w-4xl mx-auto py-8 px-4">
         {/* Breadcrumb */}

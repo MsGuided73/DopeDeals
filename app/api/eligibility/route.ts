@@ -46,6 +46,44 @@ export async function GET(req: NextRequest) {
 
     const restrictedCategories = (rules || []).map((r: any) => r.category);
 
+    // If productIds are provided, check which specific products are restricted
+    const productIds = searchParams.get('productIds')?.split(',').filter(Boolean) || [];
+    let restrictedProducts: string[] = [];
+    
+    if (productIds.length > 0) {
+      // 1. Check state-level restrictions via compliance rules mappings
+      if (rules && rules.length > 0) {
+        const ruleIds = rules.map((r: any) => r.id);
+        const { data: pcRows } = await supabase
+          .from('product_compliance')
+          .select('product_id')
+          .in('product_id', productIds)
+          .in('compliance_id', ruleIds);
+          
+        if (pcRows) {
+          restrictedProducts.push(...pcRows.map((row: any) => row.product_id));
+        }
+      }
+
+      // 2. Check individual product ZIP-level restrictions
+      const { data: individualRows } = await supabase
+        .from('main_site_products')
+        .select('id, compliance_info')
+        .in('id', productIds);
+
+      if (individualRows) {
+        for (const p of individualRows) {
+          const compInfo = p.compliance_info as any;
+          if (compInfo?.restricted_zipcodes?.includes(zip)) {
+            restrictedProducts.push(p.id);
+          }
+        }
+      }
+      
+      // Remove duplicates
+      restrictedProducts = Array.from(new Set(restrictedProducts));
+    }
+
     // Aggregate shipping restrictions
     const shipping = (rules || []).reduce(
       (acc: any, r: any) => {
@@ -73,6 +111,7 @@ export async function GET(req: NextRequest) {
       city: zipRow.city,
       county: zipRow.county,
       restrictedCategories: Array.from(new Set(restrictedCategories)),
+      restrictedProducts, // New field
       shippingRestrictions: shipping,
     });
   } catch (err) {

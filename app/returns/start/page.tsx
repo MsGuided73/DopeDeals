@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import ReturnForm from './ReturnForm';
 
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 export default function StartReturnPage() {
   return (
     <>
-      <AgeVerification />
       <GlobalMasthead />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">

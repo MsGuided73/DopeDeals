@@ -1295,3 +1295,5 @@ export class SupabaseStorage implements IStorage {
     return !error;
   }
 }
+
+export const storage = new SupabaseStorage();

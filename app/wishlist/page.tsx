@@ -1,7 +1,6 @@
 "use client";
 import { useState } from 'react';
 import GlobalMasthead from '../components/GlobalMasthead';
-import AgeVerification from '../components/AgeVerification';
 import { Heart, ShoppingCart, Trash2, Share2, Grid, List } from 'lucide-react';
 import Image from 'next/image';
 
@@ -40,7 +39,6 @@ export default function WishlistPage() {
 
   return (
     <>
-      <AgeVerification />
       <GlobalMasthead />
       
       <div className="min-h-screen bg-gray-50">

@@ -1,4 +1,5 @@
 import { type Order } from "@shared/schema";
+import { createClient } from '@supabase/supabase-js';
 
 // File Storage Interface for Supabase Storage Operations (Extended to support orders)
 export interface IStorage {
@@ -39,9 +40,7 @@ export class SupabaseStorage implements IStorage {
   private bucket: string;
 
   constructor() {
-    const { createClient } = require('@supabase/supabase-js');
-
-    const url = process.env.SUPABASE_URL;
+    const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!url || !key) {
@@ -107,19 +106,28 @@ export class SupabaseStorage implements IStorage {
 }
 
 // Storage provider - uses Supabase if available, falls back to memory
-let storage: IStorage;
+let storageInstance: IStorage | null = null;
 
-try {
-  if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    storage = new SupabaseStorage();
-    console.log('✅ Supabase file storage initialized');
-  } else {
-    storage = new MemoryStorage();
-    console.log('⚠️ Using memory file storage (Supabase credentials not found)');
+function getStorageInstance(): IStorage {
+  if (!storageInstance) {
+    const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    
+    if (url && key) {
+      console.log('✅ Supabase storage initializing via SupabaseStorage');
+      storageInstance = new SupabaseStorage();
+    } else {
+      console.log('⚠️ Using memory file storage fallback');
+      storageInstance = new MemoryStorage();
+    }
   }
-} catch (error) {
-  console.warn('⚠️ Supabase storage failed, using memory fallback:', error);
-  storage = new MemoryStorage();
+  return storageInstance;
 }
 
-export { storage };
+export const storage = new Proxy({} as IStorage, {
+  get(target, prop, receiver) {
+    const instance = getStorageInstance();
+    const value = Reflect.get(instance, prop, receiver);
+    return typeof value === 'function' ? value.bind(instance) : value;
+  }
+});

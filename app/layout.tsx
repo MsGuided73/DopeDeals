@@ -10,6 +10,7 @@ import AutosuggestRecommendations from "./components/AutosuggestRecommendations"
 import RecentlyViewed from "./components/RecentlyViewed";
 import { NavigationProvider } from "./contexts/NavigationContext";
 import AgeGateModal from "./components/AgeGateModal";
+import Script from "next/script";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
@@ -121,6 +122,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </NavigationProvider>
         </AppProviders>
+        {/* Global Age Verification Service */}
+        <Script
+          id="agechecker-script"
+          src="https://cdn.agechecker.net/static/popup/v1/popup.js"
+          strategy="beforeInteractive"
+          data-agecheck-api-key="64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ"
+          data-agecheck-disable-auto="true"
+        />
       </body>
     </html>
   );

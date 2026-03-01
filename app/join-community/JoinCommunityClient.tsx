@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 import { Mail, User, CheckCircle } from 'lucide-react';
 
@@ -81,7 +80,6 @@ export default function JoinCommunityClient() {
   if (isSubmitted) {
     return (
       <>
-        <AgeVerification />
         <GlobalMasthead />
 
         <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center">
@@ -110,7 +108,6 @@ export default function JoinCommunityClient() {
 
   return (
     <>
-      <AgeVerification />
       <GlobalMasthead />
 
       <div className="min-h-screen bg-white dark:bg-gray-950">

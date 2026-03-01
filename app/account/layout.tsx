@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { requireAuthWithRedirect } from '../lib/auth-helpers';
 import Link from 'next/link';
+import { AccountNavBar } from '../../components/AccountNavBar';
 
 export default async function AccountLayout({ children }: { children: ReactNode }) {
   // Require authentication with automatic redirect
@@ -12,62 +13,18 @@ export default async function AccountLayout({ children }: { children: ReactNode 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Account Navigation Sidebar */}
           <div className="lg:w-1/4">
-            <div className="bg-gray-900 rounded-lg p-6">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-white mb-2">My Account</h2>
-                <p className="text-gray-400 text-sm">
+            <div className="bg-gray-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sticky top-24">
+              <div className="mb-8 px-2">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                  My Account
+                </h2>
+                <p className="text-gray-400 text-sm mt-1">
                   Welcome back, {user.user_metadata?.firstName || user.email?.split('@')[0]}
                 </p>
               </div>
 
-              <nav className="space-y-2">
-                <Link
-                  href="/account"
-                  className="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
-                >
-                  Account Overview
-                </Link>
-                <Link
-                  href="/orders"
-                  className="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
-                >
-                  Order History
-                </Link>
-                <Link
-                  href="/profile"
-                  className="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
-                >
-                  Profile Settings
-                </Link>
-                <Link
-                  href="/payment-methods"
-                  className="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
-                >
-                  Payment Methods
-                </Link>
-                <Link
-                  href="/wishlist"
-                  className="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
-                >
-                  Wishlist
-                </Link>
-                <Link
-                  href="/rewards"
-                  className="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
-                >
-                  VIP Rewards
-                </Link>
+              <AccountNavBar userRole={user.role} />
 
-                {/* Admin link for admin users */}
-                {user.role === 'admin' && (
-                  <Link
-                    href="/admin"
-                    className="block px-4 py-2 rounded-lg text-orange-400 hover:bg-orange-900 hover:text-orange-300 transition-colors border-t border-gray-700 mt-4 pt-4"
-                  >
-                    Admin Panel
-                  </Link>
-                )}
-              </nav>
             </div>
           </div>
 

@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle } from 'lucide-react';
 import BlogFooter from '../../components/BlogFooter';
@@ -20,7 +19,6 @@ export default function CannabisHistoryArticle() {
       <div className="relative z-10 mix-blend-difference">
         <GlobalMasthead />
       </div>
-      <AgeVerification />
 
       {/* FULL WIDTH HERO BACKGROUND */}
       <div className="relative w-full pt-16 pb-48 flex flex-col items-center">

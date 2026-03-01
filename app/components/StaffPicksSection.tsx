@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { useCompliance } from '../contexts/ComplianceContext';
 
 interface StaffPickProduct {
   id: string;
@@ -30,6 +31,18 @@ export default function StaffPicksSection() {
   const [products, setProducts] = useState<StaffPickProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
+
+  // Pre-fetch eligibility for all products once they are loaded
+  useEffect(() => {
+    if (userZipCode && products.length > 0) {
+      const idsToCheck = products.map(p => p.id).filter(id => !restrictedProductIds.includes(id));
+      if (idsToCheck.length > 0) {
+        checkProductEligibility(idsToCheck);
+      }
+    }
+  }, [userZipCode, products, restrictedProductIds, checkProductEligibility]);
 
   useEffect(() => {
     async function fetchStaffPicks() {
@@ -157,11 +170,26 @@ export default function StaffPicksSection() {
 
       {/* Staff Picks Products - Clean Design */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {products.map((product) => (
+        {products.map((product) => {
+          const isRestricted = restrictedProductIds.includes(product.id);
+          return (
           <div
             key={product.id}
-            className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-white relative overflow-hidden hover:shadow-lg hover:shadow-dope-orange-500/20 transition-all duration-300"
+            className={`bg-gray-900 border border-gray-700 rounded-xl p-6 text-white relative overflow-hidden transition-all duration-300 ${
+              isRestricted 
+                ? 'opacity-60 grayscale cursor-not-allowed' 
+                : 'hover:shadow-lg hover:shadow-dope-orange-500/20'
+            }`}
           >
+            {isRestricted && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center p-8 pointer-events-none">
+                <div className="bg-black/90 backdrop-blur-md border border-red-500/50 rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl transform rotate-[-3deg]">
+                  <div className="text-3xl mb-2 text-red-500">🚫</div>
+                  <span className="text-white font-black uppercase tracking-tighter text-xl leading-none whitespace-nowrap">Local Restriction</span>
+                  <span className="text-red-400 text-xs font-bold uppercase tracking-widest mt-1">Limited Availability</span>
+                </div>
+              </div>
+            )}
             <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
               {product.discount_percentage}% OFF
             </div>
@@ -172,12 +200,19 @@ export default function StaffPicksSection() {
                 <span className="text-2xl font-bold text-dope-orange-400">{formatPrice(product.price)}</span>
                 <span className="text-lg text-gray-400 line-through">{formatPrice(product.original_price)}</span>
               </div>
-              <button className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
-                GRAB THIS DEAL
+              <button 
+                className={`px-6 py-3 rounded-lg font-bold transition-all duration-300 ${
+                  isRestricted
+                    ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50'
+                    : 'bg-dope-orange-500 hover:bg-dope-orange-600 text-white hover:scale-105'
+                }`}
+                disabled={isRestricted}
+              >
+                {isRestricted ? 'Unavailable in your ZIP' : 'GRAB THIS DEAL'}
               </button>
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </section>
   );

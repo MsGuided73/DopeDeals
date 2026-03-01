@@ -124,15 +124,15 @@ export default function GlobalMasthead() {
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-black/50 to-transparent"></div>
           </div>
 
-          {/* Desktop Logo - left aligned, spanning full masthead height (both rows) */}
-          <div className="hidden md:flex absolute inset-y-0 z-10 items-center" style={{ maxWidth: "400px", left: "5%" }}>
+          {/* Logo - Spanning full masthead height (both rows) */}
+          <div className="flex absolute inset-y-0 z-10 items-center md:left-[5%] left-4" style={{ maxWidth: "400px" }}>
             <Link href="/" className="flex items-center h-full w-full">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420 Logo"
                 width={400}
                 height={86}
-                className="object-contain h-full w-auto"
+                className="object-contain h-full w-auto md:max-w-none max-w-[120px]"
                 style={{ display: "block" }}
                 priority
               />
@@ -165,17 +165,8 @@ export default function GlobalMasthead() {
               </div>
             ) : (
               <>
-                {/* Left: Logo */}
-                <Link href="/" className="flex-shrink-0 flex items-center h-full">
-                  <Image
-                    src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
-                    alt="H420"
-                    width={180}
-                    height={60}
-                    className="object-contain h-full w-auto py-1"
-                    priority
-                  />
-                </Link>
+                {/* Placeholder for absolute logo spacing */}
+                <div className="w-[120px] md:hidden" />
 
                 {/* Right: 4 Icons (Search, User, Cart, Menu) */}
                 <div className="flex items-center gap-3 text-white">

@@ -188,6 +188,34 @@ export default function AccountPage() {
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Age Verification Status */}
+            <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 border border-gray-200">
+              <div className="flex items-center mb-4">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${user?.user_metadata?.age_verified ? 'bg-green-500' : 'bg-red-500'}`}>
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Age Verification</h2>
+                  <p className={`text-sm ${user?.user_metadata?.age_verified ? 'text-green-600' : 'text-red-600'}`}>
+                    {user?.user_metadata?.age_verified ? 'Verified & Secure' : 'Verification Required'}
+                  </p>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mb-4">
+                {user?.user_metadata?.age_verified 
+                  ? 'Your identity has been verified. You can shop all products across DopeDeals.' 
+                  : 'You must verify your age before purchasing restricted items.'}
+              </p>
+              {!user?.user_metadata?.age_verified && (
+                <Link 
+                  href="/auth/verify"
+                  className="inline-flex items-center text-dope-orange-600 font-semibold hover:text-dope-orange-700"
+                >
+                  Verify Now <span className="ml-2">→</span>
+                </Link>
+              )}
+            </div>
+
             {/* Profile Settings */}
             <Link href="/profile" className="group">
               <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-dope-orange-300 group-hover:transform group-hover:scale-105">
@@ -197,7 +225,7 @@ export default function AccountPage() {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-gray-900">Profile Settings</h2>
-                    <p className="text-sm text-gray-600">Edit profile, preferences, age verification</p>
+                    <p className="text-sm text-gray-600">Edit profile, preferences, password</p>
                   </div>
                 </div>
                 <div className="flex items-center text-dope-orange-600 font-semibold group-hover:text-dope-orange-700">

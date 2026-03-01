@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { addToCart } from '../lib/cart-utils';
+import { useCompliance } from '../contexts/ComplianceContext';
 
 interface QuickAddToCartButtonProps {
   productId: string;
@@ -24,11 +25,14 @@ export default function QuickAddToCartButton({
 }: QuickAddToCartButtonProps) {
   const [isAdding, setIsAdding] = useState(false);
 
+  const { restrictedProductIds } = useCompliance();
+  const isRestricted = restrictedProductIds.includes(productId);
+
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation if button is inside a link
     e.stopPropagation(); // Prevent event bubbling
     
-    if (!inStock || isAdding) return;
+    if (!inStock || isAdding || isRestricted) return;
     
     setIsAdding(true);
     await addToCart(productId, quantity);
@@ -55,7 +59,7 @@ export default function QuickAddToCartButton({
     lg: 'w-5 h-5'
   };
 
-  if (!inStock) {
+  if (!inStock || isRestricted) {
     return (
       <button
         disabled
@@ -65,9 +69,10 @@ export default function QuickAddToCartButton({
           flex items-center justify-center gap-1
           bg-gray-300 text-gray-500
           ${className}
+          opacity-50
         `}
       >
-        Out of Stock
+        {isRestricted ? (size === 'sm' ? 'X' : 'Restricted') : 'Out of Stock'}
       </button>
     );
   }

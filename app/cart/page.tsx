@@ -157,6 +157,7 @@ export default function CartPage() {
                               src={product.imageUrl}
                               alt={product.name}
                               fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                               className="object-cover"
                             />
                           ) : (
@@ -318,6 +319,22 @@ export default function CartPage() {
                     <span className="text-2xl font-black text-gray-900">${cart.total.toFixed(2)}</span>
                 </div>
 
+                {/* Terms Checkbox */}
+                 <div className="flex items-start gap-3 p-2 mb-4">
+                    <div className="relative flex items-center">
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            checked={agreedToTerms}
+                            onChange={(e) => setAgreedToTerms(e.target.checked)}
+                            className="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer"
+                        />
+                    </div>
+                    <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer select-none font-bold">
+                        I agree to the <Link href="/terms-and-conditions" className="text-green-600 underline hover:text-green-700">Terms & Conditions</Link>
+                    </label>
+                </div>
+
                 <button
                     onClick={() => agreedToTerms ? router.push('/checkout') : toast.error('Please accept the Terms & Conditions')}
                     disabled={!agreedToTerms}
@@ -364,21 +381,6 @@ export default function CartPage() {
                      </div>
                 </div>
 
-                {/* Terms Checkbox */}
-                 <div className="mt-4 flex items-start gap-3 p-2">
-                    <div className="relative flex items-center">
-                        <input
-                            type="checkbox"
-                            id="terms"
-                            checked={agreedToTerms}
-                            onChange={(e) => setAgreedToTerms(e.target.checked)}
-                            className="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer"
-                        />
-                    </div>
-                    <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer select-none">
-                        I agree to the <Link href="/terms-and-conditions" className="text-green-600 underline hover:text-green-700">Terms & Conditions</Link>
-                    </label>
-                </div>
 
              </div>
           </div>

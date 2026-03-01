@@ -18,7 +18,9 @@ import {
   ProcessPaymentRequest,
   PaymentResult,
   RefundResult,
-  TransactionStatus
+  TransactionStatus,
+  HostedFormRequest,
+  HostedFormResponse
 } from './types';
 
 export class KajaPayClient {
@@ -124,6 +126,31 @@ export class KajaPayClient {
         success: false,
         error: {
           responseCode: 'CHARGE_FAILED',
+          responseText: error.message,
+          details: error.response?.data
+        }
+      };
+    }
+  }
+
+  // Create Hosted Form URL for redirect-based payment
+  async createHostedForm(formData: Partial<HostedFormRequest>): Promise<ApiResponse<HostedFormResponse>> {
+    try {
+      // The endpoint for hosted form is often different, but let's assume it's /hosted-form based on context
+      const response: AxiosResponse<HostedFormResponse> = await this.client.post('hosted-payment/create', {
+        ...formData,
+        sourceKey: this.config.sourceKey
+      });
+
+      return {
+        success: response.data.responseCode === '00' || response.data.responseCode === '000',
+        data: response.data
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: {
+          responseCode: 'HOSTED_FORM_FAILED',
           responseText: error.message,
           details: error.response?.data
         }

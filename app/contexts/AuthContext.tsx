@@ -29,26 +29,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Get user role from multiple sources
   // Get user role from multiple sources
   const getUserRole = async (authUser: User): Promise<{ role: UserRole, profile: any }> => {
-    // Check profile table
+    console.log('[AuthContext] Fetching role for user:', authUser.id);
+    
+    // Check profile table with timeout
     try {
-      // Use a more resilient approach in case columns are missing
-      // Try to select role specifically, but handle failure
-      const { data: profile, error } = await supabaseBrowser
-        .from('users')
-        .select('*') // Select all columns now that we use them
-        .eq('id', authUser.id)
-        .maybeSingle();
+      const fetchWithTimeout = async () => {
+        const { data: profile, error } = await supabaseBrowser
+          .from('users')
+          .select('*')
+          .eq('id', authUser.id)
+          .maybeSingle();
+        return { profile, error };
+      };
+
+      // 5 second timeout for profile fetch
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000)
+      );
+
+      const { profile, error } = await Promise.race([
+        fetchWithTimeout(),
+        timeoutPromise
+      ]) as { profile: any, error: any };
 
       if (error && error.code !== 'PGRST116') {
          console.warn('[AuthContext] Error fetching profile:', error);
       }
 
+      console.log('[AuthContext] Role/Profile fetched:', profile?.role || 'default');
       return {
          role: (profile?.role as UserRole) || UserRole.USER,
          profile: profile
       };
     } catch (error) {
-      console.warn('[AuthContext] Could not fetch user profile:', error);
+      console.warn('[AuthContext] Resilient fallback triggered for user profile:', error);
       return { role: UserRole.USER, profile: null };
     }
   };
@@ -96,6 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Listen for auth changes
     const { data: { subscription } } = supabaseBrowser.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('[AuthContext] Auth state change event:', event);
         if (session?.user) {
           const { role, profile } = await getUserRole(session.user);
           const isVip = getVipStatus(profile);
@@ -118,6 +133,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setSession(null);
         }
         setLoading(false);
+        console.log('[AuthContext] Loading set to false after event:', event);
       }
     );
 

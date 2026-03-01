@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '../../products/components/ProductCard';
 import GlobalMasthead from '../../components/GlobalMasthead';
-import AgeVerification from '../../components/AgeVerification';
 import { supabaseServer } from '../../lib/supabase-server';
 
 // Force dynamic rendering with 90-minute cache revalidation
@@ -60,13 +59,11 @@ export default async function PuffcoPage() {
   };
 
   return (
-    <>
+    <main className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      
-      <AgeVerification />
       <GlobalMasthead />
 
       <div className="min-h-screen bg-black text-white">
@@ -243,7 +240,7 @@ export default async function PuffcoPage() {
             </div>
           </div>
         </section>
-      </div>
-    </>
+    </div>
+    </main>
   );
 }

@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, Share2, ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
-import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import BlogComments from '../../components/comments/BlogComments';
 import BlogFooter from '../../components/BlogFooter';
@@ -37,7 +36,6 @@ export default function UltimateBongGuideClient() {
 
   return (
     <>
-      <AgeVerification />
       <GlobalMasthead />
 
       <div className="min-h-screen bg-[#000] text-white selection:bg-[#ff6b35] selection:text-black overflow-x-hidden font-sans pb-0 relative">

@@ -2,7 +2,6 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import { storage } from '@/../server/storage';
 import Link from 'next/link';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export default async function OrdersPage() {
@@ -36,9 +35,6 @@ export default async function OrdersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
       {/* Universal Layout Components */}
       <GlobalMasthead />
 

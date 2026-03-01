@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 interface Review {
@@ -116,7 +115,6 @@ export default function ReviewsPage() {
   return (
     <div className="min-h-screen bg-white">
       <GlobalMasthead />
-      <AgeVerification />
       
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Header */}

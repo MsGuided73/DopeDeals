@@ -25,8 +25,10 @@ function calculateTax(subtotal: number, shippingState: string): number {
   return subtotal * rate;
 }
 
-// Calculate shipping based on order total and location
-function calculateShipping(subtotal: number, shippingState: string): number {
+// Calculate shipping based on order total, selection, and location
+function calculateShipping(subtotal: number, shippingState: string, method?: 'standard' | 'express', amount?: number): number {
+  if (amount !== undefined) return amount;
+  if (method === 'express') return 19.99;
   if (subtotal >= 75) return 0; // Free shipping over $75
   const shippingRates: Record<string, number> = {
     'CA': 8.99, 'NY': 9.99, 'TX': 7.99, 'FL': 8.99, 'WA': 9.99
@@ -45,7 +47,7 @@ const CheckoutSchema = z.object({
     postalCode: z.string(),
     country: z.string().default('US'),
     phone: z.string().optional()
-  }).optional(),
+  }),
   billingAddress: z.object({
     firstName: z.string(),
     lastName: z.string(),
@@ -57,6 +59,8 @@ const CheckoutSchema = z.object({
     email: z.string().email().optional(),
     phone: z.string().optional()
   }).optional(),
+  shippingMethod: z.enum(['standard', 'express']).optional(),
+  shippingAmount: z.number().optional(),
   paymentMethod: z.object({
     type: z.enum(['card', 'ach', 'saved_card']),
     cardNumber: z.string().optional(),
@@ -82,7 +86,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid payload', issues: parse.error.issues }, { status: 400 });
   }
 
-  const { items, shippingAddress, billingAddress, paymentMethod, processPayment, savePaymentMethod } = parse.data;
+  const { items, shippingAddress, billingAddress, shippingMethod, shippingAmount, paymentMethod, processPayment, savePaymentMethod } = parse.data;
 
   // Validate inventory with real-time stock checking
   const storage = await getStorage();
@@ -102,6 +106,52 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Final Compliance Check (Zipcode)
+  try {
+    const supabase = (storage as any).client || (await import('@supabase/supabase-js')).createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    
+    // Resolve state for the zip
+    const { data: zipRow } = await supabase
+      .from('us_zipcodes')
+      .select('state')
+      .eq('zip', shippingAddress.postalCode)
+      .single();
+
+    if (zipRow) {
+      const state = zipRow.state;
+      // Fetch compliance rules for this state
+      const { data: rules } = await supabase
+        .from('compliance_rules')
+        .select('id')
+        .contains('restricted_states', [state]);
+
+      if (rules && rules.length > 0) {
+        const ruleIds = rules.map((r: any) => r.id);
+        const productIds = items.map(i => i.productId);
+        
+        const { data: restrictions } = await supabase
+          .from('product_compliance')
+          .select('product_id')
+          .in('product_id', productIds)
+          .in('compliance_id', ruleIds);
+
+        if (restrictions && restrictions.length > 0) {
+          return NextResponse.json({ 
+            error: 'One or more items in your cart cannot be shipped to your location due to local regulations.',
+            restrictedProductIds: restrictions.map((r: any) => r.product_id)
+          }, { status: 403 });
+        }
+      }
+    }
+  } catch (complianceError) {
+    console.error('[Checkout] Compliance check failed:', complianceError);
+    // Continue if compliance check itself fails (we don't want to block everything if just the check has a bug, 
+    // unless the policy is strict "fail closed")
+  }
+
   // Compute totals (basic)
   let subtotal = 0;
   for (const line of items) {
@@ -111,8 +161,8 @@ export async function POST(req: NextRequest) {
     subtotal += Number(price) * line.quantity;
   }
   // Calculate tax and shipping
-  const tax = calculateTax(subtotal, shippingAddress?.state || 'CA');
-  const shipping = calculateShipping(subtotal, shippingAddress?.state || 'CA');
+  const tax = calculateTax(subtotal, shippingAddress.state || 'CA');
+  const shipping = calculateShipping(subtotal, shippingAddress.state || 'CA', shippingMethod, shippingAmount);
   const total = subtotal + tax + shipping;
 
   // Generate order number
@@ -132,7 +182,7 @@ export async function POST(req: NextRequest) {
       totalAmount: total.toString()
     });
 
-    // Fire-and-forget: create ShipStation order after paid (placeholder until payment integration)
+    // Fire-and-forget: create ShipStation order (graceful fail)
     try {
       const { ShipstationService } = await import('../../../lib/services/shipstation/service');
       const { getStorage: getServerStorage } = await import('../../../lib/storage');
@@ -144,7 +194,7 @@ export async function POST(req: NextRequest) {
         const map = {
           orderNumber: order.id,
           orderDate: new Date().toISOString(),
-          orderStatus: 'awaiting_shipment',
+          orderStatus: 'on_hold', // Hold until payment confirmed
           billTo: (billingAddress || shippingAddress || {}) as any,
           shipTo: (shippingAddress || billingAddress || {}) as any,
           items: createdItems.map((ci: any) => ({
@@ -154,7 +204,7 @@ export async function POST(req: NextRequest) {
             unitPrice: Number(ci.priceAtPurchase || 0),
           })),
           orderTotal: Number(total),
-          amountPaid: Number(total),
+          amountPaid: 0,
         } as any;
         svc.createShipstationOrder(map).catch(() => void 0);
       }
@@ -164,151 +214,51 @@ export async function POST(req: NextRequest) {
       await storage.clearCart(user.id);
     }
 
-    // Process payment if requested and payment method provided
-    if (processPayment && paymentMethod && billingAddress) {
-      try {
-        // Import payment processing
-        const { kajaPayClient } = await import('../../../lib/services/kajapay/client');
+    // Always use KajaPay Hosted Form for redirect flow
+    try {
+      const { kajaPayClient } = await import('../../../lib/services/kajapay/client');
+      
+      const host = req.headers.get('host') || 'localhost:3000';
+      const protocol = host.includes('localhost') ? 'http' : 'https';
+      const baseUrl = `${protocol}://${host}`;
 
-        // Prepare payment request
-        const paymentRequest = {
-          amount: Number(total),
-          currency: 'USD',
-          paymentMethod,
-          billingAddress: {
-            ...billingAddress,
-            zip: billingAddress.postalCode
-          },
-          orderData: {
-            orderNumber: order.orderNumber || order.id,
-            orderDescription: `Highway 420 Order: ${createdItems.length} items`,
-            lineItems: createdItems.map((item: any) => ({
-              name: item.productName || 'Item',
-              description: item.productDescription || '',
-              quantity: item.quantity,
-              unitPrice: Number(item.priceAtPurchase),
-              totalPrice: Number(item.priceAtPurchase) * item.quantity
-            }))
-          },
-          taxAmount: Number(tax),
-          shippingAmount: Number(shipping)
-        } as any;
+      const hostedFormResponse = await kajaPayClient.createHostedForm({
+        amount: Number(total),
+        orderNumber: order.orderNumber || order.id,
+        orderDescription: `Highway 420 Order: ${createdItems.length} items`,
+        firstName: shippingAddress.firstName,
+        lastName: shippingAddress.lastName,
+        address1: shippingAddress.address1,
+        city: shippingAddress.city,
+        state: shippingAddress.state,
+        zip: shippingAddress.postalCode,
+        country: shippingAddress.country,
+        email: user.email || undefined,
+        redirectUrl: `${baseUrl}/checkout/confirmation?orderId=${order.id}`,
+        cancelUrl: `${baseUrl}/checkout/review`,
+        callbackUrl: `${baseUrl}/api/webhooks/kajapay`
+      });
 
-        // Create payment transaction record
-        const transaction = await (storage.createTransaction as any)({
-          orderId: order.id,
-          transactionType: 'charge',
-          amount: total.toString(),
-          currency: 'USD',
-          status: 'pending',
-          paymentMethodData: {
-            type: paymentMethod.type,
-            maskedCardNumber: paymentMethod.cardNumber ? `****${paymentMethod.cardNumber.slice(-4)}` : undefined
-          }
-        });
-
-        // Process payment
-        const paymentResult = await kajaPayClient.processPayment(paymentRequest);
-
-        // Update transaction with result
-        await (storage.updateTransaction as any)(transaction.id, {
-          kajaPayTransactionId: paymentResult.transactionId,
-          kajaPayReferenceNumber: paymentResult.referenceNumber,
-          status: paymentResult.success ? 'approved' : 'declined',
-          kajaPayStatusCode: paymentResult.responseCode,
-          authCode: paymentResult.authCode,
-          errorMessage: paymentResult.errorMessage,
-          paymentMethodData: {
-            ...transaction.paymentMethodData,
-            maskedCardNumber: paymentResult.maskedCardNumber,
-            cardType: paymentResult.cardType,
-            customerToken: paymentResult.customerToken,
-            paymentAccountDataToken: paymentResult.paymentAccountDataToken
-          }
-        });
-
-        if (paymentResult.success) {
-          // Update order to paid
-          await (storage.updateOrder as any)(order.id, {
-            paymentStatus: 'paid',
-            transactionId: paymentResult.transactionId?.toString(),
-            status: 'processing'
-          });
-
-          // Save payment method if requested
-          if (savePaymentMethod && paymentResult.customerToken && paymentResult.paymentAccountDataToken) {
-            try {
-              await (storage.createPaymentMethod as any)({
-                userId: user.id,
-                kajaPayToken: paymentResult.paymentAccountDataToken,
-                cardLast4: paymentResult.maskedCardNumber?.slice(-4),
-                cardType: paymentResult.cardType,
-                billingName: `${billingAddress.firstName} ${billingAddress.lastName}`,
-                billingAddress: billingAddress,
-                isDefault: false
-              });
-            } catch (error) {
-              console.error('[Checkout] Failed to save payment method:', error);
-            }
-          }
-
-          return NextResponse.json({
-            order: { ...order, paymentStatus: 'paid', status: 'processing' },
-            items: createdItems,
-            summary: { items, totals: { subtotal, tax, shipping, total } },
-            payment: {
-              success: true,
-              transactionId: paymentResult.transactionId,
-              authCode: paymentResult.authCode
-            }
-          }, { status: 201 });
-        } else {
-          // Payment failed
-          await (storage.updateOrder as any)(order.id, {
-            paymentStatus: 'failed',
-            status: 'payment_failed'
-          });
-
-          return NextResponse.json({
-            order: { ...order, paymentStatus: 'failed', status: 'payment_failed' },
-            items: createdItems,
-            summary: { items, totals: { subtotal, tax, shipping, total } },
-            payment: {
-              success: false,
-              error: paymentResult.responseText || 'Payment failed',
-              responseCode: paymentResult.responseCode
-            }
-          }, { status: 402 });
-        }
-      } catch (error) {
-        console.error('[Checkout] Payment processing error:', error);
-
-        // Update order to failed
-        await (storage.updateOrder as any)(order.id, {
-          paymentStatus: 'failed',
-          status: 'payment_failed'
-        });
-
+      if (hostedFormResponse.success && hostedFormResponse.data?.paymentUrl) {
         return NextResponse.json({
-          order: { ...order, paymentStatus: 'failed', status: 'payment_failed' },
-          items: createdItems,
-          summary: { items, totals: { subtotal, tax, shipping, total } },
-          payment: {
-            success: false,
-            error: 'Payment processing failed'
-          }
-        }, { status: 500 });
+          success: true,
+          redirectUrl: hostedFormResponse.data.paymentUrl,
+          orderId: order.id
+        });
+      } else {
+        throw new Error(hostedFormResponse.error?.responseText || 'Failed to create payment session');
       }
+    } catch (error: any) {
+      console.error('[Checkout] KajaPay Hosted Form error:', error);
+      return NextResponse.json({ 
+        error: 'Payment session creation failed', 
+        details: error.message,
+        orderId: order.id // Return orderId so we can attempt retry if needed
+      }, { status: 500 });
     }
-
-    return NextResponse.json({
-      order,
-      items: createdItems,
-      summary: { items, totals: { subtotal, tax, shipping, total } },
-    }, { status: 201 });
   }
 
-  // Fallback: create order and items separately (memory or Prisma path)
+  // Fallback: create order and items separately
   const order = await (storage.createOrder as any)({
     userId: user.id,
     orderNumber,

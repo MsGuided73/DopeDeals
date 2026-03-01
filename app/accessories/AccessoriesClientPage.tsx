@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense } from 'react';
-import AgeVerification from '../components/AgeVerification';
 import AccessoriesPageContent from './AccessoriesPageContent';
 import PrismaticBurst from '../components/PrismaticBurst';
 import GlobalMasthead from '../components/GlobalMasthead';
@@ -52,15 +51,14 @@ export default function AccessoriesClientPage() {
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen bg-white">
+      <GlobalMasthead />
       <PrismaticBurst
         intensity={3}
         speed={0.7}
         colors={['#10b981', '#059669', '#047857']}
       />
 
-      {/* Age Verification Popup */}
-      <AgeVerification />
 
       {/* Universal Layout Components */}
       <GlobalMasthead />

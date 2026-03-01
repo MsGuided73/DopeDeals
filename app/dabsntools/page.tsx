@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import DabsntoolsPageContent from './DabsntoolsPageContent';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 import { Metadata } from 'next';
 
@@ -106,9 +105,6 @@ export default function DabsntoolsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
       {/* Universal Layout Components */}
       <GlobalMasthead />
 

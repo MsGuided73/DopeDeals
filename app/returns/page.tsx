@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
 const GlobalMasthead = dynamic(() => import('../components/GlobalMasthead'));
-import AgeVerification from '../components/AgeVerification';
 import { RotateCcw, Clock, CheckCircle, XCircle, Package, CreditCard } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -39,7 +38,6 @@ export default function ReturnsPage() {
 
   return (
     <>
-      <AgeVerification />
       <GlobalMasthead />
       
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">

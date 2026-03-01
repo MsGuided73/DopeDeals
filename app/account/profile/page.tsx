@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 
 // Force dynamic rendering to avoid static generation issues
@@ -41,7 +40,6 @@ export default function ProfileSettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <GlobalMasthead />
-      <AgeVerification />
       
       <div className="max-w-4xl mx-auto py-8 px-4">
         {/* Breadcrumb */}

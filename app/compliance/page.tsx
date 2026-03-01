@@ -1,12 +1,10 @@
 import Link from 'next/link';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export default function CompliancePage() {
   return (
     <div className="min-h-screen bg-white">
       <GlobalMasthead />
-      <AgeVerification />
       
       <div className="max-w-4xl mx-auto py-12 px-4">
         {/* Breadcrumb */}

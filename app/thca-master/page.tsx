@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import ThcaMasterPageContent from './ThcaMasterPageContent';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
@@ -115,9 +114,6 @@ export default function ThcaMasterPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Age Verification Popup */}
-      <AgeVerification />
-
       {/* Universal Layout Components */}
       <GlobalMasthead />
 

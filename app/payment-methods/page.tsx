@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import AgeVerification from '../components/AgeVerification';
 import { CreditCard, Smartphone, Shield, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -41,8 +40,6 @@ export default function PaymentMethodsPage() {
 
   return (
     <>
-      <AgeVerification />
-
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">

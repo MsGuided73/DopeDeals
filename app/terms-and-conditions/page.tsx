@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata: Metadata = {
@@ -10,7 +9,6 @@ export const metadata: Metadata = {
 export default function TermsAndConditionsPage() {
   return (
     <>
-      <AgeVerification />
       <GlobalMasthead />
 
       <div className="min-h-screen bg-white dark:bg-gray-950">

@@ -182,6 +182,82 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
   }
 }
 
+// Merge guest cart into user cart
+async function mergeCarts(sessionId: string, userId: string) {
+  try {
+    console.log(`[Cart Merge] Starting merge for session ${sessionId} to user ${userId}`);
+    
+    // 1. Find guest cart
+    const { data: guestCart } = await supabase
+      .from('carts')
+      .select('id')
+      .eq('session_id', sessionId)
+      .is('user_id', null)
+      .limit(1)
+      .single();
+
+    if (!guestCart) return;
+
+    // 2. Get guest cart items
+    const { data: guestItems } = await supabase
+      .from('cart_items')
+      .select('*')
+      .eq('cart_id', guestCart.id);
+
+    if (!guestItems || guestItems.length === 0) {
+      // Empty guest cart, just link it to the user if no user cart exists
+      await supabase.from('carts').update({ user_id: userId }).eq('id', guestCart.id);
+      return;
+    }
+
+    // 3. Find or create user cart
+    const userCartId = await getOrCreateCart(null, userId);
+    if (!userCartId) return;
+
+    // 4. Move items one by one (to handle potential duplicates)
+    for (const item of guestItems) {
+      // Check if user already has this product in cart
+      const { data: existingUserItem } = await supabase
+        .from('cart_items')
+        .select('id, quantity')
+        .eq('cart_id', userCartId)
+        .eq('product_id', item.product_id)
+        .single();
+
+      if (existingUserItem) {
+        // Update quantity
+        await supabase
+          .from('cart_items')
+          .update({ 
+            quantity: existingUserItem.quantity + item.quantity,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingUserItem.id);
+      } else {
+        // Move item to user cart
+        await supabase
+          .from('cart_items')
+          .update({ 
+            cart_id: userCartId,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', item.id);
+      }
+    }
+
+    // 5. Cleanup guest cart if it was different
+    if (guestCart.id !== userCartId) {
+       // Delete any remaining guest items (should be none) and the guest cart
+       await supabase.from('cart_items').delete().eq('cart_id', guestCart.id);
+       await supabase.from('carts').delete().eq('id', guestCart.id);
+    }
+
+    console.log(`[Cart Merge] Successfully merged items from session ${sessionId} to user ${userId}`);
+  } catch (error) {
+    console.error('[Cart Merge] Error during merge:', error);
+  }
+}
+
 // Add or update cart item with session-based UPSERT logic
 async function manageCartItem(
   sessionId?: string | null,
@@ -297,6 +373,11 @@ export async function GET(request: NextRequest) {
     const sessionId = await getSessionId(request);
 
     const userId = user?.id || null;
+
+    // Trigger merge if both session and user exist
+    if (userId && sessionId) {
+      await mergeCarts(sessionId, userId);
+    }
 
     // Get cart items (cart will be created automatically if needed)
     const cartItems = await getCartItems(sessionId, userId);

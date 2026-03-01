@@ -234,6 +234,35 @@ export interface PaymentMethodData {
   secCode?: string;
 }
 
+// Hosted Form Request
+export interface HostedFormRequest {
+  amount: number;
+  sourceKey: string;
+  orderNumber?: string;
+  orderDescription?: string;
+  customerToken?: string;
+  // URLs for redirection
+  redirectUrl?: string; // Where to go after success
+  callbackUrl?: string; // Webhook/postback
+  cancelUrl?: string;   // Where to go if cancelled
+  // Billing Info
+  firstName?: string;
+  lastName?: string;
+  address1?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+  email?: string;
+  phone?: string;
+}
+
+// Hosted Form Response
+export interface HostedFormResponse extends KajaPayBaseResponse {
+  paymentUrl: string; // The URL to redirect the user to
+  token?: string;     // Form identifier
+}
+
 // Process Payment Request
 export interface ProcessPaymentRequest {
   amount: number;
@@ -246,6 +275,7 @@ export interface ProcessPaymentRequest {
     lineItems?: LineItem[];
   };
   taxAmount?: number;
+  shippingAmount?: number;
   tipAmount?: number;
   surchargeAmount?: number;
   level3Data?: {

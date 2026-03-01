@@ -30,7 +30,7 @@ export class ComplianceService {
     'THCA': {
       category: 'THCA',
       substanceType: 'Delta-9 THC Precursor',
-      restrictedStates: ['ID', 'KS', 'NE', 'NC', 'SC', 'TN', 'TX', 'UT', 'WY'],
+      restrictedStates: ['CA', 'ID', 'KS', 'NE', 'NC', 'SC', 'TN', 'TX', 'UT', 'WY'],
       ageRequirement: 21,
       labTestingRequired: true,
       batchTrackingRequired: true,
@@ -65,6 +65,19 @@ export class ComplianceService {
         requiresAdultSignature: true,
         noInternationalShipping: true
       }
+    },
+    'CBD': {
+      category: 'CBD',
+      substanceType: 'Cannabidiol',
+      restrictedStates: [], // Federally legal
+      ageRequirement: 18,
+      labTestingRequired: true,
+      batchTrackingRequired: false,
+      warningLabels: [
+        'These statements have not been evaluated by the FDA',
+        'For adult use only'
+      ],
+      shippingRestrictions: {}
     }
   };
 

@@ -10,7 +10,8 @@ export default function ShippingPage() {
   const { cart, isLoading } = useCart();
   const router = useRouter();
 
-  // Basic form state
+  console.log('[ShippingPage] Render state:', { isLoading, hasCart: !!cart, itemCount: cart?.items?.length });
+  console.log('[ShippingPage] Icons state:', { Truck: !!Truck, ArrowRight: !!ArrowRight });
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -27,20 +28,13 @@ export default function ShippingPage() {
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
 
+  const [restrictedItems, setRestrictedItems] = useState<string[]>([]);
+  const [isCheckingZip, setIsCheckingZip] = useState(false);
+
   useEffect(() => {
     // Check if formally verified in this session
     const verified = localStorage.getItem('hw420_age_verified_formal') === 'true';
     if (verified) setIsAgeVerified(true);
-
-    // Load AgeChecker script if not present
-    if (!document.getElementById('agechecker-script')) {
-      const script = document.createElement('script');
-      script.id = 'agechecker-script';
-      script.src = 'https://cdn.agechecker.net/static/popup/v1/popup.js';
-      script.setAttribute('data-agecheck-api-key', '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ');
-      script.setAttribute('data-agecheck-disable-auto', 'true');
-      document.head.appendChild(script);
-    }
 
     // Handle AgeChecker verification success
     const handleVerified = () => {
@@ -49,44 +43,123 @@ export default function ShippingPage() {
       setIsAgeVerified(true);
       setIsVerifying(false);
       toast.success('Age verified successfully!');
+      
+      // If we were waiting for verification to submit, try submitting again
+      const pendingSubmit = sessionStorage.getItem('checkout_pending_submit') === 'true';
+      if (pendingSubmit) {
+        sessionStorage.removeItem('checkout_pending_submit');
+        // We can't easily call handleSubmit here because it needs the event,
+        // but we can trigger a manual click on the submit button or just notify.
+        toast.success('Please click "Continue to Review" again to proceed.');
+      }
     };
 
     window.addEventListener('agechecker:verified', handleVerified);
     return () => window.removeEventListener('agechecker:verified', handleVerified);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Effect to check ZIP eligibility
+  useEffect(() => {
+    const checkZip = async () => {
+      if (form.shippingZip.length === 5 && cart?.items.length) {
+        setIsCheckingZip(true);
+        try {
+          const productIds = cart.items.map(i => i.productId).join(',');
+          const res = await fetch(`/api/eligibility?zip=${form.shippingZip}&productIds=${productIds}`);
+          const data = await res.json();
+          
+          if (data.restrictedProducts?.length > 0) {
+            setRestrictedItems(data.restrictedProducts);
+            toast.error(`Some items in your cart cannot be shipped to ${data.state}.`);
+          } else {
+            setRestrictedItems([]);
+            // Autofill city/state if found
+            if (data.city && !form.shippingCity) {
+              setForm(prev => ({ ...prev, shippingCity: data.city, shippingState: data.state }));
+            }
+          }
+        } catch (error) {
+          console.error('Failed to check zip eligibility:', error);
+        } finally {
+          setIsCheckingZip(false);
+        }
+      } else {
+        setRestrictedItems([]);
+      }
+    };
+
+    const timer = setTimeout(checkZip, 500);
+    return () => clearTimeout(timer);
+  }, [form.shippingZip, cart?.items]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
-    if (!form.firstName || !form.lastName || !form.email || !form.shippingAddress1 || !form.shippingCity || !form.shippingZip) {
+    if (!form.firstName || !form.lastName || !form.email || !form.shippingAddress1 || !form.shippingCity || !form.shippingState || !form.shippingZip) {
       toast.error('Please fill out all required shipping fields');
       return;
     }
 
+    // Manual Final Zip Check to prevent debouncing bypass
+    setIsCheckingZip(true);
+    const checkToastId = toast.loading('Verifying shipping eligibility...');
+    try {
+      const productIds = cart!.items.map(i => i.productId).join(',');
+      const res = await fetch(`/api/eligibility?zip=${form.shippingZip}&productIds=${productIds}`);
+      const data = await res.json();
+      
+      if (data.restrictedProducts?.length > 0) {
+        setRestrictedItems(data.restrictedProducts);
+        toast.error(`Some items in your cart cannot be shipped to ${data.state}.`, { id: checkToastId });
+        setIsCheckingZip(false);
+        return;
+      }
+      toast.success('Shipping eligibility verified.', { id: checkToastId });
+    } catch (error) {
+      console.error('Manual zip check failed:', error);
+      toast.error('Could not verify shipping eligibility. Please try again.', { id: checkToastId });
+      setIsCheckingZip(false);
+      return;
+    } finally {
+      setIsCheckingZip(false);
+    }
+
     // Enforce Age Verification for checkout
     if (!isAgeVerified) {
-      const ac = (window as any).AgeChecker;
-      if (ac) {
-        setIsVerifying(true);
-        // Pass data to AgeChecker
-        (window as any).ageCheckerConfig = {
-          apiKey: '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
-          customerEmail: form.email,
-          customerFirstName: form.firstName,
-          customerLastName: form.lastName,
-          shippingAddress: {
-            address: form.shippingAddress1,
-            city: form.shippingCity,
-            state: form.shippingState,
-            zip: form.shippingZip,
-            country: 'US'
-          }
-        };
-        ac.verify();
-      } else {
-        toast.error('Age verification service is loading. Please try again.');
-      }
+      const attemptVerification = (retries = 0) => {
+        const ac = (window as any).AgeChecker;
+        if (ac) {
+          setIsVerifying(true);
+          sessionStorage.setItem('checkout_pending_submit', 'true');
+          // Pass data to AgeChecker
+          (window as any).ageCheckerConfig = {
+            apiKey: '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
+            customerEmail: form.email,
+            customerFirstName: form.firstName,
+            customerLastName: form.lastName,
+            shippingAddress: {
+              address: form.shippingAddress1,
+              city: form.shippingCity,
+              state: form.shippingState,
+              zip: form.shippingZip,
+              country: 'US'
+            }
+          };
+          console.log('[AgeChecker] Triggering verification flow...');
+          ac.verify();
+        } else if (retries < 6) {
+          console.log(`[AgeChecker] Service not ready, retrying in 500ms... (attempt ${retries + 1}/6)`);
+          // If it's the first retry, maybe show a hint
+          if (retries === 0) toast.loading('Initializing age verification...', { id: 'age-init' });
+          setTimeout(() => attemptVerification(retries + 1), 500);
+        } else {
+          toast.dismiss('age-init');
+          toast.error('Age verification service is taking longer than expected. Please check your connection or refresh the page.');
+        }
+      };
+
+      attemptVerification();
       return;
     }
 
@@ -115,9 +188,24 @@ export default function ShippingPage() {
   return (
     <div className="min-h-screen bg-black text-white py-8 lg:py-12">
       <div className="container mx-auto px-4 max-w-4xl">
+        
+      {restrictedItems.length > 0 && (
+        <div className="mb-6 p-4 bg-red-900/30 border border-red-500 rounded-lg flex items-start gap-4 animate-in fade-in slide-in-from-top-4">
+          <div className="p-2 bg-red-500 rounded-full">
+            {Truck && <Truck className="w-5 h-5 text-white" />}
+          </div>
+          <div>
+            <h3 className="font-bold text-red-400">Shipping Restriction</h3>
+            <p className="text-sm text-gray-300">
+              Your cart contains items that cannot be shipped to your state due to local regulations. 
+              Please remove these items from your cart to proceed with checkout.
+            </p>
+          </div>
+        </div>
+      )}
       <div className="flex items-center gap-4 mb-8 text-sm text-gray-400">
-        <span className="text-white font-medium flex items-center gap-2"><Truck className="w-4 h-4" /> Shipping</span>
-        <ArrowRight className="w-4 h-4" />
+        <span className="text-white font-medium flex items-center gap-2">{Truck && <Truck className="w-4 h-4" />} Shipping</span>
+        {ArrowRight && <ArrowRight className="w-4 h-4" />}
         <span>Review & Pay</span>
       </div>
 

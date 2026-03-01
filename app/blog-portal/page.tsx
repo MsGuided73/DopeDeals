@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import AgeVerification from '../components/AgeVerification';
+import GlobalMasthead from '../components/GlobalMasthead';
 import { MessageCircle, Sparkles, Clock, User, Search, Filter, GraduationCap, BookOpen, Lightbulb, Users } from 'lucide-react';
 
 interface BlogPost {
@@ -148,9 +148,8 @@ export default function BlogPortalPage() {
   const displayRegularPosts = displayPosts.filter(post => !post.featured);
 
   return (
-    <div className="min-h-screen bg-white">
-      <AgeVerification />
-
+    <main className="min-h-screen bg-gray-50">
+      <GlobalMasthead />
       <div className="max-w-7xl mx-auto py-12 px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -392,6 +391,6 @@ export default function BlogPortalPage() {
           </div>
         </section>
       </div>
-    </div>
+    </main>
   );
 }

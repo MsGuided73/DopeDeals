@@ -148,12 +148,12 @@ export async function createUserProfile(user: any, additionalData?: any): Promis
     const profileData = {
       id: user.id,
       email: user.email,
-      firstName: user.user_metadata?.firstName || user.user_metadata?.first_name,
-      lastName: user.user_metadata?.lastName || user.user_metadata?.last_name,
-      fullName: user.user_metadata?.fullName || user.user_metadata?.full_name,
+      first_name: user.user_metadata?.firstName || user.user_metadata?.first_name,
+      last_name: user.user_metadata?.lastName || user.user_metadata?.last_name,
+      full_name: user.user_metadata?.fullName || user.user_metadata?.full_name,
       role: user.app_metadata?.role || UserRole.USER,
-      ageVerificationStatus: 'not_verified',
-      createdAt: new Date().toISOString(),
+      age_verification_status: 'not_verified',
+      created_at: new Date().toISOString(),
       ...additionalData
     };
 
@@ -180,11 +180,11 @@ export async function isAgeVerified(userId: string): Promise<boolean> {
   try {
     const { data: profile } = await supabase
       .from('users')
-      .select('ageVerificationStatus')
+      .select('age_verification_status')
       .eq('id', userId)
       .single();
 
-    return profile?.ageVerificationStatus === 'verified';
+    return profile?.age_verification_status === 'verified';
   } catch (error) {
     console.error('[Auth Helpers] Error checking age verification:', error);
     return false;
@@ -199,8 +199,8 @@ export async function updateAgeVerification(userId: string, status: 'verified' |
     const { error } = await supabase
       .from('users')
       .update({ 
-        ageVerificationStatus: status,
-        lastVerificationCheck: new Date().toISOString()
+        age_verification_status: status,
+        last_verification_check: new Date().toISOString()
       })
       .eq('id', userId);
 
@@ -227,16 +227,16 @@ export async function getVipMembershipStatus(userId: string): Promise<{
   try {
     const { data: profile } = await supabase
       .from('users')
-      .select('membershipTierId, memberships(*)')
+      .select('membership_tier_id, memberships(*)')
       .eq('id', userId)
       .single();
 
-    if (profile?.membershipTierId && profile.memberships) {
+    if (profile?.membership_tier_id && profile.memberships) {
       const membership = Array.isArray(profile.memberships) ? profile.memberships[0] : profile.memberships;
       return {
         isVip: true,
-        tier: membership?.tierName || 'basic',
-        membershipId: profile.membershipTierId
+        tier: membership?.tier_name || 'basic',
+        membershipId: profile.membership_tier_id
       };
     }
 
@@ -263,20 +263,19 @@ export async function logUserActivity(userId: string, activity: string, metadata
     // Update last login time
     const { data: currentUser } = await supabase
       .from('users')
-      .select('loginCount')
+      .select('login_count')
       .eq('id', userId)
       .single();
 
     await supabase
       .from('users')
       .update({
-        lastLoginAt: new Date().toISOString(),
-        loginCount: (currentUser?.loginCount || 0) + 1
+        last_login_at: new Date().toISOString(),
+        login_count: (currentUser?.login_count || 0) + 1
       })
       .eq('id', userId);
 
-    // Log activity (if activity logging table exists)
-    // This could be extended to include detailed activity tracking
+    // Log activity
     console.log(`[Auth Helpers] User activity: ${userId} - ${activity}`, metadata);
   } catch (error) {
     console.error('[Auth Helpers] Error logging user activity:', error);

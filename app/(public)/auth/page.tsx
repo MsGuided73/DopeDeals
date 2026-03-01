@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '../../lib/supabase-browser';
 import Link from 'next/link';
-import AgeVerification from '../../components/AgeVerification';
 import GlobalMasthead from '../../components/GlobalMasthead';
 
 export default function AuthPage() {
@@ -130,9 +129,6 @@ export default function AuthPage() {
           animation: pulse-glow 2s ease-in-out infinite;
         }
       `}</style>
-
-      {/* Age Verification Popup */}
-      <AgeVerification />
 
       {/* Universal Layout Components */}
       <GlobalMasthead />

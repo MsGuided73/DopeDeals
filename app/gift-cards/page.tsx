@@ -1,6 +1,5 @@
 "use client";
 import { useState } from 'react';
-import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 import { Gift, CreditCard, Mail, Calendar, CheckCircle } from 'lucide-react';
 
@@ -18,7 +17,6 @@ export default function GiftCardsPage() {
 
   return (
     <>
-      <AgeVerification />
       <GlobalMasthead />
       
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
