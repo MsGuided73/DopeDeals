@@ -318,6 +318,16 @@ export interface RefundResult {
   errorMessage?: string;
 }
 
+// Void Result
+export interface VoidResult {
+  success: boolean;
+  transactionId?: number;
+  referenceNumber?: number;
+  responseCode: string;
+  responseText: string;
+  errorMessage?: string;
+}
+
 // Transaction Status
 export interface TransactionStatus {
   transactionId: number;

@@ -7,6 +7,7 @@ import {
   RefundResponse,
   VoidRequest,
   VoidResponse,
+  VoidResult,
   TransactionQueryRequest,
   TransactionQueryResponse,
   SaveCardRequest,
@@ -182,8 +183,39 @@ export class KajaPayClient {
     }
   }
 
-  // Void transaction
-  async voidTransaction(transactionId: number): Promise<ApiResponse<VoidResponse>> {
+  // High-level void transaction
+  async voidTransaction(transactionId: number): Promise<VoidResult> {
+    try {
+      const response: ApiResponse<VoidResponse> = await this.apiVoid(transactionId);
+
+      if (response.success && response.data) {
+        return {
+          success: true,
+          transactionId: response.data.transactionId,
+          referenceNumber: response.data.referenceNumber,
+          responseCode: response.data.responseCode,
+          responseText: response.data.responseText
+        };
+      } else {
+        return {
+          success: false,
+          responseCode: response.error?.responseCode || 'VOID_FAILED',
+          responseText: response.error?.responseText || 'Void processing failed',
+          errorMessage: response.error?.details
+        };
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        responseCode: 'VOID_ERROR',
+        responseText: 'Void processing error',
+        errorMessage: error.message
+      };
+    }
+  }
+
+  // Low-level API void call
+  private async apiVoid(transactionId: number): Promise<ApiResponse<VoidResponse>> {
     try {
       const response: AxiosResponse<VoidResponse> = await this.client.post('void', {
         transactionId,
@@ -198,7 +230,7 @@ export class KajaPayClient {
       return {
         success: false,
         error: {
-          responseCode: 'VOID_FAILED',
+          responseCode: 'API_VOID_ERROR',
           responseText: error.message,
           details: error.response?.data
         }
@@ -362,7 +394,7 @@ export class KajaPayClient {
   }
 
   // High-level refund processing method
-  async processRefundById(transactionId: number, amount?: number): Promise<RefundResult> {
+  async refundTransaction(transactionId: number, amount?: number): Promise<RefundResult> {
     try {
       const refundRequest: RefundRequest = {
         transactionId,

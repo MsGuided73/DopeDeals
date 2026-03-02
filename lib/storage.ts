@@ -33,17 +33,21 @@ export interface IStorage {
   getUserBehavior(userId: string, limit?: number): Promise<any[]>;
   getAllProducts(): Promise<any[]>;
   getUserOrders(userId: string): Promise<any[]>;
+  getOrder(id: string): Promise<any>;
   getProductSimilarity(productId: string): Promise<any[]>;
   createProductSimilarity(similarity: any): Promise<any>;
   
-  // Optional operations for database persistence
+  // operations for database persistence
   checkoutAtomic?(data: any): Promise<any>;
-  createOrder?(order: any): Promise<any>;
-  createOrderItem?(item: any): Promise<any>;
-  clearCart?(userId: string): Promise<void>;
-  createTransaction?(tx: any): Promise<any>;
-  updateTransaction?(id: string, updates: any): Promise<any>;
-  updateOrder?(id: string, updates: any): Promise<any>;
+  createOrder(order: any): Promise<any>;
+  updateOrder(id: string, updates: any): Promise<any>;
+  createOrderItem(item: any): Promise<any>;
+  clearCart(userId: string): Promise<void>;
+  createTransaction(tx: any): Promise<any>;
+  updateTransaction(id: string, updates: any): Promise<any>;
+  getUserTransactions(userId: string): Promise<any[]>;
+  getOrderTransactions(orderId: string): Promise<any[]>;
+  createWebhookEvent(event: any): Promise<any>;
   createPaymentMethod?(pm: any): Promise<any>;
   [key: string]: any;
 }
@@ -337,7 +341,6 @@ export async function getStorage(): Promise<IStorage> {
       }
     },
 
-    // Orders for Purchase History
     async getUserOrders(userId: string) {
       const { data, error } = await supabase
         .from('orders')
@@ -353,6 +356,36 @@ export async function getStorage(): Promise<IStorage> {
       
       if (error) throw error;
       return data || [];
+    },
+
+    async getOrder(id: string) {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('id', id)
+        .single();
+      
+      if (error || !data) return null;
+      return data;
+    },
+
+    async updateOrder(id: string, updates: any) {
+      // Map camelCase to snake_case for specific fields if needed
+      const dbUpdates: any = { ...updates };
+      if (updates.paymentStatus) {
+        dbUpdates.payment_status = updates.paymentStatus;
+        delete dbUpdates.paymentStatus;
+      }
+
+      const { data, error } = await supabase
+        .from('orders')
+        .update(dbUpdates)
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
     },
 
     // Product Similarity for Recommendations
@@ -439,6 +472,94 @@ export async function getStorage(): Promise<IStorage> {
           .delete()
           .eq('cart_id', cart.id);
       }
+    },
+
+    async createTransaction(tx: any) {
+      const { data, error } = await supabase
+        .from('payment_transactions')
+        .insert({
+          order_id: tx.orderId,
+          kajapay_transaction_id: tx.kajaPayTransactionId,
+          kajapay_reference_number: tx.kajaPayReferenceNumber,
+          transaction_type: tx.transactionType,
+          amount: tx.amount,
+          currency: tx.currency || 'USD',
+          status: tx.status,
+          kajapay_status_code: tx.kajaPayStatusCode,
+          auth_code: tx.authCode,
+          error_message: tx.errorMessage,
+          payment_method_data: tx.paymentMethodData,
+          transaction_details: tx.transactionDetails
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+
+    async updateTransaction(id: string, updates: any) {
+      const dbUpdates: any = { ...updates };
+      
+      // Map camelCase to snake_case
+      if (updates.orderId) { dbUpdates.order_id = updates.orderId; delete dbUpdates.orderId; }
+      if (updates.kajaPayTransactionId) { dbUpdates.kajapay_transaction_id = updates.kajaPayTransactionId; delete dbUpdates.kajaPayTransactionId; }
+      if (updates.kajaPayReferenceNumber) { dbUpdates.kajapay_reference_number = updates.kajaPayReferenceNumber; delete dbUpdates.kajaPayReferenceNumber; }
+      if (updates.transactionType) { dbUpdates.transaction_type = updates.transactionType; delete dbUpdates.transactionType; }
+      if (updates.kajaPayStatusCode) { dbUpdates.kajapay_status_code = updates.kajaPayStatusCode; delete dbUpdates.kajaPayStatusCode; }
+      if (updates.authCode) { dbUpdates.auth_code = updates.authCode; delete dbUpdates.authCode; }
+      if (updates.errorMessage) { dbUpdates.error_message = updates.errorMessage; delete dbUpdates.errorMessage; }
+      if (updates.paymentMethodData) { dbUpdates.payment_method_data = updates.paymentMethodData; delete dbUpdates.paymentMethodData; }
+      if (updates.transactionDetails) { dbUpdates.transaction_details = updates.transactionDetails; delete dbUpdates.transactionDetails; }
+
+      const { data, error } = await supabase
+        .from('payment_transactions')
+        .update(dbUpdates)
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+
+    async getUserTransactions(userId: string) {
+      const { data, error } = await supabase
+        .from('payment_transactions')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    },
+
+    async getOrderTransactions(orderId: string) {
+      const { data, error } = await supabase
+        .from('payment_transactions')
+        .select('*')
+        .eq('order_id', orderId)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    },
+
+    async createWebhookEvent(event: any) {
+      const { data, error } = await supabase
+        .from('kajapay_webhook_events')
+        .insert({
+          event_type: event.eventType,
+          kajapay_transaction_id: event.kajaPayTransactionId,
+          payload: event.payload,
+          processed: event.processed,
+          processed_at: event.processedAt
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
     },
   };
 }

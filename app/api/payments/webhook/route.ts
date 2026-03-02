@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../../lib/storage';
-import { kajaPayClient } from '../../../lib/services/kajapay/client';
-import { WebhookEventData } from '../../../lib/services/kajapay/types';
+import { kajaPayClient } from '../../../../lib/services/kajapay/client';
+import { WebhookEventData } from '../../../../lib/services/kajapay/types';
 
 export async function POST(req: NextRequest) {
   try {
