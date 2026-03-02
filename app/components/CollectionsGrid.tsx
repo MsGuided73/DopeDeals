@@ -42,7 +42,7 @@ export default function CollectionsGrid() {
     { 
       name: "HOT\nPRODUCTS", 
       route: "/hot-products",
-      image: "/images/promo/hot_products_bg.png",
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/hot_products_bg.png",
       color: "#f43f5e", // Rose
       bgGradient: "from-rose-600 via-rose-900 to-black", 
       isPromo: true
@@ -50,7 +50,7 @@ export default function CollectionsGrid() {
     { 
       name: "FRESH\nDROPS", 
       route: "/fresh-drops",
-      image: "/images/promo/fresh_drops_bg.png",
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/fresh_drops_2bg.png",
       color: "#14b8a6", // Teal
       bgGradient: "from-teal-600 via-teal-900 to-black",
       isPromo: true
@@ -58,7 +58,7 @@ export default function CollectionsGrid() {
     { 
       name: "DOPE\nDEALS", 
       route: "/#dope-deals",
-      image: "/images/promo/dope_deals_bg.png",
+      image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/dope_deals_bg.png",
       color: "#ef4444", // Red for Deals
       bgGradient: "from-red-600 via-red-900 to-black",
       isPromo: true
