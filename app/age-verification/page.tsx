@@ -18,7 +18,8 @@ export default function AgeVerificationPage() {
     // Polling for AgeChecker availability if not immediately present
     let pollCount = 0;
     const checkService = () => {
-      if ((window as any).AgeChecker) {
+      const ac = (window as any).AgeChecker || (window as any).AgeCheckerPopup;
+      if (ac && (typeof ac.verify === 'function' || typeof ac.show === 'function' || typeof ac.open === 'function')) {
         setIsServiceLoading(false);
       } else if (pollCount < 30) { // Poll for 15 seconds max (sync with checkout)
         pollCount++;
@@ -69,8 +70,8 @@ export default function AgeVerificationPage() {
   }, [user, updateUserMetadata]);
 
   const handleStartVerification = () => {
-    const ac = (window as any).AgeChecker;
-    if (ac && typeof ac.verify === 'function') {
+    const ac = (window as any).AgeChecker || (window as any).AgeCheckerPopup;
+    if (ac && (typeof ac.verify === 'function' || typeof ac.show === 'function' || typeof ac.open === 'function')) {
       setIsVerifying(true);
       
       // Map user metadata fields correctly to AgeChecker config
@@ -84,7 +85,9 @@ export default function AgeVerificationPage() {
       console.log('[AgeChecker] Triggering verification with config:', { ...config, apiKey: '***' });
       (window as any).ageCheckerConfig = config;
 
-      ac.verify();
+      if (typeof ac.verify === 'function') ac.verify();
+      else if (typeof ac.show === 'function') ac.show();
+      else if (typeof ac.open === 'function') ac.open();
     } else {
       toast.error('Age verification service failed to initialize. Please refresh the page.');
     }

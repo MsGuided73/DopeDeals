@@ -122,14 +122,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </NavigationProvider>
         </AppProviders>
-        {/* Global Age Verification Service */}
-        <Script
-          id="agechecker-script"
-          src="https://cdn.agechecker.net/static/popup/v1/popup.js"
-          strategy="beforeInteractive"
-          data-agecheck-api-key={process.env.NEXT_PUBLIC_AGECHECKER_API_KEY}
-          data-agecheck-disable-auto="true"
-        />
       </body>
     </html>
   );
