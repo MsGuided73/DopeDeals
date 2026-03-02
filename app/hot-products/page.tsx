@@ -92,7 +92,7 @@ export default function HotProductsPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-display-twilight text-white mb-6 tracking-wider drop-shadow-2xl">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-display-twilight text-white mb-6 uppercase tracking-[0.15em] drop-shadow-2xl">
             HOT PRODUCTS
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-light tracking-wide">

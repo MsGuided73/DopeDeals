@@ -297,7 +297,7 @@ export default function FeaturedProductsSection() {
       <section className="mt-16">
         <div className="text-center mb-12">
           <h1
-            className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight"
+            className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]"
           >
             HOT PRODUCTS
           </h1>
@@ -343,7 +343,7 @@ export default function FeaturedProductsSection() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1
-            className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight"
+            className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]"
           >
             HOT PRODUCTS
           </h1>

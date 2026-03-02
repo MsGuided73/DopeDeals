@@ -145,8 +145,8 @@ export default function AgeGateModal() {
                 transition={{ delay: 0.6 }}
                 className="space-y-1"
               >
-                <h2 className="text-3xl font-display-twilight text-white tracking-widest">
-                  Age Verification
+                <h2 className="text-3xl font-display-twilight text-white uppercase tracking-[0.15em]">
+                  AGE VERIFICATION
                 </h2>
                 <p className="text-zinc-200 text-sm font-medium">
                   Please confirm your date of birth and ZIP code to enter
@@ -159,8 +159,8 @@ export default function AgeGateModal() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7 }}
               >
-                <h3 className="text-2xl font-display-twilight text-white tracking-wider">
-                  Must be 21 to Enter
+                <h3 className="text-2xl font-display-twilight text-white uppercase tracking-[0.1em]">
+                  MUST BE 21 TO ENTER
                 </h3>
               </motion.div>
 

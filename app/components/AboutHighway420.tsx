@@ -26,7 +26,7 @@ export default function AboutHighway420() {
 
           {/* Right Column - Copy with Left Justification */}
           <div className="text-left order-first md:order-last">
-            <h2 className="text-4xl md:text-6xl font-display-twilight font-bold mb-6 text-gray-900 dark:text-white leading-tight">
+            <h2 className="text-4xl md:text-6xl font-display-twilight font-bold mb-6 text-gray-900 dark:text-white leading-tight tracking-[0.15em]">
               YOUR TRUSTED SOURCE FOR PREMIUM HEMP
             </h2>
             

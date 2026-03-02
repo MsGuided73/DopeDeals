@@ -123,7 +123,7 @@ export default function AgeVerificationPage() {
             {/* Header Section */}
             <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-1000">
               <div className="inline-block mb-4 overflow-hidden relative group">
-                <h1 className="text-6xl md:text-8xl font-display-twilight font-bold tracking-[0.15em] text-white uppercase italic leading-none relative z-10">
+                <h1 className="text-6xl md:text-8xl font-display-twilight font-bold tracking-[0.2em] text-white uppercase italic leading-none relative z-10 pr-6">
                   AGE <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/50">VERIFICATION</span>
                 </h1>
                 {/* Shimmer Effect */}
@@ -148,7 +148,7 @@ export default function AgeVerificationPage() {
                     <div className="w-28 h-28 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8 border-2 border-green-500/30 shadow-[0_0_40px_rgba(34,197,94,0.3)]">
                       <CheckCircle className="w-14 h-14 text-green-500" />
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-display-twilight font-bold text-white uppercase tracking-wider mb-6">Verification Complete</h2>
+                    <h2 className="text-4xl md:text-5xl font-display-twilight font-bold text-white uppercase tracking-[0.15em] mb-6">VERIFICATION COMPLETE</h2>
                     <p className="text-white/70 max-w-md mx-auto mb-10 text-lg leading-relaxed">
                       Your identity has been confirmed. You now have unrestricted access to the Highway 420 collection.
                     </p>
@@ -220,7 +220,7 @@ export default function AgeVerificationPage() {
                     <AlertTriangle className="w-12 h-12 text-red-500" />
                   </div>
                   <div className="text-center md:text-left">
-                    <h3 className="text-2xl font-display-chalets text-white uppercase tracking-wider mb-2">Age Requirement Enforcement</h3>
+                    <h3 className="text-2xl font-display-chalets text-white uppercase tracking-[0.15em] mb-2 font-bold">AGE REQUIREMENT ENFORCEMENT</h3>
                     <p className="text-white/70 text-lg leading-relaxed font-medium">
                       Per federal and state regulations, you must be <span className="text-red-500 font-black underline decoration-red-500/30 underline-offset-4">21+ years of age</span> to access this platform. 
                       Strict compliance is required for all transactions.
@@ -237,7 +237,7 @@ export default function AgeVerificationPage() {
                   <div className="p-4 bg-white/5 rounded-2xl mr-6 border border-white/10 group-hover:bg-orange-500/10 transition-colors">
                     <Shield className="w-8 h-8 text-orange-500" />
                   </div>
-                  <h3 className="text-2xl font-display-chalets text-white uppercase tracking-tight">Data Sovereignty</h3>
+                  <h3 className="text-2xl font-display-chalets text-white uppercase tracking-[0.15em] font-bold text-left">DATA SOVEREIGNTY</h3>
                 </div>
                 <p className="text-white/50 text-lg font-medium leading-relaxed mb-6">
                   Your privacy is paramount. Verification data is strictly encrypted and used purely for legal compliance. We never store copies of your identity documents.
@@ -250,7 +250,7 @@ export default function AgeVerificationPage() {
                   <div className="p-4 bg-white/5 rounded-2xl mr-6 border border-white/10 group-hover:bg-green-500/10 transition-colors">
                     <CheckCircle className="w-8 h-8 text-green-500" />
                   </div>
-                  <h3 className="text-2xl font-display-chalets text-white uppercase tracking-tight">Secure Process</h3>
+                  <h3 className="text-2xl font-display-chalets text-white uppercase tracking-[0.15em] font-bold text-left">SECURE PROCESS</h3>
                 </div>
                 <p className="text-white/50 text-lg font-medium leading-relaxed mb-6">
                   Our system utilizes industry standard matching algorithms to verify your age instantly. For most users, no document upload is required.

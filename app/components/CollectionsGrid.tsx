@@ -127,9 +127,9 @@ export default function CollectionsGrid() {
                       className="absolute inset-0 w-full h-full object-cover z-0 opacity-100 group-hover:scale-105 transition-transform duration-700 pointer-events-none" 
                     />
                   )}
-                  {/* Glass Overlay with better blend */}
-                  <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-30 mix-blend-overlay z-10 pointer-events-none`} />
-                  <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black/80 via-black/20 to-transparent z-20 pointer-events-none" />
+                  {/* Glass Overlay with better blend - Lightens on hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-30 group-hover:opacity-10 mix-blend-overlay z-10 transition-opacity duration-500 pointer-events-none`} />
+                  <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black/80 via-black/20 to-transparent z-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none" />
                   
                   {/* Text alignment to bottom-left */}
                   <div className="absolute bottom-3 left-3 z-30 pointer-events-none flex flex-col justify-end">
@@ -227,9 +227,9 @@ export default function CollectionsGrid() {
                        />
                      )}
                      
-                     {/* Rich Gradient Overlays */}
-                     <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-50 mix-blend-multiply z-10 transition-opacity duration-500 pointer-events-none`} />
-                     <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-20 pointer-events-none group-hover:h-full group-hover:via-black/70 transition-all duration-500" />
+                     {/* Rich Gradient Overlays - Lighten on hover for vibrancy */}
+                     <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-40 group-hover:opacity-10 mix-blend-overlay z-10 transition-opacity duration-500 pointer-events-none`} />
+                     <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-20 pointer-events-none group-hover:opacity-30 transition-all duration-500" />
 
                      {/* Editorial Text Block */}
                      <div className="absolute bottom-6 left-6 z-30 pointer-events-none flex flex-col justify-end">

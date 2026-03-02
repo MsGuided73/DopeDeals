@@ -37,7 +37,7 @@ export default function HomePage() {
 
           {/* Collections Title */}
           <div className="text-center mb-10 mt-4">
-            <h1 className="text-4xl md:text-6xl font-display-twilight font-bold tracking-tight" style={{
+            <h1 className="text-4xl md:text-6xl font-display-twilight font-bold tracking-[0.15em]" style={{
               color: '#000000',
               textShadow: '0 2px 10px rgba(0,0,0,0.05)'
             }}>
@@ -66,8 +66,7 @@ export default function HomePage() {
           {/* Customer Reviews Section - Moved above footer */}
           <section className="mt-24 mb-16">
             <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-6xl font-display-twilight font-bold mb-4" style={{
-                letterSpacing: '-0.02em',
+              <h1 className="text-4xl md:text-6xl font-display-twilight font-bold mb-4 tracking-[0.15em]" style={{
                 color: '#000000'
               }}>
                 HIGH PRAISE
@@ -196,8 +195,7 @@ export default function HomePage() {
         <section className="mt-24 mb-16">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-6xl font-display-twilight font-bold mb-4" style={{
-                letterSpacing: '-0.02em',
+              <h2 className="text-4xl md:text-6xl font-display-twilight font-bold mb-4 tracking-[0.15em]" style={{
                 color: '#000000'
               }}>
                 HIGHER LEARNING

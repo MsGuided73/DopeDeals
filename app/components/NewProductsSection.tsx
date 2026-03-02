@@ -264,7 +264,7 @@ export default function NewProductsSection() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight">
+          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
             FRESH DROPS
           </h1>
         </div>

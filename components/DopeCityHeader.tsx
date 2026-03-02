@@ -60,7 +60,7 @@ export default function Highway420Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" aria-label="Go to home" className="inline-block">
-              <h1 className="text-2xl lg:text-3xl font-display-twilight text-white">
+              <h1 className="text-2xl lg:text-3xl font-display-twilight text-white uppercase tracking-wider">
                 <span className="text-white">HIGHWAY</span>
                 <span className="text-yellow-400 ml-2">420</span>
               </h1>
