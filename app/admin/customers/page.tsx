@@ -33,6 +33,7 @@ interface Customer {
   total_spent: number;
   status: 'active' | 'inactive' | 'suspended';
   vip_status: boolean;
+  age_verified: boolean; // Added
   addresses?: Address[];
 }
 
@@ -67,6 +68,7 @@ export default function AdminCustomersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [vipFilter, setVipFilter] = useState('all');
+  const [verifiedFilter, setVerifiedFilter] = useState('all'); // Added
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [showCustomerModal, setShowCustomerModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -82,9 +84,19 @@ export default function AdminCustomersPage() {
       const response = await fetch('/api/admin/customers');
       if (response.ok) {
         const data = await response.json();
-        setCustomers(data.customers || []);
+        // The API might not return all fields, map safely
+        setCustomers(data.customers?.map((c: any) => ({
+          ...c,
+          first_name: c.name?.split(' ')[0] || 'Unknown',
+          last_name: c.name?.split(' ').slice(1).join(' ') || '',
+          age_verified: !!c.age_verified,
+          status: c.status || 'active',
+          created_at: c.joined_at || new Date().toISOString(),
+          total_orders: c.orders || 0,
+          total_spent: c.total || 0,
+        })) || []);
       } else {
-        // Mock data for development
+        // Fallback for dev
         setCustomers([
           {
             id: '1',
@@ -99,41 +111,7 @@ export default function AdminCustomersPage() {
             total_spent: 1247.50,
             status: 'active',
             vip_status: true,
-            addresses: [
-              {
-                id: '1',
-                type: 'billing',
-                street: '123 Main St',
-                city: 'Los Angeles',
-                state: 'CA',
-                zip_code: '90210',
-                country: 'USA'
-              }
-            ]
-          },
-          {
-            id: '2',
-            email: 'jane.smith@email.com',
-            first_name: 'Jane',
-            last_name: 'Smith',
-            phone: '+1 (555) 987-6543',
-            created_at: '2024-03-22T09:15:00Z',
-            last_login: '2024-11-07T16:45:00Z',
-            total_orders: 5,
-            total_spent: 387.25,
-            status: 'active',
-            vip_status: false
-          },
-          {
-            id: '3',
-            email: 'mike.johnson@email.com',
-            first_name: 'Mike',
-            last_name: 'Johnson',
-            created_at: '2024-06-10T11:20:00Z',
-            total_orders: 0,
-            total_spent: 0,
-            status: 'inactive',
-            vip_status: false
+            age_verified: true,
           }
         ]);
       }
@@ -165,36 +143,22 @@ export default function AdminCustomersPage() {
     }
   }
 
-  async function updateCustomerStatus(customerId: string, status: Customer['status']) {
+  async function updateCustomer(customerId: string, updates: Partial<Customer>) {
     try {
       const response = await fetch(`/api/admin/customers/${customerId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
+        body: JSON.stringify(updates)
       });
 
       if (response.ok) {
         await loadCustomers();
+        if (selectedCustomer?.id === customerId) {
+          setSelectedCustomer(prev => prev ? { ...prev, ...updates } : null);
+        }
       }
     } catch (error) {
-      console.error('Error updating customer status:', error);
-    }
-  }
-
-  async function deleteCustomer(customerId: string) {
-    if (!confirm('Are you sure you want to delete this customer? This action cannot be undone.')) return;
-
-    try {
-      const response = await fetch(`/api/admin/customers/${customerId}`, {
-        method: 'DELETE'
-      });
-
-      if (response.ok) {
-        await loadCustomers();
-        await loadStats();
-      }
-    } catch (error) {
-      console.error('Error deleting customer:', error);
+      console.error('Error updating customer:', error);
     }
   }
 
@@ -207,8 +171,12 @@ export default function AdminCustomersPage() {
     const matchesVip = vipFilter === 'all' ||
       (vipFilter === 'vip' && customer.vip_status) ||
       (vipFilter === 'regular' && !customer.vip_status);
+    
+    const matchesVerified = verifiedFilter === 'all' ||
+      (verifiedFilter === 'verified' && customer.age_verified) ||
+      (verifiedFilter === 'unverified' && !customer.age_verified);
 
-    return matchesSearch && matchesStatus && matchesVip;
+    return matchesSearch && matchesStatus && matchesVip && matchesVerified;
   });
 
   const formatCurrency = (amount: number) => {
@@ -299,45 +267,42 @@ export default function AdminCustomersPage() {
           </div>
         </div>
       </div>
-
+      
       {/* Filters and Search */}
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex flex-wrap gap-4 items-center justify-between">
-          {/* Search */}
           <div className="flex-1 max-w-md">
             <div className="relative">
               <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search customers by name or email..."
+                placeholder="Search customers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange"
               />
             </div>
           </div>
 
-          {/* Filters */}
           <div className="flex gap-3">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg"
             >
-              <option value="all">All Status</option>
+              <option value="all">Status: All</option>
               <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
               <option value="suspended">Suspended</option>
             </select>
 
             <select
-              value={vipFilter}
-              onChange={(e) => setVipFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dope-orange focus:border-transparent"
+              value={verifiedFilter}
+              onChange={(e) => setVerifiedFilter(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg"
             >
-              <option value="all">All Customers</option>
-              <option value="vip">VIP Only</option>
-              <option value="regular">Regular Only</option>
+              <option value="all">Verification: All</option>
+              <option value="verified">Verified</option>
+              <option value="unverified">Unverified</option>
             </select>
           </div>
         </div>
@@ -346,131 +311,56 @@ export default function AdminCustomersPage() {
       {/* Customers Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="p-12 text-center">
-            <div className="animate-spin text-6xl mb-4">⏳</div>
-            <p className="text-gray-600">Loading customers...</p>
-          </div>
-        ) : filteredCustomers.length === 0 ? (
-          <div className="p-12 text-center">
-            <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No customers found</h3>
-            <p className="text-gray-600">
-              {searchQuery || statusFilter !== 'all' || vipFilter !== 'all'
-                ? "Try adjusting your search or filters."
-                : "No customers have been added yet."
-              }
-            </p>
-          </div>
+          <div className="p-12 text-center">Loading...</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-gray-50 border-b">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Customer
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Orders
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Total Spent
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Last Login
-                  </th>
-                  <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Verification</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Spend</th>
+                  <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200">
                 {filteredCustomers.map((customer) => (
                   <tr key={customer.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
-                            <span className="text-sm font-medium text-white">
-                              {customer.first_name[0]}{customer.last_name[0]}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {customer.first_name} {customer.last_name}
-                            {customer.vip_status && (
-                              <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                VIP
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            Joined {new Date(customer.created_at).toLocaleDateString()}
-                          </div>
-                        </div>
-                      </div>
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-gray-900">{customer.first_name} {customer.last_name}</div>
+                      <div className="text-sm text-gray-500">{customer.email}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{customer.email}</div>
-                      {customer.phone && (
-                        <div className="text-sm text-gray-500">{customer.phone}</div>
-                      )}
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => updateCustomer(customer.id, { age_verified: !customer.age_verified })}
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${
+                          customer.age_verified 
+                            ? 'bg-green-100 text-green-800 border-green-200' 
+                            : 'bg-red-100 text-red-800 border-red-200'
+                        } border`}
+                      >
+                        {customer.age_verified ? 'Verified ✓' : 'Unverified ✗'}
+                      </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       <select
                         value={customer.status}
-                        onChange={(e) => updateCustomerStatus(customer.id, e.target.value as Customer['status'])}
-                        className={`inline-flex px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(customer.status)}`}
+                        onChange={(e) => updateCustomer(customer.id, { status: e.target.value as any })}
+                        className="text-xs bg-gray-50 border rounded p-1"
                       >
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                         <option value="suspended">Suspended</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {customer.total_orders}
+                    <td className="px-6 py-4 text-sm font-bold text-gray-900">
+                      ${customer.total_spent.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {formatCurrency(customer.total_spent)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {customer.last_login
-                        ? new Date(customer.last_login).toLocaleDateString()
-                        : 'Never'
-                      }
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedCustomer(customer);
-                            setShowCustomerModal(true);
-                          }}
-                          className="text-blue-600 hover:text-blue-900 p-1"
-                          title="View Details"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button
-                          className="text-gray-600 hover:text-gray-900 p-1"
-                          title="Edit Customer"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => deleteCustomer(customer.id)}
-                          className="text-red-600 hover:text-red-900 p-1"
-                          title="Delete Customer"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+                    <td className="px-6 py-4 text-right">
+                      <button onClick={() => { setSelectedCustomer(customer); setShowCustomerModal(true); }} className="text-blue-600 hover:text-blue-900">
+                        <Eye className="w-5 h-5" />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -480,157 +370,57 @@ export default function AdminCustomersPage() {
         )}
       </div>
 
-      {/* Customer Details Modal */}
       {showCustomerModal && selectedCustomer && (
         <CustomerDetailsModal
           customer={selectedCustomer}
-          onClose={() => {
-            setShowCustomerModal(false);
-            setSelectedCustomer(null);
-          }}
+          onUpdate={(updates) => updateCustomer(selectedCustomer.id, updates)}
+          onClose={() => { setShowCustomerModal(false); setSelectedCustomer(null); }}
         />
       )}
     </div>
   );
 }
 
-// Customer Details Modal Component
-function CustomerDetailsModal({ customer, onClose }: { customer: Customer; onClose: () => void }) {
+function CustomerDetailsModal({ customer, onUpdate, onClose }: { customer: Customer; onUpdate: (u: Partial<Customer>) => void; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-start mb-6">
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
-                <span className="text-xl font-medium text-white">
-                  {customer.first_name[0]}{customer.last_name[0]}
-                </span>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {customer.first_name} {customer.last_name}
-                  {customer.vip_status && (
-                    <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                      VIP
-                    </span>
-                  )}
-                </h2>
-                <p className="text-gray-600">{customer.email}</p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
-            >
-              ×
-            </button>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl">
+        <div className="p-8">
+          <div className="flex justify-between items-start mb-8">
+            <h2 className="text-2xl font-black italic uppercase tracking-tighter">Customer <span className="text-dope-orange">Profile</span></h2>
+            <button onClick={onClose} className="text-zinc-400 hover:text-black">✕</button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Customer Info */}
+          <div className="grid grid-cols-2 gap-8 mb-8">
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Customer Information</h3>
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-gray-400" />
-                  <span className="text-sm text-gray-600">{customer.email}</span>
-                </div>
-                {customer.phone && (
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">{customer.phone}</span>
-                  </div>
-                )}
-                {customer.date_of_birth && (
-                  <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
-                      Born {new Date(customer.date_of_birth).toLocaleDateString()}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-gray-400" />
-                  <span className="text-sm text-gray-600">
-                    Joined {new Date(customer.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-                {customer.last_login && (
-                  <div className="flex items-center gap-3">
-                    <Eye className="w-5 h-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
-                      Last login {new Date(customer.last_login).toLocaleDateString()}
-                    </span>
-                  </div>
-                )}
+              <label className="text-xs font-black uppercase text-zinc-500 tracking-widest">Identity</label>
+              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100">
+                <p className="text-lg font-bold">{customer.first_name} {customer.last_name}</p>
+                <p className="text-zinc-500 text-sm">{customer.email}</p>
               </div>
             </div>
 
-            {/* Order Summary */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Order Summary</h3>
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Total Orders</span>
-                  <span className="text-lg font-semibold text-gray-900">{customer.total_orders}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Total Spent</span>
-                  <span className="text-lg font-semibold text-gray-900">
-                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(customer.total_spent)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Average Order</span>
-                  <span className="text-lg font-semibold text-gray-900">
-                    {customer.total_orders > 0
-                      ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(customer.total_spent / customer.total_orders)
-                      : '$0.00'
-                    }
-                  </span>
-                </div>
+              <label className="text-xs font-black uppercase text-zinc-500 tracking-widest">Compliance Status</label>
+              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100 flex items-center justify-between">
+                <span className="font-bold">Age Verified</span>
+                <button
+                  onClick={() => onUpdate({ age_verified: !customer.age_verified })}
+                  className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${
+                    customer.age_verified 
+                      ? 'bg-green-500 text-white shadow-[0_4px_12px_rgba(34,197,94,0.3)]' 
+                      : 'bg-zinc-200 text-zinc-500'
+                  }`}
+                >
+                  {customer.age_verified ? 'Verified ✓' : 'Unverified'}
+                </button>
               </div>
             </div>
           </div>
 
-          {/* Addresses */}
-          {customer.addresses && customer.addresses.length > 0 && (
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Addresses</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {customer.addresses.map((address) => (
-                  <div key={address.id} className="bg-gray-50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-medium text-gray-900 capitalize">{address.type} Address</span>
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      <p>{address.street}</p>
-                      <p>{address.city}, {address.state} {address.zip_code}</p>
-                      <p>{address.country}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Recent Orders */}
-          <div className="mt-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
-              <Link
-                href={`/admin/orders?customer=${customer.id}`}
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-              >
-                View All Orders →
-              </Link>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <ShoppingBag className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Order history will appear here</p>
-            </div>
+          <div className="grid grid-cols-2 gap-4">
+            <button className="p-4 border border-zinc-200 rounded-xl font-bold hover:bg-zinc-50">Edit Information</button>
+            <button className="p-4 bg-black text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors">Save Changes</button>
           </div>
         </div>
       </div>

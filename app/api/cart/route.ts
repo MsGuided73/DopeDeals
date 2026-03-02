@@ -53,13 +53,21 @@ function getSessionIdFromHeaders(request: NextRequest): string | null {
   return request.headers.get('x-session-id');
 }
 
+// Use a cookie-aware Supabase client for authentication detection
+import { supabaseServer } from '../../../lib/supabase-server';
+
 // Helper function to get current auth user
 async function getCurrentUser() {
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error || !user) {
+  try {
+    const { data: { user }, error } = await supabaseServer.auth.getUser();
+    if (error || !user) {
+      return null;
+    }
+    return user;
+  } catch (err) {
+    console.error('Error in getCurrentUser:', err);
     return null;
   }
-  return user;
 }
 
 // Get or create cart for user/session with session RLS
@@ -76,7 +84,8 @@ async function getOrCreateCart(sessionId?: string | null, userId?: string | null
     if (userId) {
       cartQuery = cartQuery.eq('user_id', userId);
     } else if (sessionId) {
-      cartQuery = cartQuery.eq('session_id', sessionId);
+      // Guest session: only access carts NOT yet claimed by a user
+      cartQuery = cartQuery.eq('session_id', sessionId).is('user_id', null);
     }
 
     const { data: existingCart } = await cartQuery;
@@ -116,7 +125,8 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
     if (userId) {
       cartQuery = cartQuery.eq('user_id', userId);
     } else if (sessionId) {
-      cartQuery = cartQuery.eq('session_id', sessionId);
+      // Guest session: only access items in carts NOT yet claimed by a user
+      cartQuery = cartQuery.eq('session_id', sessionId).is('user_id', null);
     }
 
     const { data: userCarts, error: cartError } = await cartQuery;
@@ -590,7 +600,7 @@ export async function PUT(request: NextRequest) {
     // Verify the cart item belongs to current user/session (additional server-side check)
     const cartData = cartItem.carts as any;
     const isOwner = (userId && cartData.user_id === userId) ||
-                   (sessionId && cartData.session_id === sessionId);
+                   (!userId && sessionId && cartData.session_id === sessionId && cartData.user_id === null);
 
     if (!isOwner) {
       return NextResponse.json(
@@ -679,8 +689,8 @@ export async function DELETE(request: NextRequest) {
       // For authenticated users, find all their carts (across all sessions)
       cartQuery = cartQuery.eq('user_id', userId);
     } else if (sessionId) {
-      // For anonymous users, find cart from current session
-      cartQuery = cartQuery.eq('session_id', sessionId);
+      // For anonymous users, find cart from current session that hasn't been claimed
+      cartQuery = cartQuery.eq('session_id', sessionId).is('user_id', null);
     }
 
     const { data: userCarts, error: cartQueryError } = await cartQuery;

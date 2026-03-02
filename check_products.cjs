@@ -31,6 +31,10 @@ async function checkProducts() {
       .eq('is_active', true);
 
     console.log('Active products count:', activeCount);
+    if (activeData && activeData.length > 0) {
+      console.log('Sample Active Product:');
+      console.log(`- ID: ${activeData[0].id}, Name: ${activeData[0].name}`);
+    }
 
   } catch (err) {
     console.error('Connection error:', err);

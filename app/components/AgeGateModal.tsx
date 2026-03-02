@@ -1,212 +1,268 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Shield, MapPin, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Shield, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useCompliance } from '../contexts/ComplianceContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const STORAGE_KEY = 'hw420_age_verified';
-const LOGO_URL = 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png';
+// Official Transparent Logo
+const OFFICIAL_LOGO = '/highway420-logo.png';
+// Mockup-accurate boutique background
+const BACKGROUND_URL = '/images/age-gate/mockup-boutique-bg.png';
 
 export default function AgeGateModal() {
   const [show, setShow] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [dobMonth, setDobMonth] = useState('');
+  const [dobDay, setDobDay] = useState('');
+  const [dobYear, setDobYear] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [zipError, setZipError] = useState('');
+  const [error, setError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const { setUserZipCode } = useCompliance();
 
   useEffect(() => {
-    // Check if user has already been verified
     const verified = localStorage.getItem(STORAGE_KEY);
-    // Also check for legacy key to avoid double-gating returning users
     const legacyVerified = localStorage.getItem('dope-city-age-verified');
     
     if (!verified && !legacyVerified) {
       setShow(true);
       document.body.style.overflow = 'hidden';
     } else if (legacyVerified && !verified) {
-      // Migrate legacy verification
       localStorage.setItem(STORAGE_KEY, 'true');
     }
   }, []);
 
+  const calculateAge = (m: number, d: number, y: number) => {
+    const today = new Date();
+    const birthDate = new Date(y, m - 1, d);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   const handleVerify = () => {
-    // Validate ZIP if provided
-    if (zipCode && !/^\d{5}$/.test(zipCode)) {
-      setZipError('Please enter a valid 5-digit ZIP code');
+    if (!dobMonth || !dobDay || !dobYear) {
+      setError('Please Enter Full DOB');
+      return;
+    }
+    const m = parseInt(dobMonth);
+    const d = parseInt(dobDay);
+    const y = parseInt(dobYear);
+    
+    // Strict validation for MM/DD/YYYY
+    if (isNaN(m) || isNaN(d) || isNaN(y) || m < 1 || m > 12 || d < 1 || d > 31 || y < 1900 || y > new Date().getFullYear()) {
+      setError('Invalid Date Formatting');
       return;
     }
 
-    setZipError('');
-    setIsVerifying(true);
-
-    // Save compliance state
-    if (zipCode) {
-      setUserZipCode(zipCode);
+    // Check if day is valid for the month
+    const daysInMonth = new Date(y, m, 0).getDate();
+    if (d > daysInMonth) {
+      setError('Invalid Day for Month');
+      return;
     }
 
-    // Informal gate verification
+    const age = calculateAge(m, d, y);
+    if (age < 21) {
+      setError('Strict 21+ Verification Required.');
+      return;
+    }
+    
+    setError('');
+    setIsVerifying(true);
+    if (zipCode) setUserZipCode(zipCode);
     localStorage.setItem(STORAGE_KEY, 'true');
-    localStorage.setItem('dope-city-age-verified', 'true'); // Keep legacy key for compatibility
-    
-    // Show success state briefly
+    localStorage.setItem('dope-city-age-verified', 'true');
     setIsSuccess(true);
-    
-    // Smooth transition out
     setTimeout(() => {
       document.body.style.overflow = '';
       setShow(false);
       setIsVerifying(false);
-    }, 1200);
-
-    // Optionally attempt to trigger formal AgeChecker verify
-    try {
-      const ac = (window as any).AgeChecker;
-      if (ac && typeof ac.verify === 'function') {
-        ac.verify();
-      }
-    } catch (e) {
-      // Widget not ready or disabled
-    }
-  };
-
-  const handleDeny = () => {
-    window.location.href = 'https://www.google.com';
+    }, 1500);
   };
 
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 overflow-hidden">
-      {/* Backdrop — Ultra-premium blurred texture */}
-      <div
-        className="absolute inset-0 z-0 backdrop-blur-3xl bg-black/60 transition-all duration-1000"
-        aria-hidden="true"
+    <AnimatePresence>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[99999] flex items-center justify-center p-4 overflow-hidden font-inter"
       >
-        {/* Dynamic Light Orbs for depth */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-dope-orange-500/10 blur-[150px] rounded-full animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-green-500/10 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
+        {/* BOUTIQUE INTERIOR BACKGROUND */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: `url("${BACKGROUND_URL}")`,
+            filter: 'brightness(0.3) contrast(1.1) blur(6px)',
+          }}
+        />
 
-      {/* Modal Container */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        className={`relative z-10 w-full max-w-xl bg-black/40 backdrop-blur-md rounded-[2.5rem] shadow-[0_0_100px_rgba(0,0,0,0.8)] border border-white/10 transition-all duration-700 transform ${isSuccess ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}`}
-      >
-        {/* Top Accent Bar */}
-        <div className="h-1 w-full bg-gradient-to-r from-transparent via-dope-orange-500/50 to-transparent rounded-t-[2.5rem]" />
-
-        <div className="p-8 md:p-12 flex flex-col items-center text-center">
-          {/* Brand Shield Logo */}
-          <div className="relative mb-8 group animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <div className="absolute -inset-8 bg-dope-orange-500/20 blur-3xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="relative z-10 p-4 bg-white/5 rounded-full border border-white/10 backdrop-blur-md shadow-2xl">
+        {/* Modal Container */}
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0, y: 40 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          transition={{ type: "spring", damping: 20, stiffness: 100 }}
+          className="relative z-10 w-full max-w-lg"
+        >
+          {/* THE MOCKUP GLASS CARD - ENHANCED DEPTH */}
+          <div className="relative bg-[#050505]/95 backdrop-blur-[40px] rounded-[3.5rem] border border-white/10 shadow-[0_100px_200px_-50px_rgba(0,0,0,1),0_0_100px_rgba(255,140,0,0.05)] px-10 pt-36 pb-14 overflow-visible">
+            
+            {/* THE "PREMIUM SHIELD" LOGO - MASSIVE OVERLAP & GLOW */}
+            <div className="absolute -top-28 left-1/2 -translate-x-1/2 w-60 h-60 z-30 pointer-events-none drop-shadow-[0_25px_50px_rgba(0,0,0,1)]">
+              {/* Diffuse backglow to simulate a 3D physical badge sitting on the glass */}
+              <div className="absolute inset-0 bg-white/10 blur-[80px] rounded-full scale-125 opacity-60" />
+              
               <img
-                src={LOGO_URL}
+                src={OFFICIAL_LOGO}
                 alt="Highway 420"
-                className="h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,107,0,0.3)] transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-contain brightness-[1.1] contrast-[1.05]"
               />
             </div>
-          </div>
 
-          {/* Verification Content */}
-          <div className="mb-10 space-y-4 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-200">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-dope-orange-500/10 border border-dope-orange-500/20">
-              <Shield className="w-3.5 h-3.5 text-dope-orange-500" />
-              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-dope-orange-400">Strictly 21+ Only</span>
-            </div>
-            
-            <h2 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.9]">
-              Verify Your <span className="text-transparent bg-clip-text bg-gradient-to-br from-dope-orange-400 via-amber-500 to-dope-orange-600">Access Point</span>
-            </h2>
-            
-            <p className="text-zinc-400 text-sm md:text-base max-w-sm mx-auto leading-relaxed font-medium">
-              Welcome to the Highway. You must be <span className="text-white">21 or older</span> to enter. Provide your ZIP to unlock local delivery.
-            </p>
-          </div>
+            {/* Top Shine/Glow Strip - ENHANCED HIERARCHY */}
+            <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent rounded-t-[3.5rem] pointer-events-none" />
 
-          {/* Form Area */}
-          <div className="w-full max-w-sm space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
-            {/* ZIP Input */}
-            <div className="relative group">
-              <div className={`absolute inset-0 bg-dope-orange-500/20 rounded-2xl blur-xl transition-opacity duration-500 ${zipCode.length === 5 ? 'opacity-100' : 'opacity-0'}`} />
-              <div className="relative flex items-center bg-zinc-900/80 border border-white/10 rounded-2xl focus-within:border-dope-orange-500/50 transition-all duration-300 backdrop-blur-xl">
-                <div className="pl-5 text-zinc-500">
-                  <MapPin className="w-5 h-5" />
+            <div className="flex flex-col items-center text-center space-y-12 relative z-10">
+              {/* Header Block - REFINED HIERARCHY */}
+              <div className="space-y-4">
+                <h2 className="text-4xl md:text-5xl font-[1000] text-white tracking-[0.08em] uppercase leading-none drop-shadow-lg">
+                  Age Verification
+                </h2>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="h-[1px] w-8 bg-zinc-800" />
+                  <p className="text-zinc-500 text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">
+                    Required For Access
+                  </p>
+                  <div className="h-[1px] w-8 bg-zinc-800" />
                 </div>
-                <input
-                  type="text"
-                  maxLength={5}
-                  placeholder="Enter Delivery ZIP (Recommended)"
-                  value={zipCode}
-                  onChange={(e) => {
-                    const val = e.target.value.replace(/\D/g, '');
-                    setZipCode(val);
-                    if (val.length === 5) setZipError('');
-                  }}
-                  className="w-full bg-transparent border-none text-white px-4 py-5 font-bold tracking-widest focus:outline-none placeholder:text-zinc-700 placeholder:tracking-normal placeholder:font-medium"
-                />
-                {zipCode.length === 5 && !zipError && (
-                  <div className="pr-5 text-green-500 animate-in zoom-in duration-500">
-                    <CheckCircle2 className="w-6 h-6 " />
-                  </div>
-                )}
               </div>
-              {zipError && (
-                <div className="absolute left-2 -bottom-6 flex items-center gap-1.5 text-dope-orange-500 text-[10px] font-black uppercase tracking-widest animate-in slide-in-from-top-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {zipError}
+
+              {/* Main Question - HIGH IMPACT */}
+              <div className="relative w-full py-2">
+                <h3 className="text-3xl md:text-4xl font-[950] text-white italic tracking-tighter uppercase">
+                  Are you over 21?
+                </h3>
+              </div>
+
+              {/* Form Grid - UPDATED MM/DD/YYYY Logic & SUNKEN DEPTH */}
+              <div className="w-full space-y-14">
+                <div className="grid grid-cols-2 gap-8">
+                  {/* DOB Column - NOW MM / DD / YYYY */}
+                  <div className="space-y-4">
+                    <div className="h-18 bg-black/80 border border-white/[0.05] rounded-3xl flex items-center justify-center px-6 focus-within:border-[#ff8c00]/50 shadow-[inset_0_8px_16px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.05)] transition-all">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          placeholder="MM"
+                          maxLength={2}
+                          value={dobMonth}
+                          onChange={(e) => setDobMonth(e.target.value.replace(/\D/g, ''))}
+                          className="w-10 bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
+                        />
+                        <span className="text-zinc-800 font-black text-xl">/</span>
+                        <input
+                          type="text"
+                          placeholder="DD"
+                          maxLength={2}
+                          value={dobDay}
+                          onChange={(e) => setDobDay(e.target.value.replace(/\D/g, ''))}
+                          className="w-10 bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
+                        />
+                        <span className="text-zinc-800 font-black text-xl">/</span>
+                        <input
+                          type="text"
+                          placeholder="YYYY"
+                          maxLength={4}
+                          value={dobYear}
+                          onChange={(e) => setDobYear(e.target.value.replace(/\D/g, ''))}
+                          className="w-18 bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
+                        />
+                      </div>
+                    </div>
+                    <span className="block text-[11px] font-[900] text-zinc-600 tracking-[0.3em] uppercase">Birth Date</span>
+                  </div>
+
+                  {/* ZIP Column - SUNKEN DEPTH */}
+                  <div className="space-y-4">
+                    <div className="h-18 bg-black/80 border border-white/[0.05] rounded-3xl flex items-center justify-center px-6 focus-within:border-[#ff8c00]/50 shadow-[inset_0_8px_16px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.05)] transition-all">
+                      <input
+                        type="text"
+                        placeholder="ZIP CODE"
+                        maxLength={5}
+                        value={zipCode}
+                        onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
+                        className="w-full bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
+                      />
+                    </div>
+                    <span className="block text-[11px] font-[900] text-zinc-600 tracking-[0.3em] uppercase text-center">Zip Code</span>
+                  </div>
                 </div>
-              )}
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col gap-3 pt-4">
-              <button
-                onClick={handleVerify}
-                disabled={isVerifying || isSuccess}
-                className="group relative w-full py-5 bg-white text-black font-black uppercase tracking-[0.3em] rounded-2xl overflow-hidden transition-all duration-300 hover:bg-dope-orange-500 hover:text-white hover:shadow-[0_0_30px_rgba(255,107,0,0.4)] active:scale-95 disabled:opacity-50"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  {isSuccess ? (
-                    'Welcome to the Highway'
-                  ) : isVerifying ? (
-                    'Opening Gates...'
-                  ) : (
-                    <>
-                      Enter Site
-                      <ChevronRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
-                    </>
+                {/* Status Feedback */}
+                <AnimatePresence mode="wait">
+                  {error && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-[#ff8c00] text-[11px] font-black uppercase tracking-widest bg-[#ff8c00]/5 py-3 rounded-2xl border border-[#ff8c00]/10 drop-shadow-sm"
+                    >
+                      {error}
+                    </motion.div>
                   )}
-                </span>
-              </button>
+                </AnimatePresence>
 
-              <button
-                onClick={handleDeny}
-                className="w-full py-4 text-zinc-600 hover:text-white text-[10px] font-black uppercase tracking-[0.25em] transition-colors"
-              >
-                Exit — Under 21
-              </button>
+                {/* Primary Action - ULTRA GLOSSY 3D BUTTON */}
+                <div className="space-y-6 pt-4">
+                  <button
+                    onClick={handleVerify}
+                    className="group relative w-full h-[88px] bg-gradient-to-b from-[#ff9e22] to-[#e65c00] rounded-[2.8rem] overflow-hidden shadow-[0_25px_60px_-10px_rgba(255,140,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset] hover:scale-[1.02] active:scale-95 transition-all duration-300"
+                  >
+                    {/* Mirror-Shine Gloss Overlay */}
+                    <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white/60 via-white/20 to-transparent opacity-90 pointer-events-none" />
+                    
+                    {/* Inner 3D Bevel Lighting */}
+                    <div className="absolute inset-0 rounded-[2.8rem] shadow-[inset_0_4px_12px_rgba(255,255,255,0.4),inset_0_-4px_12px_rgba(0,0,0,0.3)] pointer-events-none border-t border-white/40" />
+                    
+                    <span className="relative z-10 text-white font-[1000] text-3xl md:text-4xl uppercase tracking-[0.25em] drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]">
+                      {isSuccess ? <CheckCircle2 className="w-12 h-12 mx-auto animate-bounce" /> : 'Enter Site'}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => window.location.href = 'https://google.com'}
+                    className="w-full h-14 border-2 border-white/[0.03] rounded-full text-zinc-700 font-black text-[11px] uppercase tracking-[0.6em] hover:bg-white/[0.03] hover:text-zinc-400 transition-all"
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+                {/* Regulatory Footer - SUBTLE & REFINED HIERARCHY */}
+                <div className="pt-12 space-y-12">
+                  <div className="max-w-[340px] mx-auto space-y-4">
+                    <p className="text-zinc-700 text-[10px] leading-relaxed font-[900] uppercase tracking-[0.2em] opacity-40 italic">
+                      All consumers must be at least 21 to enter Highway420.
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center justify-center gap-16 text-[9px] font-black text-zinc-800 uppercase tracking-[0.3em]">
+                    <a href="/terms" className="hover:text-zinc-400 transition-colors">Terms</a>
+                    <a href="/privacy" className="hover:text-zinc-400 transition-colors">Privacy</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* High-end Footer */}
-          <div className="mt-12 pt-8 border-t border-white/5 w-full flex items-center justify-between text-[10px] font-black text-zinc-700 uppercase tracking-[0.2em] animate-in fade-in duration-1000 delay-700">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
-              Encrypted Session
-            </div>
-            <div className="flex items-center gap-6">
-              <a href="/terms" className="hover:text-dope-orange-500 transition-colors">Terms</a>
-              <a href="/privacy" className="hover:text-dope-orange-500 transition-colors">Privacy</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Success Success Shine Effect */}
-      <div className={`fixed inset-0 z-[100] bg-white transition-opacity duration-1000 pointer-events-none ${isSuccess ? 'opacity-10' : 'opacity-0'}`} />
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

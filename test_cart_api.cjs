@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+// Node 18+ has native fetch
 
 async function testCartAPI() {
   try {
@@ -6,7 +6,7 @@ async function testCartAPI() {
 
     // Test data
     const testSessionId = 'test_session_' + Date.now();
-    const testProductId = '72b56efd-6419-4e60-9283-af75786040fa'; // From our earlier test
+    const testProductId = '45b14fa9-777f-478d-be1e-1493df28fd7f'; // Cookies 1g THC-A Flower (Laughing Gas)
 
     console.log('1. Testing GET cart (empty cart)...');
     const getResponse = await fetch('http://localhost:3000/api/cart', {

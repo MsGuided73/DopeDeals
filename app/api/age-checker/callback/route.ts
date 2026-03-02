@@ -28,15 +28,48 @@ export async function POST(request: NextRequest) {
       verified: result.verified,
       transactionId: result.transactionId,
       reason: result.reason,
+      metadata: body.metadata
     });
 
-    // TODO: If orderId is in the metadata, log the result against the order in Supabase
-    // const orderId = body.metadata?.orderId;
-    // if (orderId) { await updateOrderAgeVerification(orderId, result); }
+    // If we have an email in metadata, update that user in Supabase
+    // AgeChecker allows passing metadata during verification
+    const email = body.metadata?.email;
+    
+    if (result.verified && email) {
+      const supabase = createAdminClient();
+      
+      // Update user metadata via admin client (service role)
+      const { data: { users }, error: listError } = await supabase.auth.admin.listUsers();
+      
+      if (!listError) {
+        const user = users.find((u: any) => u.email === email);
+        if (user) {
+          await supabase.auth.admin.updateUserById(user.id, {
+            user_metadata: {
+              ...user.user_metadata,
+              age_verified: true,
+              age_verified_at: new Date().toISOString(),
+              age_checker_transaction_id: result.transactionId,
+              age_checker_status: 'verified'
+            }
+          });
+          console.log(`[AgeChecker Callback] Successfully updated user metadata for ${email}`);
+        }
+      }
+    }
 
     return NextResponse.json({ received: true, verified: result.verified });
   } catch (error: any) {
     console.error('[AgeChecker Callback] Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
+}
+
+// Helper to create Supabase admin client
+function createAdminClient() {
+  const { createClient } = require('@supabase/supabase-js');
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
 }

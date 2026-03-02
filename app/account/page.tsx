@@ -208,7 +208,7 @@ export default function AccountPage() {
               </p>
               {!user?.user_metadata?.age_verified && (
                 <Link 
-                  href="/auth/verify"
+                  href="/age-verification"
                   className="inline-flex items-center text-dope-orange-600 font-semibold hover:text-dope-orange-700"
                 >
                   Verify Now <span className="ml-2">→</span>
