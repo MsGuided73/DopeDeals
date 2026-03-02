@@ -11,8 +11,6 @@ export default function ReviewPage() {
   const { cart, isLoading } = useCart();
   const router = useRouter();
   
-  console.log('[ReviewPage] Render state:', { isLoading, hasCart: !!cart, itemCount: cart?.items?.length });
-  console.log('[ReviewPage] Icons state:', { Truck: !!Truck, ArrowLeft: !!ArrowLeft, CreditCard: !!CreditCard, Shield: !!Shield });
   const [shippingData, setShippingData] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
@@ -151,6 +149,10 @@ export default function ReviewPage() {
       }
 
       if (data.redirectUrl) {
+        // Save orderId so confirmation page can find it if KajaPay omits it from redirect params
+        if (data.orderId || data.order?.id) {
+          sessionStorage.setItem('pendingOrderId', data.orderId || data.order?.id);
+        }
         window.location.href = data.redirectUrl;
       } else if (data.success || data.orderId) {
         router.push(`/checkout/confirmation?orderId=${data.orderId || data.order?.id || 'pending'}`);

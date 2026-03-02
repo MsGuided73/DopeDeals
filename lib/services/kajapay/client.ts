@@ -29,8 +29,10 @@ export class KajaPayClient {
   private config: KajaPayConfig;
 
   constructor() {
-    // Use sandbox URL for development, production URL for production
-    const baseUrl = process.env.NODE_ENV === 'production' 
+    // Use KAJAPAY_ENVIRONMENT to control sandbox/production — NOT NODE_ENV.
+    // NODE_ENV is always 'production' on Coolify self-hosted builds regardless
+    // of environment, so we use an explicit flag instead.
+    const baseUrl = process.env.KAJAPAY_ENVIRONMENT === 'production'
       ? 'https://api.kajapaygateway.com/api/v2/'
       : 'https://api.sandbox.kajapaygateway.com/api/v2/';
 

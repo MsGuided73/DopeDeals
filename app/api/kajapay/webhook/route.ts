@@ -6,173 +6,179 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Verify Kajapay webhook signature
-function verifyWebhookSignature(signature: string, payload: string): boolean {
-  // KAJAPAY_WEBHOOK_SECRET should be set in environment variables
-  const expectedSignature = process.env.KAJAPAY_WEBHOOK_SECRET;
-
-  if (!expectedSignature) {
-    console.error('KAJAPAY_WEBHOOK_SECRET not configured');
+// Verify KajaPay webhook signature
+// In sandbox mode KAJAPAY_WEBHOOK_SECRET won't be set — we allow and warn.
+// In production, a mismatch returns 401.
+function verifyWebhookSignature(signature: string, _payload: string): boolean {
+  const secret = process.env.KAJAPAY_WEBHOOK_SECRET;
+  if (!secret) {
+    console.warn('[KajaPay Webhook] KAJAPAY_WEBHOOK_SECRET not set — skipping signature check (sandbox mode).');
+    return true;
+  }
+  if (signature !== secret) {
+    console.error('[KajaPay Webhook] Signature mismatch — rejecting.');
     return false;
   }
-
-  // Basic signature verification (implement proper HMAC verification for production)
-  return signature === expectedSignature;
+  return true;
 }
 
-// Send admin notification email (disabled until Resend is configured)
-async function sendAdminNotification(order: any, eventType: string) {
+// Log every raw event for audit trail
+async function logWebhookEvent(eventType: string, transactionId: number | undefined, orderId: string | undefined, payload: any) {
   try {
-    // For now, just log the notification - implement email when Resend is configured
-    console.log(`🔔 ${eventType}: Order ${order.id} - ${order.customer_first_name} ${order.customer_last_name} - $${order.total_amount.toFixed(2)}`);
-
-    // TODO: Re-enable when Resend API is configured
-    // const { data: adminUser } = await supabase
-    //   .from('profiles')
-    //   .select('email')
-    //   .eq('role', 'admin')
-    //   .single();
-    //
-    // if (!adminUser?.email) {
-    //   console.warn('No admin email found for notifications');
-    //   return;
-    // }
-    //
-    // const adminEmail = adminUser.email;
-    //
-    // await resend.emails.send({ ... });
-  } catch (error) {
-    console.error('Failed to send admin notification:', error);
+    await supabase.from('kajapay_webhook_events').insert({
+      event_type: eventType,
+      kajapay_transaction_id: transactionId ?? null,
+      order_id: orderId ?? null,
+      payload,
+      processed: false,
+    });
+  } catch (e) {
+    console.error('[KajaPay Webhook] Failed to log event:', e);
   }
 }
 
-// Handle payment completed
-async function handlePaymentCompleted(paymentIntent: any) {
+// Mark webhook event processed
+async function markProcessed(kajaPayTransactionId: number | undefined, success: boolean, errorMsg?: string) {
+  if (!kajaPayTransactionId) return;
   try {
-    console.log('Processing payment completed for:', paymentIntent);
+    await supabase
+      .from('kajapay_webhook_events')
+      .update({
+        processed: true,
+        processed_at: new Date().toISOString(),
+        error_message: errorMsg ?? null,
+      })
+      .eq('kajapay_transaction_id', kajaPayTransactionId)
+      .eq('processed', false);
+  } catch (e) {
+    console.error('[KajaPay Webhook] Failed to mark processed:', e);
+  }
+}
 
-    // Find payment record by payment intent ID
-    const { data: payment, error: paymentQueryError } = await supabase
-      .from('payments')
-      .select('id, order_id')
-      .eq('payment_intent_id', paymentIntent.id)
-      .single();
+// Handle approved transaction
+async function handleTransactionApproved(body: any): Promise<NextResponse> {
+  try {
+    // KajaPay sends orderId (our internal order id) in the postback
+    const orderId: string | undefined = body.orderId || body.order_id;
+    const kajaPayTransactionId: number | undefined = body.transactionId ?? body.transaction_id;
+    const authCode: string | undefined = body.authCode ?? body.auth_code;
+    const referenceNumber: number | undefined = body.referenceNumber ?? body.reference_number;
+    const amount: number | undefined = body.amount;
+    const responseCode: string | undefined = body.responseCode ?? body.response_code;
+    const maskedCard: string | undefined = body.maskedCardNumber ?? body.masked_card_number;
+    const cardType: string | undefined = body.cardType ?? body.card_type;
 
-    if (paymentQueryError || !payment?.order_id) {
-      console.error('Payment not found for payment intent:', paymentIntent.id);
-      return NextResponse.json({ error: 'Payment not found' }, { status: 404 });
+    if (!orderId) {
+      console.error('[KajaPay Webhook] Missing orderId in approved payload');
+      return NextResponse.json({ error: 'Missing orderId' }, { status: 400 });
     }
 
-    // Update order status to paid
+    // 1. Update order to paid
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .update({
         payment_status: 'paid',
-        status: 'processing', // Move to processing after payment
-        paid_at: new Date().toISOString()
+        status: 'processing',
+        transaction_id: String(kajaPayTransactionId),
+        updated_at: new Date().toISOString(),
       })
-      .eq('id', payment.order_id)
+      .eq('id', orderId)
       .select()
       .single();
 
-    if (orderError) {
-      console.error('Error updating order payment status:', orderError);
-      return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
+    if (orderError || !order) {
+      console.error('[KajaPay Webhook] Failed to update order:', orderError?.message, 'orderId:', orderId);
+      return NextResponse.json({ error: 'Order update failed' }, { status: 500 });
     }
 
-    // Update payment record
-    await supabase
-      .from('payments')
-      .update({
-        status: 'completed',
-        transaction_id: paymentIntent.transaction_id,
-        completed_at: new Date().toISOString()
-      })
-      .eq('id', payment.id);
-
-    // Add status history
-    await supabase
-      .from('order_status_history')
-      .insert({
-        order_id: order.id,
-        from_status: 'pending',
-        to_status: 'processing',
-        notes: 'Payment completed - moved to processing'
-      });
-
-    // Send admin notification
-    await sendAdminNotification(order, 'Payment Completed');
-
-    console.log('Payment completed successfully for order:', order.id);
-
-    return NextResponse.json({
-      success: true,
-      orderId: order.id,
-      message: 'Payment processed successfully'
+    // 2. Insert into payment_transactions
+    await supabase.from('payment_transactions').insert({
+      order_id: orderId,
+      user_id: order.user_id,
+      kajapay_transaction_id: kajaPayTransactionId,
+      kajapay_reference_number: referenceNumber,
+      kajapay_order_number: order.order_number,
+      transaction_type: 'charge',
+      amount: amount ?? Number(order.total_amount),
+      currency: 'USD',
+      status: 'approved',
+      kajapay_status_code: responseCode,
+      kajapay_response_text: 'APPROVED',
+      auth_code: authCode,
+      masked_card_number: maskedCard,
+      card_type: cardType,
+      gateway_response: body,
+      settled_at: new Date().toISOString(),
     });
 
-  } catch (error) {
-    console.error('Payment completion error:', error);
+    // 3. Status history
+    await supabase.from('order_status_history').insert({
+      order_id: orderId,
+      from_status: 'pending',
+      to_status: 'processing',
+      notes: `KajaPay payment approved — transactionId: ${kajaPayTransactionId}`,
+    });
+
+    console.log(`[KajaPay Webhook] ✅ Payment approved — orderId: ${orderId}, transactionId: ${kajaPayTransactionId}`);
+    await markProcessed(kajaPayTransactionId, true);
+
+    return NextResponse.json({ success: true, orderId, transactionId: kajaPayTransactionId });
+  } catch (error: any) {
+    console.error('[KajaPay Webhook] handleTransactionApproved error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-// Handle payment failed
-async function handlePaymentFailed(paymentIntent: any) {
+// Handle declined transaction
+async function handleTransactionDeclined(body: any): Promise<NextResponse> {
   try {
-    console.log('Processing payment failed for:', paymentIntent);
+    const orderId: string | undefined = body.orderId || body.order_id;
+    const kajaPayTransactionId: number | undefined = body.transactionId ?? body.transaction_id;
+    const responseCode: string | undefined = body.responseCode ?? body.response_code;
+    const responseText: string | undefined = body.responseText ?? body.response_text;
+    const amount: number | undefined = body.amount;
 
-    // Find payment record by payment intent ID
-    const { data: payment, error: paymentQueryError } = await supabase
-      .from('payments')
-      .select('id, order_id')
-      .eq('payment_intent_id', paymentIntent.id)
-      .single();
-
-    if (paymentQueryError || !payment?.order_id) {
-      console.error('Payment not found for failed payment intent:', paymentIntent.id);
-      return NextResponse.json({ error: 'Payment not found' }, { status: 404 });
+    if (!orderId) {
+      console.error('[KajaPay Webhook] Missing orderId in declined payload');
+      return NextResponse.json({ error: 'Missing orderId' }, { status: 400 });
     }
 
-    // Update payment status to failed
-    await supabase
-      .from('payments')
-      .update({
-        status: 'failed',
-        failed_at: new Date().toISOString()
-      })
-      .eq('id', payment.id);
-
-    // Add status history for failure
-    await supabase
-      .from('order_status_history')
-      .insert({
-        order_id: payment.order_id,
-        from_status: 'pending',
-        to_status: 'cancelled',
-        notes: 'Payment failed - order cancelled'
-      });
-
-    // Get order details for notification
+    // Insert declined transaction record
     const { data: order } = await supabase
       .from('orders')
-      .select('*')
-      .eq('id', payment.order_id)
+      .select('user_id, order_number, total_amount')
+      .eq('id', orderId)
       .single();
 
-    if (order) {
-      await sendAdminNotification(order, 'Payment Failed');
-    }
-
-    console.log('Payment failure handled for order:', payment.order_id);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Payment failure handled'
+    await supabase.from('payment_transactions').insert({
+      order_id: orderId,
+      user_id: order?.user_id,
+      kajapay_transaction_id: kajaPayTransactionId,
+      kajapay_order_number: order?.order_number,
+      transaction_type: 'charge',
+      amount: amount ?? Number(order?.total_amount ?? 0),
+      currency: 'USD',
+      status: 'declined',
+      kajapay_status_code: responseCode,
+      kajapay_response_text: responseText ?? 'DECLINED',
+      error_message: `Declined with code: ${responseCode}`,
+      gateway_response: body,
     });
 
-  } catch (error) {
-    console.error('Payment failure error:', error);
+    // Add status history
+    await supabase.from('order_status_history').insert({
+      order_id: orderId,
+      from_status: 'pending',
+      to_status: 'cancelled',
+      notes: `KajaPay payment declined — code: ${responseCode}, transactionId: ${kajaPayTransactionId}`,
+    });
+
+    console.log(`[KajaPay Webhook] ❌ Payment declined — orderId: ${orderId}, code: ${responseCode}`);
+    await markProcessed(kajaPayTransactionId, false, `Declined: ${responseCode}`);
+
+    return NextResponse.json({ success: true, message: 'Decline recorded' });
+  } catch (error: any) {
+    console.error('[KajaPay Webhook] handleTransactionDeclined error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -180,42 +186,57 @@ async function handlePaymentFailed(paymentIntent: any) {
 // Main webhook handler
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const rawBody = await request.text();
     const signature = request.headers.get('x-kajapay-signature') || '';
 
-    console.log('Received Kajapay webhook:', body);
-
-    // Verify webhook signature (implement proper verification)
-    // if (!verifyWebhookSignature(signature, JSON.stringify(body))) {
-    //   console.error('Invalid webhook signature');
-    //   return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-    // }
-
-    // Process different event types
-    switch (body.event_type) {
-      case 'payment.completed':
-        return await handlePaymentCompleted(body.data);
-      case 'payment.failed':
-        return await handlePaymentFailed(body.data);
-      default:
-        console.log('Unhandled webhook event type:', body.event_type);
-        return NextResponse.json({ success: true, message: 'Event type not handled' });
+    // Parse body
+    let body: any;
+    try {
+      body = JSON.parse(rawBody);
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
-  } catch (error) {
-    console.error('Webhook processing error:', error);
-    return NextResponse.json(
-      { error: 'Webhook processing failed' },
-      { status: 500 }
-    );
+    console.log('[KajaPay Webhook] Received event:', body.event_type || body.eventType, body);
+
+    // Verify signature (skipped in sandbox when secret not set)
+    if (!verifyWebhookSignature(signature, rawBody)) {
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    }
+
+    // Normalize event type (KajaPay may use camelCase or dot-notation)
+    const eventType: string = body.event_type || body.eventType || '';
+    const transactionId: number | undefined = body.transactionId ?? body.transaction_id;
+    const orderId: string | undefined = body.orderId || body.order_id;
+
+    // Log event for audit
+    await logWebhookEvent(eventType, transactionId, orderId, body);
+
+    // Route by event type — KajaPay uses transaction.approved / transaction.declined
+    switch (eventType) {
+      case 'transaction.approved':
+      case 'payment.completed': // legacy alias
+        return await handleTransactionApproved(body);
+
+      case 'transaction.declined':
+      case 'payment.failed': // legacy alias
+        return await handleTransactionDeclined(body);
+
+      default:
+        console.log('[KajaPay Webhook] Unhandled event type:', eventType);
+        return NextResponse.json({ success: true, message: 'Event type not handled' });
+    }
+  } catch (error: any) {
+    console.error('[KajaPay Webhook] Top-level error:', error);
+    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
   }
 }
 
-// Verify webhook endpoint for Kajapay dashboard
+// Health check for KajaPay dashboard
 export async function GET() {
   return NextResponse.json({
     success: true,
-    message: 'Kajapay webhook endpoint is active',
+    message: 'KajaPay webhook endpoint is active',
     timestamp: new Date().toISOString()
   });
 }

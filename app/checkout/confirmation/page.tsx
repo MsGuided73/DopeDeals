@@ -1,87 +1,161 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { CheckCircle, Loader2, Mail } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useEffect, useState, useRef } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { CheckCircle, Loader2, XCircle, Mail } from 'lucide-react';
 
 export default function ConfirmationPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const orderId = searchParams.get('orderId');
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
+  const router = useRouter();
+  const [state, setState] = useState<'processing' | 'success' | 'failed' | 'resending'>('processing');
+  const [errorReason, setErrorReason] = useState('');
+  const [resent, setResent] = useState(false);
+  const ran = useRef(false);
 
   useEffect(() => {
+    if (ran.current) return;
+    ran.current = true;
+
+    // KajaPay redirects back with these query params after hosted payment
+    const status = searchParams.get('status');           // 'approved' | 'declined' | 'cancelled'
+    const kajaPayTxId = searchParams.get('transactionId') || searchParams.get('transaction_id');
+    const referenceNumber = searchParams.get('referenceNumber') || searchParams.get('reference_number');
+    const orderId = searchParams.get('orderId') || searchParams.get('order_id') || sessionStorage.getItem('pendingOrderId');
+    const responseCode = searchParams.get('responseCode') || searchParams.get('response_code');
+
     if (!orderId) {
-      router.push('/checkout/failed?reason=missing_order');
+      // No order context — likely a direct page visit
+      setState('failed');
+      setErrorReason('No order found. Please return to the cart and try again.');
+      return;
     }
-  }, [orderId, router]);
 
-  const handleResendEmail = async () => {
-    setIsSendingEmail(true);
+    if (!status) {
+      // Params missing — something went wrong on redirect
+      setState('failed');
+      setErrorReason('Payment result unknown. Contact support with your order details.');
+      return;
+    }
+
+    const normalizedStatus = status.toLowerCase();
+
+    if (normalizedStatus === 'approved' || normalizedStatus === 'success') {
+      // Confirm the payment server-side
+      confirmPayment(orderId, kajaPayTxId, referenceNumber, responseCode);
+    } else if (normalizedStatus === 'cancelled') {
+      // User cancelled — go back to review
+      router.replace('/checkout/review');
+    } else {
+      // Declined or unknown
+      setState('failed');
+      setErrorReason(responseCode ? `Payment declined (code: ${responseCode}). Please try a different card.` : 'Payment declined. Please try again.');
+    }
+  }, [searchParams, router]);
+
+  async function confirmPayment(
+    orderId: string,
+    transactionId: string | null,
+    referenceNumber: string | null,
+    responseCode: string | null
+  ) {
     try {
-      // Setup the actual Resend interaction endpoint when email API is ready
-      // const res = await fetch(`/api/email/resend?orderId=${orderId}`);
-      // if (!res.ok) throw new Error('Failed to send');
-      
-      // Simulate network request
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      setEmailSent(true);
-      toast.success('Confirmation email resent successfully!');
-    } catch (error) {
-      toast.error('Failed to resend email. Please try again later.');
-    } finally {
-      setIsSendingEmail(false);
+      const res = await fetch('/api/checkout/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, transactionId, referenceNumber, responseCode, status: 'approved' }),
+      });
+
+      if (res.ok) {
+        // Clear session storage and send to success
+        sessionStorage.removeItem('pendingOrderId');
+        sessionStorage.removeItem('checkoutData');
+        router.replace(`/checkout/success?orderId=${orderId}`);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setState('failed');
+        setErrorReason(data.error || 'Failed to confirm payment. Your card may have been charged — please contact support.');
+      }
+    } catch {
+      setState('failed');
+      setErrorReason('Network error while confirming payment. Please contact support immediately.');
     }
-  };
+  }
 
-  const proceedToSuccess = () => {
-    router.push(`/checkout/success?orderId=${orderId}`);
-  };
-
-  if (!orderId) {
-    return <div className="flex justify-center items-center my-32"><Loader2 className="animate-spin text-primary w-12 h-12" /></div>;
+  async function handleResend() {
+    const orderId = searchParams.get('orderId') || searchParams.get('order_id') || sessionStorage.getItem('pendingOrderId');
+    if (!orderId) return;
+    setState('resending');
+    await fetch('/api/orders/resend-confirmation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId }),
+    });
+    setResent(true);
+    setState('failed'); // keep on page
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
-      <div className="flex justify-center mb-6">
-        <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center">
-          <CheckCircle className="w-12 h-12 text-green-500" />
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-10 text-center space-y-6">
+
+        {state === 'processing' && (
+          <>
+            <Loader2 className="mx-auto w-14 h-14 text-green-500 animate-spin" />
+            <h1 className="text-2xl font-bold text-gray-900">Confirming Your Payment</h1>
+            <p className="text-gray-500 text-sm">Please wait — we&apos;re verifying your transaction with KajaPay...</p>
+          </>
+        )}
+
+        {state === 'resending' && (
+          <>
+            <Loader2 className="mx-auto w-14 h-14 text-blue-500 animate-spin" />
+            <h1 className="text-2xl font-bold text-gray-900">Resending Confirmation</h1>
+          </>
+        )}
+
+        {state === 'success' && (
+          <>
+            <CheckCircle className="mx-auto w-14 h-14 text-green-500" />
+            <h1 className="text-2xl font-bold text-gray-900">Payment Confirmed!</h1>
+            <p className="text-gray-500 text-sm">Redirecting you to your order summary...</p>
+          </>
+        )}
+
+        {state === 'failed' && (
+          <>
+            <XCircle className="mx-auto w-14 h-14 text-red-500" />
+            <h1 className="text-2xl font-bold text-gray-900">Payment Issue</h1>
+            <p className="text-gray-600 text-sm leading-relaxed">{errorReason}</p>
+
+            <div className="flex flex-col gap-3 pt-2">
+              <button
+                onClick={() => router.push('/checkout/review')}
+                className="w-full py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+              >
+                Try Again
+              </button>
+              {!resent && (
+                <button
+                  onClick={handleResend}
+                  className="w-full py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  Resend Confirmation Email
+                </button>
+              )}
+              {resent && (
+                <p className="text-green-600 text-sm font-medium">Confirmation email sent!</p>
+              )}
+              <a
+                href="mailto:support@highway420store.com"
+                className="text-sm text-gray-400 hover:text-gray-600 transition"
+              >
+                Contact Support
+              </a>
+            </div>
+          </>
+        )}
       </div>
-      
-      <h1 className="text-4xl font-bold mb-4 font-heading tracking-widest uppercase text-white">Payment Processing...</h1>
-      <p className="text-gray-400 mb-8 text-lg">
-        Your payment has been handed off successfully. We are awaiting final confirmation from the merchant.
-      </p>
-
-      <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-xl shadow-2xl mb-8 text-left space-y-4">
-         <h2 className="text-xl font-bold text-white border-b border-zinc-800 pb-2">Order Details</h2>
-         <p className="text-gray-300"><span className="font-semibold text-white">Order ID:</span> {orderId}</p>
-         <p className="text-gray-300">A receipt is being prepared and will be sent to the email provided during shipping.</p>
-         
-         <div className="pt-4 mt-4 border-t border-zinc-800 flex items-center gap-4">
-            <button 
-              onClick={handleResendEmail} 
-              disabled={isSendingEmail || emailSent}
-              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded transition-colors text-sm disabled:opacity-50"
-            >
-              {isSendingEmail ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
-              {emailSent ? 'Email Sent' : 'Resend Email Receipt'}
-            </button>
-         </div>
-      </div>
-
-      <button 
-        onClick={proceedToSuccess}
-        className="px-8 py-3 bg-primary text-white font-bold uppercase tracking-widest rounded transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)]"
-      >
-        View Final Order Status
-      </button>
-
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../contexts/CartContext';
 import { ArrowRight, Truck } from 'lucide-react';
@@ -10,8 +10,7 @@ export default function ShippingPage() {
   const { cart, isLoading } = useCart();
   const router = useRouter();
 
-  console.log('[ShippingPage] Render state:', { isLoading, hasCart: !!cart, itemCount: cart?.items?.length });
-  console.log('[ShippingPage] Icons state:', { Truck: !!Truck, ArrowRight: !!ArrowRight });
+  // Dev-only render log — removed from production to prevent log spam
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -56,15 +55,17 @@ export default function ShippingPage() {
     };
 
     // Polling for AgeChecker availability if not immediately present
+    // AgeChecker.Net popup.js exposes window.AgeCheckerPopup (not window.AgeChecker)
     let pollCount = 0;
     const checkService = () => {
-      if ((window as any).AgeChecker) {
+      if ((window as any).AgeCheckerPopup || (window as any).AgeChecker) {
         setIsServiceLoading(false);
-      } else if (pollCount < 30) { // Poll for 15 seconds max (match AgeGate)
+      } else if (pollCount < 20) { // 10 seconds max
         pollCount++;
         setTimeout(checkService, 500);
       } else {
-        setIsServiceLoading(false); // Stop loading even if it failed, handle in submit
+        // Widget didn't load — don't block the UI, handle gracefully on submit
+        setIsServiceLoading(false);
       }
     };
     checkService();
@@ -73,22 +74,26 @@ export default function ShippingPage() {
     return () => window.removeEventListener('agechecker:verified', handleVerified);
   }, []);
 
+  // Stable product ID string via useMemo — avoids new array reference on every render
+  const productIdString = useMemo(
+    () => cart?.items?.map(i => i.productId).join(',') ?? '',
+    [cart?.items]
+  );
+
   // Effect to check ZIP eligibility
   useEffect(() => {
     const checkZip = async () => {
-      if (form.shippingZip.length === 5 && cart?.items.length) {
+      if (form.shippingZip.length === 5 && productIdString) {
         setIsCheckingZip(true);
         try {
-          const productIds = cart.items.map(i => i.productId).join(',');
-          const res = await fetch(`/api/eligibility?zip=${form.shippingZip}&productIds=${productIds}`);
+          const res = await fetch(`/api/eligibility?zip=${form.shippingZip}&productIds=${productIdString}`);
           const data = await res.json();
-          
+
           if (data.restrictedProducts?.length > 0) {
             setRestrictedItems(data.restrictedProducts);
             toast.error(`Some items in your cart cannot be shipped to ${data.state}.`);
           } else {
             setRestrictedItems([]);
-            // Autofill city/state if found
             if (data.city && !form.shippingCity) {
               setForm(prev => ({ ...prev, shippingCity: data.city, shippingState: data.state }));
             }
@@ -105,7 +110,7 @@ export default function ShippingPage() {
 
     const timer = setTimeout(checkZip, 500);
     return () => clearTimeout(timer);
-  }, [form.shippingZip, cart?.items]);
+  }, [form.shippingZip, productIdString]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,11 +148,13 @@ export default function ShippingPage() {
     // Enforce Age Verification for checkout
     if (!isAgeVerified) {
       const attemptVerification = (retries = 0) => {
-        const ac = (window as any).AgeChecker;
+        // AgeChecker.Net popup.js registers as window.AgeCheckerPopup
+        const ac = (window as any).AgeCheckerPopup ?? (window as any).AgeChecker;
         if (ac) {
+          toast.dismiss('age-init');
           setIsVerifying(true);
           sessionStorage.setItem('checkout_pending_submit', 'true');
-          // Pass data to AgeChecker
+          // Pre-populate AgeChecker config with customer data
           (window as any).ageCheckerConfig = {
             apiKey: process.env.NEXT_PUBLIC_AGECHECKER_API_KEY || '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
             customerEmail: form.email,
@@ -161,16 +168,16 @@ export default function ShippingPage() {
               country: 'US'
             }
           };
-          console.log('[AgeChecker] Triggering verification flow with config...');
-          ac.verify();
-        } else if (retries < 30) { // Increased to 15 seconds (30 * 500ms)
-          console.log(`[AgeChecker] Service not ready, retrying in 500ms... (attempt ${retries + 1}/30)`);
-          // If it's the first retry, show a toast
+          // Trigger the verification popup
+          if (typeof ac.show === 'function') ac.show();
+          else if (typeof ac.verify === 'function') ac.verify();
+          else if (typeof ac.open === 'function') ac.open();
+        } else if (retries < 10) { // 5 seconds max
           if (retries === 0) toast.loading('Initializing age verification...', { id: 'age-init' });
           setTimeout(() => attemptVerification(retries + 1), 500);
         } else {
           toast.dismiss('age-init');
-          toast.error('Age verification service is taking longer than expected. Please check your connection or refresh the page.');
+          toast.error('Age verification unavailable. Please refresh the page and try again.');
         }
       };
 
