@@ -27,6 +27,7 @@ export default function ShippingPage() {
 
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isServiceLoading, setIsServiceLoading] = useState(true);
 
   const [restrictedItems, setRestrictedItems] = useState<string[]>([]);
   const [isCheckingZip, setIsCheckingZip] = useState(false);
@@ -53,6 +54,20 @@ export default function ShippingPage() {
         toast.success('Please click "Continue to Review" again to proceed.');
       }
     };
+
+    // Polling for AgeChecker availability if not immediately present
+    let pollCount = 0;
+    const checkService = () => {
+      if ((window as any).AgeChecker) {
+        setIsServiceLoading(false);
+      } else if (pollCount < 30) { // Poll for 15 seconds max (match AgeGate)
+        pollCount++;
+        setTimeout(checkService, 500);
+      } else {
+        setIsServiceLoading(false); // Stop loading even if it failed, handle in submit
+      }
+    };
+    checkService();
 
     window.addEventListener('agechecker:verified', handleVerified);
     return () => window.removeEventListener('agechecker:verified', handleVerified);
@@ -134,7 +149,7 @@ export default function ShippingPage() {
           sessionStorage.setItem('checkout_pending_submit', 'true');
           // Pass data to AgeChecker
           (window as any).ageCheckerConfig = {
-            apiKey: '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
+            apiKey: process.env.NEXT_PUBLIC_AGECHECKER_API_KEY || '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
             customerEmail: form.email,
             customerFirstName: form.firstName,
             customerLastName: form.lastName,
@@ -146,11 +161,11 @@ export default function ShippingPage() {
               country: 'US'
             }
           };
-          console.log('[AgeChecker] Triggering verification flow...');
+          console.log('[AgeChecker] Triggering verification flow with config...');
           ac.verify();
-        } else if (retries < 6) {
-          console.log(`[AgeChecker] Service not ready, retrying in 500ms... (attempt ${retries + 1}/6)`);
-          // If it's the first retry, maybe show a hint
+        } else if (retries < 30) { // Increased to 15 seconds (30 * 500ms)
+          console.log(`[AgeChecker] Service not ready, retrying in 500ms... (attempt ${retries + 1}/30)`);
+          // If it's the first retry, show a toast
           if (retries === 0) toast.loading('Initializing age verification...', { id: 'age-init' });
           setTimeout(() => attemptVerification(retries + 1), 500);
         } else {
@@ -316,10 +331,11 @@ export default function ShippingPage() {
           
           <button 
             type="submit"
-            className="px-8 py-3 bg-black hover:bg-zinc-900 text-white font-bold uppercase tracking-widest rounded transition-all border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5"
+            disabled={isVerifying || isCheckingZip || isServiceLoading}
+            className="px-8 py-3 bg-black hover:bg-zinc-900 text-white font-bold uppercase tracking-widest rounded transition-all border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ color: 'white' }}
           >
-            Continue to Review
+            {isCheckingZip ? 'Checking...' : isServiceLoading ? 'Initializing...' : isVerifying ? 'Verifying...' : 'Continue to Review'}
           </button>
         </div>
       </form>

@@ -20,9 +20,10 @@
   font-display: swap;
 }
 
-/* Highway Gothic Font - Secondary Font for Body & Subtext */
+
+/* Juicy-Fills Font - Decorative Display Font */
 @font-face {
-  font-family: "Highway Gothic";
+  font-family: "Juicy-Fills";
   src:
     url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/juicy-fills/Juicy-Fills.woff")
       format("woff"),
@@ -46,9 +47,9 @@
   font-display: swap;
 }
 
-/* Twilight Font - Limited Use Display Font */
+/* Twilight Font - Primary Brand Accent Font */
 @font-face {
-  font-family: "Twilight Font Regular";
+  font-family: "Twilight";
   src:
     url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Twilight/FontsFree-Net-TwilightFont-Regular.woff")
       format("woff"),
@@ -149,10 +150,10 @@ p,
 [class*="font-highway"],
 .highway-title,
 .highway-title * {
-  font-family: "Inter", system-ui, sans-serif !important;
+  font-family: "Twilight", "Inter", system-ui, sans-serif !important;
   font-weight: normal !important;
-  letter-spacing: 0.01em !important;
-  text-transform: none !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
 }
 
 /* Chalets font for hero titles */
@@ -175,9 +176,10 @@ p,
 .font-display-twilight,
 .font-display-twilight * {
   font-family:
-    "Twilight Font Regular", "Inter", system-ui, sans-serif !important;
+    "Twilight", "Inter", system-ui, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
 }
 
 /* System font for section headings that should not use global font rules */
@@ -497,7 +499,7 @@ p,
   .highway-btn-primary {
     background: var(--highway-green);
     color: white;
-    font-family: "Highway Gothic", "Arial", sans-serif;
+    font-family: "Twilight", "Arial", sans-serif;
     font-weight: normal;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -518,7 +520,7 @@ p,
   .highway-btn-secondary {
     background: var(--highway-orange);
     color: white;
-    font-family: "Highway Gothic", "Arial", sans-serif;
+    font-family: "Twilight", "Arial", sans-serif;
     font-weight: normal;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -539,7 +541,7 @@ p,
   .highway-btn-accent {
     background: var(--highway-yellow);
     color: var(--highway-gray);
-    font-family: "Highway Gothic", "Arial", sans-serif;
+    font-family: "Twilight", "Arial", sans-serif;
     font-weight: normal;
     letter-spacing: 0.05em;
     text-transform: uppercase;

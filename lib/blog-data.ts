@@ -20,7 +20,7 @@ export const FALLBACK_POSTS: BlogPost[] = [
     author: 'Highway 420 Crew',
     date: '2025-10-15',
     category: 'Culture',
-    image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/History%20of%20Cannabis.jpg',
+    image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/History_of_Cannabis-no_Title.png',
     readTime: '10 min read',
     featured: true
   },

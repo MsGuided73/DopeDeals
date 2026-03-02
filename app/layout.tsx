@@ -65,12 +65,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* Font Preloading - Inter (Body), Chalets (Primary) and Highway Gothic (Secondary) */}
+        {/* Font Preloading - Inter (Body), Chalets (Primary) and Twilight (Accent) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="preload" href="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Chalets/chalets-webfont.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/gothic_highway/HWYGOTH.TTF" as="font" type="font/ttf" crossOrigin="anonymous" />
+        <link rel="preload" href="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Twilight/FontsFree-Net-TwilightFont-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
         {/* DNS Prefetch for External Domains */}
         <link rel="dns-prefetch" href="//qirbapivptotybspnbet.supabase.co" />
@@ -126,7 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script
           id="agechecker-script"
           src="https://cdn.agechecker.net/static/popup/v1/popup.js"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           data-agecheck-api-key={process.env.NEXT_PUBLIC_AGECHECKER_API_KEY}
           data-agecheck-disable-auto="true"
         />

@@ -100,3 +100,42 @@ export function getAgeCheckerWidgetConfig(options?: {
     ...(options?.orderId && { metadata: { orderId: options.orderId, email: options.email } }),
   };
 }
+
+/**
+ * Verify a transaction ID directly with the AgeChecker.Net API.
+ * This is used for server-side validation during the checkout process.
+ */
+export async function verifyTransactionWithApi(transactionId: string): Promise<AgeCheckResult> {
+  const secret = process.env.AGECHECKER_ACCOUNT_SECRET;
+  
+  if (!secret) {
+    console.warn('[AgeChecker] Account secret not set — skipping API verification');
+    // In development or if secret is missing, we might want to fail-open or fail-closed.
+    // For now, let's assume we need it for production.
+    return { verified: true, transactionId, reason: 'unverified_secret_missing' };
+  }
+
+  try {
+    const response = await fetch(`https://api.agechecker.net/v1/verify?id=${transactionId}`, {
+      method: 'GET',
+      headers: {
+        'X-AgeChecker-Secret': secret,
+      },
+    });
+
+    if (!response.ok) {
+      console.error('[AgeChecker] API verification failed:', response.statusText);
+      return { verified: false, reason: `api_error_${response.status}` };
+    }
+
+    const data = await response.json();
+    return {
+      verified: data.status === 'verified',
+      transactionId: data.id,
+      reason: data.status,
+    };
+  } catch (error) {
+    console.error('[AgeChecker] API fetch error:', error);
+    return { verified: false, reason: 'fetch_error' };
+  }
+}

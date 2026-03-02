@@ -4,6 +4,7 @@ import { requireAuth, requirePermission } from '../../lib/requireAuth';
 import { z } from 'zod';
 import type { ProcessPaymentRequest, BillingAddress } from '../../../lib/services/kajapay/types';
 import type { ShipstationOrder } from '@shared/shipstation-schema';
+import { verifyTransactionWithApi } from '../../../lib/services/age-checker/service';
 
 // Generate order number in format: DC-YYYYMMDD-XXXX
 function generateOrderNumber(): string {
@@ -71,7 +72,8 @@ const CheckoutSchema = z.object({
     paymentAccountDataToken: z.string().optional()
   }).optional(),
   processPayment: z.boolean().default(false),
-  savePaymentMethod: z.boolean().default(false)
+  savePaymentMethod: z.boolean().default(false),
+  ageVerificationTransactionId: z.string().optional()
 });
 
 export async function POST(req: NextRequest) {
@@ -86,7 +88,30 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid payload', issues: parse.error.issues }, { status: 400 });
   }
 
-  const { items, shippingAddress, billingAddress, shippingMethod, shippingAmount, paymentMethod, processPayment, savePaymentMethod } = parse.data;
+  const { items, shippingAddress, billingAddress, shippingMethod, shippingAmount, paymentMethod, processPayment, savePaymentMethod, ageVerificationTransactionId } = parse.data;
+
+  // 0. Server-Side Age Verification Guard
+  const isAlreadyVerified = user?.user_metadata?.age_verified === true || user?.user_metadata?.age_checker_status === 'verified';
+  
+  if (!isAlreadyVerified) {
+    if (!ageVerificationTransactionId) {
+      return NextResponse.json({ 
+        error: 'Age verification required to complete order.',
+        code: 'AGE_VERIFICATION_REQUIRED'
+      }, { status: 403 });
+    }
+
+    const verification = await verifyTransactionWithApi(ageVerificationTransactionId);
+    if (!verification.verified) {
+      return NextResponse.json({ 
+        error: 'Age verification failed or invalid. Please try again.',
+        code: 'AGE_VERIFICATION_FAILED',
+        details: verification.reason
+      }, { status: 403 });
+    }
+    
+    console.log(`[Checkout] Server-side age verification successful for user ${user.id} via transaction ${ageVerificationTransactionId}`);
+  }
 
   // Validate inventory with real-time stock checking
   const storage = await getStorage();
@@ -296,4 +321,3 @@ export async function POST(req: NextRequest) {
     summary: { items, totals: { subtotal, tax, shipping, total } },
   }, { status: 201 });
 }
-

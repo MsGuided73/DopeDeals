@@ -1,6 +1,6 @@
 // Load environment variables
 if (typeof require !== 'undefined') {
-  require('dotenv').config({ path: 'env.local' });
+  require('dotenv').config({ path: '.env.local' });
 }
 
 // CI/build safety: avoid crashing when optional server-only secrets are not present.
@@ -93,6 +93,7 @@ const nextConfig = {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    NEXT_PUBLIC_AGECHECKER_API_KEY: process.env.NEXT_PUBLIC_AGECHECKER_API_KEY,
   },
 
   async headers() {
@@ -119,7 +120,7 @@ const nextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
           { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net https://cdn.agechecker.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com https://qirbapivptotybspnbet.supabase.co; img-src 'self' data: https: blob:; connect-src 'self' https://qirbapivptotybspnbet.supabase.co wss://qirbapivptotybspnbet.supabase.co https://api.unsplash.com https://api.agechecker.net; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';" },
+          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net https://cdn.agechecker.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com https://qirbapivptotybspnbet.supabase.co; img-src 'self' data: https: blob:; connect-src 'self' https://qirbapivptotybspnbet.supabase.co wss://qirbapivptotybspnbet.supabase.co https://api.unsplash.com https://api.agechecker.net https://www.googletagmanager.com https://www.google-analytics.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';" },
         ],
       },
       {

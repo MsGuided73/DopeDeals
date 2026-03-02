@@ -223,7 +223,7 @@ export default function GlobalMasthead() {
               <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === "vapes" ? null : "vapes")}
-                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
+                  className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors flex items-center gap-1"
                 >
                   Vapes
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +259,7 @@ export default function GlobalMasthead() {
               </div>
 
               {/* Simple links */}
-              <Link href="/pre-rolls" className="text-white text-base font-black hover:text-yellow-400 transition-colors whitespace-nowrap">
+              <Link href="/pre-rolls" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors whitespace-nowrap">
                 Pre-Rolls
               </Link>
               
@@ -267,7 +267,7 @@ export default function GlobalMasthead() {
               <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === "edibles" ? null : "edibles")}
-                  className="text-white text-base font-black hover:text-yellow-400 transition-colors flex items-center gap-1"
+                  className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors flex items-center gap-1"
                 >
                   Edibles
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -296,7 +296,7 @@ export default function GlobalMasthead() {
                 N2O
               </Link>
               */}
-              <Link href="/mushrooms" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
+              <Link href="/mushrooms" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors">
                 Mushrooms
               </Link>
               {/*
@@ -304,7 +304,7 @@ export default function GlobalMasthead() {
                 Accessories
               </Link>
               */}
-              <Link href="/blog" className="text-white text-base font-black hover:text-yellow-400 transition-colors">
+              <Link href="/blog" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors">
                 Blog
               </Link>
             </nav>

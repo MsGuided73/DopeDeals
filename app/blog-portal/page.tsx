@@ -96,7 +96,7 @@ export default function BlogPortalPage() {
       author: 'Highway 420 Crew',
       date: '2025-10-15',
       category: 'Culture',
-      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop',
+      image: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/History_of_Cannabis-no_Title.png',
       readTime: '10 min read',
       featured: false,
       commentCount: 23

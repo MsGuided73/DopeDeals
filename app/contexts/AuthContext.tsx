@@ -42,9 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { profile, error };
       };
 
-      // 5 second timeout for profile fetch
+      // 15 second timeout for profile fetch (resilient to cold starts)
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000)
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 15000)
       );
 
       const { profile, error } = await Promise.race([

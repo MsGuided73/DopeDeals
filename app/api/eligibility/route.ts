@@ -29,7 +29,16 @@ export async function GET(req: NextRequest) {
       .single();
 
     if (zipErr || !zipRow) {
-      return NextResponse.json({ error: 'Zip not found' }, { status: 404 });
+      console.warn(`[Eligibility] Zip code ${zip} not found in database.`);
+      return NextResponse.json({ 
+        zip, 
+        state: 'Unknown', 
+        city: 'Unknown',
+        restrictedCategories: [],
+        restrictedProducts: [],
+        shippingRestrictions: {},
+        warning: 'Zip code not found in compliance database'
+      }, { status: 200 });
     }
 
     const state = zipRow.state as string;

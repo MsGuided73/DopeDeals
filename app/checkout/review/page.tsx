@@ -121,6 +121,8 @@ export default function ReviewPage() {
         email: shippingData.email || undefined,
       };
 
+      const ageVerificationTransactionId = localStorage.getItem('hw420_age_checker_id');
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
         credentials: 'include',
@@ -132,6 +134,7 @@ export default function ReviewPage() {
           shippingMethod,
           shippingAmount: shippingPrice,
           processPayment: false, 
+          ageVerificationTransactionId: ageVerificationTransactionId || undefined
         })
       });
 

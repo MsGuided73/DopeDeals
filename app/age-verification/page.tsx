@@ -19,11 +19,11 @@ export default function AgeVerificationPage() {
     const checkService = () => {
       if ((window as any).AgeChecker) {
         setIsServiceLoading(false);
-      } else if (pollCount < 20) { // Poll for 10 seconds max
+      } else if (pollCount < 30) { // Poll for 15 seconds max (sync with checkout)
         pollCount++;
         setTimeout(checkService, 500);
       } else {
-        setIsServiceLoading(false); // Stop showing loading even if it failed, handle in button
+        setIsServiceLoading(false); // Stop showing loading even if it failed
       }
     };
     checkService();
@@ -38,6 +38,9 @@ export default function AgeVerificationPage() {
       // Persist locally for session consistency
       localStorage.setItem('hw420_age_verified', 'true');
       localStorage.setItem('hw420_age_verified_formal', 'true');
+      if (event.detail?.uuid || event.detail?.id) {
+        localStorage.setItem('hw420_age_checker_id', event.detail.uuid || event.detail.id);
+      }
       
       setIsSuccess(true);
       setIsVerifying(false);
@@ -96,186 +99,167 @@ export default function AgeVerificationPage() {
     <>
       <GlobalMasthead />
 
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 relative">
-        {/* Logo Background Watermark */}
-        <div
-          className="absolute inset-0 opacity-10 z-0 pointer-events-none"
+      <div className="min-h-screen relative overflow-hidden flex flex-col font-inter">
+        {/* Cinematic Backdrop */}
+        <div 
+          className="fixed inset-0 z-0 bg-black"
           style={{
-            backgroundImage: `url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png")`,
-            backgroundSize: '40%',
+            backgroundImage: `url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Age%20Verification/Highway420%20backdrop%20-%20Age-Checker.png")`,
+            backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            minHeight: '100vh'
+            backgroundAttachment: 'fixed'
           }}
-        ></div>
+        >
+          {/* Subtle dark overlay for readability */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+        </div>
 
-        <div className="relative z-10">
-          {/* Hero Section */}
-          <div className="bg-gradient-to-r from-gray-900/95 via-black/95 to-gray-900/95 text-white py-16 backdrop-blur-sm shadow-2xl">
-            <div className="max-w-6xl mx-auto px-6 text-center">
-              <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none mb-4">
-                AGE <span className="text-dope-orange-500">VERIFICATION</span>
-              </h1>
-              <div className="w-32 h-1.5 bg-dope-orange-600 mx-auto mb-8 rounded-full"></div>
-              <p className="text-xl text-gray-400 max-w-2xl mx-auto font-medium tracking-wide">
-                Ensuring compliance and responsible access to our products.
-              </p>
-            </div>
-          </div>
-
-          <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="relative z-10 flex-grow pt-12 pb-24">
+          <div className="max-w-5xl mx-auto px-6">
             
-            {/* Call to Action Section - HIGHLIGHTED */}
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-800 rounded-[2rem] p-8 md:p-12 mb-12 shadow-[0_0_50px_rgba(0,0,0,0.3)] flex flex-col items-center text-center">
-              {isSuccess ? (
-                <div className="animate-in zoom-in duration-500">
-                  <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/50">
-                    <CheckCircle className="w-12 h-12 text-green-500" />
-                  </div>
-                  <h2 className="text-4xl font-black text-white uppercase italic mb-4">You are Verified</h2>
-                  <p className="text-zinc-400 max-w-md mx-auto mb-8 font-medium">
-                    Thank you for verifying your age. You now have full access to shop across Highway 420.
-                  </p>
-                  <button 
-                    onClick={() => window.location.href = '/products'}
-                    className="px-12 py-4 bg-white text-black font-black uppercase tracking-[0.2em] rounded-xl hover:bg-dope-orange-500 hover:text-white transition-all shadow-xl active:scale-95"
-                  >
-                    Start Shopping
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <div className="w-20 h-20 bg-dope-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-dope-orange-500/20">
-                    <Shield className="w-10 h-10 text-dope-orange-500" />
-                  </div>
-                  <h2 className="text-3xl font-black text-white uppercase italic mb-4">Ready to Verify?</h2>
-                  <p className="text-zinc-400 max-w-lg mx-auto mb-10 font-medium">
-                    Our quick and secure process ensures you meet the legal age requirements. Most verifications take less than a minute.
-                  </p>
-                  <button 
-                    onClick={handleStartVerification}
-                    disabled={isVerifying || isServiceLoading}
-                    className="group relative px-12 py-5 bg-dope-orange-500 text-white font-black uppercase tracking-[0.3em] rounded-2xl overflow-hidden transition-all duration-300 hover:bg-dope-orange-600 hover:shadow-[0_0_50px_rgba(255,107,0,0.4)] active:scale-95 disabled:opacity-50"
-                  >
-                    <span className="relative z-10 flex items-center gap-3">
-                      {isVerifying || isServiceLoading ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          {isServiceLoading ? 'Initializing Service...' : 'Processing...'}
-                        </>
-                      ) : (
-                        'Verify My Age Now'
-                      )}
-                    </span>
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Age Requirement Notice */}
-            <div className="bg-red-500/10 border border-red-500/20 rounded-[1.5rem] p-8 mb-12 flex flex-col md:flex-row items-center gap-6">
-              <div className="p-4 bg-red-500/20 rounded-full border border-red-500/30">
-                <AlertTriangle className="w-10 h-10 text-red-500" />
+            {/* Header Section */}
+            <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-1000">
+              <div className="inline-block mb-4 overflow-hidden relative group">
+                <h1 className="text-6xl md:text-8xl font-display-twilight font-bold tracking-[0.15em] text-white uppercase italic leading-none relative z-10">
+                  AGE <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/50">VERIFICATION</span>
+                </h1>
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-shimmer pointer-events-none"></div>
               </div>
-              <div>
-                <h2 className="text-2xl font-black text-white uppercase italic mb-2">Important Notice</h2>
-                <p className="text-zinc-400 font-medium leading-relaxed">
-                  You must be <span className="text-red-500 font-bold">21 years of age or older</span> to access this website and purchase our products. 
-                  This requirement is strictly enforced in compliance with federal and state laws.
+              
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent to-white/30"></div>
+                <p className="text-white/60 font-medium tracking-[0.3em] uppercase text-sm">
+                  Official Compliance Protocol
                 </p>
+                <div className="h-px w-16 bg-gradient-to-l from-transparent to-white/30"></div>
               </div>
             </div>
 
-            {/* Why Age Verification */}
-            <div className="grid lg:grid-cols-2 gap-8 mb-12">
-              
-              <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-[1.5rem] p-8 hover:border-dope-orange-500/30 transition-colors">
-                <div className="flex items-center mb-6">
-                  <div className="p-3 bg-dope-orange-500/10 rounded-xl mr-4">
-                    <Shield className="w-8 h-8 text-dope-orange-500" />
+            {/* Main Action Card */}
+            <div className="glassmorphic-dark rounded-[2.5rem] p-1 md:p-1.5 mb-12 shadow-2xl relative group overflow-hidden border border-white/10">
+              {/* Inner container with stronger blur */}
+              <div className="bg-black/40 backdrop-blur-3xl rounded-[2.4rem] p-10 md:p-16 flex flex-col items-center text-center relative z-10">
+                {isSuccess ? (
+                  <div className="animate-in zoom-in duration-700">
+                    <div className="w-28 h-28 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8 border-2 border-green-500/30 shadow-[0_0_40px_rgba(34,197,94,0.3)]">
+                      <CheckCircle className="w-14 h-14 text-green-500" />
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-display-twilight font-bold text-white uppercase tracking-wider mb-6">Verification Complete</h2>
+                    <p className="text-white/70 max-w-md mx-auto mb-10 text-lg leading-relaxed">
+                      Your identity has been confirmed. You now have unrestricted access to the Highway 420 collection.
+                    </p>
+                    <button 
+                      onClick={() => window.location.href = '/products'}
+                      className="px-16 py-5 bg-white text-black font-black uppercase tracking-[0.25em] rounded-2xl hover:bg-green-500 hover:text-white transition-all duration-500 shadow-2xl active:scale-95 group"
+                    >
+                      <span className="flex items-center gap-3">
+                        Enter Showroom
+                        <Loader2 className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </span>
+                    </button>
                   </div>
-                  <h2 className="text-2xl font-black text-white uppercase italic">Why We Verify</h2>
-                </div>
-                
-                <ul className="space-y-4 text-zinc-400 font-medium">
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">01</span>
-                    Comply with federal and state regulations
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">02</span>
-                    Prevent underage access to restricted products
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">03</span>
-                    Maintain strict compliance for licensing
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">04</span>
-                    Ensure responsible retail practices
-                  </li>
-                </ul>
+                ) : (
+                  <>
+                    <div className="w-24 h-24 bg-white/5 rounded-3xl rotate-45 flex items-center justify-center mx-auto mb-10 border border-white/10 shadow-xl group-hover:bg-dope-orange/10 transition-colors duration-500">
+                      <Shield className="w-12 h-12 text-white -rotate-45" />
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-display-chalets text-white uppercase tracking-tight mb-6">Identity Verification Required</h2>
+                    <p className="text-white/60 max-w-xl mx-auto mb-12 text-lg font-medium leading-relaxed">
+                      To ensure responsible access, please verify your age using our secure protocol. 
+                      Verifications are encrypted and typically take less than 60 seconds.
+                    </p>
+                    <button 
+                      onClick={handleStartVerification}
+                      disabled={isVerifying || isServiceLoading}
+                      className="group relative px-16 py-6 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-black uppercase tracking-[0.35em] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_60px_rgba(255,107,0,0.5)] active:scale-95 disabled:opacity-40 disabled:scale-100"
+                    >
+                      {/* Animated Glow Overlay */}
+                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer"></span>
+                      
+                      <span className="relative z-10 flex items-center gap-4 text-lg">
+                        {isVerifying || isServiceLoading ? (
+                          <>
+                            <Loader2 className="w-6 h-6 animate-spin" />
+                            {isServiceLoading ? 'Initializing...' : 'Processing...'}
+                          </>
+                        ) : (
+                          'Verify Age'
+                        )}
+                      </span>
+                    </button>
+                    <p className="mt-8 text-white/30 text-sm uppercase tracking-widest font-bold">
+                      Powered by AgeChecker.net Security
+                    </p>
+                  </>
+                )}
               </div>
+            </div>
 
-              <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-[1.5rem] p-8 hover:border-dope-orange-500/30 transition-colors">
-                <div className="flex items-center mb-6">
-                  <div className="p-3 bg-dope-orange-500/10 rounded-xl mr-4">
-                    <Calendar className="w-8 h-8 text-dope-orange-500" />
+            {/* Grid for Info Sections */}
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              {/* Important Notice */}
+              <div className="md:col-span-2 glassmorphic-strong rounded-[2rem] p-8 border border-red-500/20 bg-red-500/5 relative overflow-hidden">
+                <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                  <div className="p-5 bg-red-500/20 rounded-2xl border border-red-500/30 shadow-lg">
+                    <AlertTriangle className="w-12 h-12 text-red-500" />
                   </div>
-                  <h2 className="text-2xl font-black text-white uppercase italic">The Process</h2>
+                  <div className="text-center md:text-left">
+                    <h3 className="text-2xl font-display-chalets text-white uppercase tracking-wider mb-2">Age Requirement Enforcement</h3>
+                    <p className="text-white/70 text-lg leading-relaxed font-medium">
+                      Per federal and state regulations, you must be <span className="text-red-500 font-black underline decoration-red-500/30 underline-offset-4">21+ years of age</span> to access this platform. 
+                      Strict compliance is required for all transactions.
+                    </p>
+                  </div>
                 </div>
-                
-                <ul className="space-y-4 text-zinc-400 font-medium">
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">01</span>
-                    Click "Verify My Age Now" above
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">02</span>
-                    The AgeChecker secure popup will open
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">03</span>
-                    Verification is typically instant and automatic
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-dope-orange-500 font-bold">04</span>
-                    Once confirmed, your account is updated forever
-                  </li>
-                </ul>
+                {/* Background red glow */}
+                <div className="absolute -right-20 -top-20 w-64 h-64 bg-red-600/10 blur-[100px] pointer-events-none"></div>
               </div>
 
-            </div>
+              {/* Feature Cards */}
+              <div className="glassmorphic-dark rounded-[2rem] p-10 border border-white/10 hover:border-orange-500/30 transition-all duration-500 group">
+                <div className="flex items-center mb-8">
+                  <div className="p-4 bg-white/5 rounded-2xl mr-6 border border-white/10 group-hover:bg-orange-500/10 transition-colors">
+                    <Shield className="w-8 h-8 text-orange-500" />
+                  </div>
+                  <h3 className="text-2xl font-display-chalets text-white uppercase tracking-tight">Data Sovereignty</h3>
+                </div>
+                <p className="text-white/50 text-lg font-medium leading-relaxed mb-6">
+                  Your privacy is paramount. Verification data is strictly encrypted and used purely for legal compliance. We never store copies of your identity documents.
+                </p>
+                <div className="h-1 w-12 bg-orange-500/30 rounded-full group-hover:w-full transition-all duration-700"></div>
+              </div>
 
-            {/* Privacy & Legal */}
-            <div className="bg-zinc-900/30 border border-white/5 rounded-[1.5rem] p-8 mb-12">
-              <h2 className="text-2xl font-black text-white uppercase italic mb-8">Privacy & Legal Compliance</h2>
-              
-              <div className="grid md:grid-cols-2 gap-12 text-zinc-400 font-medium">
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider">Data Protection</h3>
-                  <p className="mb-4 leading-relaxed">
-                    Your security is our priority. Age verification data is encrypted, used solely for compliance, and never shared with third parties for marketing.
-                  </p>
+              <div className="glassmorphic-dark rounded-[2rem] p-10 border border-white/10 hover:border-green-500/30 transition-all duration-500 group">
+                <div className="flex items-center mb-8">
+                  <div className="p-4 bg-white/5 rounded-2xl mr-6 border border-white/10 group-hover:bg-green-500/10 transition-colors">
+                    <CheckCircle className="w-8 h-8 text-green-500" />
+                  </div>
+                  <h3 className="text-2xl font-display-chalets text-white uppercase tracking-tight">Secure Process</h3>
                 </div>
-                
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider">Legal Standards</h3>
-                  <p className="leading-relaxed">
-                    Our process adheres to all current industry standards for age-restricted retail, ensuring a safe and compliant environment for our adult community.
-                  </p>
-                </div>
+                <p className="text-white/50 text-lg font-medium leading-relaxed mb-6">
+                  Our system utilizes industry standard matching algorithms to verify your age instantly. For most users, no document upload is required.
+                </p>
+                <div className="h-1 w-12 bg-green-500/30 rounded-full group-hover:w-full transition-all duration-700"></div>
               </div>
             </div>
 
-            {/* Footer Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="px-8 py-3 bg-zinc-800 text-white font-bold rounded-lg hover:bg-zinc-700 transition-colors text-center">
-                Contact Compliance
-              </Link>
-              <Link href="/privacy" className="px-8 py-3 border border-zinc-800 text-zinc-500 font-bold rounded-lg hover:text-white hover:border-white transition-colors text-center">
-                Privacy Policy
-              </Link>
+            {/* Privacy Legal Glass Link */}
+            <div className="glassmorphic-strong rounded-[2rem] p-8 border border-white/5 text-center">
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <Link 
+                  href="/contact" 
+                  className="px-10 py-4 glassmorphic-dark border border-white/10 text-white font-bold uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all duration-500 w-full sm:w-auto"
+                >
+                  Contact Compliance
+                </Link>
+                <Link 
+                  href="/privacy" 
+                  className="px-10 py-4 text-white/40 font-bold uppercase tracking-widest hover:text-white transition-colors w-full sm:w-auto"
+                >
+                  Privacy Policy
+                </Link>
+              </div>
             </div>
 
           </div>
