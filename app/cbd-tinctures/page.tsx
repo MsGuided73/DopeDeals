@@ -1,15 +1,15 @@
 import { Suspense } from 'react';
-import EdiblesPageContent from './EdiblesPageContent';
+import CbdTincturesPageContent from './CbdTincturesPageContent';
 import AgeVerification from '../components/AgeVerification';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
-  title: 'CBD Edibles | HIGHWAY 420 - Premium CBD Products',
-  description: 'Shop premium CBD edibles at HIGHWAY 420. High-quality wellness products for every need. Free shipping on orders over $75.',
-  keywords: 'cbd edibles, cbd gummies, hemp products, wellness products, cbd snacks',
+  title: 'CBD Tinctures & Salves | HIGHWAY 420 - Premium CBD Products',
+  description: 'Shop premium CBD tinctures and salves at HIGHWAY 420. High-quality wellness products for every need. Free shipping on orders over $75.',
+  keywords: 'cbd tinctures, cbd salves, cbd oil, hemp products, wellness products, cbd topical',
 };
 
-export default function EdiblesPage() {
+export default function CbdTincturesPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Age Verification Popup */}
@@ -23,7 +23,7 @@ export default function EdiblesPage() {
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
         </div>
       }>
-        <EdiblesPageContent />
+        <CbdTincturesPageContent />
       </Suspense>
     </div>
   );

@@ -161,14 +161,15 @@ export default function VapesPageContent() {
         throw new Error(data.error);
       }
 
-      console.log(`✅ API returned ${data.totalCount} THCA preroll/vape products`);
+      const totalCount = data.totalCount ?? data.total ?? data.products?.length ?? 0;
+      console.log(`✅ API returned ${totalCount} THCA preroll/vape products`);
 
       // The API already returns properly formatted products with valid images
       const transformedProducts = data.products.map((product: any) => ({
         id: product.id,
         name: product.name,
-        our_price: product.price,
-        sale_price: product.compare_at_price,
+        our_price: product.our_price ?? product.price,
+        sale_price: product.sale_price ?? product.compare_at_price,
         image_url: product.image_url,
         imageUrl: product.image_url, // Compatibility alias
         image: product.image_url, // Compatibility alias
@@ -183,12 +184,12 @@ export default function VapesPageContent() {
         created_at: product.created_at,
         updated_at: product.updated_at,
         // Add compatibility fields
-        price: product.price,
+        price: product.price ?? product.our_price,
         isNew: product.isNew,
         isSale: product.isSale,
-        originalPrice: product.compare_at_price,
+        originalPrice: product.compare_at_price ?? product.sale_price,
         inStock: product.inStock,
-        brand: product.brand,
+        brand: product.brand ?? product.brand_name,
         category: 'THCA Prerolls & Vapes',
         // Add additional fields that the grid expects
         type: extractTypeFromName(product.name) || 'Preroll',
@@ -227,7 +228,19 @@ export default function VapesPageContent() {
 
   return (
     <ErrorBoundary>
-      <div>
+      <div className="relative">
+      <div className="hidden xl:flex fixed left-6 top-1/2 -translate-y-1/2 z-40">
+        <div className="bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-800/70 shadow-lg p-4">
+          <Image
+            src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+            alt="Highway 420"
+            width={180}
+            height={180}
+            className="h-auto w-[180px]"
+            priority={false}
+          />
+        </div>
+      </div>
       {/* Breadcrumb */}
       <ThcaPnvBreadcrumb />
 

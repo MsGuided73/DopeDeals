@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { addToCart } from '../lib/cart-utils';
 
-interface EdibleProduct {
+interface CbdProduct {
   id: string;
   name: string;
   our_price: number;
@@ -18,27 +18,17 @@ interface EdibleProduct {
   category_slug?: string | null;
 }
 
-/**
- * Render the Edibles page content with product lists for tinctures, salves, and edibles.
- *
- * Fetches edible products on mount from `/api/products/edibles`, shows a loading state while fetching,
- * groups fetched products into tinctures, salves, and edibles by `category_slug`, and renders responsive
- * product grids with pricing and an "Add to Cart" action for each product.
- *
- * @returns The rendered JSX for the Edibles, Salves & Tinctures page
- */
-export default function EdiblesPageContent() {
-  const [products, setProducts] = useState<EdibleProduct[]>([]);
+export default function CbdTincturesPageContent() {
+  const [products, setProducts] = useState<CbdProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadEdibleProducts();
+    loadCbdProducts();
   }, []);
 
-  const loadEdibleProducts = async () => {
+  const loadCbdProducts = async () => {
     try {
       setLoading(true);
-      // Fetch products with category_slug filtering for edibles
       const response = await fetch('/api/products/edibles');
 
       if (!response.ok) throw new Error('Failed to load products');
@@ -46,20 +36,24 @@ export default function EdiblesPageContent() {
       const data = await response.json();
       setProducts(data.products || []);
     } catch (error) {
-      console.error('Error loading edible products:', error);
+      console.error('Error loading CBD tincture products:', error);
       setProducts([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Group products by type
-  const edibles = products.filter((p) => {
+  const tinctures = products.filter((p) => {
     const slug = p.category_slug?.toLowerCase();
-    return slug === 'edibles' || slug === 'gummies' || slug === 'cereal bar';
+    return slug === 'tincture' || slug === 'tinctures';
   });
 
-  const renderProductCard = (product: EdibleProduct) => (
+  const salves = products.filter((p) => {
+    const slug = p.category_slug?.toLowerCase();
+    return slug === 'salve' || slug === 'salves';
+  });
+
+  const renderProductCard = (product: CbdProduct) => (
     <Link
       href={`/product/${product.id}`}
       className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
@@ -87,7 +81,7 @@ export default function EdiblesPageContent() {
             {product.brand_name}
           </p>
         )}
-        
+
         <h3 className="font-bold text-gray-900 text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors">
           {product.name}
         </h3>
@@ -143,29 +137,49 @@ export default function EdiblesPageContent() {
       {/* Hero Section */}
       <div className="text-center mb-16">
         <h1 className="text-5xl md:text-7xl font-black text-black mb-6 font-display-twilight">
-          CBD EDIBLES
+          CBD TINCTURES & SALVES
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Delicious CBD-infused treats for every taste. Explore gummies and edibles crafted for everyday wellness.
+          Premium CBD wellness products for every need. Discover tinctures and topicals crafted for daily balance.
         </p>
       </div>
 
-      {/* Edibles Section */}
-      <section id="edibles" className="mb-16">
+      {/* CBD Tinctures Section */}
+      <section id="tinctures" className="mb-16">
         <div className="mb-8">
-          <h2 className="text-4xl md:text-5xl font-black text-black mb-4">CBD EDIBLES</h2>
-          <p className="text-lg text-gray-600">Delicious CBD-infused treats and snacks</p>
+          <h2 className="text-4xl md:text-5xl font-black text-black mb-4">CBD TINCTURES</h2>
+          <p className="text-lg text-gray-600">Premium CBD oil tinctures for daily wellness</p>
         </div>
-        
-        {edibles.length > 0 ? (
+
+        {tinctures.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {edibles.map(product => (
+            {tinctures.map(product => (
               <div key={product.id}>{renderProductCard(product)}</div>
             ))}
           </div>
         ) : (
           <div className="text-center py-12 bg-gray-50 rounded-xl">
-            <p className="text-gray-500">No edibles available at this time</p>
+            <p className="text-gray-500">No tinctures available at this time</p>
+          </div>
+        )}
+      </section>
+
+      {/* Salves Section */}
+      <section id="salves" className="mb-16">
+        <div className="mb-8">
+          <h2 className="text-4xl md:text-5xl font-black text-black mb-4">CBD SALVES</h2>
+          <p className="text-lg text-gray-600">Topical CBD balms and salves for targeted relief</p>
+        </div>
+
+        {salves.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {salves.map(product => (
+              <div key={product.id}>{renderProductCard(product)}</div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-gray-50 rounded-xl">
+            <p className="text-gray-500">No salves available at this time</p>
           </div>
         )}
       </section>
@@ -173,7 +187,7 @@ export default function EdiblesPageContent() {
       {/* Info Section */}
       <section className="mt-20 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 md:p-12">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-black mb-6">Why Choose Our CBD Edibles?</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-black mb-6">Why Choose Our CBD Products?</h2>
           <div className="grid md:grid-cols-3 gap-8 mt-8">
             <div>
               <div className="text-4xl mb-4">🌿</div>

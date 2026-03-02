@@ -68,11 +68,20 @@ export async function GET(req: NextRequest) {
         ...parseImageUrls(product.image_url)
       ]));
 
+      const parsedOurPrice = product.our_price !== null && product.our_price !== undefined
+        ? Number(product.our_price)
+        : null;
+      const parsedSalePrice = product.sale_price !== null && product.sale_price !== undefined
+        ? Number(product.sale_price)
+        : null;
+
       return {
         id: product.id,
         name: product.name,
-        our_price: product.our_price,
-        sale_price: product.sale_price,
+        our_price: parsedOurPrice,
+        sale_price: parsedSalePrice,
+        price: parsedOurPrice,
+        compare_at_price: parsedSalePrice,
         image_url: normalizedImages[0] || product.image_url,
         image_urls: normalizedImages,
         description: product.description,
@@ -82,6 +91,7 @@ export async function GET(req: NextRequest) {
         is_active: product.is_active,
         featured: product.featured || false,
         brand_name: product.brand_name,
+        brand: product.brand_name,
         category_id: product.category_id,
         category_slug: product.category_slug,
         created_at: product.created_at,

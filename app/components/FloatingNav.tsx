@@ -163,10 +163,10 @@ export default function FloatingNav() {
                 <Link href="/edibles" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors font-medium">
                   All Edibles
                 </Link>
-                <Link href="/edibles#tinctures" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                <Link href="/cbd-tinctures" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   CBD Tinctures
-                </Link>
-                <Link href="/edibles#salves" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
+                      </Link>
+                <Link href="/cbd-tinctures#salves" onClick={handleDropdownLinkClick} className="block px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors">
                   Salves
                 </Link>
               </div>
