@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 
 interface ComplianceContextType {
   userZipCode: string | null;
@@ -34,26 +34,42 @@ export function ComplianceProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const checkProductEligibility = async (productIds: string[]) => {
+  const pendingProductIdsRef = useRef<Set<string>>(new Set());
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const checkProductEligibility = useCallback(async (productIds: string[]) => {
     if (!userZipCode || productIds.length === 0) return;
 
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/eligibility?zip=${userZipCode}&productIds=${productIds.join(',')}`);
-      if (response.ok) {
-        const { restrictedProducts } = await response.json();
-        // Update restricted list - merging with existing or replacing based on current context
-        setRestrictedProductIds(prev => {
-          const newSet = new Set([...prev, ...restrictedProducts]);
-          return Array.from(newSet);
-        });
-      }
-    } catch (error) {
-      console.error('Failed to check product eligibility:', error);
-    } finally {
-      setIsLoading(false);
+    // Add to pending batch
+    productIds.forEach(id => pendingProductIdsRef.current.add(id));
+
+    // Clear existing timeout if present
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
-  };
+
+    // Set a new timeout to process the batch
+    timeoutRef.current = setTimeout(async () => {
+      const idsToCheck = Array.from(pendingProductIdsRef.current);
+      pendingProductIdsRef.current.clear(); // reset for next batch
+
+      if (idsToCheck.length === 0) return;
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/eligibility?zip=${userZipCode}&productIds=${idsToCheck.join(',')}`);
+        if (response.ok) {
+          const { restrictedProducts } = await response.json();
+          // Update restricted list - merging with existing based on current state
+          setRestrictedProductIds(prev => Array.from(new Set([...prev, ...restrictedProducts])));
+        }
+      } catch (error) {
+        console.error('Failed to check product eligibility:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 50); // 50ms batching window
+  }, [userZipCode]);
 
   // Re-check visibility when ZIP changes
   useEffect(() => {
