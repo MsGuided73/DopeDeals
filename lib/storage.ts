@@ -369,25 +369,6 @@ export async function getStorage(): Promise<IStorage> {
       return data;
     },
 
-    async updateOrder(id: string, updates: any) {
-      // Map camelCase to snake_case for specific fields if needed
-      const dbUpdates: any = { ...updates };
-      if (updates.paymentStatus) {
-        dbUpdates.payment_status = updates.paymentStatus;
-        delete dbUpdates.paymentStatus;
-      }
-
-      const { data, error } = await supabase
-        .from('orders')
-        .update(dbUpdates)
-        .eq('id', id)
-        .select()
-        .single();
-      
-      if (error) throw error;
-      return data;
-    },
-
     // Product Similarity for Recommendations
     async getProductSimilarity(productId: string) {
       const { data, error } = await supabase
@@ -418,6 +399,10 @@ export async function getStorage(): Promise<IStorage> {
         .insert({
           user_id: order.userId,
           order_number: order.orderNumber,
+          customer_email: order.customerEmail,
+          customer_first_name: order.customerFirstName,
+          customer_last_name: order.customerLastName,
+          customer_phone: order.customerPhone ?? null,
           status: order.status ?? 'pending',
           payment_status: order.paymentStatus ?? 'pending',
           payment_method: order.paymentMethod ?? null,
@@ -428,8 +413,10 @@ export async function getStorage(): Promise<IStorage> {
           shipping_address: order.shippingAddress,
           billing_address: order.billingAddress,
           customer_notes: order.customerNotes ?? null,
+          admin_notes: order.adminNotes ?? null,
           gift_message: order.giftMessage ?? null,
           is_gift: order.isGift ?? false,
+          transaction_id: order.transactionId ?? null,
         })
         .select()
         .single();
@@ -448,12 +435,52 @@ export async function getStorage(): Promise<IStorage> {
           product_sku: item.productSku ?? null,
           product_image_url: item.productImageUrl ?? null,
           quantity: item.quantity,
-          price_at_purchase: item.priceAtPurchase,
+          unit_price: item.unitPrice ?? item.priceAtPurchase,
           total_price: item.totalPrice,
         })
         .select()
         .single();
 
+      if (error) throw error;
+      return data;
+    },
+
+    async updateOrder(id: string, updates: any) {
+      const dbUpdates: any = { ...updates };
+      
+      // Map camelCase to snake_case
+      if (updates.userId) { dbUpdates.user_id = updates.userId; delete dbUpdates.userId; }
+      if (updates.orderNumber) { dbUpdates.order_number = updates.orderNumber; delete dbUpdates.orderNumber; }
+      if (updates.customerEmail) { dbUpdates.customer_email = updates.customerEmail; delete dbUpdates.customerEmail; }
+      if (updates.customerFirstName) { dbUpdates.customer_first_name = updates.customerFirstName; delete dbUpdates.customerFirstName; }
+      if (updates.customerLastName) { dbUpdates.customer_last_name = updates.customerLastName; delete dbUpdates.customerLastName; }
+      if (updates.customerPhone) { dbUpdates.customer_phone = updates.customerPhone; delete dbUpdates.customerPhone; }
+      if (updates.paymentStatus) { dbUpdates.payment_status = updates.paymentStatus; delete dbUpdates.paymentStatus; }
+      if (updates.paymentMethod) { dbUpdates.payment_method = updates.paymentMethod; delete dbUpdates.paymentMethod; }
+      if (updates.fulfillmentStatus) { dbUpdates.fulfillment_status = updates.fulfillmentStatus; delete dbUpdates.fulfillmentStatus; }
+      if (updates.transactionId) { dbUpdates.transaction_id = updates.transactionId; delete dbUpdates.transactionId; }
+      if (updates.subtotalAmount) { dbUpdates.subtotal_amount = updates.subtotalAmount; delete dbUpdates.subtotalAmount; }
+      if (updates.taxAmount) { dbUpdates.tax_amount = updates.taxAmount; delete dbUpdates.taxAmount; }
+      if (updates.shippingAmount) { dbUpdates.shipping_amount = updates.shippingAmount; delete dbUpdates.shippingAmount; }
+      if (updates.discountAmount) { dbUpdates.discount_amount = updates.discountAmount; delete dbUpdates.discountAmount; }
+      if (updates.totalAmount) { dbUpdates.total_amount = updates.totalAmount; delete dbUpdates.totalAmount; }
+      if (updates.billingAddress) { dbUpdates.billing_address = updates.billingAddress; delete dbUpdates.billingAddress; }
+      if (updates.shippingAddress) { dbUpdates.shipping_address = updates.shippingAddress; delete dbUpdates.shippingAddress; }
+      if (updates.customerNotes) { dbUpdates.customer_notes = updates.customerNotes; delete dbUpdates.customerNotes; }
+      if (updates.adminNotes) { dbUpdates.admin_notes = updates.adminNotes; delete dbUpdates.adminNotes; }
+      if (updates.giftMessage) { dbUpdates.gift_message = updates.giftMessage; delete dbUpdates.giftMessage; }
+      if (updates.isGift !== undefined) { dbUpdates.is_gift = updates.isGift; delete dbUpdates.isGift; }
+      if (updates.trackingNumber) { dbUpdates.tracking_number = updates.trackingNumber; delete dbUpdates.trackingNumber; }
+      if (updates.shippedAt) { dbUpdates.shipped_at = updates.shippedAt; delete dbUpdates.shippedAt; }
+      if (updates.deliveredAt) { dbUpdates.delivered_at = updates.deliveredAt; delete dbUpdates.deliveredAt; }
+
+      const { data, error } = await supabase
+        .from('orders')
+        .update(dbUpdates)
+        .eq('id', id)
+        .select()
+        .single();
+      
       if (error) throw error;
       return data;
     },
@@ -524,10 +551,20 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async getUserTransactions(userId: string) {
+      // First get all order IDs for this user
+      const { data: orders } = await supabase
+        .from('orders')
+        .select('id')
+        .eq('user_id', userId);
+      
+      if (!orders || orders.length === 0) return [];
+      
+      const orderIds = orders.map(o => o.id);
+      
       const { data, error } = await supabase
         .from('payment_transactions')
         .select('*')
-        .eq('user_id', userId)
+        .in('order_id', orderIds)
         .order('created_at', { ascending: false });
       
       if (error) throw error;

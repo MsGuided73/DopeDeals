@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { User, Package, MapPin, CreditCard, Settings, LogOut } from 'lucide-react';
+import { User, Package, MapPin, CreditCard, Settings, LogOut, Shield, AlertCircle } from 'lucide-react';
 import GlobalMasthead from '../components/GlobalMasthead';
 import { useAuth } from '../contexts/AuthContext';
 interface Order {
@@ -203,8 +203,21 @@ export default function ProfilePage() {
             {/* Account Overview */}
             {activeTab === 'overview' && (
               <div className="space-y-6">
-                <div className="bg-gray-50 rounded-lg p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Account Information</h2>
+                <div className="bg-gray-50 rounded-lg p-6 border border-gray-100">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-gray-900">Account Information</h2>
+                    {user?.user_metadata?.age_verified ? (
+                      <span className="flex items-center gap-1 px-2.5 py-0.5 bg-green-100 text-green-800 text-xs font-bold uppercase rounded-full border border-green-200">
+                        <Shield className="w-3 h-3 mr-1" />
+                        Age Verified
+                      </span>
+                    ) : (
+                      <Link href="/age-verification" className="flex items-center gap-1 px-2.5 py-0.5 bg-red-100 text-red-800 text-xs font-bold uppercase rounded-full border border-red-200 hover:bg-red-200 transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none">
+                        <AlertCircle className="w-3 h-3 mr-1" />
+                        Verify Now
+                      </Link>
+                    )}
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm text-gray-600">Name</p>

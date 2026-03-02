@@ -1,27 +1,49 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import GlobalMasthead from '../../components/GlobalMasthead';
+import { useAuth } from '../../contexts/AuthContext';
+import { Shield, AlertCircle, CheckCircle2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
 
 export default function ProfileSettingsPage() {
+  const { user, updateProfile, loading: authLoading } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Initial state from user metadata
   const [formData, setFormData] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '(555) 123-4567',
-    dateOfBirth: '1990-01-01',
-    ageVerified: true,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    dateOfBirth: '',
     emailNotifications: true,
     smsNotifications: false,
     marketingEmails: true,
     orderUpdates: true
   });
 
-  const [isEditing, setIsEditing] = useState(false);
+  // Sync state when user loads
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.user_metadata?.firstName || user.user_metadata?.full_name?.split(' ')[0] || '',
+        lastName: user.user_metadata?.lastName || user.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '',
+        email: user.email || '',
+        phone: user.user_metadata?.phone || '',
+        dateOfBirth: user.user_metadata?.dateOfBirth || '',
+        emailNotifications: user.user_metadata?.emailNotifications ?? true,
+        smsNotifications: user.user_metadata?.smsNotifications ?? false,
+        marketingEmails: user.user_metadata?.marketingEmails ?? true,
+        orderUpdates: user.user_metadata?.orderUpdates ?? true
+      });
+    }
+  }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -31,10 +53,28 @@ export default function ProfileSettingsPage() {
     }));
   };
 
-  const handleSave = () => {
-    // TODO: Implement save functionality with Supabase
-    setIsEditing(false);
-    // Show success toast
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const { error } = await updateProfile({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        dateOfBirth: formData.dateOfBirth,
+        emailNotifications: formData.emailNotifications,
+        smsNotifications: formData.smsNotifications,
+        marketingEmails: formData.marketingEmails,
+        orderUpdates: formData.orderUpdates
+      });
+
+      if (error) throw new Error(error);
+      toast.success('Profile updated successfully!');
+      setIsEditing(false);
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update profile');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -156,18 +196,54 @@ export default function ProfileSettingsPage() {
             </div>
 
             {/* Age Verification Status */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Age Verification</h3>
-              <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                  <div>
-                    <p className="font-medium text-green-800">Age Verified</p>
-                    <p className="text-sm text-green-600">Your age has been successfully verified</p>
+            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Age Verification</h3>
+                {user?.user_metadata?.age_verified ? (
+                  <span className="flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider rounded-full border border-green-200">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Verified
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 px-3 py-1 bg-red-50 text-red-700 text-xs font-bold uppercase tracking-wider rounded-full border border-red-200">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    Pending
+                  </span>
+                )}
+              </div>
+              
+              <div className={`flex flex-col md:flex-row items-center justify-between p-5 rounded-2xl border transition-all ${
+                user?.user_metadata?.age_verified 
+                  ? 'bg-green-50/30 border-green-100' 
+                  : 'bg-orange-50/30 border-orange-100'
+              }`}>
+                <div className="flex items-center gap-4 mb-4 md:mb-0">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                    user?.user_metadata?.age_verified ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
+                  }`}>
+                    <Shield className="w-6 h-6" />
+                  </div>
+                  <div className="text-left">
+                    <p className={`font-bold ${user?.user_metadata?.age_verified ? 'text-green-900' : 'text-orange-900'}`}>
+                      {user?.user_metadata?.age_verified ? 'Official Verification Active' : 'Action Required: Verify Identity'}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {user?.user_metadata?.age_verified 
+                        ? `Verified on ${new Date(user.user_metadata.age_verified_at || Date.now()).toLocaleDateString()}`
+                        : 'Please complete the AgeChecker protocol to enable purchases.'}
+                    </p>
                   </div>
                 </div>
-                <Link href="/age-verification" className="text-sm text-green-700 hover:text-green-800 underline">
-                  View Details
+                
+                <Link 
+                  href="/age-verification" 
+                  className={`px-6 py-2.5 rounded-xl font-bold text-sm tracking-wide transition-all ${
+                    user?.user_metadata?.age_verified
+                      ? 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                      : 'bg-dope-orange text-white shadow-lg shadow-orange-500/20 hover:scale-105 active:scale-95'
+                  }`}
+                >
+                  {user?.user_metadata?.age_verified ? 'View Audit Log' : 'Verify Now →'}
                 </Link>
               </div>
             </div>

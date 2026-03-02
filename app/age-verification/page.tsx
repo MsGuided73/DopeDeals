@@ -12,6 +12,7 @@ export default function AgeVerificationPage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isServiceLoading, setIsServiceLoading] = useState(true);
+  const [serviceError, setServiceError] = useState(false);
 
   useEffect(() => {
     // Polling for AgeChecker availability if not immediately present
@@ -23,7 +24,9 @@ export default function AgeVerificationPage() {
         pollCount++;
         setTimeout(checkService, 500);
       } else {
-        setIsServiceLoading(false); // Stop showing loading even if it failed
+        setIsServiceLoading(false); 
+        setServiceError(true);
+        console.error('[AgeChecker] Service failed to load after polling');
       }
     };
     checkService();
@@ -165,10 +168,22 @@ export default function AgeVerificationPage() {
                       <Shield className="w-12 h-12 text-white -rotate-45" />
                     </div>
                     <h2 className="text-3xl md:text-5xl font-display-chalets text-white uppercase tracking-tight mb-6">Identity Verification Required</h2>
-                    <p className="text-white/60 max-w-xl mx-auto mb-12 text-lg font-medium leading-relaxed">
-                      To ensure responsible access, please verify your age using our secure protocol. 
-                      Verifications are encrypted and typically take less than 60 seconds.
-                    </p>
+                    {serviceError ? (
+                      <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 mb-8 max-w-lg animate-in fade-in zoom-in duration-500">
+                        <div className="flex items-center gap-3 text-red-500 mb-2 font-bold">
+                          <AlertTriangle className="w-5 h-5" />
+                          <span>Service Initialization Error</span>
+                        </div>
+                        <p className="text-white/60 text-sm leading-relaxed text-left">
+                          The age verification service is currently unreachable. This may be due to an ad-blocker or high network traffic. Please disable any content blockers and refresh the page to try again.
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-white/60 max-w-xl mx-auto mb-12 text-lg font-medium leading-relaxed">
+                        To ensure responsible access, please verify your age using our secure protocol. 
+                        Verifications are encrypted and typically take less than 60 seconds.
+                      </p>
+                    )}
                     <button 
                       onClick={handleStartVerification}
                       disabled={isVerifying || isServiceLoading}

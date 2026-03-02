@@ -124,12 +124,12 @@ export default function CollectionsGrid() {
                     <img 
                       src={cat.image} 
                       alt={cat.name} 
-                      className="absolute inset-0 w-full h-full object-cover z-10 opacity-70 group-hover:opacity-90 transition-opacity duration-300 pointer-events-none" 
+                      className="absolute inset-0 w-full h-full object-cover z-0 opacity-100 group-hover:scale-105 transition-transform duration-700 pointer-events-none" 
                     />
                   )}
-                  {/* Overlay for text readability */}
-                  <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-50 mix-blend-multiply z-10 pointer-events-none`} />
-                  <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-20 pointer-events-none" />
+                  {/* Glass Overlay with better blend */}
+                  <div className={`absolute inset-0 bg-gradient-to-t ${cat.bgGradient} opacity-30 mix-blend-overlay z-10 pointer-events-none`} />
+                  <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black/80 via-black/20 to-transparent z-20 pointer-events-none" />
                   
                   {/* Text alignment to bottom-left */}
                   <div className="absolute bottom-3 left-3 z-30 pointer-events-none flex flex-col justify-end">

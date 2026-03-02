@@ -188,7 +188,6 @@ export default function AccountPage() {
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Age Verification Status */}
             <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 border border-gray-200">
               <div className="flex items-center mb-4">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${user?.user_metadata?.age_verified ? 'bg-green-500' : 'bg-red-500'}`}>
@@ -206,12 +205,19 @@ export default function AccountPage() {
                   ? 'Your identity has been verified. You can shop all products across DopeDeals.' 
                   : 'You must verify your age before purchasing restricted items.'}
               </p>
-              {!user?.user_metadata?.age_verified && (
+              {!user?.user_metadata?.age_verified ? (
                 <Link 
                   href="/age-verification"
-                  className="inline-flex items-center text-dope-orange-600 font-semibold hover:text-dope-orange-700"
+                  className="inline-flex items-center text-dope-orange-600 font-semibold hover:text-dope-orange-700 bg-dope-orange-50 px-4 py-2 rounded-lg transition-colors w-full justify-center group"
                 >
-                  Verify Now <span className="ml-2">→</span>
+                  Verify Now <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+              ) : (
+                <Link 
+                  href="/age-verification"
+                  className="inline-flex items-center text-green-600 font-semibold hover:text-green-700 transition-colors"
+                >
+                  View Verification Details <span className="ml-2">→</span>
                 </Link>
               )}
             </div>
