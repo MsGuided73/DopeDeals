@@ -13,7 +13,7 @@ export async function GET() {
         submitted_at,
         date_of_birth,
         verification_method,
-        profiles (
+        users (
           email,
           full_name
         )
@@ -29,8 +29,8 @@ export async function GET() {
     const formattedVerifications = (verifications || []).map((v: any) => ({
       id: v.id,
       user_id: v.user_id,
-      user_email: v.profiles?.email || 'N/A',
-      user_name: v.profiles?.full_name || 'Anonymous',
+      user_email: v.users?.email || 'N/A',
+      user_name: v.users?.full_name || 'Anonymous',
       verification_method: v.verification_method || 'id_upload',
       status: v.status,
       submitted_at: v.submitted_at,

@@ -44,30 +44,30 @@ export async function GET(
       .select(`
         id,
         email,
-        firstName,
-        lastName,
-        fullName,
+        first_name,
+        last_name,
+        full_name,
         role,
-        ageVerificationStatus,
-        membershipTierId,
-        isActive,
-        createdAt,
-        lastLoginAt,
-        loginCount,
-        lastVerificationCheck,
+        age_verification_status,
+        membership_tier_id,
+        is_active,
+        created_at,
+        last_login_at,
+        login_count,
+        last_verification_check,
         memberships(
           id,
-          tierName,
+          tier_name,
           benefits,
-          discountPercentage,
-          isActive
+          discount_percentage,
+          is_active
         ),
         orders(
           id,
-          orderNumber,
+          order_number,
           status,
-          totalAmount,
-          createdAt
+          total_amount,
+          created_at
         )
       `)
       .eq('id', userId)
@@ -133,13 +133,22 @@ export async function PATCH(
 
     const updates = parse.data;
 
+    // Map updates to snake_case for DB
+    const dbUpdates: any = {
+      updated_at: new Date().toISOString()
+    };
+    if (updates.role) dbUpdates.role = updates.role;
+    if (updates.firstName) dbUpdates.first_name = updates.firstName;
+    if (updates.lastName) dbUpdates.last_name = updates.lastName;
+    if (updates.email) dbUpdates.email = updates.email;
+    if (updates.ageVerificationStatus) dbUpdates.age_verification_status = updates.ageVerificationStatus;
+    if (updates.membershipTierId) dbUpdates.membership_tier_id = updates.membershipTierId;
+    if (updates.isActive !== undefined) dbUpdates.is_active = updates.isActive;
+
     // Update user profile
     const { error: profileError } = await supabase
       .from('users')
-      .update({
-        ...updates,
-        updatedAt: new Date().toISOString()
-      })
+      .update(dbUpdates)
       .eq('id', userId);
 
     if (profileError) {
@@ -211,8 +220,8 @@ export async function DELETE(
       const { error: profileError } = await supabase
         .from('users')
         .update({ 
-          isActive: false,
-          deletedAt: new Date().toISOString()
+          is_active: false,
+          deleted_at: new Date().toISOString()
         })
         .eq('id', userId);
 

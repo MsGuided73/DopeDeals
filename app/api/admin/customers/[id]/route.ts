@@ -10,16 +10,19 @@ export async function PATCH(
     const { age_verified, status, vip_status } = await request.json();
 
     const updates: any = {};
-    if (age_verified !== undefined) updates.age_verified = age_verified;
-    if (status !== undefined) updates.status = status;
-    if (vip_status !== undefined) updates.vip_status = vip_status;
-
+    if (age_verified !== undefined) {
+      updates.age_verification_status = age_verified ? 'verified' : 'not_verified';
+      updates.last_verification_check = new Date().toISOString();
+    }
+    if (status !== undefined) updates.is_active = (status === 'active');
+    // membership_tier_id would go here if we had the ID
+    
     if (Object.keys(updates).length === 0) {
       return NextResponse.json({ error: 'No updates provided' }, { status: 400 });
     }
 
     const { error } = await supabase
-      .from('profiles')
+      .from('users')
       .update(updates)
       .eq('id', id);
 
@@ -43,7 +46,7 @@ export async function DELETE(
     const { id } = params;
 
     const { error } = await supabase
-      .from('profiles')
+      .from('users')
       .delete()
       .eq('id', id);
 

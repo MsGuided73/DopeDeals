@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       if (!listError) {
         const user = users.find((u: any) => u.email === email);
         if (user) {
+          // 1. Update user metadata via admin client (service role)
           await supabase.auth.admin.updateUserById(user.id, {
             user_metadata: {
               ...user.user_metadata,
@@ -53,7 +54,17 @@ export async function POST(request: NextRequest) {
               age_checker_status: 'verified'
             }
           });
-          console.log(`[AgeChecker Callback] Successfully updated user metadata for ${email}`);
+
+          // 2. Update the users table for application-level consistency
+          await supabase
+            .from('users')
+            .update({
+              age_verification_status: 'verified',
+              last_verification_check: new Date().toISOString()
+            })
+            .eq('id', user.id);
+
+          console.log(`[AgeChecker Callback] Successfully updated user data for ${email}`);
         }
       }
     }

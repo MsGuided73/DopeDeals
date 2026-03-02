@@ -7,13 +7,13 @@ export async function GET() {
     // For now, we'll fetch actual counts where possible and use sensible defaults for rates
     
     const { count: totalUsers } = await supabase
-      .from('profiles')
+      .from('users')
       .select('*', { count: 'exact', head: true });
 
     const { count: verifiedUsers } = await supabase
-      .from('profiles')
+      .from('users')
       .select('*', { count: 'exact', head: true })
-      .eq('age_verified', true);
+      .eq('age_verification_status', 'verified');
 
     const { count: pendingVerifications } = await supabase
       .from('age_verifications')

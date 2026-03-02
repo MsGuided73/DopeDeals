@@ -107,16 +107,26 @@ export default function AgeGateModal() {
 
         {/* Modal Container */}
         <motion.div
-          initial={{ scale: 0.85, opacity: 0, y: 40 }}
+          initial={{ scale: 0.9, opacity: 0, y: 60 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ type: "spring", damping: 20, stiffness: 100 }}
+          transition={{ 
+            type: "spring", 
+            damping: 25, 
+            stiffness: 120,
+            delay: 0.2
+          }}
           className="relative z-10 w-full max-w-lg"
         >
           {/* THE MOCKUP GLASS CARD - ENHANCED DEPTH */}
           <div className="relative bg-[#050505]/95 backdrop-blur-[40px] rounded-[3.5rem] border border-white/10 shadow-[0_100px_200px_-50px_rgba(0,0,0,1),0_0_100px_rgba(255,140,0,0.05)] px-10 pt-36 pb-14 overflow-visible">
             
             {/* THE "PREMIUM SHIELD" LOGO - MASSIVE OVERLAP & GLOW */}
-            <div className="absolute -top-28 left-1/2 -translate-x-1/2 w-60 h-60 z-30 pointer-events-none drop-shadow-[0_25px_50px_rgba(0,0,0,1)]">
+            <motion.div 
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="absolute -top-28 left-1/2 -translate-x-1/2 w-60 h-60 z-30 pointer-events-none drop-shadow-[0_25px_50px_rgba(0,0,0,1)]"
+            >
               {/* Diffuse backglow to simulate a 3D physical badge sitting on the glass */}
               <div className="absolute inset-0 bg-white/10 blur-[80px] rounded-full scale-125 opacity-60" />
               
@@ -125,14 +135,19 @@ export default function AgeGateModal() {
                 alt="Highway 420"
                 className="w-full h-full object-contain brightness-[1.1] contrast-[1.05]"
               />
-            </div>
+            </motion.div>
 
             {/* Top Shine/Glow Strip - ENHANCED HIERARCHY */}
             <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent rounded-t-[3.5rem] pointer-events-none" />
 
             <div className="flex flex-col items-center text-center space-y-12 relative z-10">
               {/* Header Block - REFINED HIERARCHY */}
-              <div className="space-y-4">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="space-y-4"
+              >
                 <h2 className="text-4xl md:text-5xl font-[1000] text-white tracking-[0.08em] uppercase leading-none drop-shadow-lg">
                   Age Verification
                 </h2>
@@ -143,20 +158,30 @@ export default function AgeGateModal() {
                   </p>
                   <div className="h-[1px] w-8 bg-zinc-800" />
                 </div>
-              </div>
+              </motion.div>
 
               {/* Main Question - HIGH IMPACT */}
-              <div className="relative w-full py-2">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="relative w-full py-2"
+              >
                 <h3 className="text-3xl md:text-4xl font-[950] text-white italic tracking-tighter uppercase">
                   Are you over 21?
                 </h3>
-              </div>
+              </motion.div>
 
               {/* Form Grid - UPDATED MM/DD/YYYY Logic & SUNKEN DEPTH */}
               <div className="w-full space-y-14">
                 <div className="grid grid-cols-2 gap-8">
                   {/* DOB Column - NOW MM / DD / YYYY */}
-                  <div className="space-y-4">
+                  <motion.div 
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="space-y-4"
+                  >
                     <div className="h-18 bg-black/80 border border-white/[0.05] rounded-3xl flex items-center justify-center px-6 focus-within:border-[#ff8c00]/50 shadow-[inset_0_8px_16px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.05)] transition-all">
                       <div className="flex items-center gap-2">
                         <input
@@ -188,10 +213,15 @@ export default function AgeGateModal() {
                       </div>
                     </div>
                     <span className="block text-[11px] font-[900] text-zinc-600 tracking-[0.3em] uppercase">Birth Date</span>
-                  </div>
+                  </motion.div>
 
                   {/* ZIP Column - SUNKEN DEPTH */}
-                  <div className="space-y-4">
+                  <motion.div 
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="space-y-4"
+                  >
                     <div className="h-18 bg-black/80 border border-white/[0.05] rounded-3xl flex items-center justify-center px-6 focus-within:border-[#ff8c00]/50 shadow-[inset_0_8px_16px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.05)] transition-all">
                       <input
                         type="text"
@@ -203,28 +233,38 @@ export default function AgeGateModal() {
                       />
                     </div>
                     <span className="block text-[11px] font-[900] text-zinc-600 tracking-[0.3em] uppercase text-center">Zip Code</span>
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Status Feedback */}
-                <AnimatePresence mode="wait">
-                  {error && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="text-[#ff8c00] text-[11px] font-black uppercase tracking-widest bg-[#ff8c00]/5 py-3 rounded-2xl border border-[#ff8c00]/10 drop-shadow-sm"
-                    >
-                      {error}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div className="h-6"> {/* Fixed height to prevent layout shift */}
+                  <AnimatePresence mode="wait">
+                    {error && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="text-[#ff8c00] text-[11px] font-black uppercase tracking-widest bg-[#ff8c00]/5 py-3 rounded-2xl border border-[#ff8c00]/10 drop-shadow-sm"
+                      >
+                        {error}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
                 {/* Primary Action - ULTRA GLOSSY 3D BUTTON */}
-                <div className="space-y-6 pt-4">
-                  <button
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 }}
+                  className="space-y-6 pt-4"
+                >
+                  <motion.button
                     onClick={handleVerify}
-                    className="group relative w-full h-[88px] bg-gradient-to-b from-[#ff9e22] to-[#e65c00] rounded-[2.8rem] overflow-hidden shadow-[0_25px_60px_-10px_rgba(255,140,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset] hover:scale-[1.02] active:scale-95 transition-all duration-300"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    disabled={isVerifying}
+                    className={`group relative w-full h-[88px] rounded-[2.8rem] overflow-hidden transition-all duration-300 shadow-[0_25px_60px_-10px_rgba(255,140,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset] ${isSuccess ? 'bg-green-600 shadow-[0_25px_60px_-10px_rgba(34,197,94,0.5)]' : 'bg-gradient-to-b from-[#ff9e22] to-[#e65c00]'}`}
                   >
                     {/* Mirror-Shine Gloss Overlay */}
                     <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white/60 via-white/20 to-transparent opacity-90 pointer-events-none" />
@@ -232,10 +272,31 @@ export default function AgeGateModal() {
                     {/* Inner 3D Bevel Lighting */}
                     <div className="absolute inset-0 rounded-[2.8rem] shadow-[inset_0_4px_12px_rgba(255,255,255,0.4),inset_0_-4px_12px_rgba(0,0,0,0.3)] pointer-events-none border-t border-white/40" />
                     
-                    <span className="relative z-10 text-white font-[1000] text-3xl md:text-4xl uppercase tracking-[0.25em] drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]">
-                      {isSuccess ? <CheckCircle2 className="w-12 h-12 mx-auto animate-bounce" /> : 'Enter Site'}
+                    <span className="relative z-10 text-white font-[1000] text-3xl md:text-4xl uppercase tracking-[0.25em] drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)] flex items-center justify-center gap-3">
+                      {isSuccess ? (
+                        <motion.div 
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          className="flex items-center gap-4"
+                        >
+                          <CheckCircle2 className="w-12 h-12" />
+                          <span>Verified</span>
+                        </motion.div>
+                      ) : (
+                        'Enter Site'
+                      )}
                     </span>
-                  </button>
+
+                    {/* Loading/Verifying Glow */}
+                    {isVerifying && !isSuccess && (
+                      <motion.div 
+                        initial={{ left: '-100%' }}
+                        animate={{ left: '100%' }}
+                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"
+                      />
+                    )}
+                  </motion.button>
 
                   <button
                     onClick={() => window.location.href = 'https://google.com'}
@@ -243,10 +304,15 @@ export default function AgeGateModal() {
                   >
                     Cancel
                   </button>
-                </div>
+                </motion.div>
 
                 {/* Regulatory Footer - SUBTLE & REFINED HIERARCHY */}
-                <div className="pt-12 space-y-12">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.1 }}
+                  className="pt-12 space-y-12"
+                >
                   <div className="max-w-[340px] mx-auto space-y-4">
                     <p className="text-zinc-700 text-[10px] leading-relaxed font-[900] uppercase tracking-[0.2em] opacity-40 italic">
                       All consumers must be at least 21 to enter Highway420.
@@ -257,7 +323,7 @@ export default function AgeGateModal() {
                     <a href="/terms" className="hover:text-zinc-400 transition-colors">Terms</a>
                     <a href="/privacy" className="hover:text-zinc-400 transition-colors">Privacy</a>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>

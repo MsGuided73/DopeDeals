@@ -43,8 +43,11 @@ export async function PATCH(
     // 3. If approved, update the profile's age_verified status
     if (status === 'approved') {
       const { error: profileError } = await supabase
-        .from('profiles')
-        .update({ age_verified: true })
+        .from('users')
+        .update({ 
+          age_verification_status: 'verified',
+          last_verification_check: new Date().toISOString()
+        })
         .eq('id', verification.user_id);
 
       if (profileError) {

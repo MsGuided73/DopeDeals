@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requirePermission, UserRole } from '../../../lib/requireAuth';
+import { requirePermission } from '../../../lib/requireAuth';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 
@@ -53,21 +53,21 @@ export async function GET(req: NextRequest) {
       .select(`
         id,
         email,
-        firstName,
-        lastName,
+        first_name,
+        last_name,
         role,
-        ageVerificationStatus,
-        membershipTierId,
-        isActive,
-        createdAt,
-        lastLoginAt,
-        loginCount,
-        memberships(tierName, benefits)
+        age_verification_status,
+        membership_tier_id,
+        is_active,
+        created_at,
+        last_login_at,
+        login_count,
+        memberships(tier_name, benefits)
       `, { count: 'exact' });
 
     // Apply filters
     if (search) {
-      query = query.or(`email.ilike.%${search}%,firstName.ilike.%${search}%,lastName.ilike.%${search}%`);
+      query = query.or(`email.ilike.%${search}%,first_name.ilike.%${search}%,last_name.ilike.%${search}%`);
     }
 
     if (role) {
@@ -75,16 +75,16 @@ export async function GET(req: NextRequest) {
     }
 
     if (status === 'active') {
-      query = query.eq('isActive', true);
+      query = query.eq('is_active', true);
     } else if (status === 'inactive') {
-      query = query.eq('isActive', false);
+      query = query.eq('is_active', false);
     }
 
     // Apply pagination
     query = query.range(offset, offset + limit - 1);
 
     // Order by creation date (newest first)
-    query = query.order('createdAt', { ascending: false });
+    query = query.order('created_at', { ascending: false });
 
     const { data: users, error, count } = await query;
 
@@ -150,13 +150,13 @@ export async function POST(req: NextRequest) {
       .insert({
         id: authData.user.id,
         email,
-        firstName,
-        lastName,
-        fullName: firstName && lastName ? `${firstName} ${lastName}` : undefined,
+        first_name: firstName,
+        last_name: lastName,
+        full_name: firstName && lastName ? `${firstName} ${lastName}` : undefined,
         role,
-        ageVerificationStatus: 'not_verified',
-        isActive: true,
-        createdAt: new Date().toISOString()
+        age_verification_status: 'not_verified',
+        is_active: true,
+        created_at: new Date().toISOString()
       });
 
     if (profileError) {
@@ -212,10 +212,20 @@ export async function PATCH(req: NextRequest) {
 
     for (const userId of userIds) {
       try {
+        // Map updates to snake_case for DB
+        const dbUpdates: any = {};
+        if (validUpdates.role) dbUpdates.role = validUpdates.role;
+        if (validUpdates.firstName) dbUpdates.first_name = validUpdates.firstName;
+        if (validUpdates.lastName) dbUpdates.last_name = validUpdates.lastName;
+        if (validUpdates.email) dbUpdates.email = validUpdates.email;
+        if (validUpdates.ageVerificationStatus) dbUpdates.age_verification_status = validUpdates.ageVerificationStatus;
+        if (validUpdates.membershipTierId) dbUpdates.membership_tier_id = validUpdates.membershipTierId;
+        if (validUpdates.isActive !== undefined) dbUpdates.is_active = validUpdates.isActive;
+
         // Update profile
         const { error: profileError } = await supabase
           .from('users')
-          .update(validUpdates)
+          .update(dbUpdates)
           .eq('id', userId);
 
         if (profileError) {
