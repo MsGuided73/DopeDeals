@@ -65,4 +65,4 @@ jobs:
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000' }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://placeholder.supabase.co' }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder' }}
-                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'placeholder' }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'placeholder' }}
