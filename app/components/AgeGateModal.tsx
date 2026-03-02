@@ -94,20 +94,22 @@ export default function AgeGateModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[99999] flex items-center justify-center p-4 overflow-hidden font-inter"
+        className="fixed inset-0 z-[99999] flex items-center justify-center p-4 overflow-hidden font-inter bg-black"
       >
-        {/* BOUTIQUE INTERIOR BACKGROUND */}
-        <div 
+        {/* PREMIUM BACKDROP IMAGE */}
+        <motion.div 
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
           style={{ 
-            backgroundImage: `url("${BACKGROUND_URL}")`,
-            filter: 'brightness(0.3) contrast(1.1) blur(6px)',
+            backgroundImage: `url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Age%20Verification/Highway420%20backdrop%20-%20Age-Checker.png")`,
+            filter: 'brightness(0.6)',
           }}
         />
 
         {/* Modal Container */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 60 }}
+          initial={{ scale: 0.9, opacity: 0, y: 40 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ 
             type: "spring", 
@@ -115,215 +117,153 @@ export default function AgeGateModal() {
             stiffness: 120,
             delay: 0.2
           }}
-          className="relative z-10 w-full max-w-lg"
+          className="relative z-10 w-full max-w-md"
         >
-          {/* THE MOCKUP GLASS CARD - ENHANCED DEPTH */}
-          <div className="relative bg-[#050505]/95 backdrop-blur-[40px] rounded-[3.5rem] border border-white/10 shadow-[0_100px_200px_-50px_rgba(0,0,0,1),0_0_100px_rgba(255,140,0,0.05)] px-10 pt-36 pb-14 overflow-visible">
+          {/* THE PREMIUM GLASS CARD */}
+          <div className="relative bg-black/40 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl px-6 pt-16 pb-8 overflow-visible flex flex-col items-center text-center">
             
-            {/* THE "PREMIUM SHIELD" LOGO - MASSIVE OVERLAP & GLOW */}
+            {/* THE OVERLAPPING LOGO */}
             <motion.div 
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
-              className="absolute -top-28 left-1/2 -translate-x-1/2 w-60 h-60 z-30 pointer-events-none drop-shadow-[0_25px_50px_rgba(0,0,0,1)]"
+              className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 z-30 drop-shadow-2xl"
             >
-              {/* Diffuse backglow to simulate a 3D physical badge sitting on the glass */}
-              <div className="absolute inset-0 bg-white/10 blur-[80px] rounded-full scale-125 opacity-60" />
-              
               <img
                 src={OFFICIAL_LOGO}
                 alt="Highway 420"
-                className="w-full h-full object-contain brightness-[1.1] contrast-[1.05]"
+                className="w-full h-full object-contain"
               />
             </motion.div>
 
-            {/* Top Shine/Glow Strip - ENHANCED HIERARCHY */}
-            <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent rounded-t-[3.5rem] pointer-events-none" />
-
-            <div className="flex flex-col items-center text-center space-y-12 relative z-10">
-              {/* Header Block - REFINED HIERARCHY */}
+            {/* CONTENT START */}
+            <div className="space-y-6 w-full">
+              {/* Header Block */}
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="space-y-4"
+                className="space-y-1"
               >
-                <h2 className="text-4xl md:text-5xl font-[1000] text-white tracking-[0.08em] uppercase leading-none drop-shadow-lg">
+                <h2 className="text-3xl font-bold text-white tracking-widest uppercase">
                   Age Verification
                 </h2>
-                <div className="flex items-center justify-center gap-4">
-                  <div className="h-[1px] w-8 bg-zinc-800" />
-                  <p className="text-zinc-500 text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">
-                    Required For Access
-                  </p>
-                  <div className="h-[1px] w-8 bg-zinc-800" />
-                </div>
+                <p className="text-zinc-200 text-sm font-medium">
+                  Please confirm your date of birth and ZIP code to enter
+                </p>
               </motion.div>
 
-              {/* Main Question - HIGH IMPACT */}
+              {/* MUST BE 21 - HIGH IMPACT */}
               <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7 }}
-                className="relative w-full py-2"
               >
-                <h3 className="text-3xl md:text-4xl font-[950] text-white italic tracking-tighter uppercase">
-                  Are you over 21?
+                <h3 className="text-2xl font-black text-white tracking-wider uppercase">
+                  Must be 21 to Enter
                 </h3>
               </motion.div>
 
-              {/* Form Grid - UPDATED MM/DD/YYYY Logic & SUNKEN DEPTH */}
-              <div className="w-full space-y-14">
-                <div className="grid grid-cols-2 gap-8">
-                  {/* DOB Column - NOW MM / DD / YYYY */}
-                  <motion.div 
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="space-y-4"
-                  >
-                    <div className="h-18 bg-black/80 border border-white/[0.05] rounded-3xl flex items-center justify-center px-6 focus-within:border-[#ff8c00]/50 shadow-[inset_0_8px_16px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.05)] transition-all">
-                      <div className="flex items-center gap-2">
+              {/* Form Grid */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  {/* DOB Field */}
+                  <div className="space-y-2">
+                    <div className="relative group">
+                      <div className="flex bg-black/60 border-2 border-white/20 rounded-xl h-14 items-center justify-center px-2 group-focus-within:border-orange-500 transition-all">
                         <input
                           type="text"
                           placeholder="MM"
                           maxLength={2}
                           value={dobMonth}
                           onChange={(e) => setDobMonth(e.target.value.replace(/\D/g, ''))}
-                          className="w-10 bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
+                          className="w-8 bg-transparent border-none text-white text-center font-bold text-lg focus:outline-none placeholder:text-zinc-600"
                         />
-                        <span className="text-zinc-800 font-black text-xl">/</span>
+                        <span className="text-white/40 mb-0.5">/</span>
                         <input
                           type="text"
                           placeholder="DD"
                           maxLength={2}
                           value={dobDay}
                           onChange={(e) => setDobDay(e.target.value.replace(/\D/g, ''))}
-                          className="w-10 bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
+                          className="w-8 bg-transparent border-none text-white text-center font-bold text-lg focus:outline-none placeholder:text-zinc-600"
                         />
-                        <span className="text-zinc-800 font-black text-xl">/</span>
+                        <span className="text-white/40 mb-0.5">/</span>
                         <input
                           type="text"
                           placeholder="YYYY"
                           maxLength={4}
                           value={dobYear}
                           onChange={(e) => setDobYear(e.target.value.replace(/\D/g, ''))}
-                          className="w-18 bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
+                          className="w-14 bg-transparent border-none text-white text-center font-bold text-lg focus:outline-none placeholder:text-zinc-600"
                         />
                       </div>
                     </div>
-                    <span className="block text-[11px] font-[900] text-zinc-600 tracking-[0.3em] uppercase">Birth Date</span>
-                  </motion.div>
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Date of Birth</span>
+                  </div>
 
-                  {/* ZIP Column - SUNKEN DEPTH */}
-                  <motion.div 
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="space-y-4"
-                  >
-                    <div className="h-18 bg-black/80 border border-white/[0.05] rounded-3xl flex items-center justify-center px-6 focus-within:border-[#ff8c00]/50 shadow-[inset_0_8px_16px_rgba(0,0,0,0.8),0_1px_1px_rgba(255,255,255,0.05)] transition-all">
-                      <input
-                        type="text"
-                        placeholder="ZIP CODE"
-                        maxLength={5}
-                        value={zipCode}
-                        onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
-                        className="w-full bg-transparent border-none text-white text-center font-black text-2xl focus:outline-none placeholder:text-zinc-900"
-                      />
+                  {/* ZIP Field */}
+                  <div className="space-y-2">
+                    <div className="relative group">
+                      <div className="flex bg-black/60 border-2 border-white/20 rounded-xl h-14 items-center justify-center px-4 group-focus-within:border-orange-500 transition-all">
+                        <input
+                          type="text"
+                          placeholder="ZIP CODE"
+                          maxLength={5}
+                          value={zipCode}
+                          onChange={(e) => setZipCode(e.target.value.replace(/\D/g, ''))}
+                          className="w-full bg-transparent border-none text-white text-center font-bold text-lg focus:outline-none placeholder:text-zinc-600"
+                        />
+                      </div>
                     </div>
-                    <span className="block text-[11px] font-[900] text-zinc-600 tracking-[0.3em] uppercase text-center">Zip Code</span>
-                  </motion.div>
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Zip Code</span>
+                  </div>
                 </div>
 
                 {/* Status Feedback */}
-                <div className="h-6"> {/* Fixed height to prevent layout shift */}
+                <div className="min-h-[20px]">
                   <AnimatePresence mode="wait">
                     {error && (
-                      <motion.div 
-                        initial={{ opacity: 0, y: -10 }}
+                      <motion.p 
+                        initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="text-[#ff8c00] text-[11px] font-black uppercase tracking-widest bg-[#ff8c00]/5 py-3 rounded-2xl border border-[#ff8c00]/10 drop-shadow-sm"
+                        className="text-orange-500 text-xs font-bold uppercase tracking-tighter"
                       >
                         {error}
-                      </motion.div>
+                      </motion.p>
                     )}
                   </AnimatePresence>
                 </div>
 
-                {/* Primary Action - ULTRA GLOSSY 3D BUTTON */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 }}
-                  className="space-y-6 pt-4"
+                {/* PRIMARY ACTION - GLOSSY BUTTON */}
+                <motion.button
+                  onClick={handleVerify}
+                  whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
+                  whileTap={{ scale: 0.98 }}
+                  disabled={isVerifying}
+                  className={`relative w-full h-16 rounded-xl overflow-hidden shadow-xl transition-all duration-300 ${isSuccess ? 'bg-green-600' : 'bg-gradient-to-b from-orange-400 to-orange-600'}`}
                 >
-                  <motion.button
-                    onClick={handleVerify}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    disabled={isVerifying}
-                    className={`group relative w-full h-[88px] rounded-[2.8rem] overflow-hidden transition-all duration-300 shadow-[0_25px_60px_-10px_rgba(255,140,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset] ${isSuccess ? 'bg-green-600 shadow-[0_25px_60px_-10px_rgba(34,197,94,0.5)]' : 'bg-gradient-to-b from-[#ff9e22] to-[#e65c00]'}`}
-                  >
-                    {/* Mirror-Shine Gloss Overlay */}
-                    <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white/60 via-white/20 to-transparent opacity-90 pointer-events-none" />
-                    
-                    {/* Inner 3D Bevel Lighting */}
-                    <div className="absolute inset-0 rounded-[2.8rem] shadow-[inset_0_4px_12px_rgba(255,255,255,0.4),inset_0_-4px_12px_rgba(0,0,0,0.3)] pointer-events-none border-t border-white/40" />
-                    
-                    <span className="relative z-10 text-white font-[1000] text-3xl md:text-4xl uppercase tracking-[0.25em] drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)] flex items-center justify-center gap-3">
-                      {isSuccess ? (
-                        <motion.div 
-                          initial={{ scale: 0.5, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          className="flex items-center gap-4"
-                        >
-                          <CheckCircle2 className="w-12 h-12" />
-                          <span>Verified</span>
-                        </motion.div>
-                      ) : (
-                        'Enter Site'
-                      )}
-                    </span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-[40%] bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
+                  <span className="relative z-10 text-white font-black text-2xl uppercase tracking-widest drop-shadow-md">
+                    {isSuccess ? 'Verified' : 'Enter Site'}
+                  </span>
+                </motion.button>
 
-                    {/* Loading/Verifying Glow */}
-                    {isVerifying && !isSuccess && (
-                      <motion.div 
-                        initial={{ left: '-100%' }}
-                        animate={{ left: '100%' }}
-                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"
-                      />
-                    )}
-                  </motion.button>
-
-                  <button
-                    onClick={() => window.location.href = 'https://google.com'}
-                    className="w-full h-14 border-2 border-white/[0.03] rounded-full text-zinc-700 font-black text-[11px] uppercase tracking-[0.6em] hover:bg-white/[0.03] hover:text-zinc-400 transition-all"
-                  >
-                    Cancel
-                  </button>
-                </motion.div>
-
-                {/* Regulatory Footer - SUBTLE & REFINED HIERARCHY */}
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.1 }}
-                  className="pt-12 space-y-12"
+                {/* CANCEL ACTION */}
+                <button
+                  onClick={() => window.location.href = 'https://google.com'}
+                  className="w-32 h-10 border border-white/10 rounded-full text-zinc-300 font-bold text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all outline-none"
                 >
-                  <div className="max-w-[340px] mx-auto space-y-4">
-                    <p className="text-zinc-700 text-[10px] leading-relaxed font-[900] uppercase tracking-[0.2em] opacity-40 italic">
-                      All consumers must be at least 21 to enter Highway420.
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center justify-center gap-16 text-[9px] font-black text-zinc-800 uppercase tracking-[0.3em]">
-                    <a href="/terms" className="hover:text-zinc-400 transition-colors">Terms</a>
-                    <a href="/privacy" className="hover:text-zinc-400 transition-colors">Privacy</a>
-                  </div>
-                </motion.div>
+                  Cancel
+                </button>
+              </div>
+
+              {/* FOOTER LINKS */}
+              <div className="flex items-center justify-center gap-6 pt-2">
+                <a href="/terms" className="text-[9px] font-bold text-white/40 uppercase tracking-widest hover:text-white transition-colors">Terms & Conditions</a>
+                <a href="/privacy" className="text-[9px] font-bold text-white/40 uppercase tracking-widest hover:text-white transition-colors">Privacy Policy</a>
               </div>
             </div>
           </div>

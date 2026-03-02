@@ -126,8 +126,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script
           id="agechecker-script"
           src="https://cdn.agechecker.net/static/popup/v1/popup.js"
-          strategy="beforeInteractive"
-          data-agecheck-api-key="64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ"
+          strategy="afterInteractive"
+          data-agecheck-api-key={process.env.NEXT_PUBLIC_AGECHECKER_API_KEY}
           data-agecheck-disable-auto="true"
         />
       </body>

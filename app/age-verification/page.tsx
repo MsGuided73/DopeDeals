@@ -11,8 +11,22 @@ export default function AgeVerificationPage() {
   const { user, updateUserMetadata, loading: authLoading } = useAuth();
   const [isVerifying, setIsVerifying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isServiceLoading, setIsServiceLoading] = useState(true);
 
   useEffect(() => {
+    // Polling for AgeChecker availability if not immediately present
+    let pollCount = 0;
+    const checkService = () => {
+      if ((window as any).AgeChecker) {
+        setIsServiceLoading(false);
+      } else if (pollCount < 20) { // Poll for 10 seconds max
+        pollCount++;
+        setTimeout(checkService, 500);
+      } else {
+        setIsServiceLoading(false); // Stop showing loading even if it failed, handle in button
+      }
+    };
+    checkService();
     // Check if already verified in this session or metadata
     if (user?.user_metadata?.age_verified) {
       setIsSuccess(true);
@@ -53,18 +67,20 @@ export default function AgeVerificationPage() {
     if (ac && typeof ac.verify === 'function') {
       setIsVerifying(true);
       
-      // Configure for current user if available
-      if (user) {
-        (window as any).ageCheckerConfig = {
-          customerEmail: user.email,
-          customerFirstName: user.user_metadata?.firstName || '',
-          customerLastName: user.user_metadata?.lastName || '',
-        };
-      }
+      // Map user metadata fields correctly to AgeChecker config
+      const config = {
+        apiKey: process.env.NEXT_PUBLIC_AGECHECKER_API_KEY || '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
+        customerEmail: user?.email,
+        customerFirstName: user?.user_metadata?.firstName || user?.user_metadata?.full_name?.split(' ')[0] || '',
+        customerLastName: user?.user_metadata?.lastName || user?.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '',
+      };
+      
+      console.log('[AgeChecker] Triggering verification with config:', { ...config, apiKey: '***' });
+      (window as any).ageCheckerConfig = config;
 
       ac.verify();
     } else {
-      toast.error('Age verification service is still loading. Please try again in a moment.');
+      toast.error('Age verification service failed to initialize. Please refresh the page.');
     }
   };
 
@@ -138,14 +154,14 @@ export default function AgeVerificationPage() {
                   </p>
                   <button 
                     onClick={handleStartVerification}
-                    disabled={isVerifying}
+                    disabled={isVerifying || isServiceLoading}
                     className="group relative px-12 py-5 bg-dope-orange-500 text-white font-black uppercase tracking-[0.3em] rounded-2xl overflow-hidden transition-all duration-300 hover:bg-dope-orange-600 hover:shadow-[0_0_50px_rgba(255,107,0,0.4)] active:scale-95 disabled:opacity-50"
                   >
                     <span className="relative z-10 flex items-center gap-3">
-                      {isVerifying ? (
+                      {isVerifying || isServiceLoading ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
-                          Processing...
+                          {isServiceLoading ? 'Initializing Service...' : 'Processing...'}
                         </>
                       ) : (
                         'Verify My Age Now'
