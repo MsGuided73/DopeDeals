@@ -77,12 +77,13 @@ const CheckoutSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  // Require auth and create_orders permission
-  const auth = await requirePermission('create_orders');
-  if (auth instanceof NextResponse) return auth;
-  const { user } = auth;
+  try {
+    // Require auth and create_orders permission
+    const auth = await requirePermission('create_orders');
+    if (auth instanceof NextResponse) return auth;
+    const { user } = auth;
 
-  const body = await req.json().catch(() => ({}));
+    const body = await req.json().catch(() => ({}));
   const parse = CheckoutSchema.safeParse(body);
   if (!parse.success) {
     return NextResponse.json({ error: 'Invalid payload', issues: parse.error.issues }, { status: 400 });
@@ -172,9 +173,12 @@ export async function POST(req: NextRequest) {
   // Generate order number
   const orderNumber = generateOrderNumber();
 
+  let order: any = null;
+  let createdItems: any[] = [];
+
   // Prefer atomic checkout when available (Supabase)
   if (typeof storage.checkoutAtomic === 'function') {
-    const { order, items: createdItems } = await (storage.checkoutAtomic as any)({
+    const result = await (storage.checkoutAtomic as any)({
       userId: user.id,
       items,
       shippingAddress,
@@ -185,118 +189,122 @@ export async function POST(req: NextRequest) {
       shippingAmount: shipping.toString(),
       totalAmount: total.toString()
     });
-
-    // Fire-and-forget: create ShipStation order (graceful fail)
-    try {
-      const { ShipstationService } = await import('../../../lib/services/shipstation/service');
-      const { getStorage: getServerStorage } = await import('../../../lib/storage');
-      const serverStorage = await getServerStorage();
-      const apiKey = process.env.SHIPSTATION_API_KEY;
-      const apiSecret = process.env.SHIPSTATION_API_SECRET;
-      if (apiKey && apiSecret) {
-        const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, serverStorage as any);
-        const map = {
-          orderNumber: order.id,
-          orderDate: new Date().toISOString(),
-          orderStatus: 'on_hold', // Hold until payment confirmed
-          billTo: (billingAddress || shippingAddress || {}) as any,
-          shipTo: (shippingAddress || billingAddress || {}) as any,
-          items: createdItems.map((ci: any) => ({
-            name: ci.name || 'Item',
-            sku: ci.sku,
-            quantity: ci.quantity,
-            unitPrice: Number(ci.priceAtPurchase || 0),
-          })),
-          orderTotal: Number(total),
-          amountPaid: 0,
-        } as any;
-        svc.createShipstationOrder(map).catch(() => void 0);
-      }
-    } catch {}
-
-    if (typeof storage.clearCart === 'function') {
-      await storage.clearCart(user.id);
-    }
-
-    // Always use KajaPay Hosted Form for redirect flow
-    try {
-      const { kajaPayClient } = await import('../../../lib/services/kajapay/client');
-      
-      const host = req.headers.get('host') || 'localhost:3000';
-      const protocol = host.includes('localhost') ? 'http' : 'https';
-      const baseUrl = `${protocol}://${host}`;
-
-      const hostedFormResponse = await kajaPayClient.createHostedForm({
-        amount: Number(total),
-        orderNumber: order.orderNumber || order.id,
-        orderDescription: `Highway 420 Order: ${createdItems.length} items`,
-        firstName: shippingAddress.firstName,
-        lastName: shippingAddress.lastName,
-        address1: shippingAddress.address1,
-        city: shippingAddress.city,
-        state: shippingAddress.state,
-        zip: shippingAddress.postalCode,
-        country: shippingAddress.country,
-        email: user.email || undefined,
-        redirectUrl: `${baseUrl}/checkout/confirmation?orderId=${order.id}`,
-        cancelUrl: `${baseUrl}/checkout/review`,
-        callbackUrl: `${baseUrl}/api/webhooks/kajapay`
-      });
-
-      if (hostedFormResponse.success && hostedFormResponse.data?.paymentUrl) {
-        return NextResponse.json({
-          success: true,
-          redirectUrl: hostedFormResponse.data.paymentUrl,
-          orderId: order.id
-        });
-      } else {
-        throw new Error(hostedFormResponse.error?.responseText || 'Failed to create payment session');
-      }
-    } catch (error: any) {
-      console.error('[Checkout] KajaPay Hosted Form error:', error);
-      return NextResponse.json({ 
-        error: 'Payment session creation failed', 
-        details: error.message,
-        orderId: order.id // Return orderId so we can attempt retry if needed
-      }, { status: 500 });
-    }
-  }
-
-  // Fallback: create order and items separately
-  const order = await (storage.createOrder as any)({
-    userId: user.id,
-    orderNumber,
-    subtotalAmount: subtotal.toString(),
-    taxAmount: tax.toString(),
-    shippingAmount: shipping.toString(),
-    totalAmount: total.toString(),
-    paymentStatus: 'pending',
-    paymentMethod: 'card',
-    shippingAddress: shippingAddress || null,
-    billingAddress: billingAddress || null,
-    status: 'pending',
-  });
-
-  const createdItems = [] as Array<{ id: string; productId: string; quantity: number; priceAtPurchase: string }>;
-  for (const line of items) {
-    const product = await storage.getProduct(line.productId);
-    if (!product) continue;
-    const oi = await (storage.createOrderItem as any)({
-      orderId: order.id,
-      productId: product.id,
-      quantity: line.quantity,
-      priceAtPurchase: product.our_price || product.price,
+    order = result.order;
+    createdItems = result.items;
+  } else {
+    // Fallback: create order and items separately
+    order = await (storage.createOrder as any)({
+      userId: user.id,
+      orderNumber,
+      subtotalAmount: subtotal.toString(),
+      taxAmount: tax.toString(),
+      shippingAmount: shipping.toString(),
+      totalAmount: total.toString(),
+      paymentStatus: 'pending',
+      paymentMethod: 'card',
+      shippingAddress: shippingAddress || null,
+      billingAddress: billingAddress || null,
+      status: 'pending',
     });
-    createdItems.push({ id: oi.id, productId: oi.productId as string, quantity: oi.quantity as number, priceAtPurchase: oi.priceAtPurchase as string });
+
+    for (const line of items) {
+      const product = await storage.getProduct(line.productId);
+      if (!product) continue;
+      const price = Number(product.our_price || product.price || 0);
+      const oi = await (storage.createOrderItem as any)({
+        orderId: order.id,
+        productId: product.id,
+        quantity: line.quantity,
+        priceAtPurchase: price,
+        productName: product.name || 'Unknown Product',
+        productSku: product.sku || 'SKU-000',
+        productImageUrl: product.image_url || product.imageUrl || null,
+        unitPrice: price,
+        totalPrice: price * line.quantity,
+      });
+      createdItems.push({ id: oi.id, productId: oi.productId as string, quantity: oi.quantity as number, priceAtPurchase: oi.priceAtPurchase as string });
+    }
   }
+
+  // Fire-and-forget: create ShipStation order (graceful fail)
+  try {
+    const { ShipstationService } = await import('../../../lib/services/shipstation/service');
+    const { getStorage: getServerStorage } = await import('../../../lib/storage');
+    const serverStorage = await getServerStorage();
+    const apiKey = process.env.SHIPSTATION_API_KEY;
+    const apiSecret = process.env.SHIPSTATION_API_SECRET;
+    if (apiKey && apiSecret) {
+      const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, serverStorage as any);
+      const map = {
+        orderNumber: order.id,
+        orderDate: new Date().toISOString(),
+        orderStatus: 'on_hold', // Hold until payment confirmed
+        billTo: (billingAddress || shippingAddress || {}) as any,
+        shipTo: (shippingAddress || billingAddress || {}) as any,
+        items: createdItems.map((ci: any) => ({
+          name: ci.name || 'Item',
+          sku: ci.sku,
+          quantity: ci.quantity,
+          unitPrice: Number(ci.priceAtPurchase || ci.unitPrice || 0),
+        })),
+        orderTotal: Number(total),
+        amountPaid: 0,
+      } as any;
+      svc.createShipstationOrder(map).catch(() => void 0);
+    }
+  } catch {}
 
   if (typeof storage.clearCart === 'function') {
     await storage.clearCart(user.id);
   }
 
-  return NextResponse.json({
-    order,
-    items: createdItems,
-    summary: { items, totals: { subtotal, tax, shipping, total } },
-  }, { status: 201 });
+  // Always use KajaPay Hosted Form for redirect flow
+  try {
+    const { kajaPayClient } = await import('../../../lib/services/kajapay/client');
+    
+    const host = req.headers.get('host') || 'localhost:3000';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
+
+    const hostedFormResponse = await kajaPayClient.createHostedForm({
+      amount: Number(total),
+      orderNumber: order.orderNumber || order.id,
+      orderDescription: `Highway 420 Order: ${createdItems.length} items`,
+      firstName: shippingAddress.firstName,
+      lastName: shippingAddress.lastName,
+      address1: shippingAddress.address1,
+      city: shippingAddress.city,
+      state: shippingAddress.state,
+      zip: shippingAddress.postalCode,
+      country: shippingAddress.country,
+      email: user.email || undefined,
+      redirectUrl: `${baseUrl}/checkout/confirmation?orderId=${order.id}`,
+      cancelUrl: `${baseUrl}/checkout/review`,
+      callbackUrl: `${baseUrl}/api/webhooks/kajapay`
+    });
+
+    if (hostedFormResponse.success && hostedFormResponse.data?.paymentUrl) {
+      return NextResponse.json({
+        success: true,
+        redirectUrl: hostedFormResponse.data.paymentUrl,
+        orderId: order.id
+      });
+    } else {
+      throw new Error(hostedFormResponse.error?.responseText || 'Failed to create payment session');
+    }
+  } catch (error: any) {
+    console.error('[Checkout] KajaPay Hosted Form error:', error);
+    return NextResponse.json({ 
+      error: 'Payment session creation failed', 
+      details: error.message,
+      orderId: order.id // Return orderId so we can attempt retry if needed
+    }, { status: 500 });
+  }
+} catch (globalError: any) {
+  console.error('[Checkout API Global Catch]', globalError);
+  return NextResponse.json({ 
+    error: globalError.message || 'CRITICAL_CHECKOUT_ERROR', 
+    stack: process.env.NODE_ENV === 'development' ? globalError.stack : undefined
+  }, { status: 500 });
+}
 }

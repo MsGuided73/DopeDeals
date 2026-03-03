@@ -392,7 +392,7 @@ export const orders = pgTable("orders", {
 export const orderItems = pgTable("order_items", {
   id: uuid("id").defaultRandom().primaryKey(),
   orderId: uuid("order_id").references(() => orders.id, { onDelete: 'cascade' }),
-  productId: uuid("product_id").references(() => products.id, { onDelete: 'set null' }),
+  productId: uuid("product_id"), // Removed references(() => products.id) to support main_site_products
 
   // Product Information (snapshot at time of order)
   productName: text("product_name").notNull(),

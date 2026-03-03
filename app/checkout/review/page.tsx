@@ -145,7 +145,9 @@ export default function ReviewPage() {
       }
 
       if (!response.ok) {
-        throw new Error(data.error || `Request failed with status ${response.status}`);
+        console.error('Checkout API raw response data:', data);
+        const detailedError = data.details ? `${data.error}: ${data.details}` : data.error;
+        throw new Error(detailedError || `Request failed with status ${response.status}`);
       }
 
       if (data.redirectUrl) {
