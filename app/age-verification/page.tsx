@@ -16,81 +16,40 @@ export default function AgeVerificationPage() {
   const [serviceError, setServiceError] = useState(false);
 
   useEffect(() => {
-    // Polling for AgeChecker availability if not immediately present
-    let pollCount = 0;
-    const checkService = () => {
-      const ac = (window as any).AgeChecker || (window as any).AgeCheckerPopup;
-      if (ac && (typeof ac.verify === 'function' || typeof ac.show === 'function' || typeof ac.open === 'function')) {
-        setIsServiceLoading(false);
-      } else if (pollCount < 30) { // Poll for 15 seconds max (sync with checkout)
-        pollCount++;
-        setTimeout(checkService, 500);
-      } else {
-        setIsServiceLoading(false); 
-        setServiceError(true);
-        console.error('[AgeChecker] Service failed to load after polling');
-      }
-    };
-    checkService();
     // Check if already verified in this session or metadata
     if (user?.user_metadata?.age_verified) {
       setIsSuccess(true);
-    }
-
-    const handleVerified = async (event: any) => {
-      console.log('[AgeChecker] Verification successful event:', event);
-      
-      // Persist locally for session consistency
-      localStorage.setItem('hw420_age_verified', 'true');
-      localStorage.setItem('hw420_age_verified_formal', 'true');
-      if (event.detail?.uuid || event.detail?.id) {
-        localStorage.setItem('hw420_age_checker_id', event.detail.uuid || event.detail.id);
-      }
-      
-      setIsSuccess(true);
-      setIsVerifying(false);
-      toast.success('Age verified successfully!');
-
-      // Persist to user metadata if logged in
-      if (user) {
-        try {
-          await updateUserMetadata({
-            age_verified: true,
-            age_verified_at: new Date().toISOString(),
-            age_checker_status: 'verified'
-          });
-          console.log('[AgeChecker] User metadata updated successfully');
-        } catch (error) {
-          console.error('[AgeChecker] Failed to update user metadata:', error);
-        }
-      }
-    };
-
-    window.addEventListener('agechecker:verified', handleVerified);
-    return () => window.removeEventListener('agechecker:verified', handleVerified);
-  }, [user, updateUserMetadata]);
-
-  const handleStartVerification = () => {
-    const ac = (window as any).AgeChecker || (window as any).AgeCheckerPopup;
-    if (ac && (typeof ac.verify === 'function' || typeof ac.show === 'function' || typeof ac.open === 'function')) {
-      setIsVerifying(true);
-      
-      // Map user metadata fields correctly to AgeChecker config
-      const config = {
-        apiKey: process.env.NEXT_PUBLIC_AGECHECKER_API_KEY || '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
-        customerEmail: user?.email,
-        customerFirstName: user?.user_metadata?.firstName || user?.user_metadata?.full_name?.split(' ')[0] || '',
-        customerLastName: user?.user_metadata?.lastName || user?.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '',
-      };
-      
-      console.log('[AgeChecker] Triggering verification with config:', { ...config, apiKey: '***' });
-      (window as any).ageCheckerConfig = config;
-
-      if (typeof ac.verify === 'function') ac.verify();
-      else if (typeof ac.show === 'function') ac.show();
-      else if (typeof ac.open === 'function') ac.open();
+      setIsServiceLoading(false);
     } else {
-      toast.error('Age verification service failed to initialize. Please refresh the page.');
+      setIsServiceLoading(false); // No external widget to load for Didit initially
+    }
+  }, [user]);
+
+  const handleStartVerification = async () => {
+    setIsVerifying(true);
+    try {
+      // 1. Hit our Next.js backend to securely generate a Didit session
+      const response = await fetch('/api/age-verification/create-session', {
+        method: 'POST',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create verification session');
+      }
+
+      const { url } = await response.json();
+      
+      // 2. Redirect the user to Didit's hosted flow
+      if (url) {
+         window.location.href = url;
+      } else {
+         throw new Error('No redirect URL returned');
+      }
+
+    } catch (error) {
+      console.error('[Didit] Verification start error:', error);
+      toast.error('Verification service temporarily unavailable. Please try again.');
+      setIsVerifying(false);
     }
   };
 

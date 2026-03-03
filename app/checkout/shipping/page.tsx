@@ -25,9 +25,6 @@ export default function ShippingPage() {
   });
 
   const [isAgeVerified, setIsAgeVerified] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [isServiceLoading, setIsServiceLoading] = useState(true);
-
   const [restrictedItems, setRestrictedItems] = useState<string[]>([]);
   const [isCheckingZip, setIsCheckingZip] = useState(false);
 
@@ -35,46 +32,6 @@ export default function ShippingPage() {
     // Check if formally verified in this session
     const verified = localStorage.getItem('hw420_age_verified_formal') === 'true';
     if (verified) setIsAgeVerified(true);
-
-    // Handle AgeChecker verification success
-    const handleVerified = (event: any) => {
-      console.log('[AgeChecker] Verification successful', event);
-      localStorage.setItem('hw420_age_verified_formal', 'true');
-      if (event.detail?.uuid || event.detail?.id) {
-        localStorage.setItem('hw420_age_checker_id', event.detail.uuid || event.detail.id);
-      }
-      setIsAgeVerified(true);
-      setIsVerifying(false);
-      toast.success('Age verified successfully!');
-      
-      // If we were waiting for verification to submit, try submitting again
-      const pendingSubmit = sessionStorage.getItem('checkout_pending_submit') === 'true';
-      if (pendingSubmit) {
-        sessionStorage.removeItem('checkout_pending_submit');
-        // We can't easily call handleSubmit here because it needs the event,
-        // but we can trigger a manual click on the submit button or just notify.
-        toast.success('Please click "Continue to Review" again to proceed.');
-      }
-    };
-
-    // Polling for AgeChecker availability if not immediately present
-    // AgeChecker.Net popup.js exposes window.AgeCheckerPopup (not window.AgeChecker)
-    let pollCount = 0;
-    const checkService = () => {
-      if ((window as any).AgeCheckerPopup || (window as any).AgeChecker) {
-        setIsServiceLoading(false);
-      } else if (pollCount < 20) { // 10 seconds max
-        pollCount++;
-        setTimeout(checkService, 500);
-      } else {
-        // Widget didn't load — don't block the UI, handle gracefully on submit
-        setIsServiceLoading(false);
-      }
-    };
-    checkService();
-
-    window.addEventListener('agechecker:verified', handleVerified);
-    return () => window.removeEventListener('agechecker:verified', handleVerified);
   }, []);
 
   // Stable product ID string via useMemo — avoids new array reference on every render
@@ -150,41 +107,9 @@ export default function ShippingPage() {
 
     // Enforce Age Verification for checkout
     if (!isAgeVerified) {
-      const attemptVerification = (retries = 0) => {
-        // AgeChecker.Net popup.js registers as window.AgeCheckerPopup
-        const ac = (window as any).AgeCheckerPopup ?? (window as any).AgeChecker;
-        if (ac) {
-          toast.dismiss('age-init');
-          setIsVerifying(true);
-          sessionStorage.setItem('checkout_pending_submit', 'true');
-          // Pre-populate AgeChecker config with customer data
-          (window as any).ageCheckerConfig = {
-            apiKey: process.env.NEXT_PUBLIC_AGECHECKER_API_KEY || '64Tw24wNqoE1MNcvdwYboVpmdpFsv7tZ',
-            customerEmail: form.email,
-            customerFirstName: form.firstName,
-            customerLastName: form.lastName,
-            shippingAddress: {
-              address: form.shippingAddress1,
-              city: form.shippingCity,
-              state: form.shippingState,
-              zip: form.shippingZip,
-              country: 'US'
-            }
-          };
-          // Trigger the verification popup
-          if (typeof ac.show === 'function') ac.show();
-          else if (typeof ac.verify === 'function') ac.verify();
-          else if (typeof ac.open === 'function') ac.open();
-        } else if (retries < 10) { // 5 seconds max
-          if (retries === 0) toast.loading('Initializing age verification...', { id: 'age-init' });
-          setTimeout(() => attemptVerification(retries + 1), 500);
-        } else {
-          toast.dismiss('age-init');
-          toast.error('Age verification unavailable. Please refresh the page and try again.');
-        }
-      };
-
-      attemptVerification();
+      toast.error('Age verification required. Redirecting to secure verification protocol...');
+      sessionStorage.setItem('checkout_shipping', JSON.stringify(form));
+      setTimeout(() => router.push('/age-verification'), 1500);
       return;
     }
 
@@ -341,11 +266,11 @@ export default function ShippingPage() {
           
           <button 
             type="submit"
-            disabled={isVerifying || isCheckingZip || isServiceLoading}
+            disabled={isCheckingZip}
             className="px-8 py-3 bg-black hover:bg-zinc-900 text-white font-bold uppercase tracking-widest rounded transition-all border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ color: 'white' }}
           >
-            {isCheckingZip ? 'Checking...' : isServiceLoading ? 'Initializing...' : isVerifying ? 'Verifying...' : 'Continue to Review'}
+            {isCheckingZip ? 'Checking...' : 'Continue to Review'}
           </button>
         </div>
       </form>

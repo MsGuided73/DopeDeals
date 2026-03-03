@@ -123,12 +123,24 @@ export default function AccountPage() {
           </div>
 
           <div className="mb-8 w-full max-w-4xl flex flex-col items-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-dope-orange-400 to-dope-orange-600 rounded-full mb-6 shadow-2xl">
+            <div className="relative inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-dope-orange-400 to-dope-orange-600 rounded-full mb-6 shadow-2xl">
               <User className="w-10 h-10 text-white" />
+              {user?.user_metadata?.age_verified && (
+                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1.5 border-4 border-white shadow-sm" title="Age Verified">
+                  <Shield className="w-4 h-4 text-white" />
+                </div>
+              )}
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-chalets font-bold text-gray-900 mb-6 leading-tight tracking-wide">
-              MY ACCOUNT
-            </h1>
+            <div className="flex items-center gap-4 mb-6 flex-col sm:flex-row">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-chalets font-bold text-gray-900 leading-tight tracking-wide text-center">
+                MY ACCOUNT
+              </h1>
+              {user?.user_metadata?.age_verified && (
+                <span className="bg-green-100 text-green-800 text-sm font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-sm border border-green-200 mt-2 sm:mt-0">
+                  <Shield className="w-4 h-4" /> 21+ Verified
+                </span>
+              )}
+            </div>
             <div className="w-32 h-1 bg-dope-orange-500 mx-auto mb-8 rounded-full"></div>
             <p className="text-xl md:text-2xl text-gray-800 max-w-3xl mx-auto leading-relaxed font-medium">
               Manage your account, track orders, and access exclusive member benefits

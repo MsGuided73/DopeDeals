@@ -37,6 +37,32 @@ _Define the JSON Input/Output shapes here. These must closely mirror our Zod sch
     "kajaPayTransactionId": "integer",
     "payload": "jsonb",
     "processed": "boolean"
+  },
+  "persona_inquiry": {
+    "id": "inq_...",
+    "status": "created | pending | completed | failed",
+    "referenceId": "uuid (supabase user id)",
+    "fields": {
+      "nameFirst": "string",
+      "nameLast": "string",
+      "birthdate": "YYYY-MM-DD"
+    }
+  },
+  "persona_webhook": {
+    "data": {
+      "attributes": {
+        "name": "inquiry.completed",
+        "payload": {
+          "data": {
+            "id": "inq_...",
+            "attributes": {
+              "status": "completed",
+              "referenceId": "uuid"
+            }
+          }
+        }
+      }
+    }
   }
 }
 ```
