@@ -37,9 +37,12 @@ export default function ShippingPage() {
     if (verified) setIsAgeVerified(true);
 
     // Handle AgeChecker verification success
-    const handleVerified = () => {
-      console.log('[AgeChecker] Verification successful');
+    const handleVerified = (event: any) => {
+      console.log('[AgeChecker] Verification successful', event);
       localStorage.setItem('hw420_age_verified_formal', 'true');
+      if (event.detail?.uuid || event.detail?.id) {
+        localStorage.setItem('hw420_age_checker_id', event.detail.uuid || event.detail.id);
+      }
       setIsAgeVerified(true);
       setIsVerifying(false);
       toast.success('Age verified successfully!');

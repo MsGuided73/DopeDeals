@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, Flame, Zap, Search } from 'lucide-react';
 import BlogArticlesGrid from '../components/BlogArticlesGrid';
 import BlogFooter from '../components/BlogFooter';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 
 interface BlogPost {
   id: string;
@@ -205,7 +206,9 @@ export default function BlogPage() {
 
            {/* FEED */}
            <div className="lg:col-span-9">
-             <div className="flex items-baseline justify-between mb-12 border-b border-white/10 pb-4">
+             <GlobalBreadcrumbs paths={[{ name: "The High Chronicles" }]} />
+
+             <div className="flex items-baseline justify-between mb-12 border-b border-white/10 pb-4 mt-6">
                 <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
                   The <span className="text-[#ff6b35]">Feed</span>
                 </h2>

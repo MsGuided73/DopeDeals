@@ -3,6 +3,7 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { addToCart } from "../lib/cart-utils";
+import GlobalBreadcrumbs from "../components/GlobalBreadcrumbs";
 
 interface Product {
   id: string;
@@ -117,6 +118,9 @@ export default function HotProductsPage() {
 
       {/* Products Grid */}
       <main className="max-w-7xl mx-auto px-4 py-12 md:py-20">
+        
+        <GlobalBreadcrumbs paths={[{ name: "Hot Products" }]} />
+
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (

@@ -6,6 +6,7 @@ import { Shield, Calendar, CheckCircle, AlertTriangle, Loader2 } from 'lucide-re
 import GlobalMasthead from '../components/GlobalMasthead';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 
 export default function AgeVerificationPage() {
   const { user, updateUserMetadata, loading: authLoading } = useAuth();
@@ -125,6 +126,11 @@ export default function AgeVerificationPage() {
             
             {/* Header Section */}
             <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-1000">
+              
+              <div className="flex justify-center mb-8">
+                 <GlobalBreadcrumbs paths={[{ name: "Age Verification" }]} />
+              </div>
+
               <div className="inline-block mb-4 overflow-visible relative group pr-4">
                 <h1 className="text-6xl md:text-8xl font-display-twilight font-bold tracking-[0.2em] text-white uppercase italic leading-none relative z-10 pr-6">
                   AGE <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/50">VERIFICATION</span>

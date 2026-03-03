@@ -1,7 +1,7 @@
-
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { FALLBACK_POSTS } from '../../../lib/blog-data';
+import GlobalBreadcrumbs from '../../components/GlobalBreadcrumbs';
 
 // Force dynamic rendering since we are checking params
 export const dynamic = 'force-dynamic';
@@ -75,6 +75,12 @@ export default function BlogPostPage({ params }: PageProps) {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-16">
+        
+        <GlobalBreadcrumbs paths={[
+          { name: "The High Chronicles", href: "/blog" },
+          { name: post.title }
+        ]} />
+
         <div 
           className="prose prose-lg md:prose-xl max-w-none text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-a:text-dope-orange prose-img:rounded-xl prose-img:shadow-lg"
         >

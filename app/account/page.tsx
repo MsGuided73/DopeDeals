@@ -8,6 +8,7 @@ import {
   Star, Gift, ShoppingBag, Bell, Shield, HelpCircle,
   TrendingUp, Award, Clock, Edit, Eye, Trash2, Loader2
 } from 'lucide-react';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -115,8 +116,13 @@ export default function AccountPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 py-20">
-        <div className="relative w-full max-w-none mx-0 px-6 text-center">
-          <div className="mb-8">
+        <div className="relative w-full max-w-none mx-0 px-6 text-center flex flex-col items-center">
+          
+          <div className="mb-8 w-full max-w-4xl flex justify-start">
+            <GlobalBreadcrumbs paths={[{ name: "My Account" }]} />
+          </div>
+
+          <div className="mb-8 w-full max-w-4xl flex flex-col items-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-dope-orange-400 to-dope-orange-600 rounded-full mb-6 shadow-2xl">
               <User className="w-10 h-10 text-white" />
             </div>

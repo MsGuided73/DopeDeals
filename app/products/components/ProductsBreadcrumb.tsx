@@ -1,6 +1,14 @@
+"use client";
+
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function ProductsBreadcrumb() {
+  const searchParams = useSearchParams();
+  const isOnSale = searchParams.get('onSale') === 'true';
+
+  const label = isOnSale ? 'Dope Deals' : 'All Products';
+
   return (
     <nav className="flex" aria-label="Breadcrumb">
       <ol className="flex items-center space-x-4">
@@ -19,7 +27,7 @@ export default function ProductsBreadcrumb() {
             <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
             </svg>
-            <span className="ml-4 text-sm font-medium text-gray-900">All THCA Products</span>
+            <span className="ml-4 text-sm font-medium text-gray-900">{label}</span>
           </div>
         </li>
       </ol>
