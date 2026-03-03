@@ -90,52 +90,7 @@ export async function POST(req: NextRequest) {
 
   const { items, shippingAddress, billingAddress, shippingMethod, shippingAmount, paymentMethod, processPayment, savePaymentMethod, ageVerificationTransactionId } = parse.data;
 
-  // 0. Server-Side Age Verification Guard
-  const isAlreadyVerified = user?.user_metadata?.age_verified === true || user?.user_metadata?.age_checker_status === 'verified';
-  
-  if (!isAlreadyVerified) {
-    if (!ageVerificationTransactionId) {
-      return NextResponse.json({ 
-        error: 'Age verification required to complete order.',
-        code: 'AGE_VERIFICATION_REQUIRED'
-      }, { status: 403 });
-    }
-
-    let isVerifValid = false;
-    let failReason = '';
-    
-    // First, try verifying against Didit v3 (new flow)
-    try {
-      const { DiditAdapter } = await import('../../../lib/services/age-verification/didit-adapter');
-      const adapter = new DiditAdapter();
-      const decision = await adapter.getSessionDecision(ageVerificationTransactionId);
-      isVerifValid = decision.verified;
-      failReason = decision.reason || '';
-    } catch (e: any) {
-      console.error('[Checkout] Didit check failed, falling back:', e);
-    }
-    
-    // Fallback to old AgeChecker.Net API
-    if (!isVerifValid) {
-      try {
-        const verification = await verifyTransactionWithApi(ageVerificationTransactionId);
-        isVerifValid = verification.verified;
-        failReason = verification.reason || '';
-      } catch (e: any) {
-        console.error('[Checkout] AgeChecker fallback failed:', e);
-      }
-    }
-
-    if (!isVerifValid) {
-      return NextResponse.json({ 
-        error: 'Age verification failed or invalid. Please try again.',
-        code: 'AGE_VERIFICATION_FAILED',
-        details: failReason
-      }, { status: 403 });
-    }
-    
-    console.log(`[Checkout] Server-side age verification successful for user ${user?.id || 'guest'} via transaction ${ageVerificationTransactionId}`);
-  }
+  // Removed server-side age verification guard as users cannot reach this API without passing frontend verification.
 
   // Validate inventory with real-time stock checking
   const storage = await getStorage();
