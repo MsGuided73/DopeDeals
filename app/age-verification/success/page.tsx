@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 import GlobalMasthead from '../../components/GlobalMasthead';
 
-function VerificationContent() {
+function AgeVerificationSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'processing' | 'approved' | 'declined'>('processing');
@@ -82,13 +82,15 @@ function VerificationContent() {
 
 export default function AgeVerificationSuccessPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-black flex items-center justify-center font-inter p-6 relative overflow-hidden">
-        <Loader2 className="w-20 h-20 text-dope-orange animate-spin" />
-      </div>
-    }>
+    <>
       <GlobalMasthead />
-      <VerificationContent />
-    </Suspense>
+      <Suspense fallback={
+        <div className="min-h-screen bg-black flex items-center justify-center p-6 relative overflow-hidden">
+          <Loader2 className="w-20 h-20 text-dope-orange animate-spin" />
+        </div>
+      }>
+        <AgeVerificationSuccessContent />
+      </Suspense>
+    </>
   );
 }
