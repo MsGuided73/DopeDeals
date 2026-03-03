@@ -125,7 +125,7 @@ export default function AgeVerificationPage() {
             
             {/* Header Section */}
             <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-1000">
-              <div className="inline-block mb-4 overflow-hidden relative group">
+              <div className="inline-block mb-4 overflow-visible relative group pr-4">
                 <h1 className="text-6xl md:text-8xl font-display-twilight font-bold tracking-[0.2em] text-white uppercase italic leading-none relative z-10 pr-6">
                   AGE <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/50">VERIFICATION</span>
                 </h1>
@@ -170,7 +170,7 @@ export default function AgeVerificationPage() {
                     <div className="w-24 h-24 bg-white/5 rounded-3xl rotate-45 flex items-center justify-center mx-auto mb-10 border border-white/10 shadow-xl group-hover:bg-dope-orange/10 transition-colors duration-500">
                       <Shield className="w-12 h-12 text-white -rotate-45" />
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-display-chalets text-white uppercase tracking-tight mb-6">Identity Verification Required</h2>
+                    <h2 className="text-3xl md:text-5xl font-display-twilight font-bold text-white uppercase tracking-[0.15em] mb-6 pr-4">IDENTITY VERIFICATION REQUIRED</h2>
                     {serviceError ? (
                       <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 mb-8 max-w-lg animate-in fade-in zoom-in duration-500">
                         <div className="flex items-center gap-3 text-red-500 mb-2 font-bold">

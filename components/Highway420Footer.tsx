@@ -9,7 +9,7 @@ export default function Highway420Footer() {
   const [email, setEmail] = useState("");
   const pathname = usePathname();
   const { hasCustomFooter } = useNavigation();
-  const isCheckoutFlow = pathname?.startsWith("/cart") || pathname?.startsWith("/checkout");
+  const isCheckoutFlow = pathname?.startsWith("/cart") || pathname?.startsWith("/checkout") || pathname?.startsWith("/age-verification");
   const isBlogFlow = pathname?.startsWith("/blog");
 
   if (hasCustomFooter || isBlogFlow) return null;
