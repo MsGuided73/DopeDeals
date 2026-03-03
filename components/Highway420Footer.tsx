@@ -95,13 +95,22 @@ export default function Highway420Footer() {
         </div>
 
         <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-            <div className="flex flex-wrap justify-center gap-4 font-medium">
-              <Link href="/shipping" className="hover:text-gray-900 transition-colors">Shipping</Link>
-              <Link href="/returns" className="hover:text-gray-900 transition-colors">Returns</Link>
-              <Link href="/privacy" className="hover:text-gray-900 transition-colors">Privacy</Link>
-              <Link href="/terms-and-conditions" className="hover:text-gray-900 transition-colors">Terms</Link>
-              <Link href="/help" className="hover:text-gray-900 transition-colors">Support</Link>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <Link href="/" className="shrink-0">
+                <img
+                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+                  alt="HIGHWAY 420"
+                  className="h-16 w-auto object-contain"
+                />
+              </Link>
+              <div className="flex flex-wrap justify-center md:justify-start gap-6 font-medium text-gray-500">
+                <Link href="/shipping" className="hover:text-gray-900 transition-colors">Shipping</Link>
+                <Link href="/returns" className="hover:text-gray-900 transition-colors">Returns</Link>
+                <Link href="/privacy" className="hover:text-gray-900 transition-colors">Privacy</Link>
+                <Link href="/terms-and-conditions" className="hover:text-gray-900 transition-colors">Terms</Link>
+                <Link href="/help" className="hover:text-gray-900 transition-colors">Support</Link>
+              </div>
             </div>
             <div className="flex items-center gap-6">
               <span className="text-xs font-semibold tracking-wide uppercase text-gray-400">Secure Checkout</span>
@@ -112,6 +121,19 @@ export default function Highway420Footer() {
               />
             </div>
           </div>
+
+          {/* Compliance Text */}
+          <p className="text-[10px] leading-relaxed text-gray-400 text-center max-w-5xl mx-auto border-t border-gray-100 pt-8">
+            These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose,
+            treat, cure or prevent any disease. Must be 21 years or older to purchase from this website. This product is not intended
+            for children, or pregnant or lactating women. Consult with a physician before use if you have a serious medical
+            condition or use prescription medications. A Doctor's advice should be sought before using this and any dietary
+            supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
+            do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms & Conditions printed
+            on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
+            allowed to be shipped to the following states: CA, HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
+            Louisiana.
+          </p>
         </div>
       </footer>
     );
@@ -373,8 +395,7 @@ export default function Highway420Footer() {
         {/* Copyright */}
         <div className="mt-12 text-center">
           <p className="text-gray-800 font-medium text-base mb-6">
-            © 2025 HIGHWAY 420. All rights reserved. | Designed with{" "}
-            <span className="text-green-600 font-bold mx-1 text-lg">♥</span> for better shopping experience.
+            © 2025 HIGHWAY 420. All rights reserved. | Better shopping experience.
           </p>
           <Link href="/" className="inline-block transition-transform hover:scale-105">
             <img
@@ -395,7 +416,7 @@ export default function Highway420Footer() {
             supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
             do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms & Conditions printed
             on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
-            allowed to be shipped to the following states: HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
+            allowed to be shipped to the following states: CA, HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
             Louisiana.
           </p>
           <div className="mt-8 flex justify-center">

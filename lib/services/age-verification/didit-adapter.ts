@@ -126,8 +126,38 @@ export class DiditAdapter implements AgeVerificationProvider {
     // Assuming a payload structure based on standard KYC providers.
     // We will refine this exactly to Didit's shape during the Trigger phase testing.
     return {
-      verified: payload.status === 'approved', // Or whatever Didit's success enum is
+      verified: payload.status === 'Approved', // Didit uses 'Approved'
       inquiryId: payload.session_id || payload.id
     };
+  }
+
+  async getSessionDecision(sessionId: string): Promise<{ verified: boolean, reason?: string }> {
+    try {
+      if (!this.apiKey) {
+        console.warn('[Age Verification] Warning: DIDIT_API_KEY is not defined.');
+        return { verified: false, reason: 'Server misconfiguration' };
+      }
+
+      const response = await fetch(`${this.apiUrl}/session/${sessionId}/decision/`, {
+        headers: {
+          'x-api-key': this.apiKey
+        }
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[Didit] Failed to get session decision:', errorText);
+        return { verified: false, reason: 'Session not found or API error' };
+      }
+
+      const data = await response.json();
+      return { 
+        verified: data.status === 'Approved', 
+        reason: data.status 
+      };
+    } catch (error: any) {
+      console.error('[Didit] Session decision error:', error);
+      return { verified: false, reason: error?.message || 'Unknown error' };
+    }
   }
 }

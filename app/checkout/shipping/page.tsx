@@ -26,6 +26,7 @@ export default function ShippingPage() {
 
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [restrictedItems, setRestrictedItems] = useState<string[]>([]);
+  const [shippingWarning, setShippingWarning] = useState<string | null>(null);
   const [isCheckingZip, setIsCheckingZip] = useState(false);
 
   useEffect(() => {
@@ -51,9 +52,11 @@ export default function ShippingPage() {
 
           if (data.restrictedProducts?.length > 0) {
             setRestrictedItems(data.restrictedProducts);
-            toast.error(`Some items in your cart cannot be shipped to ${data.state}.`);
+            setShippingWarning(data.warning || null);
+            toast.error(data.warning || `Some items in your cart cannot be shipped to ${data.state}.`);
           } else {
             setRestrictedItems([]);
+            setShippingWarning(null);
             if (data.city && !form.shippingCity) {
               setForm(prev => ({ ...prev, shippingCity: data.city, shippingState: data.state }));
             }
@@ -91,7 +94,8 @@ export default function ShippingPage() {
       
       if (data.restrictedProducts?.length > 0) {
         setRestrictedItems(data.restrictedProducts);
-        toast.error(`Some items in your cart cannot be shipped to ${data.state}.`, { id: checkToastId });
+        setShippingWarning(data.warning || null);
+        toast.error(data.warning || `Some items in your cart cannot be shipped to ${data.state}.`, { id: checkToastId });
         setIsCheckingZip(false);
         return;
       }
@@ -147,8 +151,7 @@ export default function ShippingPage() {
           <div>
             <h3 className="font-bold text-red-400">Shipping Restriction</h3>
             <p className="text-sm text-gray-300">
-              Your cart contains items that cannot be shipped to your state due to local regulations. 
-              Please remove these items from your cart to proceed with checkout.
+              {shippingWarning || 'Your cart contains items that cannot be shipped to your state due to local regulations. Please remove these items from your cart to proceed with checkout.'}
             </p>
           </div>
         </div>

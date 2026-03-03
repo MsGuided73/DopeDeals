@@ -85,7 +85,7 @@ export default function ReviewPage() {
       
       if (eligibilityData.restrictedProducts?.length > 0) {
         setIsProcessing(false);
-        toast.error('One or more items in your cart cannot be shipped to your location. Please return to the cart or shipping page to adjust your order.');
+        toast.error(eligibilityData.warning || 'One or more items in your cart cannot be shipped to your location. Please return to the cart or shipping page to adjust your order.');
         return;
       }
 
@@ -119,7 +119,7 @@ export default function ReviewPage() {
         email: shippingData.email || undefined,
       };
 
-      const ageVerificationTransactionId = localStorage.getItem('hw420_age_checker_id');
+      const ageVerificationTransactionId = localStorage.getItem('hw420_didit_session_id') || localStorage.getItem('hw420_age_checker_id');
 
       const response = await fetch('/api/checkout', {
         method: 'POST',
@@ -398,8 +398,8 @@ export default function ReviewPage() {
             <button 
               onClick={handleCreateOrderAndPay}
               disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-black hover:bg-zinc-900 font-bold uppercase tracking-widest rounded-lg transition-all border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] disabled:opacity-50 text-white"
-              style={{ color: 'white' }}
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-black font-bold uppercase tracking-widest rounded-lg transition-all border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] disabled:opacity-50 text-white hover:text-white"
+              style={{ color: 'white', textShadow: '0 0 10px rgba(255,255,255,0.5)' }}
             >
                 {isProcessing ? (
                   <>
@@ -408,11 +408,12 @@ export default function ReviewPage() {
                   </>
                 ) : (
                   <>
-                    Complete Purchase
+                    PROCEED TO KAJAPAY
                     <ArrowLeft className="w-5 h-5 rotate-180" />
                   </>
                 )}
               </button>
+
               
               <div className="flex items-center justify-center gap-2 text-xs xl:text-sm text-gray-500 mt-4">
                 {Shield && <Shield className="w-4 h-4 text-green-500" />}

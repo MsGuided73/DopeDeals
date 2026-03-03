@@ -46,7 +46,7 @@ export default function EssentialsFooter() {
             supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
             do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms & Conditions printed
             on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
-            allowed to be shipped to the following states: HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
+            allowed to be shipped to the following states: CA, HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
             Louisiana.
           </p>
         </div>

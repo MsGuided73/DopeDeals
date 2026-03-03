@@ -19,11 +19,17 @@ function AgeVerificationSuccessContent() {
       // Set the local flag to immediately unblock the frontend checkout flow
       localStorage.setItem('hw420_age_verified_formal', 'true');
       
+      const sessionId = searchParams.get('verificationSessionId');
+      if (sessionId) {
+        localStorage.setItem('hw420_didit_session_id', sessionId);
+      }
+      
       // Give the webhook a second to process and update Supabase securely
       setTimeout(() => {
         router.push('/checkout/shipping');
       }, 3000);
     } else if (diditStatus === 'Declined' || diditStatus === 'In Review') {
+
       setStatus('declined');
     } else {
       // Fallback if no status, assume processing

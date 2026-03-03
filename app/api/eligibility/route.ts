@@ -58,6 +58,7 @@ export async function GET(req: NextRequest) {
     // If productIds are provided, check which specific products are restricted
     const productIds = searchParams.get('productIds')?.split(',').filter(Boolean) || [];
     let restrictedProducts: string[] = [];
+    let customWarning = '';
     
     if (productIds.length > 0) {
       // 1. Check state-level restrictions via compliance rules mappings
@@ -74,10 +75,9 @@ export async function GET(req: NextRequest) {
         }
       }
 
-      // 2. Check individual product ZIP-level restrictions
       const { data: individualRows } = await supabase
         .from('main_site_products')
-        .select('id, compliance_info')
+        .select('id, name, category, subcategory, compliance_info')
         .in('id', productIds);
 
       if (individualRows) {
@@ -86,8 +86,23 @@ export async function GET(req: NextRequest) {
           if (compInfo?.restricted_zipcodes?.includes(zip)) {
             restrictedProducts.push(p.id);
           }
+
+          // Hardcode THCA restriction for restricted states
+          const thcaRestrictedStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'CA'];
+          if (thcaRestrictedStates.includes(state)) {
+            const isTHCA = 
+              p.name?.toUpperCase().includes('THCA') || 
+              p.category?.toUpperCase().includes('THCA') || 
+              p.subcategory?.toUpperCase().includes('THCA');
+            
+            if (isTHCA) {
+              restrictedProducts.push(p.id);
+              customWarning = `The law prohibits shipping of THCA products to ${state} residents. You can only purchase non-THCA products if shipping to ${state}. Please remove THCA items from your cart to proceed.`;
+            }
+          }
         }
       }
+
       
       // Remove duplicates
       restrictedProducts = Array.from(new Set(restrictedProducts));
@@ -120,8 +135,9 @@ export async function GET(req: NextRequest) {
       city: zipRow.city,
       county: zipRow.county,
       restrictedCategories: Array.from(new Set(restrictedCategories)),
-      restrictedProducts, // New field
+      restrictedProducts, 
       shippingRestrictions: shipping,
+      warning: customWarning || undefined,
     });
   } catch (err) {
     return NextResponse.json({ error: 'Eligibility check failed' }, { status: 500 });
