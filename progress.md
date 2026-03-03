@@ -6,3 +6,4 @@
 - Fixed CSP violation for AgeChecker in `next.config.js`.
 - Corrected verification link in Account Dashboard (`app/account/page.tsx`).
 - Activated Age Verification page (`app/age-verification/page.tsx`) with interactive trigger and success handling.
+- Implemented and deployed a centralized `<GlobalBreadcrumbs />` infrastructure across 7 top-level navigation pages.
