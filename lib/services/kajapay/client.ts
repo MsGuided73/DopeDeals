@@ -48,7 +48,8 @@ export class KajaPayClient {
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'User-Agent': 'Highway420-Checkout/1.0'
       },
       auth: {
         username: this.config.username,
