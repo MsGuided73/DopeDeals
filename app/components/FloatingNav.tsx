@@ -175,9 +175,11 @@ export default function FloatingNav() {
           Accessories
         </Link>
         */}
+        {/*
         <Link href="/blog" className="text-white text-sm font-bold hover:text-yellow-400 transition-colors">
           Blog
         </Link>
+        */}
       </div>
     </nav>
   );

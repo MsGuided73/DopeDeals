@@ -71,7 +71,7 @@ export default function HomePage() {
         {/* Dope Deals Section - Moved to bottom */}
         <DopeDealsSection />
 
-        {/* Blog Articles Section - Just above footer */}
+        {/* Blog Articles Section - Just above footer 
         <section className="mt-24 mb-16">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-12">
@@ -80,7 +80,7 @@ export default function HomePage() {
               }}>
                 HIGHER LEARNING
               </h2>
-              {/* IMPORTANT: This text MUST use INTER font - do not change back to other fonts */}
+              {/* IMPORTANT: This text MUST use INTER font - do not change back to other fonts * /}
               <p className="text-xl text-gray-600 max-w-2xl mx-auto blog-subtitle-inter">
                 Stay informed with the latest news, guides, and insights from the Highway 420 community
               </p>
@@ -89,6 +89,7 @@ export default function HomePage() {
             <BlogArticlesGrid />
           </div>
         </section>
+        */}
       </div>
     </div>
   );

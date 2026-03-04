@@ -304,9 +304,11 @@ export default function GlobalMasthead() {
                 Accessories
               </Link>
               */}
+              {/*
               <Link href="/blog" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors uppercase tracking-wider">
                 BLOG
               </Link>
+              */}
             </nav>
 
             {/* User Icons - Right side, visually anchored to bottom of the 2nd row and inset from edge */}
@@ -396,9 +398,11 @@ export default function GlobalMasthead() {
                 Accessories
               </Link>
               */}
+              {/*
               <Link href="/blog" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Blog
               </Link>
+              */}
 
               {/* Account */}
               <div className="pt-4 border-t border-gray-200/50">
