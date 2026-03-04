@@ -264,7 +264,8 @@ export async function POST(req: NextRequest) {
     
     const host = req.headers.get('host') || 'localhost:3000';
     const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
+    // Prioritize NEXT_PUBLIC_SITE_URL if defined, otherwise fall back to dynamic host
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${host}`;
 
     const hostedFormResponse = await kajaPayClient.createHostedForm({
       amount: Number(total),
@@ -280,7 +281,7 @@ export async function POST(req: NextRequest) {
       email: user.email || undefined,
       redirectUrl: `${baseUrl}/checkout/confirmation?orderId=${order.id}`,
       cancelUrl: `${baseUrl}/checkout/review`,
-      callbackUrl: `${baseUrl}/api/webhooks/kajapay`
+      callbackUrl: `${baseUrl}/api/kajapay/webhook`
     });
 
     if (hostedFormResponse.success && hostedFormResponse.data?.paymentUrl) {

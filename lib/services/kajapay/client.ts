@@ -39,8 +39,8 @@ export class KajaPayClient {
     this.config = {
       baseUrl,
       sourceKey: process.env.KAJAPAY_SOURCE_KEY!,
-      username: process.env.KAJAPAY_USERNAME!,
-      password: process.env.KAJAPAY_PASSWORD!
+      password: process.env.KAJAPAY_PASSWORD!,
+      paymentPageSlug: process.env.KAJAPAY_PAYMENT_PAGE_SLUG
     };
 
     this.client = axios.create({
@@ -52,8 +52,8 @@ export class KajaPayClient {
         'User-Agent': 'Highway420-Checkout/1.0'
       },
       auth: {
-        username: this.config.username,
-        password: this.config.password
+        username: this.config.sourceKey, // v2 uses Source Key as username
+        password: this.config.password || '' // v2 uses PIN/Password if provided
       }
     });
 
@@ -87,8 +87,7 @@ export class KajaPayClient {
     const errors: string[] = [];
     
     if (!this.config.sourceKey) errors.push('KAJAPAY_SOURCE_KEY is required');
-    if (!this.config.username) errors.push('KAJAPAY_USERNAME is required');
-    if (!this.config.password) errors.push('KAJAPAY_PASSWORD is required');
+    if (!this.config.paymentPageSlug) errors.push('KAJAPAY_PAYMENT_PAGE_SLUG is required');
     
     return errors;
   }
@@ -137,18 +136,62 @@ export class KajaPayClient {
     }
   }
 
-  // Create Hosted Form URL for redirect-based payment
+  // Create Hosted Form URL for redirect-based payment (v2 Payment Pages)
   async createHostedForm(formData: Partial<HostedFormRequest>): Promise<ApiResponse<HostedFormResponse>> {
     try {
-      // The endpoint for hosted form is often different, but let's assume it's /hosted-form based on context
-      const response: AxiosResponse<HostedFormResponse> = await this.client.post('hosted-payment/create', {
-        ...formData,
-        sourceKey: this.config.sourceKey
+      if (!this.config.paymentPageSlug) {
+        throw new Error('KAJAPAY_PAYMENT_PAGE_SLUG is not configured');
+      }
+
+      // v2 uses /payment-pages/generate-pay-link/{slug}
+      const response: AxiosResponse<any> = await this.client.post(`payment-pages/generate-pay-link/${this.config.paymentPageSlug}`, {
+        // v2 expects specific field names: https://docs.kajapaygateway.com/api/v2
+        one_time_use: true,
+        general_fields: {
+          invoice: formData.orderNumber, // 'invoice' instead of 'order_id'
+          description: formData.orderDescription, // 'description' instead of 'order_description'
+          amount: formData.amount,
+          email: formData.email
+        },
+        billing_fields: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          street: formData.address1, // 'street' instead of 'address'
+          city: formData.city,
+          state: formData.state,
+          zip_code: formData.zip, // 'zip_code' instead of 'zip'
+          country: formData.country,
+          email: formData.email,
+          phone: formData.phone
+        },
+        // Configuration for the link result
+        config: {
+          redirect_url: formData.redirectUrl,
+          callback_url: formData.callbackUrl,
+          cancel_url: formData.cancelUrl
+        }
       });
 
+      // v2 returns { pay_link: "..." }
+      if (response.data && response.data.pay_link) {
+        return {
+          success: true,
+          data: {
+            responseCode: '00',
+            responseText: 'Success',
+            paymentUrl: response.data.pay_link,
+            pay_link: response.data.pay_link
+          }
+        };
+      }
+
       return {
-        success: response.data.responseCode === '00' || response.data.responseCode === '000',
-        data: response.data
+        success: false,
+        error: {
+          responseCode: 'API_ERROR',
+          responseText: 'Failed to generate pay link',
+          details: response.data
+        }
       };
     } catch (error: any) {
       return {

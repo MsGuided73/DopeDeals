@@ -3,8 +3,8 @@
 export interface KajaPayConfig {
   baseUrl: string;
   sourceKey: string;
-  username: string;
   password: string;
+  paymentPageSlug?: string;
 }
 
 export interface KajaPayCredentials {
@@ -259,8 +259,9 @@ export interface HostedFormRequest {
 
 // Hosted Form Response
 export interface HostedFormResponse extends KajaPayBaseResponse {
-  paymentUrl: string; // The URL to redirect the user to
-  token?: string;     // Form identifier
+  paymentUrl?: string; // The URL to redirect the user to (mapped from pay_link)
+  pay_link?: string;    // The direct link from v2 API
+  token?: string;      // Form identifier
 }
 
 // Process Payment Request
