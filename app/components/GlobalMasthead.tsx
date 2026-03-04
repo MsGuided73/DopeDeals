@@ -7,6 +7,7 @@ import Image from "next/image";
 import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu, Search } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import { useNavigation } from "../contexts/NavigationContext";
+import { useAuth } from "../contexts/AuthContext";
 import EnhancedSearchBar from "./EnhancedSearchBar";
 
 const PROMO_TEXT = "🚀 FREE SHIPPING ON ORDERS OVER $75 • 🔥 HOT DEALS DAILY • 🌿 PREMIUM QUALITY GUARANTEED";
@@ -19,6 +20,9 @@ export default function GlobalMasthead() {
   const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  
+  // Auth state
+  const { user } = useAuth();
 
   // Get cart count (safe defaults provided by useCart hook)
   const { cartCount } = useCart();
@@ -431,8 +435,12 @@ export default function GlobalMasthead() {
                   <User className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Welcome to HIGHWAY 420</h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Guest Mode - Sign in for personalized recommendations</p>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {user ? `Welcome back, ${user.user_metadata?.firstName || 'Friend'}` : 'Welcome to HIGHWAY 420'}
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {user ? user.email : 'Guest Mode - Sign in for personalized recommendations'}
+                  </p>
                 </div>
               </div>
               <button onClick={() => setShowProfileModal(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
@@ -489,11 +497,18 @@ export default function GlobalMasthead() {
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <Link href="/signin" className="flex items-center justify-center gap-2 bg-dope-orange hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                    <User className="w-4 h-4" />
-                    Sign In / Sign Up
-                  </Link>
-                  <Link href="/rewards" className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                  {user ? (
+                    <Link href="/account" onClick={() => setShowProfileModal(false)} className="flex items-center justify-center gap-2 bg-dope-orange hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                      <User className="w-4 h-4" />
+                      Go to Dashboard
+                    </Link>
+                  ) : (
+                    <Link href="/signin" onClick={() => setShowProfileModal(false)} className="flex items-center justify-center gap-2 bg-dope-orange hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                      <User className="w-4 h-4" />
+                      Sign In / Sign Up
+                    </Link>
+                  )}
+                  <Link href="/rewards" onClick={() => setShowProfileModal(false)} className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-6 rounded-lg transition-colors">
                     <Gift className="w-4 h-4" />
                     VIP Rewards
                   </Link>

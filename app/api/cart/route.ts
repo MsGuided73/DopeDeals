@@ -54,13 +54,13 @@ function getSessionIdFromHeaders(request: NextRequest): string | null {
 }
 
 // Use a cookie-aware Supabase client for authentication detection
-import { supabaseServer } from '../../../lib/supabase-server';
+import { getSessionUser } from '../../../lib/supabase-server-ssr';
 
 // Helper function to get current auth user
 async function getCurrentUser() {
   try {
-    const { data: { user }, error } = await supabaseServer.auth.getUser();
-    if (error || !user) {
+    const user = await getSessionUser();
+    if (!user) {
       return null;
     }
     return user;

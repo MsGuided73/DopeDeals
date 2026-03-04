@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { DiditAdapter } from '../../../../lib/services/age-verification/didit-adapter';
-import { supabaseServer } from '../../../../lib/supabase-server';
+import { getSessionUser } from '../../../../lib/supabase-server-ssr';
 
 export async function POST(request: Request) {
   try {
-    const { data: { user } } = await supabaseServer.auth.getUser();
+    const user = await getSessionUser();
 
     // If no user is found, generate a temporary guest UUID for tracking during checkout.
     // In a fully integrated system, we'd ensure guests have stable IDs or are forced to login.

@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { ArrowRight, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function ShippingPage() {
   const { cart, isLoading } = useCart();
+  const { user } = useAuth();
   const router = useRouter();
 
   // Dev-only render log — removed from production to prevent log spam
@@ -30,10 +32,18 @@ export default function ShippingPage() {
   const [isCheckingZip, setIsCheckingZip] = useState(false);
 
   useEffect(() => {
-    // Check if formally verified in this session
-    const verified = localStorage.getItem('hw420_age_verified_formal') === 'true';
-    if (verified) setIsAgeVerified(true);
-  }, []);
+    // Check if formally verified in this session or via persistent user profile state
+    const localVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
+    const profileVerified = user?.user_metadata?.age_verified === true;
+    
+    if (localVerified || profileVerified) {
+      setIsAgeVerified(true);
+      // Sync local storage if profile is verified to help other pages
+      if (profileVerified && !localVerified) {
+        localStorage.setItem('hw420_age_verified_formal', 'true');
+      }
+    }
+  }, [user]);
 
   // Stable product ID string via useMemo — avoids new array reference on every render
   const productIdString = useMemo(

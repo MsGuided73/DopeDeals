@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { ArrowLeft, CreditCard, Shield, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 
 export default function ReviewPage() {
   const { cart, isLoading } = useCart();
+  const { user } = useAuth();
   const router = useRouter();
   
   const [shippingData, setShippingData] = useState<any>(null);
@@ -28,11 +30,17 @@ export default function ReviewPage() {
 
   useEffect(() => {
     // Check for age verification
-    const isAgeVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
-    if (!isAgeVerified) {
+    const localVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
+    const profileVerified = user?.user_metadata?.age_verified === true;
+
+    if (!localVerified && !profileVerified) {
       toast.error('Please complete age verification first');
       router.push('/checkout/shipping');
       return;
+    }
+
+    if (profileVerified && !localVerified) {
+       localStorage.setItem('hw420_age_verified_formal', 'true');
     }
 
     // Load shipping data from session
@@ -44,7 +52,7 @@ export default function ReviewPage() {
       toast.error('Please complete shipping details first');
       router.push('/checkout/shipping');
     }
-  }, [router]);
+  }, [router, user]);
 
   if (isLoading || !shippingData) {
     return <div className="flex justify-center items-center my-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;

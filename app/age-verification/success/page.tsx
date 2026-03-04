@@ -19,15 +19,27 @@ function AgeVerificationSuccessContent() {
       // Set the local flag to immediately unblock the frontend checkout flow
       localStorage.setItem('hw420_age_verified_formal', 'true');
       
-      const sessionId = searchParams.get('verificationSessionId');
+      const sessionId = searchParams.get('session_id');
       if (sessionId) {
         localStorage.setItem('hw420_didit_session_id', sessionId);
+
+        // Natively sync local DB to bypass public Webhook limits on localhost
+        fetch('/api/age-verification/sync-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId })
+        })
+        .catch(err => console.error("Native sync failed:", err))
+        .finally(() => {
+          setTimeout(() => {
+            router.push('/checkout/shipping');
+          }, 1500);
+        });
+      } else {
+        setTimeout(() => {
+          router.push('/checkout/shipping');
+        }, 3000);
       }
-      
-      // Give the webhook a second to process and update Supabase securely
-      setTimeout(() => {
-        router.push('/checkout/shipping');
-      }, 3000);
     } else if (diditStatus === 'Declined' || diditStatus === 'In Review') {
 
       setStatus('declined');
