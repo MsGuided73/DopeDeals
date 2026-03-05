@@ -27,6 +27,8 @@ export default function AccountPage() {
   const [statsLoading, setStatsLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [addressesLoading, setAddressesLoading] = useState(false);
 
   useEffect(() => {
     async function fetchStats() {
@@ -77,10 +79,27 @@ export default function AccountPage() {
         }
     }
 
+    async function fetchAddresses() {
+        if (!user) return;
+        setAddressesLoading(true);
+        try {
+            const response = await fetch('/api/account/addresses');
+            if (response.ok) {
+                const data = await response.json();
+                setAddresses(data.addresses || []);
+            }
+        } catch (error) {
+            console.error('Error fetching addresses:', error);
+        } finally {
+            setAddressesLoading(false);
+        }
+    }
+
     if (!authLoading && user) {
       fetchStats();
       fetchOrders();
       fetchWishlist();
+      fetchAddresses();
     } else if (!authLoading && !user) {
       setStatsLoading(false);
     }
@@ -426,27 +445,49 @@ export default function AccountPage() {
         {activeTab === 'addresses' && (
           <div className="bg-white rounded-xl shadow-lg p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Address Book</h2>
-            <div className="space-y-4">
-              <div className="border border-gray-200 rounded-lg p-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Home Address</h3>
-                    <p className="text-sm text-gray-600">123 Main St, Anytown, ST 12345</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button className="p-2 text-gray-600 hover:text-dope-orange-600 transition-colors">
-                      <Edit className="w-4 h-4" />
-                    </button>
-                    <button className="p-2 text-gray-600 hover:text-red-600 transition-colors">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+            {addressesLoading ? (
+              <div className="flex justify-center p-12">
+                  <Loader2 className="w-10 h-10 text-dope-orange-500 animate-spin" />
               </div>
-            </div>
-            <button className="mt-4 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
-              Add New Address
-            </button>
+            ) : addresses.length > 0 ? (
+              <div className="space-y-4">
+                {addresses.filter(a => a.is_default).slice(0, 1).map((address) => (
+                  <div key={address.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-gray-900">Default {address.type === 'shipping' ? 'Shipping' : 'Billing'} Address</h3>
+                          <span className="px-2 py-0.5 bg-dope-orange-100 text-dope-orange-800 text-xs font-bold rounded-full">Default</span>
+                        </div>
+                        <p className="text-gray-900">{address.first_name} {address.last_name}</p>
+                        <p className="text-sm text-gray-600">{address.address_line_1}</p>
+                        {address.address_line_2 && <p className="text-sm text-gray-600">{address.address_line_2}</p>}
+                        <p className="text-sm text-gray-600">{address.city}, {address.state} {address.zip_code}</p>
+                        <p className="text-sm text-gray-600">{address.country}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {addresses.filter(a => a.is_default).length === 0 && (
+                  <div className="text-gray-500 mb-4">You have saved addresses but no default is set. View all to manage them.</div>
+                )}
+                
+                <Link href="/account/addresses" className="inline-block mt-4 text-dope-orange-600 font-semibold hover:text-dope-orange-700">
+                  Manage all {addresses.length} addresses →
+                </Link>
+              </div>
+            ) : (
+               <div className="text-center py-12">
+                   <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                   <p className="text-gray-500 text-lg mb-4">Your address book is empty.</p>
+               </div>
+            )}
+            <Link href="/account/addresses">
+              <button className="mt-6 bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                {addresses.length > 0 ? 'Add Another Address' : 'Add New Address'}
+              </button>
+            </Link>
           </div>
         )}
 

@@ -63,6 +63,24 @@ _Define the JSON Input/Output shapes here. These must closely mirror our Zod sch
         }
       }
     }
+  },
+  "user_address": {
+    "id": "uuid",
+    "userId": "uuid",
+    "type": "shipping | billing",
+    "firstName": "string",
+    "lastName": "string",
+    "company": "string | null",
+    "addressLine1": "string",
+    "addressLine2": "string | null",
+    "city": "string",
+    "state": "string",
+    "zipCode": "string",
+    "country": "string",
+    "phone": "string | null",
+    "isDefault": "boolean",
+    "createdAt": "date-time",
+    "updatedAt": "date-time"
   }
 }
 ```

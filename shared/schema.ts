@@ -621,6 +621,26 @@ export const recommendationCache = pgTable("recommendation_cache", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+// User Addresses Table
+export const userAddresses = pgTable("user_addresses", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  type: text("type").notNull(), // shipping, billing
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  company: text("company"),
+  addressLine1: text("address_line_1").notNull(),
+  addressLine2: text("address_line_2"),
+  city: text("city").notNull(),
+  state: text("state").notNull(),
+  zipCode: text("zip_code").notNull(),
+  country: text("country").notNull(),
+  phone: text("phone"),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 // Payment Methods Table
 export const paymentMethods = pgTable("payment_methods", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -682,6 +702,7 @@ export const insertUserBehaviorSchema = createInsertSchema(userBehavior).omit({ 
 export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({ id: true, updatedAt: true });
 export const insertProductSimilaritySchema = createInsertSchema(productSimilarity).omit({ id: true, calculatedAt: true });
 export const insertRecommendationCacheSchema = createInsertSchema(recommendationCache).omit({ id: true, createdAt: true });
+export const insertUserAddressSchema = createInsertSchema(userAddresses).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertPaymentMethodSchema = createInsertSchema(paymentMethods).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertPaymentTransactionSchema = createInsertSchema(paymentTransactions).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertKajaPayWebhookEventSchema = createInsertSchema(kajaPayWebhookEvents).omit({ id: true, createdAt: true });
@@ -718,6 +739,8 @@ export type ProductSimilarity = typeof productSimilarity.$inferSelect;
 export type InsertProductSimilarity = z.infer<typeof insertProductSimilaritySchema>;
 export type RecommendationCache = typeof recommendationCache.$inferSelect;
 export type InsertRecommendationCache = z.infer<typeof insertRecommendationCacheSchema>;
+export type UserAddress = typeof userAddresses.$inferSelect;
+export type InsertUserAddress = z.infer<typeof insertUserAddressSchema>;
 export type PaymentMethod = typeof paymentMethods.$inferSelect;
 export type InsertPaymentMethod = z.infer<typeof insertPaymentMethodSchema>;
 export type PaymentTransaction = typeof paymentTransactions.$inferSelect;
