@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
 
-dotenv.config();
+dotenv.config({ path: '.env.local' });
 
 async function testKajaPayV2() {
   const sourceKey = process.env.KAJAPAY_SOURCE_KEY;
@@ -10,6 +10,11 @@ async function testKajaPayV2() {
     'https://api.sandbox.kajapaygateway.com/api/v2/',
     'https://api.sandbox.kaja-gateway.com/api/v2/'
   ];
+
+  console.log('--- Auth Config ---');
+  console.log('Source Key:', sourceKey?.substring(0, 5) + '...');
+  console.log('Password length:', process.env.KAJAPAY_PASSWORD?.length);
+  console.log('Password starts with:', process.env.KAJAPAY_PASSWORD?.substring(0, 2));
 
   for (const baseUrl of domains) {
     console.log(`\n--- Testing Domain: ${baseUrl} ---`);
@@ -27,8 +32,8 @@ async function testKajaPayV2() {
         payload,
         {
           auth: {
-            username: sourceKey,
-            password: ''
+            username: sourceKey || '',
+            password: process.env.KAJAPAY_PASSWORD || ''
           },
           headers: {
             'Content-Type': 'application/json',

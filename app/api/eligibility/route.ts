@@ -86,26 +86,18 @@ export async function GET(req: NextRequest) {
           if (compInfo?.restricted_zipcodes?.includes(zip)) {
             restrictedProducts.push(p.id);
           }
-
-          // Hardcode THCA restriction for restricted states
-          const thcaRestrictedStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'CA'];
-          if (thcaRestrictedStates.includes(state)) {
-            const isTHCA = 
-              p.name?.toUpperCase().includes('THCA') || 
-              p.category?.toUpperCase().includes('THCA') || 
-              p.subcategory?.toUpperCase().includes('THCA');
-            
-            if (isTHCA) {
-              restrictedProducts.push(p.id);
-              customWarning = `The law prohibits shipping of THCA products to ${state} residents. You can only purchase non-THCA products if shipping to ${state}. Please remove THCA items from your cart to proceed.`;
-            }
-          }
         }
       }
 
-      
       // Remove duplicates
       restrictedProducts = Array.from(new Set(restrictedProducts));
+
+      // Generate dynamic warning if any restrictions found
+      if (restrictedProducts.length > 0 && restrictedCategories.length > 0) {
+        customWarning = `The law prohibits shipping of ${restrictedCategories.join(', ')} products to ${state} residents. Please remove these items from your cart to proceed.`;
+      } else if (restrictedProducts.length > 0) {
+        customWarning = `Some items in your cart cannot be shipped to ${state} due to state regulations or age restrictions.`;
+      }
     }
 
     // Aggregate shipping restrictions
