@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import axios from 'axios';
+import * as fs from 'fs';
 
 dotenv.config({ path: '.env' });
 
@@ -27,10 +28,19 @@ async function testAuth() {
   try {
     console.log('\nTesting Basic Auth (SourceKey:PIN)...');
     const response = await axios.post(ENDPOINT, {
-      amount: '99.99',
-      orderid: 'TS-' + Date.now(),
-      first_name: 'Test',
-      last_name: 'User'
+      amount: 99.99,
+      orderId: 'TS-' + Date.now(),
+      firstName: 'Test',
+      lastName: 'User',
+      address1: '123 Test St',
+      city: 'Testville',
+      state: 'CA',
+      zip: '90210',
+      country: 'US',
+      email: 'test@example.com',
+      phone: '5551234567',
+      return_url: 'https://highway420store.com/success',
+      cancel_url: 'https://highway420store.com/cancel'
     }, {
       headers: {
         'Authorization': `Basic ${authHeader}`,
@@ -46,29 +56,10 @@ async function testAuth() {
     console.log('\nFailed.');
     if (error.response) {
       console.log('Status:', error.response.status);
-      console.log('Message:', error.response.data);
-    } else {
-      console.log('Error:', error.message);
+      fs.writeFileSync('kajapay_err1.log', typeof error.response.data === 'string' ? error.response.data : JSON.stringify(error.response.data, null, 2));
+      console.log('Message written to kajapay_err1.log');
     }
     
-    // Fallback: Test without PIN (SourceKey as Username, empty Password)
-    try {
-      console.log('\nTesting Basic Auth (SourceKey:) [Empty Password]...');
-      const authHeaderEmpty = Buffer.from(`${SOURCE_KEY}:`).toString('base64');
-      const response = await axios.post(ENDPOINT, {
-        amount: '1.00',
-        orderid: 'TS-EMPTY-' + Date.now()
-      }, {
-        headers: {
-          'Authorization': `Basic ${authHeaderEmpty}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log('Success (Empty Password)!');
-      console.log('Data:', response.data);
-    } catch (e: any) {
-      console.log('Failed (Empty Password).');
-    }
   }
 }
 
