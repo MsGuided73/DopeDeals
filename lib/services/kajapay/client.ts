@@ -39,8 +39,9 @@ export class KajaPayClient {
     this.config = {
       baseUrl,
       sourceKey: process.env.KAJAPAY_SOURCE_KEY!,
-      password: process.env.KAJAPAY_PASSWORD!,
-      paymentPageSlug: process.env.KAJAPAY_PAYMENT_PAGE_SLUG
+      password: process.env.KAJAPAY_SOURCE_KEY_PIN || process.env.KAJAPAY_PASSWORD!,
+      paymentPageSlug: process.env.KAJAPAY_PAYMENT_PAGE_SLUG,
+      tokenizationKey: process.env.KAJAPAY_TOKENIZATION_KEY
     };
 
     this.client = axios.create({
@@ -182,36 +183,22 @@ export class KajaPayClient {
       }
       // ---- END MOCK OVERRIDE ----
 
-      // v2 uses /payment-pages/generate-pay-link/{slug}
-      const response: AxiosResponse<any> = await this.client.post(`payment-pages/generate-pay-link/${this.config.paymentPageSlug}`, {
-        // v2 expects specific field names: https://docs.kajapaygateway.com/api/v2
-        one_time_use: true,
-        general_fields: {
-          invoice: formData.orderNumber, // 'invoice' instead of 'order_id'
-          description: formData.orderDescription, // 'description' instead of 'order_description'
-          amount: formData.amount,
-          email: formData.email
-        },
-        billing_fields: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          street: formData.address1, // 'street' instead of 'address'
-          city: formData.city,
-          state: formData.state,
-          zip_code: formData.zip, // 'zip_code' instead of 'zip'
-          country: formData.country,
-          email: formData.email,
-          phone: formData.phone
-        },
-        // Configuration for the link result
-        config: {
-          redirect_url: formData.redirectUrl,
-          callback_url: formData.callbackUrl,
-          cancel_url: formData.cancelUrl
-        }
+      // Dynamic Hosted Form Generation via KajaPay Gateway v2 API
+      const response = await this.client.post(`payment-pages/generate-pay-link/${this.config.paymentPageSlug}`, {
+        amount: formData.amount,
+        orderId: formData.orderNumber,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        address1: formData.address1,
+        city: formData.city,
+        state: formData.state,
+        zip: formData.zip,
+        country: formData.country,
+        email: formData.email,
+        phone: formData.phone,
+        // Any other fields required by KajaPay
       });
 
-      // v2 returns { pay_link: "..." }
       if (response.data && response.data.pay_link) {
         return {
           success: true,
@@ -219,20 +206,15 @@ export class KajaPayClient {
             responseCode: '00',
             responseText: 'Success',
             paymentUrl: response.data.pay_link,
-            pay_link: response.data.pay_link
+            pay_link: response.data.pay_link,
+            token: response.data.token
           }
         };
       }
 
-      return {
-        success: false,
-        error: {
-          responseCode: 'API_ERROR',
-          responseText: 'Failed to generate pay link',
-          details: response.data
-        }
-      };
+      throw new Error(response.data?.responseText || 'Failed to generate pay link');
     } catch (error: any) {
+      console.error('[KajaPay] Hosted form generation failed:', error.response?.data || error.message);
       return {
         success: false,
         error: {

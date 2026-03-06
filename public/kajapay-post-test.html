@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <title>KajaPay Post Test</title>
+  </head>
+  <body>
+    <h2>Testing POST to KajaPay Hosted Payment Page</h2>
+    <form
+      action="https://pay.sandbox.kaja-gateway.com/TestXYZ123"
+      method="POST"
+      id="kajaform"
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="amount" value="99.99" />
+      <input type="hidden" name="orderid" value="JS-TEST-POST-123" />
+      <input type="hidden" name="first_name" value="Jane" />
+      <input type="hidden" name="last_name" value="Doe" />
+      <input type="hidden" name="address1" value="123 Post St" />
+      <input type="hidden" name="city" value="Postville" />
+      <input type="hidden" name="state" value="CA" />
+      <input type="hidden" name="zip" value="90210" />
+      <input
+        type="submit"
+        value="Pay $99.99 via POST"
+        style="font-size: 20px; padding: 10px"
+      />
+    </form>
+
+    <script>
+      // Document loads and we don't automatically submit so we can read the message,
+      // but the user can click it to test. Let's redirect automatically for the agent.
+      setTimeout(() => document.getElementById("kajaform").submit(), 1000);
+    </script>
+  </body>
+</html>

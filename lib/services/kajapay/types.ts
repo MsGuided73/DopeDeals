@@ -5,6 +5,7 @@ export interface KajaPayConfig {
   sourceKey: string;
   password: string;
   paymentPageSlug?: string;
+  tokenizationKey?: string;
 }
 
 export interface KajaPayCredentials {
