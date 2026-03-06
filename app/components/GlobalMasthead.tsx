@@ -128,16 +128,15 @@ export default function GlobalMasthead() {
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-black/50 to-transparent"></div>
           </div>
 
-          {/* Logo - Spanning full masthead height (both rows) */}
-          <div className="flex absolute inset-y-0 z-10 items-center md:left-[5%] left-4" style={{ maxWidth: "400px" }}>
-            <Link href="/" className="flex items-center h-full w-full">
+          {/* Logo - Anchored and floating above all headers */}
+          <div className={`absolute top-1/2 -translate-y-[45%] z-[60] md:left-[5%] left-4 flex shrink-0 ${isMobileSearchOpen ? 'hidden md:flex' : 'flex'}`}>
+            <Link href="/" className="block">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420 Logo"
                 width={400}
                 height={86}
-                className="object-contain h-full w-auto md:max-w-none max-w-[120px]"
-                style={{ display: "block" }}
+                className="h-[80px] md:h-[90px] w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]"
                 priority
               />
             </Link>
@@ -156,7 +155,7 @@ export default function GlobalMasthead() {
           {/* Mobile Header: Logo + Icons */}
           <div className="md:hidden relative flex items-center justify-between px-4 py-1 bg-black h-[70px] z-50">
             {isMobileSearchOpen ? (
-              <div className="w-full h-full flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="w-full h-full flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-200 bg-black">
                 <div className="flex-grow">
                   <EnhancedSearchBar compact />
                 </div>

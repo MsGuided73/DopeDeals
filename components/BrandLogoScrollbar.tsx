@@ -66,23 +66,14 @@ export default function BrandLogoScrollbar() {
   const [isHovered, setIsHovered] = useState(false);
   const rotationRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [radius, setRadius] = useState(450); // Default radius for desktop
+  const [radius, setRadius] = useState(450); // Use a fixed generous radius
 
-  // Adjust cylinder radius based on screen size
+  // Keep a generous radius always to prevent cards from intersecting each other
+  // in 3D space on smaller screens calculation.
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setRadius(250); // smaller radius for mobile
-      } else if (window.innerWidth < 1024) {
-        setRadius(350); // medium radius for tablet
-      } else {
-        setRadius(450); // large radius for desktop
-      }
-    };
-    
-    handleResize(); // Initial call
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    // A constant larger radius prevents overlap. We compensate for scaling
+    // by pushing the container back into the 3D scene.
+    setRadius(450);
   }, []);
 
   // Custom animation loop for continuous rotation that pauses on hover
@@ -91,7 +82,9 @@ export default function BrandLogoScrollbar() {
       // Rotate 10 degrees per second (slowed down from 15)
       rotationRef.current -= (delta / 1000) * 10; 
       if (containerRef.current) {
-        containerRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
+        // Push the entire carousel back so the front card sits at exactly Z=0
+        // preventing mobile cards from getting blown up by perspective
+        containerRef.current.style.transform = `translateZ(-${radius}px) rotateY(${rotationRef.current}deg)`;
       }
     }
   });
@@ -124,7 +117,11 @@ export default function BrandLogoScrollbar() {
           <div
             ref={containerRef}
             className="relative w-full h-full flex items-center justify-center transform-style-[preserve-3d]"
-            style={{ transformStyle: "preserve-3d" }}
+            style={{ 
+              transformStyle: "preserve-3d",
+              // Initial state
+              transform: `translateZ(-${radius}px) rotateY(0deg)`
+            }}
           >
             {brandLogos.map((brand, i) => {
               // Calculate angles to evenly distribute cards in 360 degrees
@@ -140,10 +137,10 @@ export default function BrandLogoScrollbar() {
                   }}
                 >
                   {/* Floating Brand Card */}
-                  <div className="w-full h-full p-4 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100/50 flex items-center justify-center group hover:shadow-[0_15px_40px_rgba(34,197,94,0.15)] hover:-translate-y-2 transition-all duration-500 relative overflow-hidden backdrop-blur-xl bg-white/80">
+                  <div className="w-full h-full p-4 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100/50 flex items-center justify-center group hover:shadow-[0_15px_40px_rgba(34,197,94,0.15)] hover:-translate-y-2 transition-all duration-500 relative backdrop-blur-xl bg-white/80">
                     
                     {/* Hover Glow Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-emerald-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-emerald-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                     
                     {/* Brand Logo */}
                     <img

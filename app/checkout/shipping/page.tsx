@@ -105,8 +105,15 @@ export default function ShippingPage() {
       if (data.restrictedProducts?.length > 0) {
         setRestrictedItems(data.restrictedProducts);
         setShippingWarning(data.warning || null);
-        toast.error(data.warning || `Some items in your cart cannot be shipped to ${data.state}.`, { id: checkToastId });
+        toast.error(data.warning || `State law prohibits shipping certain items to ${data.state}. Diverting to resolution protocol.`, { id: checkToastId });
         setIsCheckingZip(false);
+        
+        // Save form data and restricted product IDs for the next page to consume
+        sessionStorage.setItem('checkout_shipping', JSON.stringify(form));
+        sessionStorage.setItem('restricted_products', JSON.stringify(data.restrictedProducts));
+        sessionStorage.setItem('shipping_warning', data.warning || '');
+        
+        setTimeout(() => router.push('/checkout/restricted'), 1500);
         return;
       }
       toast.success('Shipping eligibility verified.', { id: checkToastId });
