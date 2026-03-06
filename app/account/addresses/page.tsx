@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import GlobalMasthead from '../../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../../components/GlobalBreadcrumbs';
 
 interface Address {
   id: string;
@@ -178,15 +179,7 @@ export default function AddressBookPage() {
       
       <div className="max-w-4xl mx-auto py-8 px-4">
         {/* Breadcrumb */}
-        <nav className="mb-6">
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-dope-orange">Home</Link>
-            <span>/</span>
-            <Link href="/account" className="hover:text-dope-orange">Account</Link>
-            <span>/</span>
-            <span className="text-gray-900">Address Book</span>
-          </div>
-        </nav>
+        <GlobalBreadcrumbs paths={[{ name: 'Account', href: '/account' }, { name: 'Address Book' }]} />
 
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import GlobalMasthead from '../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 import { Heart, ShoppingCart, Trash2, Share2, Grid, List } from 'lucide-react';
 import Image from 'next/image';
 
@@ -45,6 +46,9 @@ export default function WishlistPage() {
         {/* Hero Section - Clean White */}
         <div className="bg-white py-8 border-b border-gray-200">
           <div className="w-full max-w-none mx-0 px-6 text-center">
+            <div className="mb-8 flex justify-start max-w-6xl mx-auto">
+              <GlobalBreadcrumbs paths={[{ name: 'Account', href: '/account' }, { name: 'My Wishlist' }]} />
+            </div>
             <h1 className="dope-city-title text-4xl md:text-5xl mb-4 text-gray-900">
               MY WISHLIST
             </h1>

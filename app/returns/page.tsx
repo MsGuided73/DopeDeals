@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
 const GlobalMasthead = dynamic(() => import('../components/GlobalMasthead'));
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 import { RotateCcw, Clock, CheckCircle, XCircle, Package, CreditCard } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -44,6 +45,9 @@ export default function ReturnsPage() {
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
           <div className="max-w-6xl mx-auto px-6 text-center">
+            <div className="mb-8 flex justify-start">
+              <GlobalBreadcrumbs paths={[{ name: 'Returns Policy' }]} />
+            </div>
             <h1 className="dope-city-title text-5xl md:text-6xl mb-4">
               RETURNS POLICY
             </h1>

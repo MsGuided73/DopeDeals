@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import GlobalMasthead from '../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 import { Truck, Clock, Package, Shield, MapPin, DollarSign } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -47,6 +48,9 @@ export default function ShippingPage() {
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
           <div className="max-w-6xl mx-auto px-6 text-center">
+            <div className="mb-8 flex justify-start">
+              <GlobalBreadcrumbs paths={[{ name: 'Shipping Info' }]} />
+            </div>
             <h1 className="dope-city-title text-5xl md:text-6xl mb-4">
               SHIPPING INFO
             </h1>

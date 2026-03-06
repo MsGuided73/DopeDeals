@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import GlobalMasthead from '../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 
 export const metadata: Metadata = {
   title: 'About Us - Highway 420',
@@ -14,6 +15,9 @@ export default function AboutPage() {
       
       <div className="min-h-screen bg-white text-gray-900 py-12 md:py-20 lg:py-24">
         <div className="max-w-5xl mx-auto px-6">
+          <div className="mb-8 flex justify-start">
+            <GlobalBreadcrumbs paths={[{ name: 'About Us' }]} />
+          </div>
           {/* Header Section */}
           <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 mb-16 md:mb-24">
             <div className="relative w-32 h-32 md:w-48 md:h-48 flex-shrink-0">

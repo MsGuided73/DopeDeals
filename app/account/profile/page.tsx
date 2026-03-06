@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import GlobalMasthead from '../../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../../components/GlobalBreadcrumbs';
 import { useAuth } from '../../contexts/AuthContext';
 import { Shield, AlertCircle, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -83,15 +84,7 @@ export default function ProfileSettingsPage() {
       
       <div className="max-w-4xl mx-auto py-8 px-4">
         {/* Breadcrumb */}
-        <nav className="mb-6">
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-dope-orange">Home</Link>
-            <span>/</span>
-            <Link href="/account" className="hover:text-dope-orange">Account</Link>
-            <span>/</span>
-            <span className="text-gray-900">Profile Settings</span>
-          </div>
-        </nav>
+        <GlobalBreadcrumbs paths={[{ name: 'Account', href: '/account' }, { name: 'Profile Settings' }]} />
 
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

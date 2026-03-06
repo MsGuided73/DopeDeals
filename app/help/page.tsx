@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import GlobalMasthead from '../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 import { Search, Package, CreditCard, Truck, RotateCcw, Shield, MessageCircle, Phone } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -75,6 +76,9 @@ export default function HelpPage() {
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
           <div className="max-w-6xl mx-auto px-6 text-center">
+            <div className="mb-8 flex justify-start">
+              <GlobalBreadcrumbs paths={[{ name: 'Help Center' }]} />
+            </div>
             <h1 className="dope-city-title text-5xl md:text-6xl mb-4">
               HELP CENTER
             </h1>

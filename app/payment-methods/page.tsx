@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { CreditCard, Smartphone, Shield, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Payment Methods - Highway 420',
@@ -44,6 +45,9 @@ export default function PaymentMethodsPage() {
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
           <div className="max-w-6xl mx-auto px-6 text-center">
+            <div className="mb-8 flex justify-start">
+              <GlobalBreadcrumbs paths={[{ name: 'Account', href: '/account' }, { name: 'Payment Methods' }]} />
+            </div>
             <h1 className="dope-city-title text-5xl md:text-6xl mb-4">
               PAYMENT METHODS
             </h1>

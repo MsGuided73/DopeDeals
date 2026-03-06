@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import GlobalMasthead from '../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - Highway 420',
@@ -15,6 +16,9 @@ export default function PrivacyPage() {
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
           <div className="max-w-4xl mx-auto px-6 text-center">
+            <div className="mb-8 flex justify-start">
+              <GlobalBreadcrumbs paths={[{ name: 'Privacy Policy' }]} />
+            </div>
             <h1 className="text-5xl md:text-6xl mb-4 font-sans">
               PRIVACY POLICY
             </h1>

@@ -3,6 +3,7 @@ import { createServerClient } from '@supabase/ssr';
 import { storage } from '@/../server/storage';
 import Link from 'next/link';
 import GlobalMasthead from '../components/GlobalMasthead';
+import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 
 export default async function OrdersPage() {
   const cookieStore = await cookies();
@@ -21,7 +22,10 @@ export default async function OrdersPage() {
   const user = data.user;
   if (!user) {
     return (
-      <div className="p-6">
+      <div className="p-6 max-w-6xl mx-auto">
+        <div className="mb-6">
+          <GlobalBreadcrumbs paths={[{ name: 'Account', href: '/account' }, { name: 'Orders' }]} />
+        </div>
         <h1 className="text-xl font-semibold">Orders</h1>
         <p className="text-sm text-muted-foreground">
           Please sign in to view your orders.{' '}
@@ -38,7 +42,10 @@ export default async function OrdersPage() {
       {/* Universal Layout Components */}
       <GlobalMasthead />
 
-      <div className="p-6">
+      <div className="p-6 max-w-6xl mx-auto">
+        <div className="mb-6">
+          <GlobalBreadcrumbs paths={[{ name: 'Account', href: '/account' }, { name: 'Orders' }]} />
+        </div>
         <h1 className="text-xl font-semibold mb-4">Your Orders</h1>
       <ul className="space-y-3">
         {orders.map((o) => (
