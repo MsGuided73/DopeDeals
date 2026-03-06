@@ -163,9 +163,10 @@ export default function ReviewPage() {
         if (data.orderId || data.order?.id) {
           sessionStorage.setItem('pendingOrderId', data.orderId || data.order?.id);
         }
-        window.location.href = data.redirectUrl;
+        // Redirect to the 3D processing page which then handshakes with KajaPay
+        router.push(`/checkout/processing?orderId=${data.orderId || data.order?.id || ''}&redirectUrl=${encodeURIComponent(data.redirectUrl)}`);
       } else if (data.success || data.orderId) {
-        router.push(`/checkout/confirmation?orderId=${data.orderId || data.order?.id || 'pending'}`);
+        router.push(`/checkout/success?orderId=${data.orderId || data.order?.id || 'pending'}`);
       } else {
         throw new Error('Invalid response from payment server');
       }

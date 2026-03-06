@@ -172,7 +172,7 @@ export default function AgeVerificationPage() {
                       </span>
                     </button>
                     <p className="mt-8 text-white/30 text-sm uppercase tracking-widest font-bold">
-                      Powered by AgeChecker.net Security
+                      Powered by Didit Security
                     </p>
                   </>
                 )}

@@ -9,6 +9,8 @@ import {
   TrendingUp, Award, Clock, Edit, Eye, Trash2, Loader2
 } from 'lucide-react';
 import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
+import OrderTracking from '../components/OrderTracking';
+import { Truck } from 'lucide-react';
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
@@ -16,6 +18,7 @@ export const dynamic = 'force-dynamic';
 export default function AccountPage() {
   const { user, isVip, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [stats, setStats] = useState({
     ordersCount: 0,
     totalSpent: 0,
@@ -379,23 +382,39 @@ export default function AccountPage() {
             ) : orders.length > 0 ? (
                 <div className="space-y-4">
                 {orders.map((order) => (
-                    <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:border-dope-orange-300 transition-colors">
-                    <div className="flex justify-between items-center">
+                    <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:border-dope-orange-300 transition-colors bg-white">
+                    <div className="flex justify-between items-center mb-4">
                         <div>
                         <h3 className="font-semibold text-gray-900">Order #{order.order_number || order.id.slice(0, 8)}</h3>
                         <p className="text-sm text-gray-600">Placed on {new Date(order.created_at).toLocaleDateString()}</p>
                         </div>
-                        <div className="text-right">
-                        <p className="font-semibold text-gray-900">${Number(order.total_amount).toFixed(2)}</p>
-                        <span className={`inline-block px-2 py-1 text-xs rounded-full ${
-                            order.status === 'delivered' ? 'bg-green-100 text-green-800' : 
-                            order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                            'bg-blue-100 text-blue-800'
-                        }`}>
-                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                        </span>
+                        <div className="text-right flex items-center gap-6">
+                          <div className="hidden sm:block">
+                            <p className="font-semibold text-gray-900">${Number(order.total_amount).toFixed(2)}</p>
+                            <span className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                order.status === 'delivered' ? 'bg-green-100 text-green-800' : 
+                                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                'bg-blue-100 text-blue-800'
+                            }`}>
+                                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </span>
+                          </div>
+                          <button 
+                            onClick={() => setExpandedOrderId(expandedOrderId === order.id ? null : order.id)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-xs uppercase transition-all ${
+                              expandedOrderId === order.id ? 'bg-black text-white' : 'bg-dope-orange-50 text-dope-orange-600 hover:bg-dope-orange-100'
+                            }`}
+                          >
+                            <Truck className="w-4 h-4" />
+                            {expandedOrderId === order.id ? 'Close' : 'Track'}
+                          </button>
                         </div>
                     </div>
+                    {expandedOrderId === order.id && (
+                      <div className="mt-4 pt-6 border-t border-gray-100 bg-black rounded-2xl p-6 overflow-hidden">
+                        <OrderTracking orderId={order.id} isCompact={false} />
+                      </div>
+                    )}
                     </div>
                 ))}
                 </div>

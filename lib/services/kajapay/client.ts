@@ -196,6 +196,8 @@ export class KajaPayClient {
         country: formData.country,
         email: formData.email,
         phone: formData.phone,
+        return_url: formData.redirectUrl,
+        cancel_url: formData.cancelUrl,
         // Any other fields required by KajaPay
       });
 

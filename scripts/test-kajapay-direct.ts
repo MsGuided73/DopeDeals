@@ -15,9 +15,9 @@ async function testKajaPay() {
       zip: '90210',
       country: 'US',
       email: 'test@example.com',
-      redirectUrl: `http://localhost:3000/checkout/confirmation?orderId=test`,
-      cancelUrl: `http://localhost:3000/checkout/review`,
-      callbackUrl: `http://localhost:3000/api/webhooks/kajapay`
+      redirectUrl: `http://localhost:3000/checkout/success?orderId=test`,
+      cancelUrl: `http://localhost:3000/checkout/error?orderId=test`,
+      callbackUrl: `http://localhost:3000/api/kajapay/webhook`
     });
     console.log('Response:', JSON.stringify(hostedFormResponse, null, 2));
   } catch (err: any) {

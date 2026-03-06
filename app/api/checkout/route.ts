@@ -4,7 +4,6 @@ import { requireAuth, requirePermission } from '../../lib/requireAuth';
 import { z } from 'zod';
 import type { ProcessPaymentRequest, BillingAddress } from '../../../lib/services/kajapay/types';
 import type { ShipstationOrder } from '@shared/shipstation-schema';
-import { verifyTransactionWithApi } from '../../../lib/services/age-checker/service';
 
 // Generate order number in format: DC-YYYYMMDD-XXXX
 function generateOrderNumber(): string {
@@ -72,8 +71,7 @@ const CheckoutSchema = z.object({
     paymentAccountDataToken: z.string().optional()
   }).optional(),
   processPayment: z.boolean().default(false),
-  savePaymentMethod: z.boolean().default(false),
-  ageVerificationTransactionId: z.string().optional()
+  savePaymentMethod: z.boolean().default(false)
 });
 
 export async function POST(req: NextRequest) {
@@ -89,7 +87,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid payload', issues: parse.error.issues }, { status: 400 });
   }
 
-  const { items, shippingAddress, billingAddress, shippingMethod, shippingAmount, paymentMethod, processPayment, savePaymentMethod, ageVerificationTransactionId } = parse.data;
+  const { items, shippingAddress, billingAddress, shippingMethod, shippingAmount, paymentMethod, processPayment, savePaymentMethod } = parse.data;
 
   // Removed server-side age verification guard as users cannot reach this API without passing frontend verification.
 
@@ -279,8 +277,8 @@ export async function POST(req: NextRequest) {
       zip: shippingAddress.postalCode,
       country: shippingAddress.country,
       email: user.email || undefined,
-      redirectUrl: `${baseUrl}/checkout/confirmation?orderId=${order.id}`,
-      cancelUrl: `${baseUrl}/checkout/review`,
+      redirectUrl: `${baseUrl}/checkout/success?orderId=${order.id}`,
+      cancelUrl: `${baseUrl}/checkout/error?orderId=${order.id}`,
       callbackUrl: `${baseUrl}/api/kajapay/webhook`
     });
 

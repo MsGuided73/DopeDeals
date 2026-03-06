@@ -19,7 +19,12 @@ export const users = pgTable("users", {
   lastLoginAt: timestamp("last_login_at", { withTimezone: true }),
   loginCount: integer("login_count").default(0),
 
+  phone: text("phone"),
+  subscribeSms: boolean("subscribe_sms").default(false),
+  subscribeEmail: boolean("subscribe_email").default(true),
+
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 export const categories = pgTable("categories", {

@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   // Verify the order belongs to this user (security check)
   const { data: order, error: orderFetchError } = await supabase
     .from('orders')
-    .select('id, user_id, payment_status, total_amount, order_number')
+    .select('id, user_id, payment_status, total_amount, order_number, customer_email, customer_phone')
     .eq('id', orderId)
     .single();
 
@@ -43,7 +43,13 @@ export async function POST(req: NextRequest) {
 
   // Idempotency — if already paid, just return success
   if (order.payment_status === 'paid') {
-    return NextResponse.json({ success: true, alreadyPaid: true, orderId });
+    return NextResponse.json({ 
+      success: true, 
+      alreadyPaid: true, 
+      orderId,
+      customerEmail: order.customer_email,
+      customerPhone: order.customer_phone
+    });
   }
 
   if (status !== 'approved') {
@@ -101,5 +107,11 @@ export async function POST(req: NextRequest) {
 
   console.log(`[Confirm] ✅ Order ${order.order_number} confirmed — transactionId: ${transactionId}`);
 
-  return NextResponse.json({ success: true, orderId, orderNumber: order.order_number });
+  return NextResponse.json({ 
+    success: true, 
+    orderId, 
+    orderNumber: order.order_number,
+    customerEmail: order.customer_email,
+    customerPhone: order.customer_phone
+  });
 }
