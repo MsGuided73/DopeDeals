@@ -170,10 +170,12 @@ export default function ProductDetailsPage({
 
   const currentImage = displayImages[selectedImageIndex] || null;
 
-  const handleAddToCart = () => {
-    // TODO: Implement cart functionality
-    console.log(`Adding ${quantity} of product ${product.id} to cart`);
-    alert(`Added ${quantity} ${product.name} to cart!`);
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(product.id, quantity);
+    } catch (err) {
+      console.error('Unexpected error adding to cart:', err);
+    }
   };
 
   return (
