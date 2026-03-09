@@ -58,7 +58,8 @@ export class DiditAdapter implements AgeVerificationProvider {
         body: JSON.stringify({
           workflow_label: "Highway420 Age Gate",
           workflow_type: "adaptive_age_verification",
-          is_liveness_enabled: true
+          is_liveness_enabled: true,
+          is_age_restrictions_enabled: true
         })
       });
 
