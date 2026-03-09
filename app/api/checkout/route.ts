@@ -254,6 +254,12 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // SHIPSTATION INTEGRATION PLAN:
+  // We are currently using a mock workflow for shipping (mock tracking numbers, 
+  // shipping times, and costs). DO NOT change any of these mock elements 
+  // until we receive official ShipStation credentials (expected after bank 
+  // approval). The service below is fire-and-forget and gracefully skips 
+  // if credentials are not present in .env.
   // Fire-and-forget: create ShipStation order (graceful fail)
   try {
     const { ShipstationService } = await import('../../../lib/services/shipstation/service');
