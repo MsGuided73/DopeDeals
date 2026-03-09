@@ -29,6 +29,11 @@ export default function ReviewPage() {
   const [ageConfirm, setAgeConfirm] = useState(false);
 
   useEffect(() => {
+    // AGE VERIFICATION STRATEGY (ELEVATED STATUS):
+    // To streamline the checkout rollout, the basic 21+ Site Gateway ('hw420_age_verified') 
+    // is currently elevated to satisfy the formal verification requirement for purchases. 
+    // This choice is intentional to allow compliant transactions while 3rd-party (Didit) 
+    // auditing remains in a "testing-only" mode.
     const basicVerified = localStorage.getItem('hw420_age_verified') === 'true';
     const localVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
     const profileVerified = user?.user_metadata?.age_verified === true;

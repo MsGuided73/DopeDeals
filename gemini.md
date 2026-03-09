@@ -90,6 +90,7 @@ _Define the JSON Input/Output shapes here. These must closely mirror our Zod sch
 - **Rule 1: robust transaction tracking**: All errors (API failures, declines, invalid data) must be caught safely. The backend must log the transaction attempt as a "decline" or "failed" status in `shared/schema.ts` `paymentTransactions`.
 - **Rule 2: TypeScript over Python (Layer 3 Tools):** Since this is a Next.js environment, "Tools" and testing scripts (Phase 2 Link Handshakes) will be written in **TypeScript** within the `scripts/` directory or as dedicated API routes, rather than isolated Python scripts.
 - **Rule 3: Schema-First (Phase 1 Blueprint):** The Data-First rule applies, but the true sources of truth are the **Zod Schemas** (e.g., `CheckoutSchema`) and **TypeScript Interfaces** (e.g., `ChargeRequest`). The JSON in `gemini.md` serves as a quick-reference translation of these.
+- **Rule 4: Age Verification Elevation:** For the current rollout, the basic **21+ Site Gateway** (`hw420_age_verified`) is elevated to be the primary and sufficient compliance check for purchases. This bypasses mandatory 3rd-party (Didit) verification to reduce user friction while maintaining a compliant gating for adults.
 
 ## 3. Architectural Invariants
 

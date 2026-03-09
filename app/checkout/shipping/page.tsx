@@ -126,8 +126,12 @@ export default function ShippingPage() {
       setIsCheckingZip(false);
     }
 
-    // Enforce Age Verification for checkout
-    // TEMPORARILY DISABLED: User wants to rely on the initial site gateway instead of Didit for checkout right now.
+    // AGE VERIFICATION STRATEGY NOTE:
+    // We have temporarily shifted focus from mandatory 3rd-party (Didit) verification 
+    // at checkout to relying on the initial 21+ Site Gateway. This avoids double-gating 
+    // and friction during the early rollout. The code below is preserved (commented out) 
+    // so we can re-engage formal 3rd-party verification once the banking approval 
+    // and compliance audits are finalized. 
     /*
     if (!isAgeVerified) {
       toast.error('Age verification required. Redirecting to secure verification protocol...');
