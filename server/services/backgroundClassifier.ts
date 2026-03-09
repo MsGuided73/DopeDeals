@@ -177,7 +177,7 @@ class BackgroundClassificationService {
 
     try {
       const products = await storage.getProducts();
-      const unclassifiedProducts = products.filter(product =>
+      const unclassifiedProducts = products.filter((product: any) =>
         // Products that haven't been through AI classification yet
         // If isHidden exists, skip hidden products; otherwise include
         !('isHidden' in (product as any)) || !(product as any).isHidden
@@ -204,7 +204,7 @@ class BackgroundClassificationService {
     activeProducts: number;
     hiddenProducts: number;
   }> {
-    const products = await storage.getProducts();
+    const products: any[] = await storage.getProducts();
     
     return {
       queueLength: this.queue.length,

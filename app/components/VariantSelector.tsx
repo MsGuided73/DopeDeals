@@ -212,7 +212,7 @@ export default function VariantSelector({
           <div className="inline-block p-3 bg-white rounded-lg shadow-md border">
             <Image
               src={variants[selectedVariant].imageUrl}
-              alt={variants[selectedVariant].name}
+              alt={variants[selectedVariant].name || 'Variant'}
               width={60}
               height={60}
               className="object-contain mx-auto"

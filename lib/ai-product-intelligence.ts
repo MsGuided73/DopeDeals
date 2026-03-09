@@ -86,7 +86,7 @@ export class AIProductIntelligence {
     );
 
     // 5. Get personalized recommendations if user is authenticated
-    let recommendations = [];
+    let recommendations: any[] = [];
     if (context.userId && intent.needsRecommendations) {
       recommendations = await this.recommendationAgent.getPersonalizedRecommendations({
         userId: context.userId,
@@ -114,8 +114,8 @@ export class AIProductIntelligence {
       ]);
 
       // Create lookup maps
-      const categoryMap = new Map(categories.map((c: any) => [c.id, c.name]));
-      const brandMap = new Map(brands.map((b: any) => [b.id, b.name]));
+      const categoryMap = new Map<string, string>(categories.map((c: any) => [c.id, c.name]));
+      const brandMap = new Map<string, string>(brands.map((b: any) => [b.id, b.name]));
 
       // Process each product
       for (const product of products) {
@@ -356,7 +356,7 @@ COMPLIANCE NOTES:
   }
 
   private extractFeatures(product: any): string[] {
-    const features = [];
+    const features: string[] = [];
     const text = `${product.name} ${product.description}`.toLowerCase();
     
     // Common product features to extract

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import { AIProductIntelligence } from '../../../lib/ai-product-intelligence';
+import { AIProductIntelligence } from '../../../../lib/ai-product-intelligence';
 import { getSessionUser } from '../../../lib/supabase-server-ssr';
 
 export async function POST(request: NextRequest) {

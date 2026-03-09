@@ -1,5 +1,5 @@
 import { ShipstationClient, ShipstationConfig, ShipstationApiResponse } from './client';
-import { SupabaseStorage } from '../../../server/supabase-storage';
+import { IStorage } from '../../../lib/storage';
 import {
   ShipstationOrder,
   InsertShipstationOrder,
@@ -60,11 +60,11 @@ export interface ShipstationRateQuote {
 
 export class ShipstationService {
   private client: ShipstationClient;
-  private storage: SupabaseStorage;
+  private storage: IStorage;
   private config: ShipstationServiceConfig;
   private syncInProgress: Set<string> = new Set();
 
-  constructor(config: ShipstationServiceConfig, storage: SupabaseStorage) {
+  constructor(config: ShipstationServiceConfig, storage: IStorage) {
     this.config = config;
     this.storage = storage;
     

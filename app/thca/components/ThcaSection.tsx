@@ -16,8 +16,8 @@ export default function ThcaSection({ id, title, description, icon, products }: 
   const transformedProducts = products.map(product => ({
     id: product.id,
     name: product.name,
-    price: product.price,
-    image_url: product.image_url,
+    price: product.price || 0,
+    image_url: product.image_url || undefined,
     brand: product.brand,
     category: product.category,
     short_description: product.subcategory,

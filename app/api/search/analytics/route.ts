@@ -57,13 +57,25 @@ export async function GET(request: NextRequest) {
     const days = parseInt(searchParams.get('days') || '7');
 
     // Get popular searches from the last N days
-    const { data: popularSearches, error } = await supabase
+    const { data: recentSearches, error } = await supabase
       .from('search_analytics')
-      .select('query, count(*)')
+      .select('query')
       .gte('timestamp', new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString())
-      .group('query')
-      .order('count', { ascending: false })
-      .limit(limit);
+      .limit(1000); // Fetch up to 1000 recent searches to group in memory
+
+    let popularSearches: { query: string; count: number }[] = [];
+    if (recentSearches) {
+      const counts: Record<string, number> = {};
+      for (const row of recentSearches) {
+        if (row.query) {
+          counts[row.query] = (counts[row.query] || 0) + 1;
+        }
+      }
+      popularSearches = Object.entries(counts)
+        .map(([query, count]) => ({ query, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, limit);
+    }
 
     if (error) {
       console.error('Error fetching search analytics:', error);

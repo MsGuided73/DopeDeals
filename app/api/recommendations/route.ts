@@ -24,12 +24,12 @@ export async function GET(request: NextRequest) {
     // Initialize recommendation agent
     const agent = new RecommendationAgent();
 
-    let recommendations;
+    let recommendations: any[] = [];
 
     // Route to different recommendation types
     if (type === 'ecosystem' && currentProductId) {
       // Get complete setup recommendations
-      const currentProduct = await agent.storage.getProduct(currentProductId);
+      const currentProduct = await (agent as any).storage.getProduct(currentProductId);
       if (currentProduct) {
         recommendations = await agent.getEcosystemRecommendations(currentProduct, limit);
       } else {
@@ -37,13 +37,13 @@ export async function GET(request: NextRequest) {
       }
     } else if (type === 'brand-category' && currentProductId) {
       // Enhanced brand and category matching
-      const currentProduct = await agent.storage.getProduct(currentProductId);
+      const currentProduct = await (agent as any).storage.getProduct(currentProductId);
       if (currentProduct) {
         // Get user preferences for brand matching
         const [userOrders] = await Promise.all([
-          agent.storage.getUserOrders(user.id).catch(() => [])
+          (agent as any).storage.getUserOrders(user.id).catch(() => [])
         ]);
-        const userPreferences = agent.analyzeUserPreferences(userOrders, []);
+        const userPreferences = (agent as any).analyzeUserPreferences(userOrders, []);
         recommendations = await agent.getBrandCategoryRecommendations(userPreferences, currentProduct);
       } else {
         recommendations = [];
