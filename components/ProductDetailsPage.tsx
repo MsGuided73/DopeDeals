@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getStorage } from '../lib/storage';
+import { addToCart } from '../app/lib/cart-utils';
 
 // Universal Product interface that handles all product types
 export interface UniversalProduct {
