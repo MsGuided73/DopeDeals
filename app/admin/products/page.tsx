@@ -925,14 +925,22 @@ function ProductCard({
           {product.name}
         </h3>
         <p className="text-xs text-gray-500 mb-2">SKU: {product.sku}</p>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mt-2">
           <span className="text-lg font-bold text-dope-orange">${product.price}</span>
-          <button
-            onClick={onDelete}
-            className="text-red-500 hover:text-red-700 text-sm font-medium"
-          >
-            Delete
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/admin/products/${product.id}/edit`}
+              className="text-blue-500 hover:text-blue-700 text-sm font-medium"
+            >
+              Edit
+            </Link>
+            <button
+              onClick={onDelete}
+              className="text-red-500 hover:text-red-700 text-sm font-medium"
+            >
+              Delete
+            </button>
+          </div>
         </div>
         {product.brand_name && (
           <div className="mt-2 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">

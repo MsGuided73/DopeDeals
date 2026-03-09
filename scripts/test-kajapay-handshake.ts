@@ -16,7 +16,7 @@ console.log(`Payment Page Slug: ${SLUG}`);
 console.log(`Tokenization Key: ${TOKEN_KEY || 'MISSING'}`);
 
 // The endpoint provided by Sam's context or inferred from V2 docs
-const ENDPOINT = `https://api.sandbox.kajapaygateway.com/api/v2/payment-pages/generate-pay-link/${SLUG}`;
+const ENDPOINT = `https://api.sandbox.kaja-gateway.com/api/v2/payment-pages/generate-pay-link/${SLUG}`;
 
 async function testAuth() {
   console.log(`Source Key: ${SOURCE_KEY.substring(0, 5)}...`);

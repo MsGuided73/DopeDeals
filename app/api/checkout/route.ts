@@ -116,20 +116,25 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
     
-    // Resolve state for the zip
+    let stateToCheck = shippingAddress.state;
+
+    // Resolve state for the zip (still do this to catch fake states if zip is real)
     const { data: zipRow } = await supabase
       .from('us_zipcodes')
       .select('state')
       .eq('zip', shippingAddress.postalCode)
       .single();
 
-    if (zipRow) {
-      const state = zipRow.state;
+    if (zipRow && zipRow.state) {
+      stateToCheck = zipRow.state;
+    }
+
+    if (stateToCheck) {
       // Fetch compliance rules for this state
       const { data: rules } = await supabase
         .from('compliance_rules')
         .select('id')
-        .contains('restricted_states', [state]);
+        .contains('restricted_states', [stateToCheck]);
 
       if (rules && rules.length > 0) {
         const ruleIds = rules.map((r: any) => r.id);
