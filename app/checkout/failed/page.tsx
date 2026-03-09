@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AlertTriangle, RefreshCcw, Home, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 
-export default function FailedPage() {
+function FailedContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawReason = searchParams.get('reason');
@@ -90,5 +90,19 @@ export default function FailedPage() {
       </p>
 
     </div>
+  );
+}
+
+export default function FailedPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-16 lg:py-24 max-w-3xl text-center">
+        <div className="flex justify-center">
+          <div className="w-24 h-24 border-4 border-red-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      </div>
+    }>
+      <FailedContent />
+    </Suspense>
   );
 }

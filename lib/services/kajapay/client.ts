@@ -185,20 +185,26 @@ export class KajaPayClient {
 
       // Dynamic Hosted Form Generation via KajaPay Gateway v2 API
       const response = await this.client.post(`payment-pages/generate-pay-link/${this.config.paymentPageSlug}`, {
-        amount: formData.amount,
-        orderId: formData.orderNumber,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        address1: formData.address1,
-        city: formData.city,
-        state: formData.state,
-        zip: formData.zip,
-        country: formData.country,
-        email: formData.email,
-        phone: formData.phone,
-        return_url: formData.redirectUrl,
-        cancel_url: formData.cancelUrl,
-        // Any other fields required by KajaPay
+        one_time_use: true,
+        general_fields: {
+          invoice: formData.orderNumber,
+          amount: formData.amount
+        },
+        billing_fields: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          address_1: formData.address1,
+          city: formData.city,
+          state: formData.state,
+          zip_code: formData.zip,
+          country: formData.country,
+          email: formData.email,
+          phone_number: formData.phone
+        },
+        config: {
+          redirect_url: formData.redirectUrl,
+          cancel_url: formData.cancelUrl
+        }
       });
 
       const paymentUrl = response.data?.payment_link || response.data?.pay_link;

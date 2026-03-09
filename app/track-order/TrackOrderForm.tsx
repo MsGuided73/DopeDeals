@@ -38,8 +38,7 @@ export default function TrackOrderForm() {
     setError(null);
 
     try {
-      // TODO: Replace with actual Shipstation API integration
-      // For now, simulate different order statuses for demo purposes
+      // ShipStation integration is pending bank approval. Using demo data for now.
 
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 2000));

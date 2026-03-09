@@ -181,6 +181,7 @@ async function syncZohoCategories(supabase: any) {
         updated_at: new Date().toISOString()
       };
 
+      // @ts-ignore
       const { error } = await supabase
         .from('categories')
         .upsert([categoryData], { onConflict: 'id' });
@@ -193,7 +194,7 @@ async function syncZohoCategories(supabase: any) {
     }
   }
 
-  return { success, failed };
+  return { success, failed, skipped: false };
 }
 
 // Phase 2: Sync Airtable Products
@@ -234,6 +235,7 @@ async function syncAirtableProducts(supabase: any) {
         updated_at: new Date().toISOString()
       };
 
+      // @ts-ignore
       const { error: productError } = await supabase
         .from('products')
         .update(productData)
@@ -255,7 +257,7 @@ async function syncAirtableProducts(supabase: any) {
     }
   }
 
-  return { success, failed };
+  return { success, failed, skipped: false };
 }
 
 // Helper function to upload product images
@@ -300,6 +302,7 @@ async function uploadProductImage(supabase: any, sku: string, image: any, index:
       height: image.height
     };
 
+    // @ts-ignore
     await supabase
       .from('product_media')
       .upsert([mediaData], { onConflict: 'product_id,path' });
@@ -311,8 +314,9 @@ async function uploadProductImage(supabase: any, sku: string, image: any, index:
 
 // Phase 3: Sync Inventory
 async function syncZohoInventory(supabase: any) {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   // Call the existing inventory sync endpoint logic
-  const response = await fetch('/api/zoho/sync-inventory', {
+  const response = await fetch(`${baseUrl}/api/zoho/sync-inventory`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ fullSync: true })
@@ -323,13 +327,14 @@ async function syncZohoInventory(supabase: any) {
   }
 
   const result = await response.json();
-  return { success: result.result?.success || 0, failed: result.result?.failed || 0 };
+  return { success: result.result?.success || 0, failed: result.result?.failed || 0, skipped: false };
 }
 
 // Phase 4: Sync Products
 async function syncZohoProducts(supabase: any, fullSync: boolean) {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   // Call the existing product sync endpoint logic
-  const response = await fetch('/api/zoho/sync', {
+  const response = await fetch(`${baseUrl}/api/zoho/sync`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ syncType: 'products', fullSync })
@@ -340,5 +345,5 @@ async function syncZohoProducts(supabase: any, fullSync: boolean) {
   }
 
   const result = await response.json();
-  return { success: result.result?.success || 0, failed: result.result?.failed || 0 };
+  return { success: result.result?.success || 0, failed: result.result?.failed || 0, skipped: false };
 }

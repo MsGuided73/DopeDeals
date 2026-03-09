@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../../lib/storage';
 import { requireAuth } from '../../../lib/requireAuth';
+import { UserRole } from '../../../types/auth';
 import { z } from 'zod';
 
 // Import KajaPay client and types
@@ -41,9 +42,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    // Verify order belongs to authenticated user (unless admin)
-    // TODO: Add admin role check when role system is implemented
-    if (order.userId !== user.id) {
+    // Verify order belongs to authenticated user, or user is an admin
+    const isAdmin = user.role && (user.role === UserRole.ADMIN || user.role === UserRole.MODERATOR);
+    if (!isAdmin && order.userId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 

@@ -145,10 +145,36 @@ export async function POST(req: NextRequest) {
           .in('product_id', productIds)
           .in('compliance_id', ruleIds);
 
-        if (restrictions && restrictions.length > 0) {
+        const restrictedProductIds = restrictions ? restrictions.map((r: any) => r.product_id) : [];
+
+        // Fallback THCA check based on category properties
+        const { data: productDetails } = await supabase
+          .from('main_site_products')
+          .select('id, category, category_id')
+          .in('id', productIds);
+          
+        if (productDetails) {
+          for (const p of productDetails) {
+            const isThca = p.category?.toLowerCase().includes('thca') || p.category_id?.toLowerCase().startsWith('thca-');
+            if (isThca) {
+              const thcaRule = rules.find((r: any) => r.category?.toLowerCase().includes('thca'));
+              if (thcaRule && !restrictedProductIds.includes(p.id)) {
+                restrictedProductIds.push(p.id);
+              } else if (!thcaRule) {
+                // Hardcoded fallback for THCA restricted states if no rule present
+                const thcaStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'AR'];
+                if (thcaStates.includes(stateToCheck) && !restrictedProductIds.includes(p.id)) {
+                  restrictedProductIds.push(p.id);
+                }
+              }
+            }
+          }
+        }
+
+        if (restrictedProductIds.length > 0) {
           return NextResponse.json({ 
             error: 'One or more items in your cart cannot be shipped to your location due to local regulations.',
-            restrictedProductIds: restrictions.map((r: any) => r.product_id)
+            restrictedProductIds
           }, { status: 403 });
         }
       }

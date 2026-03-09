@@ -147,7 +147,6 @@ export default function OptimizedImage({
           quality={quality}
           priority={priority}
           sizes={sizes}
-          srcSet={srcSet}
           className={`object-${objectFit} ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
           onLoad={handleLoad}
           onError={handleError}

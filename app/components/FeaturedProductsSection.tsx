@@ -60,6 +60,7 @@ export default function FeaturedProductsSection() {
 
   useEffect(() => {
     void fetchProducts();
+    void fetchPersistedFavorites();
   }, []);
 
   // Pre-fetch eligibility for all products once they are loaded
@@ -71,6 +72,21 @@ export default function FeaturedProductsSection() {
       }
     }
   }, [userZipCode, products, restrictedProductIds, checkProductEligibility]);
+
+  const fetchPersistedFavorites = async () => {
+    try {
+      const response = await fetch('/api/favorites');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.favorites && Array.isArray(data.favorites)) {
+          setFavorites(new Set(data.favorites));
+        }
+      }
+      // 401 means the user isn't logged in — keep local state empty, which is correct.
+    } catch {
+      // Network errors are non-critical; local state remains empty.
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -135,10 +151,13 @@ export default function FeaturedProductsSection() {
     };
   };
 
-  const handleFavorite = (productId: string, event: MouseEvent<HTMLButtonElement>) => {
+  const handleFavorite = async (productId: string, event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
+    const isCurrentlyFavorite = favorites.has(productId);
+
+    // Optimistically update local state
     setFavorites((previous) => {
       const next = new Set(previous);
       if (next.has(productId)) {
@@ -149,7 +168,29 @@ export default function FeaturedProductsSection() {
       return next;
     });
 
-    // TODO: Implement API call to persist favorites for the user.
+    // Persist to the API (no-op if the user isn't authenticated — API returns 401)
+    try {
+      const method = isCurrentlyFavorite ? 'DELETE' : 'POST';
+      const response = await fetch('/api/favorites', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productSku: productId }),
+      });
+      if (!response.ok && response.status !== 401) {
+        throw new Error(`API returned ${response.status}`);
+      }
+    } catch {
+      // Revert optimistic update on network errors or unexpected API failures
+      setFavorites((previous) => {
+        const next = new Set(previous);
+        if (isCurrentlyFavorite) {
+          next.add(productId);
+        } else {
+          next.delete(productId);
+        }
+        return next;
+      });
+    }
   };
 
   const handleAddToCart = async (productId: string, event: MouseEvent<HTMLButtonElement>) => {

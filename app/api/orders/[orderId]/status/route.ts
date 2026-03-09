@@ -307,9 +307,9 @@ async function syncOrderStatusToExternalSystems(order: any, status: string): Pro
   try {
     if (status === 'shipped' && process.env.SHIPSTATION_API_KEY) {
       const { ShipstationService } = await import('../../../../../lib/services/shipstation/service');
-      const { SupabaseStorage } = await import('../../../../../lib/storage');
+      const { getStorage } = await import('../../../../../lib/storage');
 
-      const storage = new SupabaseStorage();
+      const storage = await getStorage();
       const svc = new ShipstationService({
         apiKey: process.env.SHIPSTATION_API_KEY!,
         apiSecret: process.env.SHIPSTATION_API_SECRET!,

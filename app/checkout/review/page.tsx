@@ -29,11 +29,11 @@ export default function ReviewPage() {
   const [ageConfirm, setAgeConfirm] = useState(false);
 
   useEffect(() => {
-    // Check for age verification
+    const basicVerified = localStorage.getItem('hw420_age_verified') === 'true';
     const localVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
     const profileVerified = user?.user_metadata?.age_verified === true;
 
-    if (!localVerified && !profileVerified) {
+    if (!localVerified && !profileVerified && !basicVerified) {
       toast.error('Please complete age verification first');
       router.push('/checkout/shipping');
       return;

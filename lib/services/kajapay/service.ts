@@ -204,7 +204,7 @@ export class PaymentService {
         throw new Error('Transaction not found or invalid');
       }
 
-      const result = await kajaPayClient.processRefundById(
+      const result = await kajaPayClient.refundTransaction(
         transaction.kajaPayTransactionId,
         amount
       );

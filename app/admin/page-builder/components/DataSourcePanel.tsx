@@ -72,7 +72,7 @@ export default function DataSourcePanel({ selectedComponent, onDataSourceUpdate 
 
     try {
       setLoading(true);
-      let query = supabaseBrowser.from(config.sourceType).select('*');
+      let query: any = (supabaseBrowser.from(config.sourceType) as any).select('*');
 
       // Apply filters
       config.filters.forEach(filter => {
