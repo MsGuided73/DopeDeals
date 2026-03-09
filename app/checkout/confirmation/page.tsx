@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CheckCircle, Loader2, XCircle, Mail } from 'lucide-react';
 
-export default function ConfirmationPage() {
+function ConfirmationContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [state, setState] = useState<'processing' | 'success' | 'failed' | 'resending'>('processing');
@@ -157,5 +157,17 @@ export default function ConfirmationPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4">
+        <Loader2 className="w-14 h-14 text-green-500 animate-spin" />
+      </div>
+    }>
+      <ConfirmationContent />
+    </Suspense>
   );
 }

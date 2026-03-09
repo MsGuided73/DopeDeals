@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../lib/storage';
-import { requireAuth, requirePermission } from '../../lib/requireAuth';
+// import { requireAuth, requirePermission } from '../../lib/requireAuth';
 import { z } from 'zod';
 import type { ProcessPaymentRequest, BillingAddress } from '../../../lib/services/kajapay/types';
 import type { ShipstationOrder } from '@shared/shipstation-schema';
