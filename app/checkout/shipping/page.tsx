@@ -127,12 +127,15 @@ export default function ShippingPage() {
     }
 
     // Enforce Age Verification for checkout
+    // TEMPORARILY DISABLED: User wants to rely on the initial site gateway instead of Didit for checkout right now.
+    /*
     if (!isAgeVerified) {
       toast.error('Age verification required. Redirecting to secure verification protocol...');
       sessionStorage.setItem('checkout_shipping', JSON.stringify(form));
       setTimeout(() => router.push('/age-verification'), 1500);
       return;
     }
+    */
 
     // Save shipping info to sessionStorage to pass it into the review page
     sessionStorage.setItem('checkout_shipping', JSON.stringify(form));
