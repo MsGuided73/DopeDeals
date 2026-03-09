@@ -76,10 +76,10 @@ const CheckoutSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    // Require auth and create_orders permission
-    const auth = await requirePermission('create_orders');
-    if (auth instanceof NextResponse) return auth;
-    const { user } = auth;
+    // Accept both authenticated and guest users
+    const { getSessionUser } = await import('@/lib/supabase-server-ssr');
+    const user = await getSessionUser().catch(() => null);
+    const userId = user?.id || null;
 
     const body = await req.json().catch(() => ({}));
   const parse = CheckoutSchema.safeParse(body);
@@ -182,7 +182,7 @@ export async function POST(req: NextRequest) {
   // Prefer atomic checkout when available (Supabase)
   if (typeof storage.checkoutAtomic === 'function') {
     const result = await (storage.checkoutAtomic as any)({
-      userId: user.id,
+      userId,
       items,
       shippingAddress,
       billingAddress,
@@ -197,7 +197,7 @@ export async function POST(req: NextRequest) {
   } else {
     // Fallback: create order and items separately
     order = await (storage.createOrder as any)({
-      userId: user.id,
+      userId,
       orderNumber,
       subtotalAmount: subtotal.toString(),
       taxAmount: tax.toString(),
@@ -257,8 +257,8 @@ export async function POST(req: NextRequest) {
     }
   } catch {}
 
-  if (typeof storage.clearCart === 'function') {
-    await storage.clearCart(user.id);
+  if (typeof storage.clearCart === 'function' && userId) {
+    await storage.clearCart(userId);
   }
 
   // Always use KajaPay Hosted Form for redirect flow
@@ -281,7 +281,7 @@ export async function POST(req: NextRequest) {
       state: shippingAddress.state,
       zip: shippingAddress.postalCode,
       country: shippingAddress.country,
-      email: user.email || undefined,
+      email: user?.email || billingAddress?.email || undefined,
       redirectUrl: `${baseUrl}/checkout/success?orderId=${order.id}`,
       cancelUrl: `${baseUrl}/checkout/error?orderId=${order.id}`,
       callbackUrl: `${baseUrl}/api/kajapay/webhook`

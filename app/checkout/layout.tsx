@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { requireAuthWithRedirect } from '../lib/auth-helpers';
+import { getSessionUser } from '@/lib/supabase-server-ssr';
 import Link from 'next/link';
 
 export default async function CheckoutLayout({ children }: { children: ReactNode }) {
-  // Require authentication with automatic redirect
-  const user = await requireAuthWithRedirect();
+  // Allow guest checkout: get user if they exist, but don't redirect if they don't
+  const user = await getSessionUser().catch(() => null);
 
   return (
     <div className="min-h-screen bg-black text-white">
