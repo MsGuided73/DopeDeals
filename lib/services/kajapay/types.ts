@@ -241,6 +241,8 @@ export interface HostedFormRequest {
   sourceKey: string;
   orderNumber?: string;
   orderDescription?: string;
+  taxAmount?: number;
+  shippingAmount?: number;
   customerToken?: string;
   // URLs for redirection
   redirectUrl?: string; // Where to go after success

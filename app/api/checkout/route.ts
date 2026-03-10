@@ -296,7 +296,9 @@ export async function POST(req: NextRequest) {
     const hostedFormResponse = await kajaPayClient.createHostedForm({
       amount: Number(total),
       orderNumber: order.orderNumber || order.id,
-      orderDescription: `Highway 420 Order: ${createdItems.length} items`,
+      orderDescription: `Highway 420 Order: ${createdItems.length} item${createdItems.length !== 1 ? 's' : ''}`,
+      taxAmount: Number(tax),
+      shippingAmount: Number(shipping),
       firstName: shippingAddress.firstName,
       lastName: shippingAddress.lastName,
       address1: shippingAddress.address1,
@@ -305,6 +307,7 @@ export async function POST(req: NextRequest) {
       zip: shippingAddress.postalCode,
       country: shippingAddress.country,
       email: user?.email || billingAddress?.email || undefined,
+      phone: shippingAddress.phone || undefined,
       redirectUrl: `${baseUrl}/checkout/success?orderId=${order.id}`,
       cancelUrl: `${baseUrl}/checkout/error?orderId=${order.id}`,
       callbackUrl: `${baseUrl}/api/kajapay/webhook`
