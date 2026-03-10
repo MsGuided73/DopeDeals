@@ -24,8 +24,16 @@ export class FinanceService {
    */
   static calculateSubtotal(items: any[]): number {
     return items.reduce((sum, item) => {
-      const price = item.price || item.product?.price || 0;
-      return sum + (price * (item.quantity || 1));
+      // Cart items from the API use priceAtTime (locked price at add-time)
+      // Fall back through all possible field name variants
+      const price =
+        item.priceAtTime ||
+        item.price_at_time ||
+        item.price ||
+        item.product?.currentPrice ||
+        item.product?.our_price ||
+        0;
+      return sum + (parseFloat(price) * (item.quantity || 1));
     }, 0);
   }
 
