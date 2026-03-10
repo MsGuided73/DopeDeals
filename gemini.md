@@ -79,6 +79,7 @@ _Define the JSON Input/Output shapes here. These must closely mirror our Zod sch
     "country": "string",
     "phone": "string | null",
     "isDefault": "boolean",
+    "age_verification_status": "not_verified | verified | pending | failed",
     "createdAt": "date-time",
     "updatedAt": "date-time"
   }
