@@ -8,6 +8,8 @@ export default function LoginGateClient() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [reasonMessage, setReasonMessage] = useState<string | null>(null);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/";
@@ -50,12 +52,18 @@ export default function LoginGateClient() {
     }
   };
 
+  const reason = searchParams.get("reason");
+
   useEffect(() => {
-    // Clear any existing error on password change
-    if (error) {
-      setError("");
+    if (reason) {
+      const messages: Record<string, string> = {
+        'auth_required': 'Please enter the site password to proceed to the checkout or your account.',
+        'session_expired': 'Your session has expired. Please re-enter the site password.',
+        'kratom_blocked': 'Access to that product category is restricted. Site password required for verification.',
+      };
+      setReasonMessage(messages[reason] || 'Authorized access only. Please enter the site password.');
     }
-  }, [password]);
+  }, [reason]);
 
   return (
     <div
@@ -105,6 +113,15 @@ export default function LoginGateClient() {
           }}
         >
           <form onSubmit={handleSubmit} className="space-y-6">
+            {reasonMessage && (
+              <div className="text-blue-400 text-xs bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 mb-4 flex items-center gap-2">
+                <svg className="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {reasonMessage}
+              </div>
+            )}
+
             {/* Password input */}
             <div>
               <label

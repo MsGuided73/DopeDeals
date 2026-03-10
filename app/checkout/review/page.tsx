@@ -7,6 +7,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { ArrowLeft, CreditCard, Shield, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { FinanceService } from '../../../lib/services/FinanceService';
+
 
 export default function ReviewPage() {
   const { cart, isLoading } = useCart();
@@ -74,14 +76,16 @@ export default function ReviewPage() {
     );
   }
 
-  // Recalculate totals based on selection
+  // Recalculate totals based on selection using unified FinanceService
   const subtotal = cart.subtotal || 0;
-  const isFreeStandard = subtotal >= 75;
-  const standardPrice = isFreeStandard ? 0 : 9.99;
-  const expressPrice = 19.99;
-  const shippingPrice = shippingMethod === 'standard' ? standardPrice : expressPrice;
+  const shippingPrice = FinanceService.calculateShipping(subtotal, shippingMethod);
   const tax = cart.taxAmount || 0;
   const total = subtotal + tax + shippingPrice;
+  
+  // Define prices for display
+  const standardPrice = FinanceService.calculateShipping(subtotal, 'standard');
+  const expressPrice = FinanceService.calculateShipping(subtotal, 'express');
+
 
   const handleCreateOrderAndPay = async () => {
     if (!agreedToTerms || !ageConfirm) {

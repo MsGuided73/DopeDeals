@@ -12,6 +12,8 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [reasonMessage, setReasonMessage] = useState<string | null>(null);
+
 
   // Initialize remember me from localStorage on component mount
   useEffect(() => {
@@ -25,6 +27,21 @@ export default function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '/account';
+  const reason = searchParams.get('reason');
+
+  useEffect(() => {
+    if (reason) {
+      const messages: Record<string, string> = {
+        'auth_required': 'Please sign in to access that page.',
+        'admin_required': 'Administrator access is required for that area. Please sign in with an admin account.',
+        'session_expired': 'Your session has expired. Please sign in again.',
+        'kratom_blocked': 'Access to that product category is restricted. Please sign in to view your available options.',
+        'access_denied_admin': 'You do not have permission to access the requested area.'
+      };
+      setReasonMessage(messages[reason] || 'Authentication is required to proceed.');
+    }
+  }, [reason]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +73,17 @@ export default function SignInForm() {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
       <form onSubmit={handleSubmit} className="space-y-6">
+        {reasonMessage && (
+          <div className="bg-orange-50 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800 rounded-lg p-4 mb-6 animate-in fade-in slide-in-from-top-2">
+            <div className="flex items-center gap-3 text-orange-800 dark:text-orange-200">
+              <svg className="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <p className="text-sm font-medium">{reasonMessage}</p>
+            </div>
+          </div>
+        )}
+
         {/* Email Field */}
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

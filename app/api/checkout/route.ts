@@ -3,6 +3,8 @@ import { getStorage } from '../../../lib/storage';
 import { z } from 'zod';
 import type { ProcessPaymentRequest, BillingAddress } from '../../../lib/services/kajapay/types';
 import type { ShipstationOrder } from '@shared/shipstation-schema';
+import { FinanceService } from '../../../lib/services/FinanceService';
+
 
 // Generate order number in format: DC-YYYYMMDD-XXXX
 function generateOrderNumber(): string {
@@ -15,25 +17,7 @@ function generateOrderNumber(): string {
   return `DC-${year}${month}${day}-${random}`;
 }
 
-// Calculate tax based on shipping address
-function calculateTax(subtotal: number, shippingState: string): number {
-  const taxRates: Record<string, number> = {
-    'CA': 0.0875, 'NY': 0.08, 'TX': 0.0625, 'FL': 0.06, 'WA': 0.065
-  };
-  const rate = taxRates[shippingState] || 0;
-  return subtotal * rate;
-}
 
-// Calculate shipping based on order total, selection, and location
-function calculateShipping(subtotal: number, shippingState: string, method?: 'standard' | 'express', amount?: number): number {
-  if (amount !== undefined) return amount;
-  if (method === 'express') return 19.99;
-  if (subtotal >= 75) return 0; // Free shipping over $75
-  const shippingRates: Record<string, number> = {
-    'CA': 8.99, 'NY': 9.99, 'TX': 7.99, 'FL': 8.99, 'WA': 9.99
-  };
-  return shippingRates[shippingState] || 12.99;
-}
 
 const CheckoutSchema = z.object({
   items: z.array(z.object({ productId: z.string().uuid(), quantity: z.number().int().positive() })).min(1),
@@ -189,18 +173,22 @@ export async function POST(req: NextRequest) {
     // unless the policy is strict "fail closed")
   }
 
-  // Compute totals (basic)
-  let subtotal = 0;
+  // Compute totals using FinanceService
+  const subtotal = FinanceService.calculateSubtotal(items.map(i => ({ ...i, price: 0 }))); // We'll get prices below
+  
+  // Re-calculate subtotal with actual prices from storage
+  let actualSubtotal = 0;
   for (const line of items) {
     const product = await storage.getProduct(line.productId);
     if (!product) continue;
-    const price = product.our_price || product.price || 0;
-    subtotal += Number(price) * line.quantity;
+    const price = Number(product.our_price || product.price || 0);
+    actualSubtotal += price * line.quantity;
   }
-  // Calculate tax and shipping
-  const tax = calculateTax(subtotal, shippingAddress.state || 'CA');
-  const shipping = calculateShipping(subtotal, shippingAddress.state || 'CA', shippingMethod, shippingAmount);
-  const total = subtotal + tax + shipping;
+
+  // Calculate tax and shipping using unified service
+  const tax = FinanceService.calculateTax(actualSubtotal, shippingAddress.state);
+  const shipping = FinanceService.calculateShipping(actualSubtotal, shippingMethod);
+  const total = actualSubtotal + tax + shipping;
 
   // Generate order number
   const orderNumber = generateOrderNumber();

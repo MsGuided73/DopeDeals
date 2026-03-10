@@ -14,7 +14,9 @@ export async function middleware(request: NextRequest) {
   const kratomTerms = ['kratom', '7-oh', '7-hydroxy', 'mitragynine', '7-ohmz'];
   if (kratomTerms.some(term => pathname.toLowerCase().includes(term))) {
     console.warn(`🛑 COMPLIANCE: Blocked request to Kratom-related path: ${pathname}`);
-    return NextResponse.redirect(new URL('/', request.url));
+    const redirectUrl = new URL('/', request.url);
+    redirectUrl.searchParams.set('reason', 'kratom_blocked');
+    return NextResponse.redirect(redirectUrl);
   }
 
   const supabase = createServerClient(
@@ -70,7 +72,6 @@ export async function middleware(request: NextRequest) {
   const protectedRoutes = [
     '/account',
     '/orders',
-    '/checkout',
     '/profile',
     '/wishlist',
     '/payment-methods',
@@ -136,6 +137,7 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       const redirectUrl = new URL('/signin', request.url);
       redirectUrl.searchParams.set('redirectTo', pathname);
+      redirectUrl.searchParams.set('reason', 'admin_required');
       return NextResponse.redirect(redirectUrl);
     }
 
@@ -154,7 +156,9 @@ export async function middleware(request: NextRequest) {
 
       if (!isAdmin) {
         // Redirect non-admin users to home page
-        return NextResponse.redirect(new URL('/', request.url));
+        const redirectUrl = new URL('/', request.url);
+        redirectUrl.searchParams.set('reason', 'access_denied_admin');
+        return NextResponse.redirect(redirectUrl);
       }
     } catch (error) {
       console.error('[Middleware] Error checking admin role:', error);
@@ -167,6 +171,7 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute && !user) {
     const redirectUrl = new URL('/signin', request.url);
     redirectUrl.searchParams.set('redirectTo', pathname);
+    redirectUrl.searchParams.set('reason', 'auth_required');
     return NextResponse.redirect(redirectUrl);
   }
 

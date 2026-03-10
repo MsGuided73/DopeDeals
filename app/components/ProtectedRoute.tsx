@@ -27,7 +27,7 @@ export default function ProtectedRoute({
     if (!loading && !user) {
       // Redirect to auth page with return URL
       const currentPath = window.location.pathname;
-      const authUrl = `${redirectTo}?redirectTo=${encodeURIComponent(currentPath)}`;
+      const authUrl = `${redirectTo}?redirectTo=${encodeURIComponent(currentPath)}&reason=auth_required`;
       router.push(authUrl);
     }
   }, [user, loading, router, redirectTo]);
