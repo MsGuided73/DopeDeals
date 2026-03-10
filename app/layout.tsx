@@ -14,22 +14,30 @@ import Script from "next/script";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
-  description: "Life is a Highway, Ride With Us 🌿 Premium glass, bongs, dab rigs & smoking accessories. Curated cannabis culture since day one. Free shipping over $75 🚚 #Highway420",
+  description: "Life is a Highway, Ride With Us 🌿 Premium cannabis products at the lowest prices — glass, bongs, dab rigs, vapes, edibles & more. Quality guaranteed. Free shipping over $75 🚚 #Highway420",
 
   // Open Graph / Facebook
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://yourdomain.com',
+    url: 'https://highway420.com',
     siteName: 'HIGHWAY 420',
-    title: 'HIGHWAY 420 - Life is a Highway, Ride With Us 🌿',
-    description: 'Curated cannabis culture essentials. Free shipping over $75. Join the movement.',
+    title: 'HIGHWAY 420 — Premium Products, Lowest Prices 🌿',
+    description: 'Top-quality cannabis accessories, edibles & more — all at the lowest prices. Free shipping over $75. Life is a Highway, Ride With Us. 🚚 #Highway420',
     images: [
       {
-        url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png',
+        // Primary share image — lifestyle photo with solid background (renders on all platforms)
+        url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg',
         width: 1200,
         height: 630,
-        alt: 'HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop',
+        alt: 'HIGHWAY 420 — Premium Cannabis Products at the Lowest Prices',
+      },
+      {
+        // Secondary: brand logo
+        url: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png',
+        width: 800,
+        height: 400,
+        alt: 'HIGHWAY 420 Official Logo',
       },
     ],
   },
@@ -37,14 +45,14 @@ export const metadata = {
   // Twitter Card
   twitter: {
     card: 'summary_large_image',
-    title: 'HIGHWAY 420 - Life is Highway, Ride With Us 🌿',
-    description: 'Premium glass, bongs, dab rigs & smoking accessories. Curated cannabis culture since day one. Free shipping over $75 🚚 #Highway420',
+    title: 'HIGHWAY 420 — Premium Products, Lowest Prices 🌿',
+    description: 'Top-quality cannabis accessories, edibles & more at the lowest prices. Free shipping over $75 🚚 Life is a Highway, Ride With Us. #Highway420',
     images: ['https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/life_is_highway_ride_with_us.jpg'],
     creator: '@highway420',
   },
 
   // Additional meta tags
-  keywords: ['cannabis', 'smoking accessories', 'bongs', 'pipes', 'dab rigs', 'vaporizers', 'cbd', 'smoke shop', 'premium glass'],
+  keywords: ['cannabis', 'smoking accessories', 'bongs', 'pipes', 'dab rigs', 'vaporizers', 'cbd', 'smoke shop', 'premium glass', 'lowest prices', 'best deals'],
   authors: [{ name: 'HIGHWAY 420' }],
   creator: 'HIGHWAY 420',
   publisher: 'HIGHWAY 420',
