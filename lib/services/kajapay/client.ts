@@ -145,14 +145,13 @@ export class KajaPayClient {
       }
 
       // Build the payload for KajaPay's generate-pay-link endpoint
+      // Only include fields confirmed by the KajaPay v2 API spec to avoid 400s
       const payload = {
         one_time_use: true,
         general_fields: {
           invoice: formData.orderNumber,
-          amount: formData.amount,
-          description: formData.orderDescription || `Highway 420 Order ${formData.orderNumber}`,
-          tax_amount: formData.taxAmount,
-          shipping_amount: formData.shippingAmount,
+          // KajaPay expects amount as a decimal string e.g. "75.00"
+          amount: formData.amount!.toFixed(2),
         },
         billing_fields: {
           first_name: formData.firstName,
@@ -165,23 +164,13 @@ export class KajaPayClient {
           email: formData.email,
           phone_number: formData.phone,
         },
-        shipping_fields: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          address_1: formData.address1,
-          city: formData.city,
-          state: formData.state,
-          zip_code: formData.zip,
-          country: formData.country || 'US',
-        },
         config: {
           redirect_url: formData.redirectUrl,
           cancel_url: formData.cancelUrl,
-          notification_url: formData.callbackUrl,   // KajaPay webhook callback
         }
       };
 
-      console.log('[KajaPay] Sending generate-pay-link payload:', JSON.stringify(payload, null, 2));
+      console.log('[KajaPay] generate-pay-link payload:', JSON.stringify(payload, null, 2));
 
       // Dynamic Hosted Form Generation via KajaPay Gateway v2 API
       const response = await this.client.post(`payment-pages/generate-pay-link/${this.config.paymentPageSlug}`, payload);
