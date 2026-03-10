@@ -34,7 +34,7 @@ export class KajaPayClient {
     // of environment, so we use an explicit flag instead.
     const baseUrl = process.env.KAJAPAY_ENVIRONMENT === 'production'
       ? 'https://api.kajapaygateway.com/api/v2/'
-      : 'https://api.sandbox.kaja-gateway.com/api/v2/';
+      : 'https://api.sandbox.kajapaygateway.com/api/v2/';
 
     this.config = {
       baseUrl,
