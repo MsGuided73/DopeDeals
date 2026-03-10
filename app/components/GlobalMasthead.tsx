@@ -24,6 +24,14 @@ export default function GlobalMasthead() {
   // Auth state
   const { user } = useAuth();
 
+  // Derive display name: DB first_name > signup firstName > email prefix
+  const displayName = user
+    ? (user.user_metadata?.first_name ||
+       user.user_metadata?.firstName ||
+       user.email?.split('@')[0] ||
+       'You')
+    : null;
+
   // Get cart count (safe defaults provided by useCart hook)
   const { cartCount } = useCart();
 
@@ -184,10 +192,15 @@ export default function GlobalMasthead() {
 
                   <button
                     onClick={() => setShowProfileModal(true)}
-                    className="p-1 hover:text-yellow-400 transition-colors"
+                    className="flex flex-col items-center gap-0.5 p-1 hover:text-yellow-400 transition-colors"
                     aria-label="Profile"
                   >
                     <User className="w-5 h-5" strokeWidth={2.5} />
+                    {displayName && (
+                      <span className="text-[9px] font-bold leading-none tracking-wide max-w-[48px] truncate uppercase">
+                        {displayName}
+                      </span>
+                    )}
                   </button>
 
                   <Link
@@ -325,10 +338,15 @@ export default function GlobalMasthead() {
               {/* Profile */}
               <button
                 onClick={() => setShowProfileModal(true)}
-                className="p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
+                className="flex flex-col items-center gap-0.5 p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
                 title="Profile & Recommendations"
               >
                 <User className="w-8 h-8" strokeWidth={3} />
+                {displayName && (
+                  <span className="text-[10px] font-bold leading-none tracking-wide max-w-[60px] truncate uppercase">
+                    {displayName}
+                  </span>
+                )}
               </button>
 
               {/* Cart */}
