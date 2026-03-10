@@ -121,11 +121,17 @@ export default function AgeVerificationPage() {
                       Your identity has been confirmed. You now have unrestricted access to the Highway 420 collection.
                     </p>
                     <button 
-                      onClick={() => window.location.href = '/products'}
+                      onClick={() => {
+                        // Return to checkout if that's where the user came from, otherwise go to products
+                        const params = new URLSearchParams(window.location.search);
+                        const returnTo = params.get('returnTo');
+                        const safe = returnTo && returnTo.startsWith('/checkout') ? returnTo : '/products';
+                        window.location.href = safe;
+                      }}
                       className="px-16 py-5 bg-white text-black font-black uppercase tracking-[0.25em] rounded-2xl hover:bg-green-500 hover:text-white transition-all duration-500 shadow-2xl active:scale-95 group"
                     >
                       <span className="flex items-center gap-3">
-                        Enter Showroom
+                        {new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '').get('returnTo')?.startsWith('/checkout') ? 'Continue to Checkout' : 'Enter Showroom'}
                         <Loader2 className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </span>
                     </button>

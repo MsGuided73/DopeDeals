@@ -27,22 +27,32 @@ export default function ShippingPage() {
   });
 
   const [isAgeVerified, setIsAgeVerified] = useState(false);
+  const [ageCheckDone, setAgeCheckDone] = useState(false);
   const [restrictedItems, setRestrictedItems] = useState<string[]>([]);
   const [shippingWarning, setShippingWarning] = useState<string | null>(null);
   const [isCheckingZip, setIsCheckingZip] = useState(false);
 
   useEffect(() => {
-    // Check if formally verified in this session or via persistent user profile state
-    const localVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
+    // Accept any of our three verification signals:
+    // 1. Basic site gateway (hw420_age_verified) — set by AgeGateModal when user passes DOB check
+    // 2. Formal/upgraded verification (hw420_age_verified_formal) — set after Didit session
+    // 3. Persistent DB profile — user_metadata.age_verified = true (synced from Supabase)
+    const basicVerified  = localStorage.getItem('hw420_age_verified') === 'true';
+    const formalVerified = localStorage.getItem('hw420_age_verified_formal') === 'true';
+    const legacyVerified = localStorage.getItem('dope-city-age-verified') === 'true';
     const profileVerified = user?.user_metadata?.age_verified === true;
-    
-    if (localVerified || profileVerified) {
-      setIsAgeVerified(true);
-      // Sync local storage if profile is verified to help other pages
-      if (profileVerified && !localVerified) {
-        localStorage.setItem('hw420_age_verified_formal', 'true');
-      }
+
+    const verified = basicVerified || formalVerified || legacyVerified || profileVerified;
+    setIsAgeVerified(verified);
+
+    // Sync local storage if profile is verified to help other pages
+    if (profileVerified && !formalVerified) {
+      localStorage.setItem('hw420_age_verified_formal', 'true');
     }
+
+    // Only redirect after the auth context has resolved (user is non-null OR explicitly unauthenticated)
+    // We wait until isLoading is false so we don't flash-redirect during hydration
+    setAgeCheckDone(true);
   }, [user]);
 
   // Stable product ID string via useMemo — avoids new array reference on every render
@@ -126,20 +136,15 @@ export default function ShippingPage() {
       setIsCheckingZip(false);
     }
 
-    // AGE VERIFICATION STRATEGY NOTE:
-    // We have temporarily shifted focus from mandatory 3rd-party (Didit) verification 
-    // at checkout to relying on the initial 21+ Site Gateway. This avoids double-gating 
-    // and friction during the early rollout. The code below is preserved (commented out) 
-    // so we can re-engage formal 3rd-party verification once the banking approval 
-    // and compliance audits are finalized. 
-    /*
+    // AGE VERIFICATION ENFORCEMENT:
+    // If the user somehow bypasses the mount-level redirect (e.g. stale state),
+    // enforce a final check here before allowing progression to review.
     if (!isAgeVerified) {
-      toast.error('Age verification required. Redirecting to secure verification protocol...');
+      toast.error('Age verification required. Please verify your age to continue.');
       sessionStorage.setItem('checkout_shipping', JSON.stringify(form));
-      setTimeout(() => router.push('/age-verification'), 1500);
+      router.push('/age-verification?returnTo=/checkout/shipping');
       return;
     }
-    */
 
     // Save shipping info to sessionStorage to pass it into the review page
     sessionStorage.setItem('checkout_shipping', JSON.stringify(form));
@@ -148,7 +153,20 @@ export default function ShippingPage() {
     router.push('/checkout/review');
   };
 
-  if (isLoading) {
+  // --- Age Gate: redirect unverified users before they see the form ---
+  useEffect(() => {
+    if (!isLoading && ageCheckDone && !isAgeVerified) {
+      toast.error('Age verification required before checkout.');
+      router.replace('/age-verification?returnTo=/checkout/shipping');
+    }
+  }, [isLoading, ageCheckDone, isAgeVerified, router]);
+
+  if (isLoading || !ageCheckDone) {
+    return <div className="flex justify-center items-center my-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
+  }
+
+  // Don't render form while redirect is in flight for unverified users
+  if (!isAgeVerified) {
     return <div className="flex justify-center items-center my-32"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
   }
 
