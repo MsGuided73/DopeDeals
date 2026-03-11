@@ -327,14 +327,15 @@ export async function POST(req: NextRequest) {
         orderId: order.id
       });
     } else {
-      throw new Error(hostedFormResponse.error?.responseText || 'Failed to create payment session');
+      const errorDetails = hostedFormResponse.error?.details ? JSON.stringify(hostedFormResponse.error.details) : '';
+      throw new Error(`${hostedFormResponse.error?.responseText || 'Failed to create payment session'} - ${errorDetails}`);
     }
   } catch (error: any) {
     console.error('[Checkout] KajaPay Hosted Form error:', error);
     return NextResponse.json({ 
       error: 'Payment session creation failed', 
       details: error.message,
-      orderId: order.id // Return orderId so we can attempt retry if needed
+      orderId: order?.id // Return orderId so we can attempt retry if needed
     }, { status: 500 });
   }
 } catch (globalError: any) {
