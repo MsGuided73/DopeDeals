@@ -33,7 +33,7 @@ export class FinanceService {
         item.product?.currentPrice ||
         item.product?.our_price ||
         0;
-      return sum + (parseFloat(price) * (item.quantity || 1));
+      return sum + (Number(price) * (item.quantity || 1));
     }, 0);
   }
 
