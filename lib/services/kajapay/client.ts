@@ -146,29 +146,35 @@ export class KajaPayClient {
 
       // Build the payload for KajaPay's generate-pay-link endpoint
       // Only include fields confirmed by the KajaPay v2 API spec to avoid 400s
-      const payload = {
+      const payload: any = {
         one_time_use: true,
         general_fields: {
           invoice: formData.orderNumber,
-          // KajaPay expects amount as a decimal string e.g. "75.00"
-          amount: formData.amount!.toFixed(2),
-        },
-        billing_fields: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          address_1: formData.address1,
-          city: formData.city,
-          state: formData.state,
-          zip_code: formData.zip,
-          country: formData.country || 'US',
-          email: formData.email,
-          phone_number: formData.phone,
+          amount: {
+            value: Number(formData.amount).toFixed(2),
+            currency: 'USD'
+          }
         },
         config: {
           redirect_url: formData.redirectUrl,
           cancel_url: formData.cancelUrl,
         }
       };
+
+      // Add tax and shipping if provided
+      if (formData.taxAmount && formData.taxAmount > 0) {
+        payload.general_fields.tax_amount = {
+          value: Number(formData.taxAmount).toFixed(2),
+          currency: 'USD'
+        };
+      }
+      
+      if (formData.shippingAmount && formData.shippingAmount > 0) {
+        payload.general_fields.shipping_amount = {
+          value: Number(formData.shippingAmount).toFixed(2),
+          currency: 'USD'
+        };
+      }
 
       console.log('[KajaPay] generate-pay-link payload:', JSON.stringify(payload, null, 2));
 
@@ -200,7 +206,7 @@ export class KajaPayClient {
         error: {
           responseCode: 'HOSTED_FORM_FAILED',
           responseText: error.message,
-          details: error.response?.data
+          details: error.response?.data || error.message
         }
       };
     }

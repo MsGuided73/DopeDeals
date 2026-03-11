@@ -396,12 +396,26 @@ export class SupabaseStorage implements IStorage {
   }
 
   // Atomic checkout via Postgres function
-  async checkoutAtomic(params: { userId: string; items: Array<{ productId: string; quantity: number }>; shippingAddress?: unknown; billingAddress?: unknown; }): Promise<{ order: Order; items: OrderItem[] }> {
+  async checkoutAtomic(params: { 
+    userId: string; 
+    items: Array<{ productId: string; quantity: number }>; 
+    shippingAddress?: unknown; 
+    billingAddress?: unknown;
+    orderNumber?: string;
+    subtotal?: string;
+    taxAmount?: string;
+    shippingAmount?: string;
+    totalAmount?: string;
+  }): Promise<{ order: any; items: any[] }> {
     const { data, error } = await supabaseAdmin!.rpc('checkout_atomic', {
       p_user_id: params.userId,
       p_items: params.items,
       p_billing: params.billingAddress ?? null,
       p_shipping: params.shippingAddress ?? null,
+      p_order_number: params.orderNumber ?? null,
+      p_tax: params.taxAmount ? parseFloat(params.taxAmount) : 0,
+      p_shipping_cost: params.shippingAmount ? parseFloat(params.shippingAmount) : 0,
+      p_total: params.totalAmount ? parseFloat(params.totalAmount) : 0
     });
     if (error) throw error;
     const payload = data as any;

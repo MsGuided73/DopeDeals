@@ -38,7 +38,17 @@ export interface IStorage {
   createProductSimilarity(similarity: any): Promise<any>;
   
   // operations for database persistence
-  checkoutAtomic?(data: any): Promise<any>;
+  checkoutAtomic?(params: { 
+    userId: string; 
+    items: Array<{ productId: string; quantity: number }>; 
+    shippingAddress?: unknown; 
+    billingAddress?: unknown;
+    orderNumber?: string;
+    subtotal?: string;
+    taxAmount?: string;
+    shippingAmount?: string;
+    totalAmount?: string;
+  }): Promise<any>;
   createOrder(order: any): Promise<any>;
   updateOrder(id: string, updates: any): Promise<any>;
   createOrderItem(item: any): Promise<any>;
