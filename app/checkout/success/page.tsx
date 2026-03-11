@@ -50,6 +50,15 @@ function SuccessContent() {
 
         if (res.ok) {
           const data = await res.json();
+          
+          // Payment is fully complete and verified, now safe to clear cart
+          try {
+            const { clearCart } = await import('../../lib/cart-utils');
+            await clearCart();
+          } catch (e) {
+            console.error('Failed to clear cart after success:', e);
+          }
+
           setConfirmState('success');
           setCustomerEmail(data.customerEmail || '');
           setCustomerPhone(data.customerPhone || '');

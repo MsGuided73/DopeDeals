@@ -287,10 +287,7 @@ export async function POST(req: NextRequest) {
     }
   } catch {}
 
-  if (typeof storage.clearCart === 'function' && userId) {
-    await storage.clearCart(userId);
-  }
-
+  // Cart is preserved here — it is now cleared upon successful handshake in /checkout/success/page.tsx
   // Always use KajaPay Hosted Form for redirect flow
   try {
     const { kajaPayClient } = await import('../../../lib/services/kajapay/client');

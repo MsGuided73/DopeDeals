@@ -42,7 +42,7 @@ export default function ReviewPage() {
 
     if (!localVerified && !profileVerified && !basicVerified) {
       toast.error('Please complete age verification first');
-      router.push('/checkout/shipping');
+      router.push('/age-verification?returnTo=/checkout/review');
       return;
     }
 
