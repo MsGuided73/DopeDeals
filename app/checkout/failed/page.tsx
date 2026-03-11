@@ -96,8 +96,10 @@ function FailedContent() {
 export default function FailedPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="container mx-auto px-4 py-16 lg:py-24 max-w-3xl text-center">
+        <div className="flex justify-center">
+          <div className="w-24 h-24 border-4 border-red-500 border-t-transparent rounded-full animate-spin" />
+        </div>
       </div>
     }>
       <FailedContent />

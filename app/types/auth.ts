@@ -19,4 +19,5 @@ export interface AuthenticatedUser {
   created_at: string;
   updated_at?: string;
   isVip?: boolean;
+  age_verification_status?: string;
 }

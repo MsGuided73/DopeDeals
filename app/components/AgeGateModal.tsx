@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import { Shield, CheckCircle2, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../contexts/AuthContext';
 
 const STORAGE_KEY = 'hw420_age_verified';
 const FORMAL_KEY  = 'hw420_age_verified_formal';
 const OFFICIAL_LOGO = '/highway420-logo.png';
 
 export default function AgeGateModal() {
+  const { user } = useAuth();
   const [show, setShow]           = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [dob, setDob]             = useState('');
@@ -17,18 +19,22 @@ export default function AgeGateModal() {
 
   // ── Show modal if not yet verified ──────────────────────────────────
   useEffect(() => {
+    // 1. Check if verified in this session (LocalStorage)
     const verified       = localStorage.getItem(STORAGE_KEY);
     const formalVerified = localStorage.getItem(FORMAL_KEY);
     const legacyVerified = localStorage.getItem('dope-city-age-verified');
 
-    if (verified || formalVerified || legacyVerified) {
-      if (legacyVerified) localStorage.setItem(STORAGE_KEY, 'true');
+    // 2. Check if user is logged in and already verified in the DB/Metadata
+    const dbVerified = user?.user_metadata?.age_verified || user?.age_verification_status === 'verified';
+
+    if (verified || formalVerified || legacyVerified || dbVerified) {
+      if (legacyVerified || dbVerified) localStorage.setItem(STORAGE_KEY, 'true');
       return;
     }
 
     setShow(true);
     document.body.style.overflow = 'hidden';
-  }, []);
+  }, [user]);
 
   const handleVerify = () => {
     setError('');
@@ -62,9 +68,25 @@ export default function AgeGateModal() {
 
     setIsVerifying(true);
 
-    setTimeout(() => {
+    const completeVerification = async () => {
+      // 1. Set local storage for guest/immediate session use
       localStorage.setItem(STORAGE_KEY, 'true');
+      localStorage.setItem(FORMAL_KEY, 'true');   // satisfies checkout/shipping isAgeVerified check
       localStorage.setItem('dope-city-age-verified', 'true');
+
+      // 2. If logged in, sync with the database
+      if (user) {
+        try {
+          await fetch('/api/age-verification/verify-self', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ageVerified: true }),
+          });
+        } catch (e) {
+          console.error('[AgeGate] Failed to sync verification with DB:', e);
+          // We continue anyway since localStorage is set and user passed the local check
+        }
+      }
 
       setIsSuccess(true);
       setIsVerifying(false);
@@ -73,7 +95,9 @@ export default function AgeGateModal() {
         document.body.style.overflow = '';
         setShow(false);
       }, 1000);
-    }, 800);
+    };
+
+    completeVerification();
   };
 
   if (!show) return null;

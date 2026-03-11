@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
 
       const { data: individualRows } = await supabase
         .from('main_site_products')
-        .select('id, name, category, subcategory, compliance_info')
+        .select('id, name, category, category_id, subcategory, compliance_info')
         .in('id', productIds);
 
       if (individualRows) {
@@ -85,6 +85,19 @@ export async function GET(req: NextRequest) {
           const compInfo = p.compliance_info as any;
           if (compInfo?.restricted_zipcodes?.includes(zip)) {
             restrictedProducts.push(p.id);
+          }
+          
+          const isThca = p.category?.toLowerCase().includes('thca') || p.category_id?.toLowerCase().startsWith('thca-');
+          if (isThca) {
+            const thcaRule = rules?.find((r: any) => r.category?.toLowerCase().includes('thca'));
+            if (thcaRule) {
+              restrictedProducts.push(p.id);
+            } else {
+              const thcaStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'AR'];
+              if (thcaStates.includes(state)) {
+                restrictedProducts.push(p.id);
+              }
+            }
           }
         }
       }

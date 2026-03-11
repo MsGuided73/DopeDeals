@@ -13,7 +13,7 @@ const STATUS_MESSAGES = [
   "Redirecting to KajaPay Gateway..."
 ];
 
-function ProcessingContent() {
+function CheckoutProcessingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirectUrl');
@@ -188,11 +188,11 @@ function ProcessingContent() {
 export default function CheckoutProcessingPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6">
         <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     }>
-      <ProcessingContent />
+      <CheckoutProcessingContent />
     </Suspense>
   );
 }

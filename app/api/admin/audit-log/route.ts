@@ -37,25 +37,33 @@ export async function POST(req: NextRequest) {
                      req.headers.get('x-real-ip') ||
                      'unknown';
 
-    // For now, just log to console and return success
-    // TODO: Enable database logging once table is created
-    console.log('📝 Audit Log Entry:', {
-      event_type: event_type || 'info',
-      severity: severity || 'medium',
-      category: category || 'system',
-      title: title || 'Site Event',
-      description: description || '',
-      error_stack: error_stack || null,
-      user_agent: user_agent || req.headers.get('user-agent') || '',
-      ip_address: ipAddress,
-      url: url || req.headers.get('referer') || '',
-      auto_fix_attempted: auto_fixable || false,
-      details: details || {},
-      timestamp: new Date().toISOString()
-    });
+    // Insert audit log entry into the database
+    const { error: insertError } = await supabase
+      .from('site_audit_log')
+      .insert({
+        event_type: event_type || 'info',
+        severity: severity || 'medium',
+        category: category || 'system',
+        title: title || 'Site Event',
+        description: description || '',
+        error_stack: error_stack || null,
+        user_agent: user_agent || req.headers.get('user-agent') || '',
+        ip_address: ipAddress,
+        url: url || req.headers.get('referer') || '',
+        auto_fix_attempted: auto_fixable || false,
+        details: details || {},
+      });
+
+    if (insertError) {
+      console.error('Error inserting audit log entry:', insertError);
+      return NextResponse.json({
+        message: 'Failed to save audit log entry',
+        logged: false
+      }, { status: 500 });
+    }
 
     return NextResponse.json({
-      message: 'Audit log entry logged successfully',
+      message: 'Audit log entry saved successfully',
       logged: true
     });
 

@@ -29,6 +29,22 @@ export async function POST(request: Request) {
         { auth: { autoRefreshToken: false, persistSession: false } }
       );
 
+      // 1. Update public.users table for RLS-protected app logic
+      const { error: dbError } = await supabaseAdmin
+        .from('users')
+        .update({
+          age_verification_status: 'verified',
+          last_verification_check: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id);
+
+      if (dbError) {
+        console.error('[Sync Status] Failed to update public.users table:', dbError);
+        // We continue to update metadata for session-based checks, but log the error
+      }
+
+      // 2. Update auth metadata for session and middleware consistency
       const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
         user_metadata: {
           ...user.user_metadata,
@@ -46,6 +62,7 @@ export async function POST(request: Request) {
       console.log(`[Sync Status] Successfully native-synced age verification for user: ${user.id}`);
       return NextResponse.json({ success: true, verified: true });
     }
+
 
     return NextResponse.json({ success: true, verified: false, reason: decision.reason });
   } catch (error) {

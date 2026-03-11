@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+import { FinanceService } from '../../../lib/services/FinanceService';
+
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -178,7 +180,7 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
         name: (item.main_site_products as any).name,
         description: '',
         sku: `SKU-${item.product_id}`,
-        currentPrice: parseFloat((item.main_site_products as any).our_price) || 0,
+        currentPrice: Number((item.main_site_products as any).our_price) || 0,
         imageUrl: (item.main_site_products as any).image_url || null,
         stockQuantity: (item.main_site_products as any).stock_quantity || 0,
         isActive: (item.main_site_products as any).is_active || false,
@@ -309,7 +311,7 @@ async function manageCartItem(
         .eq('id', productId)
         .single();
 
-      const price = parseFloat(product?.our_price) || 0;
+      const price = Number(product?.our_price) || 0;
 
       // Upsert the item
       const { data: upsertedItem, error } = await supabase
@@ -392,18 +394,11 @@ export async function GET(request: NextRequest) {
     // Get cart items (cart will be created automatically if needed)
     const cartItems = await getCartItems(sessionId, userId);
 
-    // Calculate totals
-    let subtotal = 0;
-    let itemCount = 0;
-
-    cartItems.forEach(item => {
-      subtotal += item.itemTotal;
-      itemCount += item.quantity;
-    });
-
-    const taxRate = 0.08; // 8% tax
-    const taxAmount = subtotal * taxRate;
-    const shippingAmount = subtotal >= 75 ? 0 : 9.99;
+    // Calculate totals using FinanceService
+    const subtotal = FinanceService.calculateSubtotal(cartItems);
+    const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const taxAmount = FinanceService.calculateTax(subtotal, null); // Guessing state as null for cart view
+    const shippingAmount = FinanceService.calculateShipping(subtotal);
     const total = subtotal + taxAmount + shippingAmount;
 
     return NextResponse.json({

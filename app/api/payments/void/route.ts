@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../../lib/storage';
 import { requireAuth } from '../../../lib/requireAuth';
+import { UserRole } from '../../../types/auth';
 import { z } from 'zod';
 
 // Import KajaPay client and types
@@ -13,13 +14,10 @@ const VoidSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    // Require authentication (admin only for voids)
+    // Require authentication
     const auth = await requireAuth();
     if (auth instanceof NextResponse) return auth;
     const { user } = auth;
-
-    // TODO: Add admin role check when role system is implemented
-    // For now, allow order owner to void their own orders within a short timeframe
 
     // Parse and validate request body
     const body = await req.json().catch(() => ({}));
@@ -42,8 +40,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    // Verify order belongs to authenticated user (unless admin)
-    if (order.userId !== user.id) {
+    // Verify order belongs to authenticated user, or user is an admin
+    const isAdmin = user.role && (user.role === UserRole.ADMIN || user.role === UserRole.MODERATOR);
+    if (!isAdmin && order.userId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 

@@ -34,7 +34,7 @@ export class KajaPayClient {
     // of environment, so we use an explicit flag instead.
     const baseUrl = process.env.KAJAPAY_ENVIRONMENT === 'production'
       ? 'https://api.kajapaygateway.com/api/v2/'
-      : 'https://api.sandbox.kaja-gateway.com/api/v2/';
+      : 'https://api.sandbox.kajapaygateway.com/api/v2/';
 
     this.config = {
       baseUrl,
@@ -116,26 +116,6 @@ export class KajaPayClient {
   // Process charge transaction
   async processCharge(chargeData: ChargeRequest): Promise<ApiResponse<ChargeResponse>> {
     try {
-      // ---- MOCK OVERRIDE FOR INSPECTION ----
-      if (this.config.baseUrl.includes('sandbox') && this.config.password?.includes('!!!!')) {
-        console.log('[KajaPay Mock] Intercepting blocked sandbox request for charge and returning mock approval.');
-        return {
-          success: true,
-          data: {
-            responseCode: '00',
-            responseText: 'Success (Mock)',
-            transactionId: Math.floor(Math.random() * 1000000),
-            referenceNumber: Math.floor(Math.random() * 1000000),
-            authCode: 'MOCK123',
-            amount: chargeData.amount,
-            authorizedAmount: chargeData.amount,
-            maskedCardNumber: '**** **** **** 1111',
-            cardType: 'Visa'
-          }
-        };
-      }
-      // ---- END MOCK OVERRIDE ----
-
       const response: AxiosResponse<ChargeResponse> = await this.client.post('charge', {
         ...chargeData,
         sourceKey: this.config.sourceKey
@@ -164,44 +144,40 @@ export class KajaPayClient {
         throw new Error('KAJAPAY_PAYMENT_PAGE_SLUG is not configured');
       }
 
-      // ---- MOCK OVERRIDE FOR INSPECTION ----
-      // KajaPay's NGINX WAF blocks passwords containing '!!!!'. If we detect this in sandbox,
-      // return a mocked success response to allow the checkout flow to proceed for demonstration.
-      if (this.config.baseUrl.includes('sandbox') && this.config.password?.includes('!!!!')) {
-        console.log('[KajaPay Mock] Intercepting blocked sandbox request and returning mock payment URL.');
-        // If we have a redirectUrl in the form data, use it, otherwise default to a standard confirmation page
-        const redirect = formData.redirectUrl || `/checkout/confirmation?orderId=${formData.orderNumber}`;
-        return {
-          success: true,
-          data: {
-            responseCode: '00',
-            responseText: 'Success (Mock)',
-            paymentUrl: redirect,
-            pay_link: redirect
-          }
-        };
-      }
-      // ---- END MOCK OVERRIDE ----
+      // Build the payload for KajaPay's generate-pay-link endpoint
+      // Only include fields confirmed by the KajaPay v2 API spec to avoid 400s
+      const payload = {
+        one_time_use: true,
+        general_fields: {
+          invoice: formData.orderNumber,
+          // KajaPay expects amount as a decimal string e.g. "75.00"
+          amount: formData.amount!.toFixed(2),
+        },
+        billing_fields: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          address_1: formData.address1,
+          city: formData.city,
+          state: formData.state,
+          zip_code: formData.zip,
+          country: formData.country || 'US',
+          email: formData.email,
+          phone_number: formData.phone,
+        },
+        config: {
+          redirect_url: formData.redirectUrl,
+          cancel_url: formData.cancelUrl,
+        }
+      };
+
+      console.log('[KajaPay] generate-pay-link payload:', JSON.stringify(payload, null, 2));
 
       // Dynamic Hosted Form Generation via KajaPay Gateway v2 API
-      const response = await this.client.post(`payment-pages/generate-pay-link/${this.config.paymentPageSlug}`, {
-        amount: formData.amount,
-        orderId: formData.orderNumber,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        address1: formData.address1,
-        city: formData.city,
-        state: formData.state,
-        zip: formData.zip,
-        country: formData.country,
-        email: formData.email,
-        phone: formData.phone,
-        return_url: formData.redirectUrl,
-        cancel_url: formData.cancelUrl,
-        // Any other fields required by KajaPay
-      });
+      const response = await this.client.post(`payment-pages/generate-pay-link/${this.config.paymentPageSlug}`, payload);
 
-      const paymentUrl = response.data?.payment_link || response.data?.pay_link;
+      console.log('[KajaPay] generate-pay-link raw response:', JSON.stringify(response.data, null, 2));
+
+      const paymentUrl = response.data?.payment_link || response.data?.pay_link || response.data?.url;
 
       if (paymentUrl) {
         return {
@@ -216,7 +192,7 @@ export class KajaPayClient {
         };
       }
 
-      throw new Error(response.data?.responseText || 'Failed to generate pay link');
+      throw new Error(response.data?.responseText || response.data?.message || 'Failed to generate pay link');
     } catch (error: any) {
       console.error('[KajaPay] Hosted form generation failed:', error.response?.data || error.message);
       return {
@@ -336,22 +312,6 @@ export class KajaPayClient {
   // Save payment method (card tokenization)
   async saveCard(cardData: SaveCardRequest): Promise<ApiResponse<SaveCardResponse>> {
     try {
-      // ---- MOCK OVERRIDE FOR INSPECTION ----
-      if (this.config.baseUrl.includes('sandbox') && this.config.password?.includes('!!!!')) {
-        console.log('[KajaPay Mock] Intercepting blocked sandbox request for saveCard and returning mock token.');
-        return {
-          success: true,
-          data: {
-            responseCode: '00',
-            responseText: 'Success (Mock)',
-            paymentAccountDataToken: `mock_tkn_${Math.random().toString(36).substring(7)}`,
-            maskedCardNumber: '**** **** **** 1111',
-            cardType: 'Visa'
-          }
-        };
-      }
-      // ---- END MOCK OVERRIDE ----
-
       const response: AxiosResponse<SaveCardResponse> = await this.client.post('customer/add-payment-method', {
         ...cardData,
         sourceKey: this.config.sourceKey

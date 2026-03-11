@@ -58,6 +58,12 @@ export interface ShipstationRateQuote {
   transitDays?: number;
 }
 
+// SHIPSTATION INTEGRATION PLAN:
+// We are currently using a mock workflow for shipping (mock tracking numbers, 
+// shipping times, and costs). DO NOT change any of these mock elements 
+// until we receive official ShipStation credentials (expected after bank 
+// approval). This service handles the core logic for when those credentials 
+// are eventually provided.
 export class ShipstationService {
   private client: ShipstationClient;
   private storage: IStorage;
