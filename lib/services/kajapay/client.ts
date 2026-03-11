@@ -149,9 +149,9 @@ export class KajaPayClient {
       const payload: any = {
         one_time_use: true,
         general_fields: {
-          invoice: formData.orderNumber,
+          invoice: { value: formData.orderNumber },
           amount: {
-            value: Number(formData.amount).toFixed(2),
+            value: Number(Number(formData.amount).toFixed(2)),
             currency: 'USD'
           }
         },
@@ -164,14 +164,14 @@ export class KajaPayClient {
       // Add tax and shipping if provided
       if (formData.taxAmount && formData.taxAmount > 0) {
         payload.general_fields.tax_amount = {
-          value: Number(formData.taxAmount).toFixed(2),
+          value: Number(Number(formData.taxAmount).toFixed(2)),
           currency: 'USD'
         };
       }
       
       if (formData.shippingAmount && formData.shippingAmount > 0) {
         payload.general_fields.shipping_amount = {
-          value: Number(formData.shippingAmount).toFixed(2),
+          value: Number(Number(formData.shippingAmount).toFixed(2)),
           currency: 'USD'
         };
       }
