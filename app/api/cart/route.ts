@@ -180,7 +180,7 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
         name: (item.main_site_products as any).name,
         description: '',
         sku: `SKU-${item.product_id}`,
-        currentPrice: parseFloat((item.main_site_products as any).our_price) || 0,
+        currentPrice: Number((item.main_site_products as any).our_price) || 0,
         imageUrl: (item.main_site_products as any).image_url || null,
         stockQuantity: (item.main_site_products as any).stock_quantity || 0,
         isActive: (item.main_site_products as any).is_active || false,
@@ -311,7 +311,7 @@ async function manageCartItem(
         .eq('id', productId)
         .single();
 
-      const price = parseFloat(product?.our_price) || 0;
+      const price = Number(product?.our_price) || 0;
 
       // Upsert the item
       const { data: upsertedItem, error } = await supabase
