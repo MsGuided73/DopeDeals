@@ -148,16 +148,14 @@ export class KajaPayClient {
       // Only include fields confirmed by the KajaPay v2 API spec to avoid 400s
       const payload: any = {
         one_time_use: true,
+        success_url: formData.redirectUrl,
+        cancel_url: formData.cancelUrl,
         general_fields: {
           invoice: { value: formData.orderNumber },
           amount: {
             value: Number(Number(formData.amount).toFixed(2)),
             currency: 'USD'
           }
-        },
-        config: {
-          redirect_url: formData.redirectUrl,
-          cancel_url: formData.cancelUrl,
         }
       };
 

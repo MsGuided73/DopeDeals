@@ -189,7 +189,7 @@ export default function ReviewPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 py-8 lg:py-12">
+    <div className="min-h-screen bg-[#f4f7fb] text-gray-900 py-8 lg:py-12">
       <div className="container mx-auto px-4 max-w-6xl">
        <div className="flex items-center gap-4 mb-8 text-sm text-gray-600">
         <button onClick={() => router.push('/checkout/shipping')} className="text-gray-600 hover:text-gray-900 flex items-center gap-2">
@@ -205,14 +205,14 @@ export default function ReviewPage() {
         {/* Left Column - Details */}
         <div className="lg:col-span-2 space-y-6">
           
-          <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-lg">
+          <div className="bg-white border border-gray-100 p-6 rounded-xl shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2 flex items-center gap-2">
               {Truck && <Truck className="w-5 h-5 text-primary" />}
               Shipping Method
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label 
-                className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all ${shippingMethod === 'standard' ? 'border-primary bg-primary/10' : 'border-gray-200 bg-gray-50'}`}
+                className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all ${shippingMethod === 'standard' ? 'border-[#a5cbf4] bg-[#f4f7fb]' : 'border-gray-100 bg-white'}`}
               >
                 <div className="flex items-center gap-3">
                   <input 
@@ -220,7 +220,7 @@ export default function ReviewPage() {
                     name="shipping" 
                     checked={shippingMethod === 'standard'}
                     onChange={() => setShippingMethod('standard')}
-                    className="w-4 h-4 text-primary focus:ring-primary bg-white border-gray-300" 
+                    className="w-4 h-4 text-[#a5cbf4] focus:ring-[#a5cbf4] bg-white border-gray-200" 
                   />
                   <div>
                     <p className="font-bold text-gray-900">Standard Shipping</p>
@@ -231,7 +231,7 @@ export default function ReviewPage() {
               </label>
 
               <label 
-                className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all ${shippingMethod === 'express' ? 'border-primary bg-primary/10' : 'border-gray-200 bg-gray-50'}`}
+                className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all ${shippingMethod === 'express' ? 'border-[#a5cbf4] bg-[#f4f7fb]' : 'border-gray-100 bg-white'}`}
               >
                 <div className="flex items-center gap-3">
                   <input 
@@ -239,7 +239,7 @@ export default function ReviewPage() {
                     name="shipping" 
                     checked={shippingMethod === 'express'}
                     onChange={() => setShippingMethod('express')}
-                    className="w-4 h-4 text-primary focus:ring-primary bg-white border-gray-300" 
+                    className="w-4 h-4 text-[#a5cbf4] focus:ring-[#a5cbf4] bg-white border-gray-200" 
                   />
                   <div>
                     <p className="font-bold text-gray-900">Express (Air)</p>
@@ -261,7 +261,7 @@ export default function ReviewPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-lg">
+          <div className="bg-white border border-gray-100 p-6 rounded-xl shadow-sm">
              <h2 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2 flex items-center gap-2">
                {CreditCard && <CreditCard className="w-5 h-5 text-primary" />}
                Billing Details
@@ -272,7 +272,7 @@ export default function ReviewPage() {
                   type="checkbox" 
                   checked={billingSameAsShipping}
                   onChange={(e) => setBillingSameAsShipping(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 bg-white text-primary focus:ring-primary"
+                  className="w-5 h-5 rounded border-gray-300 bg-white text-[#a5cbf4] focus:ring-[#a5cbf4]"
                 />
                 <span className="text-gray-700 group-hover:text-gray-900 transition-colors">Billing address is same as shipping</span>
              </label>
@@ -283,7 +283,7 @@ export default function ReviewPage() {
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">First Name</label>
                     <input 
                       type="text" 
-                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
+                      className="w-full bg-[#f8f9fa] border-transparent rounded p-2 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]" 
                       value={billingForm.firstName}
                       onChange={(e) => setBillingForm({ ...billingForm, firstName: e.target.value })}
                     />
@@ -292,7 +292,7 @@ export default function ReviewPage() {
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Last Name</label>
                     <input 
                       type="text" 
-                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
+                      className="w-full bg-[#f8f9fa] border-transparent rounded p-2 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]" 
                       value={billingForm.lastName}
                       onChange={(e) => setBillingForm({ ...billingForm, lastName: e.target.value })}
                     />
@@ -301,7 +301,7 @@ export default function ReviewPage() {
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Address</label>
                     <input 
                       type="text" 
-                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
+                      className="w-full bg-[#f8f9fa] border-transparent rounded p-2 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]" 
                       value={billingForm.address1}
                       onChange={(e) => setBillingForm({ ...billingForm, address1: e.target.value })}
                     />
@@ -310,7 +310,7 @@ export default function ReviewPage() {
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">City</label>
                     <input 
                       type="text" 
-                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
+                      className="w-full bg-[#f8f9fa] border-transparent rounded p-2 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]" 
                       value={billingForm.city}
                       onChange={(e) => setBillingForm({ ...billingForm, city: e.target.value })}
                     />
@@ -321,14 +321,14 @@ export default function ReviewPage() {
                       <input 
                         type="text" 
                         placeholder="State" 
-                        className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
+                        className="w-full bg-[#f8f9fa] border-transparent rounded p-2 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]" 
                         value={billingForm.state}
                         onChange={(e) => setBillingForm({ ...billingForm, state: e.target.value })}
                       />
                       <input 
                         type="text" 
                         placeholder="Zip" 
-                        className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
+                        className="w-full bg-[#f8f9fa] border-transparent rounded p-2 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]" 
                         value={billingForm.postalCode}
                         onChange={(e) => setBillingForm({ ...billingForm, postalCode: e.target.value })}
                       />
@@ -338,7 +338,7 @@ export default function ReviewPage() {
              )}
           </div>
 
-          <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-lg">
+          <div className="bg-white border border-gray-100 p-6 rounded-xl shadow-sm">
              <h2 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Items Overview</h2>
              <div className="space-y-4">
                {cart.items.map((item) => (
@@ -367,7 +367,7 @@ export default function ReviewPage() {
         </div>
 
         {/* Right Column - Totals and CTA */}
-        <div className="lg:col-span-1 border border-gray-200 bg-white rounded-xl p-6 h-fit sticky top-24">
+        <div className="lg:col-span-1 border border-gray-100 bg-white rounded-xl p-6 h-fit sticky top-24 shadow-sm">
            <h2 className="text-xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">Order Summary</h2>
            
            <div className="space-y-3 text-gray-700 mb-6 border-b border-gray-200 pb-6">
@@ -396,7 +396,7 @@ export default function ReviewPage() {
                     type="checkbox" 
                     checked={agreedToTerms}
                     onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className="mt-1 w-5 h-5 rounded border-gray-300 bg-white text-primary focus:ring-primary"
+                    className="mt-1 w-5 h-5 rounded border-gray-300 bg-white text-[#a5cbf4] focus:ring-[#a5cbf4]"
                   />
                   <span className="text-xs text-gray-600 group-hover:text-gray-700 transition-colors">
                     I agree to the Terms of Service, Privacy Policy, and confirm that these products are compliant with local laws.
@@ -407,7 +407,7 @@ export default function ReviewPage() {
                     type="checkbox" 
                     checked={ageConfirm}
                     onChange={(e) => setAgeConfirm(e.target.checked)}
-                    className="mt-1 w-5 h-5 rounded border-gray-300 bg-white text-primary focus:ring-primary"
+                    className="mt-1 w-5 h-5 rounded border-gray-300 bg-white text-[#a5cbf4] focus:ring-[#a5cbf4]"
                   />
                   <span className="text-xs text-gray-600 group-hover:text-gray-700 transition-colors">
                     I confirm that I am at least 21 years of age and the shipping address provided is correct.
@@ -418,8 +418,7 @@ export default function ReviewPage() {
             <button 
               onClick={handleCreateOrderAndPay}
               disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gray-900 font-bold uppercase tracking-widest rounded-lg transition-all border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] disabled:opacity-50 text-gray-900 hover:text-gray-900"
-              style={{ color: 'white', textShadow: '0 0 10px rgba(255,255,255,0.5)' }}
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#a5cbf4] hover:bg-[#8ebae8] text-white font-medium rounded-md transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isProcessing ? (
                   <>
@@ -428,8 +427,7 @@ export default function ReviewPage() {
                   </>
                 ) : (
                   <>
-                    PROCEED TO KAJAPAY
-                    <ArrowLeft className="w-5 h-5 rotate-180" />
+                    Process Payment
                   </>
                 )}
               </button>

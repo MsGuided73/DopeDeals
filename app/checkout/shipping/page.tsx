@@ -182,7 +182,7 @@ export default function ShippingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 py-8 lg:py-12">
+    <div className="min-h-screen bg-[#f4f7fb] text-gray-900 py-8 lg:py-12">
       <div className="container mx-auto px-4 max-w-4xl">
         
       {restrictedItems.length > 0 && (
@@ -206,14 +206,14 @@ export default function ShippingPage() {
 
       <h1 className="text-3xl font-bold mb-8 font-heading text-gray-900 tracking-widest uppercase">Shipping Details</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white border border-gray-200 p-6 md:p-8 rounded-xl shadow-2xl">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white border border-gray-100 p-6 md:p-8 rounded-xl shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
             <input
               type="text"
               required
-              className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+              className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
               value={form.firstName}
               onChange={(e) => setForm({ ...form, firstName: e.target.value })}
             />
@@ -223,7 +223,7 @@ export default function ShippingPage() {
             <input
               type="text"
               required
-              className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+              className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
               value={form.lastName}
               onChange={(e) => setForm({ ...form, lastName: e.target.value })}
             />
@@ -235,7 +235,7 @@ export default function ShippingPage() {
           <input
             type="email"
             required
-            className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+            className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
@@ -245,7 +245,7 @@ export default function ShippingPage() {
            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
            <input
              type="tel"
-             className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+             className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
              value={form.phone}
              onChange={(e) => setForm({ ...form, phone: e.target.value })}
            />
@@ -259,7 +259,7 @@ export default function ShippingPage() {
               <input
                 type="text"
                 required
-                className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+                className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
                 value={form.shippingAddress1}
                 onChange={(e) => setForm({ ...form, shippingAddress1: e.target.value })}
               />
@@ -271,7 +271,7 @@ export default function ShippingPage() {
                 <input
                   type="text"
                   required
-                  className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+                  className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
                   value={form.shippingCity}
                   onChange={(e) => setForm({ ...form, shippingCity: e.target.value })}
                 />
@@ -281,7 +281,7 @@ export default function ShippingPage() {
                 <input
                   type="text"
                   required
-                  className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+                  className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
                   value={form.shippingState}
                   onChange={(e) => setForm({ ...form, shippingState: e.target.value })}
                 />
@@ -291,7 +291,7 @@ export default function ShippingPage() {
                 <input
                   type="text"
                   required
-                  className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
+                  className="w-full bg-[#f8f9fa] border-transparent rounded-md p-3 text-gray-900 focus:ring-[#a5cbf4] focus:border-[#a5cbf4]"
                   value={form.shippingZip}
                   onChange={(e) => setForm({ ...form, shippingZip: e.target.value })}
                 />
@@ -312,10 +312,9 @@ export default function ShippingPage() {
           <button 
             type="submit"
             disabled={isCheckingZip}
-            className="px-8 py-3 bg-black hover:bg-white text-gray-900 font-bold uppercase tracking-widest rounded transition-all border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ color: 'white' }}
+            className="px-8 py-3 bg-[#a5cbf4] hover:bg-[#8ebae8] text-white font-medium rounded-md transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
           >
-            {isCheckingZip ? 'Checking...' : 'Continue to Review'}
+            {isCheckingZip ? 'Checking...' : 'Continue'}
           </button>
         </div>
       </form>
