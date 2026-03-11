@@ -93,7 +93,7 @@ export async function GET(req: NextRequest) {
             if (thcaRule) {
               restrictedProducts.push(p.id);
             } else {
-              const thcaStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'AR'];
+              const thcaStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'AR', 'CA'];
               if (thcaStates.includes(state)) {
                 restrictedProducts.push(p.id);
               }

@@ -174,7 +174,7 @@ export default function ShippingPage() {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
-        <button onClick={() => router.push('/products')} className="px-6 py-2 bg-primary text-white rounded">
+        <button onClick={() => router.push('/products')} className="px-6 py-2 bg-primary text-gray-900 rounded">
           Continue Shopping
         </button>
       </div>
@@ -182,48 +182,48 @@ export default function ShippingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white py-8 lg:py-12">
+    <div className="min-h-screen bg-gray-50 text-gray-900 py-8 lg:py-12">
       <div className="container mx-auto px-4 max-w-4xl">
         
       {restrictedItems.length > 0 && (
         <div className="mb-6 p-4 bg-red-900/30 border border-red-500 rounded-lg flex items-start gap-4 animate-in fade-in slide-in-from-top-4">
           <div className="p-2 bg-red-500 rounded-full">
-            {Truck && <Truck className="w-5 h-5 text-white" />}
+            {Truck && <Truck className="w-5 h-5 text-gray-900" />}
           </div>
           <div>
             <h3 className="font-bold text-red-400">Shipping Restriction</h3>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-700">
               {shippingWarning || 'Your cart contains items that cannot be shipped to your state due to local regulations. Please remove these items from your cart to proceed with checkout.'}
             </p>
           </div>
         </div>
       )}
-      <div className="flex items-center gap-4 mb-8 text-sm text-gray-400">
-        <span className="text-white font-medium flex items-center gap-2">{Truck && <Truck className="w-4 h-4" />} Shipping</span>
+      <div className="flex items-center gap-4 mb-8 text-sm text-gray-600">
+        <span className="text-gray-900 font-medium flex items-center gap-2">{Truck && <Truck className="w-4 h-4" />} Shipping</span>
         {ArrowRight && <ArrowRight className="w-4 h-4" />}
         <span>Review & Pay</span>
       </div>
 
-      <h1 className="text-3xl font-bold mb-8 font-heading text-white tracking-widest uppercase">Shipping Details</h1>
+      <h1 className="text-3xl font-bold mb-8 font-heading text-gray-900 tracking-widest uppercase">Shipping Details</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-zinc-900 border border-zinc-800 p-6 md:p-8 rounded-xl shadow-2xl">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white border border-gray-200 p-6 md:p-8 rounded-xl shadow-2xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">First Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
             <input
               type="text"
               required
-              className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+              className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
               value={form.firstName}
               onChange={(e) => setForm({ ...form, firstName: e.target.value })}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Last Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
             <input
               type="text"
               required
-              className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+              className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
               value={form.lastName}
               onChange={(e) => setForm({ ...form, lastName: e.target.value })}
             />
@@ -231,35 +231,35 @@ export default function ShippingPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Email Address *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
           <input
             type="email"
             required
-            className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+            className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
         </div>
 
         <div>
-           <label className="block text-sm font-medium text-gray-300 mb-1">Phone Number</label>
+           <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
            <input
              type="tel"
-             className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+             className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
              value={form.phone}
              onChange={(e) => setForm({ ...form, phone: e.target.value })}
            />
         </div>
 
-        <div className="pt-4 border-t border-zinc-800">
-          <h2 className="text-xl font-semibold text-white mb-4">Shipping Address</h2>
+        <div className="pt-4 border-t border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Shipping Address</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">Street Address *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Street Address *</label>
               <input
                 type="text"
                 required
-                className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+                className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
                 value={form.shippingAddress1}
                 onChange={(e) => setForm({ ...form, shippingAddress1: e.target.value })}
               />
@@ -267,31 +267,31 @@ export default function ShippingPage() {
             
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="col-span-2 md:col-span-1">
-                <label className="block text-sm font-medium text-gray-300 mb-1">City *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
                 <input
                   type="text"
                   required
-                  className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+                  className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
                   value={form.shippingCity}
                   onChange={(e) => setForm({ ...form, shippingCity: e.target.value })}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">State *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
                 <input
                   type="text"
                   required
-                  className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+                  className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
                   value={form.shippingState}
                   onChange={(e) => setForm({ ...form, shippingState: e.target.value })}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">ZIP *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ZIP *</label>
                 <input
                   type="text"
                   required
-                  className="w-full bg-zinc-800 border-zinc-700 rounded-md p-3 text-white focus:ring-primary focus:border-primary"
+                  className="w-full bg-white border-gray-300 rounded-md p-3 text-gray-900 focus:ring-primary focus:border-primary"
                   value={form.shippingZip}
                   onChange={(e) => setForm({ ...form, shippingZip: e.target.value })}
                 />
@@ -304,7 +304,7 @@ export default function ShippingPage() {
           <button 
             type="button" 
             onClick={() => router.push('/cart')}
-            className="px-6 py-3 text-gray-300 hover:text-white transition-colors"
+            className="px-6 py-3 text-gray-700 hover:text-gray-900 transition-colors"
           >
             Return to Cart
           </button>
@@ -312,7 +312,7 @@ export default function ShippingPage() {
           <button 
             type="submit"
             disabled={isCheckingZip}
-            className="px-8 py-3 bg-black hover:bg-zinc-900 text-white font-bold uppercase tracking-widest rounded transition-all border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 py-3 bg-black hover:bg-white text-gray-900 font-bold uppercase tracking-widest rounded transition-all border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ color: 'white' }}
           >
             {isCheckingZip ? 'Checking...' : 'Continue to Review'}

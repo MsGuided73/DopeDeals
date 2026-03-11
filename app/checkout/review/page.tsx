@@ -69,7 +69,7 @@ export default function ReviewPage() {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
-        <button onClick={() => router.push('/products')} className="px-6 py-2 bg-primary text-white font-bold rounded">
+        <button onClick={() => router.push('/products')} className="px-6 py-2 bg-primary text-gray-900 font-bold rounded">
           Continue Shopping
         </button>
       </div>
@@ -189,30 +189,30 @@ export default function ReviewPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white py-8 lg:py-12">
+    <div className="min-h-screen bg-gray-50 text-gray-900 py-8 lg:py-12">
       <div className="container mx-auto px-4 max-w-6xl">
-       <div className="flex items-center gap-4 mb-8 text-sm text-gray-400">
-        <button onClick={() => router.push('/checkout/shipping')} className="text-gray-400 hover:text-white flex items-center gap-2">
+       <div className="flex items-center gap-4 mb-8 text-sm text-gray-600">
+        <button onClick={() => router.push('/checkout/shipping')} className="text-gray-600 hover:text-gray-900 flex items-center gap-2">
           {Truck && <Truck className="w-4 h-4" />} Shipping
         </button>
         {ArrowLeft && <ArrowLeft className="w-4 h-4 rotate-180" />}
-        <span className="text-white font-medium flex items-center gap-2">{CreditCard && <CreditCard className="w-4 h-4" />} Review & Pay</span>
+        <span className="text-gray-900 font-medium flex items-center gap-2">{CreditCard && <CreditCard className="w-4 h-4" />} Review & Pay</span>
       </div>
 
-      <h1 className="text-3xl font-bold mb-8 font-heading text-white tracking-widest uppercase">Order Summary</h1>
+      <h1 className="text-3xl font-bold mb-8 font-heading text-gray-900 tracking-widest uppercase">Order Summary</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - Details */}
         <div className="lg:col-span-2 space-y-6">
           
-          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl shadow-lg">
-            <h2 className="text-xl font-bold text-white mb-4 border-b border-zinc-800 pb-2 flex items-center gap-2">
+          <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-lg">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2 flex items-center gap-2">
               {Truck && <Truck className="w-5 h-5 text-primary" />}
               Shipping Method
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label 
-                className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all ${shippingMethod === 'standard' ? 'border-primary bg-primary/10' : 'border-zinc-800 bg-zinc-800/50'}`}
+                className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all ${shippingMethod === 'standard' ? 'border-primary bg-primary/10' : 'border-gray-200 bg-gray-50'}`}
               >
                 <div className="flex items-center gap-3">
                   <input 
@@ -220,18 +220,18 @@ export default function ReviewPage() {
                     name="shipping" 
                     checked={shippingMethod === 'standard'}
                     onChange={() => setShippingMethod('standard')}
-                    className="w-4 h-4 text-primary focus:ring-primary bg-zinc-800 border-zinc-700" 
+                    className="w-4 h-4 text-primary focus:ring-primary bg-white border-gray-300" 
                   />
                   <div>
-                    <p className="font-bold text-white">Standard Shipping</p>
-                    <p className="text-sm text-gray-400">3-5 Business Days</p>
+                    <p className="font-bold text-gray-900">Standard Shipping</p>
+                    <p className="text-sm text-gray-600">3-5 Business Days</p>
                   </div>
                 </div>
                 <span className="font-bold">{standardPrice === 0 ? 'FREE' : `$${standardPrice.toFixed(2)}`}</span>
               </label>
 
               <label 
-                className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all ${shippingMethod === 'express' ? 'border-primary bg-primary/10' : 'border-zinc-800 bg-zinc-800/50'}`}
+                className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all ${shippingMethod === 'express' ? 'border-primary bg-primary/10' : 'border-gray-200 bg-gray-50'}`}
               >
                 <div className="flex items-center gap-3">
                   <input 
@@ -239,21 +239,21 @@ export default function ReviewPage() {
                     name="shipping" 
                     checked={shippingMethod === 'express'}
                     onChange={() => setShippingMethod('express')}
-                    className="w-4 h-4 text-primary focus:ring-primary bg-zinc-800 border-zinc-700" 
+                    className="w-4 h-4 text-primary focus:ring-primary bg-white border-gray-300" 
                   />
                   <div>
-                    <p className="font-bold text-white">Express (Air)</p>
-                    <p className="text-sm text-gray-400">1-2 Business Days</p>
+                    <p className="font-bold text-gray-900">Express (Air)</p>
+                    <p className="text-sm text-gray-600">1-2 Business Days</p>
                   </div>
                 </div>
                 <span className="font-bold">${expressPrice.toFixed(2)}</span>
               </label>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-zinc-800">
-               <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Shipping To:</h3>
-               <div className="text-gray-300 bg-zinc-800/30 p-4 rounded-lg">
-                <p className="font-medium text-white">{shippingData.firstName} {shippingData.lastName}</p>
+            <div className="mt-6 pt-6 border-t border-gray-200">
+               <h3 className="text-sm font-bold text-gray-600 uppercase tracking-widest mb-2">Shipping To:</h3>
+               <div className="text-gray-700 bg-gray-50 p-4 rounded-lg">
+                <p className="font-medium text-gray-900">{shippingData.firstName} {shippingData.lastName}</p>
                 <p>{shippingData.shippingAddress1}</p>
                 {shippingData.shippingAddress2 && <p>{shippingData.shippingAddress2}</p>}
                 <p>{shippingData.shippingCity}, {shippingData.shippingState} {shippingData.shippingZip}</p>
@@ -261,8 +261,8 @@ export default function ReviewPage() {
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl shadow-lg">
-             <h2 className="text-xl font-bold text-white mb-4 border-b border-zinc-800 pb-2 flex items-center gap-2">
+          <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-lg">
+             <h2 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2 flex items-center gap-2">
                {CreditCard && <CreditCard className="w-5 h-5 text-primary" />}
                Billing Details
              </h2>
@@ -272,18 +272,18 @@ export default function ReviewPage() {
                   type="checkbox" 
                   checked={billingSameAsShipping}
                   onChange={(e) => setBillingSameAsShipping(e.target.checked)}
-                  className="w-5 h-5 rounded border-zinc-700 bg-zinc-800 text-primary focus:ring-primary"
+                  className="w-5 h-5 rounded border-gray-300 bg-white text-primary focus:ring-primary"
                 />
-                <span className="text-gray-300 group-hover:text-white transition-colors">Billing address is same as shipping</span>
+                <span className="text-gray-700 group-hover:text-gray-900 transition-colors">Billing address is same as shipping</span>
              </label>
 
              {!billingSameAsShipping && (
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-zinc-800/50 rounded-lg animate-in fade-in slide-in-from-top-2">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg animate-in fade-in slide-in-from-top-2">
                  <div>
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">First Name</label>
                     <input 
                       type="text" 
-                      className="w-full bg-zinc-900 border-zinc-700 rounded p-2 text-white" 
+                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
                       value={billingForm.firstName}
                       onChange={(e) => setBillingForm({ ...billingForm, firstName: e.target.value })}
                     />
@@ -292,7 +292,7 @@ export default function ReviewPage() {
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Last Name</label>
                     <input 
                       type="text" 
-                      className="w-full bg-zinc-900 border-zinc-700 rounded p-2 text-white" 
+                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
                       value={billingForm.lastName}
                       onChange={(e) => setBillingForm({ ...billingForm, lastName: e.target.value })}
                     />
@@ -301,7 +301,7 @@ export default function ReviewPage() {
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Address</label>
                     <input 
                       type="text" 
-                      className="w-full bg-zinc-900 border-zinc-700 rounded p-2 text-white" 
+                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
                       value={billingForm.address1}
                       onChange={(e) => setBillingForm({ ...billingForm, address1: e.target.value })}
                     />
@@ -310,7 +310,7 @@ export default function ReviewPage() {
                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">City</label>
                     <input 
                       type="text" 
-                      className="w-full bg-zinc-900 border-zinc-700 rounded p-2 text-white" 
+                      className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
                       value={billingForm.city}
                       onChange={(e) => setBillingForm({ ...billingForm, city: e.target.value })}
                     />
@@ -321,14 +321,14 @@ export default function ReviewPage() {
                       <input 
                         type="text" 
                         placeholder="State" 
-                        className="w-full bg-zinc-900 border-zinc-700 rounded p-2 text-white" 
+                        className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
                         value={billingForm.state}
                         onChange={(e) => setBillingForm({ ...billingForm, state: e.target.value })}
                       />
                       <input 
                         type="text" 
                         placeholder="Zip" 
-                        className="w-full bg-zinc-900 border-zinc-700 rounded p-2 text-white" 
+                        className="w-full bg-white border-gray-300 rounded p-2 text-gray-900" 
                         value={billingForm.postalCode}
                         onChange={(e) => setBillingForm({ ...billingForm, postalCode: e.target.value })}
                       />
@@ -338,12 +338,12 @@ export default function ReviewPage() {
              )}
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl shadow-lg">
-             <h2 className="text-xl font-bold text-white mb-4 border-b border-zinc-800 pb-2">Items Overview</h2>
+          <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-lg">
+             <h2 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Items Overview</h2>
              <div className="space-y-4">
                {cart.items.map((item) => (
-                 <div key={item.productId} className="flex gap-4 border-b border-zinc-800 pb-4 last:border-0 last:pb-0">
-                    <div className="w-16 h-16 bg-zinc-800 rounded-md overflow-hidden relative flex-shrink-0">
+                 <div key={item.productId} className="flex gap-4 border-b border-gray-200 pb-4 last:border-0 last:pb-0">
+                    <div className="w-16 h-16 bg-white rounded-md overflow-hidden relative flex-shrink-0">
                       <Image 
                         src={item.product?.imageUrl || '/placeholder.png'} 
                         alt={item.product?.name || 'Product'}
@@ -353,11 +353,11 @@ export default function ReviewPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-medium text-white">{item.product?.name || 'Unknown Product'}</h3>
-                      <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
+                      <h3 className="font-medium text-gray-900">{item.product?.name || 'Unknown Product'}</h3>
+                      <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-white">${(item.itemTotal || 0).toFixed(2)}</p>
+                      <p className="font-medium text-gray-900">${(item.itemTotal || 0).toFixed(2)}</p>
                     </div>
                  </div>
                ))}
@@ -367,10 +367,10 @@ export default function ReviewPage() {
         </div>
 
         {/* Right Column - Totals and CTA */}
-        <div className="lg:col-span-1 border border-zinc-800 bg-zinc-900/50 rounded-xl p-6 h-fit sticky top-24">
-           <h2 className="text-xl font-bold text-white mb-6 border-b border-zinc-800 pb-4">Order Summary</h2>
+        <div className="lg:col-span-1 border border-gray-200 bg-white rounded-xl p-6 h-fit sticky top-24">
+           <h2 className="text-xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">Order Summary</h2>
            
-           <div className="space-y-3 text-gray-300 mb-6 border-b border-zinc-800 pb-6">
+           <div className="space-y-3 text-gray-700 mb-6 border-b border-gray-200 pb-6">
               <div className="flex justify-between">
                 <span>Subtotal</span>
                 <span>${subtotal.toFixed(2)}</span>
@@ -383,7 +383,7 @@ export default function ReviewPage() {
                 <span>Estimated Tax</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-lg font-bold text-white mt-4 pt-4 border-t border-zinc-800">
+              <div className="flex justify-between text-lg font-bold text-gray-900 mt-4 pt-4 border-t border-gray-200">
                 <span>Total</span>
                 <span className="text-primary">${total.toFixed(2)}</span>
               </div>
@@ -396,9 +396,9 @@ export default function ReviewPage() {
                     type="checkbox" 
                     checked={agreedToTerms}
                     onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className="mt-1 w-5 h-5 rounded border-zinc-700 bg-zinc-800 text-primary focus:ring-primary"
+                    className="mt-1 w-5 h-5 rounded border-gray-300 bg-white text-primary focus:ring-primary"
                   />
-                  <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                  <span className="text-xs text-gray-600 group-hover:text-gray-700 transition-colors">
                     I agree to the Terms of Service, Privacy Policy, and confirm that these products are compliant with local laws.
                   </span>
                </label>
@@ -407,9 +407,9 @@ export default function ReviewPage() {
                     type="checkbox" 
                     checked={ageConfirm}
                     onChange={(e) => setAgeConfirm(e.target.checked)}
-                    className="mt-1 w-5 h-5 rounded border-zinc-700 bg-zinc-800 text-primary focus:ring-primary"
+                    className="mt-1 w-5 h-5 rounded border-gray-300 bg-white text-primary focus:ring-primary"
                   />
-                  <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                  <span className="text-xs text-gray-600 group-hover:text-gray-700 transition-colors">
                     I confirm that I am at least 21 years of age and the shipping address provided is correct.
                   </span>
                </label>
@@ -418,7 +418,7 @@ export default function ReviewPage() {
             <button 
               onClick={handleCreateOrderAndPay}
               disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-black font-bold uppercase tracking-widest rounded-lg transition-all border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] disabled:opacity-50 text-white hover:text-white"
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gray-900 font-bold uppercase tracking-widest rounded-lg transition-all border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] disabled:opacity-50 text-gray-900 hover:text-gray-900"
               style={{ color: 'white', textShadow: '0 0 10px rgba(255,255,255,0.5)' }}
             >
                 {isProcessing ? (
