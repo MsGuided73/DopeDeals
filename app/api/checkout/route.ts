@@ -98,9 +98,16 @@ export async function POST(req: NextRequest) {
 
   // Final Compliance Check (Zipcode)
   try {
-    const supabase = (storage as any).client || (await import('@supabase/supabase-js')).createClient(
+    const { createServerClient } = await import('@supabase/ssr');
+    const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        cookies: {
+          getAll() { return [] },
+          setAll() {}
+        }
+      }
     );
     
     let stateToCheck = shippingAddress.state;

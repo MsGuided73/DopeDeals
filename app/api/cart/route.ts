@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { FinanceService } from '../../../lib/services/FinanceService';
 
-
-const supabase = createClient(
+const supabase = createServerClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    cookies: {
+      getAll() { return [] },
+      setAll() {}
+    }
+  }
 );
 
 // Validation helpers
@@ -189,7 +194,11 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
     }));
 
   } catch (error) {
-    console.error('Error in getCartItems:', error);
+    console.error('[CART GET_ITEMS ERROR]', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      raw: error
+    });
     return [];
   }
 }
@@ -266,7 +275,11 @@ async function mergeCarts(sessionId: string, userId: string) {
 
     console.log(`[Cart Merge] Successfully merged items from session ${sessionId} to user ${userId}`);
   } catch (error) {
-    console.error('[Cart Merge] Error during merge:', error);
+    console.error('[CART MERGE ERROR] Session:', sessionId, 'User:', userId, {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      raw: error
+    });
   }
 }
 
@@ -370,7 +383,11 @@ async function manageCartItem(
     }
 
   } catch (error) {
-    console.error('Cart management error:', error);
+    console.error('[CART MANAGE_ITEM ERROR] Action Action:', action, 'ProductID:', productId, {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      raw: error
+    });
     throw error;
   }
 }
@@ -414,7 +431,11 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Cart GET error:', error);
+    console.error('[CART API GET EXACT ERROR]', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      raw: error
+    });
     return NextResponse.json({
       success: false,
       cart: {
@@ -425,7 +446,8 @@ export async function GET(request: NextRequest) {
         shippingAmount: 0,
         total: 0
       },
-      error: 'Failed to fetch cart'
+      error: 'Failed to fetch cart',
+      details: error instanceof Error ? error.message : 'Check server logs'
     }, { status: 500 });
   }
 }
@@ -525,9 +547,13 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Add to cart error:', error);
+    console.error('[CART API POST EXACT ERROR]', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      raw: error
+    });
     return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
