@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { AlertTriangle, RefreshCcw, Home, ShoppingCart } from 'lucide-react';
+import { AlertTriangle, RefreshCcw, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 
 function FailedContent() {
