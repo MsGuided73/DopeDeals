@@ -141,7 +141,7 @@ export default function AuthPage() {
           <div className="relative bg-white rounded-lg p-8 -m-8">
           <div className="text-center mb-8">
             <h1 className="dope-city-title text-4xl text-black mb-2 uppercase">
-              {isSignUp ? 'Join DOPE CITY' : 'Welcome Back'}
+              {isSignUp ? 'Join HIGHWAY 420' : 'Welcome Back'}
             </h1>
             <p className="text-gray-600">
               {isSignUp

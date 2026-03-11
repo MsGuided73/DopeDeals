@@ -13,7 +13,7 @@ export default function WholesalePage() {
             WHOLESALE PORTAL
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Partner with DOPE CITY for premium wholesale pricing on smoking accessories, THCA products, and more. 
+            Partner with Highway 420 for premium wholesale pricing on smoking accessories, THCA products, and more. 
             Built for retailers, dispensaries, and distributors.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -29,7 +29,7 @@ export default function WholesalePage() {
         {/* Benefits Section */}
         <section className="mb-16">
           <h2 className="text-3xl font-chalets-legweb text-gray-900 text-center mb-12" style={{ letterSpacing: '-0.02em' }}>
-            Why Choose DOPE CITY Wholesale?
+            Why Choose Highway 420 Wholesale?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6">
@@ -208,7 +208,7 @@ export default function WholesalePage() {
                 4
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Start Ordering</h3>
-              <p className="text-gray-600 text-sm">Begin placing wholesale orders and growing your business with DOPE CITY.</p>
+              <p className="text-gray-600 text-sm">Begin placing wholesale orders and growing your business with Highway 420.</p>
             </div>
           </div>
         </section>
@@ -248,7 +248,7 @@ export default function WholesalePage() {
             Ready to Partner with Us?
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join hundreds of retailers who trust DOPE CITY for their wholesale needs. 
+            Join hundreds of retailers who trust Highway 420 for their wholesale needs. 
             Let's grow your business together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -262,17 +262,17 @@ export default function WholesalePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Wholesale Sales</h4>
-              <p className="text-gray-600">wholesale@dopecity.com</p>
+              <p className="text-gray-600">wholesale@highway420.com</p>
               <p className="text-gray-600">1-800-WHOLESALE</p>
             </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Account Management</h4>
-              <p className="text-gray-600">accounts@dopecity.com</p>
+              <p className="text-gray-600">accounts@highway420.com</p>
               <p className="text-gray-600">1-800-ACCOUNTS</p>
             </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Support</h4>
-              <p className="text-gray-600">support@dopecity.com</p>
+              <p className="text-gray-600">support@highway420.com</p>
               <p className="text-gray-600">1-800-SUPPORT</p>
             </div>
           </div>

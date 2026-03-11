@@ -37,7 +37,7 @@ const componentLibrary: ComponentItem[] = [
     description: 'Full-width hero with background and CTA',
     type: 'hero',
     defaultProps: {
-      title: 'Welcome to DOPE CITY',
+      title: 'Welcome to Highway 420',
       subtitle: 'Premium cannabis culture meets street authenticity',
       backgroundImage: '',
       ctaText: 'Shop Now',

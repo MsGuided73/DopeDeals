@@ -242,7 +242,7 @@ export default function AccountPage() {
               </div>
               <p className="text-sm text-gray-600 mb-4">
                 {user?.user_metadata?.age_verified 
-                  ? 'Your identity has been verified. You can shop all products across DopeDeals.' 
+                  ? 'Your identity has been verified. You can shop all products across Highway 420.' 
                   : 'You must verify your age before purchasing restricted items.'}
               </p>
               {!user?.user_metadata?.age_verified ? (

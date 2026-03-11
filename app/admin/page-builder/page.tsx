@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import PageBuilderInterface from './components/PageBuilderInterface';
 
 export const metadata = {
-  title: 'Visual Page Builder | DOPE CITY Admin',
+  title: 'Visual Page Builder | Highway 420 Admin',
   description: 'Create and edit pages with the visual page builder',
 };
 

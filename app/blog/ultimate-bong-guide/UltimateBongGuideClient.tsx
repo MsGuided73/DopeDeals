@@ -99,8 +99,8 @@ export default function UltimateBongGuideClient() {
 
               <div className="flex flex-wrap items-center gap-6 text-sm font-bold uppercase tracking-widest text-gray-300 border-b border-white/10 pb-8">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 bg-[#ff6b35] text-black rounded-full flex items-center justify-center text-xs">DC</span>
-                  <span className="text-white">DOPE CITY Team</span>
+                  <span className="w-6 h-6 bg-[#ff6b35] text-black rounded-full flex items-center justify-center text-xs">H4</span>
+                  <span className="text-white">Highway 420 Team</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#ff6b35]">🕒</span>
@@ -265,7 +265,7 @@ export default function UltimateBongGuideClient() {
 
             <p className="text-center py-8">
               <Link href="/products?q=bong" className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-block">
-                Shop Bongs at DOPE CITY
+                Shop Bongs at Highway 420
               </Link>
             </p>
             </article>

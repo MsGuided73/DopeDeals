@@ -90,8 +90,7 @@ export async function POST(request: NextRequest) {
             .from('brands')
             .insert({
               name: brandName,
-              slug: slug,
-              description: `Premium ${brandName} products available at DOPE CITY`,
+              description: `Premium ${brandName} products available at Highway 420`,
               created_at: new Date().toISOString()
             });
 
