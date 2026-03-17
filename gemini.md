@@ -82,6 +82,16 @@ _Define the JSON Input/Output shapes here. These must closely mirror our Zod sch
     "age_verification_status": "not_verified | verified | pending | failed",
     "createdAt": "date-time",
     "updatedAt": "date-time"
+  },
+  "deployment_env": {
+    "NEXT_PUBLIC_SITE_URL": "string",
+    "NEXT_PUBLIC_SUPABASE_URL": "string",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "string",
+    "SUPABASE_SERVICE_ROLE_KEY": "string",
+    "DATABASE_URL": "string",
+    "KAJAPAY_SOURCE_KEY": "string",
+    "KAJAPAY_USERNAME": "string",
+    "KAJAPAY_PASSWORD": "string"
   }
 }
 ```

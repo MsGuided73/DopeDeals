@@ -142,22 +142,26 @@ export async function POST(req: NextRequest) {
 
         const restrictedProductIds = restrictions ? restrictions.map((r: any) => r.product_id) : [];
 
-        // Fallback THCA check based on category properties
+        // Fallback THCA check based on category properties and names
         const { data: productDetails } = await supabase
           .from('main_site_products')
-          .select('id, category, category_id')
+          .select('id, name, category, category_id')
           .in('id', productIds);
           
         if (productDetails) {
           for (const p of productDetails) {
-            const isThca = p.category?.toLowerCase().includes('thca') || p.category_id?.toLowerCase().startsWith('thca-');
+            const nameLower = p.name?.toLowerCase() || '';
+            const isThca = p.category?.toLowerCase().includes('thca') || 
+                           p.category_id?.toLowerCase().startsWith('thca-') ||
+                           nameLower.includes('thca') || 
+                           nameLower.includes('thc-a');
             if (isThca) {
               const thcaRule = rules.find((r: any) => r.category?.toLowerCase().includes('thca'));
               if (thcaRule && !restrictedProductIds.includes(p.id)) {
                 restrictedProductIds.push(p.id);
               } else if (!thcaRule) {
                 // Hardcoded fallback for THCA restricted states if no rule present
-                const thcaStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'AR'];
+                const thcaStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'AR', 'CA'];
                 if (thcaStates.includes(stateToCheck) && !restrictedProductIds.includes(p.id)) {
                   restrictedProductIds.push(p.id);
                 }
