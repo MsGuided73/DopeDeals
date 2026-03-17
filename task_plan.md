@@ -1,18 +1,30 @@
-# Task Plan
+# Task Plan - Server Migration to Digital Ocean
 
 ## Goal
+Successfully migrate the DopeDeals application (main site, tobacco site, and admin dashboard) to a US-based Digital Ocean VPS using Coolify for deployment management.
 
-Build out the remainder of the checkout workflow utilizing the KajaPay credentials.
+## Phases
 
-## Checklist
+### Phase 1: Blueprint & Discovery
+- [ ] Answer discovery questions (User input required)
+- [ ] Define environment variable requirements for production
+- [ ] Confirm domain and DNS strategy
 
-- [x] Investigate current checkout frontend and backend implementation.
-- [x] Test the checkout workflow using sandbox KajaPay credentials.
-- [x] Determine missing pieces in the checkout workflow.
-- [x] Refactor monolithic `/checkout` into a multi-page sequence.
-- [x] Implement `app/checkout/shipping/page.tsx` (Address, method).
-- [x] Implement `app/checkout/review/page.tsx` (Order Summary, redirect to KajaPay).
-- [x] Implement `app/checkout/confirmation/page.tsx` (Success message, Resend email).
-- [x] Implement `app/checkout/success/page.tsx` (Payment Succeeded, Tracking Number).
-- [x] Implement `app/checkout/failed/page.tsx` (Payment Failed, Retry options).
-- [x] Verify KajaPay Webhook Endpoint (`app/api/kajapay/webhook/route.ts`).
+### Phase 2: Link (Connectivity)
+- [ ] Verify access to Digital Ocean VPS
+- [ ] Install/Verify Coolify on VPS
+- [ ] Test connectivity between VPS and Supabase/KajaPay APIs
+
+### Phase 3: Architect (Preparation)
+- [ ] Standardize `Dockerfile` for production
+- [ ] Finalize production environment variable list
+- [ ] Validate build process locally
+
+### Phase 4: Stylize & Refine
+- [ ] Configure custom domains and SSL in Coolify
+- [ ] Refine production-specific configurations (CORS, URLs)
+
+### Phase 5: Trigger (Deployment)
+- [ ] Execute deployment via Coolify
+- [ ] Verify application health post-deployment
+- [ ] Perform smoke tests on core features (Orders, Payments, Compliance)

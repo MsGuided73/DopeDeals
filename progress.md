@@ -1,9 +1,9 @@
-# Progress
+# Progress - Server Migration
 
-- Initialized project memory components.
-- Analyzed `server/kajapay/client.ts` and `app/api/checkout/route.ts`.
-- Started development server at `http://localhost:3000`.
-- Fixed CSP violation for AgeChecker in `next.config.js`.
-- Corrected verification link in Account Dashboard (`app/account/page.tsx`).
-- Activated Age Verification page (`app/age-verification/page.tsx`) with interactive trigger and success handling.
-- Implemented and deployed a centralized `<GlobalBreadcrumbs />` infrastructure across 7 top-level navigation pages.
+## 2026-03-17
+- [x] Initialized `task_plan.md` with migration phases.
+- [x] Reviewed existing `COOLIFY_SETUP_GUIDE.md` and `SERVER_DEPLOYMENT_PLAN.md`.
+- [x] Updated `findings.md` with current migration context.
+- [x] Answer discovery questions (Discovery Complete).
+- [ ] Prepare Environment Variable Manifest for production.
+- [ ] Research "US-Based" compliance requirements for payment processors (Foundational).
