@@ -87,7 +87,12 @@ export async function GET(req: NextRequest) {
             restrictedProducts.push(p.id);
           }
           
-          const isThca = p.category?.toLowerCase().includes('thca') || p.category_id?.toLowerCase().startsWith('thca-');
+          const nameLower = p.name?.toLowerCase() || '';
+          const isThca = p.category?.toLowerCase().includes('thca') || 
+                         p.category_id?.toLowerCase().startsWith('thca-') ||
+                         nameLower.includes('thca') || 
+                         nameLower.includes('thc-a');
+                         
           if (isThca) {
             const thcaRule = rules?.find((r: any) => r.category?.toLowerCase().includes('thca'));
             if (thcaRule) {

@@ -33,7 +33,7 @@ const NICOTINE_FREE_CATEGORIES = [
   'chocolate', 'candy', 'brownies', 'cookies', 'lollipops', 'sour',
   'sweet', 'treats', 'snacks', 'gummy', 'gummy bears', 'gummy worms',
   'gummy rings', 'gummy candy', 'gummy edibles',
-  'mushroom chocolate', 'mushroom gummies', 'magic mushrooms', 'psilocybin',
+  'mushroom chocolate', 'mushroom gummies', 'functional mushrooms', 'psilocybin',
   'psilocybin mushrooms', 'shrooms', 'zoomers', 'zoomies', 'mushroom treats',
   'infusion'
 ];
