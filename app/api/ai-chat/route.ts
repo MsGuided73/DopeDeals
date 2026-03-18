@@ -129,34 +129,39 @@ async function getProductRecommendations(
 ): Promise<ProductRecommendation[]> {
   
   let query = supabase
-    .from('products')
+    .from('main_site_products')
     .select(`
-      id, name, sku, price, image_url, short_description, stock_quantity,
-      length, width, height, weight, weight_unit,
-      sales_velocity, profit_margin, lead_time_days,
-      estimated_delivery, brand_name
+      id, name, sku, our_price, sale_price, image_url, image_urls, short_description, stock_quantity,
+      brand_name, is_active, nicotine_product, tobacco_product,
+      created_at, featured
     `)
     .eq('is_active', true)
     .eq('nicotine_product', false)
     .eq('tobacco_product', false)
+    .not('name', 'ilike', '%battery%')
+    .not('name', 'ilike', '%kratom%')
+    .not('name', 'ilike', '%7-oh%')
+    .not('name', 'ilike', '%7-hydroxy%')
+    .not('name', 'ilike', '%mitragynine%')
+    .not('name', 'ilike', '%7-ohmz%')
     .gt('stock_quantity', 0);
 
   // Apply filters based on intent
   switch (intent) {
     case 'budget_conscious':
-      query = query.lte('price', 100).order('price', { ascending: true });
+      query = query.lte('our_price', 100).order('our_price', { ascending: true });
       break;
     case 'fast_shipping':
-      query = query.not('estimated_delivery', 'is', null).order('estimated_delivery', { ascending: true });
+      query = query.order('created_at', { ascending: false });
       break;
     case 'quality_focused':
-      query = query.gte('price', 50).order('profit_margin', { ascending: false });
+      query = query.gte('our_price', 50).order('featured', { ascending: false });
       break;
     case 'size_conscious':
-      query = query.not('length', 'is', null).order('length', { ascending: true });
+      query = query.order('our_price', { ascending: true }); // Fallback since length not present
       break;
     default:
-      query = query.order('sales_velocity', { ascending: false });
+      query = query.order('featured', { ascending: false }); // Fallback for sales_velocity
   }
 
   // Apply keyword filters
@@ -192,22 +197,28 @@ async function getProductRecommendations(
 
   // Convert to recommendations with reasoning
   return products.map(product => {
-    const normalizedImages = parseImageUrls(product.image_url);
+    const normalizedImages = Array.from(new Set([
+      ...parseImageUrls(product.image_urls),
+      ...parseImageUrls(product.image_url)
+    ]));
+
+    const estimatedDelivery = calculateEstimatedDelivery(product);
+    const activePrice = product.our_price || product.sale_price || 0;
 
     return {
       id: product.id,
       name: product.name,
       sku: product.sku,
-      price: product.price,
+      price: activePrice,
       image_url: normalizedImages[0] || product.image_url,
       short_description: product.short_description,
       in_stock: (product.stock_quantity || 0) > 0,
-      estimated_delivery: product.estimated_delivery || calculateEstimatedDelivery(product),
+      estimated_delivery: estimatedDelivery,
       dimensions: formatDimensions(product),
       weight: formatWeight(product),
-      sales_velocity: product.sales_velocity,
-      profit_margin: product.profit_margin,
-      why_recommended: generateRecommendationReason(product, intent, keywords)
+      sales_velocity: 10, // Mocked fallback
+      profit_margin: 35, // Mocked fallback
+      why_recommended: generateRecommendationReason({ ...product, price: activePrice, estimated_delivery: estimatedDelivery }, intent, keywords)
     };
   });
 }
