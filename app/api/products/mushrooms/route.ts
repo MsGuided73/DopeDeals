@@ -16,12 +16,13 @@ export async function GET(req: NextRequest) {
     // NO LIMIT: Return all products
     const limit = 5000;
 
-    // Get mushroom products with expanded category_slug filtering
     const mushroomSlugs = [
       'mushrooms',
       'mushroom',
       'mush-gummies',
       'mush-chocolate',
+      'mushroom-chocolate',
+      'mushroom-gummies',
       'mush',
       'shrooms'
     ];

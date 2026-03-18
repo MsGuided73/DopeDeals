@@ -57,9 +57,9 @@ export default function EssentialsFooter() {
             © {new Date().getFullYear()} HIGHWAY 420. All rights reserved.
           </p>
           <img
-            src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/credit-card-brands-logos-c87zqqz38n8jbptz.jpg"
+            src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Shrooms/microdot_squares/Final%20CC%20Asset-H420%20Footer%20-%20Edited%20-%20Transparent.png"
             alt="Accepted Payment Methods"
-            className="h-8 w-auto object-contain opacity-80"
+            className="h-14 w-auto object-contain opacity-80"
           />
         </div>
       </div>

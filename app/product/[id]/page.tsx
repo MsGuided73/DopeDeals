@@ -17,6 +17,14 @@ const AutosuggestRecommendations = dynamic(() => import('../../components/Autosu
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
+  
+  if (id === 'test-rich-text') {
+    return {
+      title: `Micro Dot Mushroom Chocolate Bar | Highway 420`,
+      description: 'Experience a profound shift in perception with our Micro Dot Mushroom Chocolate Bar.'
+    };
+  }
+
   try {
     const storage = await getStorage();
     const product = await storage.getProduct(id);

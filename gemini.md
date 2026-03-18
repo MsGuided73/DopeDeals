@@ -92,6 +92,14 @@ _Define the JSON Input/Output shapes here. These must closely mirror our Zod sch
     "KAJAPAY_SOURCE_KEY": "string",
     "KAJAPAY_USERNAME": "string",
     "KAJAPAY_PASSWORD": "string"
+  },
+  "product_display": {
+    "short_description": "string | null",
+    "description_markdown": "string | null",
+    "ingredients": "string | null",
+    "allergy_warning": "string | null",
+    "highlights": "string[] | null",
+    "flavors": "string[] | null"
   }
 }
 ```
@@ -114,3 +122,4 @@ _Define the JSON Input/Output shapes here. These must closely mirror our Zod sch
 
 - **[2026-02-27]:** Project Initialized. Reviewed and adapted BLAST protocol to fit the Next.js/TypeScript and Supabase tech stack.
 - **[2026-02-27]:** Clarified architecture invariants to move services to `lib/services/`. Expanded tracking schemas for Kajapay.
+- **[2026-03-18]:** Added `product_display` schema for the rich product detail frontend implementation.

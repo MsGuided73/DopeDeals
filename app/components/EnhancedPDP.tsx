@@ -32,6 +32,7 @@ import { addToCart } from '../lib/cart-utils';
 import { ShippingSection } from './ShippingSection';
 import GlobalMasthead from './GlobalMasthead';
 import EssentialsFooter from './EssentialsFooter';
+import ProductDescription from './ProductDescription';
 
 // Types match your stack
 interface EnhancedPDPProps {
@@ -427,22 +428,63 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
 
           <div className="py-12">
             {activeTab === 'details' && (
-              <div className="prose max-w-none text-slate-700">
-                <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                   {/* We render standard HTML description here */}
-                   {product.description ? (
-                      <div dangerouslySetInnerHTML={{ __html: product.description.replace(/\\n/g, '<br/>') }} />
-                   ) : (
-                    <p>No description available.</p>
-                   )}
+              <div className="space-y-8 max-w-none">
+                <div className="py-4 text-lg">
+                  {product.description_markdown ? (
+                    <div className="prose prose-lg prose-slate max-w-none leading-loose">
+                      <ProductDescription markdownText={product.description_markdown} />
+                    </div>
+                  ) : product.description ? (
+                    <div className="prose prose-lg prose-slate max-w-none leading-loose">
+                      <ProductDescription markdownText={product.description} />
+                    </div>
+                  ) : (
+                    <p className="text-slate-700">No description available.</p>
+                  )}
                 </div>
+
+                {product.highlights && Array.isArray(product.highlights) && product.highlights.length > 0 && (
+                  <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 className="text-xl font-bold text-slate-900 mb-4">Highlights</h3>
+                    <ul className="list-disc list-inside space-y-2 text-slate-700">
+                      {product.highlights.map((highlight: string, idx: number) => (
+                        <li key={idx}>{highlight}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {product.flavors && Array.isArray(product.flavors) && product.flavors.length > 0 && (
+                  <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 className="text-xl font-bold text-slate-900 mb-4">Flavors</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {product.flavors.map((flavor: string, idx: number) => (
+                        <span key={idx} className="bg-slate-100 px-4 py-2 rounded-full text-sm font-semibold text-slate-800 border border-slate-200">
+                          {flavor}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {product.allergy_warning && (
+                  <div className="mt-4 p-6 bg-red-50 text-red-900 border border-red-200 rounded-2xl text-md font-semibold flex items-start gap-3">
+                    <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0" />
+                    <div>
+                      <span className="block mb-1">Dietary & Allergy Warning</span>
+                      <span className="text-red-800 font-normal">{product.allergy_warning}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
             {activeTab === 'ingredients' && (
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                 <h3 className="text-2xl font-bold text-slate-900 mb-6">Ingredients</h3>
-                {ingredients.contains && ingredients.contains.length > 0 ? (
+                {typeof product.ingredients === 'string' ? (
+                  <p className="text-slate-700 text-lg leading-relaxed">{product.ingredients}</p>
+                ) : ingredients?.contains && ingredients.contains.length > 0 ? (
                   <div className="grid md:grid-cols-2 gap-4">
                     {ingredients.contains.map((ingredient: string, index: number) => (
                       <div key={index} className="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-200">

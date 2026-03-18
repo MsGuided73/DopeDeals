@@ -115,9 +115,9 @@ export default function Highway420Footer() {
             <div className="flex items-center gap-6">
               <span className="text-xs font-semibold tracking-wide uppercase text-gray-400">Secure Checkout</span>
               <img
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/credit-card-brands-logos-c87zqqz38n8jbptz.jpg"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Shrooms/microdot_squares/Final%20CC%20Asset-H420%20Footer%20-%20Edited%20-%20Transparent.png"
                 alt="Accepted Payment Methods"
-                className="h-7 w-auto object-contain greyscale opacity-80 hover:opacity-100 transition-all duration-300"
+                className="h-12 w-auto object-contain greyscale opacity-80 hover:opacity-100 transition-all duration-300"
               />
             </div>
           </div>
@@ -421,9 +421,9 @@ export default function Highway420Footer() {
           </p>
           <div className="mt-8 flex justify-center">
             <img
-              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/credit-card-brands-logos-c87zqqz38n8jbptz.jpg"
+              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Shrooms/microdot_squares/Final%20CC%20Asset-H420%20Footer%20-%20Edited%20-%20Transparent.png"
               alt="Accepted Payment Methods"
-              className="h-12 w-auto object-contain drop-shadow-lg"
+              className="h-20 w-auto object-contain drop-shadow-lg"
             />
           </div>
         </div>

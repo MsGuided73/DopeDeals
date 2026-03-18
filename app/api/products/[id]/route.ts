@@ -48,6 +48,10 @@ interface PDPResponse {
     brand: string | null;
     short_description: string | null;
     description: string | null;
+    description_markdown?: string | null;
+    highlights?: string[] | null;
+    flavors?: string[] | null;
+    allergy_warning?: string | null;
     product_type: string | null;
   };
   pricing_status: 'priced' | 'pending' | 'hidden';
@@ -150,6 +154,19 @@ function normalizeIngredients(rawIngredients: any): PDPIngredients {
 
   // If it's already in the expected format
   if (typeof rawIngredients === 'object' && !Array.isArray(rawIngredients)) {
+    // Handle the specific Micro Dot format (ingredients array inside object, with allergens)
+    if (rawIngredients.ingredients && Array.isArray(rawIngredients.ingredients)) {
+      const parsedContains = rawIngredients.ingredients.map((i: any) => typeof i === 'string' ? i : i.name);
+      return {
+        contains: parsedContains,
+        allergens: rawIngredients.allergens?.contains || [],
+        dietary: [],
+        warnings: rawIngredients.allergens?.warning ? [rawIngredients.allergens.warning] : [],
+        source: 'label',
+        last_verified_at: null
+      };
+    }
+
     return {
       contains: Array.isArray(rawIngredients.contains) ? rawIngredients.contains : [],
       allergens: Array.isArray(rawIngredients.allergens) ? rawIngredients.allergens : [],
@@ -310,6 +327,10 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
         brand: rawProduct.brand_name || rawProduct.brand_id || null,
         short_description: rawProduct.short_description || null,
         description: rawProduct.description || null,
+        description_markdown: rawProduct.description_markdown || null,
+        highlights: rawProduct.highlights || null,
+        flavors: rawProduct.flavors || null,
+        allergy_warning: rawProduct.allergy_warning || null,
         product_type: inferProductType(rawProduct)
       },
       pricing_status: pricingStatus,
