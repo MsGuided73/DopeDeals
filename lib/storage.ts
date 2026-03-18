@@ -82,6 +82,7 @@ export async function getStorage(): Promise<IStorage> {
         nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
         created_at, updated_at
       `)
+      .eq('is_active', true) // DEFAULT: only return active products
       // STRICT: No Kratom or related substances
       .not('name', 'ilike', '%kratom%')
       .not('name', 'ilike', '%7-oh%')

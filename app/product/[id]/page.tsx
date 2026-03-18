@@ -11,8 +11,6 @@ const EnhancedPDP = dynamic(() => import('../../components/EnhancedPDP'), {
   )
 });
 
-const ProductRecommendations = dynamic(() => import('../../../components/ProductRecommendations'));
-
 const AutosuggestRecommendations = dynamic(() => import('../../components/AutosuggestRecommendations'));
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -63,14 +61,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {/* AI-Powered Recommendations */}
         <section>
           <AutosuggestRecommendations />
-        </section>
-
-        {/* Related Products */}
-        <section className="pb-32">
-          <div className="border-t border-gray-100 pt-16">
-            <h2 className="text-3xl font-bold text-center mb-12">You Might Also Like</h2>
-            <ProductRecommendations currentProductId={id} />
-          </div>
         </section>
       </div>
     </div>
