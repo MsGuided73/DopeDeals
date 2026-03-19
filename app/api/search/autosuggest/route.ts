@@ -82,6 +82,7 @@ export async function GET(request: NextRequest) {
       .not('name', 'ilike', '%7-ohmz%')
       .not('name', 'ilike', '%tincture%')
       .not('name', 'ilike', '%salve%')
+      .eq('is_active', true)
       .limit(50);
 
     if (!productsError && products) {

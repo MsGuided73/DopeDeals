@@ -92,7 +92,8 @@ export async function POST(req: Request) {
       .not('name', 'ilike', '%tincture%')
       .not('name', 'ilike', '%salve%')
       .not('description', 'ilike', '%tincture%')
-      .not('description', 'ilike', '%salve%');
+      .not('description', 'ilike', '%salve%')
+      .eq('is_active', true);
 
     if (category) q1 = q1.eq("category_slug", category);
 

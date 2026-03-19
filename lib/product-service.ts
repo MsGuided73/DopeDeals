@@ -56,7 +56,8 @@ export class ProductService {
       const supabase = await this.getSupabaseClient();
       let query = supabase
         .from('main_site_products')
-        .select('*');
+        .select('*')
+        .eq('is_active', true);
 
       // Apply filters
       if (filters.category) {
@@ -124,6 +125,7 @@ export class ProductService {
         .from('main_site_products')
         .select('*')
         .eq('id', id)
+        .eq('is_active', true)
         .single();
 
       if (error) {
@@ -159,7 +161,8 @@ export class ProductService {
       const { data, error } = await supabase
         .from('main_site_products')
         .select('*')
-        .in('id', ids);
+        .in('id', ids)
+        .eq('is_active', true);
 
       if (error) {
         console.error('Error fetching products by IDs:', error);
@@ -224,7 +227,8 @@ export class ProductService {
       const supabase = await this.getSupabaseClient();
       let query = supabase
         .from('main_site_products')
-        .select('*', { count: 'exact', head: true });
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true);
 
       // Apply the same filters as getProducts but only for counting
       if (filters.category) {
