@@ -418,7 +418,7 @@ export default function AdminInventoryPage() {
                             <div className="flex-shrink-0 h-10 w-10">
                               <div className="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center">
                                 {item.image_url ? (
-                                  <img src={item.image_url} alt="" className="h-10 w-10 rounded-lg object-cover" />
+                                  <img src={item.image_url} alt={item.name || 'Product'} className="h-10 w-10 rounded-lg object-cover" />
                                 ) : (
                                   <Package className="w-6 h-6 text-gray-400" />
                                 )}

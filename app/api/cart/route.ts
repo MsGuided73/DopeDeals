@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { FinanceService } from '../../../lib/services/FinanceService';
+import { logger } from '../../../lib/logger';
 
 const supabase = createServerClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -74,7 +75,7 @@ async function getCurrentUser() {
     }
     return user;
   } catch (err) {
-    console.error('Error in getCurrentUser:', err);
+    logger.error('Error in getCurrentUser:', err);
     return null;
   }
 }
@@ -115,7 +116,7 @@ async function getOrCreateCart(sessionId?: string | null, userId?: string | null
     if (error) throw error;
     return newCart.id;
   } catch (error) {
-    console.error('Error getting/creating cart:', error);
+    logger.error('Error getting/creating cart:', error);
     return null;
   }
 }
@@ -171,7 +172,7 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
       .in('cart_id', cartIds);
 
     if (error) {
-      console.error('Error fetching cart items:', error);
+      logger.error('Error fetching cart items:', error);
       return [];
     }
 
@@ -196,7 +197,7 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
     }));
 
   } catch (error) {
-    console.error('[CART GET_ITEMS ERROR]', {
+    logger.error('[CART GET_ITEMS ERROR]', {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       raw: error
@@ -208,7 +209,7 @@ async function getCartItems(sessionId?: string | null, userId?: string | null) {
 // Merge guest cart into user cart
 async function mergeCarts(sessionId: string, userId: string) {
   try {
-    console.log(`[Cart Merge] Starting merge for session ${sessionId} to user ${userId}`);
+    logger.info(`[Cart Merge] Starting merge for session ${sessionId} to user ${userId}`);
     
     // 1. Find guest cart
     const { data: guestCart } = await supabase
@@ -275,9 +276,9 @@ async function mergeCarts(sessionId: string, userId: string) {
        await supabase.from('carts').delete().eq('id', guestCart.id);
     }
 
-    console.log(`[Cart Merge] Successfully merged items from session ${sessionId} to user ${userId}`);
+    logger.info(`[Cart Merge] Successfully merged items from session ${sessionId} to user ${userId}`);
   } catch (error) {
-    console.error('[CART MERGE ERROR] Session:', sessionId, 'User:', userId, {
+    logger.error('[CART MERGE ERROR] Session:', sessionId, 'User:', userId, {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       raw: error
@@ -385,7 +386,7 @@ async function manageCartItem(
     }
 
   } catch (error) {
-    console.error('[CART MANAGE_ITEM ERROR] Action Action:', action, 'ProductID:', productId, {
+    logger.error('[CART MANAGE_ITEM ERROR] Action Action:', action, 'ProductID:', productId, {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       raw: error
@@ -433,7 +434,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('[CART API GET EXACT ERROR]', {
+    logger.error('[CART API GET EXACT ERROR]', {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       raw: error
@@ -541,7 +542,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('[CART API POST EXACT ERROR]', {
+    logger.error('[CART API POST EXACT ERROR]', {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       raw: error
@@ -672,7 +673,7 @@ export async function PUT(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Update cart error:', error);
+    logger.error('Update cart error:', error);
     return NextResponse.json(
       { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
@@ -729,7 +730,7 @@ export async function DELETE(request: NextRequest) {
       .select();
 
     if (error) {
-      console.error('Error clearing cart:', error);
+      logger.error('Error clearing cart:', error);
       return NextResponse.json(
         { error: 'Failed to clear cart' },
         { status: 500 }
@@ -743,7 +744,7 @@ export async function DELETE(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Clear cart error:', error);
+    logger.error('Clear cart error:', error);
     return NextResponse.json(
       { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }

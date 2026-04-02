@@ -4,7 +4,7 @@ import { z } from 'zod';
 import type { ProcessPaymentRequest, BillingAddress } from '../../../lib/services/kajapay/types';
 import type { ShipstationOrder } from '@shared/shipstation-schema';
 import { FinanceService } from '../../../lib/services/FinanceService';
-
+import { logger } from '../../../lib/logger';
 
 // Generate order number in format: DC-YYYYMMDD-XXXX
 function generateOrderNumber(): string {
@@ -160,9 +160,9 @@ export async function POST(req: NextRequest) {
               if (thcaRule && !restrictedProductIds.includes(p.id)) {
                 restrictedProductIds.push(p.id);
               } else if (!thcaRule) {
-                // Hardcoded fallback for THCA restricted states if no rule present
-                const thcaStates = ['HI', 'ID', 'MN', 'OR', 'RI', 'UT', 'VT', 'AR', 'CA'];
-                if (thcaStates.includes(stateToCheck) && !restrictedProductIds.includes(p.id)) {
+                // Fallback for THCA restricted states if no DB rule present (centralized in compliance-filters.ts)
+                const { THCA_RESTRICTED_STATES: thcaStates } = await import('../../../lib/compliance-filters');
+                if ((thcaStates as readonly string[]).includes(stateToCheck) && !restrictedProductIds.includes(p.id)) {
                   restrictedProductIds.push(p.id);
                 }
               }
@@ -179,7 +179,7 @@ export async function POST(req: NextRequest) {
       }
     }
   } catch (complianceError) {
-    console.error('[Checkout] Compliance check failed:', complianceError);
+    logger.error('[Checkout] Compliance check failed:', complianceError);
     // FAIL-CLOSED: If we can't verify compliance, we cannot process the order.
     // This prevents restricted products from slipping through during DB outages.
     return NextResponse.json({
@@ -302,7 +302,7 @@ export async function POST(req: NextRequest) {
         }
       } catch (ssError) {
         // ShipStation is non-blocking — log but don't fail checkout
-        console.error('[Checkout] ShipStation order creation failed:', ssError);
+        logger.error('[Checkout] ShipStation order creation failed:', ssError);
       }
     }
   } catch {}
@@ -348,7 +348,7 @@ export async function POST(req: NextRequest) {
       throw new Error(`${hostedFormResponse.error?.responseText || 'Failed to create payment session'} - ${errorDetails}`);
     }
   } catch (error: any) {
-    console.error('[Checkout] KajaPay Hosted Form error:', error);
+    logger.error('[Checkout] KajaPay Hosted Form error:', error);
     // Cancel the orphaned order so it doesn't sit in 'pending' forever
     if (order?.id) {
       try {
@@ -359,7 +359,7 @@ export async function POST(req: NextRequest) {
           admin_notes: `Auto-cancelled: KajaPay payment form creation failed — ${error.message}`,
         });
       } catch (cleanupError) {
-        console.error('[Checkout] Failed to cancel orphaned order:', cleanupError);
+        logger.error('[Checkout] Failed to cancel orphaned order:', cleanupError);
       }
     }
     return NextResponse.json({
@@ -368,7 +368,7 @@ export async function POST(req: NextRequest) {
     }, { status: 500 });
   }
 } catch (globalError: any) {
-  console.error('[Checkout API Global Catch]', globalError);
+  logger.error('[Checkout API Global Catch]', globalError);
   return NextResponse.json({ 
     error: globalError.message || 'CRITICAL_CHECKOUT_ERROR', 
     stack: process.env.NODE_ENV === 'development' ? globalError.stack : undefined

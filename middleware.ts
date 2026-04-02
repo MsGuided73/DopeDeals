@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
 
   // STRICT COMPLIANCE: Block all Kratom-related paths
   if (isRestrictedPath(pathname)) {
-    console.warn(`🛑 COMPLIANCE: Blocked request to Kratom-related path: ${pathname}`);
+    // Compliance block logged server-side only
     const redirectUrl = new URL('/', request.url);
     redirectUrl.searchParams.set('reason', 'kratom_blocked');
     return NextResponse.redirect(redirectUrl);

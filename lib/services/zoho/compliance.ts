@@ -35,10 +35,8 @@ export const DEFAULT_COMPLIANCE_CONFIG: ComplianceConfig = {
   pactActCompliant: true
 };
 
-// PACT Act compliance states (states with tobacco shipping restrictions)
-export const PACT_ACT_RESTRICTED_STATES = [
-  'UT', 'AL', 'AK', 'CT', 'HI', 'ME', 'NY', 'VT', 'WA'
-];
+// PACT Act compliance states — re-exported from centralized config
+export { PACT_ACT_RESTRICTED_STATES } from '../../../lib/compliance-filters';
 
 // Age verification function
 export async function verifyAge(

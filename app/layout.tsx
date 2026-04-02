@@ -1,16 +1,11 @@
 import "./globals.css";
 import AppProviders from "./providers";
-import GlobalMasthead from "./components/GlobalMasthead";
 import Highway420Footer from "../components/Highway420Footer";
-import ScrollingBanner from "./components/ScrollingBanner";
 import FeedbackButton from "./components/FeedbackButton";
 import FloatingNav from "./components/FloatingNav";
 import StickyCartPopup from "./components/StickyCartPopup";
-import AutosuggestRecommendations from "./components/AutosuggestRecommendations";
-import RecentlyViewed from "./components/RecentlyViewed";
 import { NavigationProvider } from "./contexts/NavigationContext";
 import AgeGateModal from "./components/AgeGateModal";
-import Script from "next/script";
 
 export const metadata = {
   title: "HIGHWAY 420 - Premium Cannabis Culture & Smoke Shop",
@@ -101,21 +96,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AgeGateModal />
           <NavigationProvider>
             <div className="min-h-screen flex flex-col">
-              {/* Scrolling Banner - DISABLED for now */}
-              {/* <ScrollingBanner /> */}
-
-              {/* Global Masthead removed from layout - pages control their own masthead inclusion */}
-              {/* <GlobalMasthead /> */}
-
               <main className="flex-1">
                 {children}
               </main>
-
-              {/* Autosuggest Recommendations - Temporarily disabled for debugging */}
-              {/* <AutosuggestRecommendations /> */}
-
-              {/* Recently Viewed Products - Temporarily disabled for debugging */}
-              {/* <RecentlyViewed /> */}
 
               <Highway420Footer />
 
