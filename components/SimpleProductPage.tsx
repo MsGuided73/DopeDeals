@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
 import { ChevronRight, Plus, Minus, Shield, Beaker, AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, Star, ShoppingCart } from 'lucide-react';
 import ProductGallery from '../app/components/ProductGallery';
 import FlavorSelector from '../app/components/FlavorSelector';
@@ -324,7 +325,7 @@ export default function SimpleProductPage({ productId, isConsumable = false }: S
             {/* Description */}
             <div 
               className="prose prose-lg text-gray-600 max-w-none font-bold leading-relaxed description-content"
-              dangerouslySetInnerHTML={{ __html: (product.short_description || product.description_md || product.description || '').replace(/\\n/g, '<br/>') }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize((product.short_description || product.description_md || product.description || '').replace(/\\n/g, '<br/>')) }}
             />
 
             {/* Add to Cart Section */}

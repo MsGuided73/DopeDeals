@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '2');
 
     // Get featured products with higher prices for staff picks - NO stock filtering
-    const { data: products, error } = await supabase
+    let staffQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price,
@@ -43,18 +44,12 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true) // Only show active products on the site
       .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+      .eq('tobacco_product', false);
+
+    // Apply centralized compliance filters
+    staffQuery = applyRestrictedProductFilter(staffQuery);
+
+    const { data: products, error } = await staffQuery
       .eq('featured', true)
       .gte('our_price', 50) // Higher priced items for staff picks
       .order('our_price', { ascending: false })
@@ -67,7 +62,7 @@ export async function GET(req: NextRequest) {
 
     // If no featured products, get high-value products
     if (!products || products.length < limit) {
-      const { data: fallbackProducts, error: fallbackError } = await supabase
+      let fallbackQuery = supabase
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price,
@@ -76,18 +71,12 @@ export async function GET(req: NextRequest) {
         `)
         .eq('is_active', true) // Only show active products on the site
         .eq('nicotine_product', false)
-        .eq('tobacco_product', false)
-        // STRICT: No Kratom or related substances
-        .not('name', 'ilike', '%kratom%')
-        .not('name', 'ilike', '%7-oh%')
-        .not('name', 'ilike', '%7-hydroxy%')
-        .not('name', 'ilike', '%mitragynine%')
-        .not('name', 'ilike', '%7-ohmz%')
-        .not('description', 'ilike', '%kratom%')
-        .not('description', 'ilike', '%7-oh%')
-        .not('description', 'ilike', '%7-hydroxy%')
-        .not('description', 'ilike', '%mitragynine%')
-        .not('description', 'ilike', '%7-ohmz%')
+        .eq('tobacco_product', false);
+
+      // Apply centralized compliance filters
+      fallbackQuery = applyRestrictedProductFilter(fallbackQuery);
+
+      const { data: fallbackProducts, error: fallbackError } = await fallbackQuery
         .gte('our_price', 30)
         .order('our_price', { ascending: false })
         .limit(limit);

@@ -8,6 +8,8 @@ interface Order {
   order_number: string;
   status: string;
   payment_status: string;
+  payment_confirmed_at?: string;
+  shipstation_order_id?: string;
   total_amount: number;
   customer_first_name: string;
   customer_last_name: string;
@@ -162,6 +164,8 @@ export default function AdminOrdersPage() {
         customer_last_name: order.customer_last_name,
         customer_email: order.customer_email,
         created_at: order.created_at,
+        payment_confirmed_at: order.payment_confirmed_at || null,
+        shipstation_order_id: order.shipstation_order_id || null,
         item_count: order.order_items?.length || 1
       })) || [];
 
@@ -454,15 +458,27 @@ export default function AdminOrdersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                        order.payment_status === 'paid'
-                          ? 'bg-green-100 text-green-800'
-                          : order.payment_status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {order.payment_status.charAt(0).toUpperCase() + order.payment_status.slice(1)}
-                      </span>
+                      <div className="flex flex-col gap-1">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                          order.payment_status === 'paid'
+                            ? 'bg-green-100 text-green-800'
+                            : order.payment_status === 'pending'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {order.payment_status.charAt(0).toUpperCase() + order.payment_status.slice(1)}
+                        </span>
+                        {order.payment_confirmed_at && (
+                          <span className="text-xs text-green-600" title={new Date(order.payment_confirmed_at).toLocaleString()}>
+                            ✓ {new Date(order.payment_confirmed_at).toLocaleDateString()}
+                          </span>
+                        )}
+                        {order.shipstation_order_id && (
+                          <span className="text-xs text-blue-600" title={`ShipStation ID: ${order.shipstation_order_id}`}>
+                            ✓ ShipStation
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       ${order.total_amount.toFixed(2)}

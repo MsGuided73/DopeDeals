@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 /**
  * GET /api/products/pre-rolls
@@ -26,7 +27,7 @@ export async function GET(_req: NextRequest) {
 
     const MAX_PRODUCTS = 5000;
 
-    const { data: allProducts, error: allError } = await supabase
+    let prerollQuery = supabase
       .from('main_site_products')
       .select(
         `
@@ -57,17 +58,12 @@ export async function GET(_req: NextRequest) {
       )
       .eq('is_active', true)
       .not('name', 'ilike', '%test%')
-      .not('name', 'ilike', '%sample%')
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+      .not('name', 'ilike', '%sample%');
+
+    // Apply centralized compliance filters
+    prerollQuery = applyRestrictedProductFilter(prerollQuery);
+
+    const { data: allProducts, error: allError } = await prerollQuery
       .limit(MAX_PRODUCTS);
 
     if (allError) {

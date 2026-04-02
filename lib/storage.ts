@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from './compliance-filters';
 
 /**
  * IMPORTANT: Database Table Usage Guide for DOPE CITY
@@ -82,22 +83,9 @@ export async function getStorage(): Promise<IStorage> {
         nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
         created_at, updated_at
       `)
-      .eq('is_active', true) // DEFAULT: only return active products
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%tincture%')
-      .not('name', 'ilike', '%salve%')
-      .not('description', 'ilike', '%tincture%')
-      .not('description', 'ilike', '%salve%');
+      .eq('is_active', true); // DEFAULT: only return active products
+      // STRICT: No restricted substances or product types (centralized in compliance-filters.ts)
+      query = applyRestrictedProductFilter(query);
 
       if (filters?.categoryId) query = query.eq('category_id', filters.categoryId);
       if (filters?.brandId) query = query.eq('brand_id', filters.brandId);
@@ -195,21 +183,12 @@ export async function getStorage(): Promise<IStorage> {
 
     // Categories
     async getCategories() {
-      const { data, error } = await supabase
+      let catQuery = supabase
         .from('categories')
-        .select('*')
-        // STRICT: No Kratom-related categories
-        .not('slug', 'ilike', '%kratom%')
-        .not('slug', 'ilike', '%hydroxy%')
-        .not('slug', 'ilike', '%7-oh%')
-        .not('name', 'ilike', '%kratom%')
-        .not('name', 'ilike', '%hydroxy%')
-        .not('name', 'ilike', '%7-oh%')
-        .not('slug', 'ilike', '%tincture%')
-        .not('slug', 'ilike', '%salve%')
-        .not('name', 'ilike', '%tincture%')
-        .not('name', 'ilike', '%salve%')
-        .order('name');
+        .select('*');
+      // STRICT: No restricted categories (centralized in compliance-filters.ts)
+      catQuery = applyRestrictedProductFilter(catQuery, ['slug', 'name']);
+      const { data, error } = await catQuery.order('name');
       
       if (error) throw error;
       return data || [];
@@ -314,7 +293,7 @@ export async function getStorage(): Promise<IStorage> {
       try {
         console.log('🔒 COMPLIANCE: Fetching only safe products for recommendations');
 
-        const { data, error } = await supabase
+        let recQuery = supabase
           .from('main_site_products')
           .select(`
             id, name, description, short_description, our_price, sale_price,
@@ -322,23 +301,10 @@ export async function getStorage(): Promise<IStorage> {
             nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
             created_at, updated_at
           `)
-          .eq('is_active', true)
-          // STRICT: No Kratom or related substances
-          .not('name', 'ilike', '%kratom%')
-          .not('name', 'ilike', '%7-oh%')
-          .not('name', 'ilike', '%7-hydroxy%')
-          .not('name', 'ilike', '%mitragynine%')
-          .not('name', 'ilike', '%7-ohmz%')
-          .not('description', 'ilike', '%kratom%')
-          .not('description', 'ilike', '%7-oh%')
-          .not('description', 'ilike', '%7-hydroxy%')
-          .not('description', 'ilike', '%mitragynine%')
-          .not('description', 'ilike', '%7-ohmz%')
-          .not('name', 'ilike', '%tincture%')
-          .not('name', 'ilike', '%salve%')
-          .not('description', 'ilike', '%tincture%')
-          .not('description', 'ilike', '%salve%')
-          .limit(100);
+          .eq('is_active', true);
+        // STRICT: No restricted substances or product types (centralized in compliance-filters.ts)
+        recQuery = applyRestrictedProductFilter(recQuery);
+        const { data, error } = await recQuery.limit(100);
 
         if (error) throw error;
 

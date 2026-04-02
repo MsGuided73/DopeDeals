@@ -150,6 +150,11 @@ export default function StaffPicksSection() {
     );
   }
 
+  // Don't render the section if there are no products to show
+  if (!loading && products.length === 0) {
+    return null;
+  }
+
   return (
     <section className="mt-16">
       <div className="flex items-center justify-center mb-12">

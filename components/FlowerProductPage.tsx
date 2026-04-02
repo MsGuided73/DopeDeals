@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import DOMPurify from 'isomorphic-dompurify';
 import { ChevronRight, Plus, Minus, Heart, Star, ShoppingCart, Share2 } from 'lucide-react';
 import ProductGallery from '../app/components/ProductGallery';
 import FlavorSelector from '../app/components/FlavorSelector';
@@ -164,7 +165,7 @@ export default function FlowerProductPage({ productId }: FlowerProductPageProps)
 
             <div 
               className="text-gray-600 text-sm font-bold leading-relaxed description-content"
-              dangerouslySetInnerHTML={{ __html: (product.description || product.short_description || '').replace(/\\n/g, '<br/>') }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize((product.description || product.short_description || '').replace(/\\n/g, '<br/>')) }}
             />
 
             {/* Variant Selector (Flavor Dropdown) */}

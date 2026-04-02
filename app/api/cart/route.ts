@@ -20,24 +20,26 @@ function validateUUID(uuid: string): boolean {
   return uuidRegex.test(uuid);
 }
 
-// Setup session-based RLS using PostgreSQL GUC
+// Setup session-based RLS using PostgreSQL GUC (parameterized to prevent SQL injection)
 async function setupSessionRLS(sessionId?: string | null, userId?: string | null) {
   try {
-    // Set GUC variables for session-based RLS
+    // Use set_config via parameterized RPC to safely set GUC variables
     if (sessionId) {
-      await supabase.rpc('exec_sql', {
-        sql: `SET LOCAL app.current_session_id = '${sessionId.replace(/'/g, "''")}'`
+      await supabase.rpc('set_app_config', {
+        config_name: 'app.current_session_id',
+        config_value: sessionId
       });
     }
 
     if (userId) {
-      await supabase.rpc('exec_sql', {
-        sql: `SET LOCAL app.current_user_id = '${userId.replace(/'/g, "''")}'`
+      await supabase.rpc('set_app_config', {
+        config_name: 'app.current_user_id',
+        config_value: userId
       });
     }
   } catch (error) {
-    // Fallback: Try direct set_config calls
-    console.warn('GUC setup via RPC failed, this may be expected in some environments');
+    // GUC setup is supplementary - cart ownership is verified at app level
+    // via .eq('user_id', userId) / .eq('session_id', sessionId) queries
   }
 }
 
@@ -438,14 +440,6 @@ export async function GET(request: NextRequest) {
     });
     return NextResponse.json({
       success: false,
-      cart: {
-        items: [],
-        itemCount: 0,
-        subtotal: 0,
-        taxAmount: 0,
-        shippingAmount: 0,
-        total: 0
-      },
       error: 'Failed to fetch cart',
       details: error instanceof Error ? error.message : 'Check server logs'
     }, { status: 500 });

@@ -259,6 +259,24 @@ export default function NewProductsSection() {
     );
   };
 
+  if (error) {
+    return (
+      <section className="mt-16">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
+            FRESH DROPS
+          </h1>
+          <p className="text-red-500 mt-6">Unable to load new products. Please refresh the page.</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Don't render the section if there are no products to show
+  if (!loading && productsToShow.length === 0) {
+    return null;
+  }
+
   return (
     <section className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -87,16 +88,15 @@ export async function GET(req: NextRequest) {
 async function performRegularSearch(supabase: any, options: any) {
   console.log('THCA API: Starting simplified search');
 
-  const { data, error } = await supabase
+  let thcaPrerollQuery = supabase
     .from('main_site_products')
     .select('id, name, our_price, sale_price, fire_price, image_url, image_urls, category_slug')
-    .eq('is_active', true)
-    // STRICT: No Kratom or related substances
-    .not('name', 'ilike', '%kratom%')
-    .not('name', 'ilike', '%7-oh%')
-    .not('name', 'ilike', '%7-hydroxy%')
-    .not('name', 'ilike', '%mitragynine%')
-    .not('name', 'ilike', '%7-ohmz%')
+    .eq('is_active', true);
+
+  // Apply centralized compliance filters
+  thcaPrerollQuery = applyRestrictedProductFilter(thcaPrerollQuery);
+
+  const { data, error } = await thcaPrerollQuery
     .or('name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%thca%,name.ilike.%thc-a%,name.ilike.%THC-A%,name.ilike.%THC-a%')
     .limit(options.limit || 5000);
 

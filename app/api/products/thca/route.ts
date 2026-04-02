@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
     const effectiveLimit = limit;
 
     // Query THCA products from main_site_products table
-    const { data: rawProducts, error } = await supabase
+    let thcaQuery = supabase
       .from('main_site_products')
       .select(`
         id,
@@ -50,18 +51,12 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .not('image_url', 'is', null)
-      .neq('image_url', '')
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+      .neq('image_url', '');
+
+    // Apply centralized compliance filters
+    thcaQuery = applyRestrictedProductFilter(thcaQuery);
+
+    const { data: rawProducts, error } = await thcaQuery
       .or('name.ilike.%thca%,name.ilike.%packman%,name.ilike.%crave%,name.ilike.%hidden.hills%,name.ilike.%hidden-hills%,name.ilike.%flower%,name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%concentrate%,name.ilike.%edible%,brand_name.ilike.%thca%,brand_name.ilike.%packman%,brand_name.ilike.%crave%,brand_name.ilike.%hidden.hills%,brand_name.ilike.%hidden-hills%,brand_name.ilike.%flower%,brand_name.ilike.%preroll%,brand_name.ilike.%cartridge%,brand_name.ilike.%vape%,brand_name.ilike.%concentrate%,brand_name.ilike.%edible%,description.ilike.%thca%,description.ilike.%packman%,description.ilike.%crave%,description.ilike.%hidden.hills%,description.ilike.%hidden-hills%,description.ilike.%flower%,description.ilike.%preroll%,description.ilike.%cartridge%,description.ilike.%vape%,description.ilike.%concentrate%,description.ilike.%edible%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit);

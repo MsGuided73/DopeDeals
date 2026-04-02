@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
 import { AlertTriangle, Beaker, CheckCircle2, ChevronDown, ChevronUp, Shield, Star } from 'lucide-react';
 
 interface ConsumableProductDetailsProps {
@@ -65,7 +66,7 @@ export function ConsumableProductDetails({ product }: ConsumableProductDetailsPr
 
   const descriptionHtml = useMemo(() => {
     const raw = product.description_md || product.description || product.short_description || '';
-    return raw.replace(/\n/g, '<br/>');
+    return DOMPurify.sanitize(raw.replace(/\n/g, '<br/>'));
   }, [product.description_md, product.description, product.short_description]);
 
   const additionalInfo = [

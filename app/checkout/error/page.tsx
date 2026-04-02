@@ -7,9 +7,20 @@ import { motion } from 'framer-motion';
 import { AlertCircle, CreditCard, RefreshCw, MessageSquare, ArrowLeft } from 'lucide-react';
 import GlobalMasthead from '../../components/GlobalMasthead';
 
+// Sanitize error messages from URL params to avoid showing internal details to customers
+function sanitizeErrorMessage(raw: string | null): string {
+  const fallback = 'The transaction could not be completed at this time.';
+  if (!raw) return fallback;
+  // Block stack traces, SQL errors, or excessively long messages
+  if (raw.length > 200 || raw.includes('Error:') || raw.includes('at ') || raw.includes('SQL') || raw.includes('supabase')) {
+    return fallback;
+  }
+  return raw;
+}
+
 function ErrorContent() {
   const searchParams = useSearchParams();
-  const error = searchParams.get('message') || 'The transaction could not be completed at this time.';
+  const error = sanitizeErrorMessage(searchParams.get('message'));
   const orderId = searchParams.get('orderId');
 
   return (

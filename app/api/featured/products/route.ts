@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 /**
  * Featured Products API Route
@@ -84,25 +85,19 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '8');
 
       // Check for FEATURED_PRODUCT first - these take absolute priority
-      const { data: featuredProducts, error: featuredError } = await supabase
+      let featuredQuery1 = supabase
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price, sale_price,
           image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product, brand_name, category_id,
           created_at, updated_at
       `)
-      .eq('is_active', true) // Only show active products on the site
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+      .eq('is_active', true); // Only show active products on the site
+
+      // Apply centralized compliance filters
+      featuredQuery1 = applyRestrictedProductFilter(featuredQuery1);
+
+      const { data: featuredProducts, error: featuredError } = await featuredQuery1
       .or('featured_product.eq.true,featured_product.eq."YES"') // Get featured_product items (both boolean true and string "YES")
       .order('created_at', { ascending: false });
 
@@ -122,25 +117,19 @@ export async function GET(req: NextRequest) {
       console.log(`⚠️ No featured_product items found, falling back to featured items`);
 
       // Fallback to FEATURED products if no featured_product items exist
-      const { data: priorityProducts, error } = await supabase
+      let featuredQuery2 = supabase
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price, sale_price,
           image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product, brand_name, category_id,
           created_at, updated_at
         `)
-        .eq('is_active', true) // Only show active products on the site
-        // STRICT: No Kratom or related substances
-        .not('name', 'ilike', '%kratom%')
-        .not('name', 'ilike', '%7-oh%')
-        .not('name', 'ilike', '%7-hydroxy%')
-        .not('name', 'ilike', '%mitragynine%')
-        .not('name', 'ilike', '%7-ohmz%')
-        .not('description', 'ilike', '%kratom%')
-        .not('description', 'ilike', '%7-oh%')
-        .not('description', 'ilike', '%7-hydroxy%')
-        .not('description', 'ilike', '%mitragynine%')
-        .not('description', 'ilike', '%7-ohmz%')
+        .eq('is_active', true); // Only show active products on the site
+
+      // Apply centralized compliance filters
+      featuredQuery2 = applyRestrictedProductFilter(featuredQuery2);
+
+      const { data: priorityProducts, error } = await featuredQuery2
         .eq('featured', true) // Get featured products as fallback
         .order('created_at', { ascending: false })
         .limit(Math.min(limit, 12)); // Get more featured products to ensure availability

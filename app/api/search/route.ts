@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
+import { applyRestrictedProductFilter } from "../../../lib/compliance-filters";
 
 const Body = z.object({
   q: z.string().trim().max(200).optional().nullable(),
@@ -78,22 +79,10 @@ export async function POST(req: Request) {
       )
       .not("image_url", "is", null)
       .neq("image_url", "")
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%tincture%')
-      .not('name', 'ilike', '%salve%')
-      .not('description', 'ilike', '%tincture%')
-      .not('description', 'ilike', '%salve%')
       .eq('is_active', true);
+
+    // Apply centralized compliance filters
+    q1 = applyRestrictedProductFilter(q1);
 
     if (category) q1 = q1.eq("category_slug", category);
 

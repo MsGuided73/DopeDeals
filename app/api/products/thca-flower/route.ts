@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,7 +18,7 @@ export async function GET(req: NextRequest) {
     const limit = 5000;
 
     // Get THCA flower products
-    const { data: rawProducts, error } = await supabase
+    let flowerQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
@@ -26,18 +27,12 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .not('image_url', 'is', null)
-      .neq('image_url', '')
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+      .neq('image_url', '');
+
+    // Apply centralized compliance filters
+    flowerQuery = applyRestrictedProductFilter(flowerQuery);
+
+    const { data: rawProducts, error } = await flowerQuery
       .eq('category_slug', 'flower')
       .order('created_at', { ascending: false })
       .limit(limit);

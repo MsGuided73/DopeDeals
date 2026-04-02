@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -43,7 +44,7 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '4');
 
     // Get newest products with images
-    const { data: products, error } = await supabase
+    let arrivalsQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price,
@@ -52,17 +53,12 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('nicotine_product', false)
-      .eq('tobacco_product', false)
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+      .eq('tobacco_product', false);
+
+    // Apply centralized compliance filters
+    arrivalsQuery = applyRestrictedProductFilter(arrivalsQuery);
+
+    const { data: products, error } = await arrivalsQuery
       .not('image_url', 'is', null)
       .order('created_at', { ascending: false })
       .limit(limit);
@@ -74,7 +70,7 @@ export async function GET(req: NextRequest) {
 
     // If we don't have enough products with images, get some without images as fallback
     if (!products || products.length < limit) {
-      const { data: fallbackProducts, error: fallbackError } = await supabase
+      let fallbackArrivalsQuery = supabase
         .from('main_site_products')
         .select(`
           id, name, description, short_description, our_price,
@@ -83,17 +79,12 @@ export async function GET(req: NextRequest) {
         `)
         .eq('is_active', true)
         .eq('nicotine_product', false)
-        .eq('tobacco_product', false)
-        .not('name', 'ilike', '%kratom%')
-        .not('name', 'ilike', '%7-oh%')
-        .not('name', 'ilike', '%7-hydroxy%')
-        .not('name', 'ilike', '%mitragynine%')
-        .not('name', 'ilike', '%7-ohmz%')
-        .not('description', 'ilike', '%kratom%')
-        .not('description', 'ilike', '%7-oh%')
-        .not('description', 'ilike', '%7-hydroxy%')
-        .not('description', 'ilike', '%mitragynine%')
-        .not('description', 'ilike', '%7-ohmz%')
+        .eq('tobacco_product', false);
+
+      // Apply centralized compliance filters
+      fallbackArrivalsQuery = applyRestrictedProductFilter(fallbackArrivalsQuery);
+
+      const { data: fallbackProducts, error: fallbackError } = await fallbackArrivalsQuery
         .order('created_at', { ascending: false })
         .limit(limit);
 

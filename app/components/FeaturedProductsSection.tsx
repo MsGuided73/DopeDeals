@@ -379,6 +379,11 @@ export default function FeaturedProductsSection() {
     );
   }
 
+  // Don't render the section if there are no products to show
+  if (!loading && products.length === 0) {
+    return null;
+  }
+
   return (
     <section className="mt-16 bg-white dark:bg-gray-950 py-12">
       <div className="max-w-7xl mx-auto px-4">

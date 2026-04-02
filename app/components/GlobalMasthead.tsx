@@ -275,6 +275,15 @@ export default function GlobalMasthead() {
               </div>
 
               {/* Simple links */}
+              <Link href="/bongs" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors whitespace-nowrap uppercase tracking-wider">
+                BONGS
+              </Link>
+              <Link href="/pipes" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors whitespace-nowrap uppercase tracking-wider">
+                PIPES
+              </Link>
+              <Link href="/dabsntools" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors whitespace-nowrap uppercase tracking-wider">
+                DAB RIGS
+              </Link>
               <Link href="/pre-rolls" className="text-white text-base font-display-twilight hover:text-yellow-400 transition-colors whitespace-nowrap uppercase tracking-wider">
                 PRE-ROLLS
               </Link>
@@ -391,6 +400,15 @@ export default function GlobalMasthead() {
                 </div>
               </div>
 
+              <Link href="/bongs" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Bongs
+              </Link>
+              <Link href="/pipes" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Pipes
+              </Link>
+              <Link href="/dabsntools" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
+                Dab Rigs
+              </Link>
               <Link href="/pre-rolls" className="block text-black text-lg font-bold hover:text-yellow-500 transition-colors py-3 border-b border-gray-200/50" onClick={() => setIsMenuOpen(false)}>
                 Pre-Rolls
               </Link>
@@ -535,7 +553,7 @@ export default function GlobalMasthead() {
               {/* Popular Categories */}
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Popular Categories</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <Link href="/thca_flower" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🌱</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">THCA Flower</div>
@@ -555,6 +573,18 @@ export default function GlobalMasthead() {
                   <Link href="/pre-rolls" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
                     <div className="text-2xl mb-2">🚬</div>
                     <div className="text-sm font-medium text-gray-900 dark:text-white">Pre-Rolls</div>
+                  </Link>
+                  <Link href="/bongs" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">🧊</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Bongs</div>
+                  </Link>
+                  <Link href="/pipes" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">🔥</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Pipes</div>
+                  </Link>
+                  <Link href="/dabsntools" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">
+                    <div className="text-2xl mb-2">🍯</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">Dab Rigs</div>
                   </Link>
                   {/*
                   <Link href="/nitrous-oxide" className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-4 text-center transition-colors">

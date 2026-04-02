@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../lib/compliance-filters';
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -139,12 +140,10 @@ async function getProductRecommendations(
     .eq('nicotine_product', false)
     .eq('tobacco_product', false)
     .not('name', 'ilike', '%battery%')
-    .not('name', 'ilike', '%kratom%')
-    .not('name', 'ilike', '%7-oh%')
-    .not('name', 'ilike', '%7-hydroxy%')
-    .not('name', 'ilike', '%mitragynine%')
-    .not('name', 'ilike', '%7-ohmz%')
     .gt('stock_quantity', 0);
+
+  // Apply centralized compliance filters
+  query = applyRestrictedProductFilter(query);
 
   // Apply filters based on intent
   switch (intent) {

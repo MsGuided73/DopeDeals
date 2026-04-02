@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 import { config } from 'dotenv';
 import * as path from 'path';
 
@@ -27,7 +28,7 @@ export async function GET(req: NextRequest) {
     const limit = 5000;
 
     // Search active products first
-    const { data: rawProducts, error: allError } = await supabase
+    let bubblerQuery = supabase
       .from('main_site_products')
       .select(`
         id,
@@ -56,18 +57,12 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .not('name', 'ilike', '%test%')
-      .not('name', 'ilike', '%sample%')
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
+      .not('name', 'ilike', '%sample%');
+
+    // Apply centralized compliance filters
+    bubblerQuery = applyRestrictedProductFilter(bubblerQuery);
+
+    const { data: rawProducts, error: allError } = await bubblerQuery
       .or(
         `category_slug.eq.bubblers,` +
         `subcategory_slug.ilike.%bubbler%,` +

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../lib/compliance-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -28,24 +29,10 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .not('name', 'ilike', '%battery%')
       .not('description', 'ilike', '%battery%')
-      .not('short_description', 'ilike', '%battery%')
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%tincture%')
-      .not('name', 'ilike', '%salve%')
-      .not('description', 'ilike', '%tincture%')
-      .not('description', 'ilike', '%salve%')
-      .not('short_description', 'ilike', '%tincture%')
-      .not('short_description', 'ilike', '%salve%');
+      .not('short_description', 'ilike', '%battery%');
+
+    // Apply centralized compliance filters
+    query = applyRestrictedProductFilter(query, ['name', 'description', 'short_description']);
 
     // Apply category filter if provided
     if (category) {
@@ -74,24 +61,10 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true)
       .not('name', 'ilike', '%battery%')
       .not('description', 'ilike', '%battery%')
-      .not('short_description', 'ilike', '%battery%')
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%tincture%')
-      .not('name', 'ilike', '%salve%')
-      .not('description', 'ilike', '%tincture%')
-      .not('description', 'ilike', '%salve%')
-      .not('short_description', 'ilike', '%tincture%')
-      .not('short_description', 'ilike', '%salve%');
+      .not('short_description', 'ilike', '%battery%');
+
+    // Apply centralized compliance filters
+    countQuery = applyRestrictedProductFilter(countQuery, ['name', 'description', 'short_description']);
 
     // Apply category filter to count query if provided
     if (category) {

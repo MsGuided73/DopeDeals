@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
     const effectiveLimit = limit;
 
     // Query featured products from main_site_products table
-    const { data: rawProducts, error } = await supabase
+    let featuredQuery = supabase
       .from('main_site_products')
       .select(`
         id,
@@ -50,22 +51,12 @@ export async function GET(req: NextRequest) {
       `)
       .eq('is_active', true)
       .eq('featured', true)
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('description', 'ilike', '%kratom%')
-      .not('description', 'ilike', '%7-oh%')
-      .not('description', 'ilike', '%7-hydroxy%')
-      .not('description', 'ilike', '%mitragynine%')
-      .not('description', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%battery%')
-      .not('name', 'ilike', '%tincture%')
-      .not('name', 'ilike', '%salve%')
-      .not('description', 'ilike', '%tincture%')
-      .not('description', 'ilike', '%salve%')
+      .not('name', 'ilike', '%battery%');
+
+    // Apply centralized compliance filters
+    featuredQuery = applyRestrictedProductFilter(featuredQuery);
+
+    const { data: rawProducts, error } = await featuredQuery
       .order('created_at', { ascending: false })
       .limit(effectiveLimit);
 
@@ -112,19 +103,17 @@ export async function GET(req: NextRequest) {
       });
 
     // Get total count
-    const { count } = await supabase
+    let countQuery = supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
       .eq('featured', true)
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%battery%')
-      .not('name', 'ilike', '%tincture%')
-      .not('name', 'ilike', '%salve%');
+      .not('name', 'ilike', '%battery%');
+
+    // Apply centralized compliance filters
+    countQuery = applyRestrictedProductFilter(countQuery);
+
+    const { count } = await countQuery;
 
     return NextResponse.json({
       products: products,

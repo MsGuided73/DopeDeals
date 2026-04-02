@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { sanitizeHtml } from '../../../lib/sanitize-html';
 import { FALLBACK_POSTS } from '../../../lib/blog-data';
 import GlobalBreadcrumbs from '../../components/GlobalBreadcrumbs';
 
@@ -85,7 +86,7 @@ export default function BlogPostPage({ params }: PageProps) {
           className="prose prose-lg md:prose-xl max-w-none text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-a:text-dope-orange prose-img:rounded-xl prose-img:shadow-lg"
         >
           {/* Render content safely */}
-          <div dangerouslySetInnerHTML={{ __html: post.content || '' }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content || '') }} />
           
           {/* Fallback if content is empty but excerpt exists */}
           {!post.content && (

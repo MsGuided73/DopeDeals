@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -68,21 +69,18 @@ export async function GET(request: NextRequest) {
     let suggestions: AutosuggestResult[] = [];
 
     // Search products for autosuggest
-    const { data: products, error: productsError } = await supabase
+    let autosuggestQuery = supabase
       .from('main_site_products')
       .select('name, brand_name, category_slug, image_url')
       .or(`name.ilike.%${searchTerm}%,brand_name.ilike.%${searchTerm}%`)
       .not('image_url', 'is', null)
       .neq('image_url', '')
-      // STRICT: No Kratom or related substances
-      .not('name', 'ilike', '%kratom%')
-      .not('name', 'ilike', '%7-oh%')
-      .not('name', 'ilike', '%7-hydroxy%')
-      .not('name', 'ilike', '%mitragynine%')
-      .not('name', 'ilike', '%7-ohmz%')
-      .not('name', 'ilike', '%tincture%')
-      .not('name', 'ilike', '%salve%')
-      .eq('is_active', true)
+      .eq('is_active', true);
+
+    // Apply centralized compliance filters
+    autosuggestQuery = applyRestrictedProductFilter(autosuggestQuery);
+
+    const { data: products, error: productsError } = await autosuggestQuery
       .limit(50);
 
     if (!productsError && products) {

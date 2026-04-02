@@ -59,8 +59,14 @@ interface Order {
   billing_state?: string;
   billing_postal_code?: string;
   billing_country?: string;
+  payment_confirmed_at?: string;
+  kajapay_transaction_id?: string;
+  shipstation_order_id?: string;
+  shipstation_order_key?: string;
   created_at: string;
   updated_at: string;
+  shipped_at?: string;
+  delivered_at?: string;
   tracking_number?: string;
   notes?: string;
   order_items: OrderItem[];
@@ -374,6 +380,18 @@ export default function AdminOrderDetailPage() {
                   </div>
                 </div>
 
+                {order.payment_confirmed_at && (
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Payment Confirmed by KajaPay</p>
+                      <p className="text-sm text-gray-600">{formatDate(order.payment_confirmed_at)}</p>
+                    </div>
+                  </div>
+                )}
+
                 {order.status !== 'pending' && (
                   <div className="flex items-start gap-3">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -386,14 +404,29 @@ export default function AdminOrderDetailPage() {
                   </div>
                 )}
 
-                {order.tracking_number && (
+                {order.shipped_at && (
                   <div className="flex items-start gap-3">
                     <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                       <Truck className="w-4 h-4 text-purple-600" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">Shipped</p>
-                      <p className="text-sm text-gray-600">Tracking: {order.tracking_number}</p>
+                      <p className="text-sm text-gray-600">{formatDate(order.shipped_at)}</p>
+                      {order.tracking_number && (
+                        <p className="text-sm text-gray-500">Tracking: {order.tracking_number}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {order.delivered_at && (
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Delivered</p>
+                      <p className="text-sm text-gray-600">{formatDate(order.delivered_at)}</p>
                     </div>
                   </div>
                 )}
@@ -446,6 +479,88 @@ export default function AdminOrderDetailPage() {
                 <p>{order.shipping_city}, {order.shipping_state} {order.shipping_postal_code}</p>
                 <p>{order.shipping_country}</p>
               </div>
+            </div>
+          </div>
+
+          {/* Payment Confirmation */}
+          <div className="bg-white rounded-lg shadow">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <CreditCard className="w-5 h-5" />
+                Payment Details
+              </h3>
+            </div>
+            <div className="p-6 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Status</span>
+                <span className={`inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full ${getPaymentStatusColor(order.payment_status)}`}>
+                  {order.payment_status.charAt(0).toUpperCase() + order.payment_status.slice(1)}
+                </span>
+              </div>
+              {order.payment_confirmed_at ? (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Confirmed</span>
+                    <span className="text-sm font-medium text-green-700">{formatDate(order.payment_confirmed_at)}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2 p-2 bg-green-50 rounded-lg border border-green-200">
+                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                    <span className="text-xs text-green-700 font-medium">Payment received by KajaPay</span>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center gap-2 mt-2 p-2 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <Clock className="w-4 h-4 text-yellow-600 flex-shrink-0" />
+                  <span className="text-xs text-yellow-700 font-medium">Awaiting payment confirmation</span>
+                </div>
+              )}
+              {order.kajapay_transaction_id && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">KajaPay Txn ID</span>
+                  <span className="text-sm font-mono text-gray-900">{order.kajapay_transaction_id}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ShipStation Tracking */}
+          <div className="bg-white rounded-lg shadow">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <Truck className="w-5 h-5" />
+                ShipStation
+              </h3>
+            </div>
+            <div className="p-6 space-y-3">
+              {order.shipstation_order_id ? (
+                <>
+                  <div className="flex items-center gap-2 p-2 bg-green-50 rounded-lg border border-green-200">
+                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                    <span className="text-xs text-green-700 font-medium">Order sent to ShipStation</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Order ID</span>
+                    <span className="text-sm font-mono text-gray-900">{order.shipstation_order_id}</span>
+                  </div>
+                  {order.shipstation_order_key && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Order Key</span>
+                      <span className="text-sm font-mono text-gray-900 truncate max-w-[180px]" title={order.shipstation_order_key}>{order.shipstation_order_key}</span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                  <Clock className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-xs text-gray-500 font-medium">Not yet sent to ShipStation</span>
+                </div>
+              )}
+              {order.tracking_number && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Tracking #</span>
+                  <span className="text-sm font-mono text-gray-900">{order.tracking_number}</span>
+                </div>
+              )}
             </div>
           </div>
 

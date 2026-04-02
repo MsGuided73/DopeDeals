@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { STATIC_COA_DATA } from '../../../lib/coa-data';
+import { applyRestrictedProductFilter } from '../../../lib/compliance-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -71,13 +72,12 @@ export async function GET(req: NextRequest) {
         .from('main_site_products')
         .select('id, name, sku, brand_name, categories, compliance_info, updated_at')
         .eq('is_active', true)
-        .not('compliance_info->lab_certificate_url', 'is', null)
-        .not('name', 'ilike', '%kratom%')
-        .not('name', 'ilike', '%7-oh%')
-        .not('name', 'ilike', '%7-hydroxy%')
-        .not('name', 'ilike', '%mitragynine%')
-        .not('name', 'ilike', '%7-ohmz%')
-        .limit(500); // Increase limit to show all active COAs
+        .not('compliance_info->lab_certificate_url', 'is', null);
+
+      // Apply centralized compliance filters
+      query = applyRestrictedProductFilter(query);
+
+      query = query.limit(500); // Increase limit to show all active COAs
 
       const { data: prods, error: prodError } = await query;
 

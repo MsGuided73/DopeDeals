@@ -73,6 +73,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const [activeTab, setActiveTab] = useState<'details' | 'ingredients' | 'lab' | 'reviews'>('details');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [cartMessage, setCartMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   React.useEffect(() => {
     setHasCustomFooter(true);
@@ -128,11 +129,15 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   // Handle Add to Cart
   const handleAddToCart = async () => {
     setIsAdding(true);
+    setCartMessage(null);
     try {
       await addToCart(product.id, quantity);
       refreshCart();
+      setCartMessage({ type: 'success', text: 'Added to cart!' });
+      setTimeout(() => setCartMessage(null), 3000);
     } catch (e) {
-      console.error(e);
+      const message = e instanceof Error ? e.message : 'Failed to add to cart. Please try again.';
+      setCartMessage({ type: 'error', text: message });
     } finally {
       setIsAdding(false);
     }
@@ -390,6 +395,11 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                       </>
                     )}
                   </button>
+                  {cartMessage && (
+                    <p className={`text-sm font-medium text-center ${cartMessage.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                      {cartMessage.text}
+                    </p>
+                  )}
                 </div>
               </div>
             )}

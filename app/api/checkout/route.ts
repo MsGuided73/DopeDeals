@@ -180,8 +180,12 @@ export async function POST(req: NextRequest) {
     }
   } catch (complianceError) {
     console.error('[Checkout] Compliance check failed:', complianceError);
-    // Continue if compliance check itself fails (we don't want to block everything if just the check has a bug, 
-    // unless the policy is strict "fail closed")
+    // FAIL-CLOSED: If we can't verify compliance, we cannot process the order.
+    // This prevents restricted products from slipping through during DB outages.
+    return NextResponse.json({
+      error: 'Unable to verify product eligibility for your location. Please try again shortly.',
+      code: 'COMPLIANCE_CHECK_FAILED'
+    }, { status: 503 });
   }
 
   // Compute totals using FinanceService
@@ -287,7 +291,19 @@ export async function POST(req: NextRequest) {
         orderTotal: Number(total),
         amountPaid: 0,
       } as any;
-      svc.createShipstationOrder(map).catch(() => void 0);
+      try {
+        const ssResult = await svc.createShipstationOrder(map);
+        // Store ShipStation reference on the order for admin dashboard tracking
+        if (ssResult?.success && ssResult.shipstationOrderId) {
+          await serverStorage.updateOrder(order.id, {
+            shipstation_order_id: ssResult.shipstationOrderId,
+            shipstation_order_key: ssResult.order?.orderKey || '',
+          });
+        }
+      } catch (ssError) {
+        // ShipStation is non-blocking — log but don't fail checkout
+        console.error('[Checkout] ShipStation order creation failed:', ssError);
+      }
     }
   } catch {}
 
@@ -333,10 +349,22 @@ export async function POST(req: NextRequest) {
     }
   } catch (error: any) {
     console.error('[Checkout] KajaPay Hosted Form error:', error);
-    return NextResponse.json({ 
-      error: 'Payment session creation failed', 
-      details: error.message,
-      orderId: order?.id // Return orderId so we can attempt retry if needed
+    // Cancel the orphaned order so it doesn't sit in 'pending' forever
+    if (order?.id) {
+      try {
+        const storage = await getStorage();
+        await storage.updateOrder(order.id, {
+          status: 'cancelled',
+          payment_status: 'failed',
+          admin_notes: `Auto-cancelled: KajaPay payment form creation failed — ${error.message}`,
+        });
+      } catch (cleanupError) {
+        console.error('[Checkout] Failed to cancel orphaned order:', cleanupError);
+      }
+    }
+    return NextResponse.json({
+      error: 'Payment session creation failed. Please try again.',
+      orderId: order?.id
     }, { status: 500 });
   }
 } catch (globalError: any) {

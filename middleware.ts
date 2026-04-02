@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { isRestrictedPath } from './lib/compliance-filters';
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -11,8 +12,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // STRICT COMPLIANCE: Block all Kratom-related paths
-  const kratomTerms = ['kratom', '7-oh', '7-hydroxy', 'mitragynine', '7-ohmz'];
-  if (kratomTerms.some(term => pathname.toLowerCase().includes(term))) {
+  if (isRestrictedPath(pathname)) {
     console.warn(`🛑 COMPLIANCE: Blocked request to Kratom-related path: ${pathname}`);
     const redirectUrl = new URL('/', request.url);
     redirectUrl.searchParams.set('reason', 'kratom_blocked');

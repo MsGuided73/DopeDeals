@@ -73,14 +73,17 @@ async function handleTransactionApproved(body: any): Promise<NextResponse> {
       return NextResponse.json({ error: 'Missing orderId' }, { status: 400 });
     }
 
-    // 1. Update order to paid
+    // 1. Update order to paid with payment confirmation timestamp
+    const now = new Date().toISOString();
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .update({
         payment_status: 'paid',
         status: 'processing',
         transaction_id: String(kajaPayTransactionId),
-        updated_at: new Date().toISOString(),
+        kajapay_transaction_id: String(kajaPayTransactionId),
+        payment_confirmed_at: now,
+        updated_at: now,
       })
       .eq('id', orderId)
       .select()
