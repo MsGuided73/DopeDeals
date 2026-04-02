@@ -285,20 +285,26 @@ function getValidStatusTransitions(currentStatus: string): string[] {
   return transitions[currentStatus] || [];
 }
 
-// Helper function to send order status notifications
+// Send order status notification email to customer
 async function sendOrderStatusNotification(
-  order: any, 
-  status: string, 
-  trackingNumber?: string, 
+  order: any,
+  status: string,
+  trackingNumber?: string,
   carrier?: string
 ): Promise<void> {
-  // TODO: Implement email/SMS notification system
-  console.log(`[Order Status] Would send notification for order ${order.orderNumber}: ${status}`);
-  
-  // Example notification logic:
-  // - Send email to customer
-  // - Send SMS if phone number provided
-  // - Create in-app notification
+  try {
+    const { sendOrderStatusEmail } = await import('../../../../../lib/email-orders');
+    await sendOrderStatusEmail({
+      orderNumber: order.order_number || order.orderNumber || order.id,
+      customerEmail: order.customer_email || order.customerEmail,
+      customerFirstName: order.customer_first_name || order.customerFirstName || 'Customer',
+      newStatus: status,
+      trackingNumber,
+      carrier,
+    });
+  } catch (error) {
+    console.error('[Order Status] Email notification failed (non-blocking):', error);
+  }
 }
 
 // Helper function to sync order status to external systems

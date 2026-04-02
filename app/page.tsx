@@ -1,20 +1,32 @@
-import Link from "next/link";
+import { Metadata } from "next";
+import { Suspense } from "react";
+import nextDynamic from "next/dynamic";
 import CollectionsGrid from "./components/CollectionsGrid";
-import FeaturedProductsSection from "./components/FeaturedProductsSection";
-import NewProductsSection from "./components/NewProductsSection";
-import BrandLogoScrollbar from "../components/BrandLogoScrollbar";
-import DopeDealsSection from "./components/DopeDealsSection";
-import BlogArticlesGrid from "./components/BlogArticlesGrid";
 import GlobalMasthead from "./components/GlobalMasthead";
-import TrustBadgeBar from "./components/TrustBadgeBar";
-import AboutHighway420 from "./components/AboutHighway420";
-import SpotlightReviews from "./components/SpotlightReviews";
+
+export const metadata: Metadata = {
+  title: "HIGHWAY 420 — Premium Cannabis Culture & Smoke Shop",
+  description: "Life is a Highway, Ride With Us. Premium cannabis products at the lowest prices — glass, bongs, dab rigs, vapes, edibles & more. Free shipping over $75.",
+  alternates: { canonical: 'https://highway420.com' },
+};
+
+// Lazy-load below-the-fold sections for faster initial page load
+const FeaturedProductsSection = nextDynamic(() => import("./components/FeaturedProductsSection"));
+const NewProductsSection = nextDynamic(() => import("./components/NewProductsSection"));
+const BrandLogoScrollbar = nextDynamic(() => import("../components/BrandLogoScrollbar"));
+const TrustBadgeBar = nextDynamic(() => import("./components/TrustBadgeBar"));
+const AboutHighway420 = nextDynamic(() => import("./components/AboutHighway420"));
+const SpotlightReviews = nextDynamic(() => import("./components/SpotlightReviews"));
+const DopeDealsSection = nextDynamic(() => import("./components/DopeDealsSection"));
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
+function SectionFallback() {
+  return <div className="h-64 animate-pulse bg-gray-100 rounded-lg mx-4 my-8" />;
+}
 
+export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Global Masthead */}
@@ -22,16 +34,12 @@ export default function HomePage() {
 
       {/* Main Content */}
       <div>
-
-        {/* Collections Grid */}
+        {/* Collections Grid — above the fold, loaded eagerly */}
         <main className="w-full px-0 py-0 -mt-8">
           {/* Enhanced Metallic Section Divider */}
           <div className="w-full -mt-0 mb-8">
-            {/* Top metallic line */}
             <div className="h-4 bg-gradient-to-r from-transparent via-white to-transparent mb-1 shadow-lg"></div>
             <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-1"></div>
-
-            {/* Bottom metallic lines */}
             <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-1"></div>
             <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg"></div>
           </div>
@@ -48,48 +56,35 @@ export default function HomePage() {
 
           <CollectionsGrid />
 
-          {/* Featured Products Section - Moved below Collections Grid */}
-          <FeaturedProductsSection />
+          {/* Below-the-fold sections — lazy loaded with Suspense */}
+          <Suspense fallback={<SectionFallback />}>
+            <FeaturedProductsSection />
+          </Suspense>
 
-          {/* New Products Section */}
-          <NewProductsSection />
+          <Suspense fallback={<SectionFallback />}>
+            <NewProductsSection />
+          </Suspense>
 
+          <Suspense fallback={<SectionFallback />}>
+            <BrandLogoScrollbar />
+          </Suspense>
 
-          {/* Brand Logo Scrollbar */}
-          <BrandLogoScrollbar />
+          <Suspense fallback={<SectionFallback />}>
+            <TrustBadgeBar />
+          </Suspense>
 
-          {/* Trust Badge Bar - Between Brands and About Section */}
-          <TrustBadgeBar />
+          <Suspense fallback={<SectionFallback />}>
+            <AboutHighway420 />
+          </Suspense>
 
-          {/* About Highway 420 - Trust & Compliance Section */}
-          <AboutHighway420 />
-
-          {/* Customer Reviews Section */}
-          <SpotlightReviews />
+          <Suspense fallback={<SectionFallback />}>
+            <SpotlightReviews />
+          </Suspense>
         </main>
 
-        {/* Dope Deals Section - Moved to bottom */}
-        <DopeDealsSection />
-
-        {/* Blog Articles Section - Just above footer 
-        <section className="mt-24 mb-16">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-6xl font-display-twilight font-bold mb-4 tracking-[0.15em]" style={{
-                color: '#000000'
-              }}>
-                HIGHER LEARNING
-              </h2>
-              {/* IMPORTANT: This text MUST use INTER font - do not change back to other fonts * /}
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto blog-subtitle-inter">
-                Stay informed with the latest news, guides, and insights from the Highway 420 community
-              </p>
-            </div>
-
-            <BlogArticlesGrid />
-          </div>
-        </section>
-        */}
+        <Suspense fallback={<SectionFallback />}>
+          <DopeDealsSection />
+        </Suspense>
       </div>
     </div>
   );

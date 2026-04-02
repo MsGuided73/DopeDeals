@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer from './AutoScrollContainer';
 import { useCompliance } from '../contexts/ComplianceContext';
@@ -140,10 +141,12 @@ export default function NewProductsSection() {
         <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
           <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
             {transformedProduct.image_url ? (
-              <img
+              <Image
                 src={transformedProduct.image_url}
                 alt={transformedProduct.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800">

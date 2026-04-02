@@ -50,9 +50,46 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  
+
+  // Build JSON-LD structured data for Google rich snippets
+  let jsonLd: Record<string, unknown> | null = null;
+  try {
+    const storage = await getStorage();
+    const product = await storage.getProduct(id) as any;
+    if (product) {
+      const name = product.display_name || product.name || 'Product';
+      const description = product.short_description || product.description || '';
+      const price = Number(product.our_price || product.sale_price || 0);
+      const inStock = (product.stock_quantity || 0) > 0;
+
+      jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name,
+        description: typeof description === 'string' ? description.slice(0, 500) : '',
+        image: product.image_url || undefined,
+        sku: product.sku || product.id,
+        brand: product.brand_id ? { '@type': 'Brand', name: product.brand_id } : undefined,
+        offers: {
+          '@type': 'Offer',
+          url: `https://highway420.com/product/${id}`,
+          priceCurrency: 'USD',
+          price: price.toFixed(2),
+          availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          seller: { '@type': 'Organization', name: 'Highway 420' },
+        },
+      };
+    }
+  } catch {}
+
   return (
     <div className="bg-white">
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       {/* Enhanced PDP with trust bar, COA, ingredients, shipping */}
       <EnhancedPDP productId={id} />
 

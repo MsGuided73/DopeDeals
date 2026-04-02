@@ -122,7 +122,32 @@ async function handleTransactionApproved(body: any): Promise<NextResponse> {
       notes: `KajaPay payment approved — transactionId: ${kajaPayTransactionId}`,
     });
 
-    console.log(`[KajaPay Webhook] ✅ Payment approved — orderId: ${orderId}, transactionId: ${kajaPayTransactionId}`);
+    // 4. Send order confirmation email to customer
+    try {
+      const { sendOrderConfirmationEmail } = await import('../../../../lib/email-orders');
+      // Fetch order items for email
+      const { data: orderItems } = await supabase
+        .from('order_items')
+        .select('product_name, quantity, unit_price')
+        .eq('order_id', orderId);
+
+      await sendOrderConfirmationEmail({
+        orderId,
+        orderNumber: order.order_number || orderId,
+        customerEmail: order.customer_email,
+        customerFirstName: order.customer_first_name || 'Customer',
+        totalAmount: Number(order.total_amount),
+        items: (orderItems || []).map((i: any) => ({
+          name: i.product_name || 'Item',
+          quantity: i.quantity,
+          price: Number(i.unit_price || 0),
+        })),
+      });
+    } catch (emailError) {
+      // Email failure should never block the webhook response
+      console.error('[KajaPay Webhook] Email send failed (non-blocking):', emailError);
+    }
+
     await markProcessed(kajaPayTransactionId, true);
 
     return NextResponse.json({ success: true, orderId, transactionId: kajaPayTransactionId });

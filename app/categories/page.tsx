@@ -3,7 +3,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Categories | Dope Deals',
+  title: 'Shop by Category | Highway 420',
+  description: 'Browse our full collection — bongs, pipes, dab rigs, vapes, edibles, THCA flower, pre-rolls & more. Premium products at the lowest prices.',
+  openGraph: {
+    title: 'Shop by Category | Highway 420',
+    description: 'Browse our full collection — bongs, pipes, dab rigs, vapes, edibles, THCA flower, pre-rolls & more.',
+  },
 };
 
 // Ensure request-time rendering (prevents prerender from running request-scoped code)
