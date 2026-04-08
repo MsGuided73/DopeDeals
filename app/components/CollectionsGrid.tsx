@@ -40,16 +40,16 @@ export default function CollectionsGrid() {
       isPromo: false
     },
     { 
-      name: "HOT\nPRODUCTS", 
-      route: "/hot-products",
+      name: "PIPES", 
+      route: "/pipes",
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/hot_products_bg.png",
       color: "#f43f5e", // Rose
       bgGradient: "from-rose-600 via-rose-900 to-black", 
       isPromo: true
     },
     { 
-      name: "FRESH\nDROPS", 
-      route: "/fresh-drops",
+      name: "DAB\nRIGS", 
+      route: "/dabsntools",
       image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Collections%20Grid/fresh_drops_2bg.png",
       color: "#14b8a6", // Teal
       bgGradient: "from-teal-600 via-teal-900 to-black",

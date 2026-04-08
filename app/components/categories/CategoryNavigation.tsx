@@ -32,7 +32,7 @@ const CATEGORIES = [
   {
     id: 'dab-rigs',
     name: "DAB RIGS",
-    href: '/dab-rigs',
+    href: '/dabsntools',
     description: 'Concentrate vaporizers',
     gradient: 'from-purple-500 to-pink-600',
   },

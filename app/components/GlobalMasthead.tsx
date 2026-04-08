@@ -93,28 +93,11 @@ export default function GlobalMasthead() {
         aria-label="Promotional announcements"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-green-900/20 via-transparent to-green-900/20 animate-pulse"></div>
-        <div className="relative z-10 flex whitespace-nowrap animate-marquee hover:pause-marquee">
+        <div className="relative z-10 flex justify-center whitespace-nowrap">
           <span className="inline-block px-8 font-bold text-sm tracking-wide">
             {PROMO_TEXT}
           </span>
-          <span className="inline-block px-8 font-bold text-sm tracking-wide" aria-hidden="true">
-            {PROMO_TEXT}
-          </span>
-          <span className="inline-block px-8 font-bold text-sm tracking-wide" aria-hidden="true">
-            {PROMO_TEXT}
-          </span>
         </div>
-        <style jsx>{`
-          @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-33.333%); }
-          }
-          .animate-marquee { animation: marquee 30s linear infinite; }
-          .hover\\:pause-marquee.animate-marquee:hover { animation-play-state: paused; }
-          @media (prefers-reduced-motion: reduce) {
-            .animate-marquee { animation: none; }
-          }
-        `}</style>
       </div>
 
       <header className="z-50 relative">

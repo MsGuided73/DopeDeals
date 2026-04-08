@@ -96,6 +96,7 @@ Thumbs.db
 # Logs
 logs
 *.log
+git_log.txt
 
 # Server public files
 server/public
