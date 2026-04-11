@@ -1,5 +1,5 @@
 # PowerShell script to run the essential cart migration
-Write-Host "🚀 Running DopeDeals Cart Migration..." -ForegroundColor Green
+Write-Host "🚀 Running Highway420 Cart Migration..." -ForegroundColor Green
 
 # Load environment variables from .env.local
 if (Test-Path ".env.local") {

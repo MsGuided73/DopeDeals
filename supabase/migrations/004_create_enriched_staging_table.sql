@@ -1,6 +1,6 @@
 -- Migration: Create Enriched Inventory Staging Table
 -- Description: Creates staging table with the exact CSV column structure
--- Author: Generated for DopeDeals
+-- Author: Generated for Highway420
 -- Date: 2025-10-10
 
 -- Drop existing staging table if it exists

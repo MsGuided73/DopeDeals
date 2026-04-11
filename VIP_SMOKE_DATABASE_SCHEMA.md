@@ -1,7 +1,7 @@
 # VIP Smoke Database Schema Documentation
 
 ## Overview
-This document provides a comprehensive overview of all database tables in the VIP Smoke platform, including both the main DopeDeals site and the VIP Smoke (tobacco/nicotine) site. The platform uses a dual-site architecture with strict compliance separation.
+This document provides a comprehensive overview of all database tables in the VIP Smoke platform, including both the main Highway420 site and the VIP Smoke (tobacco/nicotine) site. The platform uses a dual-site architecture with strict compliance separation.
 
 ## Table of Contents
 1. [Core User & Authentication Tables](#core-user--authentication-tables)

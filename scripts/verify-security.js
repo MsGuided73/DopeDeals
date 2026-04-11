@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Security Verification Script for DopeDeals
+ * Security Verification Script for Highway420
  * This script checks various security configurations and provides recommendations
  */
 
@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-console.log('🔒 DopeDeals Security Verification\n');
+console.log('🔒 Highway420 Security Verification\n');
 
 // Check environment variables
 function checkEnvironmentVariables() {

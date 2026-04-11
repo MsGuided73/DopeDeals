@@ -131,7 +131,7 @@ async function extractProductsByBrands() {
         return !contents.includes('nicotine') && !name.includes('nicotine');
       });
       
-      console.log(`✅ Non-nicotine products (DopeDeals ready): ${nonNicotineProducts.length}`);
+      console.log(`✅ Non-nicotine products (Highway420 ready): ${nonNicotineProducts.length}`);
     }
     
     return { brandGroups, totalRecords: allRecords.length };

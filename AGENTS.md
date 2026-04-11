@@ -2,7 +2,7 @@
 
 _Last updated: 2025-01-30_
 
-Welcome! This document sets the collaboration contract for the DopeDeals monorepo. All contributors—human or automated—must follow these rules before touching any file within this repository unless a more specific `AGENTS.md` in a subdirectory overrides them.
+Welcome! This document sets the collaboration contract for the Highway420 monorepo. All contributors—human or automated—must follow these rules before touching any file within this repository unless a more specific `AGENTS.md` in a subdirectory overrides them.
 
 ## 1. Collaboration & Workflow Norms
 - **Branching:** Create feature branches named `feat/<slug>`, `fix/<slug>`, or `chore/<slug>` that describe the work. Do not commit directly to `main`.

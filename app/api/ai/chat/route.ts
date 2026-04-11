@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
         suggestions,
         greeting: user 
           ? `Hey ${user.user_metadata?.firstName || 'there'}! What can I help you find today? 🌟`
-          : "Welcome to DopeDeals! I'm your AI product expert. What can I help you discover? 🚀"
+          : "Welcome to Highway420! I'm your AI product expert. What can I help you discover? 🚀"
       });
     }
 

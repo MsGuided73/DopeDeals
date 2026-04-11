@@ -1,12 +1,12 @@
 # Email Draft: Request for Zoho Inventory API Access
 
-## Subject: Request for Zoho Inventory API Access - DopeDeals Integration Setup
+## Subject: Request for Zoho Inventory API Access - Highway420 Integration Setup
 
 ## Email Body:
 
 Dear [Organization Owner's Name],
 
-I hope this email finds you well. I'm reaching out regarding the Zoho Inventory integration setup for our DopeDeals platform. We've made significant progress on the technical implementation, but we need your assistance to complete the final configuration.
+I hope this email finds you well. I'm reaching out regarding the Zoho Inventory integration setup for our Highway420 platform. We've made significant progress on the technical implementation, but we need your assistance to complete the final configuration.
 
 ## What We've Accomplished So Far
 
@@ -79,7 +79,7 @@ Best regards,
 [Your Name]
 [Your Position]
 [Your Contact Information]
-DopeDeals Development Team
+Highway420 Development Team
 
 ## Technical Details (For Reference)
 

@@ -1,4 +1,4 @@
-# 🚀 DopeDeals Coolify Deployment Checklist
+# 🚀 Highway420 Coolify Deployment Checklist
 
 ## ✅ Pre-Deployment Preparation (COMPLETED)
 
@@ -14,7 +14,7 @@
 1. Go to your Coolify dashboard
 2. Click "New Project"
 3. Select "GitHub Repository"
-4. Repository: `https://github.com/MsGuided73/DopeDeals.git`
+4. Repository: `https://github.com/MsGuided73/Highway420.git`
 5. Branch: `main`
 6. **Build Pack: Docker** (NOT Static Site)
 

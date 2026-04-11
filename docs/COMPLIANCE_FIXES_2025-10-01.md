@@ -1,7 +1,7 @@
 # 🚨 CRITICAL COMPLIANCE FIXES - October 1, 2025
 
 ## Issue Identified
-**CRITICAL COMPLIANCE VIOLATION**: Nicotine products (e.g., "CRAVE E-LIQUID - MANGO ICE 6MG") were appearing on the main DopeDeals site through the AI Recommendation Engine and Featured Products API.
+**CRITICAL COMPLIANCE VIOLATION**: Nicotine products (e.g., "CRAVE E-LIQUID - MANGO ICE 6MG") were appearing on the main Highway420 site through the AI Recommendation Engine and Featured Products API.
 
 **Risk**: Federal and state fines for selling nicotine products without proper licensing and age verification on the main site.
 

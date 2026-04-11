@@ -1,6 +1,6 @@
 -- Migration: Execute CSV Import
 -- Description: Loads and processes the enriched_inventory.csv file
--- Author: Generated for DopeDeals
+-- Author: Generated for Highway420
 -- Date: 2025-10-10
 
 -- Load CSV data directly into staging table
@@ -15,7 +15,7 @@ TRUNCATE TABLE enriched_inventory_staging RESTART IDENTITY;
 COPY enriched_inventory_staging (
     name, sku, description, short_description, brand, categories,
     regular_price, sale_price, stock, low_stock_amount, images, tags, visibility_in_catalog
-) FROM 'C:\__DOPE CITY\DopeDeals\enriched_inventory.csv'
+) FROM 'C:\__DOPE CITY\Highway420\enriched_inventory.csv'
 WITH CSV HEADER DELIMITER ',' QUOTE '"' ENCODING 'UTF-8' NULL '';
 
 -- Update import status to pending for all loaded records

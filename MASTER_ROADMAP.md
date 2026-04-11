@@ -1,4 +1,4 @@
-# DopeDeals Ecommerce Platform - Master Implementation Roadmap
+# Highway420 Ecommerce Platform - Master Implementation Roadmap
 
 *Consolidated from all planning documents and comprehensive platform analysis*
 *Status: January 2025 - KajaPay credentials configured, ShipStation pending*

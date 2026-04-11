@@ -68,7 +68,7 @@ async function fetchCraveAPIView() {
     console.log(`📦 In stock: ${inStock}/${allRecords.length} (${(inStock/allRecords.length*100).toFixed(1)}%)`);
     console.log(`💰 With prices: ${withPrices}/${allRecords.length} (${(withPrices/allRecords.length*100).toFixed(1)}%)`);
     console.log(`🚫 Nicotine products: ${nicotineProducts.length}/${allRecords.length} (${(nicotineProducts.length/allRecords.length*100).toFixed(1)}%)`);
-    console.log(`✅ DopeDeals ready: ${allRecords.length - nicotineProducts.length}/${allRecords.length} (${((allRecords.length - nicotineProducts.length)/allRecords.length*100).toFixed(1)}%)`);
+    console.log(`✅ Highway420 ready: ${allRecords.length - nicotineProducts.length}/${allRecords.length} (${((allRecords.length - nicotineProducts.length)/allRecords.length*100).toFixed(1)}%)`);
     
     // Group by categories
     const categoryGroups = new Map<string, any[]>();
@@ -100,7 +100,7 @@ async function fetchCraveAPIView() {
       console.log(`   📊 ${products.length} products`);
       console.log(`   📷 ${withImagesInCat} with images (${(withImagesInCat/products.length*100).toFixed(1)}%)`);
       console.log(`   🚫 ${nicotineInCat} nicotine products (${(nicotineInCat/products.length*100).toFixed(1)}%)`);
-      console.log(`   ✅ ${products.length - nicotineInCat} DopeDeals ready (${((products.length - nicotineInCat)/products.length*100).toFixed(1)}%)`);
+      console.log(`   ✅ ${products.length - nicotineInCat} Highway420 ready (${((products.length - nicotineInCat)/products.length*100).toFixed(1)}%)`);
       
       // Show first few products in each category
       console.log(`   📋 Sample products:`);
@@ -174,7 +174,7 @@ fetchCraveAPIView()
       console.log(`\n🎉 SUCCESS: Fetched ${products.length} Crave products from API view!`);
       console.log(`\n🚀 READY FOR NEXT STEPS:`);
       console.log(`   1. Match products to existing Supabase inventory`);
-      console.log(`   2. Import new products to expand DopeDeals catalog`);
+      console.log(`   2. Import new products to expand Highway420 catalog`);
       console.log(`   3. Update product images and descriptions`);
       console.log(`   4. Apply proper categorization and filtering`);
     }

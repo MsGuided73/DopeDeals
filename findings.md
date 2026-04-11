@@ -10,7 +10,7 @@
 - **North Star**: Compliance-driven move, with expected performance gains from dedicated hardware.
 - **Integrations**: Existing stack (Supabase, KajaPay, Didit) remains. No new integrations.
 - **Source of Truth**: Supabase managed instance will remain the SSOT. The VPS will only host the application code and Coolify.
-- **Delivery Payload**: Migration of existing domains (`dopedeals.com`, etc.) to the new server.
+- **Delivery Payload**: Migration of existing domains (`highway420.com`, etc.) to the new server.
 - **Compliance**: No specific location-based logic changes required at this stage.
 
 ## Current State

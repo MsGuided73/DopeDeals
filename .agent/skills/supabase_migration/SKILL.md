@@ -1,6 +1,6 @@
 ---
 name: supabase_migration
-description: How to run SQL migrations against the Supabase project for DopeDeals / Highway 420. Covers the correct auth method, reliable execution order, and what to do when common failure modes occur.
+description: How to run SQL migrations against the Supabase project for Highway420 / Highway 420. Covers the correct auth method, reliable execution order, and what to do when common failure modes occur.
 ---
 
 # Supabase Migration Skill

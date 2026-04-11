@@ -1,4 +1,4 @@
-# n8n DopeDeals Migration Analysis Workflow
+# n8n Highway420 Migration Analysis Workflow
 
 This document provides step-by-step instructions for building an n8n workflow to analyze your Airtable and Supabase data structures and create an intelligent migration plan using OpenAI.
 
@@ -13,21 +13,21 @@ The workflow will:
 ## Prerequisites
 
 - n8n instance running
-- Access to your DopeDeals Supabase database
+- Access to your Highway420 Supabase database
 - Access to your Airtable SigDistro base
 - OpenAI API key
 
 ## Step 1: Create the Workflow
 
 1. Open n8n and create a new workflow
-2. Name it: `DopeDeals-Migration-Analysis`
+2. Name it: `Highway420-Migration-Analysis`
 
 ## Step 2: Set Up Credentials
 
 ### Supabase Credential
 - Go to Settings > Credentials > Add Credential
 - Choose "HTTP Request Auth"
-- Name: `Supabase-DopeDeals`
+- Name: `Supabase-Highway420`
 - Authentication: `Header Auth`
 - Header Name: `Authorization`
 - Header Value: `Bearer YOUR_SUPABASE_SERVICE_ROLE_KEY`

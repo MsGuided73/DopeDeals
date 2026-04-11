@@ -1,4 +1,4 @@
-// C:\__Highway 420\DopeDeals\app\categories\page.tsx
+// C:\__Highway 420\Highway420\app\categories\page.tsx
 import type { Metadata } from 'next';
 import Link from 'next/link';
 

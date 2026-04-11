@@ -2,7 +2,7 @@
 import { readFileSync } from 'fs';
 
 function verifyCodeChange() {
-  const content = readFileSync('c:/dev/DopeDeals-1/lib/storage.ts', 'utf8');
+  const content = readFileSync('c:/dev/Highway420-1/lib/storage.ts', 'utf8');
   
   const hasFilter = content.includes(".eq('is_active', true)");
   const getProductsSection = content.indexOf('getProducts(');

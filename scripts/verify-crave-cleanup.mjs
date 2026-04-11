@@ -34,7 +34,7 @@ cleanProducts.slice(0, 10).forEach((p, i) => {
 });
 
 console.log('\n\n🎯 RESULT:');
-console.log(`   Main DopeDeals site will show: ${cleanCount} Crave products`);
+console.log(`   Main Highway420 site will show: ${cleanCount} Crave products`);
 console.log(`   Tobacco site will show: ${nicotineCount} Crave products`);
 console.log(`   Compliance: ✅ MAINTAINED`);
 

@@ -3,7 +3,7 @@ param(
     [string]$EnvFile = ".env.local"
 )
 
-Write-Host "🚀 Running DopeDeals Database Migration..." -ForegroundColor Green
+Write-Host "🚀 Running Highway420 Database Migration..." -ForegroundColor Green
 
 # Load environment variables from .env.local
 if (Test-Path $EnvFile) {

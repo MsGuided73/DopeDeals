@@ -2,7 +2,7 @@
 
 ## 🎉 What We Built
 
-A comprehensive CPanel-like asset management system for DopeDeals that provides efficient storage, organization, and access to all website images.
+A comprehensive CPanel-like asset management system for Highway420 that provides efficient storage, organization, and access to all website images.
 
 ## 📦 Components Created
 

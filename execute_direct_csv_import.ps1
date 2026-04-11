@@ -7,7 +7,7 @@ Write-Host "🚀 Starting Direct CSV Import to main_site_products table..." -For
 $currentDir = Get-Location
 if (-not (Test-Path "scripts/csv-import-direct-to-products.js")) {
     Write-Host "❌ scripts/csv-import-direct-to-products.js not found in current directory" -ForegroundColor Red
-    Write-Host "   Make sure you're running this from the DopeDeals directory" -ForegroundColor Yellow
+    Write-Host "   Make sure you're running this from the Highway420 directory" -ForegroundColor Yellow
     exit 1
 }
 

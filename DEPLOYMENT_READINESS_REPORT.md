@@ -1,4 +1,4 @@
-# 🚀 DopeDeals Deployment Readiness Report
+# 🚀 Highway420 Deployment Readiness Report
 *Comprehensive Pre-Deployment Assessment - January 15, 2025*
 
 ## 📊 EXECUTIVE SUMMARY
@@ -65,7 +65,7 @@
 
 ### **Coolify Setup** 🟡
 - [ ] **Create Coolify Project** (30 min)
-  - GitHub integration: `https://github.com/MsGuided73/DopeDeals.git`
+  - GitHub integration: `https://github.com/MsGuided73/Highway420.git`
   - Build pack: Docker (NOT Static Site)
   - Port: 3000
   - Health check: `/`
@@ -182,4 +182,4 @@ AIRTABLE_BRANDS_VIEW=
 4. **Deploy to production** - Get the platform live
 5. **Continue Phase 2** - Data consolidation and enhancements
 
-**Bottom Line**: Your DopeDeals platform is production-ready with a complete ecommerce flow. The only blocker is a simple route conflict that can be fixed in 15 minutes. After that, you're ready to deploy and go live! 🚀
+**Bottom Line**: Your Highway420 platform is production-ready with a complete ecommerce flow. The only blocker is a simple route conflict that can be fixed in 15 minutes. After that, you're ready to deploy and go live! 🚀

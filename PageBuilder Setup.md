@@ -12,7 +12,7 @@ This guide will help you set up the complete Visual Page Builder system for your
 1. **Open PowerShell as Administrator**
 2. **Navigate to your project directory**:
    ```powershell
-   cd "C:\__DOPE CITY\DopeDeals"
+   cd "C:\__DOPE CITY\Highway420"
    ```
 
 3. **Run the debug command**:

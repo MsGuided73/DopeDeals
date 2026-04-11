@@ -1,4 +1,4 @@
-# 🚀 DopeDeals Platform - Final Project Consolidation
+# 🚀 Highway420 Platform - Final Project Consolidation
 *Comprehensive Review & Consolidation of All Remaining Tasks*
 *Generated: November 15, 2025*
 
@@ -81,10 +81,10 @@
 
 #### **D.1 Coolify Deployment Setup**
 - [ ] **Create Coolify Project**
-  - Set up GitHub integration with DopeDeals repository
+  - Set up GitHub integration with Highway420 repository
   - Configure Next.js build settings
   - Set custom domain and SSL certificate
-  - **Repository**: `https://github.com/MsGuided73/DopeDeals.git`
+  - **Repository**: `https://github.com/MsGuided73/Highway420.git`
   - **Build Pack**: Docker (NOT Static Site)
 
 - [ ] **Environment Variables Configuration**
@@ -128,7 +128,7 @@
 
 - [ ] **Activate Categories Sync**
   - Run categories sync from Zoho Inventory
-  - Map Zoho categories to DopeDeals categories
+  - Map Zoho categories to Highway420 categories
   - Update products with proper category assignments
   - **Files**: `scripts/direct-categories-sync.ts`
 
@@ -355,7 +355,7 @@
 ## 🎯 **SUCCESS METRICS & ACCEPTANCE CRITERIA**
 
 ### **Deployment Phase Success:**
-- ✅ **Platform Deployed** - DopeDeals live on production server
+- ✅ **Platform Deployed** - Highway420 live on production server
 - ✅ **Core Functionality** - Homepage, products, auth, cart working
 - ✅ **Payment Processing** - KajaPay transactions processing successfully
 - ✅ **Order Management** - Complete order lifecycle functional
@@ -484,4 +484,4 @@
 
 ---
 
-*This consolidated document represents the definitive roadmap for completing the DopeDeals platform. All previous task lists have been reviewed, completed items marked, and remaining work organized by priority and dependency. The platform is ready for deployment with core functionality complete - focus now shifts to data consolidation, admin operations, and production readiness.*
+*This consolidated document represents the definitive roadmap for completing the Highway420 platform. All previous task lists have been reviewed, completed items marked, and remaining work organized by priority and dependency. The platform is ready for deployment with core functionality complete - focus now shifts to data consolidation, admin operations, and production readiness.*

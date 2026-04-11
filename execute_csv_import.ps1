@@ -7,7 +7,7 @@ Write-Host "Starting Dope City CSV Import Process..." -ForegroundColor Green
 $currentDir = Get-Location
 if (-not (Test-Path "csv_to_database_mapping.sql")) {
 Write-Host "ERROR: csv_to_database_mapping.sql not found in current directory" -ForegroundColor Red
-    Write-Host "   Make sure you're running this from the DopeDeals directory" -ForegroundColor Yellow
+    Write-Host "   Make sure you're running this from the Highway420 directory" -ForegroundColor Yellow
     exit 1
 }
 

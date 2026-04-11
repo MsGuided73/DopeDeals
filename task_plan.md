@@ -1,7 +1,7 @@
 # Task Plan - Server Migration to Digital Ocean
 
 ## Goal
-Successfully migrate the DopeDeals application (main site, tobacco site, and admin dashboard) to a US-based Digital Ocean VPS using Coolify for deployment management.
+Successfully migrate the Highway420 application (main site, tobacco site, and admin dashboard) to a US-based Digital Ocean VPS using Coolify for deployment management.
 
 ## Phases
 

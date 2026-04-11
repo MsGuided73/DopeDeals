@@ -1,4 +1,4 @@
-# 📋 DopeDeals Platform - Task Management System
+# 📋 Highway420 Platform - Task Management System
 *Updated: January 15, 2025 - Post-Phase 1 Completion & Pre-Deployment*
 
 ## **🎯 CURRENT STATUS OVERVIEW**
@@ -35,7 +35,7 @@
 #### **D.1 Coolify Deployment Setup** 🔄 IN PROGRESS
 - **UUID**: cNtBT4RHS9Mxc5Fp6BWDN1
 - **Description**: Create Coolify project with GitHub integration, configure Next.js build settings, set custom domain and SSL certificate
-- **Repository**: https://github.com/MsGuided73/DopeDeals.git
+- **Repository**: https://github.com/MsGuided73/Highway420.git
 - **Estimated**: 1-2 hours
 - **Status**: IN PROGRESS
 
@@ -100,8 +100,8 @@
 ### **Deployment Blockers**
 - ⚠️ **Coolify Setup** - Need to configure deployment environment
 - ⚠️ **GitHub Push Protection** - Secrets in previous commits blocking push
-  - Airtable Token: https://github.com/MsGuided73/DopeDeals/security/secret-scanning/unblock-secret/33I2NH4SNJE2G4a2b0J5PtsfEOQ
-  - OpenAI Key: https://github.com/MsGuided73/DopeDeals/security/secret-scanning/unblock-secret/33I2NK2vYiWsziXMj5NiDgoJY3x
+  - Airtable Token: https://github.com/MsGuided73/Highway420/security/secret-scanning/unblock-secret/33I2NH4SNJE2G4a2b0J5PtsfEOQ
+  - OpenAI Key: https://github.com/MsGuided73/Highway420/security/secret-scanning/unblock-secret/33I2NK2vYiWsziXMj5NiDgoJY3x
 
 ### **Phase 2 Blockers**
 - ⚠️ **Server Environment** - Need production server for sync scripts

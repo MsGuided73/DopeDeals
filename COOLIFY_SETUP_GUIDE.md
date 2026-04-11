@@ -1,5 +1,5 @@
 # 🚀 Coolify Deployment Setup Guide
-*DopeDeals Production Deployment*
+*Highway420 Production Deployment*
 
 ## ✅ Prerequisites Verified
 - [x] Build issues fixed (duplicate routes removed)
@@ -15,7 +15,7 @@
 1. **Go to your Coolify dashboard**
 2. **Click "New Project"** 
 3. **Select "GitHub Repository"**
-4. **Repository**: `https://github.com/MsGuided73/DopeDeals.git`
+4. **Repository**: `https://github.com/MsGuided73/Highway420.git`
 5. **Branch**: `main` (or `deployment-ready` if using clean branch)
 6. **Build Pack**: **Docker** (NOT Static Site)
 
@@ -116,7 +116,7 @@ AIRTABLE_BRANDS_VIEW=your_airtable_brands_view
 
 ## 🔥 Ready to Deploy!
 
-Your DopeDeals platform is production-ready with:
+Your Highway420 platform is production-ready with:
 - ✅ 4,540 products ready to sell
 - ✅ Complete ecommerce functionality
 - ✅ Payment processing integrated

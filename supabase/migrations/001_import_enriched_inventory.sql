@@ -1,6 +1,6 @@
 -- Migration: Import Enriched Inventory CSV
 -- Description: Safely imports enriched inventory data into main_site_products table
--- Author: Generated for DopeDeals
+-- Author: Generated for Highway420
 -- Date: 2025-10-10
 
 -- Enable required extensions if not already enabled

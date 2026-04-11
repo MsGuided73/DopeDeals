@@ -2,7 +2,7 @@
 
 ## 🔒 Security Status: ✅ FULLY SECURED
 
-The DopeDeals Asset Manager is now protected with **5 layers of security** ensuring only authorized administrators can access and manage website assets.
+The Highway420 Asset Manager is now protected with **5 layers of security** ensuring only authorized administrators can access and manage website assets.
 
 ---
 

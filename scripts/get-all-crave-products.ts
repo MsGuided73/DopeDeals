@@ -89,7 +89,7 @@ async function getAllCraveProducts() {
     console.log(`📋 Published: ${published}/${craveProducts.length}`);
     console.log(`📦 In stock: ${inStock}/${craveProducts.length}`);
     console.log(`🚫 Nicotine products: ${nicotineProducts.length}/${craveProducts.length}`);
-    console.log(`✅ DopeDeals ready: ${craveProducts.length - nicotineProducts.length}/${craveProducts.length}`);
+    console.log(`✅ Highway420 ready: ${craveProducts.length - nicotineProducts.length}/${craveProducts.length}`);
     
     // Show categories
     const categories = new Map();

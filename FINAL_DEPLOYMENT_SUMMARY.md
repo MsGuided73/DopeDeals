@@ -1,9 +1,9 @@
-# 🚀 DopeDeals - READY FOR DEPLOYMENT
+# 🚀 Highway420 - READY FOR DEPLOYMENT
 *Final Assessment - January 15, 2025*
 
 ## 🎯 DEPLOYMENT STATUS: ✅ READY TO DEPLOY
 
-Your DopeDeals platform is **production-ready** and can be deployed to your self-hosted VPS using Coolify immediately.
+Your Highway420 platform is **production-ready** and can be deployed to your self-hosted VPS using Coolify immediately.
 
 ## ✅ CRITICAL ISSUES RESOLVED
 
@@ -33,7 +33,7 @@ git push origin main
 1. **Go to your Coolify dashboard**
 2. **Click "New Project"**
 3. **Select "GitHub Repository"**
-4. **Repository**: `https://github.com/MsGuided73/DopeDeals.git`
+4. **Repository**: `https://github.com/MsGuided73/Highway420.git`
 5. **Branch**: `main`
 6. **Build Pack**: **Docker** (NOT Static Site)
 
@@ -156,7 +156,7 @@ AIRTABLE_BRANDS_VIEW=your_brands_view
 
 ## 🔥 BOTTOM LINE
 
-**Your DopeDeals platform is production-ready!** 
+**Your Highway420 platform is production-ready!** 
 
 The core ecommerce functionality is complete and tested:
 - ✅ **4,540 products** ready to sell

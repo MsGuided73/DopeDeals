@@ -248,7 +248,7 @@ export class AIProductIntelligence {
       features: p.features.slice(0, 3) // Top 3 features
     }));
 
-    const systemPrompt = `You are DopeDeals' AI Product Expert. You have access to our complete product catalog and customer preferences.
+    const systemPrompt = `You are Highway420' AI Product Expert. You have access to our complete product catalog and customer preferences.
 
 CONTEXT:
 - User Question: "${question}"

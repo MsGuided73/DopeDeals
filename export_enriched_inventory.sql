@@ -93,7 +93,7 @@ COPY (
     AND "Brand" IS NOT NULL
     AND "Brand" != ''
     AND ("Description" IS NOT NULL OR "Short Description" IS NOT NULL)
-) TO 'C:\__Highway 420\DopeDeals\enriched_inventory_export.csv'
+) TO 'C:\__Highway 420\Highway420\enriched_inventory_export.csv'
 WITH CSV HEADER DELIMITER ',' QUOTE '"' ENCODING 'UTF-8';
 
 -- 3. Verify the export worked
@@ -120,7 +120,7 @@ SELECT
 FROM information_schema.columns
 WHERE table_name = 'products'
 ORDER BY ordinal_position
-INTO OUTFILE 'C:\__Highway 420\DopeDeals\products_table_structure.csv'
+INTO OUTFILE 'C:\__Highway 420\Highway420\products_table_structure.csv'
 WITH CSV HEADER;
 
 -- 6. Final verification

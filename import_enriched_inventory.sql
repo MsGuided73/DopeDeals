@@ -32,7 +32,7 @@ COPY main_site_products (
   -- Timestamps
   created_at,
   updated_at
-) FROM 'C:\__DOPE CITY\DopeDeals\enriched_inventory_export.csv'
+) FROM 'C:\__DOPE CITY\Highway420\enriched_inventory_export.csv'
 WITH CSV HEADER DELIMITER ',' QUOTE '"' ENCODING 'UTF-8'
 -- Handle potential data quality issues gracefully
 NULL 'NULL'

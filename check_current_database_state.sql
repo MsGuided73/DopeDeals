@@ -1,4 +1,4 @@
--- Check current database state for DopeDeals
+-- Check current database state for Highway420
 -- This will help us understand what's built and what needs to be done
 
 -- 1. Check brands_new table (current brands)

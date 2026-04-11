@@ -1,4 +1,4 @@
-# DopeDeals Asset Manager
+# Highway420 Asset Manager
 
 A comprehensive CPanel-like asset management system for efficiently storing, organizing, and accessing website images.
 

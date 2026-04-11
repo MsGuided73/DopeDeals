@@ -1,6 +1,6 @@
 -- Migration: CSV Import Workaround
 -- Description: Alternative import method that doesn't require file system access
--- Author: Generated for DopeDeals
+-- Author: Generated for Highway420
 -- Date: 2025-10-10
 
 -- Create a function that can be called to execute the import process

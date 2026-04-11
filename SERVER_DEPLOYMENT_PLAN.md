@@ -1,12 +1,12 @@
-# 🚀 DopeDeals Server Deployment Architecture
+# 🚀 Highway420 Server Deployment Architecture
 
 ## **🏗️ Multi-Site Architecture**
 
 ### **Site Structure:**
 ```
 /var/www/
-├── dopedeals-main/          # CBD/Hemp products (compliant)
-├── dopedeals-tobacco/       # Nicotine/Tobacco products (separate)
+├── highway420-main/          # CBD/Hemp products (compliant)
+├── highway420-tobacco/       # Nicotine/Tobacco products (separate)
 ├── shared-services/         # AI Manager, Compliance Engine
 └── admin-dashboard/         # Unified admin for both sites
 ```

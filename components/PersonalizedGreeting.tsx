@@ -64,7 +64,7 @@ export default function PersonalizedGreeting({
     return (
       <div className={className}>
         <p className="text-lg font-medium text-gray-600">
-          Welcome to DopeDeals! 👋
+          Welcome to Highway420! 👋
         </p>
         <p className="text-sm text-gray-500">
           Sign in for personalized recommendations
@@ -148,7 +148,7 @@ function WelcomeBackMessage({ userId, firstName }: { userId: string, firstName: 
   if (!lastVisit) {
     return (
       <p className="text-sm text-green-600 font-medium">
-        🎉 Welcome to DopeDeals, {firstName}! Thanks for joining us.
+        🎉 Welcome to Highway420, {firstName}! Thanks for joining us.
       </p>
     );
   }

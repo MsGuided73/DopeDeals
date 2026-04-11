@@ -2,7 +2,7 @@
 
 ## 🔒 Security Overview
 
-The DopeDeals Asset Manager implements multiple layers of security to ensure only authorized administrators can access and manage website assets.
+The Highway420 Asset Manager implements multiple layers of security to ensure only authorized administrators can access and manage website assets.
 
 ---
 

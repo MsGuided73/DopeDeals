@@ -1,4 +1,4 @@
-# 🚀 Highway 420 - DopeDeals Platform TODO
+# 🚀 Highway 420 - Highway420 Platform TODO
 *Updated: January 15, 2025 - Post-Phase 1 Completion & Pre-Deployment*
 
 ## **🎯 PROJECT STATUS SUMMARY**
@@ -65,10 +65,10 @@
 
 ### **D.1 Coolify Deployment Setup**
 - [ ] **Create Coolify Project**
-  - Set up GitHub integration with DopeDeals repository
+  - Set up GitHub integration with Highway420 repository
   - Configure Next.js build settings
   - Set custom domain and SSL certificate
-  - **Repository**: `https://github.com/MsGuided73/DopeDeals.git`
+  - **Repository**: `https://github.com/MsGuided73/Highway420.git`
   - **Estimated**: 1-2 hours
 
 - [ ] **Environment Variables Configuration**
@@ -115,7 +115,7 @@
 
 - [ ] **Activate Categories Sync**
   - Run categories sync from Zoho Inventory
-  - Map Zoho categories to DopeDeals categories
+  - Map Zoho categories to Highway420 categories
   - Update products with proper category assignments
   - **Files**: `scripts/direct-categories-sync.ts`
   - **Estimated**: 4 hours
@@ -246,7 +246,7 @@
 ## **🎯 SUCCESS METRICS & ACCEPTANCE CRITERIA**
 
 ### **Deployment Phase Success:**
-- ✅ **Platform Deployed** - DopeDeals live on production server
+- ✅ **Platform Deployed** - Highway420 live on production server
 - ✅ **Core Functionality** - Homepage, products, auth, cart working
 - ✅ **Payment Processing** - KajaPay transactions processing successfully
 - ✅ **Order Management** - Complete order lifecycle functional

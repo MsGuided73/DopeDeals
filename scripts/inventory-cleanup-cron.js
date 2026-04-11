@@ -75,7 +75,7 @@ async function cleanupExpiredReservations() {
       headers: {
         'Authorization': `Bearer ${API_KEY}`,
         'Content-Type': 'application/json',
-        'User-Agent': 'DopeDeals-InventoryCleanup/1.0'
+        'User-Agent': 'Highway420-InventoryCleanup/1.0'
       }
     });
     
@@ -110,7 +110,7 @@ async function getInventoryHealth() {
     const response = await makeRequest(CLEANUP_ENDPOINT, {
       method: 'GET',
       headers: {
-        'User-Agent': 'DopeDeals-InventoryCleanup/1.0'
+        'User-Agent': 'Highway420-InventoryCleanup/1.0'
       }
     });
     
