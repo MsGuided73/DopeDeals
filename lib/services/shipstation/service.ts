@@ -19,7 +19,6 @@ import {
 
 export interface ShipstationServiceConfig {
   apiKey: string;
-  apiSecret: string;
   webhookUrl?: string;
   defaultWarehouseId?: string;
   autoSyncInterval?: number;
@@ -75,11 +74,25 @@ export class ShipstationService {
     this.storage = storage;
     
     const clientConfig: ShipstationConfig = {
-      apiKey: config.apiKey,
-      apiSecret: config.apiSecret
+      apiKey: config.apiKey
     };
     
     this.client = new ShipstationClient(clientConfig);
+  }
+
+  // Rate Shopping — proxy to client V2 multi-carrier rates
+  async getShippingRates(params: {
+    shipTo: { postalCode: string; countryCode: string; cityLocality?: string; stateProvince?: string };
+    weight: { value: number; unit: 'ounce' | 'pound' | 'gram' | 'kilogram' };
+    dimensions?: { length: number; width: number; height: number; unit: 'inch' | 'centimeter' };
+  }): Promise<{ success: boolean; rates?: any[]; error?: string }> {
+    const result = await this.client.getShippingRates(params);
+    if (!result.success) {
+      return { success: false, error: result.error };
+    }
+    // V2 response shape: { rate_response: { rates: [...] } }
+    const rates = (result.data as any)?.rate_response?.rates ?? result.data ?? [];
+    return { success: true, rates: Array.isArray(rates) ? rates : [] };
   }
 
   // Configuration and Health
@@ -385,64 +398,8 @@ export class ShipstationService {
     }
   }
 
-  async getShippingRates(rateRequest: {
-    carrierCode?: string;
-    packageCode: string;
-    fromPostalCode: string;
-    toState?: string;
-    toCountry: string;
-    toPostalCode: string;
-    weight: { value: number; units: string };
-    dimensions?: {
-      units: string;
-      length: number;
-      width: number;
-      height: number;
-    };
-    confirmation?: string;
-    residential?: boolean;
-  }): Promise<{
-    success: boolean;
-    rates?: ShipstationRateQuote[];
-    error?: string;
-  }> {
-    try {
-      console.log('[ShipStation] Getting shipping rates');
-      
-      const rateRequestWithCarrier = {
-        ...rateRequest,
-        carrierCode: rateRequest.carrierCode || 'fedex' // Default carrier if not provided
-      };
-      const response = await this.client.getRates(rateRequestWithCarrier);
-      
-      if (!response.success || !response.data) {
-        return {
-          success: false,
-          error: response.error || 'Failed to get shipping rates'
-        };
-      }
+  // getShippingRates (V1 — removed; replaced by V2 implementation above)
 
-      const rates: ShipstationRateQuote[] = response.data.map((rate: any) => ({
-        carrierCode: rateRequest.carrierCode || rate.carrierCode,
-        serviceName: rate.serviceName,
-        serviceCode: rate.serviceCode,
-        shipmentCost: rate.shipmentCost,
-        otherCost: rate.otherCost,
-        totalCost: rate.shipmentCost + rate.otherCost
-      }));
-
-      return {
-        success: true,
-        rates
-      };
-    } catch (error) {
-      console.error('[ShipStation] Failed to get shipping rates:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Failed to get shipping rates'
-      };
-    }
-  }
 
   async voidShippingLabel(shipmentId: string): Promise<{
     success: boolean;

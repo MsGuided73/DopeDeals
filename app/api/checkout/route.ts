@@ -261,30 +261,26 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // SHIPSTATION INTEGRATION PLAN:
-  // We are currently using a mock workflow for shipping (mock tracking numbers, 
-  // shipping times, and costs). DO NOT change any of these mock elements 
-  // until we receive official ShipStation credentials (expected after bank 
-  // approval). The service below is fire-and-forget and gracefully skips 
-  // if credentials are not present in .env.
   // Fire-and-forget: create ShipStation order (graceful fail)
   try {
     const { ShipstationService } = await import('../../../lib/services/shipstation/service');
     const { getStorage: getServerStorage } = await import('../../../lib/storage');
     const serverStorage = await getServerStorage();
     const apiKey = process.env.SHIPSTATION_API_KEY;
-    const apiSecret = process.env.SHIPSTATION_API_SECRET;
-    if (apiKey && apiSecret) {
-      const svc = new ShipstationService({ apiKey, apiSecret, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL }, serverStorage as any);
-      const map = {
-        orderNumber: order.id,
+    if (apiKey) {
+      const svc = new ShipstationService(
+        { apiKey, webhookUrl: process.env.SHIPSTATION_WEBHOOK_URL },
+        serverStorage as any
+      );
+      const ssPayload = {
+        orderNumber: order.orderNumber || order.id,
         orderDate: new Date().toISOString(),
         orderStatus: 'on_hold', // Hold until payment confirmed
         billTo: (billingAddress || shippingAddress || {}) as any,
         shipTo: (shippingAddress || billingAddress || {}) as any,
         items: createdItems.map((ci: any) => ({
-          name: ci.name || 'Item',
-          sku: ci.sku,
+          name: ci.productName || ci.name || 'Item',
+          sku: ci.productSku || ci.sku,
           quantity: ci.quantity,
           unitPrice: Number(ci.priceAtPurchase || ci.unitPrice || 0),
         })),
@@ -292,8 +288,7 @@ export async function POST(req: NextRequest) {
         amountPaid: 0,
       } as any;
       try {
-        const ssResult = await svc.createShipstationOrder(map);
-        // Store ShipStation reference on the order for admin dashboard tracking
+        const ssResult = await svc.createShipstationOrder(ssPayload);
         if (ssResult?.success && ssResult.shipstationOrderId) {
           await serverStorage.updateOrder(order.id, {
             shipstation_order_id: ssResult.shipstationOrderId,
@@ -301,7 +296,6 @@ export async function POST(req: NextRequest) {
           });
         }
       } catch (ssError) {
-        // ShipStation is non-blocking — log but don't fail checkout
         logger.error('[Checkout] ShipStation order creation failed:', ssError);
       }
     }

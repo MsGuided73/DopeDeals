@@ -9,9 +9,7 @@ import {
 
 export interface ShipstationConfig {
   apiKey: string;
-  apiSecret: string;
   baseUrl?: string;
-  version?: 'v1' | 'v2';
   timeout?: number;
 }
 
@@ -107,19 +105,14 @@ export class ShipstationApiError extends Error {
 
 export class ShipstationClient {
   private config: Required<ShipstationConfig>;
-  private authHeader: string;
 
   constructor(config: ShipstationConfig) {
     this.config = {
-      baseUrl: 'https://ssapi.shipstation.com',
-      version: 'v1',
+      // V2 base URL — all endpoints are relative paths under /v2
+      baseUrl: 'https://api.shipstation.com/v2',
       timeout: 30000,
       ...config
     };
-
-    // Create Basic Auth header for V1 API
-    const credentials = Buffer.from(`${this.config.apiKey}:${this.config.apiSecret}`).toString('base64');
-    this.authHeader = `Basic ${credentials}`;
   }
 
   private async makeRequest<T = any>(
@@ -151,9 +144,10 @@ export class ShipstationClient {
       }
 
       const headers: Record<string, string> = {
-        'Authorization': this.authHeader,
+        // V2 authentication: single API-Key header
+        'API-Key': this.config.apiKey,
         'Content-Type': 'application/json',
-        'User-Agent': 'VIP-Smoke-ShipStation-Integration/1.0',
+        'User-Agent': 'Highway420-ShipStation-V2/1.0',
         ...customHeaders
       };
 
@@ -217,10 +211,10 @@ export class ShipstationClient {
     }
   }
 
-  // Authentication & Health Check
+  // Authentication & Health Check — V2 uses /v2/carriers
   async validateCredentials(): Promise<ShipstationApiResponse<boolean>> {
     try {
-      const response = await this.makeRequest('/accounts/listcarriers');
+      const response = await this.makeRequest('/carriers');
       return {
         success: response.success,
         data: response.success,
@@ -358,25 +352,72 @@ export class ShipstationClient {
     });
   }
 
-  // Rates
+  // Rates — V2 endpoint: POST /v2/rates
   async getRates(rateData: ShipstationRateRequest): Promise<ShipstationApiResponse<ShipstationRate[]>> {
-    return this.makeRequest('/shipments/getrates', {
+    return this.makeRequest('/rates', {
       method: 'POST',
       data: rateData
     });
   }
 
-  // Carriers
+  // Multi-carrier rate shopping — returns all available rates for a shipment
+  async getShippingRates(params: {
+    shipTo: { postalCode: string; countryCode: string; cityLocality?: string; stateProvince?: string };
+    weight: { value: number; unit: 'ounce' | 'pound' | 'gram' | 'kilogram' };
+    dimensions?: { length: number; width: number; height: number; unit: 'inch' | 'centimeter' };
+    shipFrom?: { postalCode?: string; countryCode?: string };
+  }): Promise<ShipstationApiResponse<any[]>> {
+    const payload = {
+      rate_options: {
+        carrier_ids: [], // empty = all connected carriers
+      },
+      shipment: {
+        validate_address: 'no_validation',
+        ship_to: {
+          postal_code: params.shipTo.postalCode,
+          country_code: params.shipTo.countryCode,
+          city_locality: params.shipTo.cityLocality,
+          state_province: params.shipTo.stateProvince,
+          address_line1: '',
+          city: '',
+          name: 'Ship To'
+        },
+        ship_from: {
+          postal_code: params.shipFrom?.postalCode || (process.env.SHIPSTATION_FROM_POSTAL_CODE || '78701'),
+          country_code: params.shipFrom?.countryCode || 'US',
+          address_line1: '',
+          city_locality: '',
+          state_province: '',
+          name: 'Highway420 Warehouse'
+        },
+        packages: [{
+          weight: {
+            value: params.weight.value,
+            unit: params.weight.unit
+          },
+          ...(params.dimensions ? { dimensions: {
+            length: params.dimensions.length,
+            width: params.dimensions.width,
+            height: params.dimensions.height,
+            unit: params.dimensions.unit
+          } } : {})
+        }]
+      }
+    };
+    return this.makeRequest('/rates', { method: 'POST', data: payload });
+  }
+
+  // Carriers — V2 endpoints
   async getCarriers(): Promise<ShipstationApiResponse<ShipstationCarrier[]>> {
-    return this.makeRequest('/accounts/listcarriers');
+    return this.makeRequest('/carriers');
   }
 
   async getServices(carrierCode: string): Promise<ShipstationApiResponse<any[]>> {
-    return this.makeRequest(`/accounts/listservices?carrierCode=${carrierCode}`);
+    return this.makeRequest(`/carriers/${carrierCode}/services`);
   }
 
   async getPackages(carrierCode: string): Promise<ShipstationApiResponse<any[]>> {
-    return this.makeRequest(`/accounts/listpackages?carrierCode=${carrierCode}`);
+    return this.makeRequest(`/carriers/${carrierCode}/packages`);
   }
 
   // Products
@@ -550,8 +591,8 @@ export class ShipstationClient {
   } {
     return {
       baseUrl: this.config.baseUrl,
-      version: this.config.version,
-      authenticated: !!this.config.apiKey && !!this.config.apiSecret
+      version: 'v2',
+      authenticated: !!this.config.apiKey
     };
   }
 }

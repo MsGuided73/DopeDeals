@@ -14,7 +14,7 @@ const PROMO_TEXT = "🚀 FREE SHIPPING ON ORDERS OVER $75 • 🔥 HOT DEALS DAI
 
 export default function GlobalMasthead() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [openNestedSubmenu, setOpenNestedSubmenu] = useState<string | null>(null);
@@ -120,7 +120,7 @@ export default function GlobalMasthead() {
           </div>
 
           {/* Logo - Anchored and floating above all headers */}
-          <div className={`absolute top-1/2 -translate-y-[45%] z-[60] md:left-[5%] left-4 flex shrink-0 ${isMobileSearchOpen ? 'hidden md:flex' : 'flex'}`}>
+          <div className={`absolute top-1/2 -translate-y-[45%] z-[60] md:left-[10%] left-4 flex shrink-0 ${isSearchOpen ? 'hidden md:flex opacity-20 transition-opacity' : 'flex transition-opacity'}`}>
             <Link href="/" className="block">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
@@ -133,25 +133,32 @@ export default function GlobalMasthead() {
             </Link>
           </div>
 
-          {/* Top Row: Search Bar only - Desktop */}
-          <div className="hidden md:flex items-center px-6 py-2 relative" style={{ height: "30px" }}>
-            {/* Search Bar - Equal padding from both sides */}
-            <div className="absolute left-1/2 top-2 transform -translate-x-1/2" style={{ width: "calc(100% - 300px)" }}>
-              <div className="max-w-2xl w-full mx-auto">
-                <EnhancedSearchBar />
+          {/* Desktop Search Overlay */}
+          <div className="hidden md:flex items-center px-6 py-2 relative" style={{ height: "30px", zIndex: 65 }}>
+            {isSearchOpen && (
+              <div className="absolute left-1/2 top-4 transform -translate-x-1/2 w-full max-w-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2 z-[70] bg-black/60 p-2 rounded-xl backdrop-blur-sm border border-gray-700 shadow-2xl">
+                <div className="flex-grow">
+                  <EnhancedSearchBar />
+                </div>
+                <button 
+                  onClick={() => setIsSearchOpen(false)}
+                  className="p-2 text-white hover:text-red-400 transition-colors bg-white/10 rounded-full hover:bg-red-500/20"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Mobile Header: Logo + Icons */}
           <div className="md:hidden relative flex items-center justify-between px-4 py-1 bg-black h-[70px] z-50">
-            {isMobileSearchOpen ? (
+            {isSearchOpen ? (
               <div className="w-full h-full flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-200 bg-black">
                 <div className="flex-grow">
                   <EnhancedSearchBar compact />
                 </div>
                 <button 
-                  onClick={() => setIsMobileSearchOpen(false)}
+                  onClick={() => setIsSearchOpen(false)}
                   className="p-2 text-white hover:text-red-400 transition-colors"
                 >
                   <X className="w-6 h-6" />
@@ -166,7 +173,7 @@ export default function GlobalMasthead() {
                 <div className="flex items-center gap-3 text-white">
                   {/* Search Toggle */}
                   <button
-                    onClick={() => setIsMobileSearchOpen(true)}
+                    onClick={() => setIsSearchOpen(true)}
                     className="p-1 hover:text-yellow-400 transition-colors"
                     aria-label="Search"
                   >
@@ -327,6 +334,21 @@ export default function GlobalMasthead() {
 
 
 
+              {/* Search Toggle */}
+              {!isSearchOpen && (
+                <button
+                  onClick={() => setIsSearchOpen(true)}
+                  className="flex flex-col items-center gap-0.5 p-2 hover:text-yellow-400 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg hover:bg-white/20"
+                  aria-label="Search"
+                  title="Search"
+                >
+                  <Search className="w-8 h-8" strokeWidth={3} />
+                  <span className="text-[10px] font-bold leading-none tracking-wide max-w-[60px] truncate uppercase">
+                    Search
+                  </span>
+                </button>
+              )}
+
               {/* Profile */}
               <button
                 onClick={() => setShowProfileModal(true)}
@@ -351,6 +373,7 @@ export default function GlobalMasthead() {
                 <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
+                <span className="sr-only">Cart</span>
               </Link>
             </div>
           </div>

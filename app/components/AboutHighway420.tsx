@@ -1,78 +1,84 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+import { FlaskConical, ShieldCheck, FileCheck, PackageCheck, Tag } from 'lucide-react';
 
 export default function AboutHighway420() {
+  const cards = [
+    {
+      title: "Third-Party\nLab Tested",
+      description: "Every product is verified through independent lab testing for purity and potency.",
+      icon: <FlaskConical className="w-10 h-10 text-green-700" strokeWidth={1.5} />,
+    },
+    {
+      title: "Farm Bill\nCompliant",
+      description: "All products meet 2018 Farm Bill standards with less than 0.3% Delta-9 THC.",
+      icon: <ShieldCheck className="w-10 h-10 text-green-700" strokeWidth={1.5} />,
+    },
+    {
+      title: "Verified &\nTransparent",
+      description: "We only source from trusted manufacturers with full COA documentation.",
+      icon: <FileCheck className="w-10 h-10 text-green-700" strokeWidth={1.5} />,
+    },
+    {
+      title: "Discreet, Reliable\nShipping",
+      description: "Fast fulfillment with packaging designed for privacy and peace of mind.",
+      icon: <PackageCheck className="w-10 h-10 text-green-700" strokeWidth={1.5} />,
+    },
+    {
+      title: "VIP Pricing\n& Perks",
+      description: "Members get exclusive pricing, early access to drops, and special offers.",
+      icon: <Tag className="w-10 h-10 text-green-700" strokeWidth={1.5} />,
+    }
+  ];
+
   return (
-    <section className="py-16 bg-white dark:bg-gray-950">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-          {/* Mobile: Copy First, Desktop: Logo First */}
-          
-          {/* Left Column - Large Logo (hidden on mobile, shown on desktop) */}
-          <div className="hidden md:flex justify-center md:justify-end">
-            <div className="relative w-full max-w-md lg:max-w-lg">
-              <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
-                alt="Highway 420 - Premium Hemp Products"
-                width={500}
-                height={500}
-                className="w-full h-auto"
-                priority={false}
-              />
-            </div>
-          </div>
+    <section className="py-24 bg-[#F9F8F6] dark:bg-gray-950 flex flex-col items-center">
+      <div className="max-w-[1300px] mx-auto px-4 w-full">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-gray-900 dark:text-white">
+            Why Highway 420
+          </h2>
+          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300">
+            Premium products. Verified quality. Better prices.
+          </p>
+        </div>
 
-          {/* Right Column - Copy with Left Justification */}
-          <div className="text-left order-first md:order-last">
-            <h2 className="text-4xl md:text-6xl font-display-twilight font-bold mb-6 text-gray-900 dark:text-white leading-tight tracking-[0.15em]">
-              YOUR TRUSTED SOURCE FOR PREMIUM HEMP
-            </h2>
-            
-            {/* Main Copy - Trust-Focused */}
-            <div className="space-y-4 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              <p>
-                <strong className="text-gray-900 dark:text-white">Highway 420</strong> is a licensed retailer of federally compliant hemp-derived products. 
-                Every THC-A, Delta-8, and CBD product in our catalog is sourced from trusted manufacturers and verified through independent third-party lab testing.
-              </p>
-              
-              <p>
-                We take compliance seriously. All products meet the requirements of the 2018 Farm Bill, containing less than 0.3% Delta-9 THC by dry weight. 
-                Age verification is required for all purchases — we only sell to customers 21 and older.
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-16">
+          {cards.map((card, index) => (
+            <div 
+              key={index} 
+              className="bg-white dark:bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center transition-transform hover:scale-[1.02] duration-300"
+            >
+              <div className="mb-6">
+                {card.icon}
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 whitespace-pre-line leading-tight">
+                {card.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                {card.description}
               </p>
             </div>
+          ))}
+        </div>
 
-            {/* CTA Links */}
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link 
-                href="/lab-results" 
-                className="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
-              >
-                View Lab Results
-              </Link>
-              <Link 
-                href="/compliance" 
-                className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 hover:border-green-500 text-gray-700 dark:text-gray-200 font-semibold rounded-lg transition-colors"
-              >
-                Our Compliance Standards
-              </Link>
-            </div>
-          </div>
-
-          {/* Mobile Only - Logo Below Copy */}
-          <div className="flex md:hidden justify-center mt-8">
-            <div className="relative w-full max-w-xs">
-              <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
-                alt="Highway 420 - Premium Hemp Products"
-                width={300}
-                height={300}
-                className="w-full h-auto"
-                priority={false}
-              />
-            </div>
-          </div>
+        {/* Footer Actions */}
+        <div className="flex flex-wrap justify-center gap-6">
+          <Link 
+            href="/lab-results" 
+            className="inline-flex items-center px-8 py-3 bg-[#2A8643] hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+          >
+            View Lab Results
+          </Link>
+          <Link 
+            href="/compliance" 
+            className="inline-flex items-center px-8 py-3 border border-gray-300 dark:border-gray-600 hover:border-gray-400 bg-white dark:bg-transparent text-gray-800 dark:text-gray-200 font-semibold rounded-lg transition-colors shadow-sm"
+          >
+            Our Compliance Standards
+          </Link>
         </div>
       </div>
     </section>
