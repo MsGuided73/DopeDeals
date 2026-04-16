@@ -1,314 +1,266 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { supabaseBrowser } from '../lib/supabase-browser';
 
-interface CarouselSlide {
-  id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  background_image_url: string;
-  cta_text: string;
-  cta_link: string;
-  text_color: string;
-  overlay_opacity: number;
-  display_duration: number;
-  is_active: boolean;
-  sort_order: number;
-}
-
-// Fallback slides in case database is unavailable
-const fallbackSlides: CarouselSlide[] = [
+// ─── Carousel slides ──────────────────────────────────────────────────────────
+const SLIDES = [
   {
-    id: "fallback-1",
-    title: "",
-    subtitle: "",
-    description: "",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/slider1.png",
-    cta_text: "",
-    cta_link: "/rewards",
-    text_color: "text-white",
-    overlay_opacity: 0,
-    display_duration: 5000,
-    is_active: true,
-    sort_order: 1
+    id: 'slide-1',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Image%20Only%20Carousel-skinny.png',
+    alt: 'Highway 420 — Free VIP Membership',
+    href: '/rewards',
   },
   {
-    id: "fallback-2",
-    title: "",
-    subtitle: "",
-    description: "",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/rewards/wtf.jpg",
-    cta_text: "",
-    cta_link: "/accessories",
-    text_color: "text-white",
-    overlay_opacity: 0,
-    display_duration: 5000,
-    is_active: true,
-    sort_order: 2
+    id: 'slide-2',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Premium%20dab%20rig%20experience%20showcased.png',
+    alt: 'Highway 420 — Premium Dab Rig Experience',
+    href: '/bongs',
   },
   {
-    id: "fallback-3",
-    title: "",
-    subtitle: "",
-    description: "",
-    background_image_url: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/website-images/RawRollingPapers/raw-rolling-papers-hero.jpg",
-    cta_text: "",
-    cta_link: "/pre-rolls",
-    text_color: "text-white",
-    overlay_opacity: 0,
-    display_duration: 5000,
-    is_active: true,
-    sort_order: 3
-  }
+    id: 'slide-3',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Image2-ProductAd-skinny.png',
+    alt: 'Highway 420 — Featured Products',
+    href: '/products',
+  },
 ];
 
+const SLIDE_DURATION = 6000;
+
 export default function FullscreenCarousel() {
-  const [slides, setSlides] = useState<CarouselSlide[]>(fallbackSlides);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [current,  setCurrent]  = useState(0);
+  const [paused,   setPaused]   = useState(false);
+  const [mounted,  setMounted]  = useState(false);
+  const [progress, setProgress] = useState(0);
+  const total = SLIDES.length;
 
-  // Fetch slides from database
-  const fetchSlides = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  useEffect(() => { setMounted(true); }, []);
 
-      const { data, error: fetchError } = await supabaseBrowser
-        .from('carousel_slides')
-        .select('*')
-        .eq('is_active', true)
-        .order('sort_order', { ascending: true });
+  const goTo = useCallback((idx: number) => {
+    setCurrent(((idx % total) + total) % total);
+    setPaused(true);
+    setTimeout(() => setPaused(false), 10_000);
+  }, [total]);
 
-      if (fetchError) {
-        console.error('Error fetching carousel slides:', fetchError);
-        setError(fetchError.message);
-        // Keep using fallback slides
-        return;
-      }
+  const prev = () => goTo(current - 1);
+  const next = () => goTo(current + 1);
 
-      if (data && data.length > 0) {
-        setSlides(data);
-      } else {
-        // No active slides found, use fallback
-        console.warn('No active carousel slides found, using fallback slides');
-      }
-    } catch (err) {
-      console.error('Error fetching carousel slides:', err);
-      setError(err instanceof Error ? err.message : 'Unknown error');
-      // Keep using fallback slides
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Set mounted state
+  // Auto-advance
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (paused || total <= 1) return;
+    const id = setInterval(() => setCurrent(c => (c + 1) % total), SLIDE_DURATION);
+    return () => clearInterval(id);
+  }, [paused, total]);
 
-  // Fetch slides on component mount
+  // Progress bar
   useEffect(() => {
-    if (mounted) {
-      fetchSlides();
-    }
-  }, [mounted]);
-
-  // Auto-advance slides based on current slide's display duration
-  useEffect(() => {
-    if (!isAutoPlaying || slides.length === 0) return;
-
-    const currentSlideData = slides[currentSlide];
-    const duration = currentSlideData?.display_duration || 5000;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, duration);
-
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, slides, currentSlide]);
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-    setIsAutoPlaying(false);
-    // Resume auto-play after 10 seconds of manual interaction
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const goToPrevious = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const goToNext = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return null;
-  }
-
-  // Show loading state
-  if (loading) {
-    return (
-      <div className="relative w-full overflow-hidden flex items-center justify-center bg-gray-900" style={{ height: 'calc(100vh - 40px)' }}>
-        <div className="text-white text-xl">Loading carousel...</div>
-      </div>
-    );
-  }
-
-  // Show error state with fallback
-  if (error && slides.length === 0) {
-    return (
-      <div className="relative w-full overflow-hidden flex items-center justify-center bg-gray-900" style={{ height: 'calc(100vh - 40px)' }}>
-        <div className="text-white text-center">
-          <div className="text-xl mb-2">Unable to load carousel</div>
-          <div className="text-sm text-gray-400">Using default content</div>
-        </div>
-      </div>
-    );
-  }
-
-  const currentSlideData = slides[currentSlide];
-  if (!currentSlideData) return null;
-
-  // Check if this slide has text baked into the image (no overlay needed)
-  const hasTextInImage = currentSlideData.background_image_url.includes('Screenshot%202025-09-24%20092028.png');
-
-  // Check if slide has any text content
-  const hasTextContent = currentSlideData.title || currentSlideData.subtitle || currentSlideData.description || currentSlideData.cta_text;
+    if (paused || total <= 1) return;
+    setProgress(0);
+    const step  = 50;
+    const ticks = SLIDE_DURATION / step;
+    let count   = 0;
+    const id = setInterval(() => {
+      count++;
+      setProgress(Math.min((count / ticks) * 100, 100));
+    }, step);
+    return () => clearInterval(id);
+  }, [current, paused, total]);
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 40px)' }}>
-      {/* Background Image with Overlay */}
-      <div
-        className="absolute inset-0 bg-contain bg-bottom bg-no-repeat transition-all duration-1000 ease-in-out"
-        style={{
-          backgroundImage: `url('${currentSlideData.background_image_url}')`,
-        }}
-      >
-        {/* Dynamic overlay opacity */}
-        <div
-          className="absolute inset-0 bg-black"
-          style={{ opacity: currentSlideData.overlay_opacity || 0 }}
-        ></div>
-      </div>
+    <>
+      <style>{`
+        /*
+         * Responsive carousel heights.
+         * cover + objectPosition left-center always shows the
+         * text-bearing LEFT side of wide landscape images.
+         */
+        .carousel-wrap {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+          background: #0D0D0B;
+          line-height: 0;
+        }
 
-      {/* Content - Hide text overlay if image has text baked in or no text content */}
-      {!hasTextInImage && hasTextContent && (
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="text-center max-w-4xl mx-auto px-6">
-            {/* Subtitle */}
-            {currentSlideData.subtitle && (
-              <div className="mb-4">
-                <span className={`inline-block px-4 py-2 rounded-full bg-dope-orange/20 backdrop-blur-sm border border-dope-orange/30 ${currentSlideData.text_color} text-sm font-medium uppercase tracking-wider`}>
-                  {currentSlideData.subtitle}
-                </span>
-              </div>
-            )}
+        /* Mobile portrait — generous but not dominating */
+        @media (max-width: 479px) {
+          .carousel-wrap { height: 68vw; min-height: 240px; max-height: 380px; }
+        }
+        /* Mobile landscape / large phone */
+        @media (min-width: 480px) and (max-width: 767px) {
+          .carousel-wrap { height: 60vw; min-height: 260px; max-height: 420px; }
+        }
+        /* Tablet */
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .carousel-wrap { height: 50vw; min-height: 340px; max-height: 520px; }
+        }
+        /* Desktop — anchor image drives height naturally */
+        @media (min-width: 1024px) {
+          .carousel-wrap { height: auto; }
+          .carousel-anchor {
+            display: block !important;
+            width: 100%;
+            height: auto;
+            visibility: hidden;
+          }
+        }
 
-            {/* Main Title */}
-            {currentSlideData.title && (
-              <h1
-                className={`font-chalets-legweb tracking-wider leading-none mb-6 ${currentSlideData.text_color}`}
-                style={{
-                  fontFamily: "'Chalets', 'Inter', system-ui, sans-serif",
-                  fontSize: 'clamp(4rem, 12vw, 8rem)',
-                  lineHeight: '0.9',
-                  fontWeight: 'normal',
-                  letterSpacing: '0.02em',
-                  textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 0, 0, 0.6)'
-                }}
-              >
-                {currentSlideData.title}
-              </h1>
-            )}
+        .carousel-slide-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: left center;
+        }
 
-            {/* Description */}
-            {currentSlideData.description && (
-              <p className={`text-xl md:text-2xl mb-8 max-w-2xl mx-auto ${currentSlideData.text_color} opacity-90`}
-                 style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.8)' }}>
-                {currentSlideData.description}
-              </p>
-            )}
+        /* Slide fade */
+        .carousel-slide {
+          position: absolute;
+          inset: 0;
+          transition: opacity 0.9s ease-in-out;
+        }
 
-            {/* CTA Button */}
-            {currentSlideData.cta_text && (
-              <Link
-                href={currentSlideData.cta_link}
-                className="inline-block bg-dope-orange hover:bg-dope-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg uppercase tracking-wide transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                {currentSlideData.cta_text}
-              </Link>
-            )}
-          </div>
-        </div>
-      )}
+        /* Arrows */
+        .carousel-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 20;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(0,0,0,0.35);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          border: 1px solid rgba(255,255,255,0.14);
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s, transform 0.2s;
+          cursor: pointer;
+          touch-action: manipulation;
+        }
+        .carousel-arrow:hover { background: rgba(0,0,0,0.55); }
+        .carousel-arrow:active { transform: translateY(-50%) scale(0.93); }
+        .carousel-arrow-left  { left:  16px; }
+        .carousel-arrow-right { right: 16px; }
 
-      {/* Show just the CTA button for images with baked-in text */}
-      {hasTextInImage && currentSlideData.cta_text && (
-        <div className="relative z-10 h-full flex items-end justify-center pb-20">
-          <Link
-            href={currentSlideData.cta_link}
-            className="inline-block bg-dope-orange hover:bg-dope-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg uppercase tracking-wide transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-          >
-            {currentSlideData.cta_text}
-          </Link>
-        </div>
-      )}
+        @media (min-width: 768px) {
+          .carousel-arrow { width: 44px; height: 44px; }
+          .carousel-arrow-left  { left: 28px; }
+          .carousel-arrow-right { right: 28px; }
+        }
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={goToPrevious}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3 text-white transition-all duration-300 hover:scale-110"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="w-6 h-6" />
-      </button>
+        /* Dots */
+        .carousel-dots {
+          position: absolute;
+          bottom: 14px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 20;
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+        .carousel-dot {
+          height: 9px;
+          border-radius: 999px;
+          border: none;
+          cursor: pointer;
+          transition: width 0.3s, background 0.3s;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
 
-      <button
-        onClick={goToNext}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3 text-white transition-all duration-300 hover:scale-110"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="w-6 h-6" />
-      </button>
+        /* Progress bar */
+        .carousel-progress-track {
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
+          height: 3px;
+          background: rgba(0,0,0,0.22);
+          z-index: 20;
+        }
+        .carousel-progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #C5A059 0%, #8B6914 100%);
+        }
+      `}</style>
 
-      {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-3">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide
-                ? 'bg-dope-orange scale-125'
-                : 'bg-white/50 hover:bg-white/70'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+      {/* ── Carousel wrapper ─────────────────────────────────────────────── */}
+      <section className="carousel-wrap" aria-label="Featured carousel">
 
-      {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20 z-20">
-        <div 
-          className="h-full bg-dope-orange transition-all duration-300 ease-linear"
-          style={{
-            width: `${((currentSlide + 1) / slides.length) * 100}%`
-          }}
+        {/*
+          Desktop-only hidden anchor: its natural height (width:100%; height:auto)
+          determines the container height so the full image is visible without cropping.
+          Hidden on mobile/tablet via CSS above.
+        */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="carousel-anchor"
+          src={SLIDES[0].src}
+          alt=""
+          aria-hidden="true"
         />
-      </div>
-    </div>
+
+        {/* ── Slides ── */}
+        {SLIDES.map((slide, idx) => (
+          <a
+            key={slide.id}
+            href={slide.href}
+            className="carousel-slide"
+            style={{ opacity: idx === current ? 1 : 0, zIndex: idx === current ? 1 : 0 }}
+            aria-hidden={idx !== current}
+            tabIndex={idx !== current ? -1 : 0}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="carousel-slide-img"
+              src={slide.src}
+              alt={slide.alt}
+            />
+          </a>
+        ))}
+
+        {/* ── Arrows (only when 2+ slides) ── */}
+        {total > 1 && (
+          <>
+            <button className="carousel-arrow carousel-arrow-left" onClick={prev} aria-label="Previous slide">
+              <ChevronLeft style={{ width: 18, height: 18, strokeWidth: 2.5 }} />
+            </button>
+            <button className="carousel-arrow carousel-arrow-right" onClick={next} aria-label="Next slide">
+              <ChevronRight style={{ width: 18, height: 18, strokeWidth: 2.5 }} />
+            </button>
+          </>
+        )}
+
+        {/* ── Dots (only when 2+ slides) ── */}
+        {total > 1 && (
+          <div className="carousel-dots">
+            {SLIDES.map((_, idx) => (
+              <button
+                key={idx}
+                className="carousel-dot"
+                onClick={() => goTo(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                style={{
+                  width: idx === current ? '26px' : '9px',
+                  background: idx === current
+                    ? 'linear-gradient(90deg,#C5A059,#8B6914)'
+                    : 'rgba(255,255,255,0.42)',
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ── Gold progress bar ── */}
+        {total > 1 && (
+          <div className="carousel-progress-track">
+            <div className="carousel-progress-fill" style={{ width: `${progress}%` }} />
+          </div>
+        )}
+      </section>
+    </>
   );
 }
