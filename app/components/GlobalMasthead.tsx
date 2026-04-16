@@ -307,11 +307,11 @@ export default function GlobalMasthead() {
 
         {/* ══════════════════════════════════════════════════════════════
             DESKTOP VIEW
-            Layout: [Logo left] ── [Categories centered, flex-1] ── [Search + Account + Cart right]
+            Layout: [Logo left] ── [Search centred / Categories centred] ── [Account + Cart right]
         ══════════════════════════════════════════════════════════════ */}
         <div className="hidden md:flex flex-row items-stretch w-full mx-auto relative z-10">
 
-          {/* ══ LEFT: Logo — self-stretch spans the full masthead height ══ */}
+          {/* ══ LEFT: Logo — self-stretch spans full masthead height ══ */}
           <Link
             href="/"
             className="flex-shrink-0 self-stretch flex items-center pl-4 lg:pl-6 pr-4 hover:brightness-110 transition-all duration-200"
@@ -322,31 +322,19 @@ export default function GlobalMasthead() {
               alt="HIGHWAY 420"
               width={340}
               height={73}
-              style={{
-                height: "clamp(80px, 11vw, 130px)",
-                width: "auto",
-              }}
+              style={{ height: "clamp(80px, 11vw, 130px)", width: "auto" }}
               className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
               priority
             />
           </Link>
 
-          {/* ══ CENTRE: Category nav buttons — flex-1, centred ══ */}
-          <div className="flex flex-1 items-center justify-center flex-wrap gap-x-3 gap-y-2 px-4 py-4">
-            {NAV_CATEGORIES.map(cat => (
-              <Link key={cat.href} href={cat.href} className="hw-badge">
-                {cat.label}
-              </Link>
-            ))}
-          </div>
+          {/* ══ CENTRE: Search (top) + Category buttons (bottom), both centred ══ */}
+          <div className="flex flex-col flex-1 items-center justify-center gap-2 px-4 py-3">
 
-          {/* ══ RIGHT: Search + Account + Cart ══ */}
-          <div className="flex-shrink-0 flex items-center gap-2 pr-4 lg:pr-8 py-3">
-
-            {/* Search */}
+            {/* Search bar — centred, capped width */}
             <form
               onSubmit={handleSearch}
-              className="hw-inset-container w-[180px] lg:w-[240px] xl:w-[300px]"
+              className="hw-inset-container w-full max-w-[480px]"
               style={{ height: "44px" }}
             >
               <Search
@@ -357,12 +345,25 @@ export default function GlobalMasthead() {
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search..."
+                placeholder="Search Highway 420..."
                 aria-label="Search products"
                 className="hw-search-input"
-                style={{ fontSize: "15px" }}
               />
             </form>
+
+            {/* Category nav buttons — centred, wrap on narrow screens */}
+            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1">
+              {NAV_CATEGORIES.map(cat => (
+                <Link key={cat.href} href={cat.href} className="hw-badge">
+                  {cat.label}
+                </Link>
+              ))}
+            </div>
+
+          </div>
+
+          {/* ══ RIGHT: Account + Cart ══ */}
+          <div className="flex-shrink-0 flex items-center gap-2 pr-4 lg:pr-8">
 
             {/* Account */}
             <button
