@@ -123,17 +123,21 @@ export default function Highway420Footer() {
           </div>
 
           {/* Compliance Text */}
-          <p className="text-[10px] leading-relaxed text-gray-400 text-center max-w-5xl mx-auto border-t border-gray-100 pt-8">
-            These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose,
-            treat, cure or prevent any disease. Must be 21 years or older to purchase from this website. This product is not intended
-            for children, or pregnant or lactating women. Consult with a physician before use if you have a serious medical
-            condition or use prescription medications. A Doctor's advice should be sought before using this and any dietary
-            supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
-            do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms & Conditions printed
-            on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
-            allowed to be shipped to the following states: CA, HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
-            Louisiana.
-          </p>
+          <div className="border-t border-gray-100 pt-8">
+            <div className="max-w-5xl mx-auto rounded-xl border border-gray-200 bg-gray-50/80 px-6 py-4">
+              <p className="text-[10px] leading-relaxed text-gray-500 text-center">
+                These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose,
+                treat, cure or prevent any disease. Must be 21 years or older to purchase from this website. This product is not intended
+                for children, or pregnant or lactating women. Consult with a physician before use if you have a serious medical
+                condition or use prescription medications. A Doctor's advice should be sought before using this and any dietary
+                supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
+                do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms & Conditions printed
+                on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
+                allowed to be shipped to the following states: CA, HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
+                Louisiana.
+              </p>
+            </div>
+          </div>
         </div>
       </footer>
     );
@@ -147,15 +151,14 @@ export default function Highway420Footer() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
-              "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/sign/Highway420_assets/assets/ChatGPT%20Image%20Oct%2023,%202025,%2004_02_38%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xZDFmMmVhMi1kNjI5LTQ5MWQtOWNmYi01MTE2Y2UwMjcxNmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaWdod2F5NDIwX2Fzc2V0cy9hc3NldHMvQ2hhdEdQVCBJbWFnZSBPY3QgMjMsIDIwMjUsIDA0XzAyXzM4IFBNLnBuZyIsImlhdCI6MTc2NDkzNTU1NywiZXhwIjoxNzk2NDcxNTU3fQ.RyPalWiDNqwZxn5h7pgPFZq68YAxnmsBmiNMVt1TZEw')",
+              "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Footer/BigSur-Coastline.png')",
           }}
         />
+        {/* Dark gradient overlay for text legibility over the landscape */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.35)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.55) 100%)",
           }}
         />
       </div>
@@ -408,17 +411,27 @@ export default function Highway420Footer() {
               }}
             />
           </Link>
-          <p className="mt-10 text-xs leading-relaxed text-gray-900/80 max-w-5xl mx-auto" style={{ fontSize: "0.7rem", lineHeight: 1.5 }}>
-            These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose,
-            treat, cure or prevent any disease. Must be 21 years or older to purchase from this website. This product is not intended
-            for children, or pregnant or lactating women. Consult with a physician before use if you have a serious medical
-            condition or use prescription medications. A Doctor’s advice should be sought before using this and any dietary
-            supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
-            do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms & Conditions printed
-            on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
-            allowed to be shipped to the following states: CA, HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
-            Louisiana.
-          </p>
+          <div
+            className="mt-10 max-w-5xl mx-auto rounded-xl px-6 py-5"
+            style={{
+              background: "rgba(0,0,0,0.55)",
+              border: "1px solid rgba(212,175,55,0.35)",
+              boxShadow: "0 0 0 1px rgba(255,255,255,0.06) inset",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <p className="text-center" style={{ fontSize: "0.68rem", lineHeight: 1.6, color: "rgba(255,255,255,0.75)" }}>
+              These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose,
+              treat, cure or prevent any disease. Must be 21 years or older to purchase from this website. This product is not intended
+              for children, or pregnant or lactating women. Consult with a physician before use if you have a serious medical
+              condition or use prescription medications. A Doctor's advice should be sought before using this and any dietary
+              supplement product. All trademarks and copyrights are property of their respective owners and are not affiliated with nor
+              do they endorse this product. By using this site, you agree to follow the Privacy Policy and all Terms &amp; Conditions printed
+              on this site. Void Where Prohibited by Law. Products on this site contain less than 0.3% Δ9-THC. Our THCA products are not
+              allowed to be shipped to the following states: CA, HI, ID, MN, OR, RI, UT, VT. We do not ship amanita muscaria to the State of
+              Louisiana.
+            </p>
+          </div>
           <div className="mt-8 flex justify-center">
             <img
               src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Shrooms/microdot_squares/Final%20CC%20Asset-H420%20Footer%20-%20Edited%20-%20Transparent.png"

@@ -64,77 +64,78 @@ export default function GlobalMasthead() {
 
   return (
     <>
-      {/* ──────────────────────────────────────────────────────────────────
-          GLOBAL STYLES — scoped to masthead elements
-      ────────────────────────────────────────────────────────────────── */}
       <style>{`
-        /* ── Core Masthead Typography ── */
-        .hw-header { font-family: 'Space Grotesk', system-ui, sans-serif; }
-
-        /* ── Unified Wood Background ── */
+        /* ── Unified Realistic Wood Background ── */
         .hw-wood-bg {
-          background-color: #1a0d05;
+          /* Warm walnut brown base */
+          background-color: #3b2012; 
           background-image: 
-            linear-gradient(rgba(26, 12, 3, 0.65), rgba(10, 5, 0, 0.85)),
-            url('https://images.unsplash.com/photo-1550684376-efcbd6e3f031?q=80&w=2000&auto=format&fit=crop');
+            linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.4) 100%),
+            url('https://images.unsplash.com/photo-1588691503932-aab708f33b1e?q=80&w=2000&auto=format&fit=crop');
           background-size: cover;
           background-position: center;
+          /* Blend to give it the deep rustic look */
           background-blend-mode: overlay, normal;
-          box-shadow: inset 0 -5px 15px rgba(0,0,0,0.8), 0 8px 30px rgba(0,0,0,0.7);
-          border-bottom: 2px solid #000;
+          box-shadow: inset 0 -8px 24px rgba(0,0,0,0.9), 0 12px 30px rgba(0,0,0,0.8);
+          border-top: 1px solid rgba(255,255,255,0.1);
+          border-bottom: 4px solid #0a0502;
+          position: relative;
+        }
+        /* Add a warm amber tint overlay to match the lighting */
+        .hw-wood-bg::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse at 50% 10%, rgba(200,140,50,0.15) 0%, rgba(50,20,5,0.5) 100%);
+          pointer-events: none;
+          z-index: 0;
         }
 
         /* ── Enamel & Gold Category Buttons ── */
         .hw-badge {
           display: inline-flex;
           align-items: center;
-          /* Rich enamel green gradient */
-          background: linear-gradient(180deg, #375b3b 0%, #1c3520 100%);
-          /* Gold trim */
-          border: 1px solid #d4af37;
-          border-bottom-width: 2px;
+          background: linear-gradient(180deg, #3a563a 0%, #223a22 45%, #182818 100%);
+          border: 2px solid #b6924b; /* Distinct gold rim */
+          border-bottom-width: 3px;
           border-right-width: 2px;
-          /* 3D button pop */
           box-shadow: 
-            inset 0 1px 1px rgba(255,255,255,0.25), 
-            inset 0 -1px 2px rgba(0,0,0,0.5), 
-            0 4px 8px rgba(0,0,0,0.7);
+            inset 0 2px 2px rgba(255,255,255,0.25), 
+            0 4px 6px rgba(0,0,0,0.7);
           border-radius: 6px;
-          color: #e8dcb8; /* Cream/gold text */
-          font-family: 'Big Shoulders Display', 'Oswald', sans-serif;
-          font-size: 18px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          padding: 4px 16px;
+          color: #ebd197; /* Creamy gold text */
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 16px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          padding: 6px 20px;
           text-transform: uppercase;
           white-space: nowrap;
           transition: all 0.15s ease-out;
           cursor: pointer;
           text-decoration: none;
-          text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+          text-shadow: 0 1px 2px rgba(0,0,0,0.9);
         }
         .hw-badge:hover {
-          background: linear-gradient(180deg, #436d47 0%, #224227 100%);
-          color: #fff4d4;
-          border-color: #f1cf5a;
+          background: linear-gradient(180deg, #446644 0%, #294729 45%, #1c321c 100%);
+          color: #fff8e1;
+          border-color: #d1ad63;
         }
         .hw-badge:active {
           transform: translateY(2px);
-          box-shadow: 0 1px 2px rgba(0,0,0,0.7);
+          box-shadow: 0 1px 2px rgba(0,0,0,0.8);
           border-bottom-width: 1px;
-          border-right-width: 1px;
         }
 
         /* ── Carved Inset Elements (Search & Actions) ── */
         .hw-inset-container {
-          background: rgba(12, 6, 2, 0.7);
-          /* Deep carve shadow */
+          background: #180d06; /* Dark carved wood */
           box-shadow: 
-            inset 0 4px 12px rgba(0,0,0,0.95), 
+            inset 0 6px 12px rgba(0,0,0,0.95), 
             inset 0 1px 3px rgba(0,0,0,0.9), 
             0 1px 1px rgba(255,255,255,0.12),
-            inset 0 0 0 1px rgba(0,0,0,0.8);
-          border-radius: 24px;
+            inset 0 0 0 1px #050201; /* Black inner lip */
+          border-radius: 12px; /* Not a pill, slightly rounded rectangle */
           height: 48px;
           display: flex;
           align-items: center;
@@ -147,11 +148,11 @@ export default function GlobalMasthead() {
           border: none;
           outline: none;
           color: #decba5;
-          font-size: 15px;
+          font-size: 17px;
           width: 100%;
           font-family: inherit;
         }
-        .hw-search-input::placeholder { color: rgba(222,203,165,0.4); }
+        .hw-search-input::placeholder { color: rgba(222,203,165,0.5); }
 
         /* ── Right Side Action Controls ── */
         .hw-action-btn {
@@ -159,7 +160,7 @@ export default function GlobalMasthead() {
           align-items: center;
           gap: 8px;
           color: #decba5;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 500;
           transition: color 0.15s;
           background: transparent;
@@ -169,16 +170,21 @@ export default function GlobalMasthead() {
         }
         .hw-action-btn:hover { color: #fff4d4; }
         
+        /* The gold circle button from the mockup */
         .hw-action-circle {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #d4af37 0%, #aa8420 100%);
+          background: linear-gradient(180deg, #e4c575 0%, #b6924b 40%, #896924 100%);
+          border: 2px solid #4a3411; /* Dark wood border ring */
           color: #1a0d05;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
+          box-shadow: 
+            inset 0 1px 2px rgba(255,255,255,0.6), 
+            inset 0 -1px 2px rgba(0,0,0,0.4),
+            0 2px 4px rgba(0,0,0,0.8);
           transition: transform 0.15s, filter 0.15s;
           position: relative;
         }
@@ -224,33 +230,27 @@ export default function GlobalMasthead() {
         .hw-cart-badge {
           position: absolute;
           top: -6px; right: -6px;
-          width: 18px; height: 18px;
+          width: 20px; height: 20px;
           border-radius: 50%;
           background: #d32f2f;
           border: 1.5px solid #d4af37;
           box-shadow: 0 2px 4px rgba(0,0,0,0.6);
           display: flex; align-items: center; justify-content: center;
-          font-size: 9px; font-weight: 800; color: #fff;
+          font-size: 10px; font-weight: 800; color: #fff;
           line-height: 1;
         }
       `}</style>
 
-      <header className="hw-header relative z-50 w-full hw-wood-bg pb-6 md:pb-8">
-        
-        {/* Ambient Top Lighting effect */}
-        <div 
-          className="absolute inset-0 pointer-events-none" 
-          style={{ background: "linear-gradient(180deg, rgba(230,190,120,0.08) 0%, transparent 15%)" }} 
-        />
+      <header className="hw-header relative w-full hw-wood-bg" style={{ zIndex: 100 }}>
 
         {/* ══════════════════════════════════════════════════════════════
             MOBILE VIEW (Compact, retains icon/hamburger design)
         ══════════════════════════════════════════════════════════════ */}
-        <div className="md:hidden">
+        <div className="md:hidden relative z-10 pb-4">
           {/* Mobile Search Overlay */}
           {isSearchOpen && (
             <div className="hw-search-overlay">
-              <form onSubmit={handleSearch} className="hw-inset-container flex-1" style={{ height: "40px" }}>
+              <form onSubmit={handleSearch} className="hw-inset-container flex-1" style={{ height: "40px", borderRadius: "20px" }}>
                 <Search style={{ width: 14, height: 14, color: "rgba(222,203,165,0.6)", flexShrink: 0 }} strokeWidth={2.5} />
                 <input
                   ref={searchInputRef}
@@ -276,7 +276,7 @@ export default function GlobalMasthead() {
           <div className={`w-full flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
             <Link href="/" aria-label="Highway 420 home">
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420_Logo_Gold_Transparent.png"
                 alt="HIGHWAY 420"
                 width={340}
                 height={73}
@@ -306,83 +306,89 @@ export default function GlobalMasthead() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════════
-            DESKTOP VIEW (High-fidelity reference replication)
+            DESKTOP VIEW
+            Layout: [Logo left] ── [Categories centered, flex-1] ── [Search + Account + Cart right]
         ══════════════════════════════════════════════════════════════ */}
-        <div className="hidden md:flex flex-col w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-8 gap-6 relative z-10">
-          
-          {/* TOP SECTION: Logo, Search, Controls */}
-          <div className="flex items-center justify-between gap-8 h-[76px]">
-            
-            {/* Left: Vintage Shield + Name */}
-            <Link href="/" className="flex-shrink-0 flex items-center gap-4 hover:brightness-110 transition-all">
-              <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
-                alt="HIGHWAY 420"
-                width={340}
-                height={73}
-                style={{ height: "76px", width: "auto" }}
-                className="object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
-                priority
-              />
-              <span
-                style={{
-                  fontFamily: "'Big Shoulders Display', 'Oswald', Impact, sans-serif",
-                  fontSize: "38px",
-                  fontWeight: 800,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  lineHeight: 1,
-                  color: "#f5ebc8",
-                  textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 16px rgba(212,175,55,0.25)",
-                }}
-              >
-                Highway 420
-              </span>
-            </Link>
+        <div className="hidden md:flex flex-row items-stretch w-full mx-auto relative z-10">
 
-            {/* Middle: Deep Carved Search Area */}
-            <form onSubmit={handleSearch} className="hw-inset-container flex-1 max-w-[640px]">
-              <Search style={{ width: 18, height: 18, color: "rgba(222,203,165,0.6)", flexShrink: 0 }} strokeWidth={2.5} />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search Highway 420..."
-                aria-label="Search products"
-                className="hw-search-input"
-              />
-            </form>
+          {/* ══ LEFT: Logo — self-stretch spans the full masthead height ══ */}
+          <Link
+            href="/"
+            className="flex-shrink-0 self-stretch flex items-center pl-4 lg:pl-6 pr-4 hover:brightness-110 transition-all duration-200"
+            aria-label="Highway 420 home"
+          >
+            <Image
+              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420_Logo_Gold_Transparent.png"
+              alt="HIGHWAY 420"
+              width={340}
+              height={73}
+              style={{
+                height: "clamp(80px, 11vw, 130px)",
+                width: "auto",
+              }}
+              className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
+              priority
+            />
+          </Link>
 
-            {/* Right: Account & Cart Slot */}
-            <div className="hw-inset-container flex-shrink-0 pr-2 pl-5 h-[48px] border border-[rgba(255,255,255,0.04)]">
-              <button onClick={() => setShowProfileModal(true)} className="hw-action-btn hover:-translate-y-[1px] transition-transform">
-                <User style={{ width: 16, height: 16 }} strokeWidth={2.5} />
-                <span className="truncate max-w-[100px] uppercase tracking-wider text-[13px] font-bold pb-px">
-                  {displayName || "Account"}
-                </span>
-              </button>
-              
-              <div className="w-[1px] h-6 bg-[rgba(222,203,165,0.2)] mx-2" />
-              
-              <Link href="/cart" className="hw-action-circle ml-1" aria-label={`Cart (${cartCount} items)`}>
-                <ShoppingCart style={{ width: 15, height: 15 }} strokeWidth={2.5} />
-                {cartCount > 0 && <span className="hw-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>}
-              </Link>
-            </div>
-            
-          </div>
-
-          {/* BOTTOM SECTION: Enamel Category Links */}
-          <div className="flex items-center justify-center gap-3 pt-2">
+          {/* ══ CENTRE: Category nav buttons — flex-1, centred ══ */}
+          <div className="flex flex-1 items-center justify-center flex-wrap gap-x-3 gap-y-2 px-4 py-4">
             {NAV_CATEGORIES.map(cat => (
               <Link key={cat.href} href={cat.href} className="hw-badge">
                 {cat.label}
               </Link>
             ))}
           </div>
-          
-        </div>
 
+          {/* ══ RIGHT: Search + Account + Cart ══ */}
+          <div className="flex-shrink-0 flex items-center gap-2 pr-4 lg:pr-8 py-3">
+
+            {/* Search */}
+            <form
+              onSubmit={handleSearch}
+              className="hw-inset-container w-[180px] lg:w-[240px] xl:w-[300px]"
+              style={{ height: "44px" }}
+            >
+              <Search
+                style={{ width: 16, height: 16, color: "rgba(222,203,165,0.6)", flexShrink: 0 }}
+                strokeWidth={2}
+              />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search..."
+                aria-label="Search products"
+                className="hw-search-input"
+                style={{ fontSize: "15px" }}
+              />
+            </form>
+
+            {/* Account */}
+            <button
+              onClick={() => setShowProfileModal(true)}
+              className="hw-action-btn hw-inset-container gap-2 px-3"
+              style={{ height: "44px", flexShrink: 0 }}
+            >
+              <User style={{ width: 17, height: 17 }} />
+              <span className="hidden xl:inline whitespace-nowrap">{displayName || "Account"}</span>
+            </button>
+
+            {/* Cart */}
+            <Link
+              href="/cart"
+              className="hw-action-circle flex-shrink-0"
+              style={{ width: "44px", height: "44px" }}
+              aria-label={`Cart (${cartCount} items)`}
+            >
+              <ShoppingCart style={{ width: 18, height: 18 }} strokeWidth={2.5} />
+              {cartCount > 0 && (
+                <span className="hw-cart-badge">{cartCount > 99 ? "99+" : String(cartCount)}</span>
+              )}
+            </Link>
+          </div>
+
+        </div>
 
         {/* ══════════════════════════════════════════════════════════════
             MOBILE DRAWER — slides down from masthead
