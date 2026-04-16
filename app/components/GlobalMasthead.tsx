@@ -68,114 +68,126 @@ export default function GlobalMasthead() {
           GLOBAL STYLES — scoped to masthead elements
       ────────────────────────────────────────────────────────────────── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
+        /* ── Core Masthead Typography ── */
         .hw-header { font-family: 'Space Grotesk', system-ui, sans-serif; }
 
-        /* ── Category badge ── */
+        /* ── Unified Wood Background ── */
+        .hw-wood-bg {
+          background-color: #1a0d05;
+          background-image: 
+            linear-gradient(rgba(26, 12, 3, 0.65), rgba(10, 5, 0, 0.85)),
+            url('https://images.unsplash.com/photo-1550684376-efcbd6e3f031?q=80&w=2000&auto=format&fit=crop');
+          background-size: cover;
+          background-position: center;
+          background-blend-mode: overlay, normal;
+          box-shadow: inset 0 -5px 15px rgba(0,0,0,0.8), 0 8px 30px rgba(0,0,0,0.7);
+          border-bottom: 2px solid #000;
+        }
+
+        /* ── Enamel & Gold Category Buttons ── */
         .hw-badge {
           display: inline-flex;
           align-items: center;
-          background: ${BG_BADGE};
-          border: 1px solid rgba(160,120,25,0.38);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.55);
-          color: #C4D0BA;
-          letter-spacing: 0.09em;
-          font-size: 11px;
-          font-weight: 600;
-          padding: 5px 14px;
-          border-radius: 4px;
+          /* Rich enamel green gradient */
+          background: linear-gradient(180deg, #375b3b 0%, #1c3520 100%);
+          /* Gold trim */
+          border: 1px solid #d4af37;
+          border-bottom-width: 2px;
+          border-right-width: 2px;
+          /* 3D button pop */
+          box-shadow: 
+            inset 0 1px 1px rgba(255,255,255,0.25), 
+            inset 0 -1px 2px rgba(0,0,0,0.5), 
+            0 4px 8px rgba(0,0,0,0.7);
+          border-radius: 6px;
+          color: #e8dcb8; /* Cream/gold text */
+          font-family: 'Big Shoulders Display', 'Oswald', sans-serif;
+          font-size: 18px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          padding: 4px 16px;
           text-transform: uppercase;
           white-space: nowrap;
           transition: all 0.15s ease-out;
           cursor: pointer;
           text-decoration: none;
+          text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
         .hw-badge:hover {
-          background: linear-gradient(145deg, #2A4E38 0%, #1E3828 55%, #182E22 100%);
-          border-color: rgba(200,155,35,0.6);
-          color: #D8E8CE;
+          background: linear-gradient(180deg, #436d47 0%, #224227 100%);
+          color: #fff4d4;
+          border-color: #f1cf5a;
+        }
+        .hw-badge:active {
+          transform: translateY(2px);
+          box-shadow: 0 1px 2px rgba(0,0,0,0.7);
+          border-bottom-width: 1px;
+          border-right-width: 1px;
         }
 
-        /* ── Search input field ── */
-        .hw-search-field {
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.12);
-          box-shadow: inset 0 1px 3px rgba(0,0,0,0.45);
-          border-radius: 6px;
-          height: 38px;
+        /* ── Carved Inset Elements (Search & Actions) ── */
+        .hw-inset-container {
+          background: rgba(12, 6, 2, 0.7);
+          /* Deep carve shadow */
+          box-shadow: 
+            inset 0 4px 12px rgba(0,0,0,0.95), 
+            inset 0 1px 3px rgba(0,0,0,0.9), 
+            0 1px 1px rgba(255,255,255,0.12),
+            inset 0 0 0 1px rgba(0,0,0,0.8);
+          border-radius: 24px;
+          height: 48px;
           display: flex;
           align-items: center;
-          padding: 0 12px;
-          gap: 8px;
-          flex: 1;
-          min-width: 0;
-          transition: all 0.2s ease;
+          padding: 0 16px;
+          gap: 12px;
         }
-        .hw-search-field:focus-within {
-          background: rgba(255,255,255,0.11);
-          border-color: rgba(180,140,40,0.5);
-          box-shadow: inset 0 1px 3px rgba(0,0,0,0.35), 0 0 0 2px rgba(140,105,20,0.18);
-        }
-        .hw-search-field input {
+
+        .hw-search-input {
           background: transparent;
           border: none;
           outline: none;
-          color: #E8E4DC;
-          font-size: 13px;
+          color: #decba5;
+          font-size: 15px;
           width: 100%;
           font-family: inherit;
         }
-        .hw-search-field input::placeholder { color: rgba(200,196,185,0.48); }
+        .hw-search-input::placeholder { color: rgba(222,203,165,0.4); }
 
-        /* ── Cart circle button ── */
-        .hw-cart-btn {
-          position: relative;
+        /* ── Right Side Action Controls ── */
+        .hw-action-btn {
           display: flex;
           align-items: center;
-          justify-content: center;
-          width: 38px;
-          height: 38px;
-          min-width: 38px;
-          border-radius: 50%;
-          background: ${BG_CART};
-          border: 1px solid rgba(160,120,25,0.40);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 1px 4px rgba(0,0,0,0.5);
-          color: #C4D0BA;
-          text-decoration: none;
-          transition: all 0.15s ease;
-          flex-shrink: 0;
-        }
-        .hw-cart-btn:hover {
-          border-color: rgba(200,155,35,0.6);
-          color: #D8E8CE;
-        }
-
-        /* ── Ghost icon button (search icon, user, menu) ── */
-        .hw-ghost-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 5px;
-          height: 38px;
-          padding: 0 10px;
-          border-radius: 5px;
-          color: #C4C0B4;
-          font-size: 12px;
+          gap: 8px;
+          color: #decba5;
+          font-size: 14px;
           font-weight: 500;
-          letter-spacing: 0.04em;
-          transition: background 0.15s, color 0.15s;
-          cursor: pointer;
-          white-space: nowrap;
-          flex-shrink: 0;
+          transition: color 0.15s;
           background: transparent;
           border: none;
+          cursor: pointer;
+          text-decoration: none;
         }
-        .hw-ghost-btn:hover { background: rgba(255,255,255,0.07); color: #E8E4DC; }
-        /* Square icon-only variant (search, menu) */
-        .hw-ghost-btn.icon-only { padding: 0; width: 38px; }
+        .hw-action-btn:hover { color: #fff4d4; }
+        
+        .hw-action-circle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #d4af37 0%, #aa8420 100%);
+          color: #1a0d05;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
+          transition: transform 0.15s, filter 0.15s;
+          position: relative;
+        }
+        .hw-action-circle:hover {
+          filter: brightness(1.15);
+          transform: scale(1.05);
+        }
 
-        /* ── Mobile search overlay ── */
+        /* ── Mobile Overlays & Drawers ── */
         .hw-search-overlay {
           position: absolute;
           inset: 0;
@@ -187,7 +199,6 @@ export default function GlobalMasthead() {
           background: linear-gradient(180deg, #1E1C16 0%, #171510 100%);
         }
 
-        /* ── Mobile drawer ── */
         .hw-drawer {
           background: linear-gradient(180deg, #1A1814 0%, #141210 100%);
           border-top: 1px solid rgba(220,185,80,0.10);
@@ -210,275 +221,166 @@ export default function GlobalMasthead() {
         .hw-drawer-link:hover { color: #E8E4DC; padding-left: 4px; }
         .hw-drawer-link:last-child { border-bottom: none; }
 
-        /* ── Cart badge ── */
         .hw-cart-badge {
           position: absolute;
-          top: -5px; right: -5px;
-          width: 17px; height: 17px;
+          top: -6px; right: -6px;
+          width: 18px; height: 18px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #E5B830 0%, #C49A20 100%);
-          border: 1.5px solid rgba(0,0,0,0.3);
-          box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+          background: #d32f2f;
+          border: 1.5px solid #d4af37;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.6);
           display: flex; align-items: center; justify-content: center;
-          font-size: 8px; font-weight: 700; color: #000;
+          font-size: 9px; font-weight: 800; color: #fff;
           line-height: 1;
         }
       `}</style>
 
-      <header className="hw-header relative z-50 w-full">
+      <header className="hw-header relative z-50 w-full hw-wood-bg pb-6 md:pb-8">
+        
+        {/* Ambient Top Lighting effect */}
+        <div 
+          className="absolute inset-0 pointer-events-none" 
+          style={{ background: "linear-gradient(180deg, rgba(230,190,120,0.08) 0%, transparent 15%)" }} 
+        />
 
         {/* ══════════════════════════════════════════════════════════════
-            ROW 1 — Brand bar
+            MOBILE VIEW (Compact, retains icon/hamburger design)
         ══════════════════════════════════════════════════════════════ */}
-        <div
-          style={{
-            background: "#1A1008",
-            boxShadow: "0 6px 28px rgba(0,0,0,0.80), 0 2px 8px rgba(0,0,0,0.5)",
-            minHeight: "64px",
-          }}
-          className="relative flex items-center"
-        >
-          {/* ── SVG procedural wood grain (Row 1) ── */}
-          <svg
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            preserveAspectRatio="xMidYMid slice"
-            style={{ zIndex: 0 }}
-          >
-            <defs>
-              <filter id="hw-grain-r1" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-                {/* Low X-frequency = long horizontal grain runs; moderate Y = fine grain lines */}
-                <feTurbulence
-                  type="fractalNoise"
-                  baseFrequency="0.006 0.38"
-                  numOctaves="5"
-                  seed="7"
-                  stitchTiles="stitch"
-                  result="noise"
-                />
-                {/* Map greyscale noise → warm walnut tones */}
-                <feColorMatrix
-                  in="noise"
-                  type="matrix"
-                  values="0.50 0 0 0 0.14  0.25 0 0 0 0.07  0.06 0 0 0 0.02  0 0 0 0.85 0"
-                />
-              </filter>
-              <linearGradient id="hw-shimmer-r1" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#DDBA50" stopOpacity="0.12" />
-                <stop offset="5%"   stopColor="#DDBA50" stopOpacity="0.04" />
-                <stop offset="100%" stopColor="#DDBA50" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            {/* Solid walnut base */}
-            <rect width="100%" height="100%" fill="#1A1008" />
-            {/* Procedural grain */}
-            <rect width="100%" height="100%" filter="url(#hw-grain-r1)" />
-            {/* Amber top-edge shimmer */}
-            <rect width="100%" height="100%" fill="url(#hw-shimmer-r1)" />
-          </svg>
-          {/* Ambient centre glow */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(180,130,30,0.04) 0%, transparent 70%)" }}
-          />
-
-          {/* ── Mobile search overlay (full-width, absolute) ── */}
+        <div className="md:hidden">
+          {/* Mobile Search Overlay */}
           {isSearchOpen && (
-            <div className="hw-search-overlay md:hidden">
-              <form onSubmit={handleSearch} className="hw-search-field flex-1">
-                <Search style={{ width: 14, height: 14, color: "rgba(200,196,185,0.5)", flexShrink: 0 }} strokeWidth={2} />
+            <div className="hw-search-overlay">
+              <form onSubmit={handleSearch} className="hw-inset-container flex-1" style={{ height: "40px" }}>
+                <Search style={{ width: 14, height: 14, color: "rgba(222,203,165,0.6)", flexShrink: 0 }} strokeWidth={2.5} />
                 <input
                   ref={searchInputRef}
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search Highway 420..."
-                  aria-label="Search"
+                  placeholder="Search..."
+                  className="hw-search-input"
                 />
               </form>
               <button
                 type="button"
                 onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
-                className="hw-ghost-btn icon-only"
+                className="hw-action-btn ml-2"
                 aria-label="Close search"
               >
-                <X style={{ width: 18, height: 18 }} />
+                <X style={{ width: 22, height: 22 }} />
               </button>
             </div>
           )}
 
-          {/* ─────────────────────────────────────────────────────────
-              MOBILE ROW  (hidden when search is open on mobile)
-          ───────────────────────────────────────────────────────── */}
-          <div
-            className={`w-full flex items-center px-3 gap-2 md:hidden ${isSearchOpen ? "invisible" : "visible"}`}
-          >
-            {/* Logo — compact on mobile */}
-            <Link href="/" className="flex-shrink-0" aria-label="Highway 420 home">
+          {/* Mobile Top Bar */}
+          <div className={`w-full flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
+            <Link href="/" aria-label="Highway 420 home">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
                 width={340}
                 height={73}
-                style={{ height: "44px", width: "auto" }}
-                className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
+                style={{ height: "46px", width: "auto" }}
+                className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
                 priority
               />
             </Link>
-
-            {/* Spacer */}
+            
             <div className="flex-1" />
-
-            {/* Search icon */}
-            <button
-              className="hw-ghost-btn icon-only"
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Search"
-            >
-              <Search style={{ width: 18, height: 18 }} strokeWidth={2} />
+            
+            <button className="hw-action-btn" onClick={() => setIsSearchOpen(true)} aria-label="Search">
+              <Search style={{ width: 20, height: 20 }} strokeWidth={2.5} />
             </button>
-
-            {/* Cart */}
-            <Link href="/cart" className="hw-cart-btn" aria-label="Cart">
-              <ShoppingCart style={{ width: 16, height: 16 }} strokeWidth={2} />
-              {cartCount > 0 && (
-                <span className="hw-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>
-              )}
+            
+            <Link href="/cart" className="relative group" aria-label="Cart">
+              <div className="w-[38px] h-[38px] rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(10,5,0,0.5)] flex items-center justify-center text-[#decba5]">
+                <ShoppingCart style={{ width: 18, height: 18 }} />
+              </div>
+              {cartCount > 0 && <span className="hw-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>}
             </Link>
 
-            {/* Hamburger */}
-            <button
-              className="hw-ghost-btn icon-only"
-              onClick={() => setIsMenuOpen(v => !v)}
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isMenuOpen}
-            >
-              {isMenuOpen
-                ? <X   style={{ width: 20, height: 20 }} strokeWidth={2} />
-                : <Menu style={{ width: 20, height: 20 }} strokeWidth={2} />
-              }
+            <button className="hw-action-btn" onClick={() => setIsMenuOpen(v => !v)}>
+              {isMenuOpen ? <X style={{ width: 24, height: 24 }} strokeWidth={2} /> : <Menu style={{ width: 24, height: 24 }} strokeWidth={2} />}
             </button>
           </div>
+        </div>
 
-          {/* ─────────────────────────────────────────────────────────
-              DESKTOP ROW  (hidden on mobile)
-          ───────────────────────────────────────────────────────── */}
-          <div className="hidden md:flex w-full items-center px-6 lg:px-10 gap-4 relative z-10">
-            {/* Logo + wordmark */}
-            <Link href="/" className="flex-shrink-0 flex items-center gap-3" aria-label="Highway 420 home">
+        {/* ══════════════════════════════════════════════════════════════
+            DESKTOP VIEW (High-fidelity reference replication)
+        ══════════════════════════════════════════════════════════════ */}
+        <div className="hidden md:flex flex-col w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-8 gap-6 relative z-10">
+          
+          {/* TOP SECTION: Logo, Search, Controls */}
+          <div className="flex items-center justify-between gap-8 h-[76px]">
+            
+            {/* Left: Vintage Shield + Name */}
+            <Link href="/" className="flex-shrink-0 flex items-center gap-4 hover:brightness-110 transition-all">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
                 width={340}
                 height={73}
-                style={{ height: "64px", width: "auto" }}
-                className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
+                style={{ height: "76px", width: "auto" }}
+                className="object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]"
                 priority
               />
               <span
                 style={{
                   fontFamily: "'Big Shoulders Display', 'Oswald', Impact, sans-serif",
-                  fontSize: "32px",
+                  fontSize: "38px",
                   fontWeight: 800,
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
                   lineHeight: 1,
-                  color: "#EDE8DC",
-                  whiteSpace: "nowrap",
-                  textShadow: "0 2px 8px rgba(0,0,0,0.85), 0 0 24px rgba(180,140,30,0.15)",
-                  userSelect: "none",
+                  color: "#f5ebc8",
+                  textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 16px rgba(212,175,55,0.25)",
                 }}
               >
                 Highway 420
               </span>
             </Link>
 
-            {/* Search bar — desktop (always visible, no icon-only toggle) */}
-            <form onSubmit={handleSearch} className="hw-search-field" style={{ maxWidth: "520px" }}>
-              <Search style={{ width: 14, height: 14, color: "rgba(200,196,185,0.5)", flexShrink: 0 }} strokeWidth={2} />
+            {/* Middle: Deep Carved Search Area */}
+            <form onSubmit={handleSearch} className="hw-inset-container flex-1 max-w-[640px]">
+              <Search style={{ width: 18, height: 18, color: "rgba(222,203,165,0.6)", flexShrink: 0 }} strokeWidth={2.5} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Search Highway 420..."
                 aria-label="Search products"
+                className="hw-search-input"
               />
             </form>
 
-            <div className="flex-1" />
-
-            {/* User/profile */}
-            <button
-              className="hw-ghost-btn"
-              onClick={() => setShowProfileModal(true)}
-              aria-label="Profile"
-            >
-              <User style={{ width: 16, height: 16 }} strokeWidth={2} />
-              {displayName && (
-                <span className="max-w-[72px] truncate">{displayName}</span>
-              )}
-            </button>
-
-            {/* Cart */}
-            <Link href="/cart" className="hw-cart-btn" aria-label={`Cart (${cartCount} items)`}>
-              <ShoppingCart style={{ width: 16, height: 16 }} strokeWidth={2} />
-              {cartCount > 0 && (
-                <span className="hw-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>
-              )}
-            </Link>
+            {/* Right: Account & Cart Slot */}
+            <div className="hw-inset-container flex-shrink-0 pr-2 pl-5 h-[48px] border border-[rgba(255,255,255,0.04)]">
+              <button onClick={() => setShowProfileModal(true)} className="hw-action-btn hover:-translate-y-[1px] transition-transform">
+                <User style={{ width: 16, height: 16 }} strokeWidth={2.5} />
+                <span className="truncate max-w-[100px] uppercase tracking-wider text-[13px] font-bold pb-px">
+                  {displayName || "Account"}
+                </span>
+              </button>
+              
+              <div className="w-[1px] h-6 bg-[rgba(222,203,165,0.2)] mx-2" />
+              
+              <Link href="/cart" className="hw-action-circle ml-1" aria-label={`Cart (${cartCount} items)`}>
+                <ShoppingCart style={{ width: 15, height: 15 }} strokeWidth={2.5} />
+                {cartCount > 0 && <span className="hw-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>}
+              </Link>
+            </div>
+            
           </div>
-        </div>
 
-        {/* ══════════════════════════════════════════════════════════════
-            ROW 2 — Category badge strip (desktop only)
-        ══════════════════════════════════════════════════════════════ */}
-        <div
-          className="relative hidden md:flex items-center justify-center px-6 gap-2 flex-wrap"
-          style={{
-            background: "#1E1009",
-            boxShadow: "inset 0 2px 4px rgba(0,0,0,0.4), inset 0 -1px 0 rgba(0,0,0,0.6), 0 4px 18px rgba(0,0,0,0.55)",
-            minHeight: "48px",
-          }}
-        >
-          {/* ── SVG procedural wood grain (Row 2) ── */}
-          <svg
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            preserveAspectRatio="xMidYMid slice"
-            style={{ zIndex: 0 }}
-          >
-            <defs>
-              <filter id="hw-grain-r2" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-                <feTurbulence
-                  type="fractalNoise"
-                  baseFrequency="0.007 0.45"
-                  numOctaves="5"
-                  seed="13"
-                  stitchTiles="stitch"
-                  result="noise"
-                />
-                <feColorMatrix
-                  in="noise"
-                  type="matrix"
-                  values="0.55 0 0 0 0.16  0.27 0 0 0 0.08  0.06 0 0 0 0.02  0 0 0 0.90 0"
-                />
-              </filter>
-              <linearGradient id="hw-bevel-r2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#DDBA50" stopOpacity="0.16" />
-                <stop offset="6%"   stopColor="#DDBA50" stopOpacity="0.05" />
-                <stop offset="100%" stopColor="#DDBA50" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="#1E1009" />
-            <rect width="100%" height="100%" filter="url(#hw-grain-r2)" />
-            <rect width="100%" height="100%" fill="url(#hw-bevel-r2)" />
-          </svg>
-          <div className="absolute top-0 inset-x-0 h-px" style={{ background: "rgba(220,185,80,0.14)", zIndex: 1 }} />
-          {NAV_CATEGORIES.map(cat => (
-            <Link key={cat.href} href={cat.href} className="hw-badge" style={{ position: "relative", zIndex: 1 }}>{cat.label}</Link>
-          ))}
+          {/* BOTTOM SECTION: Enamel Category Links */}
+          <div className="flex items-center justify-center gap-3 pt-2">
+            {NAV_CATEGORIES.map(cat => (
+              <Link key={cat.href} href={cat.href} className="hw-badge">
+                {cat.label}
+              </Link>
+            ))}
+          </div>
+          
         </div>
 
 
