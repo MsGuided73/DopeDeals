@@ -7,18 +7,30 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const SLIDES = [
   {
     id: 'slide-1',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Image%20Only%20Carousel-skinny.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/FreeMembership-Carousel1.png',
     alt: 'Highway 420 — Free VIP Membership',
     href: '/rewards',
   },
   {
     id: 'slide-2',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/16x9-FreeMembershipPic2.jpeg',
+    alt: 'Highway 420 — Free VIP Membership',
+    href: '/rewards',
+  },
+  {
+    id: 'slide-3',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Image%20Only%20Carousel-skinny.png',
+    alt: 'Highway 420 — Free VIP Membership',
+    href: '/rewards',
+  },
+  {
+    id: 'slide-4',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Premium%20dab%20rig%20experience%20showcased.png',
     alt: 'Highway 420 — Premium Dab Rig Experience',
     href: '/bongs',
   },
   {
-    id: 'slide-3',
+    id: 'slide-5',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Image2-ProductAd-skinny.png',
     alt: 'Highway 420 — Featured Products',
     href: '/products',
@@ -70,9 +82,8 @@ export default function FullscreenCarousel() {
     <>
       <style>{`
         /*
-         * Responsive carousel heights.
-         * cover + objectPosition left-center always shows the
-         * text-bearing LEFT side of wide landscape images.
+         * 16:9 carousel — matches image aspect ratio exactly so nothing is cropped.
+         * max-height clamps to the remaining viewport below the masthead.
          */
         .carousel-wrap {
           position: relative;
@@ -80,28 +91,15 @@ export default function FullscreenCarousel() {
           overflow: hidden;
           background: #0D0D0B;
           line-height: 0;
+          aspect-ratio: 16 / 9;
+          max-height: calc(100vh  - 70px);
+          max-height: calc(100svh - 70px);
         }
 
-        /* Mobile portrait — generous but not dominating */
-        @media (max-width: 479px) {
-          .carousel-wrap { height: 68vw; min-height: 240px; max-height: 380px; }
-        }
-        /* Mobile landscape / large phone */
-        @media (min-width: 480px) and (max-width: 767px) {
-          .carousel-wrap { height: 60vw; min-height: 260px; max-height: 420px; }
-        }
-        /* Tablet */
-        @media (min-width: 768px) and (max-width: 1023px) {
-          .carousel-wrap { height: 50vw; min-height: 340px; max-height: 520px; }
-        }
-        /* Desktop — anchor image drives height naturally */
         @media (min-width: 1024px) {
-          .carousel-wrap { height: auto; }
-          .carousel-anchor {
-            display: block !important;
-            width: 100%;
-            height: auto;
-            visibility: hidden;
+          .carousel-wrap {
+            max-height: calc(100vh  - 140px);
+            max-height: calc(100svh - 140px);
           }
         }
 
@@ -111,7 +109,7 @@ export default function FullscreenCarousel() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: left center;
+          object-position: center;
         }
 
         /* Slide fade */
@@ -190,18 +188,6 @@ export default function FullscreenCarousel() {
       {/* ── Carousel wrapper ─────────────────────────────────────────────── */}
       <section className="carousel-wrap" aria-label="Featured carousel">
 
-        {/*
-          Desktop-only hidden anchor: its natural height (width:100%; height:auto)
-          determines the container height so the full image is visible without cropping.
-          Hidden on mobile/tablet via CSS above.
-        */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="carousel-anchor"
-          src={SLIDES[0].src}
-          alt=""
-          aria-hidden="true"
-        />
 
         {/* ── Slides ── */}
         {SLIDES.map((slide, idx) => (

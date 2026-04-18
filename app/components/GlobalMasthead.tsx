@@ -65,77 +65,113 @@ export default function GlobalMasthead() {
   return (
     <>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Bebas+Neue&display=swap');
+
         /* ── Unified Realistic Wood Background ── */
         .hw-wood-bg {
           /* Warm walnut brown base */
-          background-color: #3b2012; 
-          background-image: 
-            linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.4) 100%),
+          background-color: #3b2012;
+          background-image:
+            linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.40) 100%),
             url('https://images.unsplash.com/photo-1588691503932-aab708f33b1e?q=80&w=2000&auto=format&fit=crop');
           background-size: cover;
           background-position: center;
-          /* Blend to give it the deep rustic look */
           background-blend-mode: overlay, normal;
-          box-shadow: inset 0 -8px 24px rgba(0,0,0,0.9), 0 12px 30px rgba(0,0,0,0.8);
-          border-top: 1px solid rgba(255,255,255,0.1);
-          border-bottom: 4px solid #0a0502;
+          box-shadow:
+            inset 0 -8px 24px rgba(0,0,0,0.9),
+            0 2px 10px rgba(0,0,0,0.70),
+            0 6px 28px rgba(0,0,0,0.45);
+          border-top: 1px solid rgba(255,255,255,0.09);
+          border-bottom: 3px solid rgba(0,0,0,0.95);
           position: relative;
         }
-        /* Add a warm amber tint overlay to match the lighting */
+        /* Soft ambient warmth overlay */
         .hw-wood-bg::before {
           content: "";
           position: absolute;
           inset: 0;
-          background: radial-gradient(ellipse at 50% 10%, rgba(200,140,50,0.15) 0%, rgba(50,20,5,0.5) 100%);
+          background:
+            /* upper-right warmth — boosted */
+            radial-gradient(ellipse 60% 80% at 82% 0%,  rgba(220,170,90,0.22) 0%, transparent 68%),
+            /* centre-top ambient — boosted */
+            radial-gradient(ellipse 80% 50% at 50% 0%,  rgba(160,110,50,0.13) 0%, rgba(30,12,3,0.35) 100%),
+            /* direct spotlight over search-bar area */
+            radial-gradient(ellipse 40% 70% at 50% 55%,  rgba(190,140,60,0.10) 0%, transparent 65%);
           pointer-events: none;
           z-index: 0;
         }
+        /* Deep dark shadow seam at the bottom edge */
+        .hw-wood-bg::after {
+          content: "";
+          position: absolute;
+          bottom: -8px;
+          left: 0;
+          right: 0;
+          height: 20px;
+          background: radial-gradient(
+            ellipse 70% 100% at 50% 0%,
+            rgba(0,0,0,0.90) 0%,
+            rgba(0,0,0,0.55) 35%,
+            rgba(0,0,0,0.18) 62%,
+            transparent      85%
+          );
+          pointer-events: none;
+          z-index: 1;
+        }
 
-        /* ── Enamel & Gold Category Buttons ── */
+        /* ── Category Nav Buttons — dark enamel, cream text ── */
         .hw-badge {
           display: inline-flex;
           align-items: center;
-          background: linear-gradient(180deg, #3a563a 0%, #223a22 45%, #182818 100%);
-          border: 2px solid #b6924b; /* Distinct gold rim */
-          border-bottom-width: 3px;
-          border-right-width: 2px;
-          box-shadow: 
-            inset 0 2px 2px rgba(255,255,255,0.25), 
-            0 4px 6px rgba(0,0,0,0.7);
-          border-radius: 6px;
-          color: #ebd197; /* Creamy gold text */
-          font-family: system-ui, -apple-system, sans-serif;
-          font-size: 16px;
-          font-weight: 800;
-          letter-spacing: 0.04em;
-          padding: 6px 20px;
+          background: linear-gradient(180deg, #1e3a1e 0%, #142a14 50%, #0e1e0e 100%);
+          border: 1px solid rgba(80,110,65,0.80);
+          border-bottom: 1px solid rgba(40,65,30,0.95);
+          box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.10),
+            inset 0 -1px 2px rgba(0,0,0,0.55),
+            0 2px 5px rgba(0,0,0,0.55);
+          border-radius: 5px;
+          color: #e2ddd0;
+          font-family: 'Oswald', system-ui, sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          padding: 5px 13px;
           text-transform: uppercase;
           white-space: nowrap;
           transition: all 0.15s ease-out;
           cursor: pointer;
           text-decoration: none;
-          text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+          text-shadow: 0 1px 3px rgba(0,0,0,0.95);
         }
         .hw-badge:hover {
-          background: linear-gradient(180deg, #446644 0%, #294729 45%, #1c321c 100%);
-          color: #fff8e1;
-          border-color: #d1ad63;
+          background: linear-gradient(180deg, #253f25 0%, #192e19 50%, #111f11 100%);
+          color: #f0ece4;
+          border-color: rgba(100,140,80,0.9);
+          box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.15),
+            0 2px 8px rgba(0,0,0,0.7);
         }
         .hw-badge:active {
-          transform: translateY(2px);
-          box-shadow: 0 1px 2px rgba(0,0,0,0.8);
-          border-bottom-width: 1px;
+          transform: translateY(1px);
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.7);
         }
 
         /* ── Carved Inset Elements (Search & Actions) ── */
         .hw-inset-container {
-          background: #180d06; /* Dark carved wood */
-          box-shadow: 
-            inset 0 6px 12px rgba(0,0,0,0.95), 
-            inset 0 1px 3px rgba(0,0,0,0.9), 
+          background: #180d06;
+          box-shadow:
+            inset 0 6px 12px rgba(0,0,0,0.95),
+            inset 0 1px 3px rgba(0,0,0,0.9),
+            inset 0 0 0 1px #050201,
+            /* inner amber glow — lit-from-within effect */
+            inset 0 0 18px rgba(180,120,40,0.22),
+            inset 0 0 6px  rgba(210,150,60,0.12),
             0 1px 1px rgba(255,255,255,0.12),
-            inset 0 0 0 1px #050201; /* Black inner lip */
-          border-radius: 12px; /* Not a pill, slightly rounded rectangle */
+            /* warm outer glow — simulates overhead lamp */
+            0 0 16px rgba(190,130,45,0.28),
+            0 0 38px rgba(160,100,25,0.14);
+          border-radius: 12px;
           height: 48px;
           display: flex;
           align-items: center;
@@ -143,23 +179,34 @@ export default function GlobalMasthead() {
           gap: 12px;
         }
 
+        /* Radial spotlight on the centre column — highlights search bar area */
+        .hw-center-zone {
+          background:
+            radial-gradient(
+              ellipse 85% 95% at 50% 40%,
+              rgba(210,155,60,0.22) 0%,
+              rgba(180,110,30,0.10) 48%,
+              transparent 72%
+            );
+        }
+
         .hw-search-input {
           background: transparent;
           border: none;
           outline: none;
-          color: #decba5;
+          color: #ddd8cc;
           font-size: 17px;
           width: 100%;
           font-family: inherit;
         }
-        .hw-search-input::placeholder { color: rgba(222,203,165,0.5); }
+        .hw-search-input::placeholder { color: rgba(210,205,190,0.45); }
 
         /* ── Right Side Action Controls ── */
         .hw-action-btn {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: #decba5;
+          color: #ddd8cc;
           font-size: 16px;
           font-weight: 500;
           transition: color 0.15s;
@@ -168,7 +215,7 @@ export default function GlobalMasthead() {
           cursor: pointer;
           text-decoration: none;
         }
-        .hw-action-btn:hover { color: #fff4d4; }
+        .hw-action-btn:hover { color: #f0ece8; }
         
         /* The gold circle button from the mockup */
         .hw-action-circle {
@@ -274,14 +321,31 @@ export default function GlobalMasthead() {
 
           {/* Mobile Top Bar */}
           <div className={`w-full flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
-            <Link href="/" aria-label="Highway 420 home">
+            <Link href="/" aria-label="Highway 420 home" className="flex items-center" style={{ gap: '8px' }}>
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420_Logo_Gold_Transparent.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
                 alt="HIGHWAY 420"
-                width={340}
-                height={73}
-                style={{ height: "46px", width: "auto" }}
+                width={120}
+                height={120}
+                style={{ height: '44px', width: 'auto', flexShrink: 0 }}
                 className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
+                priority
+              />
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
+                alt="HIGHWAY 420"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{
+                  height: '24px',
+                  width: 'auto',
+                  flexShrink: 0,
+                  transform: 'translateY(-1px)',
+                  filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.85))',
+                  mixBlendMode: 'screen',
+                }}
+                className="object-contain"
                 priority
               />
             </Link>
@@ -311,30 +375,50 @@ export default function GlobalMasthead() {
         ══════════════════════════════════════════════════════════════ */}
         <div className="hidden md:flex flex-row items-stretch w-full mx-auto relative z-10">
 
-          {/* ══ LEFT: Logo — self-stretch spans full masthead height ══ */}
+          {/* ══ LEFT: Brand Lockup — shield + single-line wordmark ══ */}
           <Link
             href="/"
-            className="flex-shrink-0 self-stretch flex items-center pl-4 lg:pl-6 pr-4 hover:brightness-110 transition-all duration-200"
+            className="flex-shrink-0 self-stretch flex items-center pl-4 lg:pl-6 pr-4 hover:brightness-110 transition-all duration-200 relative z-10"
             aria-label="Highway 420 home"
           >
-            <Image
-              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420_Logo_Gold_Transparent.png"
-              alt="HIGHWAY 420"
-              width={340}
-              height={73}
-              style={{ height: "clamp(80px, 11vw, 130px)", width: "auto" }}
-              className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
-              priority
-            />
+            {/* Brand lockup wrapper — sits in the upper portion of the nav, not dead centre */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {/* Shield — tall, spanning nearly full masthead height */}
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
+                alt="HIGHWAY 420"
+                width={120}
+                height={120}
+                style={{ height: 'clamp(80px, 11vw, 130px)', width: 'auto', flexShrink: 0 }}
+                className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
+                priority
+              />
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
+                alt="HIGHWAY 420"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{
+                  height: 'clamp(80px, 11vw, 130px)',
+                  width: 'auto',
+                  flexShrink: 0,
+                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.90))',
+                  mixBlendMode: 'screen',
+                }}
+                className="object-contain"
+                priority
+              />
+            </div>
           </Link>
 
-          {/* ══ CENTRE: Search (top) + Category buttons (bottom), both centred ══ */}
-          <div className="flex flex-col flex-1 items-center justify-center gap-2 px-4 py-3">
+          {/* ══ CENTRE: absolute overlay — true page-center for search + category buttons ══ */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 py-3 pointer-events-none">
 
-            {/* Search bar — centred, capped width */}
+            {/* Search bar */}
             <form
               onSubmit={handleSearch}
-              className="hw-inset-container w-full max-w-[480px]"
+              className="hw-inset-container w-full max-w-[480px] pointer-events-auto"
               style={{ height: "44px" }}
             >
               <Search
@@ -351,8 +435,8 @@ export default function GlobalMasthead() {
               />
             </form>
 
-            {/* Category nav buttons — centred, wrap on narrow screens */}
-            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1">
+            {/* Category nav buttons */}
+            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 pointer-events-auto">
               {NAV_CATEGORIES.map(cat => (
                 <Link key={cat.href} href={cat.href} className="hw-badge">
                   {cat.label}
@@ -363,7 +447,7 @@ export default function GlobalMasthead() {
           </div>
 
           {/* ══ RIGHT: Account + Cart ══ */}
-          <div className="flex-shrink-0 flex items-center gap-2 pr-4 lg:pr-8">
+          <div className="flex-shrink-0 flex items-center gap-2 pr-4 lg:pr-8 relative z-10 ml-auto">
 
             {/* Account */}
             <button

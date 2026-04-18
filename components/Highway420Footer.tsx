@@ -151,7 +151,7 @@ export default function Highway420Footer() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
-              "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Footer/On%20the%20Beach.png')",
+              "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Footer/BigSur-Coastline.png')",
           }}
         />
         {/* Dark gradient overlay for text legibility over the landscape */}

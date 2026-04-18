@@ -111,25 +111,18 @@ export default function SpotlightReviews() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* ── Background: light warm neutral with subtle depth ── */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(160deg, #f8f6f1 0%, #f0ede6 50%, #f4f1ec 100%)" }} />
-
-      {/* Subtle dot grid for texture */}
+      {/* ── Background: Beach-Toast photo ── */}
       <div
-        className="absolute inset-0 opacity-[0.4]"
+        className="absolute inset-0"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(22,163,74,0.12) 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
+          backgroundImage: "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/High%20Praise/Beach-Toast.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       />
-
-      {/* Soft green top-center glow for brand warmth */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(22,163,74,0.08) 0%, transparent 70%)",
-        }}
-      />
+      {/* Very light warm veil — keeps dark text legible without killing the photo */}
+      <div className="absolute inset-0" style={{ background: "rgba(255,248,240,0.22)" }} />
 
       {/* ── Content ── */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8">
@@ -139,7 +132,7 @@ export default function SpotlightReviews() {
           <p
             className="text-xs tracking-[0.35em] uppercase mb-3"
             style={{
-              color: "rgba(22,163,74,0.8)",
+              color: "rgba(22,100,50,0.9)",
               fontFamily: "system-ui, sans-serif",
               fontWeight: 600,
             }}
@@ -153,29 +146,24 @@ export default function SpotlightReviews() {
             HIGH PRAISE
           </h2>
           <div className="flex items-center justify-center gap-3 mt-4">
-            <div className="h-px w-20 bg-gradient-to-r from-transparent to-green-500/50" />
-            <div
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: "#16a34a" }}
-            />
-            <div className="h-px w-20 bg-gradient-to-l from-transparent to-green-500/50" />
+            <div className="h-px w-20 bg-gradient-to-r from-transparent to-green-700/50" />
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#15803d" }} />
+            <div className="h-px w-20 bg-gradient-to-l from-transparent to-green-700/50" />
           </div>
         </div>
 
         {/* ── Triptych Stage ── */}
         <div className="relative flex items-center justify-center gap-0">
 
-          {/* Left Arrow */}
           <button
             onClick={() => shift("left")}
             aria-label="Previous review"
             className="shrink-0 z-20 mr-4 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus:outline-none"
             style={{
-              background: "rgba(255,255,255,0.07)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              backdropFilter: "blur(8px)",
-              color: "rgba(255,255,255,0.7)",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              background: "rgba(0,0,0,0.12)",
+              border: "1px solid rgba(0,0,0,0.18)",
+              color: "rgba(15,23,42,0.85)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -197,17 +185,15 @@ export default function SpotlightReviews() {
 
           </div>
 
-          {/* Right Arrow */}
           <button
             onClick={() => shift("right")}
             aria-label="Next review"
             className="shrink-0 z-20 ml-4 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus:outline-none"
             style={{
-              background: "rgba(255,255,255,0.07)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              backdropFilter: "blur(8px)",
-              color: "rgba(255,255,255,0.7)",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              background: "rgba(0,0,0,0.12)",
+              border: "1px solid rgba(0,0,0,0.18)",
+              color: "rgba(15,23,42,0.85)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -274,33 +260,14 @@ function CenterCard({
     <div
       className="relative rounded-2xl transition-all duration-380"
       style={{
-        background: "rgba(255,255,255,0.55)",
-        backdropFilter: "blur(24px) saturate(180%)",
-        WebkitBackdropFilter: "blur(24px) saturate(180%)",
-        border: "1px solid rgba(255,255,255,0.85)",
-        boxShadow:
-          `0 32px 80px rgba(0,0,0,0.14), 0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9), 0 0 40px -8px ${review.glowColor}`,
+        background: "transparent",
         transform: animating ? "scale(0.97) translateY(6px)" : "scale(1) translateY(-10px)",
         opacity: animating ? 0 : 1,
         transition: "all 0.38s cubic-bezier(0.4,0,0.2,1)",
         zIndex: 10,
       }}
     >
-      {/* Frosted glass inner highlight */}
-      <div
-        className="absolute inset-0 rounded-2xl pointer-events-none"
-        style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 100%)",
-        }}
-      />
-
-      {/* Top green accent bar */}
-      <div
-        className="absolute top-0 left-8 right-8 h-[3px] rounded-b-full"
-        style={{ background: "linear-gradient(90deg, #16a34a, #4ade80)" }}
-      />
-
-      <div className="relative p-8 pt-10">
+      <div className="relative p-8 pt-6">
         {/* Quote mark */}
         <div
           className="mb-4 select-none"
@@ -308,13 +275,13 @@ function CenterCard({
             fontSize: "64px",
             lineHeight: 0.7,
             fontFamily: "Georgia, serif",
-            color: "#16a34a",
-            opacity: 0.18,
+            color: "#15803d",
+            opacity: 0.25,
             fontWeight: 900,
           }}
           aria-hidden
         >
-          ❝
+          ❤
         </div>
 
         {/* Stars */}
@@ -327,10 +294,11 @@ function CenterCard({
             fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
             fontSize: "1.0625rem",
             fontStyle: "italic",
-            fontWeight: 500,
+            fontWeight: 600,
             letterSpacing: "0.01em",
             minHeight: "84px",
-            color: "#1f2937",
+            color: "#0f172a",
+            textShadow: "0 1px 2px rgba(255,255,255,0.5)",
           }}
         >
           &ldquo;{review.quote}&rdquo;
@@ -339,21 +307,21 @@ function CenterCard({
         {/* Divider */}
         <div
           className="mb-5 h-px"
-          style={{ background: "linear-gradient(90deg, rgba(22,163,74,0.15), rgba(22,163,74,0.5), rgba(22,163,74,0.15))" }}
+          style={{ background: "rgba(15,23,42,0.2)" }}
         />
 
         {/* Attribution */}
         <div className="flex items-center gap-4">
           <div
             className={`w-12 h-12 rounded-full bg-gradient-to-br ${review.gradient} flex items-center justify-center shrink-0`}
-            style={{ boxShadow: `0 4px 16px ${review.glowColor}, 0 0 0 3px rgba(255,255,255,0.6)` }}
+            style={{ boxShadow: `0 4px 16px ${review.glowColor}` }}
           >
             <span className="text-xl">{review.emoji}</span>
           </div>
           <div>
             <div
               className="font-display-twilight tracking-[0.12em] text-gray-900"
-              style={{ fontSize: "0.9rem" }}
+              style={{ fontSize: "0.9rem", fontWeight: 700 }}
             >
               {review.name}
             </div>
@@ -361,7 +329,7 @@ function CenterCard({
               style={{
                 fontFamily: "system-ui, sans-serif",
                 fontSize: "0.75rem",
-                color: "#6b7280",
+                color: "#374151",
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 marginTop: "2px",
@@ -376,6 +344,7 @@ function CenterCard({
   );
 }
 
+
 function SideCard({
   review,
   side,
@@ -387,12 +356,8 @@ function SideCard({
     <div
       className="hidden md:block relative rounded-2xl p-6"
       style={{
-        background: "rgba(255,255,255,0.35)",
-        backdropFilter: "blur(16px) saturate(160%)",
-        WebkitBackdropFilter: "blur(16px) saturate(160%)",
-        border: "1px solid rgba(255,255,255,0.6)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7)",
-        opacity: 0.75,
+        background: "transparent",
+        opacity: 0.85,
         transform: side === "left" ? "translateX(12px) scale(0.95)" : "translateX(-12px) scale(0.95)",
         transition: "all 0.38s cubic-bezier(0.4,0,0.2,1)",
         zIndex: 5,
@@ -408,12 +373,13 @@ function SideCard({
           fontFamily: "system-ui, sans-serif",
           fontSize: "0.9rem",
           fontStyle: "italic",
-          color: "rgba(31,41,55,0.75)",
+          color: "rgba(15,23,42,0.80)",
           display: "-webkit-box",
           WebkitLineClamp: 4,
           WebkitBoxOrient: "vertical",
           overflow: "hidden",
           minHeight: "84px",
+          fontWeight: 500,
         }}
       >
         &ldquo;{review.quote}&rdquo;
@@ -422,21 +388,21 @@ function SideCard({
       {/* Divider */}
       <div
         className="mb-4 h-px"
-        style={{ background: "rgba(22,163,74,0.25)" }}
+        style={{ background: "rgba(15,23,42,0.2)" }}
       />
 
       {/* Attribution */}
       <div className="flex items-center gap-3">
         <div
           className={`w-9 h-9 rounded-full bg-gradient-to-br ${review.gradient} flex items-center justify-center shrink-0`}
-          style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1), 0 0 0 2px rgba(255,255,255,0.5)" }}
+          style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}
         >
           <span className="text-base">{review.emoji}</span>
         </div>
         <div>
           <div
             className="font-display-twilight tracking-[0.1em]"
-            style={{ fontSize: "0.8rem", color: "rgba(17,24,39,0.85)" }}
+            style={{ fontSize: "0.8rem", color: "rgba(15,23,42,0.9)", fontWeight: 700 }}
           >
             {review.name}
           </div>
@@ -444,7 +410,7 @@ function SideCard({
             style={{
               fontFamily: "system-ui, sans-serif",
               fontSize: "0.7rem",
-              color: "rgba(107,114,128,0.9)",
+              color: "rgba(55,65,81,0.9)",
               textTransform: "uppercase",
               letterSpacing: "0.06em",
               marginTop: "1px",
