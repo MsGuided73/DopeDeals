@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 
 // ─── Carousel slides ──────────────────────────────────────────────────────────
 const SLIDES: { id: string; src: string; alt: string; href: string }[] = [
@@ -165,6 +165,53 @@ export default function FullscreenCarousel() {
           box-shadow: 0 1px 4px rgba(0,0,0,0.5);
         }
 
+        /* Scroll CTA arrow */
+        .carousel-scroll-cta {
+          position: absolute;
+          bottom: 36px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 25;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          cursor: pointer;
+          background: none;
+          border: none;
+          padding: 8px 12px;
+          animation: hw420-bounce 2.2s ease-in-out infinite;
+        }
+        .carousel-scroll-cta:hover .cta-ring {
+          border-color: #C5A059;
+          background: rgba(197,160,89,0.15);
+        }
+        .cta-ring {
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          border: 1.5px solid rgba(255,255,255,0.45);
+          background: rgba(0,0,0,0.28);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: border-color 0.25s, background 0.25s;
+        }
+        .cta-label {
+          font-size: 9px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.55);
+          font-family: system-ui, sans-serif;
+          white-space: nowrap;
+        }
+        @keyframes hw420-bounce {
+          0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.9; }
+          50%       { transform: translateX(-50%) translateY(7px); opacity: 1;   }
+        }
+
         /* Progress bar */
         .carousel-progress-track {
           position: absolute;
@@ -233,6 +280,20 @@ export default function FullscreenCarousel() {
             ))}
           </div>
         )}
+
+        {/* ── Scroll CTA arrow ── */}
+        <button
+          className="carousel-scroll-cta"
+          aria-label="Scroll to collections"
+          onClick={() => {
+            document.getElementById('collections-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }}
+        >
+          <div className="cta-ring">
+            <ChevronDown style={{ width: 18, height: 18, strokeWidth: 2, color: '#C5A059' }} />
+          </div>
+          <span className="cta-label">Shop now</span>
+        </button>
 
         {/* ── Gold progress bar ── */}
         {total > 1 && (

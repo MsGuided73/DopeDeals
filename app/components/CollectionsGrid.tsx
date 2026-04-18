@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 // ─── 9-card grid data — swap image URLs when assets arrive ───────────────────
@@ -64,8 +65,41 @@ const COLLECTIONS = [
 ];
 
 export default function CollectionsGrid() {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const cards = gridRef.current?.querySelectorAll<HTMLElement>('.cg-card');
+    if (!cards?.length) return;
+
+    // Start all cards invisible + shifted down
+    cards.forEach((card) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(36px)';
+      card.style.transition = 'none';
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        observer.disconnect();
+        // Stagger each card
+        cards.forEach((card, i) => {
+          setTimeout(() => {
+            card.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, i * 60);
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    if (gridRef.current) observer.observe(gridRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="w-full px-3 md:px-6 pb-8">
+    <div id="collections-grid" ref={gridRef} className="w-full px-3 md:px-6 pb-8">
       {/* Desktop: fixed-height 3×3 grid — all 9 cards visible without scrolling */}
       <div
         className="hidden md:grid grid-cols-3 grid-rows-3 gap-3"
@@ -75,7 +109,7 @@ export default function CollectionsGrid() {
           <Link
             key={i}
             href={col.route}
-            className="group relative h-full rounded-2xl overflow-hidden shadow-xl block"
+            className="cg-card group relative h-full rounded-2xl overflow-hidden shadow-xl block"
             style={{
               background: col.image
                 ? undefined
@@ -142,7 +176,7 @@ export default function CollectionsGrid() {
           <Link
             key={i}
             href={col.route}
-            className="group relative rounded-2xl overflow-hidden shadow-xl block"
+            className="cg-card group relative rounded-2xl overflow-hidden shadow-xl block"
             style={{
               height: 'calc(44vw + 25px)',
               background: col.image
