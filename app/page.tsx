@@ -46,17 +46,29 @@ export default function HomePage() {
           <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg" />
         </div>
 
-        {/* Collections heading */}
-        <div className="text-center mb-10 mt-8">
-          <h1
-            className="text-4xl md:text-6xl font-display-twilight font-bold tracking-[0.15em]"
-            style={{ color: "#000000", textShadow: "0 2px 10px rgba(0,0,0,0.05)" }}
-          >
-            SHOP OUR COLLECTIONS
-          </h1>
-        </div>
+        {/* ── Collections Section — vintage map background ── */}
+        <section
+          style={{
+            background: `
+              linear-gradient(rgba(245,235,215,0.82), rgba(235,220,190,0.88)),
+              url('/vintage-map-bg.png') center/cover repeat
+            `,
+            borderTop: '3px solid #C5A059',
+            borderBottom: '3px solid #C5A059',
+          }}
+        >
+          {/* Collections heading */}
+          <div className="text-center pb-6 pt-10">
+            <h1
+              className="text-4xl md:text-6xl font-display-twilight font-bold tracking-[0.15em]"
+              style={{ color: "#2a1a06", textShadow: "0 1px 3px rgba(0,0,0,0.15)" }}
+            >
+              SHOP OUR COLLECTIONS
+            </h1>
+          </div>
 
-        <CollectionsGrid />
+          <CollectionsGrid />
+        </section>
 
         <Suspense fallback={<SectionFallback />}>
           <FeaturedProductsSection />

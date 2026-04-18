@@ -57,10 +57,10 @@ const COLLECTIONS = [
     accent: "#ec4899",
   },
   {
-    name: "DEALS",
-    route: "/#dope-deals",
-    image: "", // TODO: replace with new image URL
-    accent: "#ef4444",
+    name: "BUNDLES",
+    route: "/bundles",
+    image: "", // TODO: add bundle image
+    accent: "#C5A059",
   },
 ];
 
@@ -99,17 +99,22 @@ export default function CollectionsGrid() {
   }, []);
 
   return (
-    <div id="collections-grid" ref={gridRef} className="w-full px-3 md:px-6 pb-8">
+    <div
+      id="collections-grid"
+      ref={gridRef}
+      className="w-full px-5 md:px-8 pb-8"
+      style={{ scrollMarginTop: '90px' }}
+    >
       {/* Desktop: fixed-height 3×3 grid — all 9 cards visible without scrolling */}
       <div
-        className="hidden md:grid grid-cols-3 grid-rows-3 gap-3"
+        className="hidden md:grid grid-cols-3 grid-rows-3 gap-4"
         style={{ height: 'calc(100vh - 85px)', minHeight: '615px', maxHeight: '1035px' }}
       >
         {COLLECTIONS.map((col, i) => (
           <Link
             key={i}
             href={col.route}
-            className="cg-card group relative h-full rounded-2xl overflow-hidden shadow-xl block"
+            className="cg-card group relative h-full overflow-hidden shadow-xl block"
             style={{
               background: col.image
                 ? undefined
@@ -127,7 +132,7 @@ export default function CollectionsGrid() {
               <img
                 src={col.image}
                 alt={col.name}
-                className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
               />
             ) : (
               /* Placeholder while awaiting images */
@@ -141,12 +146,15 @@ export default function CollectionsGrid() {
               </div>
             )}
 
+            {/* Inset ring — always shows the card’s rounded shape */}
+            <div className="absolute inset-0 rounded-2xl ring-2 ring-inset ring-white/20 pointer-events-none z-20" />
+
             {/* Dark gradient overlay for text legibility */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none transition-opacity duration-300 group-hover:from-black/55" />
 
             {/* Accent border flash on hover */}
             <div
-              className="absolute inset-0 rounded-2xl border border-white/0 group-hover:border-white/20 transition-all duration-300 pointer-events-none"
+              className="absolute inset-0 border border-white/0 group-hover:border-white/20 transition-all duration-300 pointer-events-none"
             />
 
             {/* Label */}
@@ -176,7 +184,7 @@ export default function CollectionsGrid() {
           <Link
             key={i}
             href={col.route}
-            className="cg-card group relative rounded-2xl overflow-hidden shadow-xl block"
+            className="cg-card group relative overflow-hidden shadow-xl block"
             style={{
               height: 'calc(44vw + 25px)',
               background: col.image
@@ -195,6 +203,8 @@ export default function CollectionsGrid() {
                 <span className="text-white text-xs uppercase tracking-widest">Image coming</span>
               </div>
             )}
+            {/* Inset ring — always shows the card’s rounded shape */}
+            <div className="absolute inset-0 rounded-2xl ring-2 ring-inset ring-white/20 pointer-events-none z-20" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none" />
             <div className="absolute bottom-0 inset-x-0 p-4 z-10 pointer-events-none">
               <div className="h-[3px] w-6 rounded-full mb-2" style={{ backgroundColor: col.accent }} />
