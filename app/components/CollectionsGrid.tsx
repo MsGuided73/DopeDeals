@@ -8,13 +8,13 @@ const COLLECTIONS = [
   {
     name: "FLOWER",
     route: "/thca_flower",
-    image: "", // TODO: replace with new image URL
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/FLOWER-prerollnBud.png",
     accent: "#10b981",
   },
   {
-    name: "PRE-ROLLS",
-    route: "/pre-rolls",
-    image: "", // TODO: replace with new image URL
+    name: "PIPES",
+    route: "/pipes",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/PIPES-Bubblers.jpeg",
     accent: "#f59e0b",
   },
   {
@@ -27,7 +27,7 @@ const COLLECTIONS = [
   {
     name: "EDIBLES",
     route: "/edibles",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/EDIBLES-GummySquares.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/CG-Edibles.png",
     accent: "#f97316",
   },
   {
@@ -37,16 +37,16 @@ const COLLECTIONS = [
     accent: "#a855f7",
   },
   {
-    name: "GLASS",
-    route: "/glass",
-    image: "", // TODO: replace with new image URL
+    name: "BONGS",
+    route: "/bongs",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/CG-RooRatSunset.png",
     accent: "#3b82f6",
   },
   // Row 3
   {
     name: "DAB RIGS",
     route: "/dabsntools",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/DabRig-withPhoneTech.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/CG_ProdCard-Dab%20Rig.png",
     accent: "#14b8a6",
   },
   {
@@ -69,7 +69,7 @@ export default function CollectionsGrid() {
       {/* Desktop: fixed-height 3×3 grid — all 9 cards visible without scrolling */}
       <div
         className="hidden md:grid grid-cols-3 grid-rows-3 gap-3"
-        style={{ height: 'calc(100vh - 160px)', minHeight: '540px', maxHeight: '960px' }}
+        style={{ height: 'calc(100vh - 85px)', minHeight: '615px', maxHeight: '1035px' }}
       >
         {COLLECTIONS.map((col, i) => (
           <Link
@@ -93,7 +93,7 @@ export default function CollectionsGrid() {
               <img
                 src={col.image}
                 alt={col.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
               /* Placeholder while awaiting images */
@@ -144,7 +144,7 @@ export default function CollectionsGrid() {
             href={col.route}
             className="group relative rounded-2xl overflow-hidden shadow-xl block"
             style={{
-              height: '44vw',
+              height: 'calc(44vw + 25px)',
               background: col.image
                 ? undefined
                 : `linear-gradient(145deg, #1c1c1c 0%, #111 60%, #0a0a0a 100%)`,
@@ -154,7 +154,7 @@ export default function CollectionsGrid() {
               <img
                 src={col.image}
                 alt={col.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center opacity-10" style={{ border: `2px dashed ${col.accent}` }}>

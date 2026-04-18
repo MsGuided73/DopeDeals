@@ -4,36 +4,30 @@ import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 // ─── Carousel slides ──────────────────────────────────────────────────────────
-const SLIDES = [
+const SLIDES: { id: string; src: string; alt: string; href: string }[] = [
   {
     id: 'slide-1',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/FreeMembership-Carousel1.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/VIP%20Membership%20-%20V3.png',
     alt: 'Highway 420 — Free VIP Membership',
     href: '/rewards',
   },
   {
     id: 'slide-2',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/16x9-FreeMembershipPic2.jpeg',
-    alt: 'Highway 420 — Free VIP Membership',
-    href: '/rewards',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/CG_ProdCard-Dab%20Rig.png',
+    alt: 'Highway 420 — Premium Dab Rig Experience',
+    href: '/dabsntools',
   },
   {
     id: 'slide-3',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Image%20Only%20Carousel-skinny.png',
-    alt: 'Highway 420 — Free VIP Membership',
-    href: '/rewards',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/Bundles-V1.png',
+    alt: 'Highway 420 — Bundles',
+    href: '/bundles',
   },
   {
     id: 'slide-4',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Premium%20dab%20rig%20experience%20showcased.png',
-    alt: 'Highway 420 — Premium Dab Rig Experience',
-    href: '/bongs',
-  },
-  {
-    id: 'slide-5',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Image2-ProductAd-skinny.png',
-    alt: 'Highway 420 — Featured Products',
-    href: '/products',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/Road-Trips-V2.png',
+    alt: 'Highway 420 — Road Trips',
+    href: '/road-trips',
   },
 ];
 
