@@ -71,10 +71,10 @@ export default function CollectionsGrid() {
     const cards = gridRef.current?.querySelectorAll<HTMLElement>('.cg-card');
     if (!cards?.length) return;
 
-    // Start all cards invisible + shifted down
+    // Start all cards invisible + shifted down + slightly scaled
     cards.forEach((card) => {
       card.style.opacity = '0';
-      card.style.transform = 'translateY(36px)';
+      card.style.transform = 'translateY(70px) scale(0.96)';
       card.style.transition = 'none';
     });
 
@@ -82,16 +82,16 @@ export default function CollectionsGrid() {
       (entries) => {
         if (!entries[0].isIntersecting) return;
         observer.disconnect();
-        // Stagger each card
+        // Stagger each card — 120ms apart so the wave reads clearly
         cards.forEach((card, i) => {
           setTimeout(() => {
-            card.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+            card.style.transition = 'opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)';
             card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, i * 60);
+            card.style.transform = 'translateY(0) scale(1)';
+          }, i * 120);
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.08 }
     );
 
     if (gridRef.current) observer.observe(gridRef.current);
