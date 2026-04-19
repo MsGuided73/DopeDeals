@@ -252,7 +252,38 @@ export function createShipstationRoutes(shipstationService: ShipstationService |
         residential: z.boolean().optional()
       }).parse(req.body);
 
-      const result = await shipstationService.getShippingRates(rateRequest);
+      // Map legacy V1 request shape → V2 shape expected by the service.
+      // The schema above accepts the older flat structure for backwards
+      // compatibility; the service signature is the V2 multi-carrier API.
+      const normalizeWeightUnit = (u: string): 'ounce' | 'pound' | 'gram' | 'kilogram' => {
+        const lower = u.toLowerCase();
+        if (lower.startsWith('oz') || lower === 'ounce' || lower === 'ounces') return 'ounce';
+        if (lower.startsWith('kg') || lower === 'kilogram' || lower === 'kilograms') return 'kilogram';
+        if (lower.startsWith('g')) return 'gram';
+        return 'pound';
+      };
+      const normalizeDimUnit = (u: string): 'inch' | 'centimeter' =>
+        u.toLowerCase().startsWith('cm') || u.toLowerCase().startsWith('cent') ? 'centimeter' : 'inch';
+
+      const result = await shipstationService.getShippingRates({
+        shipTo: {
+          postalCode: rateRequest.toPostalCode,
+          countryCode: rateRequest.toCountry,
+          stateProvince: rateRequest.toState,
+        },
+        weight: {
+          value: rateRequest.weight.value,
+          unit: normalizeWeightUnit(rateRequest.weight.units),
+        },
+        dimensions: rateRequest.dimensions
+          ? {
+              length: rateRequest.dimensions.length,
+              width: rateRequest.dimensions.width,
+              height: rateRequest.dimensions.height,
+              unit: normalizeDimUnit(rateRequest.dimensions.units),
+            }
+          : undefined,
+      });
       
       res.json(result);
     } catch (error) {
