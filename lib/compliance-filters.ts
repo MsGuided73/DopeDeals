@@ -42,10 +42,10 @@ export function isRestrictedPath(pathname: string): boolean {
  * @param columns - Columns to filter on (defaults to name + description)
  * @returns The same query with .not() filters applied
  */
-export function applyRestrictedProductFilter<T>(
-  query: T,
+export function applyReshtrictedProductFilter(
+  query: any,
   columns: string[] = ['name', 'description']
-): T {
+): any {
   let filtered = query;
   for (const col of columns) {
     for (const term of RESTRICTED_PRODUCT_TERMS) {
