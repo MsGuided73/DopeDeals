@@ -49,10 +49,10 @@ export default function HomePage() {
         {/* ── Collections Section — vintage map background ── */}
         <section
           style={{
-            background: `
-              linear-gradient(rgba(245,235,215,0.82), rgba(235,220,190,0.88)),
-              url('/vintage-map-bg.png') center/cover repeat
-            `,
+            backgroundImage: `url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Background.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             borderTop: '3px solid #C5A059',
             borderBottom: '3px solid #C5A059',
           }}

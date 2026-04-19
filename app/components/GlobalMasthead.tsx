@@ -24,11 +24,16 @@ const BG_BADGE = "linear-gradient(145deg, #213D2C 0%, #162A1D 55%, #112318 100%)
 const BG_CART  = "linear-gradient(145deg, #213D2C 0%, #162A1D 100%)";
 
 export default function GlobalMasthead() {
-  const [isMenuOpen,        setIsMenuOpen]        = useState(false);
-  const [isSearchOpen,      setIsSearchOpen]      = useState(false);
-  const [showProfileModal,  setShowProfileModal]  = useState(false);
-  const [searchQuery,       setSearchQuery]       = useState("");
+  const [isMenuOpen,               setIsMenuOpen]               = useState(false);
+  const [isSearchOpen,             setIsSearchOpen]             = useState(false);
+  const [showProfileModal,         setShowProfileModal]         = useState(false);
+  const [isDesktopSearchCollapsed, setIsDesktopSearchCollapsed] = useState(false);
+  const [isNavCollapsed,           setIsNavCollapsed]           = useState(false);
+  const [searchQuery,              setSearchQuery]              = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const logoRef        = useRef<HTMLDivElement>(null);
+  const searchRef      = useRef<HTMLFormElement>(null);
+  const catNavRef      = useRef<HTMLDivElement>(null);
 
   const { user }           = useAuth();
   const { cartCount }      = useCart();
@@ -52,6 +57,50 @@ export default function GlobalMasthead() {
       setTimeout(() => searchInputRef.current?.focus(), 60);
     }
   }, [isSearchOpen]);
+
+  // Desktop: collapse search bar + category nav when logo contacts them
+  useEffect(() => {
+    let collapsed = false;
+    let navCollapsed = false;
+    const check = () => {
+      if (!logoRef.current) return;
+      const logoRight = logoRef.current.getBoundingClientRect().right;
+
+      // ── Search bar collapse ─────────────────────────────────────────
+      if (!collapsed && searchRef.current) {
+        const searchLeft = searchRef.current.getBoundingClientRect().left;
+        if (logoRight + 20 >= searchLeft) {
+          collapsed = true;
+          setIsDesktopSearchCollapsed(true);
+        }
+      } else if (collapsed) {
+        const estimatedSearchLeft = window.innerWidth / 2 - 250;
+        if (logoRight + 32 < estimatedSearchLeft) {
+          collapsed = false;
+          setIsDesktopSearchCollapsed(false);
+        }
+      }
+
+      // ── Category nav collapse ───────────────────────────────────────
+      if (!navCollapsed && catNavRef.current) {
+        const navLeft = catNavRef.current.getBoundingClientRect().left;
+        if (logoRight + 20 >= navLeft) {
+          navCollapsed = true;
+          setIsNavCollapsed(true);
+        }
+      } else if (navCollapsed) {
+        const estimatedNavLeft = window.innerWidth / 2 - 200;
+        if (logoRight + 40 < estimatedNavLeft) {
+          navCollapsed = false;
+          setIsNavCollapsed(false);
+        }
+      }
+    };
+    const ro = new ResizeObserver(check);
+    ro.observe(document.documentElement);
+    check();
+    return () => ro.disconnect();
+  }, []);
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -327,7 +376,7 @@ export default function GlobalMasthead() {
                 alt="HIGHWAY 420"
                 width={120}
                 height={120}
-                style={{ height: '44px', width: 'auto', flexShrink: 0 }}
+                style={{ height: '58px', width: 'auto', flexShrink: 0 }}
                 className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
                 priority
               />
@@ -338,7 +387,7 @@ export default function GlobalMasthead() {
                 height={0}
                 sizes="100vw"
                 style={{
-                  height: '24px',
+                  height: '38px',
                   width: 'auto',
                   flexShrink: 0,
                   transform: 'translateY(-1px)',
@@ -363,7 +412,13 @@ export default function GlobalMasthead() {
               {cartCount > 0 && <span className="hw-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>}
             </Link>
 
-            <button className="hw-action-btn" onClick={() => setIsMenuOpen(v => !v)}>
+            <Link href={user ? "/account" : "/signin"} className="relative" aria-label="Account">
+              <div className="w-[38px] h-[38px] rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(10,5,0,0.5)] flex items-center justify-center text-[#decba5]">
+                <User style={{ width: 18, height: 18 }} />
+              </div>
+            </Link>
+
+            <button className="hw-action-btn" onClick={() => setIsMenuOpen(v => !v)} aria-label="Menu">
               {isMenuOpen ? <X style={{ width: 24, height: 24 }} strokeWidth={2} /> : <Menu style={{ width: 24, height: 24 }} strokeWidth={2} />}
             </button>
           </div>
@@ -373,7 +428,7 @@ export default function GlobalMasthead() {
             DESKTOP VIEW
             Layout: [Logo left] ── [Search centred / Categories centred] ── [Account + Cart right]
         ══════════════════════════════════════════════════════════════ */}
-        <div className="hidden md:flex flex-row items-stretch w-full mx-auto relative z-10">
+        <div className="hidden md:flex flex-row items-stretch w-full mx-auto relative z-10" style={{ minHeight: '120px' }}>
 
           {/* ══ LEFT: Brand Lockup — shield + single-line wordmark ══ */}
           <Link
@@ -381,15 +436,15 @@ export default function GlobalMasthead() {
             className="flex-shrink-0 self-stretch flex items-center pl-4 lg:pl-6 pr-4 hover:brightness-110 transition-all duration-200 relative z-10"
             aria-label="Highway 420 home"
           >
-            {/* Brand lockup wrapper — sits in the upper portion of the nav, not dead centre */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* Brand lockup wrapper — ref used for search-collapse collision detection */}
+            <div ref={logoRef} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               {/* Shield — tall, spanning nearly full masthead height */}
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
                 alt="HIGHWAY 420"
                 width={120}
                 height={120}
-                style={{ height: 'clamp(80px, 11vw, 130px)', width: 'auto', flexShrink: 0 }}
+                style={{ height: 'clamp(110px, 13vw, 155px)', width: 'auto', flexShrink: 0 }}
                 className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
                 priority
               />
@@ -400,7 +455,7 @@ export default function GlobalMasthead() {
                 height={0}
                 sizes="100vw"
                 style={{
-                  height: 'clamp(80px, 11vw, 130px)',
+                  height: 'clamp(110px, 13vw, 155px)',
                   width: 'auto',
                   flexShrink: 0,
                   filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.90))',
@@ -415,39 +470,71 @@ export default function GlobalMasthead() {
           {/* ══ CENTRE: absolute overlay — true page-center for search + category buttons ══ */}
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 py-3 pointer-events-none">
 
-            {/* Search bar */}
-            <form
-              onSubmit={handleSearch}
-              className="hw-inset-container w-full max-w-[480px] pointer-events-auto"
-              style={{ height: "44px" }}
-            >
-              <Search
-                style={{ width: 16, height: 16, color: "rgba(222,203,165,0.6)", flexShrink: 0 }}
-                strokeWidth={2}
-              />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search Highway 420..."
-                aria-label="Search products"
-                className="hw-search-input"
-              />
-            </form>
+            {/* Search bar — hidden when logo contacts it; icon migrates to right nav */}
+            {!isDesktopSearchCollapsed && (
+              <form
+                ref={searchRef}
+                onSubmit={handleSearch}
+                className="hw-inset-container w-full max-w-[480px] pointer-events-auto"
+                style={{ height: '44px' }}
+              >
+                <Search
+                  style={{ width: 16, height: 16, color: 'rgba(222,203,165,0.6)', flexShrink: 0 }}
+                  strokeWidth={2}
+                />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search Highway 420..."
+                  aria-label="Search products"
+                  className="hw-search-input"
+                />
+              </form>
+            )}
 
-            {/* Category nav buttons */}
-            <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 pointer-events-auto">
-              {NAV_CATEGORIES.map(cat => (
-                <Link key={cat.href} href={cat.href} className="hw-badge">
-                  {cat.label}
-                </Link>
-              ))}
-            </div>
+            {/* Category nav buttons — hidden when logo contacts them; hamburger migrates to right nav */}
+            {!isNavCollapsed && (
+              <div ref={catNavRef} className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 pointer-events-auto">
+                {NAV_CATEGORIES.map(cat => (
+                  <Link key={cat.href} href={cat.href} className="hw-badge">
+                    {cat.label}
+                  </Link>
+                ))}
+              </div>
+            )}
 
           </div>
 
-          {/* ══ RIGHT: Account + Cart ══ */}
+          {/* ══ RIGHT: collapsed icons + Account + Cart ══ */}
           <div className="flex-shrink-0 flex items-center gap-2 pr-4 lg:pr-8 relative z-10 ml-auto">
+
+            {/* Search icon — migrates here when search bar is contacted by logo */}
+            {isDesktopSearchCollapsed && (
+              <button
+                type="button"
+                className="hw-action-circle flex-shrink-0"
+                style={{ width: '44px', height: '44px' }}
+                onClick={() => setIsSearchOpen(true)}
+                aria-label="Search"
+              >
+                <Search style={{ width: 18, height: 18 }} strokeWidth={2} />
+              </button>
+            )}
+
+            {/* Hamburger — migrates here when category nav is contacted by logo */}
+            {isNavCollapsed && (
+              <button
+                className="hw-action-circle flex-shrink-0"
+                style={{ width: '44px', height: '44px' }}
+                onClick={() => setIsMenuOpen(v => !v)}
+                aria-label="Navigation menu"
+              >
+                {isMenuOpen
+                  ? <X    style={{ width: 20, height: 20 }} strokeWidth={2} />
+                  : <Menu style={{ width: 20, height: 20 }} strokeWidth={2} />}
+              </button>
+            )}
 
             {/* Account */}
             <button
@@ -473,6 +560,37 @@ export default function GlobalMasthead() {
             </Link>
           </div>
 
+          {/* Desktop search overlay (shown when collapsed search icon is clicked) */}
+          {isDesktopSearchCollapsed && isSearchOpen && (
+            <div
+              className="absolute inset-0 z-40 flex items-center gap-4 px-6"
+              style={{ background: 'linear-gradient(180deg, #1E1C16 0%, #171510 100%)' }}
+            >
+              <form
+                onSubmit={handleSearch}
+                className="hw-inset-container flex-1"
+                style={{ height: '48px' }}
+              >
+                <Search style={{ width: 16, height: 16, color: 'rgba(222,203,165,0.6)', flexShrink: 0 }} strokeWidth={2} />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search Highway 420..."
+                  className="hw-search-input"
+                />
+              </form>
+              <button
+                type="button"
+                onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
+                className="hw-action-btn"
+                aria-label="Close search"
+              >
+                <X style={{ width: 22, height: 22 }} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* ══════════════════════════════════════════════════════════════

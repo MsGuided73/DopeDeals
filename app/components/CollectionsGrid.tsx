@@ -102,13 +102,13 @@ export default function CollectionsGrid() {
     <div
       id="collections-grid"
       ref={gridRef}
-      className="w-full px-5 md:px-8 pb-8"
-      style={{ scrollMarginTop: '90px' }}
+      className="mx-auto px-5 md:px-8 pb-8"
+      style={{ scrollMarginTop: '90px', maxWidth: '900px', width: '100%' }}
     >
       {/* Desktop: fixed-height 3×3 grid — all 9 cards visible without scrolling */}
       <div
         className="hidden md:grid grid-cols-3 grid-rows-3 gap-4"
-        style={{ height: 'calc(100vh - 85px)', minHeight: '615px', maxHeight: '1035px' }}
+        style={{ height: '70vh', minHeight: '480px', maxHeight: '780px' }}
       >
         {COLLECTIONS.map((col, i) => (
           <Link
@@ -147,10 +147,10 @@ export default function CollectionsGrid() {
             )}
 
             {/* Inset ring — always shows the card’s rounded shape */}
-            <div className="absolute inset-0 rounded-2xl ring-2 ring-inset ring-white/20 pointer-events-none z-20" />
+            <div className="absolute inset-0 ring-1 ring-inset ring-white/10 pointer-events-none z-20" />
 
             {/* Dark gradient overlay for text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none transition-opacity duration-300 group-hover:from-black/55" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none transition-opacity duration-300 group-hover:from-black/30" />
 
             {/* Accent border flash on hover */}
             <div

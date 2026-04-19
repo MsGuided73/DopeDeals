@@ -4,30 +4,34 @@ import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 
 // ─── Carousel slides ──────────────────────────────────────────────────────────
-const SLIDES: { id: string; src: string; alt: string; href: string }[] = [
+const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string }[] = [
   {
     id: 'slide-1',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/VIP%20Membership%20-%20V3.png',
     alt: 'Highway 420 — Free VIP Membership',
     href: '/rewards',
+    objectPosition: 'left top',
   },
   {
     id: 'slide-2',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/CG_ProdCard-Dab%20Rig.png',
     alt: 'Highway 420 — Premium Dab Rig Experience',
     href: '/dabsntools',
+    objectPosition: 'left top',
   },
   {
     id: 'slide-3',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/Bundles-V1.png',
     alt: 'Highway 420 — Bundles',
     href: '/bundles',
+    objectPosition: 'center center',
   },
   {
     id: 'slide-4',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/Road-Trips-V2.png',
     alt: 'Highway 420 — Road Trips',
     href: '/road-trips',
+    objectPosition: 'center center',
   },
 ];
 
@@ -76,8 +80,9 @@ export default function FullscreenCarousel() {
     <>
       <style>{`
         /*
-         * 16:9 carousel — matches image aspect ratio exactly so nothing is cropped.
-         * max-height clamps to the remaining viewport below the masthead.
+         * Mobile: 4:3 so tall/portrait images show more content.
+         * Desktop (md+): 16:9 widescreen.
+         * max-height clamps to remaining viewport below the masthead.
          */
         .carousel-wrap {
           position: relative;
@@ -85,9 +90,15 @@ export default function FullscreenCarousel() {
           overflow: hidden;
           background: #0D0D0B;
           line-height: 0;
-          aspect-ratio: 16 / 9;
+          aspect-ratio: 4 / 3;
           max-height: calc(100vh  - 70px);
           max-height: calc(100svh - 70px);
+        }
+
+        @media (min-width: 768px) {
+          .carousel-wrap {
+            aspect-ratio: 16 / 9;
+          }
         }
 
         @media (min-width: 1024px) {
@@ -103,7 +114,6 @@ export default function FullscreenCarousel() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center;
         }
 
         /* Slide fade */
@@ -245,6 +255,7 @@ export default function FullscreenCarousel() {
               className="carousel-slide-img"
               src={slide.src}
               alt={slide.alt}
+              style={{ objectPosition: slide.objectPosition ?? 'center center' }}
             />
           </a>
         ))}
