@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-// ─── 9-card grid data — swap image URLs when assets arrive ───────────────────
+// ─── Collection data ──────────────────────────────────────────────────────────
 const COLLECTIONS = [
-  // Row 1
   {
     name: "FLOWER",
     route: "/thca_flower",
@@ -21,10 +20,9 @@ const COLLECTIONS = [
   {
     name: "VAPES & CARTS",
     route: "/vapes",
-    image: "", // TODO: replace with new image URL
+    image: "",
     accent: "#06b6d4",
   },
-  // Row 2
   {
     name: "EDIBLES",
     route: "/edibles",
@@ -34,7 +32,7 @@ const COLLECTIONS = [
   {
     name: "MUSHROOMS",
     route: "/mushrooms",
-    image: "", // TODO: replace with new image URL
+    image: "",
     accent: "#a855f7",
   },
   {
@@ -43,7 +41,6 @@ const COLLECTIONS = [
     image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/CG-RooRatSunset.png",
     accent: "#3b82f6",
   },
-  // Row 3
   {
     name: "DAB RIGS",
     route: "/dabsntools",
@@ -53,164 +50,484 @@ const COLLECTIONS = [
   {
     name: "ACCESSORIES",
     route: "/accessories",
-    image: "", // TODO: replace with new image URL
+    image: "",
     accent: "#ec4899",
   },
   {
     name: "BUNDLES",
     route: "/bundles",
-    image: "", // TODO: add bundle image
+    image: "",
     accent: "#C5A059",
   },
 ];
 
+// ─── Shared style blocks ──────────────────────────────────────────────────────
+const RACK_FRAME: React.CSSProperties = {
+  background: "linear-gradient(160deg, #1a1510 0%, #0e0b07 60%, #080602 100%)",
+  border: "6px solid #1f1a13",
+  borderBottom: "14px solid #0d0a06",
+  borderRadius: "10px",
+  padding: "14px 14px 6px",
+  boxShadow: [
+    "0 28px 64px rgba(0,0,0,0.95)",
+    "0 10px 24px rgba(0,0,0,0.7)",
+    "inset 0 1px 0 rgba(255,235,180,0.05)",
+    "inset 0 -6px 12px rgba(0,0,0,0.6)",
+  ].join(", "),
+};
+
+const RACK_FLOOR: React.CSSProperties = {
+  marginTop: "8px",
+  height: "5px",
+  background: "linear-gradient(180deg, #12100c 0%, #08060200 100%)",
+  borderRadius: "3px",
+  boxShadow: "inset 0 1px 4px rgba(0,0,0,0.9)",
+};
+
+function monitorStyle(isHovered: boolean, accent: string): React.CSSProperties {
+  return {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    background: isHovered
+      ? "linear-gradient(145deg, #2a2a30 0%, #1e1e24 100%)"
+      : "linear-gradient(145deg, #22222a 0%, #181820 100%)",
+    borderRadius: "7px",
+    padding: "7px 7px 0 7px",
+    boxShadow: isHovered
+      ? [
+          "inset 0 1px 0 rgba(255,255,255,0.10)",
+          "inset 0 -1px 0 rgba(0,0,0,0.6)",
+          "0 14px 36px rgba(0,0,0,0.85)",
+          `0 0 26px -6px ${accent}50`,
+          "0 0 0 1px rgba(255,255,255,0.07)",
+        ].join(", ")
+      : [
+          "inset 0 1px 0 rgba(255,255,255,0.06)",
+          "inset 0 -1px 0 rgba(0,0,0,0.55)",
+          "0 6px 20px rgba(0,0,0,0.75)",
+          "0 0 0 1px rgba(255,255,255,0.03)",
+        ].join(", "),
+    transition:
+      "box-shadow 0.35s ease, background 0.35s ease, transform 0.25s cubic-bezier(0.22,1,0.36,1)",
+    transform: isHovered ? "translateY(-3px) scale(1.015)" : "translateY(0) scale(1)",
+  };
+}
+
+function screenFaceStyle(isHovered: boolean, accent: string): React.CSSProperties {
+  return {
+    flex: 1,
+    position: "relative",
+    borderRadius: "4px",
+    overflow: "hidden",
+    background: "#000",
+    boxShadow: isHovered
+      ? `inset 0 0 50px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.06), 0 0 12px -3px ${accent}30`
+      : "inset 0 0 60px rgba(0,0,0,0.95), inset 0 0 0 1px rgba(0,0,0,0.9)",
+    transition: "box-shadow 0.35s ease",
+  };
+}
+
+const CHIN_STYLE: React.CSSProperties = {
+  height: "18px",
+  flexShrink: 0,
+  background: "linear-gradient(180deg, #141418 0%, #0f0f13 100%)",
+  borderRadius: "0 0 5px 5px",
+  borderTop: "1px solid rgba(0,0,0,0.6)",
+  display: "flex",
+  alignItems: "center",
+  paddingLeft: "9px",
+  gap: "6px",
+};
+
+// ─── Component ────────────────────────────────────────────────────────────────
 export default function CollectionsGrid() {
-  const gridRef = useRef<HTMLDivElement>(null);
+  const rackRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
+  // Staggered entrance animation
   useEffect(() => {
-    const cards = gridRef.current?.querySelectorAll<HTMLElement>('.cg-card');
-    if (!cards?.length) return;
+    const units = rackRef.current?.querySelectorAll<HTMLElement>(".monitor-unit");
+    if (!units?.length) return;
 
-    // Start all cards invisible + shifted down + slightly scaled
-    cards.forEach((card) => {
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(70px) scale(0.96)';
-      card.style.transition = 'none';
+    units.forEach((u) => {
+      u.style.opacity = "0";
+      u.style.transform = "translateY(60px) scale(0.93)";
+      u.style.transition = "none";
     });
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries[0].isIntersecting) return;
         observer.disconnect();
-        // Stagger each card — 120ms apart so the wave reads clearly
-        cards.forEach((card, i) => {
+        units.forEach((u, i) =>
           setTimeout(() => {
-            card.style.transition = 'opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0) scale(1)';
-          }, i * 120);
-        });
+            u.style.transition =
+              "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)";
+            u.style.opacity = "1";
+            u.style.transform = "translateY(0) scale(1)";
+          }, i * 110)
+        );
       },
-      { threshold: 0.08 }
+      { threshold: 0.05 }
     );
 
-    if (gridRef.current) observer.observe(gridRef.current);
+    if (rackRef.current) observer.observe(rackRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div
-      id="collections-grid"
-      ref={gridRef}
-      className="mx-auto px-5 md:px-8 pb-8"
-      style={{ scrollMarginTop: '90px', maxWidth: '900px', width: '100%' }}
-    >
-      {/* Desktop: fixed-height 3×3 grid — all 9 cards visible without scrolling */}
+    <div id="collections-grid" style={{ scrollMarginTop: "90px", width: "100%" }}>
+
+      {/* ── DESKTOP: Monitor bank ─────────────────────────────────────────── */}
       <div
-        className="hidden md:grid grid-cols-3 grid-rows-3 gap-4"
-        style={{ height: '70vh', minHeight: '480px', maxHeight: '780px' }}
+        ref={rackRef}
+        className="hidden md:block mx-auto px-4 pb-10"
+        style={{ maxWidth: "975px" }}
+      >
+        {/* Outer rack / equipment enclosure */}
+        <div style={RACK_FRAME}>
+
+          {/* 3 × 3 monitor grid */}
+          <div
+            className="grid grid-cols-3 grid-rows-3 gap-[10px]"
+            style={{ height: "68vh", minHeight: "460px", maxHeight: "760px" }}
+          >
+            {COLLECTIONS.map((col, i) => {
+              const on = hovered === i;
+              return (
+                <Link
+                  key={i}
+                  href={col.route}
+                  className="monitor-unit block"
+                  style={{ textDecoration: "none" }}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
+                >
+                  {/* Monitor housing */}
+                  <div style={monitorStyle(on, col.accent)}>
+
+                    {/* Screen face */}
+                    <div style={screenFaceStyle(on, col.accent)}>
+
+                      {/* Product image */}
+                      {col.image ? (
+                        <img
+                          src={col.image}
+                          alt={col.name}
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            transition:
+                              "transform 0.55s cubic-bezier(0.22,1,0.36,1), filter 0.4s ease",
+                            transform: on ? "scale(1.06)" : "scale(1)",
+                            filter: on
+                              ? "brightness(1.18) saturate(1.12)"
+                              : "brightness(0.88) saturate(0.85)",
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            border: `1px dashed ${col.accent}35`,
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: col.accent,
+                              opacity: 0.28,
+                              fontSize: "10px",
+                              letterSpacing: "0.12em",
+                              textTransform: "uppercase",
+                              fontFamily: "Oswald, sans-serif",
+                            }}
+                          >
+                            Coming Soon
+                          </span>
+                        </div>
+                      )}
+
+                      {/* CRT scanlines (very subtle) */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          backgroundImage:
+                            "repeating-linear-gradient(0deg, rgba(0,0,0,0.045) 0px, rgba(0,0,0,0.045) 1px, transparent 1px, transparent 3px)",
+                          pointerEvents: "none",
+                          zIndex: 10,
+                          transition: "opacity 0.35s ease",
+                          opacity: on ? 0.45 : 1,
+                        }}
+                      />
+
+                      {/* Screen glass glare */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background:
+                            "linear-gradient(130deg, rgba(255,255,255,0.055) 0%, transparent 40%)",
+                          pointerEvents: "none",
+                          zIndex: 11,
+                        }}
+                      />
+
+                      {/* Bottom vignette for label legibility */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background:
+                            "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.25) 35%, transparent 65%)",
+                          pointerEvents: "none",
+                          zIndex: 12,
+                        }}
+                      />
+
+                      {/* Category label */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          padding: "8px 10px",
+                          zIndex: 13,
+                          pointerEvents: "none",
+                        }}
+                      >
+                        <div
+                          style={{
+                            height: "2px",
+                            width: on ? "28px" : "14px",
+                            borderRadius: "2px",
+                            backgroundColor: col.accent,
+                            marginBottom: "4px",
+                            transition: "width 0.3s ease",
+                          }}
+                        />
+                        <p
+                          style={{
+                            fontFamily: "'Oswald', system-ui, sans-serif",
+                            fontWeight: 700,
+                            fontSize: "clamp(10px, 1.05vw, 14px)",
+                            letterSpacing: "0.11em",
+                            color: "#fff",
+                            textTransform: "uppercase",
+                            textShadow: "0 1px 5px rgba(0,0,0,0.95)",
+                          }}
+                        >
+                          {col.name}
+                        </p>
+                      </div>
+
+                      {/* Accent inner glow when hovered (screen emission) */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          boxShadow: on
+                            ? `inset 0 0 50px ${col.accent}22`
+                            : "none",
+                          pointerEvents: "none",
+                          zIndex: 14,
+                          transition: "box-shadow 0.4s ease",
+                        }}
+                      />
+                    </div>{/* /screen face */}
+
+                    {/* Monitor chin / chassis strip */}
+                    <div style={CHIN_STYLE}>
+                      {/* Power LED */}
+                      <div
+                        style={{
+                          width: "5px",
+                          height: "5px",
+                          borderRadius: "50%",
+                          flexShrink: 0,
+                          backgroundColor: col.accent,
+                          boxShadow: on
+                            ? `0 0 10px 2px ${col.accent}`
+                            : `0 0 4px 0px ${col.accent}`,
+                          transition: "box-shadow 0.3s ease",
+                        }}
+                      />
+                    </div>
+
+                  </div>{/* /monitor housing */}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Rack base rail */}
+          <div style={RACK_FLOOR} />
+        </div>
+      </div>
+
+      {/* ── MOBILE: 2-col screen stack ────────────────────────────────────── */}
+      <div
+        className="md:hidden grid grid-cols-2 gap-3 px-4 pb-8"
+        style={{ maxWidth: "540px", margin: "0 auto" }}
       >
         {COLLECTIONS.map((col, i) => (
           <Link
             key={i}
             href={col.route}
-            className="cg-card group relative h-full overflow-hidden shadow-xl block"
-            style={{
-              background: col.image
-                ? undefined
-                : `linear-gradient(145deg, #1c1c1c 0%, #111 60%, #0a0a0a 100%)`,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = `0 20px 40px -8px ${col.accent}55`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "";
-            }}
+            className="cg-card block"
+            style={{ textDecoration: "none" }}
           >
-            {/* Background image (or placeholder) */}
-            {col.image ? (
-              <img
-                src={col.image}
-                alt={col.name}
-                className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-            ) : (
-              /* Placeholder while awaiting images */
-              <div
-                className="absolute inset-0 flex items-center justify-center opacity-10"
-                style={{ border: `2px dashed ${col.accent}` }}
-              >
-                <span className="text-white text-xs uppercase tracking-widest">
-                  Image coming
-                </span>
-              </div>
-            )}
-
-            {/* Inset ring — always shows the card’s rounded shape */}
-            <div className="absolute inset-0 ring-1 ring-inset ring-white/10 pointer-events-none z-20" />
-
-            {/* Dark gradient overlay for text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none transition-opacity duration-300 group-hover:from-black/30" />
-
-            {/* Accent border flash on hover */}
             <div
-              className="absolute inset-0 border border-white/0 group-hover:border-white/20 transition-all duration-300 pointer-events-none"
-            />
-
-            {/* Label */}
-            <div className="absolute bottom-0 inset-x-0 p-4 md:p-5 z-10 pointer-events-none">
-              {/* Accent bar */}
+              style={{
+                background: "linear-gradient(145deg, #22222a 0%, #181820 100%)",
+                borderRadius: "8px",
+                padding: "6px 6px 0 6px",
+                boxShadow: [
+                  "inset 0 1px 0 rgba(255,255,255,0.07)",
+                  "0 4px 16px rgba(0,0,0,0.7)",
+                ].join(", "),
+              }}
+            >
+              {/* Mobile screen */}
               <div
-                className="h-[3px] w-6 rounded-full mb-2 transition-all duration-300 group-hover:w-10"
-                style={{ backgroundColor: col.accent }}
-              />
-              <p
-                className="text-white font-bold uppercase tracking-[0.12em] text-base md:text-lg leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]"
-                style={{ fontFamily: "'Oswald', system-ui, sans-serif" }}
+                style={{
+                  borderRadius: "3px",
+                  overflow: "hidden",
+                  position: "relative",
+                  height: "42vw",
+                  maxHeight: "200px",
+                  background: "#000",
+                  flexShrink: 0,
+                }}
               >
-                {col.name}
-              </p>
-            </div>
-
-            {/* Hover lift — handled by shadow onMouse above, subtle scale below */}
-            <div className="absolute inset-0 transition-transform duration-300 group-hover:-translate-y-0.5 pointer-events-none" />
-          </Link>
-        ))}
-      </div>
-
-      {/* Mobile: simple scrollable 1-col stack */}
-      <div className="md:hidden grid grid-cols-1 gap-3">
-        {COLLECTIONS.map((col, i) => (
-          <Link
-            key={i}
-            href={col.route}
-            className="cg-card group relative overflow-hidden shadow-xl block"
-            style={{
-              height: 'calc(44vw + 25px)',
-              background: col.image
-                ? undefined
-                : `linear-gradient(145deg, #1c1c1c 0%, #111 60%, #0a0a0a 100%)`,
-            }}
-          >
-            {col.image ? (
-              <img
-                src={col.image}
-                alt={col.name}
-                className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center opacity-10" style={{ border: `2px dashed ${col.accent}` }}>
-                <span className="text-white text-xs uppercase tracking-widest">Image coming</span>
+                {col.image ? (
+                  <img
+                    src={col.image}
+                    alt={col.name}
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      filter: "brightness(0.9)",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: `1px dashed ${col.accent}30`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: col.accent,
+                        opacity: 0.25,
+                        fontSize: "9px",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        fontFamily: "Oswald, sans-serif",
+                      }}
+                    >
+                      Coming
+                    </span>
+                  </div>
+                )}
+                {/* Scanlines */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundImage:
+                      "repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 3px)",
+                    pointerEvents: "none",
+                    zIndex: 2,
+                  }}
+                />
+                {/* Bottom vignette */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.80) 0%, transparent 55%)",
+                    pointerEvents: "none",
+                    zIndex: 3,
+                  }}
+                />
+                {/* Label */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    padding: "5px 8px",
+                    zIndex: 4,
+                    pointerEvents: "none",
+                  }}
+                >
+                  <div
+                    style={{
+                      height: "2px",
+                      width: "12px",
+                      borderRadius: "2px",
+                      backgroundColor: col.accent,
+                      marginBottom: "3px",
+                    }}
+                  />
+                  <p
+                    style={{
+                      fontFamily: "'Oswald', system-ui, sans-serif",
+                      fontWeight: 700,
+                      fontSize: "11px",
+                      letterSpacing: "0.10em",
+                      color: "#fff",
+                      textTransform: "uppercase",
+                      textShadow: "0 1px 4px rgba(0,0,0,0.95)",
+                    }}
+                  >
+                    {col.name}
+                  </p>
+                </div>
               </div>
-            )}
-            {/* Inset ring — always shows the card’s rounded shape */}
-            <div className="absolute inset-0 rounded-2xl ring-2 ring-inset ring-white/20 pointer-events-none z-20" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none" />
-            <div className="absolute bottom-0 inset-x-0 p-4 z-10 pointer-events-none">
-              <div className="h-[3px] w-6 rounded-full mb-2" style={{ backgroundColor: col.accent }} />
-              <p className="text-white font-bold uppercase tracking-[0.12em] text-base leading-tight" style={{ fontFamily: "'Oswald', system-ui, sans-serif" }}>
-                {col.name}
-              </p>
+
+              {/* Mobile chin */}
+              <div
+                style={{
+                  height: "16px",
+                  background: "linear-gradient(180deg, #141418 0%, #0f0f13 100%)",
+                  borderRadius: "0 0 4px 4px",
+                  borderTop: "1px solid rgba(0,0,0,0.6)",
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "8px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "50%",
+                    backgroundColor: col.accent,
+                    boxShadow: `0 0 4px ${col.accent}`,
+                  }}
+                />
+              </div>
             </div>
           </Link>
         ))}

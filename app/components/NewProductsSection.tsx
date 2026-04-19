@@ -6,6 +6,16 @@ import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer from './AutoScrollContainer';
 import { useCompliance } from '../contexts/ComplianceContext';
 
+// ── Roadside Stop palette ──────────────────────────────────────────────────
+const RS = {
+  bg: '#f0e6d0',          // sun-bleached tan
+  accent: '#bf6830',      // deep ochre/rust
+  accentLight: '#d9883e', // lighter ochre for gradients
+  dark: '#1c1208',        // aged dark brown
+  muted: '#8a7d6a',       // dusty road text
+  white: '#faf6ef',       // warm white
+};
+
 interface Product {
   id: string;
   name: string;
@@ -39,13 +49,10 @@ export default function NewProductsSection() {
     fetchNewProducts();
   }, []);
 
-  // Pre-fetch eligibility for all products once they are loaded
   useEffect(() => {
     if (userZipCode && products.length > 0) {
       const idsToCheck = products.map(p => p.id).filter(id => !restrictedProductIds.includes(id));
-      if (idsToCheck.length > 0) {
-        checkProductEligibility(idsToCheck);
-      }
+      if (idsToCheck.length > 0) checkProductEligibility(idsToCheck);
     }
   }, [userZipCode, products, restrictedProductIds, checkProductEligibility]);
 
@@ -53,209 +60,134 @@ export default function NewProductsSection() {
     try {
       setLoading(true);
       const response = await fetch('/api/newest/products?limit=12');
-
       if (!response.ok) {
-        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch (e) {
-          // If we can't parse JSON, use the status text
-        }
-        console.error('New products API error:', errorMessage);
-        throw new Error(`Failed to fetch new products: ${errorMessage}`);
+        let msg = `HTTP ${response.status}: ${response.statusText}`;
+        try { msg = (await response.json()).error || msg; } catch { /* noop */ }
+        throw new Error(msg);
       }
-
       const data = await response.json();
-
-      if (!data.products) {
-        console.warn('No new products data received');
-        setProducts([]);
-        return;
-      }
-
+      if (!data.products) { setProducts([]); return; }
       setProducts(data.products);
     } catch (err) {
-      console.error('Error fetching new products:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
   };
 
-  const getProductDescription = (product: Product): string => {
-    return product.short_description || product.description || 'Premium quality product';
-  };
-
-  const transformProductForCard = (product: Product) => {
-    const primaryImageUrl = product.image_url ||
-                           (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
-
-    return {
-      id: product.id,
-      name: product.name,
-      price: product.our_price.toString(),
-      image_url: primaryImageUrl || undefined,
-      featured: product.featured,
-      stock_quantity: product.stock_quantity,
-      brand_name: product.brand_name || 'Unknown Brand',
-      short_description: getProductDescription(product),
-      description: getProductDescription(product),
-      sku: product.sku || '',
-      compare_at_price: product.sale_price && product.sale_price < product.our_price ? product.sale_price : undefined,
-      discount_percentage: product.sale_price && product.sale_price < product.our_price
-        ? Math.round(((product.our_price - product.sale_price) / product.our_price) * 100)
-        : undefined,
-    };
+  const getPrice = (p: Product) => {
+    const num = parseFloat(p.our_price.toString());
+    return Number.isFinite(num) ? num.toFixed(2) : '0.00';
   };
 
   const handleAddToCart = async (productId: string, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    try {
-      const success = await addToCart(productId, 1);
-      if (success) {
-        // Success flow is handled by addToCart function with toast notifications
-      }
-    } catch (error) {
-      console.error('Error adding item to cart:', error);
-    }
+    try { await addToCart(productId, 1); } catch (e) { console.error(e); }
   };
 
-  const productsToShow = products;
-
-  const renderProductCard = (product: Product, isDesktop: boolean) => {
-    const transformedProduct = transformProductForCard(product);
+  const renderCard = (product: Product, isDesktop: boolean) => {
     const isRestricted = restrictedProductIds.includes(product.id);
-
-    const cardClassName = `group bg-white rounded-xl overflow-hidden transition-all duration-300 relative ${
-      isDesktop ? 'flex-shrink-0 w-96' : 'block'
-    } ${
-      isRestricted 
-        ? 'opacity-60 grayscale cursor-not-allowed pointer-events-none' 
-        : 'hover:shadow-xl hover:border-dope-orange-300 hover:-translate-y-2'
-    }`;
+    const imageUrl = product.image_url ||
+      (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
+    const brand = product.brand_name && product.brand_name !== 'Unknown Brand'
+      ? product.brand_name : null;
 
     return (
-      <div key={product.id} className={cardClassName}>
-        <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
+      <div
+        key={product.id}
+        className="group"
+        style={{
+          background: RS.white,
+          overflow: 'hidden',
+          boxShadow: '0 2px 12px rgba(28,18,8,0.10)',
+          transition: 'box-shadow 0.3s, transform 0.3s',
+          flexShrink: isDesktop ? 0 : undefined,
+          width: isDesktop ? '290px' : undefined,
+          opacity: isRestricted ? 0.6 : 1,
+          filter: isRestricted ? 'grayscale(1)' : undefined,
+          pointerEvents: isRestricted ? 'none' : undefined,
+          position: 'relative',
+        }}
+      >
+        {/* Rope-stitch top border — ochre dashes */}
+        <div style={{ height: '4px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 12px, transparent 12px, transparent 18px)`, opacity: 0.85 }} />
+
+        {/* Image */}
+        <div style={{ position: 'relative', aspectRatio: '1', background: RS.bg, overflow: 'hidden' }}>
           <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
-            {transformedProduct.image_url ? (
+            {imageUrl ? (
               <Image
-                src={transformedProduct.image_url}
-                alt={transformedProduct.name}
+                src={imageUrl}
+                alt={product.name}
                 fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                sizes="(max-width: 768px) 50vw, 290px"
+                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800">
-                <div className="text-center">
-                  <div className="text-4xl mb-2">📦</div>
-                  <div className="text-sm font-medium">No Image</div>
+              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: RS.muted }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '36px', marginBottom: '8px' }}>📦</div>
+                  <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px' }}>No Image</div>
                 </div>
               </div>
             )}
           </Link>
 
-          {/* Favorite Button (Hidden if restricted) */}
-          {!isRestricted && (
-            <button
-              className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <svg
-                className="w-5 h-5 text-gray-700"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </button>
-          )}
+          {/* "NEW ARRIVAL" ribbon badge */}
+          <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 10, background: RS.accent, color: 'white', fontSize: '9px', fontWeight: 700, fontFamily: "'DM Sans',sans-serif", padding: '3px 8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            🆕 NEW
+          </div>
 
-          {/* Restriction Overlay */}
+          {/* Restriction overlay */}
           {isRestricted && (
-            <div className="absolute inset-0 z-20 flex items-center justify-center p-8 pointer-events-none">
-              <div className="bg-black/90 backdrop-blur-md border border-red-500/50 rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl transform rotate-[2deg]">
-                <div className="text-3xl mb-2 text-red-500">🚫</div>
-                <span className="text-white font-black uppercase tracking-tighter text-xl leading-none whitespace-nowrap">Local Restriction</span>
-                <span className="text-red-400 text-xs font-bold uppercase tracking-widest mt-1">Limited Availability</span>
+            <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', pointerEvents: 'none' }}>
+              <div style={{ background: 'rgba(0,0,0,0.85)', border: '1px solid rgba(239,68,68,0.5)', borderRadius: '12px', padding: '18px', textAlign: 'center', transform: 'rotate(2deg)' }}>
+                <div style={{ fontSize: '26px', marginBottom: '6px', color: '#ef4444' }}>🚫</div>
+                <span style={{ color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 900, textTransform: 'uppercase', fontSize: '14px', lineHeight: 1, display: 'block' }}>Local Restriction</span>
+                <span style={{ color: '#f87171', fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.18em', marginTop: '4px', display: 'block' }}>Limited Availability</span>
               </div>
             </div>
           )}
         </div>
 
-        <div className="p-4 flex flex-col">
-          <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block">
-            {transformedProduct.brand_name && (
-              <p
-                className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight"
-                style={{
-                  fontFamily:
-                    "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                }}
-              >
-                {transformedProduct.brand_name}
-              </p>
-            )}
-
-            <h3
-              className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors"
-              style={{
-                fontFamily:
-                  "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-              }}
-            >
-              {transformedProduct.name}
+        {/* Body */}
+        <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
+          {brand && (
+            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', fontWeight: 700, color: RS.accent, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
+              {brand}
+            </p>
+          )}
+          <Link href={isRestricted ? '#' : `/product/${product.id}`}>
+            <h3 style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 600, color: RS.dark, fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 group-hover:opacity-70 transition-opacity">
+              {product.name}
             </h3>
           </Link>
 
-          <div className="mt-auto">
-            <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block mb-4">
-              {transformedProduct.compare_at_price ? (
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500 line-through">
-                      ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
-                    </span>
-                    <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                      -{transformedProduct.discount_percentage}%
-                    </span>
-                  </div>
-                  <div className="text-xl font-bold text-green-600">
-                    ${parseFloat(transformedProduct.price).toFixed(2)}
-                  </div>
-                </div>
-              ) : (
-                <div className="text-xl font-bold text-gray-900 dark:text-white">
-                  ${parseFloat(transformedProduct.price).toFixed(2)}
-                </div>
-              )}
-            </Link>
+          {/* Price */}
+          <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '21px', color: RS.accent, letterSpacing: '0.03em', marginBottom: '11px' }}>
+            ${getPrice(product)}
+          </div>
 
+          {/* Side-by-side buttons */}
+          <div style={{ display: 'flex', gap: '7px' }}>
             <button
-              className={`w-full px-4 py-3 font-bold rounded-full transition-all duration-300 text-center text-sm relative z-10 ${
-                isRestricted
-                  ? 'bg-zinc-200 text-zinc-500 cursor-not-allowed'
-                  : 'bg-transparent text-green-800 border-2 border-green-800 hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg'
-              }`}
-              style={{
-                fontFamily:
-                  "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                letterSpacing: '0.05em',
-              }}
               onClick={(e) => !isRestricted && handleAddToCart(product.id, e)}
               disabled={isRestricted}
+              style={isRestricted
+                ? { flex: 1, background: '#e5e5e5', color: '#999', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase' }
+                : { flex: 1, background: RS.accent, color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', transition: 'opacity 0.2s' }}
+              className={isRestricted ? '' : 'hover:opacity-85'}
             >
-              {isRestricted ? 'Unavailable in your ZIP' : 'Add to Cart'}
+              {isRestricted ? 'Unavailable' : 'Add to Cart'}
             </button>
+            <Link
+              href={isRestricted ? '#' : `/product/${product.id}`}
+              style={{ flex: 1, border: `1.5px solid ${RS.accent}`, color: RS.accent, fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', transition: 'background 0.2s, color 0.2s' }}
+              className="hover:bg-[#bf6830] hover:text-white"
+            >
+              View Details
+            </Link>
           </div>
         </div>
       </div>
@@ -264,56 +196,101 @@ export default function NewProductsSection() {
 
   if (error) {
     return (
-      <section className="mt-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
-            FRESH DROPS
-          </h1>
-          <p className="text-red-500 mt-6">Unable to load new products. Please refresh the page.</p>
+      <section style={{ marginTop: '64px', background: RS.bg, padding: '64px 16px' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(40px,7vw,80px)', letterSpacing: '0.06em' }}>FRESH DROPS</h2>
+          <p style={{ fontFamily: "'DM Sans',sans-serif", color: '#ef4444', marginTop: '16px' }}>Unable to load new products. Please refresh the page.</p>
         </div>
       </section>
     );
   }
 
-  // Don't render the section if there are no products to show
-  if (!loading && productsToShow.length === 0) {
-    return null;
-  }
+  if (!loading && products.length === 0) return null;
 
   return (
-    <section className="mt-16 bg-white dark:bg-gray-950 py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
-            FRESH DROPS
-          </h1>
-        </div>
+    // ── Roadside Stop: Fresh Drops Section ──────────────────────────────────
+    <section style={{ marginTop: '64px', background: RS.bg, padding: '60px 0 72px', position: 'relative' }}>
+      {/* Horizontal weathered rule above */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '6px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 24px, transparent 24px, transparent 36px)`, opacity: 0.35 }} />
 
-        {/* Mobile: Grid layout */}
-        <div className="block lg:hidden">
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
-            {productsToShow.slice(0, 6).map((product) => renderProductCard(product, false))}
-          </div>
-        </div>
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
+        <p style={{ fontFamily: "'DM Sans',sans-serif", color: RS.accent, fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
+          Just Rolled In · New Arrivals
+        </p>
+        <div style={{ height: '3px', width: '48px', background: RS.accent, margin: '0 auto 14px' }} />
+        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.06em', margin: 0 }}>
+          FRESH DROPS
+        </h2>
+        <p style={{ fontFamily: "'DM Sans',sans-serif", color: RS.muted, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '10px' }}>
+          Latest arrivals · Be the first at the stop
+        </p>
+        <div style={{ borderTop: `1px dashed ${RS.accent}50`, margin: '20px auto 0', maxWidth: '360px' }} />
+      </div>
 
-        {/* Desktop: Auto-scrolling with manual controls */}
-        <div className="hidden lg:block">
-          <AutoScrollContainer>
-            {productsToShow.map((product) => renderProductCard(product, true))}
-          </AutoScrollContainer>
-        </div>
-
-        {/* View All Button */}
-        <div className="text-center mt-8">
-          <Link
-            href="/fresh-drops"
-            className="inline-block px-6 py-3 text-green-600 border-2 border-green-600 font-bold text-base rounded-lg transition-all duration-300 hover:bg-green-600 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-green-600/25"
-          >
-            VIEW ALL FRESH DROPS →
-          </Link>
+      {/* Mobile grid */}
+      <div className="block lg:hidden" style={{ padding: '0 16px' }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {(loading ? Array(6).fill(null) : products.slice(0, 6)).map((product, i) =>
+            loading ? (
+              <div key={i} style={{ background: RS.white, overflow: 'hidden' }} className="animate-pulse">
+                <div style={{ height: '4px', background: `${RS.accent}30` }} />
+                <div className="aspect-square" style={{ background: '#e8dacc' }} />
+                <div style={{ padding: '13px 15px' }}>
+                  <div className="h-2 rounded mb-2 w-1/3" style={{ background: '#d4c5a9' }} />
+                  <div className="h-4 rounded mb-3" style={{ background: '#d4c5a9' }} />
+                  <div className="h-6 rounded w-1/2 mb-3" style={{ background: '#d4c5a9' }} />
+                  <div style={{ display: 'flex', gap: '7px' }}>
+                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
+                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
+                  </div>
+                </div>
+              </div>
+            ) : renderCard(product, false)
+          )}
         </div>
       </div>
+
+      {/* Desktop auto-scroll */}
+      <div className="hidden lg:block" style={{ padding: '0 24px' }}>
+        {loading ? (
+          <div style={{ display: 'flex', gap: '16px', overflowX: 'hidden' }}>
+            {Array(5).fill(null).map((_, i) => (
+              <div key={i} style={{ background: RS.white, overflow: 'hidden', flexShrink: 0, width: '290px' }} className="animate-pulse">
+                <div style={{ height: '4px', background: `${RS.accent}30` }} />
+                <div style={{ aspectRatio: '1', background: '#e8dacc' }} />
+                <div style={{ padding: '13px 15px' }}>
+                  <div className="h-2 rounded mb-2 w-1/3" style={{ background: '#d4c5a9' }} />
+                  <div className="h-4 rounded mb-3" style={{ background: '#d4c5a9' }} />
+                  <div className="h-6 rounded w-1/2 mb-3" style={{ background: '#d4c5a9' }} />
+                  <div style={{ display: 'flex', gap: '7px' }}>
+                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
+                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <AutoScrollContainer>
+            {products.map((product) => renderCard(product, true))}
+          </AutoScrollContainer>
+        )}
+      </div>
+
+      {/* CTA */}
+      <div style={{ textAlign: 'center', marginTop: '44px' }}>
+        <Link
+          href="/fresh-drops"
+          style={{ display: 'inline-block', background: RS.dark, color: RS.bg, fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.1em', padding: '13px 48px', textDecoration: 'none', transition: 'opacity 0.2s', border: `2px solid ${RS.dark}` }}
+          className="hover:opacity-80"
+        >
+          VIEW ALL FRESH DROPS →
+        </Link>
+      </div>
+
+      {/* Horizontal weathered rule below */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '6px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 24px, transparent 24px, transparent 36px)`, opacity: 0.35 }} />
     </section>
   );
 }

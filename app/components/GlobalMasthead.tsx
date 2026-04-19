@@ -62,40 +62,54 @@ export default function GlobalMasthead() {
   useEffect(() => {
     let collapsed = false;
     let navCollapsed = false;
+    // Capture natural rendered widths once so re-expand thresholds mirror
+    // the same centering math the browser uses — prevents oscillation.
+    const naturalW = { search: 0, nav: 0 };
+
     const check = () => {
       if (!logoRef.current) return;
       const logoRight = logoRef.current.getBoundingClientRect().right;
+      const vw = window.innerWidth;
 
-      // ── Search bar collapse ─────────────────────────────────────────
+      // ── Search bar ─────────────────────────────────────────────────
       if (!collapsed && searchRef.current) {
+        if (!naturalW.search) naturalW.search = searchRef.current.offsetWidth;
         const searchLeft = searchRef.current.getBoundingClientRect().left;
         if (logoRight + 20 >= searchLeft) {
           collapsed = true;
           setIsDesktopSearchCollapsed(true);
         }
       } else if (collapsed) {
-        const estimatedSearchLeft = window.innerWidth / 2 - 250;
-        if (logoRight + 32 < estimatedSearchLeft) {
+        // Predict where the search left edge would be if it were visible.
+        // The bar is centered in vw; use stored width (same math the browser uses).
+        const sw = naturalW.search || 480;
+        const estimatedSearchLeft = (vw - sw) / 2;
+        // +48 gives a 28px hysteresis gap vs the +20 collapse threshold
+        if (logoRight + 48 < estimatedSearchLeft) {
           collapsed = false;
           setIsDesktopSearchCollapsed(false);
         }
       }
 
-      // ── Category nav collapse ───────────────────────────────────────
+      // ── Category nav ───────────────────────────────────────────────
       if (!navCollapsed && catNavRef.current) {
+        if (!naturalW.nav) naturalW.nav = catNavRef.current.offsetWidth;
         const navLeft = catNavRef.current.getBoundingClientRect().left;
         if (logoRight + 20 >= navLeft) {
           navCollapsed = true;
           setIsNavCollapsed(true);
         }
       } else if (navCollapsed) {
-        const estimatedNavLeft = window.innerWidth / 2 - 200;
-        if (logoRight + 40 < estimatedNavLeft) {
+        // Same prediction using stored nav width
+        const nw = naturalW.nav || 520;
+        const estimatedNavLeft = (vw - nw) / 2;
+        if (logoRight + 48 < estimatedNavLeft) {
           navCollapsed = false;
           setIsNavCollapsed(false);
         }
       }
     };
+
     const ro = new ResizeObserver(check);
     ro.observe(document.documentElement);
     check();

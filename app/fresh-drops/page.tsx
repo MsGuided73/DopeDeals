@@ -2,8 +2,20 @@
 
 import { useEffect, useState, type MouseEvent } from "react";
 import Link from "next/link";
-import { addToCart } from "../lib/cart-utils"; // Import directly from lib
+import { addToCart } from "../lib/cart-utils";
 import GlobalBreadcrumbs from "../components/GlobalBreadcrumbs";
+
+// ── Roadside Stop palette ──────────────────────────────────────────────────
+const RS = {
+  bg: '#f0e6d0',          // sun-bleached tan
+  hero: '#1c1208',        // aged dark brown for hero bg
+  heroBg2: '#2e1c0d',     // lighter dark brown gradient end
+  accent: '#bf6830',      // deep ochre/rust
+  accentLight: '#d9883e', // lighter ochre
+  dark: '#1c1208',        // dark text
+  muted: '#8a7d6a',       // dusty road muted text
+  white: '#faf6ef',       // warm white
+};
 
 interface Product {
   id: string;
@@ -11,8 +23,8 @@ interface Product {
   price: number;
   image: string;
   category: string;
-  rating: number; // Mock or real
-  reviews: number; 
+  rating: number;
+  reviews: number;
   is_featured: boolean;
   is_active: boolean;
   slug: string;
@@ -44,203 +56,205 @@ export default function FreshDropsPage() {
   useEffect(() => {
     async function fetchFreshDrops() {
       try {
-        // Fetch strictly the newest fresh drops (confined list)
         const response = await fetch('/api/newest/products?limit=24');
-        if (!response.ok) {
-          throw new Error('Failed to fetch fresh drops');
-        }
-        
+        if (!response.ok) throw new Error('Failed to fetch fresh drops');
         const data = await response.json();
-        // Handle response format { products: [...] }
         const rawProducts: RawProduct[] = Array.isArray(data) ? data : (data.products || []);
-        
-        const mappedProducts = rawProducts.map((p) => ({
+        setProducts(rawProducts.map((p) => ({
           id: String(p.id),
           title: p.name || 'Unknown Product',
           price: Number(p.sale_price || p.our_price || 0),
           image: p.image_url || '',
           category: p.category_id || 'Fresh Drop',
-          rating: 5, // New products start high!
-          reviews: 0, // Fresh drops have no reviews yet
+          rating: 5,
+          reviews: 0,
           is_featured: p.featured || false,
           is_active: p.is_active || false,
           slug: p.slug || String(p.id),
           brand_name: p.brand_name || undefined,
           short_description: p.short_description || undefined,
-          stock_quantity: p.stock_quantity || 0
-        }));
-        
-        setProducts(mappedProducts);
+          stock_quantity: p.stock_quantity || 0,
+        })));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);
       }
     }
-
     fetchFreshDrops();
   }, []);
 
   const handleAddToCart = (e: MouseEvent, product: Product) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    // Correct usage: productId, quantity
     addToCart(product.id, 1);
-    
-    // Create floating +1 animation
+    // Floating +1
     const btn = e.currentTarget as HTMLButtonElement;
     const rect = btn.getBoundingClientRect();
-    const floatingOne = document.createElement('div');
-    floatingOne.textContent = '+1';
-    floatingOne.style.position = 'fixed';
-    floatingOne.style.left = `${rect.left + rect.width / 2}px`;
-    floatingOne.style.top = `${rect.top}px`;
-    floatingOne.style.color = '#10b981'; // Green
-    floatingOne.style.fontWeight = 'bold';
-    floatingOne.style.pointerEvents = 'none';
-    floatingOne.style.zIndex = '1000';
-    floatingOne.className = 'animate-float-up'; // Ensure this class exists or add inline animation
-    floatingOne.animate([
-      { transform: 'translateY(0)', opacity: 1 },
-      { transform: 'translateY(-20px)', opacity: 0 }
-    ], {
-      duration: 800,
-      easing: 'ease-out'
-    });
-    
-    document.body.appendChild(floatingOne);
-    setTimeout(() => floatingOne.remove(), 800);
+    const el = document.createElement('div');
+    el.textContent = '+1';
+    el.style.cssText = `position:fixed;left:${rect.left + rect.width / 2}px;top:${rect.top}px;color:${RS.accent};font-weight:700;pointer-events:none;z-index:1000;`;
+    el.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(-20px)', opacity: 0 }], { duration: 800, easing: 'ease-out' });
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 800);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden bg-black">
-        {/* Background base */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-black opacity-95" />
-        
-        {/* Subtle Green/Blue Glow for "Fresh" vibe */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-green-900/10 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 right-1/4 h-[500px] bg-gradient-to-t from-green-900/10 to-transparent blur-3xl rounded-full opacity-30" />
-        </div>
+    <div style={{ background: RS.bg, minHeight: '100vh' }}>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-display-twilight text-white mb-6 tracking-wider drop-shadow-2xl">
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <section style={{ background: `linear-gradient(160deg, ${RS.hero} 0%, ${RS.heroBg2} 50%, ${RS.hero} 100%)`, paddingTop: '80px', paddingBottom: '80px', position: 'relative', overflow: 'hidden' }}>
+
+        {/* Horizontal dashed road marker */}
+        <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: '2px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 32px, transparent 32px, transparent 52px)`, opacity: 0.15, transform: 'translateY(-50%)' }} />
+
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1280px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
+          {/* Eyebrow */}
+          <p style={{ fontFamily: "'DM Sans',sans-serif", color: RS.accent, fontSize: '11px', fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: '10px' }}>
+            Highway 420 · Latest Arrivals
+          </p>
+
+          {/* Ochre accent rule */}
+          <div style={{ height: '3px', width: '48px', background: RS.accent, margin: '0 auto 16px' }} />
+
+          {/* Title */}
+          <h1 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.bg, fontSize: 'clamp(56px,10vw,120px)', lineHeight: 1, letterSpacing: '0.06em', margin: '0 0 16px' }}>
             FRESH DROPS
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-light tracking-wide">
-            The latest and greatest arrivals. Be the first to try our newest premium selections.
+
+          {/* Sub */}
+          <p style={{ fontFamily: "'DM Sans',sans-serif", color: RS.muted, fontSize: '16px', maxWidth: '480px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+            The latest arrivals, just pulled off the truck. Be the first to grab them.
           </p>
-          
-          <div className="mt-8 flex justify-center gap-4 text-sm font-medium text-white/80">
-            <span className="flex items-center gap-1">
-              <span className="text-green-500">🆕</span> New Arrivals
-            </span>
-            <span className="w-1 h-1 rounded-full bg-gray-600 self-center" />
-            <span className="flex items-center gap-1">
-              <span className="text-blue-400">⚡</span> Limited Stock
-            </span>
-            <span className="w-1 h-1 rounded-full bg-gray-600 self-center" />
-            <span className="flex items-center gap-1">
-              <span className="text-purple-400">💎</span> Premium Quality
-            </span>
+
+          <div style={{ borderTop: `1px dashed ${RS.accent}50`, maxWidth: '360px', margin: '0 auto 20px' }} />
+
+          {/* Stat pills */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
+            {[
+              { icon: '🆕', label: `${products.length > 0 ? products.length : '24+'} New Arrivals` },
+              { icon: '⚡', label: 'Limited Stock' },
+              { icon: '💎', label: 'Premium Quality' },
+            ].map(({ icon, label }, i) => (
+              <span key={i} style={{ fontFamily: "'DM Sans',sans-serif", color: RS.muted, fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ color: RS.accent }}>{icon}</span>{label}
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Products Grid */}
-      <main className="max-w-7xl mx-auto px-4 py-12 md:py-20">
-        
-        <GlobalBreadcrumbs paths={[{ name: "Fresh Drops" }]} />
+      {/* ── Products Grid ─────────────────────────────────────────────────── */}
+      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px 80px' }}>
+        <GlobalBreadcrumbs paths={[{ name: 'Fresh Drops' }]} />
 
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="aspect-[3/4] bg-gray-200 dark:bg-gray-800 rounded-2xl animate-pulse" />
+              <div key={i} style={{ background: RS.white, overflow: 'hidden' }} className="animate-pulse">
+                <div style={{ height: '4px', background: `${RS.accent}30` }} />
+                <div className="aspect-square" style={{ background: '#e4d5bc' }} />
+                <div style={{ padding: '13px 15px' }}>
+                  <div className="h-2 rounded mb-3 w-1/3" style={{ background: '#d4c5a9' }} />
+                  <div className="h-4 rounded mb-2" style={{ background: '#d4c5a9' }} />
+                  <div className="h-6 rounded w-1/2 mb-4" style={{ background: '#d4c5a9' }} />
+                  <div style={{ display: 'flex', gap: '7px' }}>
+                    <div className="h-10 flex-1" style={{ background: '#d4c5a9' }} />
+                    <div className="h-10 flex-1" style={{ background: '#d4c5a9' }} />
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         ) : error ? (
-          <div className="text-center py-20">
-            <h3 className="text-xl text-red-500 mb-4">Error loading fresh drops</h3>
-            <p className="text-gray-500">{error}</p>
-            <button 
+          <div style={{ textAlign: 'center', padding: '80px 0' }}>
+            <h3 style={{ fontFamily: "'DM Sans',sans-serif", color: RS.dark, fontSize: '20px', marginBottom: '12px' }}>Error loading fresh drops</h3>
+            <p style={{ color: RS.muted }}>{error}</p>
+            <button
               onClick={() => window.location.reload()}
-              className="mt-6 px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+              style={{ marginTop: '24px', padding: '12px 36px', background: RS.accent, color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '13px', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}
+              className="hover:opacity-90 transition-opacity"
             >
               Try Again
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {products.map((product) => (
-              <Link 
-                key={product.id} 
-                href={`/product/${product.slug}`}
-                className="group relative block"
-              >
-                <div className="aspect-[3/4] relative bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow hover:-translate-y-1 duration-300">
-                  {/* Badge */}
-                  <div className="absolute top-3 left-3 z-10 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
-                    <span>🆕</span> NEW
-                  </div>
-                  
-                  {product.image ? (
-                    <img 
-                      src={product.image} 
-                      alt={product.title}
-                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      No Image
+              <div key={product.id} className="group" style={{ background: RS.white, overflow: 'hidden', boxShadow: '0 2px 14px rgba(28,18,8,0.09)', transition: 'box-shadow 0.3s, transform 0.3s' }}>
+                {/* Rope-stitch dashed accent */}
+                <div style={{ height: '4px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 12px, transparent 12px, transparent 18px)`, opacity: 0.8 }} />
+
+                {/* Image */}
+                <Link href={`/product/${product.slug}`}>
+                  <div style={{ position: 'relative', aspectRatio: '1', background: RS.bg, overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 10, background: RS.accent, color: 'white', fontSize: '9px', fontWeight: 700, fontFamily: "'DM Sans',sans-serif", padding: '3px 8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                      🆕 NEW
                     </div>
-                  )}
-                  
-                  {/* Quick Add Button - Desktop */}
-                  <div className="absolute bottom-4 right-4 translate-y-20 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100">
-                    <button
-                      onClick={(e) => handleAddToCart(e, product)}
-                      className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg"
-                      title="Add to Cart"
-                    >
-                      +
-                    </button>
+                    {product.image ? (
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: RS.muted }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '40px', marginBottom: '8px' }}>📦</div>
+                          <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px' }}>No Image</div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-                
-                <div className="space-y-1">
+                </Link>
+
+                {/* Body */}
+                <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
                   {product.brand_name && (
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', fontWeight: 700, color: RS.accent, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>
                       {product.brand_name}
                     </p>
                   )}
-                  <h3 className="font-medium text-lg text-gray-900 dark:text-white line-clamp-1 group-hover:text-amber-500 transition-colors">
+                  <h3 style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 600, color: RS.dark, fontSize: '14px', lineHeight: 1.35, marginBottom: '8px' }} className="line-clamp-2">
                     {product.title}
                   </h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-900 dark:text-gray-100 font-bold">
-                      ${product.price.toFixed(2)}
-                    </span>
-                    <div className="flex items-center gap-1 text-xs text-green-600 font-medium">
-                       Just Dropped
-                    </div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '12px' }}>
+                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '21px', color: RS.accent, letterSpacing: '0.03em' }}>${product.price.toFixed(2)}</span>
+                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', color: RS.accent, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Just Dropped</span>
+                  </div>
+
+                  {/* Side-by-side buttons */}
+                  <div style={{ display: 'flex', gap: '7px' }}>
+                    <button
+                      onClick={(e) => handleAddToCart(e, product)}
+                      style={{ flex: 1, background: RS.accent, color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '10px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', transition: 'opacity 0.2s' }}
+                      className="hover:opacity-85"
+                    >
+                      Add to Cart
+                    </button>
+                    <Link
+                      href={`/product/${product.slug}`}
+                      style={{ flex: 1, border: `1.5px solid ${RS.accent}`, color: RS.accent, fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', transition: 'background 0.2s, color 0.2s' }}
+                      className="hover:bg-[#bf6830] hover:text-white"
+                    >
+                      View Details
+                    </Link>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}
       </main>
 
-      <div className="text-center pb-20">
-         <Link 
-           href="/products" 
-           className="inline-flex items-center gap-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors"
-         >
-           <span>← Back to All Products</span>
-         </Link>
+      {/* ── Back link ─────────────────────────────────────────────────────── */}
+      <div style={{ textAlign: 'center', paddingBottom: '80px' }}>
+        <Link
+          href="/products"
+          style={{ fontFamily: "'DM Sans',sans-serif", color: RS.accent, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: `1px solid ${RS.accent}`, paddingBottom: '2px' }}
+        >
+          ← Back to All Products
+        </Link>
       </div>
     </div>
   );

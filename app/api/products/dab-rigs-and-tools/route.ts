@@ -29,16 +29,14 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     query = applyRestrictedProductFilter(query);
 
-    const dabKeywords = [
-      'dab', 'rig', 'nail', 'banger', 'tool', 'puffco', 'e-rig', 'concentrate',
-      'diamond', 'glass', 'recycler', 'portable', 'travel', 'carb cap', 'dart'
-    ];
-
-    const keywordConditions = dabKeywords.map(keyword =>
-      `name.ilike.%${keyword}%`
+    // ── Strict category_slug filter ──────────────────────────────────────────
+    // Database has three dab-rig slugs (confirmed via audit):
+    //   'dab-rig'              → 30 products  (all Puffco e-rigs, tools, rigs)
+    //   'dab-rig-attachment'   →  1 product   (Puffco Peak Ryan Fitt Recycler)
+    //   'dab-rig-accessories'  →  1 product   (Puffco Peak Bowl)
+    query = query.or(
+      'category_slug.eq.dab-rig,category_slug.eq.dab-rig-attachment,category_slug.eq.dab-rig-accessories'
     );
-
-    query = query.or(keywordConditions.join(','));
 
     // Apply pagination
     query = query.limit(limit);
@@ -67,8 +65,11 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     dabCountQuery = applyRestrictedProductFilter(dabCountQuery);
 
-    const { count } = await dabCountQuery
-      .or(dabKeywords.map(keyword => `name.ilike.%${keyword}%`).join(','));
+
+    const { count } = await dabCountQuery.or(
+      'category_slug.eq.dab-rig,category_slug.eq.dab-rig-attachment,category_slug.eq.dab-rig-accessories'
+    );
+
 
     const brandIds = [...new Set(products?.map((p: any) => p.brand_id).filter(Boolean) || [])];
     let brandsMap: Record<string, string> = {};

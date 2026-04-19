@@ -32,16 +32,12 @@ export async function GET(req: NextRequest) {
       .neq('image_url', '') // Must not be empty string
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
-      .or(
-        `category_slug.eq.pipes,` +
-        `name.ilike.%pipe%,` +
-        `name.ilike.%glass pipe%,` +
-        `name.ilike.%hand pipe%,` +
-        `name.ilike.%metal pipe%,` +
-        `name.ilike.%one hitter%,` +
-        `category_slug.ilike.%pipe%,` +
-        `category_slug.ilike.%pipes%`
-      )
+      // ── Strict slug-based filter ──────────────────────────────────────────
+      // Only products explicitly tagged category_slug = 'pipes' appear here.
+      // Water pipes (bongs) are excluded because they carry category_slug = 'bongs'.
+      // If this returns 0 results, it means no hand-pipe products have been
+      // ingested / tagged yet — the catalog needs to be updated, not the query.
+      .eq('category_slug', 'pipes')
       .order('created_at', { ascending: false })
       .limit(limit);
 
