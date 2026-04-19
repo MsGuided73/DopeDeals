@@ -59,25 +59,22 @@ jobs:
         run: pnpm build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
-          # Use secrets if available, otherwise use placeholders to satisfy build requirements
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder' }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000' }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://placeholder.supabase.co' }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder' }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'placeholder' }}
-                    # KajaPay - loose/placeholder until credentials are fully configured
-                              KAJAPAY_USERNAME: ${{ secrets.KAJAPAY_USERNAME || 'placeholder' }}
-                                        KAJAPAY_PASSWORD: ${{ secrets.KAJAPAY_PASSWORD || 'placeholder' }}
-                                                  KAJAPAY_SOURCE_KEY: ${{ secrets.KAJAPAY_SOURCE_KEY || 'placeholder' }}
-                                                            KAJAPAY_BASE_URL: ${{ secrets.KAJAPAY_BASE_URL || 'https://placeholder.kajapay.com' }}
-                                                                      KAJAPAY_SANDBOX_BASE_URL: ${{ secrets.KAJAPAY_SANDBOX_BASE_URL || 'https://sandbox.kajapay.com' }}
-                                                                                KAJAPAY_SECRET_KEY: ${{ secrets.KAJAPAY_SECRET_KEY || 'placeholder' }}
-                                                                                          # ShipStation - loose/placeholder until credentials are received
-                                                                                                    SHIPSTATION_API_KEY: ${{ secrets.SHIPSTATION_API_KEY || 'placeholder' }}
-                                                                                                              SHIPSTATION_API_SECRET: ${{ secrets.SHIPSTATION_API_SECRET || 'placeholder' }}
-                                                                                                                        SHIPSTATION_BASE_URL: ${{ secrets.SHIPSTATION_BASE_URL || 'https://ssapi.shipstation.com' }}
-                                                                                                                                  SHIPSTATION_WEBHOOK_URL: ${{ secrets.SHIPSTATION_WEBHOOK_URL || '' }}
-                                                                                                                                            SHIPSTATION_DEFAULT_WAREHOUSE_ID: ${{ secrets.SHIPSTATION_DEFAULT_WAREHOUSE_ID || '' }}
-                                                                                                                                                      SHIPSTATION_SYNC_INTERVAL: ${{ secrets.SHIPSTATION_SYNC_INTERVAL || '3600000' }}
-                                                                                                                                                                SHIPSTATION_ENABLE_WEBHOOKS: ${{ secrets.SHIPSTATION_ENABLE_WEBHOOKS || 'false' }}
+          KAJAPAY_USERNAME: ${{ secrets.KAJAPAY_USERNAME || 'placeholder' }}
+          KAJAPAY_PASSWORD: ${{ secrets.KAJAPAY_PASSWORD || 'placeholder' }}
+          KAJAPAY_SOURCE_KEY: ${{ secrets.KAJAPAY_SOURCE_KEY || 'placeholder' }}
+          KAJAPAY_BASE_URL: ${{ secrets.KAJAPAY_BASE_URL || 'https://placeholder.kajapay.com' }}
+          KAJAPAY_SANDBOX_BASE_URL: ${{ secrets.KAJAPAY_SANDBOX_BASE_URL || 'https://sandbox.kajapay.com' }}
+          KAJAPAY_SECRET_KEY: ${{ secrets.KAJAPAY_SECRET_KEY || 'placeholder' }}
+          SHIPSTATION_API_KEY: ${{ secrets.SHIPSTATION_API_KEY || 'placeholder' }}
+          SHIPSTATION_API_SECRET: ${{ secrets.SHIPSTATION_API_SECRET || 'placeholder' }}
+          SHIPSTATION_BASE_URL: ${{ secrets.SHIPSTATION_BASE_URL || 'https://ssapi.shipstation.com' }}
+          SHIPSTATION_WEBHOOK_URL: ${{ secrets.SHIPSTATION_WEBHOOK_URL || 'placeholder' }}
+          SHIPSTATION_DEFAULT_WAREHOUSE_ID: ${{ secrets.SHIPSTATION_DEFAULT_WAREHOUSE_ID || 'placeholder' }}
+          SHIPSTATION_SYNC_INTERVAL: ${{ secrets.SHIPSTATION_SYNC_INTERVAL || '3600000' }}
+          SHIPSTATION_ENABLE_WEBHOOKS: ${{ secrets.SHIPSTATION_ENABLE_WEBHOOKS || 'false' }}
