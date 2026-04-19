@@ -81,7 +81,7 @@ export default function HomePage() {
         </Suspense>
 
         <Suspense fallback={<SectionFallback />}>
-          <AboutHighway420 />
+          <DopeDealsSection />
         </Suspense>
 
         <Suspense fallback={<SectionFallback />}>
@@ -90,7 +90,7 @@ export default function HomePage() {
       </main>
 
       <Suspense fallback={<SectionFallback />}>
-        <DopeDealsSection />
+        <AboutHighway420 />
       </Suspense>
     </div>
   );
