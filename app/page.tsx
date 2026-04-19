@@ -16,7 +16,6 @@ export const metadata: Metadata = {
 const FeaturedProductsSection = nextDynamic(() => import("./components/FeaturedProductsSection"));
 const NewProductsSection      = nextDynamic(() => import("./components/NewProductsSection"));
 const TrustedBrandsBulletin   = nextDynamic(() => import("./components/TrustedBrandsBulletin"));
-const TrustBadgeBar           = nextDynamic(() => import("./components/TrustBadgeBar"));
 const AboutHighway420         = nextDynamic(() => import("./components/AboutHighway420"));
 const SpotlightReviews        = nextDynamic(() => import("./components/SpotlightReviews"));
 const DopeDealsSection        = nextDynamic(() => import("./components/DopeDealsSection"));
@@ -74,10 +73,6 @@ export default function HomePage() {
 
         <Suspense fallback={<SectionFallback />}>
           <TrustedBrandsBulletin />
-        </Suspense>
-
-        <Suspense fallback={<SectionFallback />}>
-          <TrustBadgeBar />
         </Suspense>
 
         <Suspense fallback={<SectionFallback />}>
