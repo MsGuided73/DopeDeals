@@ -241,7 +241,8 @@ export default function SpotlightReviews() {
         position: "relative",
         overflow: "hidden",
         backgroundColor: "#c9b89a",
-        aspectRatio: "16 / 9",
+        // Never shrink below what the content needs; at wide viewports look like 16/9
+        minHeight: "clamp(520px, 56.25vw, 900px)",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -275,17 +276,17 @@ export default function SpotlightReviews() {
       />
 
       {/* ── Content (absolutely positioned overlay) ── */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 2,
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "10% 32px 0",
-          width: "100%",
-        }}
-      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 2,
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "clamp(24px, 8%, 80px) 32px 0",
+            width: "100%",
+          }}
+        >
         {/* Left-aligned header block */}
         <div style={{ marginBottom: "40px" }}>
           <p
@@ -366,9 +367,15 @@ export default function SpotlightReviews() {
           </button>
 
           {/* Three review columns with vertical pipe dividers */}
-          <div style={{ flex: 1, display: "flex" }}>
+          <div
+            style={{ flex: 1, display: "flex", flexWrap: "wrap", gap: "0" }}
+            className="reviews-grid"
+          >
             {visible.map((review, i) => (
-              <div key={`${review.id}-${startIdx}`} style={{ display: "flex", flex: 1 }}>
+              <div
+                key={`${review.id}-${startIdx}`}
+                style={{ display: "flex", flex: "1 1 280px", minWidth: 0 }}
+              >
                 {/* Vertical pipe divider (before 2nd and 3rd columns) */}
                 {i > 0 && (
                   <div

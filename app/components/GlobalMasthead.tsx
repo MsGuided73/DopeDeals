@@ -62,8 +62,6 @@ export default function GlobalMasthead() {
   useEffect(() => {
     let collapsed = false;
     let navCollapsed = false;
-    // Capture natural rendered widths once so re-expand thresholds mirror
-    // the same centering math the browser uses — prevents oscillation.
     const naturalW = { search: 0, nav: 0 };
 
     const check = () => {
@@ -73,18 +71,18 @@ export default function GlobalMasthead() {
 
       // ── Search bar ─────────────────────────────────────────────────
       if (!collapsed && searchRef.current) {
-        if (!naturalW.search) naturalW.search = searchRef.current.offsetWidth;
+        // Only capture naturalW when the element is actually rendered and sized
+        if (!naturalW.search && searchRef.current.offsetWidth > 0) {
+          naturalW.search = searchRef.current.offsetWidth;
+        }
         const searchLeft = searchRef.current.getBoundingClientRect().left;
         if (logoRight + 20 >= searchLeft) {
           collapsed = true;
           setIsDesktopSearchCollapsed(true);
         }
       } else if (collapsed) {
-        // Predict where the search left edge would be if it were visible.
-        // The bar is centered in vw; use stored width (same math the browser uses).
         const sw = naturalW.search || 480;
         const estimatedSearchLeft = (vw - sw) / 2;
-        // +48 gives a 28px hysteresis gap vs the +20 collapse threshold
         if (logoRight + 48 < estimatedSearchLeft) {
           collapsed = false;
           setIsDesktopSearchCollapsed(false);
@@ -93,27 +91,46 @@ export default function GlobalMasthead() {
 
       // ── Category nav ───────────────────────────────────────────────
       if (!navCollapsed && catNavRef.current) {
-        if (!naturalW.nav) naturalW.nav = catNavRef.current.offsetWidth;
-        const navLeft = catNavRef.current.getBoundingClientRect().left;
-        if (logoRight + 20 >= navLeft) {
-          navCollapsed = true;
-          setIsNavCollapsed(true);
+        // Only capture naturalW when the element is actually rendered and sized.
+        // A zero offsetWidth means fonts/images haven't loaded yet — skip this tick.
+        if (!naturalW.nav && catNavRef.current.offsetWidth > 0) {
+          naturalW.nav = catNavRef.current.offsetWidth;
+        }
+        // Don't collapse until we have a real measurement
+        if (naturalW.nav > 0) {
+          const navLeft = catNavRef.current.getBoundingClientRect().left;
+          if (logoRight + 20 >= navLeft) {
+            navCollapsed = true;
+            setIsNavCollapsed(true);
+          }
         }
       } else if (navCollapsed) {
-        // Same prediction using stored nav width
         const nw = naturalW.nav || 520;
         const estimatedNavLeft = (vw - nw) / 2;
-        if (logoRight + 48 < estimatedNavLeft) {
+        if (logoRight + 64 < estimatedNavLeft) {
           navCollapsed = false;
           setIsNavCollapsed(false);
         }
       }
     };
 
-    const ro = new ResizeObserver(check);
-    ro.observe(document.documentElement);
-    check();
-    return () => ro.disconnect();
+    // Defer the first check until after paint so fonts + images have rendered
+    // and offsetWidth reflects the real layout — prevents false collapse on mount.
+    let rafId = requestAnimationFrame(() => {
+      check();
+      const ro = new ResizeObserver(check);
+      ro.observe(document.documentElement);
+      // Store disconnect so the cleanup below can reach it
+      (rafId as any) = ro;
+    });
+
+    return () => {
+      if (typeof (rafId as any).disconnect === 'function') {
+        (rafId as any).disconnect();
+      } else {
+        cancelAnimationFrame(rafId as unknown as number);
+      }
+    };
   }, []);
 
   const handleSearch = (e?: React.FormEvent) => {
