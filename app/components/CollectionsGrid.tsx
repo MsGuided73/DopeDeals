@@ -30,7 +30,7 @@ const COLLECTIONS = [
     accent: "#f97316",
   },
   {
-    name: "MUSHROOMS",
+    name: "SHROOMS & MORE",
     route: "/mushrooms",
     image: "",
     accent: "#a855f7",
@@ -44,7 +44,7 @@ const COLLECTIONS = [
   {
     name: "DAB RIGS",
     route: "/dabsntools",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/CG_ProdCard-Dab%20Rig.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/DabRig-withPhoneTech-NoWords.png",
     accent: "#14b8a6",
   },
   {
@@ -56,14 +56,14 @@ const COLLECTIONS = [
   {
     name: "BUNDLES",
     route: "/bundles",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Popular%20Setups.png",
     accent: "#C5A059",
   },
 ];
 
 // ─── Shared style blocks ──────────────────────────────────────────────────────
 const WOOD_TEXTURE_1 =
-  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain1.png";
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/Berle.png";
 const WOOD_TEXTURE_2 =
   "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain2.png";
 
@@ -119,7 +119,7 @@ function monitorStyle(isHovered: boolean, accent: string): React.CSSProperties {
       ? "linear-gradient(145deg, #2a2a30 0%, #1e1e24 100%)"
       : "linear-gradient(145deg, #22222a 0%, #181820 100%)",
     borderRadius: "7px",
-    padding: "7px 7px 0 7px",
+    padding: "7px",
     boxShadow: isHovered
       ? [
           "inset 0 1px 0 rgba(255,255,255,0.10)",
@@ -153,18 +153,6 @@ function screenFaceStyle(isHovered: boolean, accent: string): React.CSSPropertie
     transition: "box-shadow 0.35s ease",
   };
 }
-
-const CHIN_STYLE: React.CSSProperties = {
-  height: "18px",
-  flexShrink: 0,
-  background: "linear-gradient(180deg, #141418 0%, #0f0f13 100%)",
-  borderRadius: "0 0 5px 5px",
-  borderTop: "1px solid rgba(0,0,0,0.6)",
-  display: "flex",
-  alignItems: "center",
-  paddingLeft: "9px",
-  gap: "6px",
-};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function CollectionsGrid() {
@@ -334,7 +322,8 @@ export default function CollectionsGrid() {
                           style={{
                             fontFamily: "'BebasNeue', 'Bebas Neue', sans-serif",
                             fontWeight: 900,
-                            fontSize: "clamp(18px, 1.8vw, 28px)",
+                            fontSize: "clamp(26px, 2.6vw, 42px)",
+                            WebkitTextStroke: "0.75px #fff",
                             lineHeight: 1,
                             letterSpacing: "0.06em",
                             color: "#fff",
@@ -374,24 +363,6 @@ export default function CollectionsGrid() {
                       />
                     </div>{/* /screen face */}
 
-                    {/* Monitor chin / chassis strip */}
-                    <div style={CHIN_STYLE}>
-                      {/* Power LED */}
-                      <div
-                        style={{
-                          width: "5px",
-                          height: "5px",
-                          borderRadius: "50%",
-                          flexShrink: 0,
-                          backgroundColor: col.accent,
-                          boxShadow: on
-                            ? `0 0 10px 2px ${col.accent}`
-                            : `0 0 4px 0px ${col.accent}`,
-                          transition: "box-shadow 0.3s ease",
-                        }}
-                      />
-                    </div>
-
                   </div>{/* /monitor housing */}
                 </Link>
               );
@@ -419,7 +390,7 @@ export default function CollectionsGrid() {
               style={{
                 background: "linear-gradient(145deg, #22222a 0%, #181820 100%)",
                 borderRadius: "8px",
-                padding: "6px 6px 0 6px",
+                padding: "6px",
                 boxShadow: [
                   "inset 0 1px 0 rgba(255,255,255,0.07)",
                   "0 4px 16px rgba(0,0,0,0.7)",
@@ -522,8 +493,8 @@ export default function CollectionsGrid() {
                   <p
                     style={{
                       fontFamily: "'Oswald', system-ui, sans-serif",
-                      fontWeight: 700,
-                      fontSize: "11px",
+                      fontWeight: 900,
+                      fontSize: "15px",
                       letterSpacing: "0.10em",
                       color: "#fff",
                       textTransform: "uppercase",
@@ -533,29 +504,6 @@ export default function CollectionsGrid() {
                     {col.name}
                   </p>
                 </div>
-              </div>
-
-              {/* Mobile chin */}
-              <div
-                style={{
-                  height: "16px",
-                  background: "linear-gradient(180deg, #141418 0%, #0f0f13 100%)",
-                  borderRadius: "0 0 4px 4px",
-                  borderTop: "1px solid rgba(0,0,0,0.6)",
-                  display: "flex",
-                  alignItems: "center",
-                  paddingLeft: "8px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "4px",
-                    height: "4px",
-                    borderRadius: "50%",
-                    backgroundColor: col.accent,
-                    boxShadow: `0 0 4px ${col.accent}`,
-                  }}
-                />
               </div>
             </div>
           </Link>
