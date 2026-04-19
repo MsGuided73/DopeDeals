@@ -66,8 +66,12 @@ export interface IStorage {
   [key: string]: any;
 }
 
-// Storage abstraction layer for Next.js
-export async function getStorage(): Promise<IStorage> {
+// Module-level singleton — created once per process, reused on every request.
+let _supabase: ReturnType<typeof createClient> | null = null;
+
+function getSupabaseClient() {
+  if (_supabase) return _supabase;
+
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -75,7 +79,13 @@ export async function getStorage(): Promise<IStorage> {
     throw new Error('Supabase credentials not configured');
   }
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  _supabase = createClient(supabaseUrl, supabaseKey);
+  return _supabase;
+}
+
+// Storage abstraction layer for Next.js
+export async function getStorage(): Promise<IStorage> {
+  const supabase = getSupabaseClient();
 
   return {
     // Products

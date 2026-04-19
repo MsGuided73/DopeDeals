@@ -53,6 +53,7 @@ interface PDPResponse {
     flavors?: string[] | null;
     allergy_warning?: string | null;
     product_type: string | null;
+    stock_quantity: number;
   };
   pricing_status: 'priced' | 'pending' | 'hidden';
   display_price_cents: number | null;
@@ -66,8 +67,6 @@ interface PDPResponse {
   variants: any[];
   selected_variant_id: string | null;
   ui_state: PDPUIState;
-  // Keep original fields for backward compatibility
-  raw_product: any;
 }
 
 // Default ingredients structure when not provided
@@ -331,7 +330,8 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
         highlights: rawProduct.highlights || null,
         flavors: rawProduct.flavors || null,
         allergy_warning: rawProduct.allergy_warning || null,
-        product_type: inferProductType(rawProduct)
+        product_type: inferProductType(rawProduct),
+        stock_quantity: rawProduct.stock_quantity || 0
       },
       pricing_status: pricingStatus,
       display_price_cents: priceVisible 
@@ -359,26 +359,6 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
         can_purchase: canPurchase,
         price_visible: priceVisible
       },
-      // Keep raw product for backward compatibility
-      raw_product: {
-        ...rawProduct,
-        // Transform to expected format for legacy components
-        price: parseFloat(rawProduct.our_price) || 0,
-        compare_at_price: rawProduct.sale_price ? parseFloat(rawProduct.sale_price) : undefined,
-        brand_name: rawProduct.brand_name || rawProduct.brand_id,
-        image_urls: buildImagesArray(rawProduct).map(img => img.url),
-        inStock: (rawProduct.stock_quantity || 0) > 0,
-        featured: Boolean(rawProduct.featured),
-        category_slug: rawProduct.category_slug,
-        variations: variations.map((v: any) => ({
-          id: v.id,
-          name: v.name,
-          image_url: v.image_url,
-          price: parseFloat(v.our_price) || 0,
-          sale_price: v.sale_price ? parseFloat(v.sale_price) : undefined,
-          inStock: (v.stock_quantity || 0) > 0
-        }))
-      }
     };
 
     return NextResponse.json(response);

@@ -120,14 +120,11 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     );
   }
 
-  // Helper values
-  const rawProduct = data?.raw_product || props.product || {}; 
+  // stock_quantity is now in the normalized product object
+  const stockCount = product.stock_quantity || 0;
+  const inStock = stockCount > 0;
   const price = display_price_cents ? display_price_cents / 100 : 0;
   const originalPrice = compare_at_price_cents ? compare_at_price_cents / 100 : null;
-  const stockCount = rawProduct.stock_quantity || 0; 
-  // If we can't find stock data, we might default to inStock for safety, or check ui_state
-  // But strictly, raw_product should have it.
-  const inStock = stockCount > 0;
   const displayImages = images.length > 0 ? images.map((i: any) => i.url) : ['/api/placeholder/600/600'];
 
   // Handle Add to Cart
