@@ -69,23 +69,33 @@ export interface IStorage {
 // Module-level singleton — created once per process, reused on every request.
 let _supabase: ReturnType<typeof createClient> | null = null;
 
-function getSupabaseClient() {
+function getSupabaseClient(): ReturnType<typeof createClient> | null {
   if (_supabase) return _supabase;
 
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Supabase credentials not configured');
+  // During next build, env vars may be placeholder strings — don't crash the build.
+  const isPlaceholder = (v?: string) =>
+    !v || v === 'placeholder' || v.includes('placeholder.supabase');
+
+  if (isPlaceholder(supabaseUrl) || isPlaceholder(supabaseKey)) {
+    return null;
   }
 
-  _supabase = createClient(supabaseUrl, supabaseKey);
+  _supabase = createClient(supabaseUrl!, supabaseKey!);
   return _supabase;
 }
 
 // Storage abstraction layer for Next.js
 export async function getStorage(): Promise<IStorage> {
   const supabase = getSupabaseClient();
+
+  if (!supabase) {
+    throw new Error(
+      'Supabase client not available — check SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.'
+    );
+  }
 
   return {
     // Products
