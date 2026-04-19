@@ -33,6 +33,9 @@ import { ShippingSection } from './ShippingSection';
 import GlobalMasthead from './GlobalMasthead';
 import EssentialsFooter from './EssentialsFooter';
 import ProductDescription from './ProductDescription';
+import ReviewButton from './reviews/ReviewButton';
+import ReviewsList from './reviews/ReviewsList';
+import ProductRatingBadge from './reviews/ProductRatingBadge';
 
 // Types match your stack
 interface EnhancedPDPProps {
@@ -73,6 +76,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const [activeTab, setActiveTab] = useState<'details' | 'ingredients' | 'lab' | 'reviews'>('details');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [reviewsRefreshKey, setReviewsRefreshKey] = useState(0);
   const [cartMessage, setCartMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   React.useEffect(() => {
@@ -279,23 +283,13 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
               </h1>
             </div>
 
-            {/* Rating (Placeholder logic until reviews implemented) */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    className={`w-5 h-5 ${
-                      i < 5 // Defaulting to 5 stars for now
-                        ? 'fill-yellow-400 text-yellow-400' 
-                        : 'text-slate-300'
-                    }`} 
-                  />
-                ))}
-              </div>
-              <span className="text-slate-900 font-semibold">5.0</span>
-              <span className="text-slate-600">(New Arrival)</span>
-            </div>
+            {/* Rating — pulls live aggregate from /api/reviews/product/[id] */}
+            {product?.id && (
+              <ProductRatingBadge
+                productId={product.id}
+                onJumpToReviews={() => setActiveTab('reviews')}
+              />
+            )}
 
             {/* Price */}
             <div className="flex items-baseline gap-4">
@@ -546,12 +540,26 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
               </div>
             )}
 
-            {activeTab === 'reviews' && (
+            {activeTab === 'reviews' && product?.id && (
               <div className="space-y-6">
-                <div className="bg-white p-12 rounded-2xl shadow-sm border border-slate-200 text-center">
-                   <Star className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-                   <h3 className="text-2xl font-bold text-slate-900 mb-2">Reviews Coming Soon</h3>
-                   <p className="text-slate-600">Be the first to review this new arrival!</p>
+                {/* Write-a-review CTA at the top of the tab */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-1">Customer Reviews</h3>
+                    <p className="text-sm text-slate-600">
+                      Verified buyers only — only customers who purchased and received this product can review.
+                    </p>
+                  </div>
+                  <ReviewButton
+                    productId={product.id}
+                    productName={product.name || 'this product'}
+                    onReviewSubmitted={() => setReviewsRefreshKey(k => k + 1)}
+                  />
+                </div>
+
+                {/* Reviews list (re-fetches when reviewsRefreshKey changes) */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                  <ReviewsList productId={product.id} refreshKey={reviewsRefreshKey} />
                 </div>
               </div>
             )}

@@ -13,7 +13,7 @@
 --   - email_verified = true (user_profiles)
 --   - age_verification_status = 'verified' (users)
 --   - Has a delivered order containing the product (orders.status = 'delivered'
---     AND ogo ahead and take care rders.delivered_at IS NOT NULL AND order_items.product_id = $1)
+--     AND orders.delivered_at IS NOT NULL AND order_items.product_id = $1)
 --   - Hasn't already reviewed this product (UNIQUE(user_id, product_id))
 -- ─────────────────────────────────────────────────────────────────────────────
 
