@@ -73,6 +73,17 @@
   font-display: swap;
 }
 
+/* Montserrat ExtraBold - self-hosted on Supabase CDN */
+@font-face {
+  font-family: "MontserratExtraBold";
+  src:
+    url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/fonts/Montserrat%20ExtraBold/Montserrat-ExtraBold.woff2")
+      format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @keyframes scroll-horizontal {
   0% {
     transform: translateX(0);
@@ -161,11 +172,11 @@ h6 {
   text-transform: uppercase !important;
 }
 
-/* Serif heading — for editorial-style section titles (e.g. "High Praise") */
+/* Editorial heading — Inter Black for section titles like "High Praise" */
 .font-serif-heading {
-  font-family: "Source Serif 4", Georgia, "Times New Roman", serif !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.01em !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.03em !important;
   text-transform: none !important;
 }
 
@@ -192,6 +203,14 @@ p,
   font-weight: 400 !important;
   letter-spacing: 0.01em !important;
   text-transform: none !important;
+}
+
+/* Eyebrow labels — escape the global p letter-spacing override */
+p.eyebrow-label {
+  letter-spacing: var(--eyebrow-spacing, 0.35em) !important;
+  font-family: inherit !important;
+  font-weight: inherit !important;
+  text-transform: inherit !important;
 }
 
 /* 3. Legacy font class support - Redirect to new hierarchy */

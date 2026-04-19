@@ -182,8 +182,8 @@ export default function CollectionsGrid() {
       {/* ── DESKTOP: Monitor bank ─────────────────────────────────────────── */}
       <div
         ref={rackRef}
-        className="hidden md:block mx-auto px-4 pb-10"
-        style={{ maxWidth: "975px" }}
+        className="hidden md:block mx-auto px-6 pb-10"
+        style={{ maxWidth: "min(75vw, 1600px)", width: "100%" }}
       >
         {/* Outer rack / equipment enclosure */}
         <div style={RACK_FRAME}>
@@ -191,7 +191,7 @@ export default function CollectionsGrid() {
           {/* 3 × 3 monitor grid */}
           <div
             className="grid grid-cols-3 grid-rows-3 gap-[10px]"
-            style={{ height: "68vh", minHeight: "460px", maxHeight: "760px" }}
+            style={{ height: "80vh", minHeight: "600px", maxHeight: "1000px" }}
           >
             {COLLECTIONS.map((col, i) => {
               const on = hovered === i;
@@ -319,7 +319,7 @@ export default function CollectionsGrid() {
                           style={{
                             fontFamily: "'Oswald', system-ui, sans-serif",
                             fontWeight: 700,
-                            fontSize: "clamp(10px, 1.05vw, 14px)",
+                            fontSize: "clamp(11px, 1.1vw, 15px)",
                             letterSpacing: "0.11em",
                             color: "#fff",
                             textTransform: "uppercase",

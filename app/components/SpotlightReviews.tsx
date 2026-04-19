@@ -240,7 +240,6 @@ export default function SpotlightReviews() {
       style={{
         position: "relative",
         overflow: "hidden",
-        minHeight: "820px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
@@ -288,17 +287,19 @@ export default function SpotlightReviews() {
         {/* Left-aligned header block */}
         <div style={{ marginBottom: "40px" }}>
           <p
+            className="eyebrow-label"
             style={{
-              fontFamily: "'DM Sans', 'Inter', system-ui, sans-serif",
-              fontSize: "11px",
-              fontWeight: 700,
-              letterSpacing: "0.28em",
+              fontFamily: "'MontserratExtraBold', 'Montserrat', sans-serif",
+              fontSize: "14px",
+              fontWeight: 800,
+              letterSpacing: "0.35em",
               textTransform: "uppercase",
-              color: "rgba(22,100,50,0.85)",
+              color: "#1a6b3a",
+              WebkitTextStroke: "0.6px #1a6b3a",
               marginBottom: "8px",
             }}
           >
-            From the Road
+            FROM THE ROAD
           </p>
 
           <h2
