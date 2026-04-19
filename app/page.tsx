@@ -19,6 +19,7 @@ const TrustedBrandsBulletin   = nextDynamic(() => import("./components/TrustedBr
 const AboutHighway420         = nextDynamic(() => import("./components/AboutHighway420"));
 const SpotlightReviews        = nextDynamic(() => import("./components/SpotlightReviews"));
 const DopeDealsSection        = nextDynamic(() => import("./components/DopeDealsSection"));
+const RideWithUsBanner        = nextDynamic(() => import("./components/RideWithUsBanner"));
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = "force-dynamic";
@@ -86,6 +87,10 @@ export default function HomePage() {
 
       <Suspense fallback={<SectionFallback />}>
         <AboutHighway420 />
+      </Suspense>
+
+      <Suspense fallback={<SectionFallback />}>
+        <RideWithUsBanner />
       </Suspense>
     </div>
   );
