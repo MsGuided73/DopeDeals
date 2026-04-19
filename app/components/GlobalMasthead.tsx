@@ -15,7 +15,9 @@ const NAV_CATEGORIES = [
   { label: "FLOWER",      href: "/thca_flower" },
   { label: "EDIBLES",     href: "/edibles" },
   { label: "MUSHROOMS",   href: "/mushrooms" },
-  { label: "GLASS",       href: "/bongs" },
+  { label: "PIPES",       href: "/pipes" },
+  { label: "BONGS",       href: "/bongs" },
+  { label: "DAB RIGS",    href: "/dabsntools" },
   { label: "ACCESSORIES", href: "/accessories" },
 ];
 

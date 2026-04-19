@@ -25,11 +25,6 @@ const nextConfig = {
         destination: '/',
         permanent: false,
       },
-      {
-        source: '/accessories',
-        destination: '/',
-        permanent: false,
-      },
     ];
   },
 

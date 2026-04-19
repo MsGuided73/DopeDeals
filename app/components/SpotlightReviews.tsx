@@ -241,8 +241,10 @@ export default function SpotlightReviews() {
         position: "relative",
         overflow: "hidden",
         backgroundColor: "#c9b89a",
-        // Never shrink below what the content needs; at wide viewports look like 16/9
-        minHeight: "clamp(520px, 56.25vw, 900px)",
+        // Flex column so the section grows to fit its content — text never bleeds into the photo
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "clamp(680px, 65vw, 960px)",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -275,16 +277,16 @@ export default function SpotlightReviews() {
         }}
       />
 
-      {/* ── Content (absolutely positioned overlay) ── */}
+      {/* ── Content — grows the section height so text never overflows ── */}
         <div
           style={{
-            position: "absolute",
-            inset: 0,
+            position: "relative",
             zIndex: 2,
             maxWidth: "1280px",
             margin: "0 auto",
-            padding: "clamp(24px, 8%, 80px) 32px 0",
+            padding: "clamp(32px, 8%, 80px) 32px clamp(48px, 6%, 80px)",
             width: "100%",
+            flex: 1,
           }}
         >
         {/* Left-aligned header block */}

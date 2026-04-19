@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer from './AutoScrollContainer';
@@ -239,21 +238,48 @@ export default function FeaturedProductsSection() {
         <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: 'white', overflow: 'hidden' }}>
           <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
             {transformedProduct.image_url ? (
-              <Image
+              <img
                 src={transformedProduct.image_url}
                 alt={transformedProduct.name}
-                fill
-                sizes="(max-width: 768px) 50vw, 300px"
-                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                onError={(e) => {
+                  // Gracefully fall back when sigdistro or other CDN returns 404
+                  const target = e.currentTarget;
+                  target.onerror = null; // prevent infinite loop
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    const fallback = parent.querySelector('.img-fallback') as HTMLElement | null;
+                    if (fallback) fallback.style.display = 'flex';
+                  }
+                }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  padding: '12px',
+                  transition: 'transform 0.3s',
+                }}
+                className="group-hover:scale-105"
               />
-            ) : (
-              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', background: '#f5f0e8' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '36px', marginBottom: '8px' }}>📦</div>
-                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px' }}>No Image</div>
-                </div>
+            ) : null}
+            {/* Fallback — shown immediately when no image_url, revealed via onError when CDN 404s */}
+            <div
+              className="img-fallback"
+              style={{
+                width: '100%', height: '100%',
+                display: transformedProduct.image_url ? 'none' : 'flex',
+                alignItems: 'center', justifyContent: 'center',
+                color: '#999', background: '#f5f0e8',
+                position: 'absolute', inset: 0,
+              }}
+            >
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '36px', marginBottom: '8px' }}>📦</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px' }}>No Image</div>
               </div>
-            )}
+            </div>
           </Link>
 
           {/* HOT badge */}

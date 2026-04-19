@@ -112,9 +112,11 @@ export async function middleware(request: NextRequest) {
     '/sitemap-page',
     '/pipes',
     '/bongs',
-    '/pre-rolls',
-    '/dab-rigs',
     '/bubblers',
+    '/dab-rigs',
+    '/dabsntools',
+    '/accessories',
+    '/pre-rolls',
     '/new'
   ];
 
