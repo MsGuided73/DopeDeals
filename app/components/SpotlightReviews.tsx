@@ -241,10 +241,7 @@ export default function SpotlightReviews() {
         position: "relative",
         overflow: "hidden",
         backgroundColor: "#c9b89a",
-        // Flex column so the section grows to fit its content — text never bleeds into the photo
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "clamp(680px, 65vw, 960px)",
+        // Height is driven by content + padding — text can never overflow the section
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -277,16 +274,15 @@ export default function SpotlightReviews() {
         }}
       />
 
-      {/* ── Content — grows the section height so text never overflows ── */}
+      {/* ── Content — normal flow; section grows to fit; bg image covers beneath it ── */}
         <div
           style={{
             position: "relative",
             zIndex: 2,
             maxWidth: "1280px",
             margin: "0 auto",
-            padding: "clamp(32px, 8%, 80px) 32px clamp(48px, 6%, 80px)",
-            width: "100%",
-            flex: 1,
+            // Generous padding top + bottom so content never touches the photo
+            padding: "clamp(48px, 8%, 88px) 32px clamp(64px, 8%, 88px)",
           }}
         >
         {/* Left-aligned header block */}
