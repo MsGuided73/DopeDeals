@@ -154,11 +154,12 @@ export default function Highway420Footer() {
               "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Footer/BigSur-Coastline.png')",
           }}
         />
-        {/* Dark gradient overlay for text legibility over the landscape */}
+        {/* Light cream overlay so the BLACK footer text reads cleanly against the landscape */}
         <div
           className="absolute inset-0"
           style={{
-            background: "linear-gradient(to bottom, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.30) 100%)",
+            background:
+              "linear-gradient(to bottom, rgba(245, 239, 226, 0.62) 0%, rgba(232, 222, 200, 0.70) 100%)",
           }}
         />
       </div>

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 // Lazy-load below-the-fold sections for faster initial page load
 const FeaturedProductsSection = nextDynamic(() => import("./components/FeaturedProductsSection"));
 const NewProductsSection      = nextDynamic(() => import("./components/NewProductsSection"));
-const BrandLogoScrollbar      = nextDynamic(() => import("../components/BrandLogoScrollbar"));
+const TrustedBrandsBulletin   = nextDynamic(() => import("./components/TrustedBrandsBulletin"));
 const TrustBadgeBar           = nextDynamic(() => import("./components/TrustBadgeBar"));
 const AboutHighway420         = nextDynamic(() => import("./components/AboutHighway420"));
 const SpotlightReviews        = nextDynamic(() => import("./components/SpotlightReviews"));
@@ -73,7 +73,7 @@ export default function HomePage() {
         </Suspense>
 
         <Suspense fallback={<SectionFallback />}>
-          <BrandLogoScrollbar />
+          <TrustedBrandsBulletin />
         </Suspense>
 
         <Suspense fallback={<SectionFallback />}>
