@@ -42,7 +42,7 @@ export function isRestrictedPath(pathname: string): boolean {
  * @param columns - Columns to filter on (defaults to name + description)
  * @returns The same query with .not() filters applied
  */
-export function applyReshtrictedProductFilter(
+export function applyRestrictedProductFilter(
   query: any,
   columns: string[] = ['name', 'description']
 ): any {
