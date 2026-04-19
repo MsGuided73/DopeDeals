@@ -281,8 +281,7 @@ export default function SpotlightReviews() {
             zIndex: 2,
             maxWidth: "1280px",
             margin: "0 auto",
-            // Generous padding top + bottom so content never touches the photo
-            padding: "clamp(48px, 8%, 88px) 32px clamp(64px, 8%, 88px)",
+            padding: "24px 32px 32px",
           }}
         >
         {/* Left-aligned header block */}
