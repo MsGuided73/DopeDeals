@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pit Stop · Dab Rigs · Highway 420 (Mockup)</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&family=Source+Serif+4:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --amber: #e8920a;
+      --amber-light: #f4ab2e;
+      --amber-soft: #fef2e0;
+      --shield-green: rgba(22, 100, 50, 0.9);
+      --shield-green-fill: rgba(22, 100, 50, 0.08);
+      --base-dark: #0d0d0b;
+    }
+
+    html, body {
+      background: var(--base-dark);
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-display { font-family: 'Bebas Neue', sans-serif !important; }
+    .font-body    { font-family: 'DM Sans', sans-serif !important; }
+    .font-serif-h { font-family: 'Source Serif 4', Georgia, serif !important; }
+
+    /* Dashed amber center road-stripe */
+    .road-stripe {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      transform: translateX(-50%);
+      background: repeating-linear-gradient(
+        180deg,
+        var(--amber) 0px,
+        var(--amber) 16px,
+        transparent 16px,
+        transparent 32px
+      );
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    /* Hero gradient (desert dusk — same as Hot Products) */
+    .hero-band {
+      background: linear-gradient(180deg, #2d2622 0%, #5a4a3a 55%, #a07a4a 100%);
+    }
+    .grid-band {
+      background: linear-gradient(180deg, #a07a4a 0%, #5a4a3a 30%, #2d2622 100%);
+    }
+
+    /* Filter chips */
+    .chip {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--amber);
+      background: transparent;
+      color: var(--amber);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .chip:hover { background: rgba(232, 146, 10, 0.12); }
+    .chip.is-active { background: var(--amber); color: var(--base-dark); }
+
+    /* Product card */
+    .product-card {
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.10);
+      transition: box-shadow 0.3s, transform 0.3s;
+      display: flex;
+      flex-direction: column;
+      color: #1e1e1e;
+    }
+    .product-card:hover {
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+      transform: translateY(-2px);
+    }
+    .product-card .speed-stripe {
+      height: 3px;
+      background: linear-gradient(90deg, var(--amber), var(--amber-light));
+    }
+    .product-card .img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #fff;
+      overflow: hidden;
+    }
+    .product-card .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 12px;
+      transition: transform 0.3s;
+    }
+    .product-card:hover .img-wrap img {
+      transform: scale(1.05);
+    }
+    .hot-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--amber);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      letter-spacing: 0.1em;
+      z-index: 10;
+    }
+
+    /* Shield tool-tag */
+    .tool-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(22, 100, 50, 0.45);
+      border-radius: 999px;
+      padding: 3px 9px 3px 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--shield-green);
+      white-space: nowrap;
+    }
+
+    /* Buttons */
+    .btn-amber {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 10px 4px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-amber:hover { opacity: 0.9; }
+    .btn-amber-outline {
+      border: 1.5px solid var(--amber);
+      color: var(--amber);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 9px 4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-amber-outline:hover {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .btn-cta {
+      background: var(--amber);
+      color: var(--base-dark);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.12em;
+      padding: 14px 56px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-cta:hover { opacity: 0.9; }
+
+    /* Sort select */
+    .sort-select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      background: transparent;
+      color: var(--amber);
+      border: 1.5px solid var(--amber);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .sort-select option {
+      background: var(--base-dark);
+      color: var(--amber);
+    }
+
+    /* Sticky filter rail */
+    .filter-rail {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(13, 13, 11, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(232, 146, 10, 0.18);
+      padding: 14px 16px;
+    }
+
+    /* Mock global masthead placeholder */
+    .mock-masthead {
+      background: linear-gradient(145deg, #213d2c 0%, #162a1d 55%, #112318 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 16px;
+      color: #fff;
+    }
+    .mock-masthead .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── MOCK GLOBAL MASTHEAD (placeholder so layout is true to the site) ── -->
+  <header class="mock-masthead">
+    <div class="max-w-[1280px] mx-auto flex items-center justify-between">
+      <span class="logo">HIGHWAY 420</span>
+      <span class="text-[10px] tracking-[0.2em] uppercase text-white/55">[ mock masthead — replace with &lt;GlobalMasthead /&gt; ]</span>
+    </div>
+  </header>
+
+  <!-- ── HERO BAND ─────────────────────────────────────────── -->
+  <section class="hero-band relative overflow-hidden" style="padding: 72px 16px 88px;">
+    <div class="road-stripe"></div>
+
+    <div class="max-w-[1280px] mx-auto relative z-10">
+      <!-- breadcrumb -->
+      <nav class="mb-8 text-[11px] tracking-[0.1em] uppercase text-white/55">
+        <a href="#" class="hover:text-white">Home</a>
+        <span class="mx-2">›</span>
+        <a href="#" class="hover:text-white">Collections</a>
+        <span class="mx-2">›</span>
+        <span style="color: var(--amber);">Dab Rigs</span>
+      </nav>
+
+      <!-- amber rule -->
+      <div style="height: 3px; width: 48px; background: var(--amber); margin-bottom: 18px;"></div>
+
+      <!-- eyebrow -->
+      <p class="text-[12px] font-bold tracking-[0.3em] uppercase mb-2.5" style="color: var(--amber);">
+        Gear Up For The Haul · Mile 420
+      </p>
+
+      <!-- title -->
+      <h1
+        class="font-display m-0 text-white"
+        style="font-size: clamp(56px, 9vw, 120px); line-height: 0.95; letter-spacing: 0.04em; text-shadow: 0 2px 24px rgba(0,0,0,0.4); margin-bottom: 18px;"
+      >
+        PIT STOP — DABS &amp; TOOLS
+      </h1>
+
+      <!-- blurb -->
+      <p class="text-[16px] leading-[1.6] text-white/[0.78]" style="max-width: 620px;">
+        Premium glass, e-rigs, and concentrate tools — all road-tested, all stocked with COAs.
+        Pull in, fuel up, and get back on the highway.
+      </p>
+
+      <!-- dashed divider -->
+      <div style="border-top: 1px dashed rgba(232,146,10,0.35); margin-top: 32px; max-width: 360px;"></div>
+    </div>
+  </section>
+
+  <!-- ── STICKY FILTER RAIL ────────────────────────────────── -->
+  <div class="filter-rail">
+    <div class="max-w-[1280px] mx-auto flex items-center gap-4 flex-wrap">
+      <span class="text-[10px] font-extrabold tracking-[0.25em] uppercase whitespace-nowrap" style="color: var(--amber);">
+        Fuel Grade:
+      </span>
+
+      <div class="flex gap-2 flex-wrap flex-1" id="filter-chips">
+        <button class="chip is-active" data-filter="ALL">All</button>
+        <button class="chip" data-filter="GLASS">Glass</button>
+        <button class="chip" data-filter="SILICONE">Silicone</button>
+        <button class="chip" data-filter="E-RIGS">E-Rigs</button>
+        <button class="chip" data-filter="MINI">Mini</button>
+        <button class="chip" data-filter="COLLECTOR">Collector</button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] font-extrabold tracking-[0.2em] uppercase text-white/55">Sort:</span>
+        <select class="sort-select" id="sort-select">
+          <option>Featured</option>
+          <option>Price: Low</option>
+          <option>Price: High</option>
+          <option>Newest</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PRODUCT GRID ──────────────────────────────────────── -->
+  <section class="grid-band relative overflow-hidden" style="padding: 56px 16px 72px;">
+    <div class="road-stripe"></div>
+
+    <div class="max-w-[1280px] mx-auto relative z-10">
+      <!-- result count -->
+      <div class="text-[11px] tracking-[0.15em] uppercase text-white/55 mb-6" id="result-count">
+        Showing <span class="text-white font-bold">8</span> of 8
+      </div>
+
+      <!-- grid -->
+      <div
+        id="product-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;"
+      ></div>
+
+      <!-- load more -->
+      <div class="text-center" style="margin-top: 56px;">
+        <button class="btn-cta">LOAD MORE →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MOCK FOOTER PLACEHOLDER ───────────────────────────── -->
+  <footer class="text-center py-6 text-[10px] tracking-[0.2em] uppercase text-white/40">
+    [ mock footer — replace with site footer ]
+  </footer>
+
+  <script>
+    const PRODUCTS = [
+      { id: 1, brand: "ROOR",              name: 'Beaker Base Dab Rig 8"',     price: 189, comparePrice: 229, joint: "14mm",  type: "GLASS",     hot: true,  img: "https://placehold.co/400x400/eaeaea/666?text=ROOR+8%22" },
+      { id: 2, brand: "Puffco",            name: "Peak Pro Smart Rig",         price: 399,                     joint: "E-Rig", type: "E-RIGS",    hot: true,  img: "https://placehold.co/400x400/eaeaea/666?text=Puffco+Peak" },
+      { id: 3, brand: "Eyce",              name: "Silicone Mini Beaker",       price: 49,                      joint: "10mm",  type: "SILICONE",            img: "https://placehold.co/400x400/eaeaea/666?text=Eyce+Mini" },
+      { id: 4, brand: "MJ Arsenal",        name: "Martian Mini Rig",           price: 89,                      joint: "10mm",  type: "MINI",                img: "https://placehold.co/400x400/eaeaea/666?text=MJ+Martian" },
+      { id: 5, brand: "Grav Labs",         name: "Helix Recycler",             price: 145,                     joint: "14mm",  type: "GLASS",               img: "https://placehold.co/400x400/eaeaea/666?text=Grav+Helix" },
+      { id: 6, brand: "Dr. Dabber",        name: "Boost Evo E-Rig",            price: 299, comparePrice: 349,  joint: "E-Rig", type: "E-RIGS",              img: "https://placehold.co/400x400/eaeaea/666?text=Boost+Evo" },
+      { id: 7, brand: "Empire Glassworks", name: "Pineapple Mini Rig",         price: 219,                     joint: "14mm",  type: "COLLECTOR",           img: "https://placehold.co/400x400/eaeaea/666?text=Empire+Pineapple" },
+      { id: 8, brand: "Stundenglass",      name: "Kompact Gravity Rig",        price: 449,                     joint: "18mm",  type: "COLLECTOR", hot: true, img: "https://placehold.co/400x400/eaeaea/666?text=Stundenglass" },
+    ];
+
+    let activeFilter = "ALL";
+
+    function shieldSvg() {
+      return `
+        <svg width="11" height="13" viewBox="0 0 14 16" fill="none" aria-hidden="true">
+          <path d="M7 0.5L1 2.5V8C1 11.5 3.8 14.6 7 15.5C10.2 14.6 13 11.5 13 8V2.5L7 0.5Z"
+                stroke="rgba(22,100,50,0.9)" stroke-width="1.2"
+                fill="rgba(22,100,50,0.08)" />
+        </svg>`;
+    }
+
+    function renderCard(p) {
+      const discount = p.comparePrice
+        ? Math.round(((p.comparePrice - p.price) / p.comparePrice) * 100)
+        : null;
+      return `
+        <div class="product-card group">
+          <div class="speed-stripe"></div>
+          <div class="img-wrap">
+            <img src="${p.img}" alt="${p.name}" />
+            ${p.hot ? '<div class="hot-badge">🔥 HOT</div>' : ""}
+            <div style="position:absolute; bottom:10px; right:10px; z-index:10;">
+              <span class="tool-tag">${shieldSvg()} ${p.joint}</span>
+            </div>
+          </div>
+          <div style="padding: 14px 16px 16px; display: flex; flex-direction: column; flex: 1;">
+            <p style="font-size:10px; font-weight:700; color: var(--amber); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:4px;">
+              ${p.brand}
+            </p>
+            <h3 style="font-weight:600; color:#1e1e1e; font-size:14px; line-height:1.35; margin-bottom:10px;">
+              ${p.name}
+            </h3>
+            <div style="margin-bottom:12px;">
+              ${p.comparePrice ? `
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+                  <span style="font-size:12px; color:#999; text-decoration:line-through;">$${p.comparePrice.toFixed(2)}</span>
+                  <span style="background: var(--amber-soft); color: var(--amber); padding:2px 6px; font-size:10px; font-weight:700;">-${discount}%</span>
+                </div>
+                <div style="font-weight:700; font-size:22px; color: var(--amber);">$${p.price.toFixed(2)}</div>
+              ` : `
+                <div style="font-weight:700; font-size:22px; color: var(--amber);">$${p.price.toFixed(2)}</div>
+              `}
+            </div>
+            <div style="display:flex; gap:8px; margin-top:auto;">
+              <button class="btn-amber" style="flex:1;">Add to Cart</button>
+              <button class="btn-amber-outline" style="flex:1;">View Details</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGrid() {
+      const visible = activeFilter === "ALL"
+        ? PRODUCTS
+        : PRODUCTS.filter(p => p.type === activeFilter);
+      document.getElementById("product-grid").innerHTML = visible.map(renderCard).join("");
+      const suffix = activeFilter !== "ALL" ? ` · ${activeFilter}` : "";
+      document.getElementById("result-count").innerHTML =
+        `Showing <span class="text-white font-bold">${visible.length}</span> of ${PRODUCTS.length}${suffix}`;
+    }
+
+    document.querySelectorAll("#filter-chips .chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#filter-chips .chip").forEach(c => c.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        activeFilter = btn.dataset.filter;
+        renderGrid();
+      });
+    });
+
+    renderGrid();
+  </script>
+</body>
+</html>

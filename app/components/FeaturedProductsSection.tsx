@@ -344,7 +344,7 @@ export default function FeaturedProductsSection() {
 
   if (loading) {
     return (
-      <section style={{ marginTop: '64px', background: 'linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%)', padding: '64px 16px' }}>
+      <section style={{ marginTop: '64px', background: 'linear-gradient(180deg, #2d2622 0%, #5a4a3a 55%, #a07a4a 100%)', padding: '64px 16px' }}>
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{ height: '3px', width: '48px', background: '#e8920a', margin: '0 auto 16px' }} />
           <h2 style={{ fontFamily: "'BebasNeue', 'Bebas Neue', sans-serif", color: '#e8920a', fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: 1, letterSpacing: '0.05em' }}>HOT PRODUCTS</h2>
@@ -392,7 +392,7 @@ export default function FeaturedProductsSection() {
 
   return (
     // ── Open Road: Hot Products Section ──────────────────────────────────────
-    <section style={{ marginTop: '64px', background: 'linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%)', padding: '60px 0 72px' }}>
+    <section style={{ marginTop: '64px', background: 'linear-gradient(180deg, #2d2622 0%, #5a4a3a 55%, #a07a4a 100%)', padding: '60px 0 72px' }}>
       {/* Ambient road-stripe accent */}
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', background: 'repeating-linear-gradient(180deg, #e8920a 0px, #e8920a 16px, transparent 16px, transparent 32px)', opacity: 0.18, transform: 'translateX(-50%)' }} />

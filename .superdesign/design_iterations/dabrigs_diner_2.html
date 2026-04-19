@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neon Highway Diner v2 · Dab Rigs · Highway 420 (Mockup)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&family=Monoton&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --amber: #e8920a;
+      --amber-light: #f4ab2e;
+      --amber-deep: #c5751a;
+      --amber-soft: #fef2e0;
+      --neon-pink: #ff5996;
+      --base-dark: #0d0d0b;
+
+      /* Light bottom-half palette (pulled from High Praise / SpotlightReviews) */
+      --paper: #f0eadc;
+      --paper-deep: #e6dcc6;
+      --paper-card: #fffcf4;
+      --ink: #2a2218;
+      --ink-soft: #5a4a3a;
+      --shield-green: rgba(22, 100, 50, 0.9);
+    }
+
+    html, body {
+      background: var(--paper);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-display { font-family: 'Bebas Neue', sans-serif !important; }
+    .font-neon    { font-family: 'Monoton', cursive !important; }
+
+    /* ════════════════════════════════════════════════════════
+       TOP HALF — DARK NEON HERO (unchanged from v1)
+       ════════════════════════════════════════════════════════ */
+    .diner-hero {
+      position: relative;
+      background: radial-gradient(ellipse at 50% 40%, #2a1e15 0%, #120c08 60%, #0d0d0b 100%);
+      overflow: hidden;
+      padding: 96px 16px 120px;
+      color: #fff;
+    }
+    .diner-hero::before {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 30%;
+      background: radial-gradient(ellipse at 50% 100%, rgba(232,146,10,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.045) 0px,
+        rgba(0,0,0,0.045) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .neon-title {
+      font-family: 'Bebas Neue', sans-serif;
+      color: #fff8ec;
+      letter-spacing: 0.04em;
+      line-height: 0.92;
+      text-shadow:
+        0 0 6px rgba(255, 232, 175, 0.95),
+        0 0 14px rgba(255, 200, 110, 0.75),
+        0 0 28px rgba(232, 146, 10, 0.65),
+        0 0 60px rgba(232, 146, 10, 0.45);
+    }
+
+    .open-sign {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 12px;
+      border: 1.5px solid var(--neon-pink);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow:
+        0 0 10px rgba(255, 89, 150, 0.45),
+        inset 0 0 8px rgba(255, 89, 150, 0.18);
+    }
+    .open-sign .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--neon-pink);
+      box-shadow: 0 0 8px var(--neon-pink);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+    .open-sign .label {
+      font-family: 'Monoton', cursive;
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      color: #ffd9e6;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       NEON-PIPING TRANSITION STRIP
+       — sits between dark hero and light filter rail
+       ════════════════════════════════════════════════════════ */
+    .neon-piping {
+      position: relative;
+      height: 6px;
+      background: linear-gradient(90deg, var(--amber-deep), var(--amber), var(--amber-light), var(--amber), var(--amber-deep));
+      box-shadow:
+        0 0 18px rgba(232, 146, 10, 0.65),
+        0 -8px 28px rgba(232, 146, 10, 0.35);
+    }
+    /* tiny "drip" of dark gradient just under the strip (sunrise feel) */
+    .sunrise-fade {
+      height: 64px;
+      background: linear-gradient(180deg,
+        rgba(13, 13, 11, 0.55) 0%,
+        rgba(45, 38, 34, 0.30) 35%,
+        rgba(160, 122, 74, 0.12) 70%,
+        transparent 100%);
+      margin-top: -64px;
+      pointer-events: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       BOTTOM HALF — LIGHT (cream/sand)
+       ════════════════════════════════════════════════════════ */
+
+    /* Sticky filter rail — cream glassmorphic */
+    .filter-rail {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(240, 234, 220, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(232, 146, 10, 0.35);
+      padding: 14px 16px;
+    }
+    .menu-pill {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--amber-deep);
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--amber-deep);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .menu-pill:hover {
+      background: rgba(232, 146, 10, 0.12);
+      border-color: var(--amber);
+    }
+    .menu-pill.is-active {
+      background: var(--amber);
+      color: #fff;
+      border-color: var(--amber);
+      box-shadow: 0 0 14px rgba(232, 146, 10, 0.45);
+    }
+
+    .sort-select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--amber-deep);
+      border: 1px solid var(--amber-deep);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .sort-select option { background: var(--paper); color: var(--ink); }
+
+    /* Light grid band */
+    .grid-band {
+      position: relative;
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+      padding: 56px 16px 96px;
+    }
+    /* faint amber glow accent in the corner — keeps a hint of neon */
+    .grid-band::before {
+      content: "";
+      position: absolute;
+      top: 0; right: 0;
+      width: 50%; height: 240px;
+      background: radial-gradient(ellipse at 80% 0%, rgba(232,146,10,0.12) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── PRODUCT CARD (light version, with neon DNA) ── */
+    .product-card {
+      position: relative;
+      background: var(--paper-card);
+      border: 1px solid rgba(80, 60, 30, 0.12);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      color: var(--ink);
+      box-shadow: 0 2px 12px rgba(80, 60, 30, 0.08);
+    }
+    .product-card::before {
+      /* subtle glass glare — pulled from the dark cards */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, rgba(255,255,255,0.4) 0%, transparent 35%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(232, 146, 10, 0.5);
+      box-shadow:
+        0 12px 32px rgba(80, 60, 30, 0.14),
+        0 0 28px rgba(232, 146, 10, 0.22);
+    }
+    /* amber speed stripe (Pit Stop DNA) */
+    .product-card .speed-stripe {
+      height: 3px;
+      background: linear-gradient(90deg, var(--amber), var(--amber-light));
+      position: relative;
+      z-index: 3;
+    }
+    .product-card .img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #fff;
+      overflow: hidden;
+    }
+    .product-card .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      padding: 14px;
+      transition: filter 0.3s, transform 0.35s;
+    }
+    .product-card:hover .img-wrap img {
+      transform: scale(1.05);
+      filter: brightness(1.04);
+    }
+    /* power-LED kept (amber dot in corner — neon DNA carryover) */
+    .power-led {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber), 0 0 14px rgba(232,146,10,0.5);
+      z-index: 3;
+    }
+    .hot-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--amber);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      letter-spacing: 0.12em;
+      z-index: 3;
+      box-shadow: 0 0 10px rgba(232, 146, 10, 0.45);
+    }
+    /* joint tag — kept dark for contrast (one piece of "menu board" DNA) */
+    .joint-tag {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      z-index: 3;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(13, 13, 11, 0.85);
+      padding: 4px 9px;
+      border: 1px solid rgba(232, 146, 10, 0.55);
+      border-radius: 3px;
+      backdrop-filter: blur(6px);
+    }
+
+    .btn-amber {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 10px 4px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .btn-amber:hover {
+      opacity: 0.95;
+      box-shadow: 0 0 16px rgba(232, 146, 10, 0.45);
+    }
+    .btn-outline {
+      border: 1.5px solid var(--amber-deep);
+      color: var(--amber-deep);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 9px 4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-outline:hover {
+      background: var(--amber);
+      color: #fff;
+      border-color: var(--amber);
+    }
+
+    .btn-cta {
+      background: transparent;
+      color: var(--amber-deep);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.14em;
+      padding: 14px 56px;
+      border: 1.5px solid var(--amber-deep);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-cta:hover {
+      background: var(--amber);
+      color: #fff;
+      border-color: var(--amber);
+      box-shadow: 0 0 26px rgba(232, 146, 10, 0.5);
+    }
+
+    .result-count {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .result-count .strong { color: var(--ink); font-weight: 800; }
+
+    /* Mock global masthead */
+    .mock-masthead {
+      background: linear-gradient(145deg, #213d2c 0%, #162a1d 55%, #112318 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 16px;
+      color: #fff;
+    }
+    .mock-masthead .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+    }
+
+    /* footer band — soft cream, slightly deeper */
+    .mock-footer {
+      background: var(--paper-deep);
+      border-top: 1px dashed rgba(80, 60, 30, 0.3);
+      text-align: center;
+      padding: 24px 16px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="mock-masthead">
+    <div class="max-w-[1280px] mx-auto flex items-center justify-between">
+      <span class="logo">HIGHWAY 420</span>
+      <span class="text-[10px] tracking-[0.2em] uppercase text-white/55">[ mock masthead ]</span>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════
+       TOP HALF — DARK NEON HERO (unchanged)
+       ════════════════════════════════════════════════════════ -->
+  <section class="diner-hero">
+    <div class="scanlines"></div>
+
+    <div class="max-w-[1280px] mx-auto relative z-10">
+      <nav class="mb-10 text-[11px] tracking-[0.1em] uppercase text-white/55">
+        <a href="#" class="hover:text-white">Home</a>
+        <span class="mx-2">›</span>
+        <a href="#" class="hover:text-white">Collections</a>
+        <span class="mx-2">›</span>
+        <span style="color: var(--amber);">Dab Rigs</span>
+      </nav>
+
+      <div class="grid lg:grid-cols-[1fr_auto] gap-8 items-end">
+        <div>
+          <div class="open-sign mb-7">
+            <span class="dot"></span>
+            <span class="label">OPEN 24/7</span>
+          </div>
+
+          <h1
+            class="neon-title m-0"
+            style="font-size: clamp(80px, 13vw, 180px); margin-bottom: 14px;"
+          >
+            DAB RIGS
+          </h1>
+
+          <p class="text-[12px] font-bold tracking-[0.32em] uppercase" style="color: var(--amber);">
+            COA on every unit · Free shipping over $50 · Mile 420
+          </p>
+        </div>
+
+        <div class="max-w-[320px] hidden lg:block">
+          <div style="border-left: 2px solid var(--amber); padding: 6px 0 6px 18px;">
+            <p class="text-[11px] uppercase tracking-[0.2em] text-white/55 mb-2">Tonight's Specials</p>
+            <p class="text-[14px] leading-[1.55] text-white/80">
+              Premium glass, e-rigs, and concentrate accessories — pulled from the top shelf and lit up just for you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       TRANSITION — neon piping + sunrise fade
+       ════════════════════════════════════════════════════════ -->
+  <div class="neon-piping"></div>
+  <div class="sunrise-fade"></div>
+
+  <!-- ════════════════════════════════════════════════════════
+       FILTER RAIL — light glassmorphic
+       ════════════════════════════════════════════════════════ -->
+  <div class="filter-rail">
+    <div class="max-w-[1280px] mx-auto flex items-center gap-4 flex-wrap">
+      <span class="text-[10px] font-extrabold tracking-[0.25em] uppercase whitespace-nowrap" style="color: var(--amber-deep);">
+        Menu:
+      </span>
+      <div class="flex gap-2 flex-wrap flex-1" id="filter-pills">
+        <button class="menu-pill is-active" data-filter="ALL">All</button>
+        <button class="menu-pill" data-filter="GLASS">Glass</button>
+        <button class="menu-pill" data-filter="SILICONE">Silicone</button>
+        <button class="menu-pill" data-filter="E-RIGS">E-Rigs</button>
+        <button class="menu-pill" data-filter="MINI">Mini</button>
+        <button class="menu-pill" data-filter="COLLECTOR">Collector</button>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] font-extrabold tracking-[0.2em] uppercase" style="color: var(--ink-soft);">Sort:</span>
+        <select class="sort-select">
+          <option>Featured</option>
+          <option>Price: Low</option>
+          <option>Price: High</option>
+          <option>Newest</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       PRODUCT GRID — light cream
+       ════════════════════════════════════════════════════════ -->
+  <section class="grid-band">
+    <div class="max-w-[1280px] mx-auto relative z-10">
+      <div class="result-count mb-6" id="result-count">
+        Showing <span class="strong">8</span> of 8
+      </div>
+      <div
+        id="product-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px;"
+      ></div>
+      <div class="text-center mt-14">
+        <button class="btn-cta">LOAD MORE →</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mock-footer">[ mock footer ]</footer>
+
+  <script>
+    const PRODUCTS = [
+      { id: 1, brand: "ROOR",              name: 'Beaker Base Dab Rig 8"',     price: 189, comparePrice: 229, joint: "14mm",  type: "GLASS",     hot: true,  img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=ROOR+8%22" },
+      { id: 2, brand: "Puffco",            name: "Peak Pro Smart Rig",         price: 399,                     joint: "E-Rig", type: "E-RIGS",    hot: true,  img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=Puffco+Peak" },
+      { id: 3, brand: "Eyce",              name: "Silicone Mini Beaker",       price: 49,                      joint: "10mm",  type: "SILICONE",            img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=Eyce+Mini" },
+      { id: 4, brand: "MJ Arsenal",        name: "Martian Mini Rig",           price: 89,                      joint: "10mm",  type: "MINI",                img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=MJ+Martian" },
+      { id: 5, brand: "Grav Labs",         name: "Helix Recycler",             price: 145,                     joint: "14mm",  type: "GLASS",               img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=Grav+Helix" },
+      { id: 6, brand: "Dr. Dabber",        name: "Boost Evo E-Rig",            price: 299, comparePrice: 349,  joint: "E-Rig", type: "E-RIGS",              img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=Boost+Evo" },
+      { id: 7, brand: "Empire Glassworks", name: "Pineapple Mini Rig",         price: 219,                     joint: "14mm",  type: "COLLECTOR",           img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=Empire+Pineapple" },
+      { id: 8, brand: "Stundenglass",      name: "Kompact Gravity Rig",        price: 449,                     joint: "18mm",  type: "COLLECTOR", hot: true, img: "https://placehold.co/400x400/fffcf4/5a4a3a?text=Stundenglass" },
+    ];
+
+    let activeFilter = "ALL";
+
+    function renderCard(p) {
+      const discount = p.comparePrice
+        ? Math.round(((p.comparePrice - p.price) / p.comparePrice) * 100)
+        : null;
+      return `
+        <div class="product-card">
+          <div class="speed-stripe"></div>
+          <div class="img-wrap">
+            <img src="${p.img}" alt="${p.name}" />
+            ${p.hot ? '<div class="hot-badge">🔥 HOT</div>' : ''}
+            <div class="power-led"></div>
+            <div class="joint-tag">${p.joint}</div>
+          </div>
+          <div style="padding: 16px 16px 18px; display:flex; flex-direction:column; flex:1; position:relative; z-index:3;">
+            <p style="font-size:10px; font-weight:800; color: var(--amber-deep); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:6px;">
+              ${p.brand}
+            </p>
+            <h3 style="font-weight:700; color: var(--ink); font-size:14px; line-height:1.35; margin-bottom:12px;">
+              ${p.name}
+            </h3>
+            <div style="margin-bottom:14px;">
+              ${p.comparePrice ? `
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+                  <span style="font-size:12px; color: rgba(80,60,30,0.5); text-decoration:line-through;">$${p.comparePrice.toFixed(2)}</span>
+                  <span style="background: var(--amber-soft); color: var(--amber-deep); padding:2px 6px; font-size:10px; font-weight:700;">-${discount}%</span>
+                </div>
+                <div style="font-weight:700; font-size:22px; color: var(--amber-deep);">$${p.price.toFixed(2)}</div>
+              ` : `
+                <div style="font-weight:700; font-size:22px; color: var(--amber-deep);">$${p.price.toFixed(2)}</div>
+              `}
+            </div>
+            <div style="display:flex; gap:8px; margin-top:auto;">
+              <button class="btn-amber" style="flex:1;">Add to Cart</button>
+              <button class="btn-outline" style="flex:1;">View Details</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGrid() {
+      const visible = activeFilter === "ALL"
+        ? PRODUCTS
+        : PRODUCTS.filter(p => p.type === activeFilter);
+      document.getElementById("product-grid").innerHTML = visible.map(renderCard).join("");
+      const suffix = activeFilter !== "ALL" ? ` · ${activeFilter}` : "";
+      document.getElementById("result-count").innerHTML =
+        `Showing <span class="strong">${visible.length}</span> of ${PRODUCTS.length}${suffix}`;
+    }
+
+    document.querySelectorAll("#filter-pills .menu-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#filter-pills .menu-pill").forEach(c => c.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        activeFilter = btn.dataset.filter;
+        renderGrid();
+      });
+    });
+
+    renderGrid();
+  </script>
+</body>
+</html>

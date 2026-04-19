@@ -62,24 +62,50 @@ const COLLECTIONS = [
 ];
 
 // ─── Shared style blocks ──────────────────────────────────────────────────────
+const WOOD_TEXTURE_1 =
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain1.png";
+const WOOD_TEXTURE_2 =
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain2.png";
+
 const RACK_FRAME: React.CSSProperties = {
-  background: "linear-gradient(160deg, #1a1510 0%, #0e0b07 60%, #080602 100%)",
-  border: "6px solid #1f1a13",
-  borderBottom: "14px solid #0d0a06",
+  // Wood-grain panel with ambient lighting:
+  // 1) warm overhead "spotlight" radial that warms up the top-center of the wood
+  // 2) very light directional shade (top-bright → bottom-darker) for depth
+  // 3) WoodGrain1 texture as the actual material
+  backgroundImage: [
+    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 200, 120, 0.28) 0%, rgba(255, 170, 80, 0.12) 35%, transparent 70%)",
+    "linear-gradient(180deg, rgba(255, 220, 170, 0.06) 0%, rgba(0, 0, 0, 0.12) 55%, rgba(0, 0, 0, 0.40) 100%)",
+    `url('${WOOD_TEXTURE_1}')`,
+  ].join(", "),
+  backgroundSize: "cover, cover, cover",
+  backgroundPosition: "center, center, center",
+  backgroundRepeat: "no-repeat, no-repeat, no-repeat",
+  border: "6px solid #2a1d10",
+  borderBottom: "14px solid #1a1108",
   borderRadius: "10px",
   padding: "14px 14px 6px",
   boxShadow: [
-    "0 28px 64px rgba(0,0,0,0.95)",
-    "0 10px 24px rgba(0,0,0,0.7)",
-    "inset 0 1px 0 rgba(255,235,180,0.05)",
-    "inset 0 -6px 12px rgba(0,0,0,0.6)",
+    // Outer drop shadows (depth)
+    "0 28px 64px rgba(0,0,0,0.92)",
+    "0 10px 24px rgba(0,0,0,0.65)",
+    // Warm rim lighting on the inside edges
+    "inset 0 2px 0 rgba(255, 220, 165, 0.22)",      // top edge highlight (warm)
+    "inset 1px 0 0 rgba(255, 210, 155, 0.10)",      // left rim light
+    "inset -1px 0 0 rgba(255, 210, 155, 0.10)",     // right rim light
+    "inset 0 -10px 22px rgba(60, 30, 8, 0.45)",     // soft warm-brown bottom shade
   ].join(", "),
 };
 
 const RACK_FLOOR: React.CSSProperties = {
   marginTop: "8px",
   height: "5px",
-  background: "linear-gradient(180deg, #12100c 0%, #08060200 100%)",
+  backgroundImage: [
+    "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.85) 100%)",
+    `url('${WOOD_TEXTURE_2}')`,
+  ].join(", "),
+  backgroundSize: "cover, cover",
+  backgroundPosition: "center, center",
+  backgroundRepeat: "no-repeat, no-repeat",
   borderRadius: "3px",
   boxShadow: "inset 0 1px 4px rgba(0,0,0,0.9)",
 };
@@ -225,8 +251,8 @@ export default function CollectionsGrid() {
                               "transform 0.55s cubic-bezier(0.22,1,0.36,1), filter 0.4s ease",
                             transform: on ? "scale(1.06)" : "scale(1)",
                             filter: on
-                              ? "brightness(1.18) saturate(1.12)"
-                              : "brightness(0.88) saturate(0.85)",
+                              ? "brightness(1.10) saturate(1.08)"
+                              : "none",
                           }}
                         />
                       ) : (
@@ -281,53 +307,56 @@ export default function CollectionsGrid() {
                         }}
                       />
 
-                      {/* Bottom vignette for label legibility */}
+                      {/* Top vignette for label legibility */}
                       <div
                         style={{
                           position: "absolute",
                           inset: 0,
                           background:
-                            "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.25) 35%, transparent 65%)",
+                            "linear-gradient(to bottom, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.25) 35%, transparent 65%)",
                           pointerEvents: "none",
                           zIndex: 12,
                         }}
                       />
 
-                      {/* Category label */}
+                      {/* Category label — upper-left, BebasNeue Extra Bold */}
                       <div
                         style={{
                           position: "absolute",
-                          bottom: 0,
+                          top: 0,
                           left: 0,
-                          right: 0,
-                          padding: "8px 10px",
+                          padding: "12px 14px",
                           zIndex: 13,
                           pointerEvents: "none",
                         }}
                       >
-                        <div
-                          style={{
-                            height: "2px",
-                            width: on ? "28px" : "14px",
-                            borderRadius: "2px",
-                            backgroundColor: col.accent,
-                            marginBottom: "4px",
-                            transition: "width 0.3s ease",
-                          }}
-                        />
                         <p
                           style={{
-                            fontFamily: "'Oswald', system-ui, sans-serif",
-                            fontWeight: 700,
-                            fontSize: "clamp(11px, 1.1vw, 15px)",
-                            letterSpacing: "0.11em",
+                            fontFamily: "'BebasNeue', 'Bebas Neue', sans-serif",
+                            fontWeight: 900,
+                            fontSize: "clamp(18px, 1.8vw, 28px)",
+                            lineHeight: 1,
+                            letterSpacing: "0.06em",
                             color: "#fff",
                             textTransform: "uppercase",
-                            textShadow: "0 1px 5px rgba(0,0,0,0.95)",
+                            margin: 0,
+                            textShadow:
+                              "0 2px 6px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.55)",
                           }}
                         >
                           {col.name}
                         </p>
+                        <div
+                          style={{
+                            height: "2px",
+                            width: on ? "36px" : "22px",
+                            borderRadius: "2px",
+                            backgroundColor: col.accent,
+                            marginTop: "5px",
+                            transition: "width 0.3s ease",
+                            boxShadow: on ? `0 0 10px ${col.accent}` : "none",
+                          }}
+                        />
                       </div>
 
                       {/* Accent inner glow when hovered (screen emission) */}

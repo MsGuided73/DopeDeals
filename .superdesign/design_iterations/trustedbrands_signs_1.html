@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trusted Brands · Road Signs · Highway 420 (Mockup)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --asphalt: #1a1a1a;
+      --asphalt-2: #242424;
+      --amber: #e8920a;
+      --amber-light: #f4ab2e;
+      --sign-green: #2d6a3f;
+      --sign-green-deep: #1f4d2d;
+      --reflective: #f0eadc;
+    }
+
+    html, body {
+      background: var(--asphalt);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .mock-masthead {
+      background: linear-gradient(145deg, #213d2c 0%, #162a1d 55%, #112318 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 16px;
+    }
+    .mock-masthead .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+    }
+
+    /* ── SECTION BAND ── */
+    .brands-band {
+      position: relative;
+      background:
+        radial-gradient(ellipse 60% 60% at 50% 0%, rgba(232,146,10,0.08) 0%, transparent 65%),
+        linear-gradient(180deg, var(--asphalt) 0%, var(--asphalt-2) 50%, var(--asphalt) 100%);
+      padding: 72px 0 88px;
+      overflow: hidden;
+    }
+
+    /* Amber dashed road-stripe divider */
+    .road-stripe {
+      height: 3px;
+      width: 56px;
+      background: linear-gradient(90deg, var(--amber), var(--amber-light));
+      margin-bottom: 14px;
+    }
+
+    .eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 88px);
+      line-height: 0.95;
+      letter-spacing: 0.04em;
+      color: #fff;
+      margin: 0 0 12px;
+    }
+
+    .section-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ── TICKER ── */
+    .ticker-viewport {
+      position: relative;
+      margin-top: 48px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+              mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    }
+    .ticker-track {
+      display: flex;
+      gap: 28px;
+      width: max-content;
+      animation: marquee 55s linear infinite;
+    }
+    .ticker-viewport:hover .ticker-track {
+      animation-play-state: paused;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── HIGHWAY SIGN CARD ── */
+    .sign-card {
+      position: relative;
+      flex-shrink: 0;
+      width: 220px;
+      height: 160px;
+      background: linear-gradient(180deg, #38824b 0%, var(--sign-green) 50%, var(--sign-green-deep) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 22px;
+      box-shadow:
+        /* White reflective double-border (outer thin + gap + inner thicker) */
+        inset 0 0 0 2px var(--reflective),
+        inset 0 0 0 4px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 6px var(--reflective),
+        /* Depth */
+        0 10px 22px rgba(0, 0, 0, 0.55),
+        0 4px 8px rgba(0, 0, 0, 0.40);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .sign-card::before {
+      /* Faint reflective sheen */
+      content: "";
+      position: absolute;
+      inset: 10px;
+      pointer-events: none;
+      background: linear-gradient(160deg, rgba(255,255,255,0.12) 0%, transparent 35%);
+      border-radius: 4px;
+    }
+    .sign-card:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        inset 0 0 0 2px var(--reflective),
+        inset 0 0 0 4px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 6px var(--reflective),
+        0 14px 32px rgba(0, 0, 0, 0.65),
+        0 0 18px rgba(232, 146, 10, 0.25);
+    }
+
+    /* Logo is inverted (white) for contrast on green signs */
+    .sign-card img {
+      max-width: 100%;
+      max-height: 80%;
+      object-fit: contain;
+      filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+      opacity: 0.95;
+      transition: opacity 0.2s ease;
+      position: relative;
+      z-index: 2;
+    }
+    .sign-card:hover img {
+      opacity: 1;
+    }
+
+    /* Small "EXIT" tab above each sign for extra road-signage feel */
+    .exit-tab {
+      position: absolute;
+      top: -12px;
+      left: 14px;
+      background: var(--reflective);
+      color: var(--sign-green-deep);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      padding: 2px 8px 3px;
+      border-radius: 3px 3px 1px 1px;
+      border: 1.5px solid var(--sign-green-deep);
+      border-bottom: none;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="mock-masthead">
+    <div class="max-w-[1280px] mx-auto flex items-center justify-between">
+      <span class="logo">HIGHWAY 420</span>
+      <span class="text-[10px] tracking-[0.2em] uppercase text-white/55">[ mock masthead ]</span>
+    </div>
+  </header>
+
+  <!-- ── SECTION ── -->
+  <section class="brands-band">
+    <div class="max-w-[1280px] mx-auto px-6 text-center">
+      <div class="flex flex-col items-center">
+        <p class="eyebrow">From the Highway</p>
+        <div class="road-stripe"></div>
+        <h2 class="section-title">TRUSTED BRANDS</h2>
+        <p class="section-sub">The names that ride with us · Road-tested favorites</p>
+      </div>
+    </div>
+
+    <div class="ticker-viewport" id="ticker"></div>
+  </section>
+
+  <footer class="text-center py-6 text-[10px] tracking-[0.2em] uppercase text-white/35">
+    [ mock footer ]
+  </footer>
+
+  <script>
+    const BRANDS = [
+      { name: "Cookies",       exit: "EXIT 1",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Cookies%20Logo.webp" },
+      { name: "Crave",         exit: "EXIT 2",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/crave-logo-black-150x96.png" },
+      { name: "Mush Caps",     exit: "EXIT 3",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Mush-Caps-Logo.webp" },
+      { name: "Hidden Hills",  exit: "EXIT 4",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Hidden-Hills_logo.webp" },
+      { name: "Truemoola",     exit: "EXIT 5",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Truemoola.png" },
+      { name: "Urth Farmacy",  exit: "EXIT 6",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Urth_Farmacy_logo.webp" },
+      { name: "Zoomers",       exit: "EXIT 7",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Zoomers.png" },
+      { name: "Astro Eight",   exit: "EXIT 8",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Astro%20Eight.png" },
+      { name: "mmelt",         exit: "EXIT 9",  logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/mmelt%20logo.png" },
+    ];
+
+    function buildCard(b) {
+      return `
+        <div class="sign-card" title="${b.name}">
+          <span class="exit-tab">${b.exit}</span>
+          <img src="${b.logo}" alt="${b.name} logo" />
+        </div>
+      `;
+    }
+
+    // Duplicate the brand list so the marquee loop is seamless
+    const cards = BRANDS.concat(BRANDS).map(buildCard).join("");
+    document.getElementById("ticker").innerHTML = `<div class="ticker-track">${cards}</div>`;
+  </script>
+</body>
+</html>

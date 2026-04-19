@@ -148,9 +148,9 @@ function ReviewCol({ review, visible }: { review: typeof reviews[0]; visible: bo
           fontFamily: "'Source Serif 4', Georgia, serif",
           fontSize: "15px",
           fontStyle: "italic",
-          fontWeight: 400,
+          fontWeight: 550,
           lineHeight: 1.65,
-          color: "rgba(10,14,20,0.88)",
+          color: "rgba(10,14,20,0.92)",
           marginBottom: "20px",
           minHeight: "100px",
         }}
@@ -240,24 +240,24 @@ export default function SpotlightReviews() {
       style={{
         position: "relative",
         overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
+        backgroundColor: "#c9b89a",
+        aspectRatio: "16 / 9",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* ── Background photo ── */}
-      <div
+      {/* ── Background photo (anchored to bottom, top sky cropped) ── */}
+      <img
+        src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/High%20Praise/Beach-Toast-HighPraise.png"
+        alt=""
         aria-hidden
         style={{
           position: "absolute",
           inset: 0,
-          backgroundImage:
-            "url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/High%20Praise/Beach-Toast.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center center",
-          backgroundRepeat: "no-repeat",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center bottom",
           zIndex: 0,
         }}
       />
@@ -270,17 +270,19 @@ export default function SpotlightReviews() {
           background:
             "linear-gradient(to bottom, rgba(240,234,220,0.36) 0%, rgba(240,234,220,0.18) 55%, rgba(0,0,0,0) 100%)",
           zIndex: 1,
+          pointerEvents: "none",
         }}
       />
 
-      {/* ── Content ── */}
+      {/* ── Content (absolutely positioned overlay) ── */}
       <div
         style={{
-          position: "relative",
+          position: "absolute",
+          inset: 0,
           zIndex: 2,
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "56px 32px 180px",
+          padding: "10% 32px 0",
           width: "100%",
         }}
       >

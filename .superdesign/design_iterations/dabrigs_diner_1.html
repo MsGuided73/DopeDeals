@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neon Highway Diner · Dab Rigs · Highway 420 (Mockup)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&family=Monoton&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --amber: #e8920a;
+      --amber-light: #f4ab2e;
+      --amber-deep: #c5751a;
+      --neon-pink: #ff5996;     /* highway sign accent */
+      --base-dark: #0d0d0b;
+      --card-grad-a: #22222a;
+      --card-grad-b: #181820;
+      --card-hover-a: #2a2a30;
+      --card-hover-b: #1e1e24;
+    }
+
+    html, body {
+      background: var(--base-dark);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-display { font-family: 'Bebas Neue', sans-serif !important; }
+    .font-neon    { font-family: 'Monoton', cursive !important; }
+
+    /* ── HERO ── */
+    .diner-hero {
+      position: relative;
+      background: radial-gradient(ellipse at 50% 40%, #2a1e15 0%, #120c08 60%, #0d0d0b 100%);
+      overflow: hidden;
+      padding: 96px 16px 120px;
+    }
+    /* faint city/horizon glow */
+    .diner-hero::before {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 30%;
+      background: radial-gradient(ellipse at 50% 100%, rgba(232,146,10,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* CRT scanlines — very subtle */
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.045) 0px,
+        rgba(0,0,0,0.045) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Neon title — multi-layered glow */
+    .neon-title {
+      font-family: 'Bebas Neue', sans-serif;
+      color: #fff8ec;
+      letter-spacing: 0.04em;
+      line-height: 0.92;
+      text-shadow:
+        0 0 6px rgba(255, 232, 175, 0.95),
+        0 0 14px rgba(255, 200, 110, 0.75),
+        0 0 28px rgba(232, 146, 10, 0.65),
+        0 0 60px rgba(232, 146, 10, 0.45);
+    }
+
+    /* OPEN sign */
+    .open-sign {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 12px;
+      border: 1.5px solid var(--neon-pink);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow:
+        0 0 10px rgba(255, 89, 150, 0.45),
+        inset 0 0 8px rgba(255, 89, 150, 0.18);
+    }
+    .open-sign .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--neon-pink);
+      box-shadow: 0 0 8px var(--neon-pink);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+    .open-sign .label {
+      font-family: 'Monoton', cursive;
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      color: #ffd9e6;
+    }
+
+    /* Filter rail (sticky, glassmorphic) */
+    .filter-rail {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(13, 13, 11, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(232, 146, 10, 0.22);
+      padding: 14px 16px;
+    }
+    .menu-pill {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(232, 146, 10, 0.45);
+      background: rgba(232, 146, 10, 0.05);
+      color: #fff8ec;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .menu-pill:hover {
+      background: rgba(232, 146, 10, 0.18);
+      border-color: var(--amber);
+    }
+    .menu-pill.is-active {
+      background: var(--amber);
+      color: var(--base-dark);
+      border-color: var(--amber);
+      box-shadow: 0 0 14px rgba(232, 146, 10, 0.5);
+    }
+
+    .sort-select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 9px 12px;
+      background: rgba(232, 146, 10, 0.05);
+      color: #fff8ec;
+      border: 1px solid rgba(232, 146, 10, 0.45);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .sort-select option { background: var(--base-dark); color: #fff8ec; }
+
+    /* ── PRODUCT CARD (DARK / MONITOR) ── */
+    .grid-band {
+      position: relative;
+      background:
+        radial-gradient(ellipse at 80% 0%, rgba(232,146,10,0.06) 0%, transparent 50%),
+        var(--base-dark);
+      padding: 56px 16px 96px;
+    }
+    .product-card {
+      position: relative;
+      background: linear-gradient(145deg, var(--card-grad-a) 0%, var(--card-grad-b) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      transition: all 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+    }
+    .product-card::before {
+      /* glass glare */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, rgba(255,255,255,0.055) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .product-card::after {
+      /* CRT scanlines */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.045) 0px,
+        rgba(0,0,0,0.045) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+      opacity: 0.6;
+      z-index: 2;
+    }
+    .product-card:hover {
+      background: linear-gradient(145deg, var(--card-hover-a) 0%, var(--card-hover-b) 100%);
+      border-color: rgba(232, 146, 10, 0.4);
+      transform: translateY(-3px);
+      box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(232, 146, 10, 0.18);
+    }
+    .product-card .img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+    .product-card .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      padding: 14px;
+      filter: brightness(0.96);
+      transition: filter 0.3s, transform 0.35s;
+    }
+    .product-card:hover .img-wrap img {
+      filter: brightness(1.08) saturate(1.12);
+      transform: scale(1.04);
+    }
+    /* bottom vignette over image for label legibility */
+    .img-vignette {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.55) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Power-LED on card */
+    .power-led {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber), 0 0 14px rgba(232,146,10,0.5);
+      z-index: 3;
+    }
+    .hot-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--amber);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      letter-spacing: 0.12em;
+      z-index: 3;
+      box-shadow: 0 0 10px rgba(232, 146, 10, 0.6);
+    }
+    .joint-tag {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      z-index: 3;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(0, 0, 0, 0.55);
+      padding: 4px 9px;
+      border: 1px solid rgba(232, 146, 10, 0.45);
+      border-radius: 3px;
+      backdrop-filter: blur(6px);
+    }
+
+    .btn-amber {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 10px 4px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .btn-amber:hover {
+      opacity: 0.95;
+      box-shadow: 0 0 16px rgba(232, 146, 10, 0.5);
+    }
+    .btn-outline {
+      border: 1.5px solid var(--amber);
+      color: var(--amber);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 9px 4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-outline:hover {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .btn-cta {
+      background: transparent;
+      color: var(--amber);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.14em;
+      padding: 14px 56px;
+      border: 1.5px solid var(--amber);
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: inset 0 0 0 0 var(--amber), 0 0 14px rgba(232, 146, 10, 0.25);
+    }
+    .btn-cta:hover {
+      background: var(--amber);
+      color: #fff;
+      box-shadow: 0 0 26px rgba(232, 146, 10, 0.6);
+    }
+
+    /* Mock global masthead */
+    .mock-masthead {
+      background: linear-gradient(145deg, #213d2c 0%, #162a1d 55%, #112318 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 16px;
+    }
+    .mock-masthead .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="mock-masthead">
+    <div class="max-w-[1280px] mx-auto flex items-center justify-between">
+      <span class="logo">HIGHWAY 420</span>
+      <span class="text-[10px] tracking-[0.2em] uppercase text-white/55">[ mock masthead ]</span>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="diner-hero">
+    <div class="scanlines"></div>
+
+    <div class="max-w-[1280px] mx-auto relative z-10">
+      <!-- breadcrumb -->
+      <nav class="mb-10 text-[11px] tracking-[0.1em] uppercase text-white/55">
+        <a href="#" class="hover:text-white">Home</a>
+        <span class="mx-2">›</span>
+        <a href="#" class="hover:text-white">Collections</a>
+        <span class="mx-2">›</span>
+        <span style="color: var(--amber);">Dab Rigs</span>
+      </nav>
+
+      <div class="grid lg:grid-cols-[1fr_auto] gap-8 items-end">
+        <div>
+          <!-- OPEN sign -->
+          <div class="open-sign mb-7">
+            <span class="dot"></span>
+            <span class="label">OPEN 24/7</span>
+          </div>
+
+          <!-- neon title -->
+          <h1
+            class="neon-title m-0"
+            style="font-size: clamp(80px, 13vw, 180px); margin-bottom: 14px;"
+          >
+            DAB RIGS
+          </h1>
+
+          <!-- subline -->
+          <p class="text-[12px] font-bold tracking-[0.32em] uppercase" style="color: var(--amber);">
+            COA on every unit · Free shipping over $50 · Mile 420
+          </p>
+        </div>
+
+        <!-- right-side floating description -->
+        <div class="max-w-[320px] hidden lg:block">
+          <div style="border-left: 2px solid var(--amber); padding: 6px 0 6px 18px;">
+            <p class="text-[11px] uppercase tracking-[0.2em] text-white/55 mb-2">Tonight's Specials</p>
+            <p class="text-[14px] leading-[1.55] text-white/80">
+              Premium glass, e-rigs, and concentrate accessories — pulled from the top shelf and lit up just for you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FILTER RAIL ── -->
+  <div class="filter-rail">
+    <div class="max-w-[1280px] mx-auto flex items-center gap-4 flex-wrap">
+      <span class="text-[10px] font-extrabold tracking-[0.25em] uppercase whitespace-nowrap" style="color: var(--amber);">
+        Menu:
+      </span>
+      <div class="flex gap-2 flex-wrap flex-1" id="filter-pills">
+        <button class="menu-pill is-active" data-filter="ALL">All</button>
+        <button class="menu-pill" data-filter="GLASS">Glass</button>
+        <button class="menu-pill" data-filter="SILICONE">Silicone</button>
+        <button class="menu-pill" data-filter="E-RIGS">E-Rigs</button>
+        <button class="menu-pill" data-filter="MINI">Mini</button>
+        <button class="menu-pill" data-filter="COLLECTOR">Collector</button>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] font-extrabold tracking-[0.2em] uppercase text-white/55">Sort:</span>
+        <select class="sort-select">
+          <option>Featured</option>
+          <option>Price: Low</option>
+          <option>Price: High</option>
+          <option>Newest</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GRID ── -->
+  <section class="grid-band">
+    <div class="max-w-[1280px] mx-auto">
+      <div class="text-[11px] tracking-[0.15em] uppercase text-white/55 mb-6" id="result-count">
+        Showing <span class="text-white font-bold">8</span> of 8
+      </div>
+      <div
+        id="product-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px;"
+      ></div>
+      <div class="text-center mt-14">
+        <button class="btn-cta">LOAD MORE →</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="text-center py-6 text-[10px] tracking-[0.2em] uppercase text-white/40">
+    [ mock footer ]
+  </footer>
+
+  <script>
+    const PRODUCTS = [
+      { id: 1, brand: "ROOR",              name: 'Beaker Base Dab Rig 8"',     price: 189, comparePrice: 229, joint: "14mm",  type: "GLASS",     hot: true,  img: "https://placehold.co/400x400/1a1a20/fff?text=ROOR+8%22" },
+      { id: 2, brand: "Puffco",            name: "Peak Pro Smart Rig",         price: 399,                     joint: "E-Rig", type: "E-RIGS",    hot: true,  img: "https://placehold.co/400x400/1a1a20/fff?text=Puffco+Peak" },
+      { id: 3, brand: "Eyce",              name: "Silicone Mini Beaker",       price: 49,                      joint: "10mm",  type: "SILICONE",            img: "https://placehold.co/400x400/1a1a20/fff?text=Eyce+Mini" },
+      { id: 4, brand: "MJ Arsenal",        name: "Martian Mini Rig",           price: 89,                      joint: "10mm",  type: "MINI",                img: "https://placehold.co/400x400/1a1a20/fff?text=MJ+Martian" },
+      { id: 5, brand: "Grav Labs",         name: "Helix Recycler",             price: 145,                     joint: "14mm",  type: "GLASS",               img: "https://placehold.co/400x400/1a1a20/fff?text=Grav+Helix" },
+      { id: 6, brand: "Dr. Dabber",        name: "Boost Evo E-Rig",            price: 299, comparePrice: 349,  joint: "E-Rig", type: "E-RIGS",              img: "https://placehold.co/400x400/1a1a20/fff?text=Boost+Evo" },
+      { id: 7, brand: "Empire Glassworks", name: "Pineapple Mini Rig",         price: 219,                     joint: "14mm",  type: "COLLECTOR",           img: "https://placehold.co/400x400/1a1a20/fff?text=Empire+Pineapple" },
+      { id: 8, brand: "Stundenglass",      name: "Kompact Gravity Rig",        price: 449,                     joint: "18mm",  type: "COLLECTOR", hot: true, img: "https://placehold.co/400x400/1a1a20/fff?text=Stundenglass" },
+    ];
+
+    let activeFilter = "ALL";
+
+    function renderCard(p) {
+      const discount = p.comparePrice
+        ? Math.round(((p.comparePrice - p.price) / p.comparePrice) * 100)
+        : null;
+      return `
+        <div class="product-card">
+          <div class="img-wrap">
+            <img src="${p.img}" alt="${p.name}" />
+            <div class="img-vignette"></div>
+            ${p.hot ? '<div class="hot-badge">🔥 HOT</div>' : ''}
+            <div class="power-led"></div>
+            <div class="joint-tag">${p.joint}</div>
+          </div>
+          <div style="padding: 16px 16px 18px; display:flex; flex-direction:column; flex:1; position:relative; z-index:3;">
+            <p style="font-size:10px; font-weight:700; color: var(--amber); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:6px;">
+              ${p.brand}
+            </p>
+            <h3 style="font-weight:600; color:#fff8ec; font-size:14px; line-height:1.35; margin-bottom:12px;">
+              ${p.name}
+            </h3>
+            <div style="margin-bottom:14px;">
+              ${p.comparePrice ? `
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+                  <span style="font-size:12px; color:rgba(255,255,255,0.4); text-decoration:line-through;">$${p.comparePrice.toFixed(2)}</span>
+                  <span style="background: rgba(232,146,10,0.18); color: var(--amber); padding:2px 6px; font-size:10px; font-weight:700;">-${discount}%</span>
+                </div>
+                <div style="font-weight:700; font-size:22px; color: var(--amber);">$${p.price.toFixed(2)}</div>
+              ` : `
+                <div style="font-weight:700; font-size:22px; color: var(--amber);">$${p.price.toFixed(2)}</div>
+              `}
+            </div>
+            <div style="display:flex; gap:8px; margin-top:auto;">
+              <button class="btn-amber" style="flex:1;">Add to Cart</button>
+              <button class="btn-outline" style="flex:1;">View Details</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGrid() {
+      const visible = activeFilter === "ALL"
+        ? PRODUCTS
+        : PRODUCTS.filter(p => p.type === activeFilter);
+      document.getElementById("product-grid").innerHTML = visible.map(renderCard).join("");
+      const suffix = activeFilter !== "ALL" ? ` · ${activeFilter}` : "";
+      document.getElementById("result-count").innerHTML =
+        `Showing <span class="text-white font-bold">${visible.length}</span> of ${PRODUCTS.length}${suffix}`;
+    }
+
+    document.querySelectorAll("#filter-pills .menu-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#filter-pills .menu-pill").forEach(c => c.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        activeFilter = btn.dataset.filter;
+        renderGrid();
+      });
+    });
+
+    renderGrid();
+  </script>
+</body>
+</html>

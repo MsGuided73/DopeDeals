@@ -130,36 +130,44 @@ export default function GlobalMasthead() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Bebas+Neue&display=swap');
 
-        /* ── Unified Realistic Wood Background ── */
+        /* ── Unified Realistic Wood Background (WoodGrain1) — ANTIQUED ── */
         .hw-wood-bg {
-          /* Warm walnut brown base */
-          background-color: #3b2012;
+          /* Deeper, aged walnut base */
+          background-color: #2a1809;
           background-image:
-            linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.40) 100%),
-            url('https://images.unsplash.com/photo-1588691503932-aab708f33b1e?q=80&w=2000&auto=format&fit=crop');
-          background-size: cover;
-          background-position: center;
-          background-blend-mode: overlay, normal;
+            /* 1. Corner-darkening vignette — edges look worn/dirty */
+            radial-gradient(ellipse 130% 90% at 50% 50%, transparent 38%, rgba(10, 4, 0, 0.55) 100%),
+            /* 2. Sepia patina — warm brown wash that ages the highlights */
+            linear-gradient(180deg, rgba(85, 50, 22, 0.42) 0%, rgba(45, 22, 8, 0.52) 100%),
+            /* 3. Directional shade — top brighter than bottom */
+            linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.30) 100%),
+            /* 4. The wood texture itself */
+            url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain2.png');
+          background-size: auto, auto, auto, auto;
+          background-position: center, center, center, center;
+          background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+          background-blend-mode: multiply, multiply, overlay, normal;
           box-shadow:
-            inset 0 -8px 24px rgba(0,0,0,0.9),
-            0 2px 10px rgba(0,0,0,0.70),
-            0 6px 28px rgba(0,0,0,0.45);
-          border-top: 1px solid rgba(255,255,255,0.09);
-          border-bottom: 3px solid rgba(0,0,0,0.95);
+            inset 0 -8px 24px rgba(0,0,0,0.92),
+            0 2px 10px rgba(0,0,0,0.72),
+            0 6px 28px rgba(0,0,0,0.50);
+          border-top: 1px solid rgba(120, 80, 40, 0.30);  /* warm aged trim instead of bright white */
+          border-bottom: 3px solid rgba(0,0,0,0.97);
           position: relative;
         }
-        /* Soft ambient warmth overlay */
+        /* Aged ambient overlay — dimmer "gas-lamp" warmth + smoke-stained corners */
         .hw-wood-bg::before {
           content: "";
           position: absolute;
           inset: 0;
           background:
-            /* upper-right warmth — boosted */
-            radial-gradient(ellipse 60% 80% at 82% 0%,  rgba(220,170,90,0.22) 0%, transparent 68%),
-            /* centre-top ambient — boosted */
-            radial-gradient(ellipse 80% 50% at 50% 0%,  rgba(160,110,50,0.13) 0%, rgba(30,12,3,0.35) 100%),
-            /* direct spotlight over search-bar area */
-            radial-gradient(ellipse 40% 70% at 50% 55%,  rgba(190,140,60,0.10) 0%, transparent 65%);
+            /* Smoke-stain patina at top corners (years of grime) */
+            radial-gradient(ellipse 55% 55% at 0% 0%,   rgba(20, 10, 2, 0.42) 0%, transparent 62%),
+            radial-gradient(ellipse 55% 55% at 100% 0%, rgba(20, 10, 2, 0.42) 0%, transparent 62%),
+            /* Dim overhead gas-lamp glow — much softer than before */
+            radial-gradient(ellipse 70% 55% at 50% 0%,  rgba(180, 130, 55, 0.12) 0%, transparent 70%),
+            /* Faint center wash over the search-bar area */
+            radial-gradient(ellipse 35% 60% at 50% 55%, rgba(180, 130, 55, 0.06) 0%, transparent 70%);
           pointer-events: none;
           z-index: 0;
         }
@@ -182,42 +190,98 @@ export default function GlobalMasthead() {
           z-index: 1;
         }
 
-        /* ── Category Nav Buttons — dark enamel, cream text ── */
+        /* ── Category Nav Buttons — heavily worn antique wood plaques (WoodGrain2) ── */
         .hw-badge {
           display: inline-flex;
           align-items: center;
-          background: linear-gradient(180deg, #1e3a1e 0%, #142a14 50%, #0e1e0e 100%);
-          border: 1px solid rgba(80,110,65,0.80);
-          border-bottom: 1px solid rgba(40,65,30,0.95);
+          /* Deeply worn wood: uneven corner damage + stronger sepia + WoodGrain2 */
+          background-image:
+            /* corner damage — each corner has its own darkened wear spot (uneven) */
+            radial-gradient(ellipse 35% 45% at 0%   0%,   rgba(0,0,0,0.55) 0%, transparent 55%),
+            radial-gradient(ellipse 30% 40% at 100% 100%, rgba(0,0,0,0.50) 0%, transparent 55%),
+            radial-gradient(ellipse 22% 28% at 100% 0%,   rgba(0,0,0,0.40) 0%, transparent 60%),
+            radial-gradient(ellipse 22% 28% at 0%   100%, rgba(0,0,0,0.35) 0%, transparent 60%),
+            /* overall edge darkening */
+            radial-gradient(ellipse 110% 100% at 50% 50%, transparent 25%, rgba(0,0,0,0.65) 100%),
+            /* deeper sepia grime */
+            linear-gradient(170deg, rgba(55, 30, 12, 0.45) 0%, rgba(20, 10, 3, 0.65) 100%),
+            /* directional shade — light from above */
+            linear-gradient(180deg, rgba(255, 220, 165, 0.10) 0%, rgba(0, 0, 0, 0.25) 100%),
+            url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain2.png');
+          background-size: auto, auto, auto, auto, auto, auto, auto, auto;
+          background-position: center, center, center, center, center, center, center, center;
+          background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+          background-blend-mode: multiply, multiply, multiply, multiply, multiply, multiply, overlay, normal;
+          border: 1.5px solid rgba(215, 205, 182, 0.70);   /* tarnished off-white (not pure bright) */
           box-shadow:
-            inset 0 1px 1px rgba(255,255,255,0.10),
-            inset 0 -1px 2px rgba(0,0,0,0.55),
-            0 2px 5px rgba(0,0,0,0.55);
-          border-radius: 5px;
-          color: #e2ddd0;
+            /* face dimension — strong top bevel, deep bottom recess */
+            inset 0 2px 0 rgba(240, 234, 220, 0.38),
+            inset 0 3px 2px rgba(255, 220, 165, 0.15),
+            inset 0 -5px 10px rgba(0, 0, 0, 0.70),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+            /* STACKED "extruded block" thickness — each layer a darker wood tone, builds an 8px visible side */
+            0 2px 0 rgba(60, 35, 15, 0.95),
+            0 4px 0 rgba(40, 22, 8, 0.95),
+            0 6px 0 rgba(22, 12, 4, 0.93),
+            0 8px 0 rgba(10, 5, 0, 0.92),
+            /* multi-step ambient shadow on the wall behind */
+            0 10px 14px rgba(0, 0, 0, 0.65),
+            0 16px 28px rgba(0, 0, 0, 0.45),
+            0 22px 40px rgba(0, 0, 0, 0.25),
+            /* outer hairline for separation */
+            0 0 0 1px rgba(0, 0, 0, 0.55);
+          border-radius: 4px;
+          color: #cfc1a8;                                  /* tarnished cream — worn off-white with a subtle grime tint */
           font-family: 'Oswald', system-ui, sans-serif;
           font-size: 14px;
           font-weight: 600;
           letter-spacing: 0.18em;
-          padding: 5px 13px;
+          padding: 7px 15px;
           text-transform: uppercase;
           white-space: nowrap;
-          transition: all 0.15s ease-out;
+          transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out;
           cursor: pointer;
           text-decoration: none;
-          text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+          /* text-shadow: sharp dark underlayer + faint blur (makes letters read as worn/stamped) */
+          text-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.98),
+            0 0 3px rgba(0, 0, 0, 0.70);
         }
         .hw-badge:hover {
-          background: linear-gradient(180deg, #253f25 0%, #192e19 50%, #111f11 100%);
-          color: #f0ece4;
-          border-color: rgba(100,140,80,0.9);
+          /* Lift the plaque higher — wood thickness becomes more visible */
+          color: #ede2c8;                                /* slightly cleaner cream when "lit" */
+          border-color: rgba(240, 234, 220, 0.95);
+          transform: translateY(-2px);
           box-shadow:
-            inset 0 1px 1px rgba(255,255,255,0.15),
-            0 2px 8px rgba(0,0,0,0.7);
+            /* face dimension — slightly stronger highlights */
+            inset 0 2px 0 rgba(240, 234, 220, 0.50),
+            inset 0 3px 2px rgba(255, 230, 175, 0.22),
+            inset 0 -5px 10px rgba(0, 0, 0, 0.70),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+            /* STACKED thickness — bumped to 10px tall block on lift */
+            0 2px 0 rgba(60, 35, 15, 0.95),
+            0 4px 0 rgba(40, 22, 8, 0.95),
+            0 6px 0 rgba(22, 12, 4, 0.93),
+            0 8px 0 rgba(10, 5, 0, 0.92),
+            0 10px 0 rgba(5, 2, 0, 0.90),
+            /* deeper ambient shadow */
+            0 12px 18px rgba(0, 0, 0, 0.68),
+            0 20px 32px rgba(0, 0, 0, 0.50),
+            0 28px 48px rgba(0, 0, 0, 0.28),
+            0 0 0 1px rgba(0, 0, 0, 0.55),
+            /* aged amber lamp glow */
+            0 0 22px rgba(170, 110, 40, 0.28);
         }
         .hw-badge:active {
-          transform: translateY(1px);
-          box-shadow: inset 0 2px 4px rgba(0,0,0,0.7);
+          /* Press down — compress the thickness, deepen the inset shadow */
+          transform: translateY(6px);
+          box-shadow:
+            inset 0 2px 5px rgba(0, 0, 0, 0.75),
+            inset 0 -1px 0 rgba(240, 234, 220, 0.10),
+            /* only 2px of thickness left — rest got pressed away */
+            0 2px 0 rgba(20, 10, 3, 0.90),
+            0 3px 6px rgba(0, 0, 0, 0.55),
+            0 0 0 1px rgba(0, 0, 0, 0.55);
         }
 
         /* ── Carved Inset Elements (Search & Actions) ── */
@@ -469,7 +533,7 @@ export default function GlobalMasthead() {
                 height={0}
                 sizes="100vw"
                 style={{
-                  height: 'clamp(110px, 13vw, 155px)',
+                  height: 'clamp(80px, 8.5vw, 115px)',
                   width: 'auto',
                   flexShrink: 0,
                   filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.90))',
@@ -482,7 +546,7 @@ export default function GlobalMasthead() {
           </Link>
 
           {/* ══ CENTRE: absolute overlay — true page-center for search + category buttons ══ */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 py-3 pointer-events-none">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 py-3 pointer-events-none">
 
             {/* Search bar — hidden when logo contacts it; icon migrates to right nav */}
             {!isDesktopSearchCollapsed && (
@@ -611,7 +675,7 @@ export default function GlobalMasthead() {
             MOBILE DRAWER — slides down from masthead
         ══════════════════════════════════════════════════════════════ */}
         {isMenuOpen && (
-          <div className="hw-drawer md:hidden">
+          <div className="hw-drawer">
             <nav className="px-5 py-2">
               {/* Categories */}
               {NAV_CATEGORIES.map(cat => (

@@ -48,6 +48,7 @@ export default function HomePage() {
 
         {/* ── Collections Section — vintage map background ── */}
         <section
+          className="flex justify-center"
           style={{
             backgroundImage: `url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Background.png')`,
             backgroundSize: 'cover',
@@ -55,18 +56,11 @@ export default function HomePage() {
             backgroundRepeat: 'no-repeat',
             borderTop: '3px solid #C5A059',
             borderBottom: '3px solid #C5A059',
+            paddingTop: '40px',
+            paddingBottom: '8px',
+            width: '100%',
           }}
         >
-          {/* Collections heading */}
-          <div className="text-center pb-6 pt-10">
-            <h1
-              className="text-4xl md:text-6xl font-display-twilight font-bold tracking-[0.15em]"
-              style={{ color: "#2a1a06", textShadow: "0 1px 3px rgba(0,0,0,0.15)" }}
-            >
-              SHOP OUR COLLECTIONS
-            </h1>
-          </div>
-
           <CollectionsGrid />
         </section>
 

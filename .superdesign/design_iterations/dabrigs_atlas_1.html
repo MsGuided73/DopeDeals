@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roadside Atlas · Dab Rigs · Highway 420 (Mockup)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400..700;1,400..700&family=Special+Elite&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --paper: #f0eadc;
+      --paper-deep: #e6dcc6;
+      --paper-shadow: rgba(80, 60, 30, 0.18);
+      --ink: #2a2218;
+      --ink-soft: #5a4a3a;
+      --shield-green: #1a6b3a;
+      --shield-green-deep: #0f4523;
+      --amber: #c5751a;          /* slightly deeper amber to read on cream */
+      --amber-bright: #e8920a;
+      --rust: #8b4a1f;
+    }
+
+    html, body {
+      background: var(--paper);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-display { font-family: 'Bebas Neue', sans-serif !important; }
+    .font-serif-h { font-family: 'Source Serif 4', Georgia, serif !important; }
+    .font-stamp   { font-family: 'Special Elite', monospace !important; }
+
+    /* Subtle paper grain (CSS-only) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(139, 74, 31, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(80, 60, 30, 0.05) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    /* Mock global masthead — matches the live site green badge */
+    .mock-masthead {
+      background: linear-gradient(145deg, #213d2c 0%, #162a1d 55%, #112318 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 16px;
+      color: #fff;
+      position: relative;
+      z-index: 5;
+    }
+    .mock-masthead .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--amber-bright);
+    }
+
+    /* ── HERO ── */
+    .atlas-hero {
+      position: relative;
+      padding: 64px 16px 56px;
+      border-bottom: 1px dashed rgba(80, 60, 30, 0.35);
+      background:
+        linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+    }
+
+    /* page-edge dashed road graphic, runs vertically on the left */
+    .road-edge {
+      position: absolute;
+      left: 32px;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom,
+          var(--ink) 0%, var(--ink) 100%);
+      opacity: 0.85;
+    }
+    .road-edge::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      transform: translateX(-50%);
+      background: repeating-linear-gradient(
+        180deg,
+        #fff 0px,
+        #fff 14px,
+        transparent 14px,
+        transparent 28px
+      );
+    }
+
+    /* Big road shield in hero */
+    .shield-hero {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 88px;
+      height: 100px;
+      background: linear-gradient(180deg, var(--shield-green) 0%, var(--shield-green-deep) 100%);
+      border: 3px solid #fff;
+      border-radius: 12px 12px 50% 50% / 12px 12px 30% 30%;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.18), 0 12px 24px rgba(0,0,0,0.15);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      line-height: 1;
+    }
+    .shield-hero .label-top {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      margin-top: 8px;
+      opacity: 0.85;
+    }
+    .shield-hero .number {
+      font-size: 38px;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+    .shield-hero .label-bottom {
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    /* Editorial title */
+    .editorial-title {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+    }
+    .editorial-title em {
+      font-style: italic;
+      color: var(--rust);
+      font-weight: 600;
+    }
+
+    /* ── BODY LAYOUT (sidebar + grid) ── */
+    .atlas-body {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 56px 32px 96px;
+      position: relative;
+      z-index: 2;
+    }
+    @media (max-width: 900px) {
+      .atlas-body { grid-template-columns: 1fr; gap: 32px; padding-top: 32px; }
+    }
+
+    /* Mile-marker sidebar */
+    .mile-rail {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+    }
+    .mile-rail .rail-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+    .mile-marker {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 10px 8px 4px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: all 0.18s ease;
+      border-radius: 6px;
+    }
+    .mile-marker:hover {
+      background: rgba(80, 60, 30, 0.06);
+    }
+    .mile-marker .shield {
+      flex-shrink: 0;
+      width: 36px;
+      height: 42px;
+      background: linear-gradient(180deg, var(--shield-green) 0%, var(--shield-green-deep) 100%);
+      border: 2px solid #fff;
+      border-radius: 5px 5px 50% 50% / 5px 5px 30% 30%;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+    .mile-marker .shield .mi { font-size: 7px; letter-spacing: 0.18em; opacity: 0.8; margin-top: 4px; }
+    .mile-marker .shield .num { font-size: 14px; letter-spacing: 0.04em; margin-top: 1px; }
+    .mile-marker .name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    .mile-marker .count {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+
+    .mile-marker.is-active {
+      background: rgba(197, 117, 26, 0.12);
+    }
+    .mile-marker.is-active .shield {
+      box-shadow: 0 2px 0 rgba(0,0,0,0.18), 0 0 0 3px rgba(197, 117, 26, 0.5);
+      transform: scale(1.06);
+    }
+    .mile-marker.is-active .name {
+      color: var(--rust);
+    }
+
+    /* Sort row */
+    .sort-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 28px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed rgba(80, 60, 30, 0.3);
+    }
+    .sort-row .heading {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .sort-row .heading em {
+      font-style: italic;
+      color: var(--rust);
+      font-weight: 500;
+    }
+    .sort-row .count-line {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ── PRODUCT CARD (editorial) ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px 28px;
+    }
+    .product-card {
+      position: relative;
+      background: #fffcf4;
+      border: 1px solid rgba(80, 60, 30, 0.15);
+      box-shadow: 4px 6px 0 rgba(80, 60, 30, 0.08);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      color: var(--ink);
+    }
+    .product-card:hover {
+      transform: translate(-2px, -3px);
+      box-shadow: 6px 9px 0 rgba(80, 60, 30, 0.12);
+    }
+    .product-card .img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--paper-deep);
+      overflow: hidden;
+      border-bottom: 1px solid rgba(80, 60, 30, 0.12);
+    }
+    .product-card .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      padding: 18px;
+    }
+    /* DESTINATION stamp — rotated stamp in corner of image */
+    .dest-stamp {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      transform: rotate(-7deg);
+      z-index: 3;
+    }
+    .dest-stamp .ring {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border: 2px solid var(--rust);
+      border-radius: 50%;
+      background: rgba(255, 252, 244, 0.7);
+      color: var(--rust);
+      font-family: 'Special Elite', monospace;
+      line-height: 1;
+      opacity: 0.88;
+    }
+    .dest-stamp .ring .dst { font-size: 8px; letter-spacing: 0.18em; margin-top: 8px; }
+    .dest-stamp .ring .num { font-size: 18px; font-weight: 700; margin-top: 2px; letter-spacing: 0.04em; }
+    .dest-stamp .ring .mile { font-size: 7px; letter-spacing: 0.2em; margin-top: 2px; opacity: 0.85; }
+
+    .hot-flag {
+      position: absolute;
+      top: 14px;
+      left: 0;
+      background: var(--rust);
+      color: #fff8ec;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      padding: 4px 12px 4px 10px;
+      z-index: 3;
+      clip-path: polygon(0 0, 100% 0, 90% 50%, 100% 100%, 0 100%);
+    }
+
+    .card-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-body .brand {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 6px;
+    }
+    .card-body .name {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .meta-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(80, 60, 30, 0.25);
+    }
+    .meta-line .joint {
+      font-weight: 700;
+      color: var(--shield-green);
+    }
+    .meta-line .sep { width: 4px; height: 4px; border-radius: 50%; background: rgba(80, 60, 30, 0.4); }
+
+    .price-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .price-line .now {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--rust);
+    }
+    .price-line .was {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: rgba(80, 60, 30, 0.5);
+      text-decoration: line-through;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .btn-primary {
+      flex: 1;
+      background: var(--rust);
+      color: #fff8ec;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      padding: 11px 4px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #6e3a18; }
+    .btn-secondary {
+      flex: 1;
+      background: transparent;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      padding: 10px 4px;
+      text-transform: uppercase;
+      border: 1.5px solid var(--ink);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+    .btn-cta {
+      background: var(--rust);
+      color: #fff8ec;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.14em;
+      padding: 14px 56px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-cta:hover { background: #6e3a18; }
+
+    /* tape strip behind hero blurb */
+    .washi {
+      display: inline-block;
+      padding: 4px 14px;
+      background: rgba(197, 117, 26, 0.18);
+      border-left: 3px solid var(--rust);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rust);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="mock-masthead">
+    <div class="max-w-[1280px] mx-auto flex items-center justify-between">
+      <span class="logo">HIGHWAY 420</span>
+      <span class="text-[10px] tracking-[0.2em] uppercase text-white/55">[ mock masthead ]</span>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="atlas-hero">
+    <div class="road-edge"></div>
+
+    <div class="max-w-[1280px] mx-auto pl-16 relative z-10">
+      <!-- breadcrumb -->
+      <nav class="mb-6 text-[11px] tracking-[0.1em] uppercase" style="color: var(--ink-soft);">
+        <a href="#" class="hover:underline">Home</a>
+        <span class="mx-2">›</span>
+        <a href="#" class="hover:underline">Collections</a>
+        <span class="mx-2">›</span>
+        <span style="color: var(--rust); font-weight: 700;">Dab Rigs</span>
+      </nav>
+
+      <div class="grid lg:grid-cols-[auto_1fr] gap-10 items-end">
+        <!-- big road shield -->
+        <div class="shield-hero">
+          <span class="label-top">EXIT</span>
+          <span class="number">420</span>
+          <span class="label-bottom">DAB RIGS</span>
+        </div>
+
+        <div>
+          <div class="washi mb-5">Volume IV · Spring Edition</div>
+          <h1
+            class="editorial-title m-0"
+            style="font-size: clamp(44px, 6.2vw, 78px); margin-bottom: 14px;"
+          >
+            The dab rig <em>field guide.</em>
+          </h1>
+          <p
+            class="font-serif-h text-[18px] leading-[1.55] max-w-[640px]"
+            style="color: var(--ink-soft); font-weight: 400;"
+          >
+            Six categories. From travel-ready minis to gallery-grade glass — every rig in the catalog,
+            organized like the road map you wish your dispensary had.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BODY (mile-marker rail + product grid) ── -->
+  <section class="atlas-body">
+    <!-- Mile marker sidebar -->
+    <aside class="mile-rail">
+      <div class="rail-label">Browse by Mile</div>
+      <div id="mile-markers">
+        <button class="mile-marker is-active" data-filter="ALL">
+          <div class="shield"><span class="mi">MI</span><span class="num">All</span></div>
+          <div>
+            <div class="name">All Rigs</div>
+            <div class="count">8 stops</div>
+          </div>
+        </button>
+        <button class="mile-marker" data-filter="GLASS">
+          <div class="shield"><span class="mi">MI</span><span class="num">12</span></div>
+          <div>
+            <div class="name">Glass</div>
+            <div class="count">2 stops</div>
+          </div>
+        </button>
+        <button class="mile-marker" data-filter="SILICONE">
+          <div class="shield"><span class="mi">MI</span><span class="num">28</span></div>
+          <div>
+            <div class="name">Silicone</div>
+            <div class="count">1 stop</div>
+          </div>
+        </button>
+        <button class="mile-marker" data-filter="E-RIGS">
+          <div class="shield"><span class="mi">MI</span><span class="num">94</span></div>
+          <div>
+            <div class="name">E-Rigs</div>
+            <div class="count">2 stops</div>
+          </div>
+        </button>
+        <button class="mile-marker" data-filter="MINI">
+          <div class="shield"><span class="mi">MI</span><span class="num">142</span></div>
+          <div>
+            <div class="name">Mini</div>
+            <div class="count">1 stop</div>
+          </div>
+        </button>
+        <button class="mile-marker" data-filter="COLLECTOR">
+          <div class="shield"><span class="mi">MI</span><span class="num">420</span></div>
+          <div>
+            <div class="name">Collector</div>
+            <div class="count">2 stops</div>
+          </div>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Grid + heading -->
+    <div>
+      <div class="sort-row">
+        <div class="heading">Featured <em>destinations</em></div>
+        <div class="count-line" id="result-count">Showing 8 of 8</div>
+      </div>
+
+      <div id="product-grid" class="product-grid"></div>
+
+      <div class="text-center" style="margin-top: 56px;">
+        <button class="btn-cta">CONTINUE THE TOUR →</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="text-center py-6 text-[10px] tracking-[0.2em] uppercase relative z-10" style="color: var(--ink-soft);">
+    [ mock footer ]
+  </footer>
+
+  <script>
+    const PRODUCTS = [
+      { id: 1, brand: "ROOR",              name: 'Beaker Base 8"',             price: 189, comparePrice: 229, joint: "14mm",   material: "Borosilicate", type: "GLASS",     mile: 12,  hot: true,  img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=ROOR+8%22" },
+      { id: 2, brand: "Puffco",            name: "Peak Pro Smart Rig",         price: 399,                     joint: "E-Rig",  material: "Ceramic",      type: "E-RIGS",    mile: 94,  hot: true,  img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=Puffco+Peak" },
+      { id: 3, brand: "Eyce",              name: "Silicone Mini Beaker",       price: 49,                      joint: "10mm",   material: "Silicone",     type: "SILICONE",  mile: 28,             img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=Eyce+Mini" },
+      { id: 4, brand: "MJ Arsenal",        name: "Martian Mini Rig",           price: 89,                      joint: "10mm",   material: "Glass",        type: "MINI",      mile: 142,            img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=MJ+Martian" },
+      { id: 5, brand: "Grav Labs",         name: "Helix Recycler",             price: 145,                     joint: "14mm",   material: "Glass",        type: "GLASS",     mile: 67,             img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=Grav+Helix" },
+      { id: 6, brand: "Dr. Dabber",        name: "Boost Evo E-Rig",            price: 299, comparePrice: 349,  joint: "E-Rig",  material: "Ceramic",      type: "E-RIGS",    mile: 108,            img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=Boost+Evo" },
+      { id: 7, brand: "Empire Glassworks", name: "Pineapple Mini Rig",         price: 219,                     joint: "14mm",   material: "Hand-blown",   type: "COLLECTOR", mile: 304,            img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=Empire+Pineapple" },
+      { id: 8, brand: "Stundenglass",      name: "Kompact Gravity Rig",        price: 449,                     joint: "18mm",   material: "Steel + Glass",type: "COLLECTOR", mile: 420, hot: true, img: "https://placehold.co/400x300/e6dcc6/5a4a3a?text=Stundenglass" },
+    ];
+
+    let activeFilter = "ALL";
+
+    function renderCard(p) {
+      return `
+        <article class="product-card">
+          <div class="img-wrap">
+            <img src="${p.img}" alt="${p.name}" />
+            ${p.hot ? '<div class="hot-flag">FAVORITE</div>' : ''}
+            <div class="dest-stamp">
+              <div class="ring">
+                <span class="dst">DEST</span>
+                <span class="num">${p.mile}</span>
+                <span class="mile">MILE</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="brand">${p.brand}</p>
+            <h3 class="name">${p.name}</h3>
+            <div class="meta-line">
+              <span class="joint">${p.joint}</span>
+              <span class="sep"></span>
+              <span>${p.material}</span>
+            </div>
+            <div class="price-line">
+              <span class="now">$${p.price.toFixed(2)}</span>
+              ${p.comparePrice ? `<span class="was">$${p.comparePrice.toFixed(2)}</span>` : ''}
+            </div>
+            <div class="actions">
+              <button class="btn-primary">Add to Cart</button>
+              <button class="btn-secondary">Details</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderGrid() {
+      const visible = activeFilter === "ALL"
+        ? PRODUCTS
+        : PRODUCTS.filter(p => p.type === activeFilter);
+      document.getElementById("product-grid").innerHTML = visible.map(renderCard).join("");
+      document.getElementById("result-count").textContent =
+        `Showing ${visible.length} of ${PRODUCTS.length}`;
+    }
+
+    document.querySelectorAll("#mile-markers .mile-marker").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#mile-markers .mile-marker").forEach(c => c.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        activeFilter = btn.dataset.filter;
+        renderGrid();
+      });
+    });
+
+    renderGrid();
+  </script>
+</body>
+</html>

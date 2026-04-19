@@ -73,31 +73,105 @@ export default function HotProductsPage() {
   return (
     <div style={{ background: '#f5f0e8', minHeight: '100vh' }}>
 
-      {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section style={{ background: 'linear-gradient(180deg,#1a1a1a 0%,#2d2d2d 60%,#1a1a1a 100%)', paddingTop: '80px', paddingBottom: '80px', position: 'relative', overflow: 'hidden' }}>
-        {/* Road stripe */}
-        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', background: 'repeating-linear-gradient(180deg,#e8920a 0,#e8920a 20px,transparent 20px,transparent 40px)', opacity: 0.2, transform: 'translateX(-50%)' }} />
+      {/* ── Hero (diner v2 styling) ──────────────────────────────────────── */}
+      <section
+        style={{
+          position: 'relative',
+          background: 'radial-gradient(ellipse at 50% 40%, #2a1e15 0%, #120c08 60%, #0d0d0b 100%)',
+          overflow: 'hidden',
+          padding: '96px 24px 120px',
+        }}
+      >
+        {/* CRT scanlines */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'repeating-linear-gradient(0deg, rgba(0,0,0,0.045) 0px, rgba(0,0,0,0.045) 1px, transparent 1px, transparent 3px)',
+            pointerEvents: 'none',
+            zIndex: 1,
+          }}
+        />
+        {/* Bottom amber radial glow */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: '30%',
+            background:
+              'radial-gradient(ellipse at 50% 100%, rgba(232,146,10,0.18) 0%, transparent 70%)',
+            pointerEvents: 'none',
+            zIndex: 1,
+          }}
+        />
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '1280px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", color: amber, fontSize: '11px', fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: '12px' }}>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: '1280px', margin: '0 auto' }}>
+          <p
+            style={{
+              fontFamily: "'DM Sans',sans-serif",
+              color: amber,
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '0.32em',
+              textTransform: 'uppercase',
+              marginBottom: '18px',
+            }}
+          >
             Highway 420 · Curated Collection
           </p>
-          <div style={{ height: '3px', width: '48px', background: amber, margin: '0 auto 16px' }} />
-          <h1 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: amber, fontSize: 'clamp(56px,10vw,120px)', lineHeight: 1, letterSpacing: '0.05em', margin: '0 0 16px' }}>
+          <h1
+            style={{
+              fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
+              color: '#fff8ec',
+              fontSize: 'clamp(56px,10vw,120px)',
+              lineHeight: 0.92,
+              letterSpacing: '0.05em',
+              margin: '0 0 18px',
+              textShadow:
+                '0 0 6px rgba(255, 232, 175, 0.95), 0 0 14px rgba(255, 200, 110, 0.75), 0 0 28px rgba(232, 146, 10, 0.65), 0 0 60px rgba(232, 146, 10, 0.45)',
+            }}
+          >
             HOT PRODUCTS
           </h1>
-          <p style={{ fontFamily: "'DM Sans',sans-serif", color: '#a0978a', fontSize: '16px', maxWidth: '480px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+          <p
+            style={{
+              fontFamily: "'DM Sans',sans-serif",
+              color: 'rgba(255,255,255,0.78)',
+              fontSize: '16px',
+              maxWidth: '560px',
+              margin: '0 0 28px',
+              lineHeight: 1.6,
+            }}
+          >
             Our fastest-moving items — handpicked favorites customers can&apos;t stop buying.
           </p>
-          <div style={{ borderTop: '1px dashed rgba(232,146,10,0.25)', maxWidth: '360px', margin: '0 auto 20px' }} />
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
+          <div style={{ borderTop: '1px dashed rgba(232,146,10,0.35)', maxWidth: '360px', margin: '0 0 22px' }} />
+          <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
             {[
               { icon: '🔥', label: `${products.length > 0 ? products.length : '20+'} Items` },
               { icon: '✓', label: 'Fast Shipping' },
               { icon: '★', label: 'Top Rated' },
             ].map(({ icon, label }, i) => (
-              <span key={i} style={{ fontFamily: "'DM Sans',sans-serif", color: '#8a8178', fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: amber }}>{icon}</span>{label}
+              <span
+                key={i}
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  color: 'rgba(255,255,255,0.65)',
+                  fontSize: '12px',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <span style={{ color: amber }}>{icon}</span>
+                {label}
               </span>
             ))}
           </div>
