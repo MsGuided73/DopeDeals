@@ -250,7 +250,7 @@ export default function FullscreenCarousel() {
             aria-hidden={idx !== current}
             tabIndex={idx !== current ? -1 : 0}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {/* eslint-disable-next-line */}
             <img
               className="carousel-slide-img"
               src={slide.src}
