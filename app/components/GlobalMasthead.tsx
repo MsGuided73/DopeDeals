@@ -477,25 +477,6 @@ export default function GlobalMasthead() {
                 className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
                 priority
               />
-              {/* WORDMARK TEMPORARILY HIDDEN — uncomment to restore
-              <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
-                alt="HIGHWAY 420"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{
-                  height: '38px',
-                  width: 'auto',
-                  flexShrink: 0,
-                  transform: 'translateY(-1px)',
-                  filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.85))',
-                  mixBlendMode: 'screen',
-                }}
-                className="object-contain"
-                priority
-              />
-              */}
             </Link>
             
             <div className="flex-1" />
@@ -547,24 +528,6 @@ export default function GlobalMasthead() {
                 className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
                 priority
               />
-              {/* WORDMARK TEMPORARILY HIDDEN — uncomment to restore
-              <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
-                alt="HIGHWAY 420"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{
-                  height: 'clamp(80px, 8.5vw, 115px)',
-                  width: 'auto',
-                  flexShrink: 0,
-                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.90))',
-                  mixBlendMode: 'screen',
-                }}
-                className="object-contain"
-                priority
-              />
-              */}
             </div>
           </Link>
 
