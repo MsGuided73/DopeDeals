@@ -477,6 +477,7 @@ export default function GlobalMasthead() {
                 className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
                 priority
               />
+              {/* WORDMARK TEMPORARILY HIDDEN — uncomment to restore
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
                 alt="HIGHWAY 420"
@@ -494,6 +495,7 @@ export default function GlobalMasthead() {
                 className="object-contain"
                 priority
               />
+              */}
             </Link>
             
             <div className="flex-1" />
@@ -545,6 +547,7 @@ export default function GlobalMasthead() {
                 className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
                 priority
               />
+              {/* WORDMARK TEMPORARILY HIDDEN — uncomment to restore
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
                 alt="HIGHWAY 420"
@@ -561,6 +564,7 @@ export default function GlobalMasthead() {
                 className="object-contain"
                 priority
               />
+              */}
             </div>
           </Link>
 
