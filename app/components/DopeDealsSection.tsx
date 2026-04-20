@@ -238,7 +238,7 @@ export default function DopeDealsSection() {
   if (loading) {
 // ...
     return (
-    <section className="mt-16 bg-white dark:bg-gray-950 py-12">
+    <section className="mt-16 bg-white dark:bg-gray-950 pt-12 pb-4">
         <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
@@ -285,7 +285,7 @@ export default function DopeDealsSection() {
 
   if (error) {
     return (
-      <section className="mt-16 bg-white dark:bg-gray-950 py-12">
+      <section className="mt-16 bg-white dark:bg-gray-950 pt-12 pb-4">
         <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
@@ -303,7 +303,7 @@ export default function DopeDealsSection() {
   }
 
   return (
-    <section id="dope-deals" className="mt-16 bg-white dark:bg-gray-950 py-12">
+    <section id="dope-deals" className="mt-16 bg-white dark:bg-gray-950 pt-12 pb-4">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -333,7 +333,7 @@ export default function DopeDealsSection() {
         </div>
 
         {/* View All Button */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-4">
           <Link
             href="/products"
             className="inline-block px-6 py-3 bg-neutral-900 hover:bg-black text-white rounded-full font-medium transition-colors duration-200">

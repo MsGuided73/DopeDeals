@@ -241,8 +241,7 @@ export default function SpotlightReviews() {
         position: "relative",
         overflow: "hidden",
         backgroundColor: "#c9b89a",
-        aspectRatio: "16/7",
-        minHeight: "500px",
+        minHeight: "clamp(740px, 85vh, 960px)",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -258,7 +257,7 @@ export default function SpotlightReviews() {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          objectPosition: "50% 92%",
+          objectPosition: "50% 100%",
           zIndex: 0,
         }}
       />
@@ -269,7 +268,7 @@ export default function SpotlightReviews() {
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to bottom, rgba(240,234,220,0.36) 0%, rgba(240,234,220,0.18) 55%, rgba(0,0,0,0) 100%)",
+            "linear-gradient(to bottom, rgba(200,220,240,0.12) 0%, rgba(200,220,240,0.06) 40%, rgba(0,0,0,0) 80%)",
           zIndex: 1,
           pointerEvents: "none",
         }}
@@ -282,7 +281,7 @@ export default function SpotlightReviews() {
             zIndex: 2,
             maxWidth: "1280px",
             margin: "0 auto",
-            padding: "56px 48px 360px",
+            padding: "56px 48px 520px",
           }}
         >
         {/* Left-aligned header block */}
