@@ -241,7 +241,8 @@ export default function SpotlightReviews() {
         position: "relative",
         overflow: "hidden",
         backgroundColor: "#c9b89a",
-        minHeight: "clamp(740px, 85vh, 960px)",
+        aspectRatio: "16/7",
+        minHeight: "500px",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
