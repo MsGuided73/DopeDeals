@@ -209,48 +209,48 @@ export default function GlobalMasthead() {
           z-index: 1;
         }
 
-        /* ── Category Nav Buttons — heavily worn antique wood plaques (WoodGrain2) ── */
+        /* ── Category Nav Buttons — worn aged dark green road signs ── */
         .hw-badge {
           display: inline-flex;
           align-items: center;
-          /* Deeply worn wood: uneven corner damage + stronger sepia + WoodGrain2 */
+          /* Aged dark green: corner wear + green grime + WoodGrain2 underneath */
           background-image:
-            /* corner damage — each corner has its own darkened wear spot (uneven) */
-            radial-gradient(ellipse 35% 45% at 0%   0%,   rgba(0,0,0,0.55) 0%, transparent 55%),
-            radial-gradient(ellipse 30% 40% at 100% 100%, rgba(0,0,0,0.50) 0%, transparent 55%),
-            radial-gradient(ellipse 22% 28% at 100% 0%,   rgba(0,0,0,0.40) 0%, transparent 60%),
-            radial-gradient(ellipse 22% 28% at 0%   100%, rgba(0,0,0,0.35) 0%, transparent 60%),
+            /* corner damage — uneven wear at each corner */
+            radial-gradient(ellipse 35% 45% at 0%   0%,   rgba(0,0,0,0.60) 0%, transparent 55%),
+            radial-gradient(ellipse 30% 40% at 100% 100%, rgba(0,0,0,0.55) 0%, transparent 55%),
+            radial-gradient(ellipse 22% 28% at 100% 0%,   rgba(0,0,0,0.45) 0%, transparent 60%),
+            radial-gradient(ellipse 22% 28% at 0%   100%, rgba(0,0,0,0.40) 0%, transparent 60%),
             /* overall edge darkening */
-            radial-gradient(ellipse 110% 100% at 50% 50%, transparent 25%, rgba(0,0,0,0.65) 100%),
-            /* deeper sepia grime */
-            linear-gradient(170deg, rgba(55, 30, 12, 0.45) 0%, rgba(20, 10, 3, 0.65) 100%),
-            /* directional shade — light from above */
-            linear-gradient(180deg, rgba(255, 220, 165, 0.10) 0%, rgba(0, 0, 0, 0.25) 100%),
+            radial-gradient(ellipse 110% 100% at 50% 50%, transparent 25%, rgba(0,0,0,0.70) 100%),
+            /* aged forest-green grime wash */
+            linear-gradient(170deg, rgba(12, 38, 16, 0.72) 0%, rgba(6, 22, 9, 0.82) 100%),
+            /* faint sage highlight from above — like sun-bleached paint */
+            linear-gradient(180deg, rgba(80, 140, 70, 0.10) 0%, rgba(0, 0, 0, 0.28) 100%),
             url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain2.png');
           background-size: auto, auto, auto, auto, auto, auto, auto, auto;
           background-position: center, center, center, center, center, center, center, center;
           background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
           background-blend-mode: multiply, multiply, multiply, multiply, multiply, multiply, overlay, normal;
-          border: 1.5px solid rgba(215, 205, 182, 0.70);   /* tarnished off-white (not pure bright) */
+          border: 1.5px solid rgba(90, 140, 80, 0.60);   /* tarnished sage green */
           box-shadow:
-            /* face dimension — strong top bevel, deep bottom recess */
-            inset 0 2px 0 rgba(240, 234, 220, 0.38),
-            inset 0 3px 2px rgba(255, 220, 165, 0.15),
-            inset 0 -5px 10px rgba(0, 0, 0, 0.70),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.55),
-            /* STACKED "extruded block" thickness — each layer a darker wood tone, builds an 8px visible side */
-            0 2px 0 rgba(60, 35, 15, 0.95),
-            0 4px 0 rgba(40, 22, 8, 0.95),
-            0 6px 0 rgba(22, 12, 4, 0.93),
-            0 8px 0 rgba(10, 5, 0, 0.92),
-            /* multi-step ambient shadow on the wall behind */
+            /* face dimension — faint sage bevel top, dark recess bottom */
+            inset 0 2px 0 rgba(100, 160, 85, 0.22),
+            inset 0 3px 2px rgba(80, 140, 65, 0.10),
+            inset 0 -5px 10px rgba(0, 0, 0, 0.75),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.60),
+            /* STACKED extruded block — dark forest green sides, builds 8px depth */
+            0 2px 0 rgba(18, 50, 20, 0.96),
+            0 4px 0 rgba(12, 35, 14, 0.96),
+            0 6px 0 rgba(7, 22, 9, 0.94),
+            0 8px 0 rgba(2, 10, 3, 0.93),
+            /* multi-step ambient shadow */
             0 10px 14px rgba(0, 0, 0, 0.65),
             0 16px 28px rgba(0, 0, 0, 0.45),
             0 22px 40px rgba(0, 0, 0, 0.25),
-            /* outer hairline for separation */
+            /* outer hairline */
             0 0 0 1px rgba(0, 0, 0, 0.55);
           border-radius: 4px;
-          color: #cfc1a8;                                  /* tarnished cream — worn off-white with a subtle grime tint */
+          color: #a8c298;                                  /* faded sage — like worn painted letters on an old road sign */
           font-family: 'Oswald', system-ui, sans-serif;
           font-size: 14px;
           font-weight: 600;
@@ -261,44 +261,44 @@ export default function GlobalMasthead() {
           transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out;
           cursor: pointer;
           text-decoration: none;
-          /* text-shadow: sharp dark underlayer + faint blur (makes letters read as worn/stamped) */
+          /* stamped/worn text shadow */
           text-shadow:
             0 1px 2px rgba(0, 0, 0, 0.98),
             0 0 3px rgba(0, 0, 0, 0.70);
         }
         .hw-badge:hover {
-          /* Lift the plaque higher — wood thickness becomes more visible */
-          color: #ede2c8;                                /* slightly cleaner cream when "lit" */
-          border-color: rgba(240, 234, 220, 0.95);
+          /* Lift the plaque — green paint looks freshened under good light */
+          color: #c4dab4;                                  /* brighter sage when lit */
+          border-color: rgba(120, 180, 100, 0.90);
           transform: translateY(-2px);
           box-shadow:
-            /* face dimension — slightly stronger highlights */
-            inset 0 2px 0 rgba(240, 234, 220, 0.50),
-            inset 0 3px 2px rgba(255, 230, 175, 0.22),
-            inset 0 -5px 10px rgba(0, 0, 0, 0.70),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.55),
-            /* STACKED thickness — bumped to 10px tall block on lift */
-            0 2px 0 rgba(60, 35, 15, 0.95),
-            0 4px 0 rgba(40, 22, 8, 0.95),
-            0 6px 0 rgba(22, 12, 4, 0.93),
-            0 8px 0 rgba(10, 5, 0, 0.92),
-            0 10px 0 rgba(5, 2, 0, 0.90),
+            /* face dimension — stronger sage highlights */
+            inset 0 2px 0 rgba(110, 175, 90, 0.32),
+            inset 0 3px 2px rgba(90, 155, 70, 0.18),
+            inset 0 -5px 10px rgba(0, 0, 0, 0.75),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.60),
+            /* STACKED thickness — 10px on lift */
+            0 2px 0 rgba(18, 50, 20, 0.96),
+            0 4px 0 rgba(12, 35, 14, 0.96),
+            0 6px 0 rgba(7, 22, 9, 0.94),
+            0 8px 0 rgba(2, 10, 3, 0.93),
+            0 10px 0 rgba(0, 5, 1, 0.91),
             /* deeper ambient shadow */
             0 12px 18px rgba(0, 0, 0, 0.68),
             0 20px 32px rgba(0, 0, 0, 0.50),
             0 28px 48px rgba(0, 0, 0, 0.28),
             0 0 0 1px rgba(0, 0, 0, 0.55),
-            /* aged amber lamp glow */
-            0 0 22px rgba(170, 110, 40, 0.28);
+            /* aged moss glow */
+            0 0 22px rgba(40, 110, 50, 0.25);
         }
         .hw-badge:active {
-          /* Press down — compress the thickness, deepen the inset shadow */
+          /* Press down — compress, deepen */
           transform: translateY(6px);
           box-shadow:
-            inset 0 2px 5px rgba(0, 0, 0, 0.75),
-            inset 0 -1px 0 rgba(240, 234, 220, 0.10),
-            /* only 2px of thickness left — rest got pressed away */
-            0 2px 0 rgba(20, 10, 3, 0.90),
+            inset 0 2px 5px rgba(0, 0, 0, 0.80),
+            inset 0 -1px 0 rgba(90, 150, 70, 0.08),
+            /* only 2px of thickness left */
+            0 2px 0 rgba(8, 25, 10, 0.92),
             0 3px 6px rgba(0, 0, 0, 0.55),
             0 0 0 1px rgba(0, 0, 0, 0.55);
         }
