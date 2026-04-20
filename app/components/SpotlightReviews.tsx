@@ -241,7 +241,7 @@ export default function SpotlightReviews() {
         position: "relative",
         overflow: "hidden",
         backgroundColor: "#c9b89a",
-        // Height is driven by content + padding — text can never overflow the section
+        minHeight: "clamp(600px, 75vh, 860px)",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -281,7 +281,7 @@ export default function SpotlightReviews() {
             zIndex: 2,
             maxWidth: "1280px",
             margin: "0 auto",
-            padding: "24px 32px 32px",
+            padding: "56px 48px 220px",
           }}
         >
         {/* Left-aligned header block */}
