@@ -231,11 +231,11 @@ export default function GlobalMasthead() {
           background-position: center, center, center, center, center, center, center, center;
           background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
           background-blend-mode: multiply, multiply, multiply, multiply, multiply, multiply, overlay, normal;
-          border: 1.5px solid rgba(90, 140, 80, 0.60);   /* tarnished sage green */
+          border: 1.5px solid rgba(215, 205, 182, 0.70);   /* tarnished off-white — matches shield logo */
           box-shadow:
             /* face dimension — faint sage bevel top, dark recess bottom */
-            inset 0 2px 0 rgba(100, 160, 85, 0.22),
-            inset 0 3px 2px rgba(80, 140, 65, 0.10),
+            inset 0 2px 0 rgba(240, 234, 220, 0.38),
+            inset 0 3px 2px rgba(255, 220, 165, 0.15),
             inset 0 -5px 10px rgba(0, 0, 0, 0.75),
             inset 0 -1px 0 rgba(0, 0, 0, 0.60),
             /* STACKED extruded block — dark forest green sides, builds 8px depth */
@@ -250,7 +250,7 @@ export default function GlobalMasthead() {
             /* outer hairline */
             0 0 0 1px rgba(0, 0, 0, 0.55);
           border-radius: 4px;
-          color: #a8c298;                                  /* faded sage — like worn painted letters on an old road sign */
+          color: #cfc1a8;                                  /* tarnished cream — matches Highway shield logo */
           font-family: 'Oswald', system-ui, sans-serif;
           font-size: 14px;
           font-weight: 600;
@@ -268,13 +268,13 @@ export default function GlobalMasthead() {
         }
         .hw-badge:hover {
           /* Lift the plaque — green paint looks freshened under good light */
-          color: #c4dab4;                                  /* brighter sage when lit */
-          border-color: rgba(120, 180, 100, 0.90);
+          color: #ede2c8;                                  /* brightened cream on hover */
+          border-color: rgba(240, 234, 220, 0.95);
           transform: translateY(-2px);
           box-shadow:
             /* face dimension — stronger sage highlights */
-            inset 0 2px 0 rgba(110, 175, 90, 0.32),
-            inset 0 3px 2px rgba(90, 155, 70, 0.18),
+            inset 0 2px 0 rgba(240, 234, 220, 0.50),
+            inset 0 3px 2px rgba(255, 230, 175, 0.22),
             inset 0 -5px 10px rgba(0, 0, 0, 0.75),
             inset 0 -1px 0 rgba(0, 0, 0, 0.60),
             /* STACKED thickness — 10px on lift */
