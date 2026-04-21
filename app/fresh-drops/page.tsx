@@ -118,7 +118,7 @@ export default function FreshDropsPage() {
           <div style={{ height: '3px', width: '48px', background: RS.accent, margin: '0 auto 16px' }} />
 
           {/* Title */}
-          <h1 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.bg, fontSize: 'clamp(56px,10vw,120px)', lineHeight: 1, letterSpacing: '0.06em', margin: '0 0 16px' }}>
+          <h1 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.bg, fontSize: 'clamp(56px,10vw,120px)', lineHeight: 1, letterSpacing: '0.02em', margin: '0 0 16px' }}>
             FRESH DROPS
           </h1>
 

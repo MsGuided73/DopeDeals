@@ -366,7 +366,7 @@ export default function FeaturedProductsSection() {
           Handpicked Favorites · Best Sellers
         </p>
         <div style={{ height: '3px', width: '48px', background: '#52C41A', margin: '0 auto 14px' }} />
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.06em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           HOT PRODUCTS
         </h2>
         <p style={{ color: '#6B7280', fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '10px' }}>
@@ -393,8 +393,9 @@ export default function FeaturedProductsSection() {
       <div style={{ textAlign: 'center', marginTop: '44px' }}>
         <Link
           href="/hot-products"
-          style={{ display: 'inline-block', background: '#1c1208', color: '#ffffff', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.1em', padding: '13px 48px', textDecoration: 'none', transition: 'opacity 0.2s', border: '2px solid #1c1208', borderRadius: '4px' }}
-          className="hover:opacity-80"
+          style={{ display: 'inline-block', background: 'transparent', color: '#52C41A', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: '2px solid #52C41A', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#52C41A'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = '#52C41A'; }}
         >
           SHOP ALL HOT PRODUCTS →
         </Link>

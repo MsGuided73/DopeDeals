@@ -136,15 +136,14 @@ export default function GlobalMasthead() {
           z-index: 100;
         }
 
-        /* ── Top bar (search + icons) ── */
+        /* ── Top bar (search only — icons moved to navbar) ── */
         .dg-topbar {
           max-width: 1440px;
           margin: 0 auto;
-          /* base horizontal padding; overridden via inline style when in grid layout */
           padding: 12px 24px;
           display: flex;
           align-items: center;
-          gap: 16px;
+          justify-content: center;
           width: 100%;
           box-sizing: border-box;
         }
@@ -160,7 +159,7 @@ export default function GlobalMasthead() {
           text-decoration: none;
           transition: filter 0.15s;
         }
-        .dg-logo-link:hover { filter: brightness(1.05) drop-shadow(0 2px 8px rgba(76,145,65,0.35)); }
+        .dg-logo-link:hover { filter: brightness(1.05) drop-shadow(0 2px 8px rgba(82,196,26,0.35)); }
 
         /* ── Search form ── */
         .dg-search-form {
@@ -209,7 +208,7 @@ export default function GlobalMasthead() {
         .dg-search-input::placeholder { color: #9A9A9A; }
         .dg-search-btn {
           border: none;
-          background: #5BAD52;
+          background: linear-gradient(to bottom, #63D420, #52C41A);
           color: #fff;
           padding: 0 16px;
           height: 100%;
@@ -218,7 +217,7 @@ export default function GlobalMasthead() {
           align-items: center;
           transition: background 0.15s;
         }
-        .dg-search-btn:hover { background: #4A9442; }
+        .dg-search-btn:hover { background: linear-gradient(to bottom, #72E028, #5BD420); }
 
         /* ── Right icon buttons ── */
         .dg-icon-btn {
@@ -259,25 +258,38 @@ export default function GlobalMasthead() {
           border: 1.5px solid #1B7A4D;
         }
 
-        /* ── Navigation bar ── */
+        /* ── Navigation bar — highway road-sign double-border at BOTTOM ── */
         .dg-navbar {
-          border-top: 1px solid rgba(255,255,255,0.12);
+          /* Thick outer line at very bottom, thin inner line above it */
+          border-bottom: 3px solid rgba(255,255,255,0.95);
+          position: relative;
           background: transparent;
+        }
+        /* Inner thin line — sits 4px above the thick bottom border */
+        .dg-navbar::before {
+          content: '';
+          position: absolute;
+          bottom: 6px; /* 3px border + 3px gap */
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: rgba(255,255,255,0.85);
+          pointer-events: none;
         }
         .dg-navinner {
           position: relative;
           padding: 0 16px;
           display: flex;
           align-items: center;
-          gap: 2px;
           width: 100%;
           box-sizing: border-box;
+          min-height: 52px; /* extra height for the double-line design */
         }
         .dg-navlink {
           display: inline-flex;
           align-items: center;
           gap: 3px;
-          padding: 10px 12px;
+          padding: 13px 12px;
           font-family: 'Fira Sans', sans-serif;
           font-size: 14px;
           font-weight: 700;
@@ -305,7 +317,7 @@ export default function GlobalMasthead() {
           min-width: 200px;
           background: #ffffff;
           border: 1px solid #E8E8E8;
-          border-top: 2px solid #5BAD52;
+          border-top: 2px solid #52C41A;
           border-radius: 0 0 6px 6px;
           box-shadow: 0 8px 24px rgba(0,0,0,0.12);
           z-index: 200;
@@ -323,7 +335,7 @@ export default function GlobalMasthead() {
         }
         .dg-dropdown-link:hover {
           background: #F5F5F5;
-          color: #5BAD52;
+          color: #52C41A;
         }
 
         /* ── Mobile drawer ── */
@@ -434,27 +446,24 @@ export default function GlobalMasthead() {
         ══════════════════════════════════════════════════════════════ */}
         <div className="hidden md:block">
           {/*
-            Grid layout:
-              col 1 = shield (auto width, 2-row span)
-              col 2 = topbar + navbar stacked
-            The shield will naturally fill the height of both rows — no clipping, no overflow.
+            Full-width stacked layout.
+            The logo is absolutely positioned so BOTH the search row and the nav row
+            span 100% of the header width — meaning left:50% in each row refers to
+            the exact same screen center.
           */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'auto 1fr',
-            gridTemplateRows: 'auto auto',
-            width: '100%',
-          }}>
+          <div style={{ position: 'relative', width: '100%' }}>
 
-            {/* ── Col 1, rows 1-2: Shield ── */}
+            {/* ── Logo: absolutely positioned, spans full header height ── */}
             <Link
               href="/"
               className="dg-logo-link"
               aria-label="Highway 420 home"
               style={{
-                gridColumn: '1',
-                gridRow: '1 / 3',
-                alignSelf: 'stretch',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                zIndex: 2,
                 display: 'flex',
                 alignItems: 'center',
                 padding: '8px 16px 8px 20px',
@@ -465,15 +474,30 @@ export default function GlobalMasthead() {
                 alt="HIGHWAY 420"
                 width={200}
                 height={200}
-                style={{ height: '100%', width: 'auto', maxHeight: '120px', minHeight: '80px', display: 'block' }}
+                style={{
+                  height: '100%',
+                  width: 'auto',
+                  maxHeight: '120px',
+                  minHeight: '80px',
+                  display: 'block',
+                  transform: 'translateY(-2px)',
+                  filter: 'drop-shadow(0 4px 12px rgba(255,255,255,0.28)) drop-shadow(0 1px 4px rgba(255,255,255,0.18))',
+                }}
                 className="object-contain"
                 priority
               />
             </Link>
 
-            {/* ── Col 2, row 1: Topbar — search only, centered ── */}
-            <div className="dg-topbar" style={{ gridColumn: '2', gridRow: '1', margin: 0, padding: '10px 24px 10px 16px', justifyContent: 'center' }}>
-              <form onSubmit={handleSearch} className="dg-search-form" style={{ flex: 'none', width: '100%', maxWidth: 560 }}>
+            {/* ── Row 1: Topbar — full width, search truly centered ── */}
+            <div style={{
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '68px',
+              padding: '10px 16px',
+            }}>
+              <form onSubmit={handleSearch} className="dg-search-form" style={{ width: '100%', maxWidth: 580 }}>
                 <select
                   value={selectedCategory}
                   onChange={e => setSelectedCategory(e.target.value)}
@@ -497,14 +521,20 @@ export default function GlobalMasthead() {
               </form>
             </div>
 
-            {/* ── Col 2, row 2: Navbar — centered links + icons far right ── */}
-            <nav className="dg-navbar" aria-label="Primary navigation"
-              style={{ gridColumn: '2', gridRow: '2', width: '100%' }}
-            >
-              <div className="dg-navinner" style={{ margin: 0, padding: '0 16px', position: 'relative' }}>
+            {/* ── Row 2: Navbar — full width, links truly centered, icons far right ── */}
+            <nav className="dg-navbar" aria-label="Primary navigation" style={{ width: '100%' }}>
+              <div className="dg-navinner" style={{ position: 'relative', padding: '0 16px' }}>
 
-                {/* Nav links — truly centered via absolute positioning */}
-                <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', top: 0, bottom: 0 }}>
+                {/* Nav links — left:50% relative to the FULL header width */}
+                <div style={{
+                  position: 'absolute',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  top: 0,
+                  bottom: 0,
+                }}>
                   {NAV_LINKS.map(link => (
                     <div
                       key={link.href}
@@ -542,14 +572,22 @@ export default function GlobalMasthead() {
                   ))}
                 </div>
 
-                {/* Account + Cart — absolutely anchored to far right */}
-                <div style={{ position: 'absolute', right: 16, top: 0, bottom: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
+                {/* Icons — absolutely pinned to far right of navbar */}
+                <div style={{
+                  position: 'absolute',
+                  right: '16px',
+                  top: 0,
+                  bottom: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}>
                   <button
                     onClick={() => setShowProfileModal(true)}
                     className="dg-icon-btn"
                     aria-label="Account"
                   >
-                    <User style={{ width: 24, height: 24 }} />
+                    <User style={{ width: 22, height: 22 }} />
                     {displayName ? displayName : "Account"}
                   </button>
                   <Link
@@ -557,7 +595,7 @@ export default function GlobalMasthead() {
                     className="dg-icon-btn relative"
                     aria-label={`Cart (${cartCount} items)`}
                   >
-                    <ShoppingCart style={{ width: 24, height: 24 }} />
+                    <ShoppingCart style={{ width: 22, height: 22 }} />
                     Cart
                     {cartCount > 0 && <span className="dg-cart-badge">{cartCount > 99 ? "99+" : String(cartCount)}</span>}
                   </Link>
@@ -565,7 +603,8 @@ export default function GlobalMasthead() {
 
               </div>
             </nav>
-          </div>{/* /grid wrapper */}
+
+          </div>{/* /relative wrapper */}
         </div>{/* /hidden md:block */}
       </header>
 
@@ -613,7 +652,7 @@ export default function GlobalMasthead() {
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "#4C9141" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "#52C41A" }}>
                   <User className="w-5 h-5 text-white" />
                 </div>
                 <div>

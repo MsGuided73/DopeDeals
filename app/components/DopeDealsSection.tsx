@@ -1,10 +1,19 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer from './AutoScrollContainer';
-
 import { useCompliance } from '../contexts/ComplianceContext';
+
+// ── Dope Deals palette — mirrors Hot Products brand green ─────────────────
+const DD = {
+  accent:  '#52C41A',
+  accentL: '#63D420',
+  dark:    '#1c1208',
+  muted:   '#6B7280',
+  white:   '#ffffff',
+};
 
 interface Product {
   id: string;
@@ -35,244 +44,185 @@ export default function DopeDealsSection() {
 
   const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 
-  useEffect(() => {
-    fetchDopeDeals();
-  }, []);
+  useEffect(() => { fetchDopeDeals(); }, []);
 
-  // Pre-fetch eligibility for all products once they are loaded
   useEffect(() => {
     if (userZipCode && products.length > 0) {
       const idsToCheck = products.map(p => p.id).filter(id => !restrictedProductIds.includes(id));
-      if (idsToCheck.length > 0) {
-        checkProductEligibility(idsToCheck);
-      }
+      if (idsToCheck.length > 0) checkProductEligibility(idsToCheck);
     }
   }, [userZipCode, products, restrictedProductIds, checkProductEligibility]);
 
   const fetchDopeDeals = async () => {
     try {
       setLoading(true);
-      console.log('Fetching dope deals products...');
       const response = await fetch('/api/dope-deals?limit=20');
-
       if (!response.ok) {
-        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch (e) {
-          // If we can't parse JSON, use the status text
-        }
-        console.error('Dope deals API error:', errorMessage);
-        throw new Error(`Failed to fetch dope deals: ${errorMessage}`);
+        let msg = `HTTP ${response.status}: ${response.statusText}`;
+        try { msg = (await response.json()).error || msg; } catch { /* noop */ }
+        throw new Error(msg);
       }
-
       const data = await response.json();
-      console.log('Dope deals data received:', data);
-
-      if (!data.products) {
-        console.warn('No dope deals data received');
-        setProducts([]);
-        return;
-      }
-
+      if (!data.products) { setProducts([]); return; }
       setProducts(data.products);
     } catch (err) {
-      console.error('Error fetching dope deals:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
   };
 
-  const getProductDescription = (product: Product): string => {
-    return product.short_description || product.description || 'Premium quality product';
+  const getDiscountPercent = (p: Product) => p.DD15 ? 15 : p.DD10 ? 10 : 0;
+
+  const getSalePrice = (p: Product) => {
+    const disc = getDiscountPercent(p);
+    const base = parseFloat(p.our_price.toString());
+    return disc > 0 ? base * (1 - disc / 100) : base;
   };
 
-  const transformProductForCard = (product: Product) => {
-    const primaryImageUrl = product.image_url ||
-                           (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
+  const getImageUrl = (p: Product) =>
+    p.image_url || (p.image_urls && p.image_urls.length > 0 ? p.image_urls[0] : null);
 
-    // Calculate sale price based on discount
-    const discountPercent = product.DD10 ? 10 : product.DD15 ? 15 : 0;
-    const originalPrice = product.our_price;
-    const salePrice = discountPercent > 0 ? originalPrice * (1 - discountPercent / 100) : originalPrice;
-
-    return {
-      id: product.id,
-      name: product.name,
-      originalPrice,
-      salePrice,
-      discountPercent,
-      image_url: primaryImageUrl || undefined,
-      skilled: product.featured,
-      stock_quantity: product.stock_quantity,
-      brand_name: product.brand_name || 'Unknown Brand',
-      short_description: getProductDescription(product),
-      description: getProductDescription(product),
-      sku: product.sku || '',
-      compare_at_price: discountPercent > 0 ? originalPrice : undefined,
-    };
-  };
-
-  const productsToShow = products;
-
-  const renderProductCard = (product: Product, isDesktop: boolean) => {
-    const transformedProduct = transformProductForCard(product);
+  const renderCard = (product: Product, isDesktop: boolean) => {
     const isRestricted = restrictedProductIds.includes(product.id);
-
-    const cardClassName = `group bg-white rounded-xl overflow-hidden transition-all duration-300 relative ${
-      isDesktop ? 'flex-shrink-0 w-96' : 'block'
-    } ${
-      isRestricted 
-        ? 'opacity-60 grayscale cursor-not-allowed pointer-events-none' 
-        : 'hover:shadow-xl hover:border-dope-orange-300 hover:-translate-y-2'
-    }`;
+    const disc = getDiscountPercent(product);
+    const salePrice = getSalePrice(product);
+    const origPrice = parseFloat(product.our_price.toString());
+    const imageUrl = getImageUrl(product);
+    const brand = product.brand_name && product.brand_name !== 'Unknown Brand'
+      ? product.brand_name : null;
 
     return (
-      <div key={product.id} className={cardClassName}>
-        <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
+      <div
+        key={product.id}
+        className="group"
+        style={{
+          background: DD.white,
+          overflow: 'hidden',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+          transition: 'box-shadow 0.3s, transform 0.3s',
+          flexShrink: isDesktop ? 0 : undefined,
+          width: isDesktop ? '260px' : undefined,
+          opacity: isRestricted ? 0.6 : 1,
+          filter: isRestricted ? 'grayscale(1)' : undefined,
+          position: 'relative',
+          borderRadius: '6px',
+        }}
+      >
+        {/* Lime-green top accent bar */}
+        <div style={{ height: '4px', background: `linear-gradient(90deg, ${DD.accentL}, ${DD.accent})`, borderRadius: '6px 6px 0 0' }} />
+
+        {/* Image */}
+        <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: DD.white, overflow: 'hidden' }}>
           <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
-            {transformedProduct.image_url ? (
-              <img
-                src={transformedProduct.image_url}
-                alt={transformedProduct.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt={product.name}
+                fill
+                sizes="(max-width: 1024px) 50vw, 260px"
+                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800">
-                <div className="text-center">
-                  <div className="text-4xl mb-2">📦</div>
-                  <div className="text-sm font-medium">No Image</div>
+              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: DD.muted, background: '#f5f5f5', position: 'absolute', inset: 0 }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '36px', marginBottom: '8px' }}>📦</div>
+                  <div style={{ fontSize: '11px', color: '#aaa' }}>No Image</div>
                 </div>
               </div>
             )}
           </Link>
 
-          {/* Favorite Button (Hidden if restricted) */}
-          {!isRestricted && (
-            <button
-              className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 z-10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </button>
+          {/* Discount badge */}
+          {disc > 0 && (
+            <div style={{ position: 'absolute', top: 8, left: 8, background: '#E53E3E', color: '#fff', fontSize: '10px', fontWeight: 800, padding: '3px 8px', borderRadius: '3px', letterSpacing: '0.05em', zIndex: 10 }}>
+              -{disc}% OFF
+            </div>
           )}
 
-          {/* Restriction Overlay */}
+          {/* Restriction overlay */}
           {isRestricted && (
-            <div className="absolute inset-0 z-20 flex items-center justify-center p-8 pointer-events-none">
-              <div className="bg-black/90 backdrop-blur-md border border-red-500/50 rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl transform rotate-[-2deg]">
-                <div className="text-3xl mb-2 text-red-500">🚫</div>
-                <span className="text-white font-black uppercase tracking-tighter text-xl leading-none">Local Restriction</span>
-                <span className="text-red-400 text-xs font-bold uppercase tracking-widest mt-1">Limited Availability</span>
+            <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+              <div style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid #fca5a5', borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
+                <div style={{ fontSize: '22px', marginBottom: '4px' }}>🚫</div>
+                <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Local Restriction</span>
               </div>
             </div>
           )}
         </div>
 
-        <div className="p-4 flex flex-col">
-          <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block">
-            {transformedProduct.brand_name && (
-              <p className="text-sm font-black text-dope-orange-600 mb-2 uppercase tracking-wide leading-tight" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-                {transformedProduct.brand_name}
-              </p>
-            )}
-
-            <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-              {transformedProduct.name}
+        {/* Body */}
+        <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
+          {brand && (
+            <p style={{ fontSize: '10px', fontWeight: 700, color: DD.accent, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
+              {brand}
+            </p>
+          )}
+          <Link href={isRestricted ? '#' : `/product/${product.id}`}>
+            <h3 style={{ fontWeight: 600, color: DD.dark, fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 group-hover:opacity-70 transition-opacity">
+              {product.name}
             </h3>
           </Link>
 
-          <div className="mt-auto">
-            <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block mb-4">
-              {transformedProduct.compare_at_price ? (
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500 line-through">
-                      ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
-                    </span>
-                    <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                      {transformedProduct.discountPercent}%
-                    </span>
-                  </div>
-                  <div className="text-xl font-bold text-green-600">
-                    ${transformedProduct.salePrice.toFixed(2)}
-                  </div>
-                </div>
-              ) : (
-                <div className="text-xl font-bold text-gray-900 dark:text-white">
-                  ${transformedProduct.salePrice.toFixed(2)}
-                </div>
-              )}
-            </Link>
+          {/* Price */}
+          <div style={{ fontWeight: 700, fontSize: '21px', color: DD.accent, letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span>${salePrice.toFixed(2)}</span>
+            {disc > 0 && (
+              <span style={{ fontSize: '13px', color: '#9CA3AF', fontWeight: 400, textDecoration: 'line-through' }}>
+                ${origPrice.toFixed(2)}
+              </span>
+            )}
+          </div>
 
+          {/* Buttons */}
+          <div style={{ display: 'flex', gap: '7px' }}>
             <button
-              className={`w-full px-4 py-3 font-bold rounded-full transition-all duration-300 text-center text-sm relative z-10 ${
-                isRestricted
-                  ? 'bg-zinc-200 text-zinc-500 cursor-not-allowed'
-                  : 'bg-transparent text-green-800 border-2 border-green-800 hover:bg-green-800 hover:text-white hover:scale-105 hover:shadow-lg'
-              }`}
-              style={{
-                fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                letterSpacing: '0.05em',
-              }}
-              onClick={async (e) => {
-                e.stopPropagation();
-                if (!isRestricted) {
-                  await addToCart(product.id);
-                }
-              }}
+              onClick={async (e) => { e.stopPropagation(); if (!isRestricted) await addToCart(product.id, 1); }}
               disabled={isRestricted}
+              style={isRestricted
+                ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
+                : { flex: 1, background: `linear-gradient(to bottom, ${DD.accentL}, ${DD.accent})`, color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
+              onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
             >
-              {isRestricted ? 'Unavailable in your ZIP' : 'Add to Cart'}
+              {isRestricted ? 'Unavailable' : 'Add to Cart'}
             </button>
+            <Link
+              href={isRestricted ? '#' : `/product/${product.id}`}
+              style={{ flex: 1, border: `1.5px solid ${DD.accent}`, color: DD.accent, fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+              className="hover:bg-[#52C41A] hover:text-white"
+            >
+              View Details
+            </Link>
           </div>
         </div>
       </div>
     );
   };
 
+  // ── Loading skeleton (matches Hot Products style) ────────────────────────
   if (loading) {
-// ...
     return (
-    <section className="mt-16 bg-white dark:bg-gray-950 pt-12 pb-4">
-        <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
-              🔥 DOPE DEALS 🔥
-            </h1>
+      <section style={{ background: DD.white, padding: '60px 0 72px', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: `linear-gradient(90deg, ${DD.accentL}, ${DD.accent})` }} />
+        <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
+          <div style={{ height: '14px', width: '160px', background: '#e8f5e1', borderRadius: '6px', margin: '0 auto 14px' }} />
+          <div style={{ height: '3px', width: '48px', background: '#e8f5e1', margin: '0 auto 14px' }} />
+          <div style={{ height: '80px', width: '280px', background: '#e8f5e1', borderRadius: '6px', margin: '0 auto' }} />
         </div>
-          {/* Mobile: Grid layout */}
-          <div className="block lg:hidden">
-            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse">
-                  <div className="aspect-square bg-muted"></div>
-                  <div className="p-3">
-                    <div className="h-3 bg-muted-foreground/30 rounded mb-2"></div>
-                    <div className="h-4 bg-muted-foreground/20 rounded mb-3"></div>
-                    <div className="flex items-center justify-between">
-                      <div className="h-4 bg-muted-foreground/20 rounded w-12"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop: Horizontal scrolling */}
-          <div className="hidden lg:flex lg:overflow-x-auto lg:gap-6 lg:pb-4 lg:px-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse flex-shrink-0 w-96">
-                <div className="aspect-square bg-muted"></div>
-                <div className="p-4">
-                  <div className="h-4 bg-muted-foreground/30 rounded mb-2"></div>
-                  <div className="h-6 bg-muted-foreground/20 rounded mb-4"></div>
-                  <div className="flex items-center justify-between">
-                    <div className="h-6 bg-muted-foreground/20 rounded w-16"></div>
+        <div style={{ padding: '0 24px' }}>
+          <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 animate-pulse">
+            {Array(10).fill(null).map((_, i) => (
+              <div key={i} style={{ background: DD.white, overflow: 'hidden', borderRadius: '6px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+                <div style={{ height: '4px', background: `${DD.accent}30` }} />
+                <div className="aspect-square" style={{ background: '#f0f0f0' }} />
+                <div style={{ padding: '13px 15px' }}>
+                  <div className="h-2 rounded mb-2 w-1/3" style={{ background: '#e0e0e0' }} />
+                  <div className="h-4 rounded mb-3" style={{ background: '#e0e0e0' }} />
+                  <div className="h-6 rounded w-1/2 mb-3" style={{ background: '#e0e0e0' }} />
+                  <div style={{ display: 'flex', gap: '7px' }}>
+                    <div className="h-9 flex-1 rounded" style={{ background: '#e0e0e0' }} />
+                    <div className="h-9 flex-1 rounded" style={{ background: '#e0e0e0' }} />
                   </div>
                 </div>
               </div>
@@ -285,62 +235,65 @@ export default function DopeDealsSection() {
 
   if (error) {
     return (
-      <section className="mt-16 bg-white dark:bg-gray-950 pt-12 pb-4">
-        <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
-            🔥 DOPE DEALS 🔥
-          </h1>
-            <p className="text-red-500 mt-6">Error loading dope deals: {error}</p>
-          </div>
+      <section style={{ background: DD.white, padding: '60px 0 72px', position: 'relative' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(44px,7vw,88px)', letterSpacing: '0.02em' }}>DOPE DEALS</h2>
+          <p style={{ color: '#ef4444', marginTop: '16px' }}>Unable to load deals. Please refresh.</p>
         </div>
       </section>
     );
   }
 
-  if (products.length === 0) {
-    return null; // Don't show section if no dope deals available
-  }
+  if (products.length === 0) return null;
 
   return (
-    <section id="dope-deals" className="mt-16 bg-white dark:bg-gray-950 pt-12 pb-4">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-black text-black mb-4 font-display-twilight tracking-[0.15em]">
-              🔥 DOPE DEALS 🔥
-            </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
-            Unbeatable deals on premium cannabis products - limited time offers!
-          </p>
-        </div>
+    <section id="dope-deals" style={{ background: DD.white, padding: '60px 0 72px', position: 'relative' }}>
+      {/* Thin lime green top rule */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: `linear-gradient(90deg, ${DD.accentL}, ${DD.accent})` }} />
 
-        {/* Responsive Container - Grid on mobile, horizontal scroll on larger screens */}
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Mobile: Grid layout */}
-          <div className="block lg:hidden">
-            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
-              {productsToShow.slice(0, 6).map((product) => renderProductCard(product, false))}
-            </div>
-          </div>
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
+        <p style={{ fontSize: '11px', fontWeight: 700, color: DD.accent, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
+          Limited Time · Exclusive Savings
+        </p>
+        <div style={{ height: '3px', width: '48px', background: DD.accent, margin: '0 auto 14px' }} />
+        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+          DOPE DEALS
+        </h2>
+        <p style={{ color: DD.muted, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '10px' }}>
+          Best prices · Don&apos;t miss out
+        </p>
+        <div style={{ borderTop: `1px dashed ${DD.accent}50`, margin: '20px auto 0', maxWidth: '360px' }} />
+      </div>
 
-          {/* Desktop: Auto-scrolling with manual controls */}
-          <div className="hidden lg:block">
-            <AutoScrollContainer>
-              {productsToShow.map((product) => renderProductCard(product, true))}
-            </AutoScrollContainer>
-          </div>
-        </div>
-
-        {/* View All Button */}
-        <div className="text-center mt-4">
-          <Link
-            href="/products"
-            className="inline-block px-6 py-3 bg-neutral-900 hover:bg-black text-white rounded-full font-medium transition-colors duration-200">
-            Shop All Deals
-          </Link>
+      {/* Mobile grid */}
+      <div className="block lg:hidden" style={{ padding: '0 16px' }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {products.slice(0, 6).map(p => renderCard(p, false))}
         </div>
       </div>
+
+      {/* Desktop auto-scroll */}
+      <div className="hidden lg:block" style={{ padding: '0 24px' }}>
+        <AutoScrollContainer>
+          {products.map(p => renderCard(p, true))}
+        </AutoScrollContainer>
+      </div>
+
+      {/* CTA */}
+      <div style={{ textAlign: 'center', marginTop: '44px' }}>
+        <Link
+          href="/products"
+          style={{ display: 'inline-block', background: 'transparent', color: DD.accent, fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: `2px solid ${DD.accent}`, borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = DD.accent; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = DD.accent; }}
+        >
+          SHOP ALL DEALS →
+        </Link>
+      </div>
+
+      {/* Thin lime green bottom rule */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: `linear-gradient(90deg, ${DD.accent}, ${DD.accentL})` }} />
     </section>
   );
 }

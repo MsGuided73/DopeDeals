@@ -91,6 +91,7 @@ export default function FullscreenCarousel() {
           background: #0D0D0B;
           line-height: 0;
           aspect-ratio: 4 / 3;
+          /* mobile masthead ≈ 70px */
           max-height: calc(100vh  - 70px);
           max-height: calc(100svh - 70px);
         }
@@ -103,8 +104,9 @@ export default function FullscreenCarousel() {
 
         @media (min-width: 1024px) {
           .carousel-wrap {
-            max-height: calc(100vh  - 140px);
-            max-height: calc(100svh - 140px);
+            /* desktop masthead (2 rows + icons) ≈ 160px */
+            max-height: calc(100vh  - 160px);
+            max-height: calc(100svh - 160px);
           }
         }
 

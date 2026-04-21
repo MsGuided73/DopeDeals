@@ -1,249 +1,222 @@
 "use client";
 
 /**
- * TrustedBrandsBulletin — "Road Tested Brands" section.
+ * TrustedBrandsBulletin — "Shop by Brand" section.
  *
- * Replaces the BrandLogoScrollbar component on the landing page. Renders
- * brands as paper cards pinned to a real cork board, each at a slight
- * deterministic tilt (so SSR and client render match). Hovering a card
- * "un-pins" it: it straightens, lifts off the board, and casts a deeper
- * shadow.
+ * Option 1 – Clean, frameless logo row.
+ * Full-colour logos float directly on a white background.
+ * No cards, no borders, no boxes. Each brand links to a
+ * filtered search results page: /search?q=BrandName
  */
 
 import Image from "next/image";
-
-const CORK_TEXTURE_URL =
-  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/CorkBoard1-GroupedNoGap.png";
+import Link from "next/link";
 
 type Brand = {
   name: string;
   logo: string;
+  href: string;
+  hasProducts: boolean; // only show as clickable if products exist in DB
 };
 
 const BRANDS: Brand[] = [
-  { name: "Cookies",             logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Cookies%20Logo.webp" },
-  { name: "Crave",               logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/crave-logo-black-150x96.png" },
-  { name: "Hidden Hills",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Hidden-Hills_logo.webp" },
-  { name: "Truemoola",           logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Truemoola.png" },
-  { name: "Urth Farmacy",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Urth_Farmacy_logo.webp" },
-  { name: "Astro Eight",         logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Astro%20Eight.png" },
-  { name: "Puffco",              logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/puffco_logo.webp" },
-  { name: "RooR",                logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/RooR%20Logo.avif" },
-  { name: "Diamond Glass",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/diamond-glass_logo.webp" },
-  { name: "Doodlez",             logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/Doodlez.webp" },
-  { name: "Infuzd",              logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/infuzd_logo.webp" },
-  { name: "Mellow Fellow",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/mellow-fellow_logo2.png" },
-  { name: "NEO",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/NEO-Hookah_logo.webp" },
-  { name: "RAW",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/raw_logo.png" },
-  { name: "Twenty-One Cannabis", logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/Twenty-One-Cannabis-Logo.webp" },
-];
-
-// Deterministic per-index tilt angles — keeps SSR/client renders identical
-const TILT_CYCLE = [
-  -2.4, 1.8, -1.2, 2.2, -2.8,
-   1.4, -1.8, 2.6, -0.8, 1.6,
-  -2.0, 1.2, -2.6, 2.0, -1.4,
+  { name: "Cookies",             logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Cookies%20Logo.webp",            href: "/search?q=Cookies",             hasProducts: true  },
+  { name: "Crave",               logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/crave-logo-black-150x96.png",    href: "/search?q=Crave",               hasProducts: true  },
+  { name: "Hidden Hills",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Hidden-Hills_logo.webp",         href: "/search?q=Hidden+Hills",        hasProducts: false },
+  { name: "Truemoola",           logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Truemoola.png",                  href: "/search?q=Truemoola",           hasProducts: false },
+  { name: "Urth Farmacy",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Urth_Farmacy_logo.webp",         href: "/search?q=Urth+Farmacy",        hasProducts: true  },
+  { name: "Astro Eight",         logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Astro%20Eight.png",            href: "/search?q=Astro+Eight",         hasProducts: false },
+  { name: "Puffco",              logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/puffco_logo.webp",                     href: "/search?q=Puffco",              hasProducts: true  },
+  { name: "RooR",                logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/RooR%20Logo.avif",                    href: "/search?q=ROOR",                hasProducts: true  },
+  { name: "Diamond Glass",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/diamond-glass_logo.webp",             href: "/search?q=Diamond+Glass",       hasProducts: false },
+  { name: "Doodlez",             logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/Doodlez.webp",                        href: "/search?q=Doodlez",             hasProducts: false },
+  { name: "Infuzd",              logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/infuzd_logo.webp",                    href: "/search?q=Infuzd",              hasProducts: false },
+  { name: "Mellow Fellow",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/mellow-fellow_logo2.png",             href: "/search?q=Mellow+Fellow",       hasProducts: false },
+  { name: "NEO",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/NEO-Hookah_logo.webp",                href: "/search?q=NEO",                 hasProducts: false },
+  { name: "RAW",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/raw_logo.png",                        href: "/search?q=RAW",                 hasProducts: false },
+  { name: "Twenty-One Cannabis", logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/Twenty-One-Cannabis-Logo.webp",       href: "/search?q=Twenty-One+Cannabis", hasProducts: false },
 ];
 
 export default function TrustedBrandsBulletin() {
   return (
-    <>
+    <section style={{
+      position: 'relative',
+      background: '#ffffff',
+      padding: '56px 24px 60px',
+      borderTop: '4px solid',
+      borderImage: 'linear-gradient(90deg, #52C41A, #63D420) 1',
+      borderBottom: '4px solid',
+    }}>
+      {/* Top lime rule */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #52C41A, #63D420)' }} />
+
+      {/* Section header */}
+      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <p style={{
+          fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
+          fontSize: '13px',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          color: '#52C41A',
+          margin: '0 0 10px',
+        }}>
+          Road Tested Brands
+        </p>
+        <div style={{ width: '40px', height: '3px', background: 'linear-gradient(90deg,#52C41A,#63D420)', margin: '0 auto 14px' }} />
+        <h2 style={{
+          fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
+          fontSize: 'clamp(42px, 6vw, 72px)',
+          lineHeight: 1,
+          letterSpacing: '0.02em',
+          color: '#1c1208',
+          margin: '0 0 10px',
+        }}>
+          SHOP BY BRAND
+        </h2>
+        <p style={{
+          fontSize: '13px',
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          color: '#9ca3af',
+          margin: 0,
+        }}>
+          Tap any brand to browse their full catalog
+        </p>
+      </div>
+
+      {/* Brand logo grid — no frames, just logos */}
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gap: '32px 24px',
+      }}
+        className="brand-grid"
+      >
+        {BRANDS.map((brand) => {
+          const inner = (
+            <>
+              <div style={{ width: '100%', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Image
+                  src={brand.logo}
+                  alt={`${brand.name} logo`}
+                  width={160}
+                  height={72}
+                  style={{
+                    width: 'auto',
+                    height: '100%',
+                    maxWidth: '100%',
+                    objectFit: 'contain',
+                    filter: brand.hasProducts ? 'none' : 'grayscale(100%) opacity(0.35)',
+                  }}
+                  unoptimized
+                />
+              </div>
+              <span style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '10px',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: brand.hasProducts ? '#9ca3af' : '#d1d5db',
+                textAlign: 'center',
+              }}>
+                {brand.hasProducts ? brand.name : `${brand.name} · Soon`}
+              </span>
+            </>
+          );
+
+          return brand.hasProducts ? (
+            <Link
+              key={brand.name}
+              href={brand.href}
+              className="brand-item"
+              title={`Shop all ${brand.name} products`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '10px',
+                textDecoration: 'none',
+                padding: '12px 8px',
+                transition: 'transform 0.18s ease, opacity 0.18s ease',
+              }}
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div
+              key={brand.name}
+              title="Coming soon"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 8px',
+                cursor: 'default',
+              }}
+            >
+              {inner}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* CTA */}
+      <div style={{ textAlign: 'center', marginTop: '48px' }}>
+        <Link
+          href="/brands"
+          style={{
+            display: 'inline-block',
+            background: 'transparent',
+            color: '#52C41A',
+            fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
+            fontSize: '19px',
+            letterSpacing: '0.06em',
+            padding: '12px 48px',
+            textDecoration: 'none',
+            border: '2px solid #52C41A',
+            borderRadius: '4px',
+            transition: 'background 0.18s, color 0.18s',
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLAnchorElement).style.background = '#52C41A';
+            (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff';
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
+            (e.currentTarget as HTMLAnchorElement).style.color = '#52C41A';
+          }}
+        >
+          VIEW ALL BRANDS →
+        </Link>
+      </div>
+
+      {/* Bottom lime rule */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #52C41A, #63D420)' }} />
+
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&display=swap');
-
-        .tbb-band {
-          position: relative;
-          background:
-            repeating-linear-gradient(92deg, rgba(255, 220, 160, 0.02) 0px, rgba(255, 220, 160, 0.02) 2px, transparent 2px, transparent 6px),
-            radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232, 146, 10, 0.05) 0%, transparent 70%),
-            linear-gradient(180deg, #16100a 0%, #1c1208 50%, #120c06 100%);
-          overflow: hidden;
+        @media (max-width: 1024px) {
+          .brand-grid { grid-template-columns: repeat(4, 1fr) !important; }
         }
-
-        .tbb-plank {
-          background:
-            repeating-linear-gradient(90deg, rgba(255, 210, 150, 0.04) 0px, rgba(255, 210, 150, 0.04) 2px, transparent 2px, transparent 5px),
-            linear-gradient(180deg, #3a2614 0%, #2a1c0d 50%, #1f1308 100%);
-          border-top: 2px solid rgba(0, 0, 0, 0.65);
-          border-bottom: 3px solid rgba(0, 0, 0, 0.80);
-          box-shadow:
-            inset 0 2px 0 rgba(255, 220, 165, 0.12),
-            inset 0 -4px 8px rgba(0, 0, 0, 0.55),
-            0 6px 14px rgba(0, 0, 0, 0.55);
-          padding: 28px 16px 26px;
-          text-align: center;
-          position: relative;
+        @media (max-width: 768px) {
+          .brand-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 24px 16px !important; }
         }
-        .tbb-plank::before, .tbb-plank::after {
-          content: ""; position: absolute; top: 8px;
-          width: 9px; height: 9px; border-radius: 50%;
-          background: radial-gradient(circle at 35% 30%, #b0a088 0%, #6d5c44 50%, #2a1f14 100%);
-          box-shadow: 0 1px 2px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,220,180,0.3);
+        @media (max-width: 480px) {
+          .brand-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
-        .tbb-plank::before { left: 24px; }
-        .tbb-plank::after  { right: 24px; }
-
-        .tbb-title {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(40px, 6vw, 74px);
-          line-height: 0.95;
-          letter-spacing: 0.05em;
-          color: #e8920a;
-          margin: 0 0 6px;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.85), 0 0 14px rgba(232,146,10,0.25);
+        .brand-item:hover {
+          transform: translateY(-4px) scale(1.04);
+          opacity: 1 !important;
         }
-        .tbb-sub {
-          font-family: 'Special Elite', monospace;
-          font-size: 13px;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: rgba(255, 220, 165, 0.65);
-          margin: 0;
+        .brand-item:hover span {
+          color: #52C41A !important;
         }
-
-        .tbb-corkboard {
-          position: relative;
-          padding: 64px 32px 80px;
-          background-color: #8a5e2c;
-          background-image:
-            radial-gradient(ellipse 130% 100% at 50% 50%, transparent 35%, rgba(20, 10, 2, 0.40) 100%),
-            url('${CORK_TEXTURE_URL}');
-          background-size: auto, auto;
-          background-position: center, center;
-          background-repeat: no-repeat, repeat;
-          border-top: 4px solid #0a0604;
-          border-bottom: 4px solid #0a0604;
-          box-shadow:
-            inset 0 0 80px rgba(20, 10, 2, 0.45),
-            inset 0 4px 12px rgba(0, 0, 0, 0.45),
-            inset 0 -6px 16px rgba(0, 0, 0, 0.45);
-        }
-
-        .tbb-pin-row {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          align-items: center;
-          gap: 22px 28px;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .tbb-card {
-          position: relative;
-          flex-shrink: 0;
-          width: 180px;
-          height: 130px;
-          background: linear-gradient(180deg, #fef6e2 0%, #f5ead8 50%, #e9dcbf 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 22px 16px 18px;
-          border-radius: 2px;
-          transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
-          box-shadow:
-            0 1px 2px rgba(0, 0, 0, 0.35),
-            6px 8px 18px rgba(0, 0, 0, 0.55),
-            12px 16px 28px rgba(0, 0, 0, 0.35);
-          text-decoration: none;
-        }
-        .tbb-card::before {
-          content: ""; position: absolute; inset: 0; pointer-events: none;
-          background:
-            radial-gradient(circle at 100% 100%, rgba(80, 50, 20, 0.14) 0%, transparent 20%),
-            radial-gradient(circle at 0% 100%, rgba(80, 50, 20, 0.10) 0%, transparent 18%);
-        }
-
-        .tbb-card:hover {
-          transform: rotate(0deg) translateY(-6px) scale(1.04) !important;
-          box-shadow:
-            0 2px 4px rgba(0, 0, 0, 0.45),
-            10px 16px 30px rgba(0, 0, 0, 0.70),
-            18px 26px 44px rgba(0, 0, 0, 0.40);
-          z-index: 10;
-        }
-
-        .tbb-pin {
-          position: absolute;
-          top: -8px; left: 50%; transform: translateX(-50%);
-          width: 18px; height: 18px;
-          border-radius: 50%;
-          background: radial-gradient(circle at 35% 30%, #ffc662 0%, #e8920a 45%, #c5751a 100%);
-          box-shadow:
-            inset 0 1px 2px rgba(255, 255, 255, 0.55),
-            inset 0 -2px 3px rgba(120, 60, 10, 0.6),
-            0 2px 3px rgba(0, 0, 0, 0.55),
-            0 0 10px rgba(232, 146, 10, 0.35);
-          z-index: 3;
-        }
-        .tbb-pin::after {
-          content: ""; position: absolute;
-          top: 14px; left: 50%; transform: translateX(-50%);
-          width: 3px; height: 4px;
-          background: rgba(0, 0, 0, 0.25);
-          border-radius: 1px;
-        }
-
-        .tbb-logo-wrap {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          height: 78%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .tbb-logo-wrap img {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
-        }
-
-        .tbb-card-name {
-          position: absolute;
-          bottom: 6px;
-          left: 0; right: 0;
-          font-family: 'Special Elite', monospace;
-          font-size: 9px;
-          text-align: center;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: rgba(80, 50, 20, 0.65);
+        .brand-grid:hover .brand-item:not(:hover) {
+          opacity: 0.5;
         }
       `}</style>
-
-      <section className="tbb-band">
-        <div className="tbb-plank">
-          <h2 className="tbb-title">ROAD TESTED BRANDS</h2>
-          <p className="tbb-sub">Pinned · Rated · Ridden With</p>
-        </div>
-
-        <div className="tbb-corkboard">
-          <div className="tbb-pin-row">
-            {BRANDS.map((brand, i) => (
-              <div
-                key={brand.name}
-                className="tbb-card"
-                title={brand.name}
-                style={{ transform: `rotate(${TILT_CYCLE[i % TILT_CYCLE.length]}deg)` }}
-              >
-                <span className="tbb-pin" aria-hidden />
-                <div className="tbb-logo-wrap">
-                  <Image
-                    src={brand.logo}
-                    alt={`${brand.name} logo`}
-                    width={140}
-                    height={90}
-                    style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
-                    unoptimized
-                  />
-                </div>
-                <span className="tbb-card-name">{brand.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+    </section>
   );
 }

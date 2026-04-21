@@ -35,7 +35,9 @@ export default function HomePage() {
       <GlobalMasthead />
 
       {/* ── Hero Carousel ── */}
-      <FullscreenCarousel />
+      <div style={{ marginTop: '5px' }}>
+        <FullscreenCarousel />
+      </div>
 
       {/* ── Main Content ── */}
       <main className="w-full">

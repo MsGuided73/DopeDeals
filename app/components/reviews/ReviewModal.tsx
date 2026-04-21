@@ -196,7 +196,7 @@ export default function ReviewModal({
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "10px", fontWeight: 800, letterSpacing: "0.25em", textTransform: "uppercase", color: AMBER_DEEP, margin: 0 }}>
               Write a Review
             </p>
-            <h2 id="review-modal-title" style={{ fontFamily: "'BebasNeue', 'Bebas Neue', sans-serif", fontSize: "26px", letterSpacing: "0.04em", color: INK, margin: "2px 0 0", lineHeight: 1.1 }}>
+            <h2 id="review-modal-title" style={{ fontFamily: "'BebasNeue', 'Bebas Neue', sans-serif", fontSize: "26px", letterSpacing: "0.02em", color: INK, margin: "2px 0 0", lineHeight: 1.1 }}>
               {productName}
             </h2>
           </div>

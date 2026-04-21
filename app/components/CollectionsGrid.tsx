@@ -90,7 +90,7 @@ export default function CollectionsGrid() {
         .cg-card:hover {
           box-shadow: 0 4px 20px rgba(0,0,0,0.10);
           transform: translateY(-2px);
-          border-color: #5BAD52;
+          border-color: #52C41A;
         }
         .cg-image {
           position: relative;
@@ -148,13 +148,13 @@ export default function CollectionsGrid() {
           line-height: 1.2;
         }
         .cg-card:hover .cg-name {
-          color: #5BAD52;
+          color: #52C41A;
         }
         .cg-arrow {
           margin-top: 2px;
           display: inline-block;
           font-size: 12px;
-          color: #5BAD52;
+          color: #52C41A;
           opacity: 0;
           transition: opacity 0.15s;
         }
@@ -180,7 +180,7 @@ export default function CollectionsGrid() {
               ) : (
                 <div className="cg-placeholder">
                   <span className="cg-placeholder-emoji">{col.emoji}</span>
-                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#5BAD52', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#52C41A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                     {col.label}
                   </span>
                 </div>

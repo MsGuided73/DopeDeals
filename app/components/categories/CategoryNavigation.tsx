@@ -27,7 +27,7 @@ const CATEGORIES = [
     name: 'BUBBLERS',
     href: '/bubblers',
     description: 'Small water pipes',
-    gradient: 'from-green-500 to-teal-600',
+    gradient: 'from-lime-400 to-lime-600',
   },
   {
     id: 'dab-rigs',

@@ -199,7 +199,7 @@ export default function NewProductsSection() {
     return (
       <section style={{ marginTop: '64px', background: RS.bg, padding: '64px 16px' }}>
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(40px,7vw,80px)', letterSpacing: '0.06em' }}>FRESH DROPS</h2>
+          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(40px,7vw,80px)', letterSpacing: '0.02em' }}>FRESH DROPS</h2>
           <p style={{ fontFamily: "'DM Sans',sans-serif", color: '#ef4444', marginTop: '16px' }}>Unable to load new products. Please refresh the page.</p>
         </div>
       </section>
@@ -220,7 +220,7 @@ export default function NewProductsSection() {
           Just Rolled In · New Arrivals
         </p>
         <div style={{ height: '3px', width: '48px', background: RS.accent, margin: '0 auto 14px' }} />
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.06em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           FRESH DROPS
         </h2>
         <p style={{ fontFamily: "'DM Sans',sans-serif", color: RS.muted, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '10px' }}>
@@ -229,62 +229,37 @@ export default function NewProductsSection() {
         <div style={{ borderTop: `1px dashed ${RS.accent}50`, margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 
-      {/* Mobile grid */}
-      <div className="block lg:hidden" style={{ padding: '0 16px' }}>
-        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {(loading ? Array(6).fill(null) : products.slice(0, 6)).map((product, i) =>
-            loading ? (
-              <div key={i} style={{ background: RS.white, overflow: 'hidden' }} className="animate-pulse">
-                <div style={{ height: '4px', background: `${RS.accent}30` }} />
-                <div className="aspect-square" style={{ background: '#e8dacc' }} />
-                <div style={{ padding: '13px 15px' }}>
-                  <div className="h-2 rounded mb-2 w-1/3" style={{ background: '#d4c5a9' }} />
-                  <div className="h-4 rounded mb-3" style={{ background: '#d4c5a9' }} />
-                  <div className="h-6 rounded w-1/2 mb-3" style={{ background: '#d4c5a9' }} />
-                  <div style={{ display: 'flex', gap: '7px' }}>
-                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
-                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
+      {/* Static responsive grid — all breakpoints */}
+      <div style={{ padding: '0 24px' }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {loading
+            ? Array(10).fill(null).map((_, i) => (
+                <div key={i} style={{ background: RS.white, overflow: 'hidden', borderRadius: '6px' }} className="animate-pulse">
+                  <div style={{ height: '4px', background: `${RS.accent}30` }} />
+                  <div className="aspect-square" style={{ background: '#f0f0f0' }} />
+                  <div style={{ padding: '13px 15px' }}>
+                    <div className="h-2 rounded mb-2 w-1/3" style={{ background: '#e0e0e0' }} />
+                    <div className="h-4 rounded mb-3" style={{ background: '#e0e0e0' }} />
+                    <div className="h-6 rounded w-1/2 mb-3" style={{ background: '#e0e0e0' }} />
+                    <div style={{ display: 'flex', gap: '7px' }}>
+                      <div className="h-9 flex-1 rounded" style={{ background: '#e0e0e0' }} />
+                      <div className="h-9 flex-1 rounded" style={{ background: '#e0e0e0' }} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : renderCard(product, false)
-          )}
+              ))
+            : products.slice(0, 10).map((product) => renderCard(product, false))
+          }
         </div>
-      </div>
-
-      {/* Desktop auto-scroll */}
-      <div className="hidden lg:block" style={{ padding: '0 24px' }}>
-        {loading ? (
-          <div style={{ display: 'flex', gap: '16px', overflowX: 'hidden' }}>
-            {Array(5).fill(null).map((_, i) => (
-              <div key={i} style={{ background: RS.white, overflow: 'hidden', flexShrink: 0, width: '290px' }} className="animate-pulse">
-                <div style={{ height: '4px', background: `${RS.accent}30` }} />
-                <div style={{ aspectRatio: '1', background: '#e8dacc' }} />
-                <div style={{ padding: '13px 15px' }}>
-                  <div className="h-2 rounded mb-2 w-1/3" style={{ background: '#d4c5a9' }} />
-                  <div className="h-4 rounded mb-3" style={{ background: '#d4c5a9' }} />
-                  <div className="h-6 rounded w-1/2 mb-3" style={{ background: '#d4c5a9' }} />
-                  <div style={{ display: 'flex', gap: '7px' }}>
-                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
-                    <div className="h-9 flex-1" style={{ background: '#d4c5a9' }} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <AutoScrollContainer>
-            {products.map((product) => renderCard(product, true))}
-          </AutoScrollContainer>
-        )}
       </div>
 
       {/* CTA */}
       <div style={{ textAlign: 'center', marginTop: '44px' }}>
         <Link
           href="/fresh-drops"
-          style={{ display: 'inline-block', background: RS.dark, color: RS.bg, fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.1em', padding: '13px 48px', textDecoration: 'none', transition: 'opacity 0.2s', border: `2px solid ${RS.dark}` }}
-          className="hover:opacity-80"
+          style={{ display: 'inline-block', background: 'transparent', color: '#52C41A', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: '2px solid #52C41A', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#52C41A'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = '#52C41A'; }}
         >
           VIEW ALL FRESH DROPS →
         </Link>
