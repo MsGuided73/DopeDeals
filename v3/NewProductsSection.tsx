@@ -6,14 +6,14 @@ import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer from './AutoScrollContainer';
 import { useCompliance } from '../contexts/ComplianceContext';
 
-// ── Fresh Drops palette — clean white + lime green ────────────────────────
+// ── Roadside Stop palette ──────────────────────────────────────────────────
 const RS = {
-  bg: '#ffffff',          // clean white section background
-  accent: '#52C41A',      // lime green (matches Hot Products CTA)
-  accentLight: '#63D420', // lighter lime for gradients
-  dark: '#1c1208',        // aged dark brown (kept for text)
-  muted: '#6B7280',       // neutral grey for subtext
-  white: '#ffffff',       // card background
+  bg: '#f0e6d0',          // sun-bleached tan
+  accent: '#bf6830',      // deep ochre/rust
+  accentLight: '#d9883e', // lighter ochre for gradients
+  dark: '#1c1208',        // aged dark brown
+  muted: '#8a7d6a',       // dusty road text
+  white: '#faf6ef',       // warm white
 };
 
 interface Product {
@@ -110,8 +110,8 @@ export default function NewProductsSection() {
           position: 'relative',
         }}
       >
-        {/* Solid lime-green top accent bar */}
-        <div style={{ height: '4px', background: 'linear-gradient(90deg, #63D420, #52C41A)', borderRadius: '1px 1px 0 0' }} />
+        {/* Rope-stitch top border — ochre dashes */}
+        <div style={{ height: '4px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 12px, transparent 12px, transparent 18px)`, opacity: 0.85 }} />
 
         {/* Image */}
         <div style={{ position: 'relative', aspectRatio: '1', background: RS.bg, overflow: 'hidden' }}>
@@ -175,17 +175,16 @@ export default function NewProductsSection() {
               onClick={(e) => !isRestricted && handleAddToCart(product.id, e)}
               disabled={isRestricted}
               style={isRestricted
-                ? { flex: 1, background: '#e5e5e5', color: '#999', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: 'linear-gradient(to bottom, #63D420, #52C41A)', color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
-              onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
+                ? { flex: 1, background: '#e5e5e5', color: '#999', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase' }
+                : { flex: 1, background: RS.accent, color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', transition: 'opacity 0.2s' }}
+              className={isRestricted ? '' : 'hover:opacity-85'}
             >
               {isRestricted ? 'Unavailable' : 'Add to Cart'}
             </button>
             <Link
               href={isRestricted ? '#' : `/product/${product.id}`}
-              style={{ flex: 1, border: '1.5px solid #52C41A', color: '#52C41A', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-              className="hover:bg-[#52C41A] hover:text-white"
+              style={{ flex: 1, border: `1.5px solid ${RS.accent}`, color: RS.accent, fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', transition: 'background 0.2s, color 0.2s' }}
+              className="hover:bg-[#bf6830] hover:text-white"
             >
               View Details
             </Link>
@@ -211,8 +210,8 @@ export default function NewProductsSection() {
   return (
     // ── Roadside Stop: Fresh Drops Section ──────────────────────────────────
     <section style={{ marginTop: '64px', background: RS.bg, padding: '60px 0 72px', position: 'relative' }}>
-      {/* Thin lime green top rule */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #63D420, #52C41A)' }} />
+      {/* Horizontal weathered rule above */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '6px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 24px, transparent 24px, transparent 36px)`, opacity: 0.35 }} />
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
@@ -290,8 +289,8 @@ export default function NewProductsSection() {
         </Link>
       </div>
 
-      {/* Thin lime green bottom rule */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #52C41A, #63D420)' }} />
+      {/* Horizontal weathered rule below */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '6px', background: `repeating-linear-gradient(90deg, ${RS.accent} 0, ${RS.accent} 24px, transparent 24px, transparent 36px)`, opacity: 0.35 }} />
     </section>
   );
 }

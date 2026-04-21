@@ -326,7 +326,7 @@ export async function POST(req: NextRequest) {
       country: shippingAddress.country,
       email: user?.email || billingAddress?.email || undefined,
       phone: shippingAddress.phone || undefined,
-      redirectUrl: `${baseUrl}/checkout/success?orderId=${order.id}`,
+      redirectUrl: `${baseUrl}/order-confirmation/${order.id}`,
       cancelUrl: `${baseUrl}/checkout/error?orderId=${order.id}`,
       callbackUrl: `${baseUrl}/api/kajapay/webhook`
     });

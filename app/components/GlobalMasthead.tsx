@@ -1,51 +1,99 @@
-// app/components/GlobalMasthead.tsx
+// app/components/GlobalMasthead.tsx  — DankGeek-style clean white header
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu, Search } from "lucide-react";
+import { User, ShoppingCart, X, Star, TrendingUp, Gift, Menu, Search, ChevronDown } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import { useNavigation } from "../contexts/NavigationContext";
 import { useAuth } from "../contexts/AuthContext";
 
-const NAV_CATEGORIES = [
-  { label: "VAPES",       href: "/vapes" },
-  { label: "PRE-ROLLS",   href: "/pre-rolls" },
-  { label: "FLOWER",      href: "/thca_flower" },
-  { label: "EDIBLES",     href: "/edibles" },
-  { label: "MUSHROOMS",   href: "/mushrooms" },
-  { label: "PIPES",       href: "/pipes" },
-  { label: "BONGS",       href: "/bongs" },
-  { label: "DAB RIGS",    href: "/dabsntools" },
-  { label: "ACCESSORIES", href: "/accessories" },
+/* ── Navigation categories config ─────────────────────────────────────── */
+const NAV_LINKS = [
+  {
+    label: "Water Pipes",
+    href: "/bongs",
+    children: [
+      { label: "All Bongs & Water Pipes", href: "/bongs" },
+      { label: "Beakers", href: "/bongs?type=beaker" },
+      { label: "Straight Tubes", href: "/bongs?type=straight" },
+      { label: "Below $50", href: "/bongs?maxPrice=50" },
+    ],
+  },
+  {
+    label: "Hand Pipes",
+    href: "/pipes",
+    children: [
+      { label: "All Hand Pipes", href: "/pipes" },
+      { label: "Spoon Pipes", href: "/pipes?type=spoon" },
+      { label: "Bubblers", href: "/bubblers" },
+    ],
+  },
+  {
+    label: "Vapes & Carts",
+    href: "/vapes",
+    children: [
+      { label: "All Vapes & Carts", href: "/vapes" },
+      { label: "Cartridges", href: "/vapes?type=cartridge" },
+      { label: "Disposables", href: "/vapes?type=disposable" },
+      { label: "Desktop Vapes", href: "/vapes?type=vaporizer" },
+    ],
+  },
+  {
+    label: "Dab Rigs",
+    href: "/dabsntools",
+    children: null,
+  },
+  {
+    label: "Pre-Rolls",
+    href: "/pre-rolls",
+    children: [
+      { label: "All Pre-Rolls", href: "/pre-rolls" },
+      { label: "Rolling Papers & Wraps", href: "/accessories?type=rolling" },
+    ],
+  },
+  {
+    label: "Edibles",
+    href: "/edibles",
+    children: null,
+  },
+  {
+    label: "Shrooms & More",
+    href: "/mushrooms",
+    children: null,
+  },
+  {
+    label: "Accessories",
+    href: "/accessories",
+    children: null,
+  },
+  {
+    label: "THCA Flower",
+    href: "/thca_flower",
+    children: null,
+  },
 ];
 
-// ─── Shared gradient colours ───────────────────────────────────────────────
-const BG_BADGE = "linear-gradient(145deg, #213D2C 0%, #162A1D 55%, #112318 100%)";
-const BG_CART  = "linear-gradient(145deg, #213D2C 0%, #162A1D 100%)";
+const CATEGORY_OPTIONS = ["All", "Water Pipes", "Hand Pipes", "Vaporizers", "Dab Rigs", "Edibles", "Mushrooms", "Accessories"];
 
 export default function GlobalMasthead() {
-  const [isMenuOpen,               setIsMenuOpen]               = useState(false);
-  const [isSearchOpen,             setIsSearchOpen]             = useState(false);
-  const [showProfileModal,         setShowProfileModal]         = useState(false);
-  const [isDesktopSearchCollapsed, setIsDesktopSearchCollapsed] = useState(false);
-  const [isNavCollapsed,           setIsNavCollapsed]           = useState(false);
-  const [searchQuery,              setSearchQuery]              = useState("");
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const logoRef        = useRef<HTMLDivElement>(null);
-  const searchRef      = useRef<HTMLFormElement>(null);
-  const catNavRef      = useRef<HTMLDivElement>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [showCategorySelect, setShowCategorySelect] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const dropdownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
-  const { user }           = useAuth();
-  const { cartCount }      = useCart();
+  const { user } = useAuth();
+  const { cartCount } = useCart();
   const { setHasMasthead } = useNavigation();
 
   const displayName = user
-    ? (user.user_metadata?.first_name ||
-       user.user_metadata?.firstName  ||
-       user.email?.split("@")[0]      ||
-       "You")
+    ? (user.user_metadata?.first_name || user.user_metadata?.firstName || user.email?.split("@")[0] || "You")
     : null;
 
   useEffect(() => {
@@ -53,87 +101,9 @@ export default function GlobalMasthead() {
     return () => setHasMasthead(false);
   }, [setHasMasthead]);
 
-  // Auto-focus search input when search overlay opens
   useEffect(() => {
-    if (isSearchOpen) {
-      setTimeout(() => searchInputRef.current?.focus(), 60);
-    }
+    if (isSearchOpen) setTimeout(() => searchRef.current?.focus(), 60);
   }, [isSearchOpen]);
-
-  // Desktop: collapse search bar + category nav when logo contacts them
-  useEffect(() => {
-    let collapsed = false;
-    let navCollapsed = false;
-    const naturalW = { search: 0, nav: 0 };
-
-    const check = () => {
-      if (!logoRef.current) return;
-      const logoRight = logoRef.current.getBoundingClientRect().right;
-      const vw = window.innerWidth;
-
-      // ── Search bar ─────────────────────────────────────────────────
-      if (!collapsed && searchRef.current) {
-        // Only capture naturalW when the element is actually rendered and sized
-        if (!naturalW.search && searchRef.current.offsetWidth > 0) {
-          naturalW.search = searchRef.current.offsetWidth;
-        }
-        const searchLeft = searchRef.current.getBoundingClientRect().left;
-        if (logoRight + 20 >= searchLeft) {
-          collapsed = true;
-          setIsDesktopSearchCollapsed(true);
-        }
-      } else if (collapsed) {
-        const sw = naturalW.search || 480;
-        const estimatedSearchLeft = (vw - sw) / 2;
-        if (logoRight + 48 < estimatedSearchLeft) {
-          collapsed = false;
-          setIsDesktopSearchCollapsed(false);
-        }
-      }
-
-      // ── Category nav ───────────────────────────────────────────────
-      if (!navCollapsed && catNavRef.current) {
-        // Only capture naturalW when the element is actually rendered and sized.
-        // A zero offsetWidth means fonts/images haven't loaded yet — skip this tick.
-        if (!naturalW.nav && catNavRef.current.offsetWidth > 0) {
-          naturalW.nav = catNavRef.current.offsetWidth;
-        }
-        // Don't collapse until we have a real measurement
-        if (naturalW.nav > 0) {
-          const navLeft = catNavRef.current.getBoundingClientRect().left;
-          if (logoRight + 20 >= navLeft) {
-            navCollapsed = true;
-            setIsNavCollapsed(true);
-          }
-        }
-      } else if (navCollapsed) {
-        const nw = naturalW.nav || 520;
-        const estimatedNavLeft = (vw - nw) / 2;
-        if (logoRight + 64 < estimatedNavLeft) {
-          navCollapsed = false;
-          setIsNavCollapsed(false);
-        }
-      }
-    };
-
-    // Defer the first check until after paint so fonts + images have rendered
-    // and offsetWidth reflects the real layout — prevents false collapse on mount.
-    let rafId = requestAnimationFrame(() => {
-      check();
-      const ro = new ResizeObserver(check);
-      ro.observe(document.documentElement);
-      // Store disconnect so the cleanup below can reach it
-      (rafId as any) = ro;
-    });
-
-    return () => {
-      if (typeof (rafId as any).disconnect === 'function') {
-        (rafId as any).disconnect();
-      } else {
-        cancelAnimationFrame(rafId as unknown as number);
-      }
-    };
-  }, []);
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -142,322 +112,281 @@ export default function GlobalMasthead() {
     window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
   };
 
-  const closeMenu = () => setIsMenuOpen(false);
+  const openDropdownMenu = (label: string) => {
+    if (dropdownTimerRef.current) clearTimeout(dropdownTimerRef.current);
+    setOpenDropdown(label);
+  };
+
+  const closeDropdownWithDelay = () => {
+    dropdownTimerRef.current = setTimeout(() => setOpenDropdown(null), 150);
+  };
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Bebas+Neue&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&display=swap');
 
-        /* ── Unified Realistic Wood Background (WoodGrain1) — ANTIQUED ── */
-        .hw-wood-bg {
-          /* Deeper, aged walnut base */
-          background-color: #2a1809;
-          background-image:
-            /* 1. Corner-darkening vignette — edges look worn/dirty */
-            radial-gradient(ellipse 130% 90% at 50% 50%, transparent 38%, rgba(10, 4, 0, 0.55) 100%),
-            /* 2. Sepia patina — warm brown wash that ages the highlights */
-            linear-gradient(180deg, rgba(85, 50, 22, 0.42) 0%, rgba(45, 22, 8, 0.52) 100%),
-            /* 3. Directional shade — top brighter than bottom */
-            linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.30) 100%),
-            /* 4. The wood texture itself */
-            url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain2.png');
-          background-size: auto, auto, auto, auto;
-          background-position: center, center, center, center;
-          background-repeat: no-repeat, no-repeat, no-repeat, repeat;
-          background-blend-mode: multiply, multiply, overlay, normal;
-          box-shadow:
-            inset 0 -8px 24px rgba(0,0,0,0.92),
-            0 2px 10px rgba(0,0,0,0.72),
-            0 6px 28px rgba(0,0,0,0.50);
-          border-top: 1px solid rgba(120, 80, 40, 0.30);  /* warm aged trim instead of bright white */
-          border-bottom: 3px solid rgba(0,0,0,0.97);
+
+
+        /* ── Header shell ── */
+        .dg-header {
+          background: linear-gradient(to bottom, #145C3C, #1B7A4D);
+          border-bottom: 1px solid #0F4A30;
           position: relative;
-        }
-        /* Aged ambient overlay — dimmer "gas-lamp" warmth + smoke-stained corners */
-        .hw-wood-bg::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background:
-            /* Smoke-stain patina at top corners (years of grime) */
-            radial-gradient(ellipse 55% 55% at 0% 0%,   rgba(20, 10, 2, 0.42) 0%, transparent 62%),
-            radial-gradient(ellipse 55% 55% at 100% 0%, rgba(20, 10, 2, 0.42) 0%, transparent 62%),
-            /* Dim overhead gas-lamp glow — much softer than before */
-            radial-gradient(ellipse 70% 55% at 50% 0%,  rgba(180, 130, 55, 0.12) 0%, transparent 70%),
-            /* Faint center wash over the search-bar area */
-            radial-gradient(ellipse 35% 60% at 50% 55%, rgba(180, 130, 55, 0.06) 0%, transparent 70%);
-          pointer-events: none;
-          z-index: 0;
-        }
-        /* Deep dark shadow seam at the bottom edge */
-        .hw-wood-bg::after {
-          content: "";
-          position: absolute;
-          bottom: -8px;
-          left: 0;
-          right: 0;
-          height: 20px;
-          background: radial-gradient(
-            ellipse 70% 100% at 50% 0%,
-            rgba(0,0,0,0.90) 0%,
-            rgba(0,0,0,0.55) 35%,
-            rgba(0,0,0,0.18) 62%,
-            transparent      85%
-          );
-          pointer-events: none;
-          z-index: 1;
+          z-index: 100;
         }
 
-        /* ── Category Nav Buttons — worn aged dark green road signs ── */
-        .hw-badge {
-          display: inline-flex;
-          align-items: center;
-          /* Aged dark green: corner wear + green grime + WoodGrain2 underneath */
-          background-image:
-            /* corner damage — uneven wear at each corner */
-            radial-gradient(ellipse 35% 45% at 0%   0%,   rgba(0,0,0,0.60) 0%, transparent 55%),
-            radial-gradient(ellipse 30% 40% at 100% 100%, rgba(0,0,0,0.55) 0%, transparent 55%),
-            radial-gradient(ellipse 22% 28% at 100% 0%,   rgba(0,0,0,0.45) 0%, transparent 60%),
-            radial-gradient(ellipse 22% 28% at 0%   100%, rgba(0,0,0,0.40) 0%, transparent 60%),
-            /* overall edge darkening */
-            radial-gradient(ellipse 110% 100% at 50% 50%, transparent 25%, rgba(0,0,0,0.70) 100%),
-            /* aged forest-green grime wash */
-            linear-gradient(170deg, rgba(12, 38, 16, 0.72) 0%, rgba(6, 22, 9, 0.82) 100%),
-            /* faint sage highlight from above — like sun-bleached paint */
-            linear-gradient(180deg, rgba(80, 140, 70, 0.10) 0%, rgba(0, 0, 0, 0.28) 100%),
-            url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Textures/WoodGrain2.png');
-          background-size: auto, auto, auto, auto, auto, auto, auto, auto;
-          background-position: center, center, center, center, center, center, center, center;
-          background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
-          background-blend-mode: multiply, multiply, multiply, multiply, multiply, multiply, overlay, normal;
-          border: 1.5px solid rgba(215, 205, 182, 0.70);   /* tarnished off-white — matches shield logo */
-          box-shadow:
-            /* face dimension — faint sage bevel top, dark recess bottom */
-            inset 0 2px 0 rgba(240, 234, 220, 0.38),
-            inset 0 3px 2px rgba(255, 220, 165, 0.15),
-            inset 0 -5px 10px rgba(0, 0, 0, 0.75),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.60),
-            /* STACKED extruded block — dark forest green sides, builds 8px depth */
-            0 2px 0 rgba(18, 50, 20, 0.96),
-            0 4px 0 rgba(12, 35, 14, 0.96),
-            0 6px 0 rgba(7, 22, 9, 0.94),
-            0 8px 0 rgba(2, 10, 3, 0.93),
-            /* multi-step ambient shadow */
-            0 10px 14px rgba(0, 0, 0, 0.65),
-            0 16px 28px rgba(0, 0, 0, 0.45),
-            0 22px 40px rgba(0, 0, 0, 0.25),
-            /* outer hairline */
-            0 0 0 1px rgba(0, 0, 0, 0.55);
-          border-radius: 4px;
-          color: #cfc1a8;                                  /* tarnished cream — matches Highway shield logo */
-          font-family: 'Oswald', system-ui, sans-serif;
-          font-size: 14px;
-          font-weight: 600;
-          letter-spacing: 0.18em;
-          padding: 7px 15px;
-          text-transform: uppercase;
-          white-space: nowrap;
-          transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out;
-          cursor: pointer;
-          text-decoration: none;
-          /* stamped/worn text shadow */
-          text-shadow:
-            0 1px 2px rgba(0, 0, 0, 0.98),
-            0 0 3px rgba(0, 0, 0, 0.70);
-        }
-        .hw-badge:hover {
-          /* Lift the plaque — green paint looks freshened under good light */
-          color: #ede2c8;                                  /* brightened cream on hover */
-          border-color: rgba(240, 234, 220, 0.95);
-          transform: translateY(-2px);
-          box-shadow:
-            /* face dimension — stronger sage highlights */
-            inset 0 2px 0 rgba(240, 234, 220, 0.50),
-            inset 0 3px 2px rgba(255, 230, 175, 0.22),
-            inset 0 -5px 10px rgba(0, 0, 0, 0.75),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.60),
-            /* STACKED thickness — 10px on lift */
-            0 2px 0 rgba(18, 50, 20, 0.96),
-            0 4px 0 rgba(12, 35, 14, 0.96),
-            0 6px 0 rgba(7, 22, 9, 0.94),
-            0 8px 0 rgba(2, 10, 3, 0.93),
-            0 10px 0 rgba(0, 5, 1, 0.91),
-            /* deeper ambient shadow */
-            0 12px 18px rgba(0, 0, 0, 0.68),
-            0 20px 32px rgba(0, 0, 0, 0.50),
-            0 28px 48px rgba(0, 0, 0, 0.28),
-            0 0 0 1px rgba(0, 0, 0, 0.55),
-            /* aged moss glow */
-            0 0 22px rgba(40, 110, 50, 0.25);
-        }
-        .hw-badge:active {
-          /* Press down — compress, deepen */
-          transform: translateY(6px);
-          box-shadow:
-            inset 0 2px 5px rgba(0, 0, 0, 0.80),
-            inset 0 -1px 0 rgba(90, 150, 70, 0.08),
-            /* only 2px of thickness left */
-            0 2px 0 rgba(8, 25, 10, 0.92),
-            0 3px 6px rgba(0, 0, 0, 0.55),
-            0 0 0 1px rgba(0, 0, 0, 0.55);
-        }
-
-        /* ── Carved Inset Elements (Search & Actions) ── */
-        .hw-inset-container {
-          background: #180d06;
-          box-shadow:
-            inset 0 6px 12px rgba(0,0,0,0.95),
-            inset 0 1px 3px rgba(0,0,0,0.9),
-            inset 0 0 0 1px #050201,
-            /* inner amber glow — lit-from-within effect */
-            inset 0 0 18px rgba(180,120,40,0.22),
-            inset 0 0 6px  rgba(210,150,60,0.12),
-            0 1px 1px rgba(255,255,255,0.12),
-            /* warm outer glow — simulates overhead lamp */
-            0 0 16px rgba(190,130,45,0.28),
-            0 0 38px rgba(160,100,25,0.14);
-          border-radius: 12px;
-          height: 48px;
+        /* ── Top bar (search + icons) ── */
+        .dg-topbar {
+          max-width: 1440px;
+          margin: 0 auto;
+          /* base horizontal padding; overridden via inline style when in grid layout */
+          padding: 12px 24px;
           display: flex;
           align-items: center;
-          padding: 0 16px;
-          gap: 12px;
+          gap: 16px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .dg-topbar-inner {
+          display: contents;
         }
 
-        /* Radial spotlight on the centre column — highlights search bar area */
-        .hw-center-zone {
-          background:
-            radial-gradient(
-              ellipse 85% 95% at 50% 40%,
-              rgba(210,155,60,0.22) 0%,
-              rgba(180,110,30,0.10) 48%,
-              transparent 72%
-            );
+        /* ── Logo link ── */
+        .dg-logo-link {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+          text-decoration: none;
+          transition: filter 0.15s;
         }
+        .dg-logo-link:hover { filter: brightness(1.05) drop-shadow(0 2px 8px rgba(76,145,65,0.35)); }
 
-        .hw-search-input {
+        /* ── Search form ── */
+        .dg-search-form {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          background: #F5F5F2;
+          border-radius: 6px;
+          border: 1.5px solid rgba(0,0,0,0.08);
+          overflow: hidden;
+          height: 44px;
+          transition: border-color 0.15s, background 0.15s;
+        }
+        .dg-search-form:focus-within {
+          border-color: rgba(255,255,255,0.5);
+          background: #ffffff;
+        }
+        .dg-cat-select {
+          background: transparent;
+          border: none;
+          border-right: 1.5px solid #D8D8D4;
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 13px;
+          font-weight: 500;
+          color: #2A2B2A;
+          padding: 0 10px 0 12px;
+          height: 100%;
+          cursor: pointer;
+          outline: none;
+          white-space: nowrap;
+          min-width: 80px;
+          max-width: 130px;
+        }
+        .dg-cat-select option { background: #F5F5F2; color: #2A2B2A; }
+        .dg-search-input {
+          flex: 1;
           background: transparent;
           border: none;
           outline: none;
-          color: #ddd8cc;
-          font-size: 17px;
-          width: 100%;
-          font-family: inherit;
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 14px;
+          color: #2A2B2A;
+          padding: 0 12px;
+          height: 100%;
         }
-        .hw-search-input::placeholder { color: rgba(210,205,190,0.45); }
-
-        /* ── Right Side Action Controls ── */
-        .hw-action-btn {
+        .dg-search-input::placeholder { color: #9A9A9A; }
+        .dg-search-btn {
+          border: none;
+          background: #5BAD52;
+          color: #fff;
+          padding: 0 16px;
+          height: 100%;
+          cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 8px;
-          color: #ddd8cc;
-          font-size: 16px;
-          font-weight: 500;
-          transition: color 0.15s;
+          transition: background 0.15s;
+        }
+        .dg-search-btn:hover { background: #4A9442; }
+
+        /* ── Right icon buttons ── */
+        .dg-icon-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 2px;
           background: transparent;
           border: none;
           cursor: pointer;
+          color: #ffffff;
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.03em;
+          padding: 6px 10px;
           text-decoration: none;
+          border-radius: 4px;
+          transition: background 0.15s, color 0.15s;
+          white-space: nowrap;
         }
-        .hw-action-btn:hover { color: #f0ece8; }
-        
-        /* The gold circle button from the mockup */
-        .hw-action-circle {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background: linear-gradient(180deg, #e4c575 0%, #b6924b 40%, #896924 100%);
-          border: 2px solid #4a3411; /* Dark wood border ring */
-          color: #1a0d05;
-          box-shadow: 
-            inset 0 1px 2px rgba(255,255,255,0.6), 
-            inset 0 -1px 2px rgba(0,0,0,0.4),
-            0 2px 4px rgba(0,0,0,0.8);
-          transition: transform 0.15s, filter 0.15s;
-          position: relative;
-        }
-        .hw-action-circle:hover {
-          filter: brightness(1.15);
-          transform: scale(1.05);
+        .dg-icon-btn:hover { background: rgba(255,255,255,0.15); }
+        .dg-icon-btn svg { flex-shrink: 0; }
+
+        /* ── Cart badge ── */
+        .dg-cart-badge {
+          position: absolute;
+          top: -6px; right: -6px;
+          min-width: 18px; height: 18px;
+          background: #E53E3E;
+          color: #fff;
+          border-radius: 9px;
+          font-size: 10px;
+          font-weight: 800;
+          display: flex; align-items: center; justify-content: center;
+          padding: 0 3px;
+          border: 1.5px solid #1B7A4D;
         }
 
-        /* ── Mobile Overlays & Drawers ── */
-        .hw-search-overlay {
+        /* ── Navigation bar ── */
+        .dg-navbar {
+          border-top: 1px solid rgba(255,255,255,0.12);
+          background: transparent;
+        }
+        .dg-navinner {
+          position: relative;
+          padding: 0 16px;
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .dg-navlink {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          padding: 10px 12px;
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 14px;
+          font-weight: 700;
+          color: #ffffff;
+          text-decoration: none;
+          white-space: nowrap;
+          border-bottom: 2px solid transparent;
+          transition: color 0.15s, border-color 0.15s;
+          cursor: pointer;
+          background: transparent;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+        }
+        .dg-navlink:hover, .dg-navlink.active {
+          color: #ffffff;
+          border-bottom-color: rgba(255,255,255,0.8);
+        }
+
+        /* ── Dropdown panel ── */
+        .dg-dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          min-width: 200px;
+          background: #ffffff;
+          border: 1px solid #E8E8E8;
+          border-top: 2px solid #5BAD52;
+          border-radius: 0 0 6px 6px;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+          z-index: 200;
+          padding: 8px 0;
+        }
+        .dg-dropdown-link {
+          display: block;
+          padding: 9px 16px;
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 13px;
+          font-weight: 500;
+          color: #2A2B2A;
+          text-decoration: none;
+          transition: background 0.1s, color 0.1s;
+        }
+        .dg-dropdown-link:hover {
+          background: #F5F5F5;
+          color: #5BAD52;
+        }
+
+        /* ── Mobile drawer ── */
+        .dg-drawer {
+          background: #145C3C;
+          border-top: 1px solid rgba(255,255,255,0.12);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+        .dg-drawer-link {
+          display: block;
+          padding: 13px 20px;
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.88);
+          text-decoration: none;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
+          transition: color 0.15s, background 0.15s;
+        }
+        .dg-drawer-link:hover { background: rgba(255,255,255,0.1); color: #ffffff; }
+        .dg-drawer-link:last-child { border-bottom: none; }
+
+        /* ── Mobile search overlay ── */
+        .dg-mobile-search {
           position: absolute;
           inset: 0;
-          z-index: 30;
+          background: #145C3C;
+          z-index: 50;
           display: flex;
           align-items: center;
           padding: 0 12px;
           gap: 8px;
-          background: linear-gradient(180deg, #1E1C16 0%, #171510 100%);
-        }
-
-        .hw-drawer {
-          background: linear-gradient(180deg, #1A1814 0%, #141210 100%);
-          border-top: 1px solid rgba(220,185,80,0.10);
-          box-shadow: 0 12px 32px rgba(0,0,0,0.7);
-          overflow: hidden;
-        }
-        .hw-drawer-link {
-          display: flex;
-          align-items: center;
-          padding: 14px 0;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
-          color: #C4C0B4;
-          font-size: 13px;
-          letter-spacing: 0.08em;
-          font-weight: 600;
-          text-decoration: none;
-          text-transform: uppercase;
-          transition: color 0.15s, padding-left 0.15s;
-        }
-        .hw-drawer-link:hover { color: #E8E4DC; padding-left: 4px; }
-        .hw-drawer-link:last-child { border-bottom: none; }
-
-        .hw-cart-badge {
-          position: absolute;
-          top: -6px; right: -6px;
-          width: 20px; height: 20px;
-          border-radius: 50%;
-          background: #d32f2f;
-          border: 1.5px solid #d4af37;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-          display: flex; align-items: center; justify-content: center;
-          font-size: 10px; font-weight: 800; color: #fff;
-          line-height: 1;
         }
       `}</style>
 
-      <header className="hw-header relative w-full hw-wood-bg" style={{ zIndex: 100 }}>
+
+      <header className="dg-header">
 
         {/* ══════════════════════════════════════════════════════════════
-            MOBILE VIEW (Compact, retains icon/hamburger design)
+            MOBILE (< md)
         ══════════════════════════════════════════════════════════════ */}
-        <div className="md:hidden relative z-10 pb-4">
-          {/* Mobile Search Overlay */}
+        <div className="md:hidden relative">
+
+          {/* Mobile search overlay */}
           {isSearchOpen && (
-            <div className="hw-search-overlay">
-              <form onSubmit={handleSearch} className="hw-inset-container flex-1" style={{ height: "40px", borderRadius: "20px" }}>
-                <Search style={{ width: 14, height: 14, color: "rgba(222,203,165,0.6)", flexShrink: 0 }} strokeWidth={2.5} />
+            <div className="dg-mobile-search">
+              <form onSubmit={handleSearch} className="dg-search-form flex-1" style={{ height: 40 }}>
                 <input
-                  ref={searchInputRef}
+                  ref={searchRef}
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className="hw-search-input"
+                  placeholder="Search…"
+                  className="dg-search-input"
                 />
+                <button type="submit" className="dg-search-btn" aria-label="Search">
+                  <Search style={{ width: 16, height: 16 }} />
+                </button>
               </form>
               <button
                 type="button"
                 onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
-                className="hw-action-btn ml-2"
+                style={{ background: "transparent", border: "none", cursor: "pointer", color: "#2A2B2A", padding: 4 }}
                 aria-label="Close search"
               >
                 <X style={{ width: 22, height: 22 }} />
@@ -465,264 +394,240 @@ export default function GlobalMasthead() {
             </div>
           )}
 
-          {/* Mobile Top Bar */}
-          <div className={`w-full flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
-            <Link href="/" aria-label="Highway 420 home" className="flex items-center" style={{ gap: '8px' }}>
+          {/* Mobile top bar */}
+          <div className={`flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
+            {/* Logo */}
+            <Link href="/" className="dg-logo-link" aria-label="Highway 420 home">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
                 alt="HIGHWAY 420"
                 width={120}
                 height={120}
-                style={{ height: '58px', width: 'auto', flexShrink: 0 }}
-                className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
+                style={{ height: '52px', width: 'auto' }}
+                className="object-contain"
                 priority
               />
             </Link>
-            
+
             <div className="flex-1" />
-            
-            <button className="hw-action-btn" onClick={() => setIsSearchOpen(true)} aria-label="Search">
-              <Search style={{ width: 20, height: 20 }} strokeWidth={2.5} />
-            </button>
-            
-            <Link href="/cart" className="relative group" aria-label="Cart">
-              <div className="w-[38px] h-[38px] rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(10,5,0,0.5)] flex items-center justify-center text-[#decba5]">
-                <ShoppingCart style={{ width: 18, height: 18 }} />
-              </div>
-              {cartCount > 0 && <span className="hw-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>}
-            </Link>
 
-            <Link href={user ? "/account" : "/signin"} className="relative" aria-label="Account">
-              <div className="w-[38px] h-[38px] rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(10,5,0,0.5)] flex items-center justify-center text-[#decba5]">
-                <User style={{ width: 18, height: 18 }} />
-              </div>
-            </Link>
-
-            <button className="hw-action-btn" onClick={() => setIsMenuOpen(v => !v)} aria-label="Menu">
-              {isMenuOpen ? <X style={{ width: 24, height: 24 }} strokeWidth={2} /> : <Menu style={{ width: 24, height: 24 }} strokeWidth={2} />}
-            </button>
-          </div>
-        </div>
-
-        {/* ══════════════════════════════════════════════════════════════
-            DESKTOP VIEW
-            Layout: [Logo left] ── [Search centred / Categories centred] ── [Account + Cart right]
-        ══════════════════════════════════════════════════════════════ */}
-        <div className="hidden md:flex flex-row items-stretch w-full mx-auto relative z-10" style={{ minHeight: '120px' }}>
-
-          {/* ══ LEFT: Brand Lockup — shield + single-line wordmark ══ */}
-          <Link
-            href="/"
-            className="flex-shrink-0 self-stretch flex items-center pl-4 lg:pl-6 pr-4 hover:brightness-110 transition-all duration-200 relative z-10"
-            aria-label="Highway 420 home"
-          >
-            {/* Brand lockup wrapper — ref used for search-collapse collision detection */}
-            <div ref={logoRef} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              {/* Shield — tall, spanning nearly full masthead height */}
-              <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
-                alt="HIGHWAY 420"
-                width={120}
-                height={120}
-                style={{ height: 'clamp(110px, 13vw, 155px)', width: 'auto', flexShrink: 0 }}
-                className="object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
-                priority
-              />
-            </div>
-          </Link>
-
-          {/* ══ CENTRE: absolute overlay — true page-center for search + category buttons ══ */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 py-3 pointer-events-none">
-
-            {/* Search bar — hidden when logo contacts it; icon migrates to right nav */}
-            {!isDesktopSearchCollapsed && (
-              <form
-                ref={searchRef}
-                onSubmit={handleSearch}
-                className="hw-inset-container w-full max-w-[480px] pointer-events-auto"
-                style={{ height: '44px' }}
-              >
-                <Search
-                  style={{ width: 16, height: 16, color: 'rgba(222,203,165,0.6)', flexShrink: 0 }}
-                  strokeWidth={2}
-                />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search Highway 420..."
-                  aria-label="Search products"
-                  className="hw-search-input"
-                />
-              </form>
-            )}
-
-            {/* Category nav buttons — hidden when logo contacts them; hamburger migrates to right nav */}
-            {!isNavCollapsed && (
-              <div ref={catNavRef} className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 pointer-events-auto">
-                {NAV_CATEGORIES.map(cat => (
-                  <Link key={cat.href} href={cat.href} className="hw-badge">
-                    {cat.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-
-          </div>
-
-          {/* ══ RIGHT: collapsed icons + Account + Cart ══ */}
-          <div className="flex-shrink-0 flex items-center gap-2 pr-4 lg:pr-8 relative z-10 ml-auto">
-
-            {/* Search icon — migrates here when search bar is contacted by logo */}
-            {isDesktopSearchCollapsed && (
-              <button
-                type="button"
-                className="hw-action-circle flex-shrink-0"
-                style={{ width: '44px', height: '44px' }}
-                onClick={() => setIsSearchOpen(true)}
-                aria-label="Search"
-              >
-                <Search style={{ width: 18, height: 18 }} strokeWidth={2} />
-              </button>
-            )}
-
-            {/* Hamburger — migrates here when category nav is contacted by logo */}
-            {isNavCollapsed && (
-              <button
-                className="hw-action-circle flex-shrink-0"
-                style={{ width: '44px', height: '44px' }}
-                onClick={() => setIsMenuOpen(v => !v)}
-                aria-label="Navigation menu"
-              >
-                {isMenuOpen
-                  ? <X    style={{ width: 20, height: 20 }} strokeWidth={2} />
-                  : <Menu style={{ width: 20, height: 20 }} strokeWidth={2} />}
-              </button>
-            )}
-
-            {/* Account */}
-            <button
-              onClick={() => setShowProfileModal(true)}
-              className="hw-action-btn hw-inset-container gap-2 px-3"
-              style={{ height: "44px", flexShrink: 0 }}
-            >
-              <User style={{ width: 17, height: 17 }} />
-              <span className="hidden xl:inline whitespace-nowrap">{displayName || "Account"}</span>
+            {/* Search */}
+            <button className="dg-icon-btn" onClick={() => setIsSearchOpen(true)} aria-label="Search">
+              <Search style={{ width: 20, height: 20 }} />
             </button>
 
             {/* Cart */}
-            <Link
-              href="/cart"
-              className="hw-action-circle flex-shrink-0"
-              style={{ width: "44px", height: "44px" }}
-              aria-label={`Cart (${cartCount} items)`}
-            >
-              <ShoppingCart style={{ width: 18, height: 18 }} strokeWidth={2.5} />
-              {cartCount > 0 && (
-                <span className="hw-cart-badge">{cartCount > 99 ? "99+" : String(cartCount)}</span>
-              )}
+            <Link href="/cart" className="dg-icon-btn relative" aria-label="Cart">
+              <ShoppingCart style={{ width: 20, height: 20 }} />
+              {cartCount > 0 && <span className="dg-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>}
             </Link>
-          </div>
 
-          {/* Desktop search overlay (shown when collapsed search icon is clicked) */}
-          {isDesktopSearchCollapsed && isSearchOpen && (
-            <div
-              className="absolute inset-0 z-40 flex items-center gap-4 px-6"
-              style={{ background: 'linear-gradient(180deg, #1E1C16 0%, #171510 100%)' }}
-            >
-              <form
-                onSubmit={handleSearch}
-                className="hw-inset-container flex-1"
-                style={{ height: '48px' }}
-              >
-                <Search style={{ width: 16, height: 16, color: 'rgba(222,203,165,0.6)', flexShrink: 0 }} strokeWidth={2} />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search Highway 420..."
-                  className="hw-search-input"
-                />
-              </form>
-              <button
-                type="button"
-                onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
-                className="hw-action-btn"
-                aria-label="Close search"
-              >
-                <X style={{ width: 22, height: 22 }} />
-              </button>
-            </div>
-          )}
+            {/* Hamburger */}
+            <button className="dg-icon-btn" onClick={() => setIsMenuOpen(v => !v)} aria-label="Menu">
+              {isMenuOpen ? <X style={{ width: 22, height: 22 }} /> : <Menu style={{ width: 22, height: 22 }} />}
+            </button>
+          </div>
         </div>
 
         {/* ══════════════════════════════════════════════════════════════
-            MOBILE DRAWER — slides down from masthead
+            DESKTOP (≥ md)
         ══════════════════════════════════════════════════════════════ */}
-        {isMenuOpen && (
-          <div className="hw-drawer">
-            <nav className="px-5 py-2">
-              {/* Categories */}
-              {NAV_CATEGORIES.map(cat => (
-                <Link
-                  key={cat.href}
-                  href={cat.href}
-                  className="hw-drawer-link"
-                  onClick={closeMenu}
-                >
-                  {cat.label}
-                </Link>
-              ))}
+        <div className="hidden md:block">
+          {/*
+            Grid layout:
+              col 1 = shield (auto width, 2-row span)
+              col 2 = topbar + navbar stacked
+            The shield will naturally fill the height of both rows — no clipping, no overflow.
+          */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'auto 1fr',
+            gridTemplateRows: 'auto auto',
+            width: '100%',
+          }}>
 
-              {/* Account links */}
-              <div className="mt-2 mb-1 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                <Link href={user ? "/account" : "/signin"} className="hw-drawer-link" onClick={closeMenu}
-                  style={{ letterSpacing: "0.06em" }}>
-                  {user ? "MY ACCOUNT" : "SIGN IN / SIGN UP"}
-                </Link>
-                <Link href="/rewards" className="hw-drawer-link" onClick={closeMenu}
-                  style={{ letterSpacing: "0.06em" }}>
-                  VIP REWARDS
-                </Link>
-                <Link href="/cart" className="hw-drawer-link" onClick={closeMenu}
-                  style={{ letterSpacing: "0.06em" }}>
-                  CART {cartCount > 0 ? `(${cartCount})` : ""}
-                </Link>
+            {/* ── Col 1, rows 1-2: Shield ── */}
+            <Link
+              href="/"
+              className="dg-logo-link"
+              aria-label="Highway 420 home"
+              style={{
+                gridColumn: '1',
+                gridRow: '1 / 3',
+                alignSelf: 'stretch',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '8px 16px 8px 20px',
+              }}
+            >
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Aged%20Logo-Transparent.png"
+                alt="HIGHWAY 420"
+                width={200}
+                height={200}
+                style={{ height: '100%', width: 'auto', maxHeight: '120px', minHeight: '80px', display: 'block' }}
+                className="object-contain"
+                priority
+              />
+            </Link>
+
+            {/* ── Col 2, row 1: Topbar — search only, centered ── */}
+            <div className="dg-topbar" style={{ gridColumn: '2', gridRow: '1', margin: 0, padding: '10px 24px 10px 16px', justifyContent: 'center' }}>
+              <form onSubmit={handleSearch} className="dg-search-form" style={{ flex: 'none', width: '100%', maxWidth: 560 }}>
+                <select
+                  value={selectedCategory}
+                  onChange={e => setSelectedCategory(e.target.value)}
+                  className="dg-cat-select"
+                  aria-label="Search category"
+                >
+                  {CATEGORY_OPTIONS.map(c => <option key={c}>{c}</option>)}
+                </select>
+                <input
+                  ref={searchRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search for products, brands…"
+                  aria-label="Search products"
+                  className="dg-search-input"
+                />
+                <button type="submit" className="dg-search-btn" aria-label="Search">
+                  <Search style={{ width: 16, height: 16 }} />
+                </button>
+              </form>
+            </div>
+
+            {/* ── Col 2, row 2: Navbar — centered links + icons far right ── */}
+            <nav className="dg-navbar" aria-label="Primary navigation"
+              style={{ gridColumn: '2', gridRow: '2', width: '100%' }}
+            >
+              <div className="dg-navinner" style={{ margin: 0, padding: '0 16px', position: 'relative' }}>
+
+                {/* Nav links — truly centered via absolute positioning */}
+                <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', top: 0, bottom: 0 }}>
+                  {NAV_LINKS.map(link => (
+                    <div
+                      key={link.href}
+                      className="relative"
+                      onMouseEnter={() => link.children && openDropdownMenu(link.label)}
+                      onMouseLeave={() => link.children && closeDropdownWithDelay()}
+                    >
+                      <Link
+                        href={link.href}
+                        className={`dg-navlink ${openDropdown === link.label ? "active" : ""}`}
+                      >
+                        {link.label}
+                        {link.children && <ChevronDown style={{ width: 12, height: 12, opacity: 0.6 }} />}
+                      </Link>
+
+                      {link.children && openDropdown === link.label && (
+                        <div
+                          className="dg-dropdown"
+                          onMouseEnter={() => openDropdownMenu(link.label)}
+                          onMouseLeave={closeDropdownWithDelay}
+                        >
+                          {link.children.map(child => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="dg-dropdown-link"
+                              onClick={() => setOpenDropdown(null)}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Account + Cart — absolutely anchored to far right */}
+                <div style={{ position: 'absolute', right: 16, top: 0, bottom: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <button
+                    onClick={() => setShowProfileModal(true)}
+                    className="dg-icon-btn"
+                    aria-label="Account"
+                  >
+                    <User style={{ width: 24, height: 24 }} />
+                    {displayName ? displayName : "Account"}
+                  </button>
+                  <Link
+                    href="/cart"
+                    className="dg-icon-btn relative"
+                    aria-label={`Cart (${cartCount} items)`}
+                  >
+                    <ShoppingCart style={{ width: 24, height: 24 }} />
+                    Cart
+                    {cartCount > 0 && <span className="dg-cart-badge">{cartCount > 99 ? "99+" : String(cartCount)}</span>}
+                  </Link>
+                </div>
+
               </div>
             </nav>
-          </div>
-        )}
+          </div>{/* /grid wrapper */}
+        </div>{/* /hidden md:block */}
       </header>
 
-      {/* ══════════════════════════════════════════════════════════════════
+      {/* ══════════════════════════════════════════════════════════════
+          MOBILE DRAWER
+      ══════════════════════════════════════════════════════════════ */}
+      {isMenuOpen && (
+        <div className="dg-drawer md:hidden">
+          <nav>
+            {NAV_LINKS.map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="dg-drawer-link"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div style={{ borderTop: "2px solid #F0F0F0", marginTop: 4 }}>
+              <Link href={user ? "/account" : "/signin"} className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
+                {user ? "My Account" : "Sign In / Sign Up"}
+              </Link>
+              <Link href="/rewards" className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
+                VIP Rewards
+              </Link>
+              <Link href="/cart" className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
+                Cart {cartCount > 0 ? `(${cartCount})` : ""}
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════
           PROFILE MODAL
-      ══════════════════════════════════════════════════════════════════ */}
+      ══════════════════════════════════════════════════════════════ */}
       {showProfileModal && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          style={{ background: "rgba(0,0,0,0.65)", backdropFilter: "blur(6px)" }}
+          style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
           onClick={e => { if (e.target === e.currentTarget) setShowProfileModal(false); }}
         >
-          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-5 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-green-700 to-green-900">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "#4C9141" }}>
                   <User className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
-                    {user ? `Welcome back, ${displayName}` : "Welcome to HIGHWAY 420"}
+                  <h2 className="text-base font-bold text-gray-900">
+                    {user ? `Welcome back, ${displayName}` : "Welcome to Highway 420"}
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-gray-500">
                     {user ? user.email : "Sign in for personalised recommendations"}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowProfileModal(false)}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5 text-gray-500" />
@@ -730,47 +635,48 @@ export default function GlobalMasthead() {
             </div>
 
             {/* Body */}
-            <div className="p-5 space-y-5">
+            <div className="p-5 space-y-4">
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Star className="w-4 h-4 text-yellow-500" />
-                  <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Recommended for You</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm">Recommended for You</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-xl p-4 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-lg p-3 bg-blue-50">
                     <div className="flex items-center gap-2 mb-2">
                       <TrendingUp className="w-4 h-4 text-blue-600" />
-                      <span className="font-medium text-gray-900 dark:text-white text-sm">Trending</span>
+                      <span className="font-medium text-gray-900 text-sm">Trending</span>
                     </div>
-                    <Link href="/mushrooms"  className="block text-sm text-blue-600 dark:text-blue-400 hover:underline mb-1" onClick={() => setShowProfileModal(false)}>🔥 Premium Mushrooms</Link>
-                    <Link href="/thca_flower" className="block text-sm text-blue-600 dark:text-blue-400 hover:underline" onClick={() => setShowProfileModal(false)}>🔥 THCA Flower</Link>
+                    <Link href="/mushrooms" className="block text-sm text-blue-600 hover:underline mb-1" onClick={() => setShowProfileModal(false)}>🔥 Premium Mushrooms</Link>
+                    <Link href="/thca_flower" className="block text-sm text-blue-600 hover:underline" onClick={() => setShowProfileModal(false)}>🔥 THCA Flower</Link>
                   </div>
-                  <div className="rounded-xl p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
+                  <div className="rounded-lg p-3 bg-green-50">
                     <div className="flex items-center gap-2 mb-2">
                       <Gift className="w-4 h-4 text-green-600" />
-                      <span className="font-medium text-gray-900 dark:text-white text-sm">Staff Picks</span>
+                      <span className="font-medium text-gray-900 text-sm">Staff Picks</span>
                     </div>
-                    <Link href="/thca_pnv" className="block text-sm text-green-600 dark:text-green-400 hover:underline" onClick={() => setShowProfileModal(false)}>🌟 Premium Pre-Rolls & Vapes</Link>
+                    <Link href="/thca_pnv" className="block text-sm text-green-600 hover:underline" onClick={() => setShowProfileModal(false)}>🌟 Premium Pre-Rolls & Vapes</Link>
                   </div>
                 </div>
               </div>
 
-              <div className="border-t dark:border-gray-700 pt-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="border-t pt-4">
+                <div className="grid grid-cols-2 gap-3">
                   <Link
                     href={user ? "/account" : "/signin"}
                     onClick={() => setShowProfileModal(false)}
-                    className="flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-white font-medium py-3 px-4 rounded-xl transition-colors text-sm"
+                    className="dg-btn-primary"
                   >
-                    <User className="w-4 h-4" />
+                    <User className="w-4 h-4 mr-2" />
                     {user ? "Go to Dashboard" : "Sign In / Sign Up"}
                   </Link>
                   <Link
                     href="/rewards"
                     onClick={() => setShowProfileModal(false)}
-                    className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-4 rounded-xl transition-colors text-sm"
+                    className="dg-btn-outline"
                   >
-                    <Gift className="w-4 h-4" /> VIP Rewards
+                    <Gift className="w-4 h-4 mr-2" />
+                    VIP Rewards
                   </Link>
                 </div>
               </div>

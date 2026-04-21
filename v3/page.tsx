@@ -6,9 +6,9 @@ import FullscreenCarousel from "./components/FullscreenCarousel";
 import CollectionsGrid from "./components/CollectionsGrid";
 
 export const metadata: Metadata = {
-  title: "HIGHWAY 420 — Premium Headshop | Bongs, Vapes, Edibles & More",
+  title: "HIGHWAY 420 — Premium Cannabis Culture & Smoke Shop",
   description:
-    "Your online headshop for premium glass, bongs, dab rigs, vapes, edibles & more. Free shipping over $75. Shop the best brands at the lowest prices.",
+    "Life is a Highway, Ride With Us. Premium cannabis products at the lowest prices — glass, bongs, dab rigs, vapes, edibles & more. Free shipping over $75.",
   alternates: { canonical: "https://highway420.com" },
 };
 
@@ -25,55 +25,61 @@ const RideWithUsBanner        = nextDynamic(() => import("./components/RideWithU
 export const dynamic = "force-dynamic";
 
 function SectionFallback() {
-  return <div className="h-40 animate-pulse bg-gray-100 mx-0 my-0" />;
+  return <div className="h-64 animate-pulse bg-gray-100 rounded-lg mx-4 my-8" />;
 }
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* ── Global Masthead ── */}
+    <div className="min-h-screen" style={{ background: '#0D0D0B' }}>
+      {/* ── Global Masthead (sticky nav) ── */}
       <GlobalMasthead />
 
-      {/* ── Hero Carousel ── */}
+      {/* ── Hero Carousel — full width natural height, flush below masthead ── */}
       <FullscreenCarousel />
 
       {/* ── Main Content ── */}
-      <main className="w-full">
+      <main className="w-full px-0 py-0">
+        {/* Section divider */}
+        <div className="w-full">
+          <div className="h-4 bg-gradient-to-r from-transparent via-white to-transparent mb-1 shadow-lg" />
+          <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mb-1" />
+          <div className="h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg" />
+        </div>
 
-        {/* ── Shop by Category ── */}
-        <section className="dg-section-gray">
-          <div className="max-w-[1440px] mx-auto px-4 sm:px-6">
-            <div className="flex items-end justify-between mb-6">
-              <div>
-                <p className="dg-eyebrow">Browse</p>
-                <h2 className="dg-section-title">Shop by Category</h2>
-              </div>
-            </div>
-            <CollectionsGrid />
-          </div>
+        {/* ── Collections Section — vintage map background ── */}
+        <section
+          className="flex justify-center"
+          style={{
+            backgroundImage: `url('https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Background.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            borderTop: '3px solid #C5A059',
+            borderBottom: '3px solid #C5A059',
+            paddingTop: '40px',
+            paddingBottom: '8px',
+            width: '100%',
+          }}
+        >
+          <CollectionsGrid />
         </section>
 
-        {/* ── Hot Products ── */}
         <Suspense fallback={<SectionFallback />}>
           <FeaturedProductsSection />
         </Suspense>
 
-        {/* ── New Arrivals ── */}
         <Suspense fallback={<SectionFallback />}>
           <NewProductsSection />
         </Suspense>
 
-        {/* ── Trusted Brands ── */}
         <Suspense fallback={<SectionFallback />}>
           <TrustedBrandsBulletin />
         </Suspense>
 
-        {/* ── Deals ── */}
         <Suspense fallback={<SectionFallback />}>
           <DopeDealsSection />
         </Suspense>
 
-        {/* ── Reviews ── */}
         <Suspense fallback={<SectionFallback />}>
           <SpotlightReviews />
         </Suspense>

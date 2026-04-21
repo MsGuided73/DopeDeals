@@ -676,24 +676,24 @@ export default function UniversalProductCard({
     );
   }
 
-  // Default grid view — DankGeek style
+  // Default grid view
   return (
-    <Link
-      href={isRestricted ? '#' : `/product/${product.id}`}
-      className={`dg-card group flex flex-col relative ${isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : ''} ${className}`}
-    >
+    <div className={`group block bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 relative ${
+      isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-lg'
+    } ${config.container} ${className}`}>
       
-      {/* Restriction overlay */}
+      {/* Universal Restriction Overlay for all view modes */}
       {isRestricted && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center p-6 pointer-events-none">
-          <div className="bg-white/95 border border-red-300 rounded-lg p-4 flex flex-col items-center text-center shadow-lg">
-            <div className="text-2xl mb-1 text-red-500">🚫</div>
-            <span className="text-red-700 font-bold uppercase tracking-wide text-sm">Local Restriction</span>
+        <div className="absolute inset-0 z-20 flex items-center justify-center p-8 pointer-events-none">
+          <div className="bg-black/90 backdrop-blur-md border border-red-500/50 rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl transform rotate-[-3deg]">
+            <div className="text-3xl mb-2 text-red-500">🚫</div>
+            <span className="text-white font-black uppercase tracking-tighter text-xl leading-none">Local Restriction</span>
+            <span className="text-red-400 text-xs font-bold uppercase tracking-widest mt-1">Limited Availability</span>
           </div>
         </div>
       )}
-      {/* Product image zone */}
-      <div className={`relative ${config.image} bg-white flex-shrink-0 overflow-hidden`}>
+      {/* Product Image */}
+      <div className={`relative ${config.image} bg-white overflow-hidden`}>
         {hasImage ? (
           <Image
             src={imageUrl}
@@ -713,94 +713,127 @@ export default function UniversalProductCard({
           </div>
         )}
 
-        {/* Discount badge — top left */}
-        {showDiscount && discountPercentage && (
-          <div className="dg-price-badge" style={{ position: 'absolute', top: 8, left: 8 }}>
-            -{discountPercentage}%
-          </div>
-        )}
-
-        {/* Wishlist button — top right, appears on hover */}
-        {showFavorite && (
-          <button
-            onClick={handleToggleFavorite}
-            className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-50"
-            aria-label="Add to wishlist"
-          >
-            <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-          </button>
-        )}
-      </div>
-
-      {/* Info zone */}
-      <div className="p-3 flex flex-col flex-1">
-        {/* Brand name */}
-        {showBrand && product.brand_name && (
-          <p className="dg-brand-label">{product.brand_name}</p>
-        )}
-
-        {/* Product name */}
-        <div className="flex items-start gap-1 mb-1">
-          <h3 className={`font-semibold ${config.title} line-clamp-2 text-[#2A2B2A] flex-1`}>
-            {product.name}
-          </h3>
-          {hasProductVariants(product.image_urls || []) && (
-            <div className="ml-1 mt-0.5">
-              <VariantIndicator
-                imageUrls={product.image_urls || []}
-                onClick={(index) => setSelectedImageIndex(index)}
-              />
+        {/* Badges */}
+        <div className="absolute top-2 left-2 flex flex-col gap-1">
+          {product.featured && (
+            <div className="bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+              Featured
+            </div>
+          )}
+          {showDiscount && discountPercentage && (
+            <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+              -{discountPercentage}%
             </div>
           )}
         </div>
 
-        {/* Star rating */}
-        {showRating && product.rating && (
-          <div className="flex items-center gap-1 mb-2">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-3.5 h-3.5 ${
-                    i < Math.floor(product.rating!)
-                      ? 'fill-[#F59E0B] text-[#F59E0B]'
-                      : 'text-gray-200'
-                  }`}
+        {/* Action buttons */}
+        <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          {showFavorite && (
+            <button
+              onClick={handleToggleFavorite}
+              className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-50 transition-colors"
+            >
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+            </button>
+          )}
+          {showQuickView && (
+            <button
+              onClick={handleQuickView}
+              className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-50 transition-colors"
+            >
+              <Eye className="w-4 h-4 text-gray-600" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="p-4 flex flex-col h-full">
+        {/* Content Section - Flexible height */}
+        <div className="flex-grow">
+          <div className="flex items-start justify-between mb-2">
+            <h3 className={`font-semibold ${config.title} line-clamp-2 text-gray-900 group-hover:text-dope-orange-600 transition-colors`}>
+              {product.name}
+            </h3>
+            {/* Variant Indicator */}
+            {hasProductVariants(product.image_urls || []) && (
+              <div className="ml-2">
+                <VariantIndicator
+                  imageUrls={product.image_urls || []}
+                  onClick={(index) => setSelectedImageIndex(index)}
+                  className="-translate-y-1"
                 />
-              ))}
-            </div>
-            {product.review_count && (
-              <span className="text-xs text-gray-500">({product.review_count})</span>
+              </div>
             )}
           </div>
-        )}
 
-        {/* Spacer pushes price + button to bottom */}
-        <div className="flex-1" />
-
-        {/* Price row */}
-        <div className="flex items-center gap-1 mb-3">
-          <span className="dg-price">$ {price.toFixed(2)}</span>
-          {hasDiscount && compareAtPrice && (
-            <span className="dg-price-compare">$ {compareAtPrice.toFixed(2)}</span>
+          {showBrand && product.brand_name && (
+            <p className="text-sm text-gray-500 mb-2">{product.brand_name}</p>
           )}
+
+          {showRating && product.rating && (
+            <div className="flex items-center gap-1 mb-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < Math.floor(product.rating!)
+                        ? 'fill-yellow-400 text-yellow-400'
+                        : 'text-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+              {product.review_count && (
+                <span className="text-sm text-gray-500">({product.review_count})</span>
+              )}
+            </div>
+          )}
+
+          {showDescription && cleanShortDescription && (
+            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+              {cleanShortDescription}
+            </p>
+          )}
+
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className={`font-bold text-dope-orange-600 ${config.price}`}>
+                ${price.toFixed(2)}
+              </span>
+              {hasDiscount && compareAtPrice && (
+                <span className="text-sm text-gray-400 line-through">
+                  ${compareAtPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
+
+            {showStock && product.stock_quantity !== undefined && (
+              <span className={`text-xs px-2 py-1 rounded-full ${
+                isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              }`}>
+                {isInStock ? 'In Stock' : 'Out of Stock'}
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Add to Cart — full width green button */}
+        {/* CTA Button - Anchored to bottom */}
         {showAddToCart && (
-          <button
-            onClick={handleAddToCart}
-            disabled={!isInStock || isAddingToCart || isRestricted}
-            className="dg-btn-primary"
-          >
-            {isAddingToCart
-              ? 'Adding…'
-              : isInStock
-                ? 'Add to Cart'
-                : 'Out of Stock'}
-          </button>
+          <div className="mt-auto">
+            <button
+              onClick={handleAddToCart}
+              disabled={!isInStock || isAddingToCart || isRestricted}
+              className={`w-full bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`}
+            >
+              <ShoppingCart className="w-4 h-4" />
+              {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+            </button>
+          </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-# Highway 420 Product Variations – Audit V1
+![alt text](image.png)# Highway 420 Product Variations – Audit V1
 
 _Last updated: 2025-11-17_
 
@@ -120,7 +120,7 @@ Patterns:
   - Product interfaces include e.g.:
 
     ```ts
-    size?: string;   // 'Small (3-4")', 'Medium (4-6")', 'Large (6-8")', 'XL (8"+)' 
+    size?: string;   // 'Small (3-4")', 'Medium (4-6")', 'Large (6-8")', 'XL (8"+)'
     style?: string;  // 'Spoon Pipe', 'Chillum', 'Sherlock', etc.
     inStock?: boolean;
     ```
@@ -218,7 +218,6 @@ Patterns:
   ```
 
 - `VariantSelector` infers **color variants** from filenames / URLs and builds `VariantOption[]` purely on the client, with no schema integration:
-
   - Color detection via `extractColorFromFilename(url)`.
   - `hasProductVariants(image_urls)` is just `image_urls.length > 1`.
 

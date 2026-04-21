@@ -315,42 +315,50 @@ export default function Highway420Footer() {
               <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "Inter, sans-serif !important" }}>SHOP NOW</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/thca_flower" className="text-gray-800 hover:text-green-600">
-                    THCA FLOWER
+                  <Link href="/bongs" className="text-gray-800 hover:text-green-600">
+                    Water Pipes
                   </Link>
                 </li>
                 <li>
-                  <Link href="/pre-rolls" className="text-gray-800 hover:text-green-600">
-                    PRE-ROLLS
+                  <Link href="/pipes" className="text-gray-800 hover:text-green-600">
+                    Hand Pipes
                   </Link>
                 </li>
                 <li>
                   <Link href="/vapes" className="text-gray-800 hover:text-green-600">
-                    VAPES & CARTS
+                    Vapes &amp; Carts
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/dabsntools" className="text-gray-800 hover:text-green-600">
+                    Dab Rigs
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/pre-rolls" className="text-gray-800 hover:text-green-600">
+                    Pre-Rolls
                   </Link>
                 </li>
                 <li>
                   <Link href="/edibles" className="text-gray-800 hover:text-green-600">
-                    EDIBLES & MORE
+                    Edibles
                   </Link>
                 </li>
                 <li>
                   <Link href="/mushrooms" className="text-gray-800 hover:text-green-600">
-                    MUSHROOMS
-                  </Link>
-                </li>
-                {/*
-                <li>
-                  <Link href="/nitrous-oxide" className="text-gray-800 hover:text-green-600">
-                    N2O
+                    Shrooms &amp; More
                   </Link>
                 </li>
                 <li>
                   <Link href="/accessories" className="text-gray-800 hover:text-green-600">
-                    ACCESSORIES
+                    Accessories
                   </Link>
                 </li>
-                */}
+                <li>
+                  <Link href="/thca_flower" className="text-gray-800 hover:text-green-600">
+                    THCA Flower
+                  </Link>
+                </li>
               </ul>
             </div>
 
