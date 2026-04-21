@@ -1,0 +1,721 @@
+<!doctype html>
+<!--
+  Highway 420 — KajaPay custom Payment Page (dashboard-upload build)
+  ==================================================================
+  This file is intended to be pasted/uploaded into the KajaPay
+  merchant dashboard for the Payment Page slugged `TestXYZ123`
+  (prod slug: TBD — update KAJAPAY_PAYMENT_PAGE_SLUG when issued).
+
+  DESIGN DELIVERY NOTES
+  ---------------------
+  - Self-contained: all CSS is inline, all icons are inline SVG.
+  - No external script dependencies (no Lucide CDN, no jQuery).
+  - Google Fonts is the only external asset; there is a full
+    system-font fallback stack in case the dashboard blocks it.
+  - Shield logo is loaded from Highway 420's Supabase CDN
+    (same asset the live site masthead uses).
+
+  TOKEN PLACEHOLDERS — KajaPay should substitute at render time.
+  Leave the literal strings below; KajaPay's template engine will
+  replace them. If KajaPay uses a different token syntax, do a
+  find/replace across the file.
+  ---------------------
+    {{amount}}           — transaction total formatted, e.g. "84.26"
+    {{amount_formatted}} — with dollar sign,          e.g. "$84.26"
+    {{invoice}}          — order / invoice number,     e.g. "HW-20260421-A17X"
+    {{subtotal}}         — subtotal amount (no $)
+    {{shipping}}         — shipping amount or literal "FREE"
+    {{tax}}              — tax amount
+    {{description}}      — free-text order description KajaPay injects
+    {{customer_email}}   — pre-filled email from order (optional)
+    {{return_url}}       — approval redirect
+    {{cancel_url}}       — decline redirect
+
+  FIELD NAME CONVENTION (Paya HPP shortnames — DO NOT RENAME)
+  -----------------------------------------------------------
+    account_holder_name, account_number, exp_date, cvv,
+    street, city, state, postal_code, phone_number,
+    email (optional), save_account (optional checkbox)
+
+  SECURITY NOTE
+  -------------
+  Highway 420 servers never see raw PAN. Card fields are posted
+  directly to KajaPay's encrypted endpoint from their hosted page.
+  Do not add analytics, tag managers, or trackers to this file —
+  they will pull this page into PCI scope.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Secure Checkout — HIGHWAY 420</title>
+
+  <!-- Google Fonts (Fira Sans to match the live site). Falls back cleanly. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --hw-forest-dark:   #145C3C;
+      --hw-forest:        #1B7A4D;
+      --hw-lime:          #52C41A;
+      --hw-lime-bright:   #63D420;
+      --hw-lime-dark:     #3DA614;
+      --hw-lime-soft:     #EAF5E9;
+      --ink:              #2A2B2A;
+      --ink-muted:        #6B6B6B;
+      --ink-faint:        #9A9A9A;
+      --line:             #E8E8E8;
+      --line-strong:      #D8D8D4;
+      --bg-page:          #F7F8F5;
+      --bg-card:          #FFFFFF;
+      --bg-input:         #F5F5F2;
+      --danger:           #D7263D;
+      --danger-soft:      #FBE7EA;
+      --r-sm: 4px; --r-md: 6px; --r-lg: 10px;
+      --ease: cubic-bezier(.4,0,.2,1);
+      --font-stack: 'Fira Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    *,*::before,*::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-stack) !important;
+      color: var(--ink);
+      background: var(--bg-page);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* ── MASTHEAD ─────────────────────────────────────────── */
+    .hw-masthead {
+      background: linear-gradient(to bottom, var(--hw-forest-dark), var(--hw-forest));
+      border-bottom: 1px solid #0F4A30;
+      color: #fff;
+    }
+    .hw-masthead-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .hw-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+    .hw-logo img {
+      height: 56px; width: auto; display: block;
+      filter: drop-shadow(0 4px 10px rgba(255,255,255,0.35));
+    }
+    .hw-wordmark { font-weight: 800; letter-spacing: 0.06em; font-size: 18px; line-height: 1; }
+    .hw-wordmark small {
+      display: block; font-weight: 500; letter-spacing: 0.22em;
+      font-size: 10px; opacity: 0.8; margin-top: 4px; text-transform: uppercase;
+    }
+    .hw-secure-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff; font-size: 12px; font-weight: 600;
+      padding: 7px 12px; border-radius: 999px; letter-spacing: 0.04em;
+    }
+    .hw-secure-pill svg { width: 14px; height: 14px; }
+
+    /* ── STEP BAR ─────────────────────────────────────────── */
+    .hw-steps { background: #fff; border-bottom: 1px solid var(--line); }
+    .hw-steps-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--ink-muted);
+      overflow-x: auto;
+    }
+    .hw-step { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .hw-step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--line); color: var(--ink-muted);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 11px;
+    }
+    .hw-step.done .hw-step-num { background: var(--hw-lime); color: #fff; }
+    .hw-step.current .hw-step-num {
+      background: var(--hw-forest); color: #fff;
+      box-shadow: 0 0 0 3px rgba(82,196,26,0.15);
+    }
+    .hw-step.current .hw-step-label { color: var(--ink); font-weight: 700; }
+    .hw-step-sep { flex: 0 0 18px; height: 1px; background: var(--line-strong); }
+
+    /* ── LAYOUT ───────────────────────────────────────────── */
+    .hw-page {
+      max-width: 1200px; margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
+      gap: 32px; align-items: start;
+    }
+    @media (max-width: 960px) {
+      .hw-page { grid-template-columns: 1fr; padding: 20px 16px 48px; }
+      .hw-summary { order: -1; }
+    }
+
+    .hw-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 6px 22px rgba(20,92,60,0.06);
+      overflow: hidden;
+    }
+    .hw-card-body { padding: 28px 28px 24px; }
+    .hw-card + .hw-card { margin-top: 20px; }
+
+    .hw-h1 {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.01em;
+      margin: 0 0 4px; color: var(--ink);
+    }
+    .hw-subtle { color: var(--ink-muted); font-size: 13px; margin: 0; }
+
+    .hw-section-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--ink-muted);
+      margin: 24px 0 12px;
+    }
+    .hw-section-title:first-child { margin-top: 0; }
+    .hw-section-title svg { width: 14px; height: 14px; color: var(--hw-lime-dark); }
+
+    /* ── FORM ─────────────────────────────────────────────── */
+    .hw-row { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+    .hw-field { grid-column: span 12; }
+    .hw-field.half { grid-column: span 6; }
+    .hw-field.third { grid-column: span 4; }
+    .hw-field.quarter { grid-column: span 3; }
+    @media (max-width: 560px) {
+      .hw-field.half, .hw-field.third, .hw-field.quarter { grid-column: span 12; }
+    }
+
+    label {
+      display: block; font-size: 12px; font-weight: 600;
+      color: var(--ink); letter-spacing: 0.02em; margin: 0 0 6px;
+    }
+    label .req { color: var(--danger); margin-left: 2px; }
+
+    .hw-input-wrap { position: relative; }
+    input[type="text"], input[type="email"], input[type="tel"], select {
+      width: 100%; height: 44px; padding: 0 14px;
+      font-family: inherit; font-size: 15px; font-weight: 500;
+      color: var(--ink); background: var(--bg-input);
+      border: 1.5px solid transparent; border-radius: var(--r-md);
+      outline: none;
+      transition: border-color .15s var(--ease), background .15s var(--ease), box-shadow .15s var(--ease);
+      -webkit-appearance: none; appearance: none;
+    }
+    input::placeholder { color: var(--ink-faint); font-weight: 400; }
+    input:hover, select:hover { background: #fff; border-color: var(--line); }
+    input:focus, select:focus {
+      background: #fff; border-color: var(--hw-lime);
+      box-shadow: 0 0 0 3px rgba(82,196,26,0.18);
+    }
+    input.has-icon-left { padding-left: 40px; }
+    input.has-icon-right { padding-right: 48px; }
+    .hw-input-icon {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      color: var(--ink-muted); pointer-events: none;
+    }
+    .hw-input-icon.left { left: 12px; }
+    .hw-input-icon.right { right: 12px; }
+    .hw-input-icon svg { width: 18px; height: 18px; display: block; }
+
+    .hw-card-brand {
+      position: absolute; top: 50%; right: 12px; transform: translateY(-50%);
+      width: 36px; height: 24px;
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; color: var(--ink-muted);
+      letter-spacing: 0.04em;
+      transition: border-color .15s var(--ease), color .15s var(--ease);
+    }
+    .hw-card-brand.visa { color: #1A1F71; border-color: #1A1F71; }
+    .hw-card-brand.mc   { color: #EB001B; border-color: #EB001B; }
+    .hw-card-brand.amex { color: #006FCF; border-color: #006FCF; }
+    .hw-card-brand.disc { color: #F68121; border-color: #F68121; }
+
+    select {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B6B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    .hw-help { font-size: 12px; color: var(--ink-muted); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+    .hw-help svg { width: 12px; height: 12px; }
+
+    .hw-check {
+      display: inline-flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--ink); cursor: pointer; user-select: none;
+    }
+    .hw-check input {
+      appearance: none; -webkit-appearance: none;
+      width: 18px; height: 18px; border: 1.5px solid var(--line-strong);
+      border-radius: 4px; flex-shrink: 0; margin: 1px 0 0;
+      background: #fff; cursor: pointer; position: relative;
+      transition: border-color .15s var(--ease), background .15s var(--ease);
+    }
+    .hw-check input:checked { background: var(--hw-lime); border-color: var(--hw-lime); }
+    .hw-check input:checked::after {
+      content: ''; position: absolute; left: 5px; top: 1px;
+      width: 5px; height: 10px; border: solid #fff;
+      border-width: 0 2px 2px 0; transform: rotate(45deg);
+    }
+
+    .hw-submit {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; height: 54px; margin-top: 8px;
+      font-family: inherit; font-size: 16px; font-weight: 800;
+      color: #fff; letter-spacing: 0.03em; text-transform: uppercase;
+      background: linear-gradient(to bottom, var(--hw-lime-bright), var(--hw-lime));
+      border: none; border-radius: var(--r-md); cursor: pointer;
+      box-shadow: 0 4px 14px rgba(82,196,26,0.35);
+      transition: transform .1s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+    }
+    .hw-submit:hover {
+      background: linear-gradient(to bottom, #72E028, #5BD420);
+      box-shadow: 0 6px 20px rgba(82,196,26,0.50);
+      transform: translateY(-1px);
+    }
+    .hw-submit:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(82,196,26,0.30); }
+    .hw-submit:disabled { background: #C3E8A8; box-shadow: none; cursor: not-allowed; transform: none; }
+    .hw-submit svg { width: 18px; height: 18px; }
+
+    .hw-trust {
+      display: flex; align-items: center; justify-content: center;
+      gap: 18px; margin-top: 16px;
+      font-size: 12px; color: var(--ink-muted);
+      flex-wrap: wrap;
+    }
+    .hw-trust span { display: inline-flex; align-items: center; gap: 6px; }
+    .hw-trust svg { width: 14px; height: 14px; color: var(--hw-lime-dark); }
+
+    /* ── ORDER SUMMARY ────────────────────────────────────── */
+    .hw-summary { position: sticky; top: 24px; }
+    .hw-summary .hw-card-body { padding: 24px; }
+    .hw-sum-title {
+      font-size: 14px; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--ink-muted);
+      margin: 0 0 16px;
+    }
+    .hw-sum-invoice {
+      font-size: 12px; color: var(--ink-muted); margin: -10px 0 14px;
+      font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    }
+    .hw-sum-invoice span { color: var(--ink); font-weight: 600; }
+    .hw-sum-desc {
+      background: var(--bg-input);
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--r-sm);
+      padding: 12px 14px; margin-bottom: 16px;
+      font-size: 13px; color: var(--ink); line-height: 1.4;
+      min-height: 44px;
+    }
+
+    .hw-sum-line { height: 1px; background: var(--line); margin: 4px 0; }
+    .hw-sum-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 13px; color: var(--ink-muted);
+      padding: 6px 0;
+    }
+    .hw-sum-row strong { color: var(--ink); font-weight: 600; }
+    .hw-sum-row.free strong { color: var(--hw-lime-dark); }
+    .hw-sum-total {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 14px 0 2px; border-top: 2px solid var(--ink);
+      margin-top: 6px;
+    }
+    .hw-sum-total .label {
+      font-size: 14px; font-weight: 800; color: var(--ink);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .hw-sum-total .value {
+      font-size: 26px; font-weight: 800; color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .hw-promo {
+      margin-top: 16px;
+      background: var(--hw-lime-soft);
+      border: 1px dashed var(--hw-lime);
+      color: #1d5e0b;
+      padding: 10px 12px; border-radius: var(--r-sm);
+      font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hw-promo svg { width: 14px; height: 14px; color: var(--hw-lime-dark); }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    .hw-footer {
+      max-width: 1200px; margin: 0 auto;
+      padding: 24px; text-align: center;
+      font-size: 12px; color: var(--ink-muted); line-height: 1.7;
+    }
+    .hw-card-logos {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin: 0 8px; vertical-align: middle;
+    }
+    .hw-card-logos span {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 22px; border-radius: 3px;
+      border: 1px solid var(--line-strong);
+      font-size: 9px; font-weight: 800;
+      background: #fff; letter-spacing: 0.04em;
+    }
+    .hw-card-logos .visa { color: #1A1F71; }
+    .hw-card-logos .mc   { color: #EB001B; }
+    .hw-card-logos .amex { color: #006FCF; }
+    .hw-card-logos .disc { color: #F68121; }
+    .hw-footer a { color: var(--hw-lime-dark); text-decoration: none; font-weight: 600; }
+    .hw-footer a:hover { text-decoration: underline; }
+
+    .hw-security-panel {
+      margin-top: 20px; padding: 16px;
+      background: #fff; border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      font-size: 12px; color: var(--ink-muted); line-height: 1.5;
+      display: flex; gap: 12px;
+    }
+    .hw-security-panel .icon {
+      flex: 0 0 36px; height: 36px; border-radius: 50%;
+      background: var(--hw-lime-soft); color: var(--hw-lime-dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hw-security-panel strong {
+      color: var(--ink); display: block; margin-bottom: 2px; font-weight: 700;
+    }
+  </style>
+</head>
+
+<body>
+  <!--
+    INLINE SVG ICON LIBRARY
+    Referenced via <svg><use href="#icon-id"/></svg> — keeps the
+    page working without any external icon CDN.
+  -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+      <symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+      <symbol id="i-badge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></symbol>
+      <symbol id="i-at" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></symbol>
+      <symbol id="i-cc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+      <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ══════════ MASTHEAD ══════════ -->
+  <header class="hw-masthead" role="banner">
+    <div class="hw-masthead-inner">
+      <a class="hw-logo" href="/" aria-label="HIGHWAY 420 home">
+        <img
+          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
+          alt="HIGHWAY 420 shield logo" />
+        <span class="hw-wordmark">
+          HIGHWAY 420
+          <small>Secure Checkout</small>
+        </span>
+      </a>
+      <span class="hw-secure-pill" aria-label="Secure connection">
+        <svg><use href="#i-lock"/></svg> 256-bit SSL · PCI DSS
+      </span>
+    </div>
+  </header>
+
+  <!-- ══════════ STEP BAR ══════════ -->
+  <nav class="hw-steps" aria-label="Checkout progress">
+    <div class="hw-steps-inner">
+      <div class="hw-step done"><span class="hw-step-num">1</span><span class="hw-step-label">Cart</span></div>
+      <div class="hw-step-sep"></div>
+      <div class="hw-step done"><span class="hw-step-num">2</span><span class="hw-step-label">Shipping</span></div>
+      <div class="hw-step-sep"></div>
+      <div class="hw-step done"><span class="hw-step-num">3</span><span class="hw-step-label">Review</span></div>
+      <div class="hw-step-sep"></div>
+      <div class="hw-step current" aria-current="step"><span class="hw-step-num">4</span><span class="hw-step-label">Payment</span></div>
+    </div>
+  </nav>
+
+  <!-- ══════════ PAGE ══════════ -->
+  <main class="hw-page">
+
+    <!-- ── LEFT: PAYMENT FORM ── -->
+    <section aria-labelledby="pay-title">
+      <div class="hw-card">
+        <div class="hw-card-body">
+          <h1 id="pay-title" class="hw-h1">Payment details</h1>
+          <p class="hw-subtle">All transactions are securely processed by KajaPay. Your card information never touches Highway 420 servers.</p>
+
+          <!--
+            IMPORTANT: the enclosing <form> on the live page is owned
+            by KajaPay's template engine. Do NOT set action / method
+            here — KajaPay will inject them. Field `name` attributes
+            below are the Paya HPP shortnames KajaPay will recognize.
+          -->
+          <form id="hw-pay-form" novalidate autocomplete="on">
+
+            <!-- Contact -->
+            <div class="hw-section-title"><svg><use href="#i-mail"/></svg> Contact</div>
+            <div class="hw-row">
+              <div class="hw-field">
+                <label for="email">Email for receipt<span class="req">*</span></label>
+                <div class="hw-input-wrap">
+                  <span class="hw-input-icon left"><svg><use href="#i-at"/></svg></span>
+                  <input id="email" name="email" type="email" class="has-icon-left"
+                         autocomplete="email" inputmode="email"
+                         placeholder="you@example.com"
+                         value="{{customer_email}}" required />
+                </div>
+              </div>
+              <div class="hw-field half">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone_number" type="tel"
+                       autocomplete="tel" inputmode="tel"
+                       placeholder="(555) 555-0142" />
+              </div>
+            </div>
+
+            <!-- Card -->
+            <div class="hw-section-title"><svg><use href="#i-cc"/></svg> Card information</div>
+            <div class="hw-row">
+              <div class="hw-field">
+                <label for="cc-name">Name on card<span class="req">*</span></label>
+                <input id="cc-name" name="account_holder_name" type="text"
+                       autocomplete="cc-name"
+                       placeholder="FULL NAME AS PRINTED" required />
+              </div>
+              <div class="hw-field">
+                <label for="cc-number">Card number<span class="req">*</span></label>
+                <div class="hw-input-wrap">
+                  <span class="hw-input-icon left"><svg><use href="#i-cc"/></svg></span>
+                  <input id="cc-number" name="account_number" type="text"
+                         autocomplete="cc-number"
+                         inputmode="numeric" pattern="[0-9\s]{13,23}"
+                         placeholder="1234 1234 1234 1234"
+                         class="has-icon-left has-icon-right"
+                         maxlength="23" required />
+                  <span id="cc-brand" class="hw-card-brand">CARD</span>
+                </div>
+              </div>
+              <div class="hw-field half">
+                <label for="cc-exp">Expiration (MM/YY)<span class="req">*</span></label>
+                <input id="cc-exp" name="exp_date" type="text"
+                       autocomplete="cc-exp"
+                       inputmode="numeric" placeholder="MM/YY"
+                       maxlength="5" required />
+              </div>
+              <div class="hw-field half">
+                <label for="cc-cvv">Security code (CVV)<span class="req">*</span></label>
+                <div class="hw-input-wrap">
+                  <input id="cc-cvv" name="cvv" type="text"
+                         autocomplete="cc-csc"
+                         inputmode="numeric" placeholder="123"
+                         maxlength="4" required
+                         class="has-icon-right" />
+                  <span class="hw-input-icon right" title="3-digit code on back (4 on American Express)">
+                    <svg><use href="#i-help"/></svg>
+                  </span>
+                </div>
+                <div class="hw-help">
+                  <svg><use href="#i-info"/></svg>
+                  3 digits on back — Amex: 4 digits on front.
+                </div>
+              </div>
+            </div>
+
+            <!-- Billing address (AVS) -->
+            <div class="hw-section-title"><svg><use href="#i-pin"/></svg> Billing address (AVS)</div>
+            <div class="hw-row">
+              <div class="hw-field">
+                <label for="street">Street address<span class="req">*</span></label>
+                <input id="street" name="street" type="text"
+                       autocomplete="street-address"
+                       placeholder="123 Dispensary Lane" required />
+              </div>
+              <div class="hw-field">
+                <label for="street2">Apt / Suite (optional)</label>
+                <input id="street2" name="street2" type="text"
+                       autocomplete="address-line2"
+                       placeholder="Apt 4B" />
+              </div>
+              <div class="hw-field half">
+                <label for="city">City<span class="req">*</span></label>
+                <input id="city" name="city" type="text"
+                       autocomplete="address-level2"
+                       placeholder="Denver" required />
+              </div>
+              <div class="hw-field quarter">
+                <label for="state">State<span class="req">*</span></label>
+                <select id="state" name="state" autocomplete="address-level1" required>
+                  <option value="">—</option>
+                  <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+                  <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
+                  <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
+                  <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
+                  <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+                  <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+                  <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
+                  <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
+                  <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
+                  <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+                  <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+                  <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+                  <option>WI</option><option>WY</option>
+                </select>
+              </div>
+              <div class="hw-field quarter">
+                <label for="zip">ZIP<span class="req">*</span></label>
+                <input id="zip" name="postal_code" type="text"
+                       autocomplete="postal-code" inputmode="numeric"
+                       placeholder="80202" maxlength="10" required />
+              </div>
+            </div>
+
+            <!-- Save card -->
+            <div class="hw-row" style="margin-top:18px;">
+              <div class="hw-field">
+                <label class="hw-check">
+                  <input type="checkbox" name="save_account" value="true" />
+                  <span>Save this card securely for future orders (tokenized by KajaPay).</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="hw-submit" id="hw-pay-btn">
+              <svg><use href="#i-lock"/></svg>
+              <span>Pay <span id="hw-pay-amount">{{amount_formatted}}</span> securely</span>
+            </button>
+
+            <div class="hw-trust">
+              <span><svg><use href="#i-shield-check"/></svg> PCI DSS compliant</span>
+              <span><svg><use href="#i-lock"/></svg> 256-bit SSL</span>
+              <span><svg><use href="#i-badge"/></svg> Processed by KajaPay</span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="hw-security-panel" role="note">
+        <div class="icon"><svg><use href="#i-shield"/></svg></div>
+        <div>
+          <strong>Your data stays protected.</strong>
+          Highway 420 never sees or stores your full card number. Payment details
+          are sent directly to KajaPay over an encrypted connection and replaced
+          with a secure token for any future use.
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RIGHT: ORDER SUMMARY ── -->
+    <aside class="hw-summary" aria-label="Order summary">
+      <div class="hw-card">
+        <div class="hw-card-body">
+          <h2 class="hw-sum-title">Order summary</h2>
+          <p class="hw-sum-invoice">Order #<span>{{invoice}}</span></p>
+
+          <!-- KajaPay injects order description text here. Leave visible. -->
+          <div class="hw-sum-desc">{{description}}</div>
+
+          <div class="hw-sum-row"><span>Subtotal</span><strong>${{subtotal}}</strong></div>
+          <div class="hw-sum-row"><span>Shipping</span><strong>{{shipping}}</strong></div>
+          <div class="hw-sum-row"><span>Tax</span><strong>${{tax}}</strong></div>
+
+          <div class="hw-sum-total">
+            <span class="label">Total</span>
+            <span class="value">${{amount}}</span>
+          </div>
+
+          <div class="hw-promo">
+            <svg><use href="#i-gift"/></svg>
+            Thanks for shopping with Highway 420 — rewards points post after order confirmation.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="hw-footer">
+    <div class="hw-card-logos" aria-label="Accepted cards">
+      <span class="visa">VISA</span>
+      <span class="mc">MC</span>
+      <span class="amex">AMEX</span>
+      <span class="disc">DISC</span>
+    </div>
+    <p style="margin:8px 0 0;">
+      Payments processed by <strong>KajaPay</strong>, a PCI DSS Level 1 service provider.
+      By placing your order you agree to our <a href="https://highway420.com/terms">Terms</a>
+      and <a href="https://highway420.com/privacy">Privacy Policy</a>.
+    </p>
+    <p style="margin:6px 0 0; opacity:0.8;">
+      &copy; <span id="hw-year"></span> Highway 420. Must be 21+ to purchase. Keep out of reach of children.
+    </p>
+  </footer>
+
+  <!--
+    COSMETIC-ONLY JS
+    Purely UX helpers: card-number auto-formatting, brand detection,
+    MM/YY expiration mask, CVV numeric clamp, copyright year.
+    NO payment processing happens here — KajaPay owns the submit.
+    Strip this block if KajaPay's dashboard disallows inline script.
+  -->
+  <script>
+    (function () {
+      document.getElementById('hw-year').textContent = new Date().getFullYear();
+
+      var brandEl = document.getElementById('cc-brand');
+      var ccInput = document.getElementById('cc-number');
+
+      function detectBrand(d) {
+        if (/^4/.test(d)) return 'visa';
+        if (/^(5[1-5]|2[2-7])/.test(d)) return 'mc';
+        if (/^3[47]/.test(d)) return 'amex';
+        if (/^(6011|65|64[4-9])/.test(d)) return 'disc';
+        return '';
+      }
+      function formatCc(v) {
+        var d = v.replace(/\D/g,'').slice(0, 19);
+        if (/^3[47]/.test(d)) {
+          return d.replace(/^(\d{0,4})(\d{0,6})(\d{0,5}).*/, function (_, a, b, c) {
+            return [a, b, c].filter(Boolean).join(' ');
+          });
+        }
+        return d.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+      }
+      ccInput.addEventListener('input', function (e) {
+        var digits = e.target.value.replace(/\D/g, '');
+        e.target.value = formatCc(e.target.value);
+        var brand = detectBrand(digits);
+        brandEl.className = 'hw-card-brand ' + brand;
+        brandEl.textContent = brand ? brand.toUpperCase() : 'CARD';
+      });
+
+      document.getElementById('cc-exp').addEventListener('input', function (e) {
+        var v = e.target.value.replace(/\D/g, '').slice(0, 4);
+        if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+        if (v.length >= 2) {
+          var m = parseInt(v.slice(0, 2), 10);
+          if (m > 12) v = '12' + v.slice(2);
+          if (m === 0) v = '01' + v.slice(2);
+        }
+        e.target.value = v;
+      });
+
+      document.getElementById('cc-cvv').addEventListener('input', function (e) {
+        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+      });
+    })();
+  </script>
+</body>
+</html>

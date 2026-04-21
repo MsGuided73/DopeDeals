@@ -38,53 +38,65 @@ export default function StarRating({
       {[1, 2, 3, 4, 5].map((idx) => {
         const filled = value >= idx;
         const partial = !filled && value > idx - 1 ? value - (idx - 1) : 0; // fractional fill (read-only)
+        const starSvg = (
+          <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden>
+            <defs>
+              {partial > 0 && (
+                <linearGradient id={`star-fill-${idx}-${value}`} x1="0" x2="1" y1="0" y2="0">
+                  <stop offset={`${partial * 100}%`} stopColor={AMBER} />
+                  <stop offset={`${partial * 100}%`} stopColor={emptyColor} />
+                </linearGradient>
+              )}
+            </defs>
+            <path
+              d="M12 2.5l2.92 6.32 6.83.7-5.13 4.7 1.45 6.78L12 17.6 5.93 21l1.45-6.78L2.25 9.52l6.83-.7L12 2.5z"
+              fill={
+                filled
+                  ? AMBER
+                  : partial > 0
+                  ? `url(#star-fill-${idx}-${value})`
+                  : emptyColor
+              }
+              stroke={filled ? AMBER_LIGHT : "transparent"}
+              strokeWidth="0.5"
+            />
+          </svg>
+        );
+
+        // Read-only: render as a <span> so the whole group can be nested inside
+        // a parent <button> (e.g. ProductRatingBadge) without invalid HTML.
+        if (!interactive) {
+          return (
+            <span
+              key={idx}
+              aria-hidden
+              style={{ display: "inline-flex", lineHeight: 0 }}
+            >
+              {starSvg}
+            </span>
+          );
+        }
+
         return (
           <button
             key={idx}
             type="button"
-            disabled={!interactive}
-            onClick={interactive ? () => onChange!(idx) : undefined}
-            aria-checked={interactive ? value === idx : undefined}
-            role={interactive ? "radio" : undefined}
-            tabIndex={interactive ? 0 : -1}
-            aria-label={interactive ? `Rate ${idx} of 5 stars` : undefined}
+            onClick={() => onChange!(idx)}
+            aria-checked={value === idx}
+            role="radio"
+            tabIndex={0}
+            aria-label={`Rate ${idx} of 5 stars`}
             style={{
               background: "transparent",
               border: "none",
               padding: 0,
-              cursor: interactive ? "pointer" : "default",
+              cursor: "pointer",
               display: "inline-flex",
               transition: "transform 0.12s ease",
             }}
-            className={interactive ? "hover:scale-110" : ""}
+            className="hover:scale-110"
           >
-            <svg
-              width={size}
-              height={size}
-              viewBox="0 0 24 24"
-              aria-hidden
-            >
-              <defs>
-                {partial > 0 && (
-                  <linearGradient id={`star-fill-${idx}-${value}`} x1="0" x2="1" y1="0" y2="0">
-                    <stop offset={`${partial * 100}%`} stopColor={AMBER} />
-                    <stop offset={`${partial * 100}%`} stopColor={emptyColor} />
-                  </linearGradient>
-                )}
-              </defs>
-              <path
-                d="M12 2.5l2.92 6.32 6.83.7-5.13 4.7 1.45 6.78L12 17.6 5.93 21l1.45-6.78L2.25 9.52l6.83-.7L12 2.5z"
-                fill={
-                  filled
-                    ? AMBER
-                    : partial > 0
-                    ? `url(#star-fill-${idx}-${value})`
-                    : emptyColor
-                }
-                stroke={filled ? AMBER_LIGHT : "transparent"}
-                strokeWidth="0.5"
-              />
-            </svg>
+            {starSvg}
           </button>
         );
       })}

@@ -18,6 +18,13 @@ interface Product {
   slug: string;
 }
 
+// Brand tokens — matches FeaturedProductsSection on the landing page.
+const LIME = "#52C41A";
+const LIME_BRIGHT = "#63D420";
+const LIME_DARK = "#3DA614";
+const HOT_RED = "#E53E3E";
+const INK = "#1c1208";
+
 export default function HotProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,16 +33,16 @@ export default function HotProductsPage() {
   useEffect(() => {
     async function fetchHotProducts() {
       try {
-        const response = await fetch('/api/products/featured');
-        if (!response.ok) throw new Error('Failed to fetch products');
+        const response = await fetch("/api/products/featured");
+        if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
         const rawProducts = Array.isArray(data) ? data : (data.products || []);
         const mappedProducts = rawProducts.map((p: any) => ({
           id: String(p.id),
-          title: p.name || 'Unknown Product',
+          title: p.name || "Unknown Product",
           price: Number(p.sale_price || p.our_price || 0),
           image: p.image_url || null,
-          category: p.category_id || 'General',
+          category: p.category_id || "General",
           rating: 5,
           reviews: Math.floor(Math.random() * 50) + 10,
           is_featured: p.featured || false,
@@ -44,7 +51,7 @@ export default function HotProductsPage() {
         }));
         setProducts(mappedProducts);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
@@ -57,177 +64,286 @@ export default function HotProductsPage() {
     e.stopPropagation();
     addToCart(product.id, 1);
 
-    // Floating +1 animation
+    // Floating +1 animation — lime to match brand
     const btn = e.currentTarget as HTMLButtonElement;
     const rect = btn.getBoundingClientRect();
-    const el = document.createElement('div');
-    el.textContent = '+1';
-    el.style.cssText = `position:fixed;left:${rect.left + rect.width / 2}px;top:${rect.top}px;color:#e8920a;font-weight:700;pointer-events:none;z-index:1000;`;
-    el.className = 'animate-float-up';
+    const el = document.createElement("div");
+    el.textContent = "+1";
+    el.style.cssText = `position:fixed;left:${rect.left + rect.width / 2}px;top:${rect.top}px;color:${LIME};font-weight:800;pointer-events:none;z-index:1000;`;
+    el.className = "animate-float-up";
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 1000);
   };
 
-  const amber = '#e8920a';
-
   return (
-    <div style={{ background: '#f5f0e8', minHeight: '100vh' }}>
-
-      {/* ── Hero (diner v2 styling) ──────────────────────────────────────── */}
+    <div style={{ background: "#ffffff", minHeight: "100vh" }}>
+      {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section
         style={{
-          position: 'relative',
-          background: 'radial-gradient(ellipse at 50% 40%, #2a1e15 0%, #120c08 60%, #0d0d0b 100%)',
-          overflow: 'hidden',
-          padding: '96px 24px 120px',
+          position: "relative",
+          background: "#ffffff",
+          padding: "72px 24px 56px",
+          textAlign: "center",
         }}
       >
-        {/* CRT scanlines */}
+        {/* Top lime rule */}
         <div
-          aria-hidden
           style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'repeating-linear-gradient(0deg, rgba(0,0,0,0.045) 0px, rgba(0,0,0,0.045) 1px, transparent 1px, transparent 3px)',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
-        {/* Bottom amber radial glow */}
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute',
+            position: "absolute",
+            top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
-            height: '30%',
-            background:
-              'radial-gradient(ellipse at 50% 100%, rgba(232,146,10,0.18) 0%, transparent 70%)',
-            pointerEvents: 'none',
-            zIndex: 1,
+            height: "4px",
+            background: `linear-gradient(90deg, ${LIME_BRIGHT}, ${LIME})`,
           }}
         />
 
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: '1280px', margin: '0 auto' }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <p
             style={{
-              fontFamily: "'DM Sans',sans-serif",
-              color: amber,
-              fontSize: '12px',
+              fontFamily: "'Fira Sans','Inter',sans-serif",
+              fontSize: "11px",
               fontWeight: 700,
-              letterSpacing: '0.32em',
-              textTransform: 'uppercase',
-              marginBottom: '18px',
+              color: LIME,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              marginBottom: "10px",
             }}
           >
-            Highway 420 · Curated Collection
+            Handpicked Favorites · Best Sellers
           </p>
+
+          <div
+            style={{
+              height: "3px",
+              width: "48px",
+              background: LIME,
+              margin: "0 auto 18px",
+            }}
+          />
+
           <h1
             style={{
-              fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-              color: '#fff8ec',
-              fontSize: 'clamp(56px,10vw,120px)',
+              fontFamily: "'BebasNeue','Bebas Neue','Impact',sans-serif",
+              color: INK,
+              fontSize: "clamp(56px,10vw,128px)",
               lineHeight: 0.92,
-              letterSpacing: '0.05em',
-              margin: '0 0 18px',
-              textShadow:
-                '0 0 6px rgba(255, 232, 175, 0.95), 0 0 14px rgba(255, 200, 110, 0.75), 0 0 28px rgba(232, 146, 10, 0.65), 0 0 60px rgba(232, 146, 10, 0.45)',
+              letterSpacing: "0.02em",
+              margin: "0 0 16px",
             }}
           >
             HOT PRODUCTS
           </h1>
+
           <p
             style={{
-              fontFamily: "'DM Sans',sans-serif",
-              color: 'rgba(255,255,255,0.78)',
-              fontSize: '16px',
-              maxWidth: '560px',
-              margin: '0 0 28px',
+              fontFamily: "'Fira Sans','Inter',sans-serif",
+              color: "#6B7280",
+              fontSize: "15px",
+              maxWidth: "620px",
+              margin: "0 auto 24px",
               lineHeight: 1.6,
             }}
           >
             Our fastest-moving items — handpicked favorites customers can&apos;t stop buying.
           </p>
-          <div style={{ borderTop: '1px dashed rgba(232,146,10,0.35)', maxWidth: '360px', margin: '0 0 22px' }} />
-          <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
+
+          {/* Trust row */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "28px",
+              flexWrap: "wrap",
+              marginBottom: "20px",
+            }}
+          >
             {[
-              { icon: '🔥', label: `${products.length > 0 ? products.length : '20+'} Items` },
-              { icon: '✓', label: 'Fast Shipping' },
-              { icon: '★', label: 'Top Rated' },
+              { icon: "🔥", label: `${products.length > 0 ? products.length : "20+"} Items` },
+              { icon: "✓", label: "Fast Shipping" },
+              { icon: "★", label: "Top Rated" },
             ].map(({ icon, label }, i) => (
               <span
                 key={i}
                 style={{
-                  fontFamily: "'DM Sans',sans-serif",
-                  color: 'rgba(255,255,255,0.65)',
-                  fontSize: '12px',
-                  letterSpacing: '0.15em',
-                  textTransform: 'uppercase',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
+                  fontFamily: "'Fira Sans','Inter',sans-serif",
+                  color: "#6B7280",
+                  fontSize: "12px",
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
                 }}
               >
-                <span style={{ color: amber }}>{icon}</span>
+                <span style={{ color: LIME_DARK }}>{icon}</span>
                 {label}
               </span>
             ))}
           </div>
+
+          {/* Dashed lime divider */}
+          <div
+            style={{
+              borderTop: `1px dashed rgba(82,196,26,0.4)`,
+              margin: "0 auto",
+              maxWidth: "360px",
+            }}
+          />
         </div>
       </section>
 
-      {/* ── Grid ──────────────────────────────────────────────────────────── */}
-      <main style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px 80px' }}>
-        <GlobalBreadcrumbs paths={[{ name: 'Hot Products' }]} />
+      {/* ── Grid ─────────────────────────────────────────────────────── */}
+      <main style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 24px 80px" }}>
+        <GlobalBreadcrumbs paths={[{ name: "Hot Products" }]} />
 
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {[...Array(8)].map((_, i) => (
-              <div key={i} style={{ background: 'white', overflow: 'hidden' }} className="animate-pulse">
-                <div style={{ height: '3px', background: `${amber}30` }} />
+              <div
+                key={i}
+                style={{
+                  background: "white",
+                  overflow: "hidden",
+                  borderRadius: "6px",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                }}
+                className="animate-pulse"
+              >
+                <div
+                  style={{
+                    height: "4px",
+                    background: `linear-gradient(90deg, ${LIME_BRIGHT}, ${LIME})`,
+                    borderRadius: "6px 6px 0 0",
+                  }}
+                />
                 <div className="aspect-square bg-gray-100" />
-                <div style={{ padding: '14px 16px' }}>
+                <div style={{ padding: "14px 16px" }}>
                   <div className="h-2 bg-gray-200 rounded mb-3 w-1/3" />
                   <div className="h-4 bg-gray-200 rounded mb-2" />
                   <div className="h-6 bg-gray-200 rounded w-1/2 mb-4" />
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <div className="h-10 bg-gray-200 flex-1" />
-                    <div className="h-10 bg-gray-200 flex-1" />
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <div className="h-10 bg-gray-200 flex-1 rounded" />
+                    <div className="h-10 bg-gray-200 flex-1 rounded" />
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : error ? (
-          <div style={{ textAlign: 'center', padding: '80px 0' }}>
-            <h3 style={{ fontFamily: "'DM Sans',sans-serif", color: '#1e1e1e', fontSize: '20px', marginBottom: '12px' }}>Error loading products</h3>
-            <p style={{ color: '#888' }}>{error}</p>
-            <button onClick={() => window.location.reload()} style={{ marginTop: '24px', padding: '12px 36px', background: amber, color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '13px', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}>
+          <div style={{ textAlign: "center", padding: "80px 0" }}>
+            <h3
+              style={{
+                fontFamily: "'Fira Sans','Inter',sans-serif",
+                color: INK,
+                fontSize: "20px",
+                marginBottom: "12px",
+              }}
+            >
+              Error loading products
+            </h3>
+            <p style={{ color: "#888" }}>{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                marginTop: "24px",
+                padding: "12px 36px",
+                background: `linear-gradient(to bottom, ${LIME_BRIGHT}, ${LIME})`,
+                color: "white",
+                fontFamily: "'Fira Sans','Inter',sans-serif",
+                fontWeight: 700,
+                fontSize: "13px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                border: "none",
+                cursor: "pointer",
+                borderRadius: "4px",
+                boxShadow: "0 2px 6px rgba(82,196,26,0.30)",
+              }}
+            >
               Try Again
             </button>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {products.map((product) => (
-              <div key={product.id} className="group" style={{ background: 'white', overflow: 'hidden', boxShadow: '0 2px 14px rgba(0,0,0,0.07)', transition: 'box-shadow 0.3s,transform 0.3s' }}>
-                {/* Speed stripe */}
-                <div style={{ height: '3px', background: `linear-gradient(90deg,${amber},#f4ab2e)` }} />
+              <div
+                key={product.id}
+                className="group"
+                style={{
+                  background: "white",
+                  overflow: "hidden",
+                  borderRadius: "6px",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                  transition: "box-shadow 0.3s, transform 0.3s",
+                }}
+              >
+                {/* Lime-green top accent bar */}
+                <div
+                  style={{
+                    height: "4px",
+                    background: `linear-gradient(90deg, ${LIME_BRIGHT}, ${LIME})`,
+                    borderRadius: "6px 6px 0 0",
+                  }}
+                />
 
                 {/* Image */}
                 <Link href={`/product/${product.slug}`}>
-                  <div style={{ position: 'relative', aspectRatio: '1', background: 'white', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 10, background: amber, color: 'white', fontSize: '10px', fontWeight: 700, fontFamily: "'DM Sans',sans-serif", padding: '3px 8px', letterSpacing: '0.1em' }}>
+                  <div
+                    style={{
+                      position: "relative",
+                      aspectRatio: "1",
+                      background: "white",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {/* HOT badge — red keeps the "hot" semantic, doesn't fight the lime brand */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        left: "10px",
+                        zIndex: 10,
+                        background: HOT_RED,
+                        color: "white",
+                        fontSize: "10px",
+                        fontWeight: 800,
+                        fontFamily: "'Fira Sans','Inter',sans-serif",
+                        padding: "3px 8px",
+                        letterSpacing: "0.1em",
+                        borderRadius: "3px",
+                      }}
+                    >
                       🔥 HOT
                     </div>
                     {product.image ? (
-                      <img src={product.image} alt={product.title} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" />
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                      />
                     ) : (
-                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', background: '#f5f0e8' }}>
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '40px', marginBottom: '8px' }}>📦</div>
-                          <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px' }}>No Image</div>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#999",
+                          background: "#f5f5f5",
+                        }}
+                      >
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ fontSize: "40px", marginBottom: "8px" }}>📦</div>
+                          <div
+                            style={{
+                              fontFamily: "'Fira Sans','Inter',sans-serif",
+                              fontSize: "12px",
+                            }}
+                          >
+                            No Image
+                          </div>
                         </div>
                       </div>
                     )}
@@ -235,30 +351,106 @@ export default function HotProductsPage() {
                 </Link>
 
                 {/* Body */}
-                <div style={{ padding: '14px 16px 16px', display: 'flex', flexDirection: 'column' }}>
-                  <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', fontWeight: 700, color: amber, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>
+                <div
+                  style={{
+                    padding: "13px 15px 15px",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: "'Fira Sans','Inter',sans-serif",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                      color: LIME,
+                      letterSpacing: "0.15em",
+                      textTransform: "uppercase",
+                      marginBottom: "3px",
+                    }}
+                  >
                     {product.category}
                   </p>
-                  <h3 style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 600, color: '#1e1e1e', fontSize: '14px', lineHeight: 1.35, marginBottom: '8px' }} className="line-clamp-2">
+                  <h3
+                    style={{
+                      fontFamily: "'Fira Sans','Inter',sans-serif",
+                      fontWeight: 600,
+                      color: INK,
+                      fontSize: "14px",
+                      lineHeight: 1.35,
+                      marginBottom: "6px",
+                    }}
+                    className="line-clamp-2"
+                  >
                     {product.title}
                   </h3>
-                  <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '22px', color: amber, letterSpacing: '0.03em', marginBottom: '12px' }}>
+                  <div
+                    style={{
+                      fontFamily: "'Fira Sans','Inter',sans-serif",
+                      fontWeight: 700,
+                      fontSize: "21px",
+                      color: LIME,
+                      letterSpacing: "0.03em",
+                      marginBottom: "11px",
+                    }}
+                  >
                     ${product.price.toFixed(2)}
                   </div>
 
                   {/* Side-by-side buttons */}
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: "flex", gap: "7px" }}>
                     <button
                       onClick={(e) => handleAddToCart(e, product)}
-                      style={{ flex: 1, background: amber, color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.06em', padding: '10px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', transition: 'opacity 0.2s' }}
-                      className="hover:opacity-90"
+                      style={{
+                        flex: 1,
+                        background: `linear-gradient(to bottom, ${LIME_BRIGHT}, ${LIME})`,
+                        color: "white",
+                        fontFamily: "'Fira Sans','Inter',sans-serif",
+                        fontWeight: 700,
+                        fontSize: "11px",
+                        letterSpacing: "0.05em",
+                        padding: "9px 4px",
+                        border: "none",
+                        cursor: "pointer",
+                        textTransform: "uppercase",
+                        borderRadius: "4px",
+                        boxShadow: "0 2px 6px rgba(82,196,26,0.30)",
+                        transition: "box-shadow 0.18s, transform 0.1s",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                          "0 4px 14px rgba(82,196,26,0.45)";
+                        (e.currentTarget as HTMLButtonElement).style.transform =
+                          "translateY(-1px)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                          "0 2px 6px rgba(82,196,26,0.30)";
+                        (e.currentTarget as HTMLButtonElement).style.transform = "none";
+                      }}
                     >
                       Add to Cart
                     </button>
                     <Link
                       href={`/product/${product.slug}`}
-                      style={{ flex: 1, border: `1.5px solid ${amber}`, color: amber, fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.06em', padding: '9px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', transition: 'background 0.2s,color 0.2s' }}
-                      className="hover:bg-[#e8920a] hover:text-white"
+                      style={{
+                        flex: 1,
+                        border: `1.5px solid ${LIME}`,
+                        color: LIME,
+                        fontFamily: "'Fira Sans','Inter',sans-serif",
+                        fontWeight: 700,
+                        fontSize: "11px",
+                        letterSpacing: "0.05em",
+                        padding: "8px 4px",
+                        textAlign: "center",
+                        display: "block",
+                        background: "transparent",
+                        textTransform: "uppercase",
+                        textDecoration: "none",
+                        borderRadius: "4px",
+                        transition: "background 0.18s, color 0.18s",
+                      }}
+                      className="hover:bg-[#52C41A] hover:text-white"
                     >
                       View Details
                     </Link>
@@ -270,11 +462,36 @@ export default function HotProductsPage() {
         )}
       </main>
 
-      {/* ── Back link ─────────────────────────────────────────────────────── */}
-      <div style={{ textAlign: 'center', paddingBottom: '80px' }}>
-        <Link href="/products" style={{ fontFamily: "'DM Sans',sans-serif", color: amber, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: `1px solid ${amber}`, paddingBottom: '2px' }}>
+      {/* ── Back link ────────────────────────────────────────────────── */}
+      <div style={{ textAlign: "center", paddingBottom: "80px", position: "relative" }}>
+        <Link
+          href="/products"
+          style={{
+            fontFamily: "'Fira Sans','Inter',sans-serif",
+            color: LIME_DARK,
+            fontSize: "12px",
+            fontWeight: 600,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            textDecoration: "none",
+            borderBottom: `1px solid ${LIME}`,
+            paddingBottom: "2px",
+          }}
+        >
           ← Back to All Products
         </Link>
+
+        {/* Bottom lime rule */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "4px",
+            background: `linear-gradient(90deg, ${LIME}, ${LIME_BRIGHT})`,
+          }}
+        />
       </div>
     </div>
   );

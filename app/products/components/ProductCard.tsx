@@ -1,11 +1,15 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
-import { ShoppingCart, Heart } from 'lucide-react';
+import { useState, type MouseEvent } from 'react';
 import { addToCart } from '../../lib/cart-utils';
-import { cleanProductDescription, extractProductDescription, isImageAppropriateForProduct, getProductPlaceholder, generateProductDescription } from '../../lib/product-utils';
-import toast from 'react-hot-toast';
+import {
+  cleanProductDescription,
+  extractProductDescription,
+  isImageAppropriateForProduct,
+  getProductPlaceholder,
+  generateProductDescription,
+} from '../../lib/product-utils';
 
 interface ProductCardProps {
   product: {
@@ -21,60 +25,138 @@ interface ProductCardProps {
     short_description?: string;
   };
   viewMode?: 'grid' | 'list';
+  /** Kept for backward compatibility. The canonical card now always renders
+   *  Add to Cart + View Details; pass `false` to hide the Add to Cart button
+   *  (the View Details ghost button will still render). */
   showAddToCart?: boolean;
 }
 
-export default function ProductCard({ product, viewMode = 'grid', showAddToCart = false }: ProductCardProps) {
+const LIME = '#52C41A';
+const LIME_BRIGHT = '#63D420';
+const LIME_DARK = '#3DA614';
+const INK = '#1c1208';
+
+export default function ProductCard({ product, viewMode = 'grid', showAddToCart = true }: ProductCardProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
 
-  // Handle different image field names for maximum compatibility
   const rawImageUrl = product.image_url || product.imageUrl || product.image;
-
-  // Check if the image is appropriate for this product type
   const isImageAppropriate = isImageAppropriateForProduct(rawImageUrl, product.name);
   const imageUrl = isImageAppropriate ? rawImageUrl : null;
   const hasImage = imageUrl && imageUrl.trim() !== '';
 
-  // Clean up product descriptions
   const cleanShortDescription = product.short_description
     ? extractProductDescription(product.short_description) || cleanProductDescription(product.short_description)
     : generateProductDescription(product);
 
   const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
   const isInStock = (product.stock_quantity || 0) > 0;
-
-  // Get appropriate placeholder for product type
   const placeholder = getProductPlaceholder(product.name);
+  const detailHref = `/product/${product.id}`;
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (!isInStock || isAddingToCart) return;
-
     setIsAddingToCart(true);
-    const success = await addToCart(product.id, 1);
-    setIsAddingToCart(false);
+    try {
+      await addToCart(product.id, 1);
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    setIsFavorite(!isFavorite);
-    toast.success(isFavorite ? 'Removed from favorites' : 'Added to favorites', {
-      icon: isFavorite ? '💔' : '❤️',
-      duration: 2000,
-    });
+  // ── Primary "Add to Cart" button (filled lime gradient) ──
+  const AddToCartButton = ({ fullWidth = false }: { fullWidth?: boolean }) => {
+    const disabled = !isInStock || isAddingToCart;
+    return (
+      <button
+        type="button"
+        onClick={handleAddToCart}
+        disabled={disabled}
+        style={
+          disabled
+            ? {
+                flex: fullWidth ? undefined : 1,
+                width: fullWidth ? '100%' : undefined,
+                background: '#e5e5e5',
+                color: '#999',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.05em',
+                padding: '9px 4px',
+                border: 'none',
+                cursor: 'not-allowed',
+                textTransform: 'uppercase',
+                borderRadius: '4px',
+              }
+            : {
+                flex: fullWidth ? undefined : 1,
+                width: fullWidth ? '100%' : undefined,
+                background: `linear-gradient(to bottom, ${LIME_BRIGHT}, ${LIME})`,
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.05em',
+                padding: '9px 4px',
+                border: 'none',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                borderRadius: '4px',
+                boxShadow: '0 2px 6px rgba(82,196,26,0.30)',
+                transition: 'box-shadow 0.18s, transform 0.1s',
+              }
+        }
+        onMouseEnter={(e) => {
+          if (disabled) return;
+          const el = e.currentTarget as HTMLButtonElement;
+          el.style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)';
+          el.style.transform = 'translateY(-1px)';
+        }}
+        onMouseLeave={(e) => {
+          if (disabled) return;
+          const el = e.currentTarget as HTMLButtonElement;
+          el.style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)';
+          el.style.transform = 'none';
+        }}
+      >
+        {!isInStock ? 'Out of Stock' : isAddingToCart ? 'Adding…' : 'Add to Cart'}
+      </button>
+    );
   };
+
+  // ── Secondary "View Details" ghost button (lime outline) ──
+  const ViewDetailsButton = ({ fullWidth = false }: { fullWidth?: boolean }) => (
+    <Link
+      href={detailHref}
+      style={{
+        flex: fullWidth ? undefined : 1,
+        width: fullWidth ? '100%' : undefined,
+        border: `1.5px solid ${LIME}`,
+        color: LIME,
+        fontWeight: 700,
+        fontSize: '11px',
+        letterSpacing: '0.05em',
+        padding: '8px 4px',
+        textAlign: 'center',
+        display: 'block',
+        background: 'transparent',
+        textTransform: 'uppercase',
+        textDecoration: 'none',
+        borderRadius: '4px',
+        transition: 'background 0.18s, color 0.18s',
+      }}
+      className="hover:bg-[#52C41A] hover:text-white"
+    >
+      View Details
+    </Link>
+  );
 
   if (viewMode === 'list') {
     return (
-      <Link href={`/product/${product.id}`} className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300">
+      <div className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 product-card">
         <div className="flex">
-          {/* Product Image */}
-          <div className="relative w-48 h-48 flex-shrink-0 bg-gray-100">
+          {/* Image (links to details) */}
+          <Link href={detailHref} className="relative w-48 h-48 flex-shrink-0 bg-gray-100 block">
             {hasImage ? (
               <Image
                 src={imageUrl}
@@ -82,78 +164,124 @@ export default function ProductCard({ product, viewMode = 'grid', showAddToCart 
                 fill
                 className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                 sizes="192px"
-                onError={(e) => {
-                  console.error('Image failed to load:', imageUrl);
-                }}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400">
                 <div className="text-center">
                   <div className="text-4xl mb-2">{placeholder.icon}</div>
                   <div className="text-sm">{placeholder.text}</div>
-                  {!isImageAppropriate && rawImageUrl && (
-                    <div className="text-xs mt-1 text-red-400">Image mismatch</div>
-                  )}
                 </div>
               </div>
             )}
             {product.featured && (
-              <div className="absolute top-2 left-2 bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+              <div
+                className="absolute top-2 left-2 text-white px-2 py-1 rounded text-xs font-semibold"
+                style={{ background: LIME }}
+              >
                 Featured
               </div>
             )}
-          </div>
+          </Link>
 
-          {/* Product Info */}
-          <div className="flex-1 p-6">
-            <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-dope-orange-600 transition-colors">
-              {product.name}
-            </h3>
-
+          {/* Info */}
+          <div className="flex-1 p-6 flex flex-col">
             {product.brand_name && (
-              <p className="text-sm text-gray-500 mb-2">{product.brand_name}</p>
-            )}
-
-            {cleanShortDescription && (
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                {cleanShortDescription}
+              <p
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  color: LIME,
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  marginBottom: '4px',
+                }}
+              >
+                {product.brand_name}
               </p>
             )}
 
-            <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-dope-orange-600">
+            <Link href={detailHref}>
+              <h3
+                className="line-clamp-2"
+                style={{
+                  fontWeight: 600,
+                  color: INK,
+                  fontSize: '16px',
+                  lineHeight: 1.35,
+                  marginBottom: '8px',
+                }}
+              >
+                {product.name}
+              </h3>
+            </Link>
+
+            {cleanShortDescription && (
+              <p className="text-gray-600 text-sm mb-4 line-clamp-2">{cleanShortDescription}</p>
+            )}
+
+            <div className="flex items-center justify-between mt-auto gap-4 flex-wrap">
+              <span style={{ fontWeight: 700, fontSize: '22px', color: LIME, letterSpacing: '0.03em' }}>
                 ${price.toFixed(2)}
               </span>
 
-              <div className="flex items-center gap-3">
-                {product.stock_quantity !== undefined && (
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {isInStock ? 'In Stock' : 'Out of Stock'}
-                  </span>
-                )}
-
-                {showAddToCart && (
-                  <button
-                    className="bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors disabled:opacity-50"
-                    disabled={!isInStock}
-                  >
-                    Add to Cart
-                  </button>
-                )}
+              <div className="flex items-center gap-2 min-w-[260px]">
+                {showAddToCart && <AddToCartButton />}
+                <ViewDetailsButton />
               </div>
             </div>
+
+            {product.stock_quantity !== undefined && (
+              <span
+                className={`inline-block mt-2 text-xs px-2 py-1 rounded-full self-start ${
+                  isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}
+              >
+                {isInStock ? 'In Stock' : 'Out of Stock'}
+              </span>
+            )}
           </div>
         </div>
-      </Link>
+      </div>
     );
   }
 
-  // Grid view (default)
+  // Grid view (default) ────────────────────────────────────────────────
   return (
-    <Link href={`/product/${product.id}`} className="group block border border-gray-200 rounded-lg overflow-hidden bg-white hover:shadow-lg transition-all duration-300">
-      <div className="aspect-square bg-gray-100 relative overflow-hidden">
+    <div
+      className="group product-card"
+      style={{
+        background: '#ffffff',
+        overflow: 'hidden',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+        transition: 'box-shadow 0.3s, transform 0.3s',
+        borderRadius: '6px',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+      }}
+    >
+      {/* Solid lime-green top accent bar */}
+      <div
+        style={{
+          height: '4px',
+          background: `linear-gradient(90deg, ${LIME_BRIGHT}, ${LIME})`,
+          borderRadius: '6px 6px 0 0',
+        }}
+      />
+
+      {/* Image (links to details) */}
+      <Link
+        href={detailHref}
+        style={{
+          position: 'relative',
+          width: '100%',
+          aspectRatio: '1',
+          background: '#ffffff',
+          overflow: 'hidden',
+          display: 'block',
+        }}
+      >
         {hasImage ? (
           <Image
             src={imageUrl}
@@ -161,67 +289,76 @@ export default function ProductCard({ product, viewMode = 'grid', showAddToCart 
             fill
             className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            onError={(e) => {
-              console.error('Image failed to load:', imageUrl);
-            }}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400">
             <div className="text-center">
               <div className="text-4xl mb-2">{placeholder.icon}</div>
               <div className="text-sm">{placeholder.text}</div>
-              {!isImageAppropriate && rawImageUrl && (
-                <div className="text-xs mt-1 text-red-400">Image mismatch</div>
-              )}
             </div>
           </div>
         )}
         {product.featured && (
-          <div className="absolute top-2 left-2 bg-dope-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+          <div
+            className="absolute top-2 left-2 text-white px-2 py-1 rounded text-xs font-semibold"
+            style={{ background: LIME, zIndex: 2 }}
+          >
             Featured
           </div>
         )}
-      </div>
+      </Link>
 
-      <div className="p-4">
-        <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-dope-orange-600 transition-colors">
-          {product.name}
-        </h3>
-
+      {/* Body */}
+      <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column', flex: 1 }}>
         {product.brand_name && (
-          <p className="text-sm text-gray-500 mb-2">{product.brand_name}</p>
-        )}
-
-        {cleanShortDescription && (
-          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-            {cleanShortDescription}
+          <p
+            style={{
+              fontSize: '10px',
+              fontWeight: 700,
+              color: LIME,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              marginBottom: '3px',
+            }}
+          >
+            {product.brand_name}
           </p>
         )}
 
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xl font-bold text-dope-orange-600">
-            ${price.toFixed(2)}
-          </span>
+        <Link href={detailHref}>
+          <h3
+            className="line-clamp-2 group-hover:opacity-70 transition-opacity"
+            style={{
+              fontWeight: 600,
+              color: INK,
+              fontSize: '14px',
+              lineHeight: 1.35,
+              marginBottom: '6px',
+            }}
+          >
+            {product.name}
+          </h3>
+        </Link>
 
-          {product.stock_quantity !== undefined && (
-            <span className={`text-xs px-2 py-1 rounded-full ${
-              isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-            }`}>
-              {isInStock ? 'In Stock' : 'Out of Stock'}
-            </span>
-          )}
+        <div
+          style={{
+            fontWeight: 700,
+            fontSize: '21px',
+            color: LIME,
+            letterSpacing: '0.03em',
+            marginBottom: '11px',
+            marginTop: 'auto',
+          }}
+        >
+          ${price.toFixed(2)}
         </div>
 
-        {showAddToCart && (
-          <button
-            className="w-full bg-dope-orange-500 hover:bg-dope-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors disabled:opacity-50"
-            disabled={!isInStock}
-          >
-            Add to Cart
-          </button>
-        )}
+        {/* 2-button row — Add to Cart (filled) + View Details (ghost) */}
+        <div style={{ display: 'flex', gap: '7px' }}>
+          {showAddToCart && <AddToCartButton />}
+          <ViewDetailsButton fullWidth={!showAddToCart} />
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }
-

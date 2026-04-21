@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ShoppingCart, Heart, Eye, Star } from 'lucide-react';
 import { addToCart } from '../lib/cart-utils';
@@ -85,13 +86,28 @@ export default function UniversalProductCard({
   onFavorite,
   onQuickView
 }: UniversalProductCardProps) {
+  const router = useRouter();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  // Canonical lime brand tokens — match FeaturedProductsSection / hot-products
+  const LIME = '#52C41A';
+  const LIME_BRIGHT = '#63D420';
+
   const { restrictedProductIds } = useCompliance();
   const isRestricted = restrictedProductIds.includes(product.id);
+
+  // Secondary "View Details" button — rendered as <button> (not <Link>) because
+  // every view in this file is wrapped in an outer <Link>. Nested anchors are
+  // invalid HTML and trigger hydration errors; a button + router.push works.
+  const handleViewDetails = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isRestricted) return;
+    router.push(`/product/${product.id}`);
+  };
 
   // Handle multiple images for variant switching
   const imageUrls = product.image_urls || [];
@@ -364,7 +380,7 @@ export default function UniversalProductCard({
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {showStock && product.stock_quantity !== undefined && (
                 <span className={`text-xs px-2 py-1 rounded-full ${
                   isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -373,16 +389,39 @@ export default function UniversalProductCard({
                 </span>
               )}
 
-              {showAddToCart && (
+              {/* 2-button row: Add to Cart (filled lime) + View Details (ghost lime) */}
+              <div className="flex items-center gap-2">
+                {showAddToCart && (
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={!isInStock || isAddingToCart || isRestricted}
+                    className={`text-white ${config.button} font-bold uppercase tracking-wide rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
+                    style={{
+                      background: (!isInStock || isAddingToCart || isRestricted)
+                        ? '#C3E8A8'
+                        : `linear-gradient(to bottom, ${LIME_BRIGHT}, ${LIME})`,
+                      boxShadow: '0 2px 6px rgba(82,196,26,0.30)',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                    {isAddingToCart ? 'Adding…' : 'Add to Cart'}
+                  </button>
+                )}
                 <button
-                  onClick={handleAddToCart}
-                  disabled={!isInStock || isAddingToCart || isRestricted}
-                  className={`bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
+                  onClick={handleViewDetails}
+                  disabled={isRestricted}
+                  className={`${config.button} font-bold uppercase tracking-wide rounded transition-all disabled:opacity-50`}
+                  style={{
+                    background: 'transparent',
+                    color: LIME,
+                    border: `1.5px solid ${LIME}`,
+                    letterSpacing: '0.05em',
+                  }}
                 >
-                  <ShoppingCart className="w-4 h-4" />
-                  {isAddingToCart ? 'Adding...' : 'Add'}
+                  View Details
                 </button>
-              )}
+              </div>
             </div>
           </div>
         </div>
@@ -506,7 +545,7 @@ export default function UniversalProductCard({
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 {showStock && product.stock_quantity !== undefined && (
                   <span className={`text-xs px-2 py-1 rounded-full ${
                     isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -515,16 +554,39 @@ export default function UniversalProductCard({
                   </span>
                 )}
 
-                {showAddToCart && (
+                {/* 2-button row: Add to Cart (filled lime) + View Details (ghost lime) */}
+                <div className="flex items-center gap-2">
+                  {showAddToCart && (
+                    <button
+                      onClick={handleAddToCart}
+                      disabled={!isInStock || isAddingToCart || isRestricted}
+                      className={`text-white ${config.button} font-bold uppercase tracking-wide rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
+                      style={{
+                        background: (!isInStock || isAddingToCart || isRestricted)
+                          ? '#C3E8A8'
+                          : `linear-gradient(to bottom, ${LIME_BRIGHT}, ${LIME})`,
+                        boxShadow: '0 2px 6px rgba(82,196,26,0.30)',
+                        letterSpacing: '0.05em',
+                      }}
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      {isAddingToCart ? 'Adding…' : 'Add to Cart'}
+                    </button>
+                  )}
                   <button
-                    onClick={handleAddToCart}
-                    disabled={!isInStock || isAddingToCart || isRestricted}
-                    className={`bg-dope-orange-500 hover:bg-dope-orange-600 text-white ${config.button} rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2`}
+                    onClick={handleViewDetails}
+                    disabled={isRestricted}
+                    className={`${config.button} font-bold uppercase tracking-wide rounded transition-all disabled:opacity-50`}
+                    style={{
+                      background: 'transparent',
+                      color: LIME,
+                      border: `1.5px solid ${LIME}`,
+                      letterSpacing: '0.05em',
+                    }}
                   >
-                    <ShoppingCart className="w-4 h-4" />
-                    {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+                    View Details
                   </button>
-                )}
+                </div>
               </div>
             </div>
           </div>
@@ -650,7 +712,7 @@ export default function UniversalProductCard({
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {showStock && product.stock_quantity !== undefined && (
                 <span className={`text-xs px-2 py-1 rounded-full ${
                   isInStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -659,16 +721,39 @@ export default function UniversalProductCard({
                 </span>
               )}
 
-              {showAddToCart && (
+              {/* 2-button row: Add to Cart (filled lime) + View Details (ghost lime) */}
+              <div className="flex items-center gap-2">
+                {showAddToCart && (
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={!isInStock || isAddingToCart || isRestricted}
+                    className="text-white px-4 py-2 font-bold uppercase tracking-wide rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    style={{
+                      background: (!isInStock || isAddingToCart || isRestricted)
+                        ? '#C3E8A8'
+                        : `linear-gradient(to bottom, ${LIME_BRIGHT}, ${LIME})`,
+                      boxShadow: '0 2px 6px rgba(82,196,26,0.30)',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                    {isAddingToCart ? 'Adding…' : 'Add to Cart'}
+                  </button>
+                )}
                 <button
-                  onClick={handleAddToCart}
-                  disabled={!isInStock || isAddingToCart || isRestricted}
-                  className="glassmorphic-medium hover:bg-dope-orange-500 hover:text-white text-dope-orange-600 border border-dope-orange-400 px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-dope-orange-500/30 flex items-center gap-2"
+                  onClick={handleViewDetails}
+                  disabled={isRestricted}
+                  className="px-4 py-2 font-bold uppercase tracking-wide rounded transition-all disabled:opacity-50"
+                  style={{
+                    background: 'transparent',
+                    color: LIME,
+                    border: `1.5px solid ${LIME}`,
+                    letterSpacing: '0.05em',
+                  }}
                 >
-                  <ShoppingCart className="w-4 h-4" />
-                  {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+                  View Details
                 </button>
-              )}
+              </div>
             </div>
           </div>
         </div>
@@ -786,20 +871,56 @@ export default function UniversalProductCard({
           )}
         </div>
 
-        {/* Add to Cart — full width green button */}
-        {showAddToCart && (
+        {/* 2-button row: Add to Cart (filled lime gradient) + View Details (ghost lime) */}
+        <div style={{ display: 'flex', gap: '7px' }}>
+          {showAddToCart && (
+            <button
+              onClick={handleAddToCart}
+              disabled={!isInStock || isAddingToCart || isRestricted}
+              style={{
+                flex: 1,
+                background: (!isInStock || isAddingToCart || isRestricted)
+                  ? '#C3E8A8'
+                  : `linear-gradient(to bottom, ${LIME_BRIGHT}, ${LIME})`,
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.05em',
+                padding: '9px 4px',
+                border: 'none',
+                cursor: (!isInStock || isAddingToCart || isRestricted) ? 'not-allowed' : 'pointer',
+                textTransform: 'uppercase',
+                borderRadius: '4px',
+                boxShadow: '0 2px 6px rgba(82,196,26,0.30)',
+                transition: 'box-shadow 0.18s, transform 0.1s',
+              }}
+            >
+              {isAddingToCart ? 'Adding…' : isInStock ? 'Add to Cart' : 'Out of Stock'}
+            </button>
+          )}
           <button
-            onClick={handleAddToCart}
-            disabled={!isInStock || isAddingToCart || isRestricted}
-            className="dg-btn-primary"
+            onClick={handleViewDetails}
+            disabled={isRestricted}
+            style={{
+              flex: 1,
+              border: `1.5px solid ${LIME}`,
+              color: LIME,
+              fontWeight: 700,
+              fontSize: '11px',
+              letterSpacing: '0.05em',
+              padding: '8px 4px',
+              textAlign: 'center',
+              display: 'block',
+              background: 'transparent',
+              textTransform: 'uppercase',
+              borderRadius: '4px',
+              cursor: isRestricted ? 'not-allowed' : 'pointer',
+              transition: 'background 0.18s, color 0.18s',
+            }}
           >
-            {isAddingToCart
-              ? 'Adding…'
-              : isInStock
-                ? 'Add to Cart'
-                : 'Out of Stock'}
+            View Details
           </button>
-        )}
+        </div>
       </div>
     </Link>
   );
