@@ -216,16 +216,10 @@ export default function NewProductsSection() {
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", color: RS.accent, fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
-          Just Rolled In · New Arrivals
-        </p>
         <div style={{ height: '3px', width: '48px', background: RS.accent, margin: '0 auto 14px' }} />
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           FRESH DROPS
         </h2>
-        <p style={{ fontFamily: "'DM Sans',sans-serif", color: RS.muted, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '10px' }}>
-          Latest arrivals · Be the first at the stop
-        </p>
         <div style={{ borderTop: `1px dashed ${RS.accent}50`, margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 

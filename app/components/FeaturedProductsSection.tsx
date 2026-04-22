@@ -362,16 +362,10 @@ export default function FeaturedProductsSection() {
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <p className="dg-lime-text-gradient" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
-          Handpicked Favorites · Best Sellers
-        </p>
         <div style={{ height: '3px', width: '48px', background: '#52C41A', margin: '0 auto 14px' }} />
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           HOT PRODUCTS
         </h2>
-        <p style={{ color: '#6B7280', fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '10px' }}>
-          Top picks · Community favorites
-        </p>
         <div style={{ borderTop: '1px dashed rgba(82,196,26,0.4)', margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 

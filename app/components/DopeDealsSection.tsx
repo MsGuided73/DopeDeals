@@ -255,16 +255,10 @@ export default function DopeDealsSection() {
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <p className="dg-lime-text-gradient" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
-          Limited Time · Exclusive Savings
-        </p>
         <div style={{ height: '3px', width: '48px', background: DD.accent, margin: '0 auto 14px' }} />
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           DOPE DEALS
         </h2>
-        <p style={{ color: DD.muted, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '10px' }}>
-          Best prices · Don&apos;t miss out
-        </p>
         <div style={{ borderTop: `1px dashed ${DD.accent}50`, margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 
