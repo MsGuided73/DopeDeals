@@ -44,16 +44,15 @@ export function getAdminClient() {
 export type EligibilityReason =
   | 'not_signed_in'
   | 'email_not_verified'
-  | 'age_not_verified'
-  | 'no_delivered_purchase'
   | 'already_reviewed';
 
 export type EligibilityResult =
-  | { canReview: true; orderItemId: string; existingReviewId: null }
+  | { canReview: true; orderItemId: string | null; isVerifiedBuyer: boolean; existingReviewId: null }
   | {
       canReview: false;
       reason: EligibilityReason;
-      orderItemId: string | null;
+      orderItemId: null;
+      isVerifiedBuyer: false;
       existingReviewId: string | null;
     };
 
@@ -63,20 +62,20 @@ export type EligibilityResult =
  * Gates (in evaluation order):
  *   1. Signed in
  *   2. user_profiles.email_verified = true
- *   3. users.age_verification_status = 'verified'
- *   4. Has an order_item where the linked order belongs to the user, the
- *      linked order is status='delivered' with delivered_at set
- *   5. Hasn't already submitted a review for this product
+ *   3. Hasn't already submitted a review for this product
  *
- * Returns the order_item.id that proves the purchase so the POST route can
- * persist it on the new review (provenance / audit trail).
+ * isVerifiedBuyer is set to true when the user has a delivered order
+ * containing this product — it is metadata only, not a gate.
+ *
+ * Returns the order_item.id (if any) that proves the purchase so the POST
+ * route can persist it on the new review for audit/display purposes.
  */
 export async function checkEligibility(
   userId: string | null,
   productId: string,
 ): Promise<EligibilityResult> {
   if (!userId) {
-    return { canReview: false, reason: 'not_signed_in', orderItemId: null, existingReviewId: null };
+    return { canReview: false, reason: 'not_signed_in', orderItemId: null, isVerifiedBuyer: false, existingReviewId: null };
   }
 
   const admin = getAdminClient();
@@ -89,18 +88,7 @@ export async function checkEligibility(
     .maybeSingle();
 
   if (!profile?.email_verified) {
-    return { canReview: false, reason: 'email_not_verified', orderItemId: null, existingReviewId: null };
-  }
-
-  // Verification: age
-  const { data: userRow } = await admin
-    .from('users')
-    .select('age_verification_status')
-    .eq('id', userId)
-    .maybeSingle();
-
-  if (userRow?.age_verification_status !== 'verified') {
-    return { canReview: false, reason: 'age_not_verified', orderItemId: null, existingReviewId: null };
+    return { canReview: false, reason: 'email_not_verified', orderItemId: null, isVerifiedBuyer: false, existingReviewId: null };
   }
 
   // Already reviewed?
@@ -116,12 +104,12 @@ export async function checkEligibility(
       canReview: false,
       reason: 'already_reviewed',
       orderItemId: null,
+      isVerifiedBuyer: false,
       existingReviewId: existing.id,
     };
   }
 
-  // Delivered purchase containing this product.
-  // Use an inner join so we only get rows where the order is delivered.
+  // Check for a delivered purchase — determines isVerifiedBuyer badge only.
   const { data: orderItem } = await admin
     .from('order_items')
     .select('id, orders!inner(user_id, status, delivered_at)')
@@ -133,9 +121,10 @@ export async function checkEligibility(
     .limit(1)
     .maybeSingle();
 
-  if (!orderItem) {
-    return { canReview: false, reason: 'no_delivered_purchase', orderItemId: null, existingReviewId: null };
-  }
-
-  return { canReview: true, orderItemId: orderItem.id, existingReviewId: null };
+  return {
+    canReview: true,
+    orderItemId: orderItem?.id ?? null,
+    isVerifiedBuyer: !!orderItem,
+    existingReviewId: null,
+  };
 }

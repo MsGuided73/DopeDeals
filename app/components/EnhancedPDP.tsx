@@ -79,6 +79,13 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const [reviewsRefreshKey, setReviewsRefreshKey] = useState(0);
   const [cartMessage, setCartMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  const jumpToReviews = () => {
+    setActiveTab('reviews');
+    setTimeout(() => {
+      document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  };
+
   React.useEffect(() => {
     setHasCustomFooter(true);
     return () => setHasCustomFooter(false);
@@ -284,7 +291,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
             {product?.id && (
               <ProductRatingBadge
                 productId={product.id}
-                onJumpToReviews={() => setActiveTab('reviews')}
+                onJumpToReviews={jumpToReviews}
               />
             )}
 
@@ -538,7 +545,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
             )}
 
             {activeTab === 'reviews' && product?.id && (
-              <div className="space-y-6">
+              <div id="reviews-section" className="space-y-6">
                 {/* Write-a-review CTA at the top of the tab */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between flex-wrap gap-4">
                   <div>

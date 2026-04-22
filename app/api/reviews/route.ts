@@ -101,6 +101,7 @@ export async function POST(request: NextRequest) {
       body,
       would_recommend: wouldRecommend,
       photo_urls: photoUrls,
+      is_verified_buyer: eligibility.isVerifiedBuyer,
     })
     .select('id, created_at')
     .single();

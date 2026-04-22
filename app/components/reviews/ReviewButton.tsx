@@ -19,11 +19,12 @@ const AMBER = "#e8920a";
 const AMBER_DEEP = "#c5751a";
 
 type Eligibility =
-  | { canReview: true; orderItemId: string; existingReviewId: null }
+  | { canReview: true; orderItemId: string | null; isVerifiedBuyer: boolean; existingReviewId: null }
   | {
       canReview: false;
-      reason: "not_signed_in" | "email_not_verified" | "age_not_verified" | "no_delivered_purchase" | "already_reviewed";
-      orderItemId: string | null;
+      reason: "not_signed_in" | "email_not_verified" | "already_reviewed";
+      orderItemId: null;
+      isVerifiedBuyer: false;
       existingReviewId: string | null;
     };
 
@@ -110,27 +111,12 @@ export default function ReviewButton({ productId, productName, onReviewSubmitted
         </Link>
       );
     case "email_not_verified":
+    default:
       return (
         <Link href="/account?tab=verification" style={{ ...secondaryStyle, textDecoration: "none" }}>
           <Lock size={16} />
           Verify your email to review
         </Link>
-      );
-    case "age_not_verified":
-      return (
-        <Link href="/age-verification" style={{ ...secondaryStyle, textDecoration: "none" }}>
-          <Lock size={16} />
-          Complete age verification to review
-        </Link>
-      );
-    case "no_delivered_purchase":
-    default:
-      return (
-        <ButtonShell
-          icon={<Lock size={16} />}
-          label="Only verified buyers can review this product"
-          tone="muted"
-        />
       );
   }
 }

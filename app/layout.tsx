@@ -1,7 +1,6 @@
 import "./globals.css";
 import AppProviders from "./providers";
 import Highway420Footer from "../components/Highway420Footer";
-import FeedbackButton from "./components/FeedbackButton";
 import FloatingNav from "./components/FloatingNav";
 import StickyCartPopup from "./components/StickyCartPopup";
 import { NavigationProvider } from "./contexts/NavigationContext";
@@ -106,9 +105,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </main>
 
               <Highway420Footer />
-
-              {/* Global Feedback Button */}
-              <FeedbackButton />
 
               {/* Global Floating Navigation */}
               <FloatingNav />

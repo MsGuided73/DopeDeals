@@ -75,15 +75,13 @@ const NAV_LINKS = [
   },
 ];
 
-const CATEGORY_OPTIONS = ["All", "Water Pipes", "Hand Pipes", "Vaporizers", "Dab Rigs", "Edibles", "Mushrooms", "Accessories"];
+
 
 export default function GlobalMasthead() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [showCategorySelect, setShowCategorySelect] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const dropdownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -291,8 +289,10 @@ export default function GlobalMasthead() {
           gap: 3px;
           padding: 13px 12px;
           font-family: 'Fira Sans', sans-serif;
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
           color: #ffffff;
           text-decoration: none;
           white-space: nowrap;
@@ -307,6 +307,17 @@ export default function GlobalMasthead() {
         .dg-navlink:hover, .dg-navlink.active {
           color: #ffffff;
           border-bottom-color: rgba(255,255,255,0.8);
+        }
+
+        /* Vertical pipe dividers between nav items */
+        .dg-navitem + .dg-navitem::before {
+          content: '';
+          display: block;
+          width: 1px;
+          height: 18px;
+          background: #E8E4D9;
+          flex-shrink: 0;
+          align-self: center;
         }
 
         /* ── Dropdown panel ── */
@@ -489,7 +500,7 @@ export default function GlobalMasthead() {
                 width={320}
                 height={96}
                 style={{
-                  height: '52px',
+                  height: '68px',
                   width: 'auto',
                   marginLeft: '12px',
                 }}
@@ -564,7 +575,7 @@ export default function GlobalMasthead() {
               />
             </Link>
 
-            {/* ── Row 1: Topbar — full width, search truly centered ── */}
+            {/* ── Row 1: Topbar — search centered, icons pinned right ── */}
             <div style={{
               position: 'relative',
               display: 'flex',
@@ -574,14 +585,6 @@ export default function GlobalMasthead() {
               padding: '10px 16px',
             }}>
               <form onSubmit={handleSearch} className="dg-search-form" style={{ width: '100%', maxWidth: 580 }}>
-                <select
-                  value={selectedCategory}
-                  onChange={e => setSelectedCategory(e.target.value)}
-                  className="dg-cat-select"
-                  aria-label="Search category"
-                >
-                  {CATEGORY_OPTIONS.map(c => <option key={c}>{c}</option>)}
-                </select>
                 <input
                   ref={searchRef}
                   type="text"
@@ -595,6 +598,83 @@ export default function GlobalMasthead() {
                   <Search style={{ width: 16, height: 16 }} />
                 </button>
               </form>
+
+              {/* Profile + Cart — absolutely pinned to the right of the topbar */}
+              <div style={{
+                position: 'absolute',
+                right: '16px',
+                top: 0,
+                bottom: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+              }}>
+                {/* Profile — ghost pill: white outline, name left of icon */}
+                <button
+                  onClick={() => setShowProfileModal(true)}
+                  aria-label="Account"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '7px 14px',
+                    background: 'transparent',
+                    border: '1.5px solid rgba(255,255,255,0.80)',
+                    borderRadius: '999px',
+                    color: '#ffffff',
+                    fontFamily: "'Fira Sans', sans-serif",
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    letterSpacing: '0.02em',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'background 0.15s, border-color 0.15s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
+                  {displayName && (
+                    <span style={{ maxWidth: '110px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {displayName}
+                    </span>
+                  )}
+                  <User style={{ width: 18, height: 18, flexShrink: 0 }} />
+                </button>
+
+                {/* Cart — solid white, enlarged icon, no text */}
+                <Link
+                  href="/cart"
+                  aria-label={`Cart (${cartCount} items)`}
+                  style={{
+                    position: 'relative',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '9px 14px',
+                    background: '#ffffff',
+                    borderRadius: '6px',
+                    color: '#145C3C',
+                    textDecoration: 'none',
+                    transition: 'background 0.15s, transform 0.1s',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.18)',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.background = '#f0f0ec';
+                    (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.background = '#ffffff';
+                    (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
+                  }}
+                >
+                  <ShoppingCart style={{ width: 26, height: 26 }} />
+                  {cartCount > 0 && (
+                    <span className="dg-cart-badge" style={{ borderColor: '#145C3C' }}>
+                      {cartCount > 99 ? '99+' : String(cartCount)}
+                    </span>
+                  )}
+                </Link>
+              </div>
             </div>
 
             {/* ── Row 2: Navbar — full width, links truly centered, icons far right ── */}
@@ -614,7 +694,8 @@ export default function GlobalMasthead() {
                   {NAV_LINKS.map(link => (
                     <div
                       key={link.href}
-                      className="relative"
+                      className="dg-navitem relative"
+                      style={{ display: 'flex', alignItems: 'center' }}
                       onMouseEnter={() => link.children && openDropdownMenu(link.label)}
                       onMouseLeave={() => link.children && closeDropdownWithDelay()}
                     >
@@ -648,36 +729,7 @@ export default function GlobalMasthead() {
                   ))}
                 </div>
 
-                {/* Icons — absolutely pinned to far right of navbar */}
-                <div style={{
-                  position: 'absolute',
-                  right: '16px',
-                  top: 0,
-                  bottom: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                }}>
-                  <button
-                    onClick={() => setShowProfileModal(true)}
-                    className="dg-icon-btn"
-                    aria-label="Account"
-                  >
-                    <User style={{ width: 22, height: 22 }} />
-                    {displayName ? displayName : "Account"}
-                  </button>
-                  <Link
-                    href="/cart"
-                    className="dg-icon-btn relative"
-                    aria-label={`Cart (${cartCount} items)`}
-                  >
-                    <ShoppingCart style={{ width: 22, height: 22 }} />
-                    Cart
-                    {cartCount > 0 && <span className="dg-cart-badge">{cartCount > 99 ? "99+" : String(cartCount)}</span>}
-                  </Link>
-                </div>
-
-              </div>
+              </div>{/* /dg-navinner */}
             </nav>
 
           </div>{/* /relative wrapper */}
