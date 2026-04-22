@@ -52,12 +52,11 @@ export default function TrustedBrandsBulletin() {
 
       {/* Section header */}
       <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-        <p style={{
+        <p className="dg-lime-text-gradient" style={{
           fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
           fontSize: '13px',
           letterSpacing: '0.18em',
           textTransform: 'uppercase',
-          color: '#52C41A',
           margin: '0 0 10px',
         }}>
           Road Tested Brands
@@ -181,7 +180,7 @@ export default function TrustedBrandsBulletin() {
             transition: 'background 0.18s, color 0.18s',
           }}
           onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = '#52C41A';
+            (e.currentTarget as HTMLAnchorElement).style.background = 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)';
             (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff';
           }}
           onMouseLeave={e => {

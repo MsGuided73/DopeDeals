@@ -306,7 +306,7 @@ export default function FeaturedProductsSection() {
         <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column', flex: 1 }}>
           {/* Brand */}
           {transformedProduct.brand_name && transformedProduct.brand_name !== 'Unknown Brand' && (
-            <p style={{ fontSize: '10px', fontWeight: 700, color: '#52C41A', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
+            <p className="dg-lime-text-gradient" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
               {transformedProduct.brand_name}
             </p>
           )}
@@ -319,8 +319,8 @@ export default function FeaturedProductsSection() {
           </Link>
 
           {/* Price */}
-          <div style={{ fontWeight: 700, fontSize: '21px', color: '#52C41A', letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span>${formatPrice(transformedProduct.price)}</span>
+          <div style={{ fontWeight: 700, fontSize: '21px', letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span className="dg-lime-text-gradient">${formatPrice(transformedProduct.price)}</span>
             {transformedProduct.compare_at_price && (
               <span style={{ fontSize: '13px', color: '#9CA3AF', fontWeight: 400, textDecoration: 'line-through' }}>
                 ${formatPrice(transformedProduct.compare_at_price)}
@@ -335,7 +335,7 @@ export default function FeaturedProductsSection() {
               disabled={isRestricted || product.stock_quantity <= 0}
               style={isRestricted || product.stock_quantity <= 0
                 ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: 'linear-gradient(to bottom, #63D420, #52C41A)', color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
+                : { flex: 1, background: 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)', color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
               onMouseEnter={e => { if (!isRestricted && product.stock_quantity > 0) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
             >
@@ -362,7 +362,7 @@ export default function FeaturedProductsSection() {
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <p style={{ fontSize: '11px', fontWeight: 700, color: '#52C41A', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
+        <p className="dg-lime-text-gradient" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
           Handpicked Favorites · Best Sellers
         </p>
         <div style={{ height: '3px', width: '48px', background: '#52C41A', margin: '0 auto 14px' }} />
@@ -394,7 +394,7 @@ export default function FeaturedProductsSection() {
         <Link
           href="/hot-products"
           style={{ display: 'inline-block', background: 'transparent', color: '#52C41A', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: '2px solid #52C41A', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#52C41A'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
           onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = '#52C41A'; }}
         >
           SHOP ALL HOT PRODUCTS →

@@ -208,7 +208,7 @@ export default function GlobalMasthead() {
         .dg-search-input::placeholder { color: #9A9A9A; }
         .dg-search-btn {
           border: none;
-          background: linear-gradient(to bottom, #63D420, #52C41A);
+          background: radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%);
           color: #fff;
           padding: 0 16px;
           height: 100%;
@@ -217,7 +217,7 @@ export default function GlobalMasthead() {
           align-items: center;
           transition: background 0.15s;
         }
-        .dg-search-btn:hover { background: linear-gradient(to bottom, #72E028, #5BD420); }
+        .dg-search-btn:hover { background: radial-gradient(ellipse at 50% 35%, #72E028 0%, #5FD01D 55%, #4DBA17 100%); }
 
         /* ── Right icon buttons ── */
         .dg-icon-btn {
@@ -338,12 +338,60 @@ export default function GlobalMasthead() {
           color: #52C41A;
         }
 
-        /* ── Mobile drawer ── */
-        .dg-drawer {
-          background: #145C3C;
-          border-top: 1px solid rgba(255,255,255,0.12);
-          box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        /* ── Right-side drawer + backdrop ── */
+        .dg-drawer-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(2px);
+          -webkit-backdrop-filter: blur(2px);
+          z-index: 199;
+          animation: dg-fade-in 0.2s ease-out;
         }
+        .dg-drawer {
+          position: fixed;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: min(340px, 86vw);
+          background: #145C3C;
+          border-left: 1px solid rgba(255,255,255,0.14);
+          box-shadow: -10px 0 28px rgba(0,0,0,0.35);
+          z-index: 200;
+          overflow-y: auto;
+          animation: dg-slide-in-right 0.28s ease-out;
+          display: flex;
+          flex-direction: column;
+        }
+        .dg-drawer-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 20px;
+          border-bottom: 1px solid rgba(255,255,255,0.14);
+          flex-shrink: 0;
+        }
+        .dg-drawer-title {
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          color: #ffffff;
+          text-transform: uppercase;
+        }
+        .dg-drawer-close {
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          color: #ffffff;
+          padding: 6px;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.15s;
+        }
+        .dg-drawer-close:hover { background: rgba(255,255,255,0.12); }
         .dg-drawer-link {
           display: block;
           padding: 13px 20px;
@@ -356,7 +404,19 @@ export default function GlobalMasthead() {
           transition: color 0.15s, background 0.15s;
         }
         .dg-drawer-link:hover { background: rgba(255,255,255,0.1); color: #ffffff; }
-        .dg-drawer-link:last-child { border-bottom: none; }
+        .dg-drawer-section-divider {
+          border-top: 1px solid rgba(255,255,255,0.18);
+          margin-top: 4px;
+        }
+
+        @keyframes dg-slide-in-right {
+          from { transform: translateX(100%); }
+          to   { transform: translateX(0); }
+        }
+        @keyframes dg-fade-in {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
 
         /* ── Mobile search overlay ── */
         .dg-mobile-search {
@@ -375,9 +435,10 @@ export default function GlobalMasthead() {
       <header className="dg-header">
 
         {/* ══════════════════════════════════════════════════════════════
-            MOBILE (< md)
+            COMPACT (< xl) — hamburger layout for phones, tablets, and
+            narrow desktop/split-screen viewports
         ══════════════════════════════════════════════════════════════ */}
-        <div className="md:hidden relative">
+        <div className="xl:hidden relative">
 
           {/* Mobile search overlay */}
           {isSearchOpen && (
@@ -406,17 +467,33 @@ export default function GlobalMasthead() {
             </div>
           )}
 
-          {/* Mobile top bar */}
-          <div className={`flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
-            {/* Logo */}
+          {/* Compact top bar — mirrors desktop double-line navbar at bottom */}
+          <div className={`dg-navbar flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
+            {/* Logo + Wordmark */}
             <Link href="/" className="dg-logo-link" aria-label="Highway 420 home">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
                 alt="HIGHWAY 420"
-                width={120}
-                height={120}
-                style={{ height: '52px', width: 'auto' }}
+                width={160}
+                height={160}
+                style={{
+                  height: '72px',
+                  width: 'auto',
+                }}
                 className="object-contain"
+                priority
+              />
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
+                alt=""
+                width={320}
+                height={96}
+                style={{
+                  height: '52px',
+                  width: 'auto',
+                  marginLeft: '12px',
+                }}
+                className="hidden sm:block object-contain"
                 priority
               />
             </Link>
@@ -442,9 +519,9 @@ export default function GlobalMasthead() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════════
-            DESKTOP (≥ md)
+            DESKTOP (≥ xl) — full nav with centered links + right icons
         ══════════════════════════════════════════════════════════════ */}
-        <div className="hidden md:block">
+        <div className="hidden xl:block">
           {/*
             Full-width stacked layout.
             The logo is absolutely positioned so BOTH the search row and the nav row
@@ -466,7 +543,7 @@ export default function GlobalMasthead() {
                 zIndex: 2,
                 display: 'flex',
                 alignItems: 'center',
-                padding: '8px 16px 8px 20px',
+                padding: '2px 16px 14px 20px',
               }}
             >
               <Image
@@ -480,7 +557,6 @@ export default function GlobalMasthead() {
                   maxHeight: '120px',
                   minHeight: '80px',
                   display: 'block',
-                  transform: 'translateY(-2px)',
                   filter: 'drop-shadow(0 4px 12px rgba(255,255,255,0.28)) drop-shadow(0 1px 4px rgba(255,255,255,0.18))',
                 }}
                 className="object-contain"
@@ -605,38 +681,61 @@ export default function GlobalMasthead() {
             </nav>
 
           </div>{/* /relative wrapper */}
-        </div>{/* /hidden md:block */}
+        </div>{/* /hidden xl:block */}
       </header>
 
       {/* ══════════════════════════════════════════════════════════════
-          MOBILE DRAWER
+          RIGHT-SIDE SLIDE-IN DRAWER (shown < xl)
       ══════════════════════════════════════════════════════════════ */}
       {isMenuOpen && (
-        <div className="dg-drawer md:hidden">
-          <nav>
-            {NAV_LINKS.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="dg-drawer-link"
+        <>
+          <div
+            className="dg-drawer-backdrop xl:hidden"
+            onClick={() => setIsMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <aside
+            className="dg-drawer xl:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Main menu"
+          >
+            <div className="dg-drawer-header">
+              <span className="dg-drawer-title">Menu</span>
+              <button
+                type="button"
+                className="dg-drawer-close"
                 onClick={() => setIsMenuOpen(false)}
+                aria-label="Close menu"
               >
-                {link.label}
-              </Link>
-            ))}
-            <div style={{ borderTop: "2px solid #F0F0F0", marginTop: 4 }}>
-              <Link href={user ? "/account" : "/signin"} className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
-                {user ? "My Account" : "Sign In / Sign Up"}
-              </Link>
-              <Link href="/rewards" className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
-                VIP Rewards
-              </Link>
-              <Link href="/cart" className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
-                Cart {cartCount > 0 ? `(${cartCount})` : ""}
-              </Link>
+                <X style={{ width: 22, height: 22 }} />
+              </button>
             </div>
-          </nav>
-        </div>
+            <nav>
+              {NAV_LINKS.map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="dg-drawer-link"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="dg-drawer-section-divider">
+                <Link href={user ? "/account" : "/signin"} className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
+                  {user ? "My Account" : "Sign In / Sign Up"}
+                </Link>
+                <Link href="/rewards" className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
+                  VIP Rewards
+                </Link>
+                <Link href="/cart" className="dg-drawer-link" onClick={() => setIsMenuOpen(false)}>
+                  Cart {cartCount > 0 ? `(${cartCount})` : ""}
+                </Link>
+              </div>
+            </nav>
+          </aside>
+        </>
       )}
 
       {/* ══════════════════════════════════════════════════════════════

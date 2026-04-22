@@ -1,200 +1,377 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 
 // ─── Collection data ──────────────────────────────────────────────────────────
-const COLLECTIONS = [
+// Top row = 3 large hero cards. Bottom row = 6 smaller cards.
+// `image` is the background image URL — leave empty while you upload,
+// and a dark placeholder will render until it's populated.
+
+type Collection = {
+  name: string;
+  tagline: string;
+  route: string;
+  image: string;
+};
+
+const TOP_ROW: Collection[] = [
   {
-    name: "Flower",
-    label: "THCA Flower",
-    route: "/thca_flower",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/FLOWER-prerollnBud.png",
-    emoji: "🌿",
-  },
-  {
-    name: "Pipes",
-    label: "Hand Pipes",
-    route: "/pipes",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/PIPES-Bubblers.jpeg",
-    emoji: "🌊",
-  },
-  {
-    name: "Vapes & Carts",
-    label: "Vaporizers",
-    route: "/vapes",
-    image: "",
-    emoji: "💨",
-  },
-  {
-    name: "Edibles",
-    label: "Edibles",
-    route: "/edibles",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/CG-Edibles.png",
-    emoji: "🍬",
-  },
-  {
-    name: "Shrooms & More",
-    label: "Mushrooms",
-    route: "/mushrooms",
-    image: "",
-    emoji: "🍄",
-  },
-  {
-    name: "Bongs",
-    label: "Water Pipes",
+    name: "Bongs & Water Pipes",
+    tagline: "Smooth hits. Elevated sessions.",
     route: "/bongs",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/CG-RooRatSunset.png",
-    emoji: "🔵",
+    image: "",
   },
   {
     name: "Dab Rigs",
-    label: "Dab Rigs",
+    tagline: "Clean flavor. Next level.",
     route: "/dabsntools",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/DabRig-withPhoneTech-NoWords.png",
-    emoji: "🔥",
-  },
-  {
-    name: "Accessories",
-    label: "Accessories",
-    route: "/accessories",
     image: "",
-    emoji: "⚙️",
   },
   {
-    name: "Bundles",
-    label: "Popular Setups",
-    route: "/bundles",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Popular%20Setups.png",
-    emoji: "🎁",
+    name: "Vapes & Carts",
+    tagline: "Compact. Clean. On the go.",
+    route: "/vapes",
+    image: "",
   },
 ];
 
+const BOTTOM_ROW: Collection[] = [
+  {
+    name: "Hand Pipes",
+    tagline: "Simple. Classic. Always a vibe.",
+    route: "/pipes",
+    image: "",
+  },
+  {
+    name: "Flower",
+    tagline: "Top shelf. Hand-selected.",
+    route: "/thca_flower",
+    image: "",
+  },
+  {
+    name: "Pre-Rolls",
+    tagline: "Ready to roll. Infused or classic.",
+    route: "/pre-rolls",
+    image: "",
+  },
+  {
+    name: "Edibles",
+    tagline: "Great taste. Smooth ride.",
+    route: "/edibles",
+    image: "",
+  },
+  {
+    name: "Shrooms & More",
+    tagline: "A different kind of ride.",
+    route: "/mushrooms",
+    image: "",
+  },
+  {
+    name: "Accessories",
+    tagline: "The essentials for every setup.",
+    route: "/accessories",
+    image: "",
+  },
+];
+
+const TRUST_BADGES = [
+  { icon: "🏆", title: "Premium Quality", copy: "Carefully curated top shelf products." },
+  { icon: "🔒", title: "Discreet Shipping", copy: "Fast, secure, and 100% discreet." },
+  { icon: "🌿", title: "Earn Rewards", copy: "Get points. Unlock exclusive perks." },
+  { icon: "🎧", title: "Real Support", copy: "We're here for you. Every step of the way." },
+];
+
+// ─── Card ─────────────────────────────────────────────────────────────────────
+function CategoryCard({ col, size }: { col: Collection; size: "lg" | "sm" }) {
+  return (
+    <Link href={col.route} className={`cg-card cg-card--${size}`} aria-label={`Shop ${col.name}`}>
+      <div className="cg-card__media">
+        {col.image ? (
+          <img src={col.image} alt={col.name} loading="lazy" />
+        ) : (
+          <div className="cg-card__placeholder" aria-hidden="true" />
+        )}
+        <div className="cg-card__scrim" />
+      </div>
+      <div className="cg-card__body">
+        <h3 className="cg-card__title">{col.name}</h3>
+        <p className="cg-card__tagline">{col.tagline}</p>
+        <span className="cg-card__cta">
+          Shop Now <span aria-hidden="true">→</span>
+        </span>
+      </div>
+    </Link>
+  );
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function CollectionsGrid() {
-  const [hovered, setHovered] = useState<number | null>(null);
-
   return (
     <>
       <style>{`
-        .cg-card {
+        /* ── Header ── */
+        .cg-header {
+          text-align: center;
+          margin-bottom: 28px;
+        }
+        .cg-header__title {
+          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
+          font-size: clamp(40px, 6vw, 72px);
+          font-weight: 400;
+          letter-spacing: 0.02em;
+          line-height: 1;
+          color: #0E2A1A;
+          margin: 0;
+        }
+        .cg-header__divider {
           display: flex;
-          flex-direction: column;
-          background: #ffffff;
-          border: 1px solid #E8E8E8;
-          border-radius: 8px;
+          align-items: center;
+          justify-content: center;
+          gap: 14px;
+          margin-top: 10px;
+        }
+        .cg-header__divider::before,
+        .cg-header__divider::after {
+          content: "";
+          width: 42px;
+          height: 2px;
+          background: #0E2A1A;
+        }
+        .cg-header__sub {
+          font-family: "Fira Sans", "Inter", system-ui, sans-serif;
+          font-size: clamp(18px, 2vw, 22px);
+          font-weight: 600;
+          color: #0E2A1A;
+          margin: 0;
+        }
+        .cg-header__tagline {
+          font-family: "Fira Sans", "Inter", system-ui, sans-serif;
+          font-size: 15px;
+          color: #5B6560;
+          margin: 6px 0 0;
+        }
+
+        /* ── Grid rows ── */
+        .cg-row {
+          display: grid;
+          gap: 14px;
+        }
+        .cg-row--top {
+          grid-template-columns: 1fr;
+          margin-bottom: 14px;
+        }
+        .cg-row--bottom {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        @media (min-width: 640px) {
+          .cg-row--top { grid-template-columns: repeat(3, 1fr); }
+          .cg-row--bottom { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 1024px) {
+          .cg-row--bottom { grid-template-columns: repeat(6, 1fr); }
+        }
+
+        /* ── Card ── */
+        .cg-card {
+          position: relative;
+          display: block;
           overflow: hidden;
+          border-radius: 12px;
+          background: #1A1A1A;
           text-decoration: none;
-          transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s;
+          color: #ffffff;
+          isolation: isolate;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         .cg-card:hover {
-          box-shadow: 0 4px 20px rgba(0,0,0,0.10);
           transform: translateY(-2px);
-          border-color: #52C41A;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.25);
         }
-        .cg-image {
-          position: relative;
-          width: 100%;
-          aspect-ratio: 4/3;
-          background: #F5F5F5;
-          overflow: hidden;
-          flex-shrink: 0;
-        }
-        .cg-image img {
+        .cg-card--lg { aspect-ratio: 3 / 2; }
+        .cg-card--sm { aspect-ratio: 1 / 1; }
+
+        .cg-card__media {
           position: absolute;
           inset: 0;
+          z-index: 0;
+        }
+        .cg-card__media img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.35s cubic-bezier(0.25,1,0.5,1);
+          transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .cg-card:hover .cg-image img {
-          transform: scale(1.06);
+        .cg-card:hover .cg-card__media img {
+          transform: scale(1.05);
         }
-        .cg-placeholder {
+        .cg-card__placeholder {
           position: absolute;
           inset: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          background: #F0F7EF;
+          background:
+            linear-gradient(135deg, #2A2B2A 0%, #1A1B1A 100%);
         }
-        .cg-placeholder-emoji {
-          font-size: 36px;
+        .cg-card__placeholder::after {
+          content: "Image coming soon";
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.35);
+        }
+        .cg-card__scrim {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            180deg,
+            rgba(0,0,0,0) 35%,
+            rgba(0,0,0,0.35) 65%,
+            rgba(0,0,0,0.75) 100%
+          );
+          z-index: 1;
+        }
+
+        .cg-card__body {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 2;
+          padding: 18px 20px;
+        }
+        .cg-card--sm .cg-card__body { padding: 14px 16px; }
+
+        .cg-card__title {
+          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
+          font-weight: 400;
+          letter-spacing: 0.02em;
           line-height: 1;
+          color: #ffffff;
+          margin: 0 0 6px;
+          font-size: clamp(22px, 2.4vw, 30px);
         }
-        .cg-footer {
-          padding: 10px 12px;
-          border-top: 1px solid #F0F0F0;
-          background: #ffffff;
+        .cg-card--sm .cg-card__title {
+          font-size: clamp(18px, 1.8vw, 22px);
         }
-        .cg-label {
-          font-family: 'Fira Sans', 'Inter', system-ui, sans-serif;
+        .cg-card__tagline {
+          font-family: "Fira Sans", "Inter", system-ui, sans-serif;
+          font-size: 13px;
+          font-weight: 400;
+          color: rgba(255,255,255,0.85);
+          line-height: 1.35;
+          margin: 0 0 8px;
+        }
+        .cg-card--sm .cg-card__tagline { font-size: 12px; }
+
+        .cg-card__cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-family: "Fira Sans", "Inter", sans-serif;
           font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #ffffff;
+        }
+        .cg-card__cta span {
+          transition: transform 0.2s ease;
+        }
+        .cg-card:hover .cg-card__cta span {
+          transform: translateX(3px);
+        }
+
+        /* ── Trust bar ── */
+        .cg-trust {
+          margin-top: 20px;
+          background: #EFEFEA;
+          border-radius: 10px;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 18px;
+          padding: 20px 24px;
+        }
+        @media (min-width: 640px) {
+          .cg-trust { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+          .cg-trust {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+          }
+        }
+        .cg-trust__item {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 0 16px;
+          border-left: 1px solid transparent;
+        }
+        @media (min-width: 1024px) {
+          .cg-trust__item + .cg-trust__item { border-left-color: #D9D9D3; }
+        }
+        .cg-trust__icon {
+          font-size: 26px;
+          line-height: 1;
+          flex-shrink: 0;
+        }
+        .cg-trust__title {
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-size: 12px;
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: #6B6B6B;
-          margin-bottom: 2px;
-          display: block;
+          color: #0E2A1A;
+          margin: 0 0 2px;
         }
-        .cg-name {
-          font-family: 'Fira Sans', 'Inter', system-ui, sans-serif;
-          font-size: 15px;
-          font-weight: 700;
-          color: #2A2B2A;
-          line-height: 1.2;
-        }
-        .cg-card:hover .cg-name {
-          color: #52C41A;
-        }
-        .cg-arrow {
-          margin-top: 2px;
-          display: inline-block;
+        .cg-trust__copy {
+          font-family: "Fira Sans", "Inter", sans-serif;
           font-size: 12px;
-          color: #52C41A;
-          opacity: 0;
-          transition: opacity 0.15s;
-        }
-        .cg-card:hover .cg-arrow {
-          opacity: 1;
+          color: #5B6560;
+          line-height: 1.3;
+          margin: 0;
         }
       `}</style>
 
-      <div id="collections-grid" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-        {COLLECTIONS.map((col, i) => (
-          <Link
-            key={col.route}
-            href={col.route}
-            className="cg-card"
-            onMouseEnter={() => setHovered(i)}
-            onMouseLeave={() => setHovered(null)}
-            aria-label={`Shop ${col.name}`}
-          >
-            {/* Image / Placeholder */}
-            <div className="cg-image">
-              {col.image ? (
-                <img src={col.image} alt={col.name} loading="lazy" />
-              ) : (
-                <div className="cg-placeholder">
-                  <span className="cg-placeholder-emoji">{col.emoji}</span>
-                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#52C41A', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                    {col.label}
-                  </span>
-                </div>
-              )}
-            </div>
+      <div id="collections-grid">
+        {/* ── Header ── */}
+        <header className="cg-header">
+          <h2 className="cg-header__title">SHOP BY CATEGORY</h2>
+          <div className="cg-header__divider">
+            <p className="cg-header__sub">Choose Your Route</p>
+          </div>
+          <p className="cg-header__tagline">Premium products for every kind of ride.</p>
+        </header>
 
-            {/* Footer label */}
-            <div className="cg-footer">
-              <span className="cg-label">{col.label}</span>
-              <span className="cg-name">{col.name}</span>
-              <span className="cg-arrow">→</span>
+        {/* ── Top row: 3 large ── */}
+        <div className="cg-row cg-row--top">
+          {TOP_ROW.map((col) => (
+            <CategoryCard key={col.route} col={col} size="lg" />
+          ))}
+        </div>
+
+        {/* ── Bottom row: 6 small ── */}
+        <div className="cg-row cg-row--bottom">
+          {BOTTOM_ROW.map((col) => (
+            <CategoryCard key={col.route} col={col} size="sm" />
+          ))}
+        </div>
+
+        {/* ── Trust bar ── */}
+        <div className="cg-trust">
+          {TRUST_BADGES.map((b) => (
+            <div key={b.title} className="cg-trust__item">
+              <span className="cg-trust__icon" aria-hidden="true">{b.icon}</span>
+              <div>
+                <p className="cg-trust__title">{b.title}</p>
+                <p className="cg-trust__copy">{b.copy}</p>
+              </div>
             </div>
-          </Link>
-        ))}
+          ))}
+        </div>
       </div>
     </>
   );

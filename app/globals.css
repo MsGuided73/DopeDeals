@@ -584,7 +584,7 @@ p.eyebrow-label {
 
   /* HIGHWAY 420 Primary Button Styles */
   .highway-btn-primary {
-    background: var(--highway-green);
+    background: radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%);
     color: white;
     font-family: "Twilight", "Arial", sans-serif;
     font-weight: normal;
@@ -810,13 +810,72 @@ p.eyebrow-label {
    DANKGEEK DESIGN SYSTEM — utility classes
 ══════════════════════════════════════════════════════════ */
 
-/* Primary CTA button — full-width solid green */
+/* ── Lime gradient utilities ─────────────────────────────
+   Subtle "light center / darker edges" for depth.
+   Use .dg-lime-gradient on button backgrounds and
+   .dg-lime-text-gradient on headings/accents.
+──────────────────────────────────────────────────────────── */
+.dg-lime-gradient {
+  background: radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%) !important;
+}
+.dg-lime-gradient:hover {
+  background: radial-gradient(ellipse at 50% 35%, #72E028 0%, #5FD01D 55%, #4DBA17 100%) !important;
+}
+.dg-lime-gradient:active {
+  background: radial-gradient(ellipse at 50% 35%, #52C41A 0%, #47B317 55%, #3DA614 100%) !important;
+}
+.dg-lime-text-gradient {
+  background: linear-gradient(180deg, #5FD01D 0%, #52C41A 50%, #42A416 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Global upgrades for Tailwind dope-orange (lime) classes ─
+   These make every `bg-dope-orange-500/600` and `text-dope-orange*`
+   in the codebase inherit the new depth gradient automatically,
+   so we don't have to touch every file.
+──────────────────────────────────────────────────────────── */
+.bg-dope-orange,
+.bg-dope-orange-500,
+.bg-dope-orange-600 {
+  background-color: transparent !important;
+  background-image: radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%) !important;
+}
+.hover\:bg-dope-orange:hover,
+.hover\:bg-dope-orange-500:hover,
+.hover\:bg-dope-orange-600:hover {
+  background-color: transparent !important;
+  background-image: radial-gradient(ellipse at 50% 35%, #72E028 0%, #5FD01D 55%, #4DBA17 100%) !important;
+}
+
+.text-dope-orange,
+.text-dope-orange-500,
+.text-dope-orange-600,
+.text-dope-orange-700 {
+  background-image: linear-gradient(180deg, #5FD01D 0%, #52C41A 50%, #42A416 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+.group:hover .group-hover\:text-dope-orange-600,
+.group:hover .group-hover\:text-dope-orange-700 {
+  background-image: linear-gradient(180deg, #72E028 0%, #5FD01D 50%, #4DBA17 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Primary CTA button — radial lime gradient with depth */
 .dg-btn-primary {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  background: linear-gradient(to bottom, #63D420, #52C41A);
+  background: radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%);
   color: #ffffff;
   font-family: "Fira Sans", "Inter", system-ui, sans-serif;
   font-size: 14px;
@@ -831,12 +890,12 @@ p.eyebrow-label {
   text-decoration: none;
 }
 .dg-btn-primary:hover {
-  background: linear-gradient(to bottom, #72E028, #5BD420);
+  background: radial-gradient(ellipse at 50% 35%, #72E028 0%, #5FD01D 55%, #4DBA17 100%);
   box-shadow: 0 4px 14px rgba(82, 196, 26, 0.45);
   transform: translateY(-1px);
 }
 .dg-btn-primary:active {
-  background: linear-gradient(to bottom, #3DA614, #47B818);
+  background: radial-gradient(ellipse at 50% 35%, #52C41A 0%, #47B317 55%, #3DA614 100%);
   box-shadow: 0 1px 4px rgba(82, 196, 26, 0.25);
   transform: scale(0.99) translateY(0);
 }

@@ -20,6 +20,7 @@ const AboutHighway420         = nextDynamic(() => import("./components/AboutHigh
 const SpotlightReviews        = nextDynamic(() => import("./components/SpotlightReviews"));
 const DopeDealsSection        = nextDynamic(() => import("./components/DopeDealsSection"));
 const RideWithUsBanner        = nextDynamic(() => import("./components/RideWithUsBanner"));
+const RoadTripsSection        = nextDynamic(() => import("./components/RoadTripsSection"));
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = "force-dynamic";
@@ -45,12 +46,6 @@ export default function HomePage() {
         {/* ── Shop by Category ── */}
         <section className="dg-section-gray">
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6">
-            <div className="flex items-end justify-between mb-6">
-              <div>
-                <p className="dg-eyebrow">Browse</p>
-                <h2 className="dg-section-title">Shop by Category</h2>
-              </div>
-            </div>
             <CollectionsGrid />
           </div>
         </section>
@@ -63,6 +58,11 @@ export default function HomePage() {
         {/* ── New Arrivals ── */}
         <Suspense fallback={<SectionFallback />}>
           <NewProductsSection />
+        </Suspense>
+
+        {/* ── Road Trips ── */}
+        <Suspense fallback={<SectionFallback />}>
+          <RoadTripsSection />
         </Suspense>
 
         {/* ── Trusted Brands ── */}

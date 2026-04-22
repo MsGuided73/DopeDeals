@@ -13,6 +13,8 @@ const DD = {
   dark:    '#1c1208',
   muted:   '#6B7280',
   white:   '#ffffff',
+  grad:    'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)',
+  gradHover: 'radial-gradient(ellipse at 50% 35%, #72E028 0%, #5FD01D 55%, #4DBA17 100%)',
 };
 
 interface Product {
@@ -154,7 +156,7 @@ export default function DopeDealsSection() {
         {/* Body */}
         <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
           {brand && (
-            <p style={{ fontSize: '10px', fontWeight: 700, color: DD.accent, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
+            <p className="dg-lime-text-gradient" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
               {brand}
             </p>
           )}
@@ -165,8 +167,8 @@ export default function DopeDealsSection() {
           </Link>
 
           {/* Price */}
-          <div style={{ fontWeight: 700, fontSize: '21px', color: DD.accent, letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span>${salePrice.toFixed(2)}</span>
+          <div style={{ fontWeight: 700, fontSize: '21px', letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span className="dg-lime-text-gradient">${salePrice.toFixed(2)}</span>
             {disc > 0 && (
               <span style={{ fontSize: '13px', color: '#9CA3AF', fontWeight: 400, textDecoration: 'line-through' }}>
                 ${origPrice.toFixed(2)}
@@ -181,7 +183,7 @@ export default function DopeDealsSection() {
               disabled={isRestricted}
               style={isRestricted
                 ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: `linear-gradient(to bottom, ${DD.accentL}, ${DD.accent})`, color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
+                : { flex: 1, background: DD.grad, color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
               onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
             >
@@ -253,7 +255,7 @@ export default function DopeDealsSection() {
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <p style={{ fontSize: '11px', fontWeight: 700, color: DD.accent, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
+        <p className="dg-lime-text-gradient" style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '10px' }}>
           Limited Time · Exclusive Savings
         </p>
         <div style={{ height: '3px', width: '48px', background: DD.accent, margin: '0 auto 14px' }} />
@@ -285,7 +287,7 @@ export default function DopeDealsSection() {
         <Link
           href="/products"
           style={{ display: 'inline-block', background: 'transparent', color: DD.accent, fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: `2px solid ${DD.accent}`, borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = DD.accent; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = DD.grad; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
           onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = DD.accent; }}
         >
           SHOP ALL DEALS →

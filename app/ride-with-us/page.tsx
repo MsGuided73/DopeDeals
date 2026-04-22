@@ -64,8 +64,8 @@ export default function RideWithUsPage() {
               </div>
               <div className="relative">
                 <Image
-                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80"
-                  alt="Highway 420 Community"
+                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/RideWithUs/Desert%20road%20trip%20at%20sunset.png"
+                  alt="Desert road trip at sunset"
                   width={600}
                   height={400}
                   className="rounded-xl object-cover shadow-2xl"
