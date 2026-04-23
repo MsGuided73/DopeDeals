@@ -27,6 +27,15 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
+export const vipSignups = pgTable("vip_signups", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull().unique(),
+  phone: text("phone"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const categories = pgTable("categories", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
@@ -857,3 +866,7 @@ export type InsertLabCertificate = z.infer<typeof insertLabCertificateSchema>;
 
 export * from './emoji-schema';
 export * from './concierge-schema';
+
+export const insertVipSignupSchema = createInsertSchema(vipSignups).omit({ id: true, createdAt: true });
+export type VipSignup = typeof vipSignups.$inferSelect;
+export type InsertVipSignup = z.infer<typeof insertVipSignupSchema>;

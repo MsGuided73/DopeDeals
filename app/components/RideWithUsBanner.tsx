@@ -8,6 +8,9 @@ const BANNER_SRC =
 
 export default function RideWithUsBanner() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -21,11 +24,42 @@ export default function RideWithUsBanner() {
     };
   }, [isModalOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Placeholder for actual signup logic
-    alert("Welcome to the VIP Crew! Keep an eye on your inbox.");
-    setIsModalOpen(false);
+    setIsLoading(true);
+    setError(null);
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      phone: formData.get("phone") || undefined,
+    };
+
+    try {
+      const response = await fetch("/api/vip-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to sign up");
+      }
+
+      setSuccess(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setSuccess(false);
+      }, 3000);
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -119,10 +153,23 @@ export default function RideWithUsBanner() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} style={{ padding: "24px 32px 32px", display: "flex", flexDirection: "column", gap: "16px" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            {success ? (
+              <div style={{ padding: "40px 32px", textAlign: "center" }}>
+                <div style={{ color: "#52C41A", fontSize: "48px", marginBottom: "16px" }}>✓</div>
+                <h4 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: "32px", color: "#fff", margin: "0 0 8px 0" }}>YOU'RE ON THE LIST</h4>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#9ca3af", margin: 0 }}>Keep an eye on your inbox for exclusive drops.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ padding: "24px 32px 32px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                {error && (
+                  <div style={{ padding: "12px", background: "rgba(255, 0, 0, 0.1)", border: "1px solid rgba(255, 0, 0, 0.3)", borderRadius: "4px", color: "#ff6b6b", fontSize: "14px", fontFamily: "Inter, sans-serif" }}>
+                    {error}
+                  </div>
+                )}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                 <input 
                   type="text" 
+                  name="firstName"
                   placeholder="First Name" 
                   required
                   style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
@@ -131,6 +178,7 @@ export default function RideWithUsBanner() {
                 />
                 <input 
                   type="text" 
+                  name="lastName"
                   placeholder="Last Name" 
                   required
                   style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
@@ -141,6 +189,7 @@ export default function RideWithUsBanner() {
               
               <input 
                 type="email" 
+                name="email"
                 placeholder="Email Address" 
                 required
                 style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
@@ -150,6 +199,7 @@ export default function RideWithUsBanner() {
 
               <input 
                 type="tel" 
+                name="phone"
                 placeholder="Phone Number (Optional)" 
                 style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
                 onFocus={e => e.currentTarget.style.borderColor = "#52C41A"}
@@ -158,27 +208,28 @@ export default function RideWithUsBanner() {
 
               <button 
                 type="submit"
-                style={{
-                  width: "100%",
-                  marginTop: "8px",
-                  background: 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)',
-                  color: '#ffffff',
+                disabled={isLoading}
+                style={{ 
+                  width: "100%", 
+                  background: isLoading ? "#3d9614" : "#52C41A", 
+                  color: "#ffffff", 
+                  padding: "16px", 
+                  borderRadius: "4px", 
+                  border: "none",
                   fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-                  fontSize: '22px',
-                  letterSpacing: '0.06em',
-                  padding: '14px',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(82, 196, 26, 0.2)',
-                  transition: 'transform 0.1s'
+                  fontSize: "24px",
+                  letterSpacing: "0.06em",
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                  marginTop: "8px",
+                  transition: "background 0.2s"
                 }}
-                onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
-                onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+                onMouseOver={e => { if (!isLoading) e.currentTarget.style.background = "#45a815"; }}
+                onMouseOut={e => { if (!isLoading) e.currentTarget.style.background = "#52C41A"; }}
               >
-                JOIN THE CREW
+                {isLoading ? "JOINING..." : "JOIN THE CREW"}
               </button>
             </form>
+            )}
           </div>
         </div>
       )}
