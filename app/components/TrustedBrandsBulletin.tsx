@@ -77,7 +77,7 @@ export default function TrustedBrandsBulletin() {
           color: '#9ca3af',
           margin: 0,
         }}>
-          Tap any brand to browse their full catalog
+          Road Tested. Rider Approved.
         </p>
       </div>
 

@@ -259,6 +259,9 @@ export default function DopeDealsSection() {
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           DOPE DEALS
         </h2>
+        <p style={{ fontSize: '15px', color: DD.muted, margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>
+          Savings Worth the Detour
+        </p>
         <div style={{ borderTop: `1px dashed ${DD.accent}50`, margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 

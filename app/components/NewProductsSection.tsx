@@ -220,6 +220,9 @@ export default function NewProductsSection() {
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           FRESH DROPS
         </h2>
+        <p style={{ fontSize: '15px', color: RS.muted, margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>
+          Just Hit the Road
+        </p>
         <div style={{ borderTop: `1px dashed rgba(20,92,60,0.5)`, margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 

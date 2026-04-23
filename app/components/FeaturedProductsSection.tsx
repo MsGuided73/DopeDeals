@@ -366,6 +366,9 @@ export default function FeaturedProductsSection() {
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           HOT PRODUCTS
         </h2>
+        <p style={{ fontSize: '15px', color: '#6B7280', margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>
+          In High Demand
+        </p>
         <div style={{ borderTop: '1px dashed rgba(20,92,60,0.4)', margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 

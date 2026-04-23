@@ -383,8 +383,8 @@ export default function RoadTripsSection() {
         {/* ── Header ── */}
         <header className="rt-header">
           <span className="rt-eyebrow">Road Trips</span>
-          <h2 className="rt-title">Find Your Next Session</h2>
-          <p className="rt-tagline">Spots. Scenes. Sessions. Across the Highway.</p>
+          <h2 className="rt-title">HIGHER LEARNING</h2>
+          <p className="rt-tagline">Your Guide to the Highway.</p>
         </header>
 
         {/* ── Grid: Featured + Secondary ── */}
