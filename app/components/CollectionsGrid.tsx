@@ -190,7 +190,7 @@ export default function CollectionsGrid() {
           display: block;
           width: 100%;
           height: 100%;
-          transform: scale(var(--cg-scale, 1.02)) translate(var(--cg-offset-x, 0px), var(--cg-offset-y, 0px));
+          transform: scale(var(--cg-scale, 1.02)) translate(calc(var(--cg-offset-x, 0px) + 2px), calc(var(--cg-offset-y, 0px) - 2px));
         }
         
         /* Pixel-perfect alignment adjustments for the top row */

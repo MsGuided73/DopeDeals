@@ -17,9 +17,9 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3 \
 FROM deps AS build
 WORKDIR /app
 COPY . .
-# Cap build-time Node heap at 3 GB — prevents OOM-kill mid-compilation on a 3.8 GB host.
+# Cap build-time Node heap at 1.5 GB — prevents OOM-kill mid-compilation on host with ~3GB available RAM.
 # next build is the most memory-hungry step (Three.js, AI SDKs, 44+ routes).
-ENV NODE_OPTIONS="--max-old-space-size=3072"
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 RUN pnpm build
 
 # ---- run ----
@@ -31,5 +31,9 @@ COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
 
+# Cap runtime Node heap at 1 GB
+ENV NODE_OPTIONS="--max-old-space-size=1024"
+
 EXPOSE 3000
 CMD ["node", "server.js"]
+
