@@ -19,19 +19,19 @@ const TOP_ROW: Collection[] = [
     name: "Bongs & Water Pipes",
     tagline: "Smooth hits. Elevated sessions.",
     route: "/bongs",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Bongs%20(1).png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Bongs.png",
   },
   {
     name: "Dab Rigs",
     tagline: "Clean flavor. Next level.",
     route: "/dabsntools",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Dab%20Rigs.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Dab%20Rigs%20(1).png",
   },
   {
     name: "Vapes & Carts",
     tagline: "Compact. Clean. On the go.",
     route: "/vapes",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Vapes%20%26%20Carts.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Vapes%20&%20Carts%20(1).png",
   },
 ];
 
