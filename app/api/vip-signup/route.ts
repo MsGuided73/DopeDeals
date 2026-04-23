@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { insertVipSignupSchema } from "@/shared/schema";
+import { insertVipSignupSchema } from "@shared/schema";
 
 // Initialize Supabase client
 const supabase = createClient(

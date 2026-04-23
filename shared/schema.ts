@@ -36,7 +36,6 @@ export const vipSignups = pgTable("vip_signups", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-export const insertVipSignupSchema = createInsertSchema(vipSignups);
 
 export const categories = pgTable("categories", {
   id: uuid("id").defaultRandom().primaryKey(),
