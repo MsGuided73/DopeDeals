@@ -193,11 +193,14 @@ export default function CollectionsGrid() {
           transform: scale(1.02) translate(var(--cg-offset-x, 0px), var(--cg-offset-y, 0px));
         }
         
+        /* Pixel-perfect text alignment adjustments for the top row */
+        .cg-row--top .cg-card:nth-child(2) { --cg-text-y: -2px; }
+
         /* Pixel-perfect text alignment adjustments for the bottom row */
-        .cg-row--bottom .cg-card:nth-child(3) { --cg-offset-y: 2px; --cg-offset-x: -1px; }
-        .cg-row--bottom .cg-card:nth-child(4) { --cg-offset-y: -2px; }
-        .cg-row--bottom .cg-card:nth-child(5) { --cg-offset-y: 4px; --cg-offset-x: -1px; }
-        .cg-row--bottom .cg-card:nth-child(6) { --cg-offset-y: -7px; --cg-offset-x: 6px; }
+        .cg-row--bottom .cg-card:nth-child(3) { --cg-text-y: 2px; --cg-text-x: -1px; }
+        .cg-row--bottom .cg-card:nth-child(4) { --cg-text-y: -2px; }
+        .cg-row--bottom .cg-card:nth-child(5) { --cg-text-y: 4px; --cg-text-x: -1px; }
+        .cg-row--bottom .cg-card:nth-child(6) { --cg-text-y: -7px; --cg-text-x: 6px; }
         .cg-card__media img {
           display: block;
           width: 100%;
@@ -250,6 +253,7 @@ export default function CollectionsGrid() {
           bottom: 0;
           z-index: 2;
           padding: 18px 20px;
+          transform: translate(var(--cg-text-x, 0px), var(--cg-text-y, 0px));
         }
         .cg-card--sm .cg-card__body { padding: 14px 16px; }
 
