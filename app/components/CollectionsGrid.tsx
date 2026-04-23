@@ -40,37 +40,37 @@ const BOTTOM_ROW: Collection[] = [
     name: "Hand Pipes",
     tagline: "Simple. Classic. Always a vibe.",
     route: "/pipes",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Handpipes.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Pipes_2.png",
   },
   {
     name: "Flower",
-    tagline: "Top shelf. Hand-selected.",
+    tagline: "Top shelf. Fresh. Always fire.",
     route: "/thca_flower",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Flower.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Flower_2.png",
   },
   {
     name: "Pre-Rolls",
-    tagline: "Ready to roll. Infused or classic.",
+    tagline: "Ready when you are.",
     route: "/pre-rolls",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/PreRolls.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/PreRolls_2.png",
   },
   {
     name: "Edibles",
-    tagline: "Great taste. Smooth ride.",
+    tagline: "Delicious. Discreet. Dialed in.",
     route: "/edibles",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Edibles.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Edibles_2.png",
   },
   {
-    name: "Shrooms & More",
-    tagline: "A different kind of ride.",
+    name: "Shrooms",
+    tagline: "Elevate your mind. Naturally.",
     route: "/mushrooms",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Shrooms%20&%20More.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Shrooms.png",
   },
   {
     name: "Accessories",
-    tagline: "The essentials for every setup.",
+    tagline: "Everything you need. All in one.",
     route: "/accessories",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Accessories.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Accessories_2.png",
   },
 ];
 
@@ -182,7 +182,7 @@ export default function CollectionsGrid() {
           box-shadow: 0 10px 30px rgba(0,0,0,0.25);
         }
         .cg-card--sm {
-          aspect-ratio: 3 / 4;
+          aspect-ratio: 2 / 3;
         }
 
         .cg-card__media {
@@ -190,17 +190,20 @@ export default function CollectionsGrid() {
           display: block;
           width: 100%;
           height: 100%;
-          transform: scale(1.02) translate(var(--cg-offset-x, 0px), var(--cg-offset-y, 0px));
+          transform: scale(var(--cg-scale, 1.02)) translate(var(--cg-offset-x, 0px), var(--cg-offset-y, 0px));
         }
         
         /* Pixel-perfect alignment adjustments for the top row */
-        .cg-row--top .cg-card:nth-child(2) { --cg-offset-y: -2px; }
+        .cg-row--top .cg-card:nth-child(2) { --cg-offset-y: -3px; }
+        .cg-row--top .cg-card:nth-child(3) { --cg-offset-y: -1px; }
 
         /* Pixel-perfect image alignment adjustments for the bottom row */
-        .cg-row--bottom .cg-card:nth-child(3) { --cg-offset-y: 2px; --cg-offset-x: -1px; }
-        .cg-row--bottom .cg-card:nth-child(4) { --cg-offset-y: -2px; }
+        .cg-row--bottom .cg-card:nth-child(1) { --cg-offset-y: 5px; --cg-offset-x: 4px; --cg-scale: 1.06; }
+        .cg-row--bottom .cg-card:nth-child(2) { --cg-offset-y: 6px; --cg-offset-x: 4px; --cg-scale: 1.06; }
+        .cg-row--bottom .cg-card:nth-child(3) { --cg-offset-y: 0px; --cg-offset-x: 10px; --cg-scale: 1.09; }
+        .cg-row--bottom .cg-card:nth-child(4) { --cg-offset-y: 4px; --cg-offset-x: 5px; --cg-scale: 1.07; }
         .cg-row--bottom .cg-card:nth-child(5) { --cg-offset-y: 4px; --cg-offset-x: -1px; }
-        .cg-row--bottom .cg-card:nth-child(6) { --cg-offset-y: -7px; --cg-offset-x: 6px; }
+        .cg-row--bottom .cg-card:nth-child(6) { --cg-offset-y: -4px; --cg-offset-x: 3px; --cg-scale: 1.06; }
         .cg-card__media img {
           display: block;
           width: 100%;
