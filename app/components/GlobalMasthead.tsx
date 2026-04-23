@@ -446,10 +446,10 @@ export default function GlobalMasthead() {
       <header className="dg-header">
 
         {/* ══════════════════════════════════════════════════════════════
-            COMPACT (< xl) — hamburger layout for phones, tablets, and
+            COMPACT (< 2xl) — hamburger layout for phones, tablets, and
             narrow desktop/split-screen viewports
         ══════════════════════════════════════════════════════════════ */}
-        <div className="xl:hidden relative">
+        <div className="2xl:hidden relative">
 
           {/* Mobile search overlay */}
           {isSearchOpen && (
@@ -530,9 +530,9 @@ export default function GlobalMasthead() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════════
-            DESKTOP (≥ xl) — full nav with centered links + right icons
+            DESKTOP (≥ 2xl) — full nav with centered links + right icons
         ══════════════════════════════════════════════════════════════ */}
-        <div className="hidden xl:block">
+        <div className="hidden 2xl:block">
           {/*
             Full-width stacked layout.
             The logo is absolutely positioned so BOTH the search row and the nav row

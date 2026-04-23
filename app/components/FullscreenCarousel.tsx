@@ -7,17 +7,17 @@ import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string }[] = [
   {
     id: 'slide-1',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/VIP%20Membership%20-%20V3.png',
-    alt: 'Highway 420 — Free VIP Membership',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test.png',
+    alt: 'Highway 420 — Better Vibes',
     href: '/rewards',
-    objectPosition: 'left top',
+    objectPosition: 'center center',
   },
   {
     id: 'slide-2',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/CG_ProdCard-Dab%20Rig.png',
-    alt: 'Highway 420 — Premium Dab Rig Experience',
-    href: '/dabsntools',
-    objectPosition: 'left top',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/RooR%20Carousel.jpeg',
+    alt: 'Highway 420 — RooR Bongs',
+    href: '/bongs',
+    objectPosition: 'center center',
   },
   {
     id: 'slide-3',
@@ -90,23 +90,23 @@ export default function FullscreenCarousel() {
           overflow: hidden;
           background: #0D0D0B;
           line-height: 0;
-          aspect-ratio: 4 / 3;
+          aspect-ratio: 2 / 1;
           /* mobile masthead ≈ 70px */
-          max-height: calc(100vh  - 70px);
-          max-height: calc(100svh - 70px);
+          max-height: calc(70vh - 35px);
+          max-height: calc(70svh - 35px);
         }
 
         @media (min-width: 768px) {
           .carousel-wrap {
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 15 / 4;
           }
         }
 
         @media (min-width: 1024px) {
           .carousel-wrap {
             /* desktop masthead (2 rows + icons) ≈ 160px */
-            max-height: calc(100vh  - 160px);
-            max-height: calc(100svh - 160px);
+            max-height: calc(70vh - 80px);
+            max-height: calc(70svh - 80px);
           }
         }
 

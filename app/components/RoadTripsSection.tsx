@@ -76,13 +76,13 @@ export default function RoadTripsSection() {
           padding-bottom: 4px;
         }
         .rt-title {
-          font-family: "Fira Sans", "Inter", sans-serif;
-          font-size: clamp(34px, 5vw, 64px);
+          font-family: "Chalets", "Oswald", "Fira Sans Extra Condensed", Impact, sans-serif;
+          font-size: clamp(40px, 6vw, 76px);
           font-weight: 800;
-          letter-spacing: -0.02em;
-          line-height: 1.02;
+          letter-spacing: -0.01em;
+          line-height: 1.05;
           color: #111111;
-          margin: 10px 0 6px;
+          margin: 6px 0 8px;
         }
         .rt-tagline {
           font-family: "Fira Sans", "Inter", sans-serif;
@@ -382,9 +382,9 @@ export default function RoadTripsSection() {
       <div className="rt-wrap">
         {/* ── Header ── */}
         <header className="rt-header">
-          <span className="rt-eyebrow">Road Trips</span>
-          <h2 className="rt-title">HIGHER LEARNING</h2>
-          <p className="rt-tagline">Your Guide to the Highway.</p>
+          <span className="rt-eyebrow">ROAD TRIPS</span>
+          <h2 className="rt-title">Find Your Next Session</h2>
+          <p className="rt-tagline">Spots. Scenes. Sessions. Across the Highway.</p>
         </header>
 
         {/* ── Grid: Featured + Secondary ── */}
