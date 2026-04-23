@@ -146,11 +146,11 @@ function ReviewCol({ review, visible }: { review: typeof reviews[0]; visible: bo
       <blockquote
         style={{
           fontFamily: "'Source Serif 4', Georgia, serif",
-          fontSize: "15px",
+          fontSize: "15.5px",
           fontStyle: "italic",
-          fontWeight: 550,
+          fontWeight: 700,
           lineHeight: 1.65,
-          color: "rgba(10,14,20,0.92)",
+          color: "rgba(10,14,20,0.95)",
           marginBottom: "20px",
           minHeight: "100px",
         }}

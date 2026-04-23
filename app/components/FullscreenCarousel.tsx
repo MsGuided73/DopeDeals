@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string }[] = [
   {
     id: 'slide-1',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test2.png',
     alt: 'Highway 420 — Better Vibes',
     href: '/rewards',
     objectPosition: 'center center',
