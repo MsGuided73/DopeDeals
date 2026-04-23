@@ -43,12 +43,10 @@ export default function TrustedBrandsBulletin() {
       position: 'relative',
       background: '#ffffff',
       padding: '56px 24px 60px',
-      borderTop: '4px solid',
-      borderImage: 'linear-gradient(90deg, #52C41A, #63D420) 1',
-      borderBottom: '4px solid',
+      /* border rules removed in favor of absolute striped dividers below */
     }}>
-      {/* Top lime rule */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #52C41A, #63D420)' }} />
+      {/* Top light navbar green rule with white stripe */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D' }} />
 
       {/* Section header */}
       <div style={{ textAlign: 'center', marginBottom: '48px' }}>
@@ -61,7 +59,7 @@ export default function TrustedBrandsBulletin() {
         }}>
           Road Tested Brands
         </p>
-        <div style={{ width: '40px', height: '3px', background: 'linear-gradient(90deg,#52C41A,#63D420)', margin: '0 auto 14px' }} />
+        <div style={{ width: '40px', height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
         <h2 style={{
           fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
           fontSize: 'clamp(42px, 6vw, 72px)',
@@ -162,38 +160,10 @@ export default function TrustedBrandsBulletin() {
         })}
       </div>
 
-      {/* CTA */}
-      <div style={{ textAlign: 'center', marginTop: '48px' }}>
-        <Link
-          href="/brands"
-          style={{
-            display: 'inline-block',
-            background: 'transparent',
-            color: '#52C41A',
-            fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-            fontSize: '19px',
-            letterSpacing: '0.06em',
-            padding: '12px 48px',
-            textDecoration: 'none',
-            border: '2px solid #52C41A',
-            borderRadius: '4px',
-            transition: 'background 0.18s, color 0.18s',
-          }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)';
-            (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff';
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
-            (e.currentTarget as HTMLAnchorElement).style.color = '#52C41A';
-          }}
-        >
-          VIEW ALL BRANDS →
-        </Link>
-      </div>
 
-      {/* Bottom lime rule */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #52C41A, #63D420)' }} />
+
+      {/* Bottom light navbar green rule with white stripe */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D' }} />
 
       <style>{`
         @media (max-width: 1024px) {

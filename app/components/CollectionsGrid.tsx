@@ -19,19 +19,19 @@ const TOP_ROW: Collection[] = [
     name: "Bongs & Water Pipes",
     tagline: "Smooth hits. Elevated sessions.",
     route: "/bongs",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Bongs%20(1).png",
   },
   {
     name: "Dab Rigs",
     tagline: "Clean flavor. Next level.",
     route: "/dabsntools",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Dab%20Rigs.png",
   },
   {
     name: "Vapes & Carts",
     tagline: "Compact. Clean. On the go.",
     route: "/vapes",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Vapes%20%26%20Carts.png",
   },
 ];
 
@@ -40,37 +40,37 @@ const BOTTOM_ROW: Collection[] = [
     name: "Hand Pipes",
     tagline: "Simple. Classic. Always a vibe.",
     route: "/pipes",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Handpipes.png",
   },
   {
     name: "Flower",
     tagline: "Top shelf. Hand-selected.",
     route: "/thca_flower",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Flower.png",
   },
   {
     name: "Pre-Rolls",
     tagline: "Ready to roll. Infused or classic.",
     route: "/pre-rolls",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/PreRolls.png",
   },
   {
     name: "Edibles",
     tagline: "Great taste. Smooth ride.",
     route: "/edibles",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Edibles.png",
   },
   {
     name: "Shrooms & More",
     tagline: "A different kind of ride.",
     route: "/mushrooms",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Shrooms%20&%20More.png",
   },
   {
     name: "Accessories",
     tagline: "The essentials for every setup.",
     route: "/accessories",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Accessories.png",
   },
 ];
 
@@ -91,14 +91,6 @@ function CategoryCard({ col, size }: { col: Collection; size: "lg" | "sm" }) {
         ) : (
           <div className="cg-card__placeholder" aria-hidden="true" />
         )}
-        <div className="cg-card__scrim" />
-      </div>
-      <div className="cg-card__body">
-        <h3 className="cg-card__title">{col.name}</h3>
-        <p className="cg-card__tagline">{col.tagline}</p>
-        <span className="cg-card__cta">
-          Shop Now <span aria-hidden="true">→</span>
-        </span>
       </div>
     </Link>
   );
@@ -174,7 +166,9 @@ export default function CollectionsGrid() {
         /* ── Card ── */
         .cg-card {
           position: relative;
-          display: block;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
           overflow: hidden;
           border-radius: 12px;
           background: #1A1A1A;
@@ -187,19 +181,34 @@ export default function CollectionsGrid() {
           transform: translateY(-2px);
           box-shadow: 0 10px 30px rgba(0,0,0,0.25);
         }
-        .cg-card--lg { aspect-ratio: 3 / 2; }
-        .cg-card--sm { aspect-ratio: 1 / 1; }
+        .cg-card--sm {
+          aspect-ratio: 3 / 4;
+        }
 
         .cg-card__media {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
+          position: relative;
+          display: block;
+          width: 100%;
+          height: 100%;
+          transform: scale(1.02) translate(var(--cg-offset-x, 0px), var(--cg-offset-y, 0px));
         }
+        
+        /* Pixel-perfect text alignment adjustments for the bottom row */
+        .cg-row--bottom .cg-card:nth-child(3) { --cg-offset-y: 2px; --cg-offset-x: -1px; }
+        .cg-row--bottom .cg-card:nth-child(4) { --cg-offset-y: -2px; }
+        .cg-row--bottom .cg-card:nth-child(5) { --cg-offset-y: 4px; --cg-offset-x: -1px; }
+        .cg-row--bottom .cg-card:nth-child(6) { --cg-offset-y: -7px; --cg-offset-x: 6px; }
         .cg-card__media img {
+          display: block;
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: bottom center;
           transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .cg-card--lg .cg-card__media img {
+          height: auto;
+          object-fit: contain;
         }
         .cg-card:hover .cg-card__media img {
           transform: scale(1.05);
@@ -336,7 +345,7 @@ export default function CollectionsGrid() {
         }
       `}</style>
 
-      <div id="collections-grid">
+      <div id="collections-grid" style={{ padding: '0 16px' }}>
         {/* ── Header ── */}
         <header className="cg-header">
           <h2 className="cg-header__title">SHOP BY CATEGORY</h2>

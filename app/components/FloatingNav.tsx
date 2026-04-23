@@ -119,6 +119,8 @@ export default function FloatingNav() {
           font-family: 'Fira Sans', sans-serif;
           font-size: 13px;
           font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
           color: #111827;
           text-decoration: none;
           white-space: nowrap;
@@ -161,6 +163,24 @@ export default function FloatingNav() {
           background: #f0fce8;
           color: #3a9e12;
         }
+        .fn-navitem {
+          display: flex;
+          align-items: center;
+          height: 100%;
+        }
+        /* Vertical pipe dividers between nav items */
+        .fn-navitem + .fn-navitem::before {
+          content: '';
+          display: block;
+          width: 3px;
+          height: 18px;
+          background: transparent;
+          border-left: 1px solid #1B7A4D;
+          border-right: 1px solid #1B7A4D;
+          flex-shrink: 0;
+          align-self: center;
+          margin: 0 4px;
+        }
       `}</style>
 
       <nav className="fn-bar" aria-label="Secondary navigation">
@@ -183,7 +203,7 @@ export default function FloatingNav() {
             {NAV_LINKS.map((link) => (
               <div
                 key={link.href}
-                className="relative"
+                className="relative fn-navitem"
                 onMouseEnter={() => link.children && openMenu(link.label)}
                 onMouseLeave={() => link.children && closeWithDelay()}
               >

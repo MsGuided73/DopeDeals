@@ -17,7 +17,7 @@ const FEATURED: RoadTrip = {
   name: "Oregon Coast Sessions",
   tagline: "Where ocean views meet smooth sessions.",
   route: "/road-trips/oregon-coast",
-  image: "",
+  image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/RoadTrips_Home/Oregon%20Coastal%20Sessions.png",
 };
 
 const SECONDARY: RoadTrip[] = [
@@ -25,19 +25,19 @@ const SECONDARY: RoadTrip[] = [
     name: "Malibu Sessions",
     tagline: "Coastal views. Easy vibes.",
     route: "/road-trips/malibu",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/RoadTrips_Home/Malibu%20Sessions.png",
   },
   {
     name: "Denver Cannabis Fest",
     tagline: "Crowds, music, and elevated energy.",
     route: "/road-trips/denver-fest",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/RoadTrips_Home/Denver%20Cannabis%20Sessions.png",
   },
   {
     name: "Austin Chill Spot",
     tagline: "Laid-back hangs. Local flavor.",
     route: "/road-trips/austin",
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/RoadTrips_Home/Austin%20Chill%20Sessions.png",
   },
 ];
 

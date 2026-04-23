@@ -503,6 +503,7 @@ export async function getStorage(): Promise<IStorage> {
 
     async createTransaction(tx: any) {
       const { data, error } = await supabase
+        // @ts-ignore
         .from('payment_transactions')
         .insert({
           order_id: tx.orderId,
@@ -540,6 +541,7 @@ export async function getStorage(): Promise<IStorage> {
       if (updates.transactionDetails) { dbUpdates.transaction_details = updates.transactionDetails; delete dbUpdates.transactionDetails; }
 
       const { data, error } = await supabase
+        // @ts-ignore
         .from('payment_transactions')
         .update(dbUpdates)
         .eq('id', id)
@@ -562,6 +564,7 @@ export async function getStorage(): Promise<IStorage> {
       const orderIds = orders.map(o => o.id);
       
       const { data, error } = await supabase
+        // @ts-ignore
         .from('payment_transactions')
         .select('*')
         .in('order_id', orderIds)
@@ -573,6 +576,7 @@ export async function getStorage(): Promise<IStorage> {
 
     async getOrderTransactions(orderId: string) {
       const { data, error } = await supabase
+        // @ts-ignore
         .from('payment_transactions')
         .select('*')
         .eq('order_id', orderId)
@@ -584,6 +588,7 @@ export async function getStorage(): Promise<IStorage> {
 
     async createWebhookEvent(event: any) {
       const { data, error } = await supabase
+        // @ts-ignore
         .from('kajapay_webhook_events')
         .insert({
           event_type: event.eventType,

@@ -110,8 +110,8 @@ export default function NewProductsSection() {
           position: 'relative',
         }}
       >
-        {/* Solid lime-green top accent bar */}
-        <div style={{ height: '4px', background: 'linear-gradient(90deg, #63D420, #52C41A)', borderRadius: '1px 1px 0 0' }} />
+        {/* Light navbar green top accent bar with white stripe */}
+        <div style={{ height: '4px', background: '#ffffff', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', borderRadius: '1px 1px 0 0' }} />
 
         {/* Image */}
         <div style={{ position: 'relative', aspectRatio: '1', background: RS.bg, overflow: 'hidden' }}>
@@ -211,16 +211,16 @@ export default function NewProductsSection() {
   return (
     // ── Roadside Stop: Fresh Drops Section ──────────────────────────────────
     <section style={{ marginTop: '64px', background: RS.bg, padding: '60px 0 72px', position: 'relative' }}>
-      {/* Thin lime green top rule */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #63D420, #52C41A)' }} />
+      {/* Thin light navbar green top rule with white stripe */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D' }} />
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <div style={{ height: '3px', width: '48px', background: RS.accent, margin: '0 auto 14px' }} />
+        <div style={{ height: '4px', width: '48px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           FRESH DROPS
         </h2>
-        <div style={{ borderTop: `1px dashed ${RS.accent}50`, margin: '20px auto 0', maxWidth: '360px' }} />
+        <div style={{ borderTop: `1px dashed rgba(20,92,60,0.5)`, margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 
       {/* Static responsive grid — all breakpoints */}
@@ -259,8 +259,8 @@ export default function NewProductsSection() {
         </Link>
       </div>
 
-      {/* Thin lime green bottom rule */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #52C41A, #63D420)' }} />
+      {/* Thin light navbar green bottom rule with white stripe */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D' }} />
     </section>
   );
 }

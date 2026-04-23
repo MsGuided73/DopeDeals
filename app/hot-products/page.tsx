@@ -99,19 +99,7 @@ export default function HotProductsPage() {
         />
 
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-          <p
-            style={{
-              fontFamily: "'Fira Sans','Inter',sans-serif",
-              fontSize: "11px",
-              fontWeight: 700,
-              color: LIME,
-              letterSpacing: "0.3em",
-              textTransform: "uppercase",
-              marginBottom: "10px",
-            }}
-          >
-            Handpicked Favorites · Best Sellers
-          </p>
+
 
           <div
             style={{
@@ -128,25 +116,14 @@ export default function HotProductsPage() {
               color: INK,
               fontSize: "clamp(56px,10vw,128px)",
               lineHeight: 0.92,
-              letterSpacing: "0.02em",
+              letterSpacing: "-0.01em",
               margin: "0 0 16px",
             }}
           >
             HOT PRODUCTS
           </h1>
 
-          <p
-            style={{
-              fontFamily: "'Fira Sans','Inter',sans-serif",
-              color: "#6B7280",
-              fontSize: "15px",
-              maxWidth: "620px",
-              margin: "0 auto 24px",
-              lineHeight: 1.6,
-            }}
-          >
-            Our fastest-moving items — handpicked favorites customers can&apos;t stop buying.
-          </p>
+
 
           {/* Trust row */}
           <div

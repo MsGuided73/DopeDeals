@@ -12,17 +12,17 @@ import { Toaster } from 'react-hot-toast';
 
 const sharedSign = {
   fontFamily: "'Highway Gothic', 'Oswald', 'Impact', 'Arial Narrow', sans-serif",
-  letterSpacing: '0.08em',
+  letterSpacing: '0.06em',
   textTransform: 'uppercase' as const,
-  fontSize: '13px',
+  fontSize: '15px',
   fontWeight: '700',
-  padding: '12px 18px 12px 14px',
+  padding: '14px 22px 14px 18px',
   borderRadius: '4px',
   boxShadow:
     '0 0 0 3px rgba(255,255,255,0.90), 0 0 0 5px rgba(0,0,0,0.6), 0 6px 20px rgba(0,0,0,0.5)',
-  maxWidth: '340px',
-  minWidth: '220px',
-  lineHeight: '1.35',
+  maxWidth: '420px',
+  minWidth: '280px',
+  lineHeight: '1.4',
 };
 
 export default function ToastProvider() {
