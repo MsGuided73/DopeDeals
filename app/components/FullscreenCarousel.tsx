@@ -134,8 +134,7 @@ export default function FullscreenCarousel() {
         /* Arrows */
         .carousel-arrow {
           position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
+          bottom: 24px;
           z-index: 20;
           width: 40px;
           height: 40px;
@@ -153,7 +152,7 @@ export default function FullscreenCarousel() {
           touch-action: manipulation;
         }
         .carousel-arrow:hover { background: rgba(0,0,0,0.55); }
-        .carousel-arrow:active { transform: translateY(-50%) scale(0.93); }
+        .carousel-arrow:active { transform: scale(0.93); }
         .carousel-arrow-left  { left:  16px; }
         .carousel-arrow-right { right: 16px; }
 
