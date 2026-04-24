@@ -108,7 +108,7 @@ export default function CollectionsGrid() {
         }
         .cg-header__title {
           font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
-          font-size: clamp(40px, 6vw, 72px);
+          font-size: clamp(32px, 5vw, 64px);
           font-weight: 400;
           letter-spacing: 0.02em;
           line-height: 1;
