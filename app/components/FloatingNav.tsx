@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 /* ── Mirror the primary navbar's category structure exactly ─────────────── */
@@ -55,6 +55,7 @@ const NAV_LINKS = [
 export default function FloatingNav() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -173,6 +174,101 @@ export default function FloatingNav() {
           flex-shrink: 0;
           align-self: center;
         }
+
+        /* ── Right-side toggle button ── */
+        .fn-mobile-toggle {
+          display: none;
+          background: transparent;
+          border: none;
+          color: #ffffff;
+          padding: 8px;
+          cursor: pointer;
+          margin-left: auto;
+        }
+        @media (max-width: 1279px) {
+          .fn-links {
+            display: none;
+          }
+          .fn-mobile-toggle {
+            display: block;
+          }
+        }
+
+        /* ── Left-side drawer + backdrop ── */
+        .fn-drawer-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(2px);
+          -webkit-backdrop-filter: blur(2px);
+          z-index: 10000;
+          animation: fn-fade-in 0.2s ease-out;
+        }
+        .fn-drawer {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: min(340px, 86vw);
+          background: #145C3C;
+          border-right: 1px solid rgba(255,255,255,0.14);
+          box-shadow: 10px 0 28px rgba(0,0,0,0.35);
+          z-index: 10001;
+          overflow-y: auto;
+          animation: fn-slide-in-left 0.28s ease-out;
+          display: flex;
+          flex-direction: column;
+        }
+        .fn-drawer-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 20px;
+          border-bottom: 1px solid rgba(255,255,255,0.14);
+          flex-shrink: 0;
+        }
+        .fn-drawer-title {
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          color: #ffffff;
+          text-transform: uppercase;
+        }
+        .fn-drawer-close {
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          color: #ffffff;
+          padding: 6px;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.15s;
+        }
+        .fn-drawer-close:hover { background: rgba(255,255,255,0.12); }
+        .fn-drawer-link {
+          display: block;
+          padding: 13px 20px;
+          font-family: 'Fira Sans', sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.88);
+          text-decoration: none;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
+          transition: color 0.15s, background 0.15s;
+        }
+        .fn-drawer-link:hover { background: rgba(255,255,255,0.1); color: #ffffff; }
+
+        @keyframes fn-slide-in-left {
+          from { transform: translateX(-100%); }
+          to   { transform: translateX(0); }
+        }
+        @keyframes fn-fade-in {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
       `}</style>
 
       <nav className="fn-bar" aria-label="Secondary navigation">
@@ -219,8 +315,54 @@ export default function FloatingNav() {
             ))}
           </div>
 
+          {/* Hamburger Icon - pushed to right, visible on < xl */}
+          <button className="fn-mobile-toggle" onClick={() => setIsMenuOpen(true)} aria-label="Open menu">
+            <Menu style={{ width: 26, height: 26 }} />
+          </button>
+
         </div>
       </nav>
+
+      {/* Drawer */}
+      {isMenuOpen && (
+        <>
+          <div
+            className="fn-drawer-backdrop xl:hidden"
+            onClick={() => setIsMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <aside
+            className="fn-drawer xl:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Main menu"
+          >
+            <div className="fn-drawer-header">
+              <span className="fn-drawer-title">Menu</span>
+              <button
+                type="button"
+                className="fn-drawer-close"
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <X style={{ width: 22, height: 22 }} />
+              </button>
+            </div>
+            <nav>
+              {NAV_LINKS.map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="fn-drawer-link"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </aside>
+        </>
+      )}
     </>
   );
 }
