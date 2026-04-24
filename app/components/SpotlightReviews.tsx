@@ -146,7 +146,7 @@ function ReviewCol({ review, visible }: { review: typeof reviews[0]; visible: bo
       <blockquote
         style={{
           fontFamily: "'Source Serif 4', Georgia, serif",
-          fontSize: "15.5px",
+          fontSize: "17px",
           fontStyle: "italic",
           fontWeight: 700,
           lineHeight: 1.65,
@@ -318,7 +318,7 @@ export default function SpotlightReviews() {
           <p
             style={{
               fontFamily: "'DM Sans', 'Inter', system-ui, sans-serif",
-              fontSize: "14px",
+              fontSize: "15px",
               color: "rgba(10,14,20,0.65)",
               lineHeight: 1.55,
               maxWidth: "340px",

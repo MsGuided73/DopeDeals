@@ -382,8 +382,8 @@ export default function RoadTripsSection() {
       <div className="rt-wrap">
         {/* ── Header ── */}
         <header className="rt-header">
-          <span className="rt-eyebrow">ROAD TRIPS</span>
-          <h2 className="rt-title">Find Your Next Session</h2>
+          <span className="rt-eyebrow">Find Your Next Session</span>
+          <h2 className="rt-title">ROAD TRIPS</h2>
           <p className="rt-tagline">Spots. Scenes. Sessions. Across the Highway.</p>
         </header>
 
