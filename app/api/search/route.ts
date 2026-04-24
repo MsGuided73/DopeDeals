@@ -91,6 +91,7 @@ export async function POST(req: Request) {
       const like = `%${queryText}%`;
       q1 = q1.or([
         `name.ilike.${like}`,
+        `brand_name.ilike.${like}`,
         `description.ilike.${like}`,
         `short_description.ilike.${like}`,
       ].join(","));
