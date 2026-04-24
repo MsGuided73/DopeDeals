@@ -9,8 +9,8 @@ import { useCompliance } from '../contexts/ComplianceContext';
 // ── Fresh Drops palette — clean white + lime green ────────────────────────
 const RS = {
   bg: '#ffffff',          // clean white section background
-  accent: '#52C41A',      // lime green (matches Hot Products CTA)
-  accentLight: '#63D420', // lighter lime for gradients
+  accent: '#2d8f47',      // lime green (matches Hot Products CTA)
+  accentLight: '#3cb05b', // lighter lime for gradients
   dark: '#1c1208',        // aged dark brown (kept for text)
   muted: '#6B7280',       // neutral grey for subtext
   white: '#ffffff',       // card background
@@ -176,7 +176,7 @@ export default function NewProductsSection() {
               disabled={isRestricted}
               style={isRestricted
                 ? { flex: 1, background: '#e5e5e5', color: '#999', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: 'linear-gradient(to bottom, #63D420, #52C41A)', color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
+                : { flex: 1, background: 'linear-gradient(to bottom, #3cb05b, #2d8f47)', color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
               onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
             >
@@ -184,8 +184,8 @@ export default function NewProductsSection() {
             </button>
             <Link
               href={isRestricted ? '#' : `/product/${product.id}`}
-              style={{ flex: 1, border: '1.5px solid #52C41A', color: '#52C41A', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-              className="hover:bg-[#52C41A] hover:text-white"
+              style={{ flex: 1, border: '1.5px solid #2d8f47', color: '#2d8f47', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+              className="hover:bg-[#2d8f47] hover:text-white"
             >
               View Details
             </Link>
@@ -199,7 +199,7 @@ export default function NewProductsSection() {
     return (
       <section style={{ marginTop: '64px', background: RS.bg, padding: '64px 16px' }}>
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(40px,7vw,80px)', letterSpacing: '0.02em' }}>FRESH DROPS</h2>
+          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(32px,5vw,64px)', letterSpacing: '0.02em' }}>FRESH DROPS</h2>
           <p style={{ fontFamily: "'DM Sans',sans-serif", color: '#ef4444', marginTop: '16px' }}>Unable to load new products. Please refresh the page.</p>
         </div>
       </section>
@@ -217,7 +217,7 @@ export default function NewProductsSection() {
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
         <div style={{ height: '4px', width: '48px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(32px,5vw,64px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           FRESH DROPS
         </h2>
         <p style={{ fontSize: '15px', color: RS.muted, margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>
@@ -254,9 +254,9 @@ export default function NewProductsSection() {
       <div style={{ textAlign: 'center', marginTop: '44px' }}>
         <Link
           href="/fresh-drops"
-          style={{ display: 'inline-block', background: 'transparent', color: '#52C41A', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: '2px solid #52C41A', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#52C41A'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = '#52C41A'; }}
+          style={{ display: 'inline-block', background: 'transparent', color: '#2d8f47', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: '2px solid #2d8f47', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#2d8f47'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = '#2d8f47'; }}
         >
           VIEW ALL FRESH DROPS →
         </Link>

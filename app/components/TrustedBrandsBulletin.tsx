@@ -180,7 +180,7 @@ export default function TrustedBrandsBulletin() {
           opacity: 1 !important;
         }
         .brand-item:hover span {
-          color: #52C41A !important;
+          color: #2d8f47 !important;
         }
         .brand-grid:hover .brand-item:not(:hover) {
           opacity: 0.5;

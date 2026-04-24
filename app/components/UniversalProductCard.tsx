@@ -93,8 +93,8 @@ export default function UniversalProductCard({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Canonical lime brand tokens — match FeaturedProductsSection / hot-products
-  const LIME = '#52C41A';
-  const LIME_BRIGHT = '#63D420';
+  const LIME = '#2d8f47';
+  const LIME_BRIGHT = '#3cb05b';
 
   const { restrictedProductIds } = useCompliance();
   const isRestricted = restrictedProductIds.includes(product.id);

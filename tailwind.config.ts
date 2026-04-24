@@ -107,16 +107,16 @@ export default {
             900: '#111827',
           },
         },
-        // Legacy DOPE CITY colors — remapped to brand lime green #52C41A
+        // Legacy DOPE CITY colors — remapped to brand lime green #2d8f47
         'dope-orange': {
-          DEFAULT: '#52C41A',
+          DEFAULT: '#2d8f47',
           50:  '#f3fde8',
           100: '#e4fac5',
           200: '#cdf598',
           300: '#aaeb60',
-          400: '#63D420',
-          500: '#52C41A',
-          600: '#3DA614',
+          400: '#3cb05b',
+          500: '#2d8f47',
+          600: '#226b35',
           700: '#2d840f',
           800: '#1f5e0b',
           900: '#133a06',

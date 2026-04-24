@@ -86,9 +86,9 @@ export default function FloatingNav() {
           left: 0;
           right: 0;
           z-index: 9999;
-          background: #ffffff;
-          border-bottom: 2px solid #e5e7eb;
-          box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+          background: linear-gradient(to bottom, #145C3C, #1B7A4D);
+          border-bottom: 1px solid #0F4A30;
+          box-shadow: 0 2px 16px rgba(0,0,0,0.15);
         }
         .fn-inner {
           display: flex;
@@ -97,12 +97,7 @@ export default function FloatingNav() {
           gap: 0;
           height: 60px;
         }
-        .fn-logo {
-          flex-shrink: 0;
-          margin-right: 28px;
-          display: flex;
-          align-items: center;
-        }
+
         .fn-links {
           display: flex;
           align-items: center;
@@ -121,7 +116,7 @@ export default function FloatingNav() {
           font-weight: 700;
           letter-spacing: 0.06em;
           text-transform: uppercase;
-          color: #111827;
+          color: #ffffff;
           text-decoration: none;
           white-space: nowrap;
           border-bottom: 2px solid transparent;
@@ -133,8 +128,8 @@ export default function FloatingNav() {
           border-right: none;
         }
         .fn-link:hover, .fn-link.active {
-          color: #52C41A;
-          border-bottom-color: #52C41A;
+          color: #ffffff;
+          border-bottom-color: rgba(255,255,255,0.8);
         }
         .fn-dropdown {
           position: absolute;
@@ -143,7 +138,7 @@ export default function FloatingNav() {
           min-width: 210px;
           background: #ffffff;
           border: 1px solid #e5e7eb;
-          border-top: 2px solid #52C41A;
+          border-top: 2px solid #2d8f47;
           border-radius: 0 0 6px 6px;
           box-shadow: 0 8px 24px rgba(0,0,0,0.10);
           z-index: 100;
@@ -172,31 +167,16 @@ export default function FloatingNav() {
         .fn-navitem + .fn-navitem::before {
           content: '';
           display: block;
-          width: 3px;
+          width: 1px;
           height: 18px;
-          background: transparent;
-          border-left: 1px solid #1B7A4D;
-          border-right: 1px solid #1B7A4D;
+          background: #E8E4D9;
           flex-shrink: 0;
           align-self: center;
-          margin: 0 4px;
         }
       `}</style>
 
       <nav className="fn-bar" aria-label="Secondary navigation">
         <div className="fn-inner">
-
-          {/* Wordmark logo */}
-          <Link href="/" className="fn-logo" aria-label="Highway 420 home">
-            <Image
-              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/10inWM.png"
-              alt="Highway 420"
-              width={130}
-              height={44}
-              style={{ objectFit: "contain", height: "44px", width: "auto" }}
-              priority
-            />
-          </Link>
 
           {/* Nav links — centered */}
           <div className="fn-links">

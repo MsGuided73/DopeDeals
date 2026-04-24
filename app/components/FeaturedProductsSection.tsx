@@ -335,7 +335,7 @@ export default function FeaturedProductsSection() {
               disabled={isRestricted || product.stock_quantity <= 0}
               style={isRestricted || product.stock_quantity <= 0
                 ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)', color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
+                : { flex: 1, background: 'radial-gradient(ellipse at 50% 35%, #3cb05b 0%, #2d8f47 55%, #226b35 100%)', color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
               onMouseEnter={e => { if (!isRestricted && product.stock_quantity > 0) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
             >
@@ -343,8 +343,8 @@ export default function FeaturedProductsSection() {
             </button>
             <Link
               href={isRestricted ? '#' : `/product/${product.id}`}
-              style={{ flex: 1, border: '1.5px solid #52C41A', color: '#52C41A', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-              className="hover:bg-[#52C41A] hover:text-white"
+              style={{ flex: 1, border: '1.5px solid #2d8f47', color: '#2d8f47', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+              className="hover:bg-[#2d8f47] hover:text-white"
             >
               View Details
             </Link>
@@ -363,7 +363,7 @@ export default function FeaturedProductsSection() {
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
         <div style={{ height: '4px', width: '48px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           HOT PRODUCTS
         </h2>
         <p style={{ fontSize: '15px', color: '#6B7280', margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>
@@ -390,9 +390,9 @@ export default function FeaturedProductsSection() {
       <div style={{ textAlign: 'center', marginTop: '44px' }}>
         <Link
           href="/hot-products"
-          style={{ display: 'inline-block', background: 'transparent', color: '#52C41A', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: '2px solid #52C41A', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = '#52C41A'; }}
+          style={{ display: 'inline-block', background: 'transparent', color: '#2d8f47', fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: '2px solid #2d8f47', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'radial-gradient(ellipse at 50% 35%, #3cb05b 0%, #2d8f47 55%, #226b35 100%)'; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = '#2d8f47'; }}
         >
           SHOP ALL HOT PRODUCTS →
         </Link>

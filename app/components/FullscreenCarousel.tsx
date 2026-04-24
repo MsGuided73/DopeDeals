@@ -7,8 +7,8 @@ import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string }[] = [
   {
     id: 'slide-1',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test2.png',
-    alt: 'Highway 420 — Better Vibes',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/Membership.png',
+    alt: 'Highway 420 — VIP Membership',
     href: '/rewards',
     objectPosition: 'center center',
   },
@@ -21,15 +21,15 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
   },
   {
     id: 'slide-3',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/Bundles-V1.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/BetterVibes_Carousel_Test3.png',
     alt: 'Highway 420 — Bundles',
     href: '/bundles',
     objectPosition: 'center center',
   },
   {
     id: 'slide-4',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/Road-Trips-V2.png',
-    alt: 'Highway 420 — Road Trips',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test2.png',
+    alt: 'Highway 420 — Better Vibes',
     href: '/road-trips',
     objectPosition: 'center center',
   },
@@ -98,15 +98,15 @@ export default function FullscreenCarousel() {
 
         @media (min-width: 768px) {
           .carousel-wrap {
-            aspect-ratio: 15 / 4;
+            height: calc((100vw * 4 / 15) + 75px);
           }
         }
 
         @media (min-width: 1024px) {
           .carousel-wrap {
             /* desktop masthead (2 rows + icons) ≈ 160px */
-            max-height: calc(70vh - 80px);
-            max-height: calc(70svh - 80px);
+            max-height: calc(70vh - 5px);
+            max-height: calc(70svh - 5px);
           }
         }
 
@@ -115,7 +115,13 @@ export default function FullscreenCarousel() {
           inset: 0;
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
+        }
+
+        @media (min-width: 1024px) {
+          .carousel-slide-img {
+            object-fit: cover;
+          }
         }
 
         /* Slide fade */

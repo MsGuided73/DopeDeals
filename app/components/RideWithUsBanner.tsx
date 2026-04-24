@@ -100,7 +100,7 @@ export default function RideWithUsBanner() {
             fontSize: "24px",
             letterSpacing: "0.06em",
             color: "#fff",
-            background: "#52C41A",
+            background: "#2d8f47",
             padding: "10px 24px",
             borderRadius: "4px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
@@ -155,7 +155,7 @@ export default function RideWithUsBanner() {
             {/* Form */}
             {success ? (
               <div style={{ padding: "40px 32px", textAlign: "center" }}>
-                <div style={{ color: "#52C41A", fontSize: "48px", marginBottom: "16px" }}>✓</div>
+                <div style={{ color: "#2d8f47", fontSize: "48px", marginBottom: "16px" }}>✓</div>
                 <h4 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: "32px", color: "#fff", margin: "0 0 8px 0" }}>YOU'RE ON THE LIST</h4>
                 <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "#9ca3af", margin: 0 }}>Keep an eye on your inbox for exclusive drops.</p>
               </div>
@@ -173,7 +173,7 @@ export default function RideWithUsBanner() {
                   placeholder="First Name" 
                   required
                   style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
-                  onFocus={e => e.currentTarget.style.borderColor = "#52C41A"}
+                  onFocus={e => e.currentTarget.style.borderColor = "#2d8f47"}
                   onBlur={e => e.currentTarget.style.borderColor = "#2d241b"}
                 />
                 <input 
@@ -182,7 +182,7 @@ export default function RideWithUsBanner() {
                   placeholder="Last Name" 
                   required
                   style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
-                  onFocus={e => e.currentTarget.style.borderColor = "#52C41A"}
+                  onFocus={e => e.currentTarget.style.borderColor = "#2d8f47"}
                   onBlur={e => e.currentTarget.style.borderColor = "#2d241b"}
                 />
               </div>
@@ -193,7 +193,7 @@ export default function RideWithUsBanner() {
                 placeholder="Email Address" 
                 required
                 style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
-                onFocus={e => e.currentTarget.style.borderColor = "#52C41A"}
+                onFocus={e => e.currentTarget.style.borderColor = "#2d8f47"}
                 onBlur={e => e.currentTarget.style.borderColor = "#2d241b"}
               />
 
@@ -202,7 +202,7 @@ export default function RideWithUsBanner() {
                 name="phone"
                 placeholder="Phone Number (Optional)" 
                 style={{ width: "100%", background: "#0D0D0B", color: "#ffffff", padding: "12px 16px", borderRadius: "4px", border: "1px solid #2d241b", fontFamily: "Inter, sans-serif", fontSize: "14px", outline: "none" }}
-                onFocus={e => e.currentTarget.style.borderColor = "#52C41A"}
+                onFocus={e => e.currentTarget.style.borderColor = "#2d8f47"}
                 onBlur={e => e.currentTarget.style.borderColor = "#2d241b"}
               />
 
@@ -211,7 +211,7 @@ export default function RideWithUsBanner() {
                 disabled={isLoading}
                 style={{ 
                   width: "100%", 
-                  background: isLoading ? "#3d9614" : "#52C41A", 
+                  background: isLoading ? "#3d9614" : "#2d8f47", 
                   color: "#ffffff", 
                   padding: "16px", 
                   borderRadius: "4px", 
@@ -224,7 +224,7 @@ export default function RideWithUsBanner() {
                   transition: "background 0.2s"
                 }}
                 onMouseOver={e => { if (!isLoading) e.currentTarget.style.background = "#45a815"; }}
-                onMouseOut={e => { if (!isLoading) e.currentTarget.style.background = "#52C41A"; }}
+                onMouseOut={e => { if (!isLoading) e.currentTarget.style.background = "#2d8f47"; }}
               >
                 {isLoading ? "JOINING..." : "JOIN THE CREW"}
               </button>

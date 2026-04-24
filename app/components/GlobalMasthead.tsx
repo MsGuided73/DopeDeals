@@ -206,7 +206,7 @@ export default function GlobalMasthead() {
         .dg-search-input::placeholder { color: #9A9A9A; }
         .dg-search-btn {
           border: none;
-          background: radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%);
+          background: radial-gradient(ellipse at 50% 35%, #3cb05b 0%, #2d8f47 55%, #226b35 100%);
           color: #fff;
           padding: 0 16px;
           height: 100%;
@@ -215,7 +215,7 @@ export default function GlobalMasthead() {
           align-items: center;
           transition: background 0.15s;
         }
-        .dg-search-btn:hover { background: radial-gradient(ellipse at 50% 35%, #72E028 0%, #5FD01D 55%, #4DBA17 100%); }
+        .dg-search-btn:hover { background: radial-gradient(ellipse at 50% 35%, #4ec16c 0%, #3cb05b 55%, #287d3e 100%); }
 
         /* ── Right icon buttons ── */
         .dg-icon-btn {
@@ -328,7 +328,7 @@ export default function GlobalMasthead() {
           min-width: 200px;
           background: #ffffff;
           border: 1px solid #E8E8E8;
-          border-top: 2px solid #52C41A;
+          border-top: 2px solid #2d8f47;
           border-radius: 0 0 6px 6px;
           box-shadow: 0 8px 24px rgba(0,0,0,0.12);
           z-index: 200;
@@ -346,7 +346,7 @@ export default function GlobalMasthead() {
         }
         .dg-dropdown-link:hover {
           background: #F5F5F5;
-          color: #52C41A;
+          color: #2d8f47;
         }
 
         /* ── Right-side drawer + backdrop ── */
@@ -803,7 +803,7 @@ export default function GlobalMasthead() {
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "#52C41A" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "#2d8f47" }}>
                   <User className="w-5 h-5 text-white" />
                 </div>
                 <div>

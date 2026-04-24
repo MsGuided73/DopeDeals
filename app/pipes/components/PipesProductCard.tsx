@@ -25,8 +25,8 @@ interface PipesProductCardProps {
   };
 }
 
-const LIME = '#52C41A';
-const LIME_BRIGHT = '#63D420';
+const LIME = '#2d8f47';
+const LIME_BRIGHT = '#3cb05b';
 const INK = '#1c1208';
 
 export default function PipesProductCard({ product }: PipesProductCardProps) {
@@ -233,7 +233,7 @@ export default function PipesProductCard({ product }: PipesProductCardProps) {
                 borderRadius: '4px',
                 transition: 'background 0.18s, color 0.18s',
               }}
-              className="hover:bg-[#52C41A] hover:text-white"
+              className="hover:bg-[#2d8f47] hover:text-white"
             >
               View Details
             </Link>

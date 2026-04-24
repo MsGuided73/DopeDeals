@@ -58,7 +58,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData): Promise<
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
       <div style="background: #000; color: #fff; padding: 24px; text-align: center;">
         <h1 style="margin: 0; font-size: 24px; letter-spacing: 0.1em;">${STORE_NAME}</h1>
-        <p style="margin: 8px 0 0; color: #52C41A; font-size: 14px;">Order Confirmed</p>
+        <p style="margin: 8px 0 0; color: #2d8f47; font-size: 14px;">Order Confirmed</p>
       </div>
 
       <div style="padding: 24px;">
@@ -149,7 +149,7 @@ export async function sendOrderStatusEmail(data: StatusEmailData): Promise<void>
       </div>
       <div style="padding: 24px;">
         <p>Hey ${data.customerFirstName},</p>
-        <h2 style="color: #52C41A;">${msg.heading}</h2>
+        <h2 style="color: #2d8f47;">${msg.heading}</h2>
         <p>${msg.body}</p>
         <div style="background: #f8f8f8; padding: 16px; border-radius: 8px; margin: 16px 0;">
           <p style="margin: 0;"><strong>Order Number:</strong> ${data.orderNumber}</p>

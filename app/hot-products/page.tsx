@@ -19,9 +19,9 @@ interface Product {
 }
 
 // Brand tokens — matches FeaturedProductsSection on the landing page.
-const LIME = "#52C41A";
-const LIME_BRIGHT = "#63D420";
-const LIME_DARK = "#3DA614";
+const LIME = "#2d8f47";
+const LIME_BRIGHT = "#3cb05b";
+const LIME_DARK = "#226b35";
 const HOT_RED = "#E53E3E";
 const INK = "#1c1208";
 
@@ -427,7 +427,7 @@ export default function HotProductsPage() {
                         borderRadius: "4px",
                         transition: "background 0.18s, color 0.18s",
                       }}
-                      className="hover:bg-[#52C41A] hover:text-white"
+                      className="hover:bg-[#2d8f47] hover:text-white"
                     >
                       View Details
                     </Link>

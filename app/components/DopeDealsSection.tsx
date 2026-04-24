@@ -8,13 +8,13 @@ import { useCompliance } from '../contexts/ComplianceContext';
 
 // ── Dope Deals palette — mirrors Hot Products brand green ─────────────────
 const DD = {
-  accent:  '#52C41A',
-  accentL: '#63D420',
+  accent:  '#2d8f47',
+  accentL: '#3cb05b',
   dark:    '#1c1208',
   muted:   '#6B7280',
   white:   '#ffffff',
-  grad:    'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)',
-  gradHover: 'radial-gradient(ellipse at 50% 35%, #72E028 0%, #5FD01D 55%, #4DBA17 100%)',
+  grad:    'radial-gradient(ellipse at 50% 35%, #3cb05b 0%, #2d8f47 55%, #226b35 100%)',
+  gradHover: 'radial-gradient(ellipse at 50% 35%, #4ec16c 0%, #3cb05b 55%, #287d3e 100%)',
 };
 
 interface Product {
@@ -192,7 +192,7 @@ export default function DopeDealsSection() {
             <Link
               href={isRestricted ? '#' : `/product/${product.id}`}
               style={{ flex: 1, border: `1.5px solid ${DD.accent}`, color: DD.accent, fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-              className="hover:bg-[#52C41A] hover:text-white"
+              className="hover:bg-[#2d8f47] hover:text-white"
             >
               View Details
             </Link>
@@ -239,7 +239,7 @@ export default function DopeDealsSection() {
     return (
       <section style={{ background: DD.white, padding: '60px 0 72px', position: 'relative' }}>
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(44px,7vw,88px)', letterSpacing: '0.02em' }}>DOPE DEALS</h2>
+          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', letterSpacing: '0.02em' }}>DOPE DEALS</h2>
           <p style={{ color: '#ef4444', marginTop: '16px' }}>Unable to load deals. Please refresh.</p>
         </div>
       </section>
@@ -256,7 +256,7 @@ export default function DopeDealsSection() {
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
         <div style={{ height: '3px', width: '48px', background: DD.accent, margin: '0 auto 14px' }} />
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(44px,7vw,88px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           DOPE DEALS
         </h2>
         <p style={{ fontSize: '15px', color: DD.muted, margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>

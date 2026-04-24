@@ -42,7 +42,7 @@ export default function NotFound() {
         margin: '0 0 16px 0',
         color: '#1c1208'
       }}>
-        404 <span style={{ color: '#52C41A' }}>LOST</span>
+        404 <span style={{ color: '#2d8f47' }}>LOST</span>
       </h1>
       
       <p style={{
@@ -69,7 +69,7 @@ export default function NotFound() {
         href="/"
         style={{
           display: 'inline-block',
-          background: 'radial-gradient(ellipse at 50% 35%, #5FD01D 0%, #52C41A 55%, #42A416 100%)',
+          background: 'radial-gradient(ellipse at 50% 35%, #3cb05b 0%, #2d8f47 55%, #226b35 100%)',
           color: '#ffffff',
           fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
           fontSize: '22px',
