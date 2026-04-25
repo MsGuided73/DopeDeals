@@ -7,16 +7,16 @@ import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string }[] = [
   {
     id: 'slide-1',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/Membership2.png',
-    alt: 'Highway 420 — VIP Membership',
-    href: '/rewards',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test2.png',
+    alt: 'Highway 420 — Better Vibes',
+    href: '/road-trips',
     objectPosition: 'center center',
   },
   {
     id: 'slide-2',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/DabRigs_Carousel%20(1).png',
-    alt: 'Highway 420 — Dab Rigs',
-    href: '/dabsntools',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/Membership2.png',
+    alt: 'Highway 420 — VIP Membership',
+    href: '/rewards',
     objectPosition: 'center center',
   },
   {
@@ -28,16 +28,23 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
   },
   {
     id: 'slide-4',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test2.png',
-    alt: 'Highway 420 — Better Vibes',
-    href: '/road-trips',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/RooR%20Carousel.jpeg',
+    alt: 'Highway 420 — RooR Bongs',
+    href: '/bongs',
     objectPosition: 'center center',
   },
   {
     id: 'slide-5',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/RooR%20Carousel.jpeg',
-    alt: 'Highway 420 — RooR Bongs',
-    href: '/bongs',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/DabRigs_Carousel%20(1).png',
+    alt: 'Highway 420 — Dab Rigs',
+    href: '/dabsntools',
+    objectPosition: 'center center',
+  },
+  {
+    id: 'slide-6',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/RoadTrips.png',
+    alt: 'Highway 420 — Road Trips',
+    href: '/road-trips',
     objectPosition: 'center center',
   },
 ];

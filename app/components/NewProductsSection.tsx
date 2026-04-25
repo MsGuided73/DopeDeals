@@ -8,7 +8,7 @@ import { useCompliance } from '../contexts/ComplianceContext';
 
 // ── Fresh Drops palette — clean white + lime green ────────────────────────
 const RS = {
-  bg: '#ffffff',          // clean white section background
+  bg: '#F5F5F5',          // light gray section background (matches Shop by Category)
   accent: '#2d8f47',      // lime green (matches Hot Products CTA)
   accentLight: '#3cb05b', // lighter lime for gradients
   dark: '#1c1208',        // aged dark brown (kept for text)
