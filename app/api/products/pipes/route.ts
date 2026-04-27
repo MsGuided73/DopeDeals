@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
       .not('name', 'ilike', '%battery%') // No batteries
-      .not('description', 'ilike', '%battery%')
+      // Removed Supabase description filter because it silently drops products with NULL descriptions
       // ── Strict slug-based filter ──────────────────────────────────────────
       // Only products explicitly tagged category_slug = 'pipes' appear here.
       // Water pipes (bongs) are excluded because they carry category_slug = 'bongs'.
@@ -62,8 +62,16 @@ export async function GET(req: NextRequest) {
         .filter(Boolean);
     };
 
-    // Transform products to match expected interface
-    const transformedProducts = (rawProducts || []).map((product: any) => {
+    // Transform products to match expected interface and filter batteries in description safely
+    const transformedProducts = (rawProducts || [])
+      .filter((product: any) => {
+        // Filter out batteries from description (handling nulls safely)
+        if (product.description && product.description.toLowerCase().includes('battery')) {
+          return false;
+        }
+        return true;
+      })
+      .map((product: any) => {
       const normalizedImages = Array.from(new Set([
         ...parseImageUrls(product.image_urls),
         ...parseImageUrls(product.image_url)

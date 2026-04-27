@@ -51,8 +51,8 @@ describe('Order Payment & ShipStation Tracking', () => {
 
     it('handles ShipStation failure gracefully without blocking checkout', () => {
       // ShipStation errors should be caught and logged, not thrown
-      expect(source).toContain('ShipStation is non-blocking');
       expect(source).toContain('catch (ssError)');
+      expect(source).toContain('ShipStation order creation failed');
     });
   });
 

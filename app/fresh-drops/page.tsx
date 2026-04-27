@@ -7,14 +7,14 @@ import GlobalBreadcrumbs from "../components/GlobalBreadcrumbs";
 
 // ── Roadside Stop palette ──────────────────────────────────────────────────
 const RS = {
-  bg: '#f0e6d0',          // sun-bleached tan
+  bg: '#ffffff',          // white background
   hero: '#1c1208',        // aged dark brown for hero bg
   heroBg2: '#2e1c0d',     // lighter dark brown gradient end
   accent: '#bf6830',      // deep ochre/rust
   accentLight: '#d9883e', // lighter ochre
   dark: '#1c1208',        // dark text
   muted: '#8a7d6a',       // dusty road muted text
-  white: '#faf6ef',       // warm white
+  white: '#ffffff',       // white cards
 };
 
 interface Product {

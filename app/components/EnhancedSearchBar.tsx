@@ -341,13 +341,13 @@ export default function EnhancedSearchBar({ compact = false }: { compact?: boole
                       className="w-full px-4 py-1 hover:bg-gray-50 transition-colors flex items-center gap-3 text-left"
                     >
                       {suggestion.type === 'product' && suggestion.image_url ? (
-                        <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="w-10 h-10 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 p-1">
                           <Image
                             src={suggestion.image_url}
                             alt={suggestion.text}
                             width={40}
                             height={40}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                       ) : (

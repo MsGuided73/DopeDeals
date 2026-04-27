@@ -15,7 +15,7 @@ import {
 
 /* ── Constants ───────────────────────────────────────────────── */
 const SHIELD =
-  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png';
+  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png';
 
 /* ── Types ───────────────────────────────────────────────────── */
 interface OrderItem {

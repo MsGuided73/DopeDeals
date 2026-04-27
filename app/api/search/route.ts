@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
+import { normalizeProductImages } from "../../../lib/utils/image-utils";
 import { applyRestrictedProductFilter } from "../../../lib/compliance-filters";
 
 const Body = z.object({
@@ -148,30 +149,16 @@ export async function POST(req: Request) {
     if (error) throw error;
 
     const items = (data ?? []).map((r: any) => {
-      // Helper to parse image URLs that might be comma-separated strings
-      const parseImageUrls = (value?: string[] | string | null) => {
-        if (!value) return [] as string[];
-        if (Array.isArray(value)) {
-          return value
-            .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
-            .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
-            .filter(Boolean);
-        }
-        if (typeof value !== 'string') return [value].filter(Boolean);
-        return value
-          .split(',')
-          .map((entry) => entry.trim())
-          .filter(Boolean);
-      };
-
-      const normalizedImages = parseImageUrls(r.image_url);
+      // Normalize image data
+      const { image_url, image_urls } = normalizeProductImages(r);
 
       return {
         id: r.id,
         name: r.name,
         brand_name: r.brand_name ?? null,
         brand_slug: r.brand_slug ?? null,
-        image_url: normalizedImages[0] || r.image_url || null,
+        image_url,
+        image_urls,
         price: r.sale_price ?? r.our_price ?? null,
         inventory_status: r.inventory_status ?? null,
         stock_quantity: r.stock_quantity ?? null,

@@ -114,9 +114,13 @@ export default function DopeDealsSection() {
         {/* Lime-green top accent bar */}
         <div style={{ height: '4px', background: `linear-gradient(90deg, ${DD.accentL}, ${DD.accent})`, borderRadius: '6px 6px 0 0' }} />
 
-        {/* Image */}
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: DD.white, overflow: 'hidden' }}>
-          <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
+        {/* Image & Info Link Wrapper */}
+        <Link 
+          href={isRestricted ? '#' : `/product/${product.id}`}
+          className="block no-underline"
+        >
+          {/* Image */}
+          <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: DD.white, overflow: 'hidden' }}>
             {imageUrl ? (
               <Image
                 src={imageUrl}
@@ -133,70 +137,73 @@ export default function DopeDealsSection() {
                 </div>
               </div>
             )}
-          </Link>
 
-          {/* Discount badge */}
-          {disc > 0 && (
-            <div style={{ position: 'absolute', top: 8, left: 8, background: '#E53E3E', color: '#fff', fontSize: '10px', fontWeight: 800, padding: '3px 8px', borderRadius: '3px', letterSpacing: '0.05em', zIndex: 10 }}>
-              -{disc}% OFF
-            </div>
-          )}
-
-          {/* Restriction overlay */}
-          {isRestricted && (
-            <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
-              <div style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid #fca5a5', borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
-                <div style={{ fontSize: '22px', marginBottom: '4px' }}>🚫</div>
-                <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Local Restriction</span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Body */}
-        <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
-          {brand && (
-            <p className="dg-lime-text-gradient" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
-              {brand}
-            </p>
-          )}
-          <Link href={isRestricted ? '#' : `/product/${product.id}`}>
-            <h3 style={{ fontWeight: 600, color: DD.dark, fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 group-hover:opacity-70 transition-opacity">
-              {product.name}
-            </h3>
-          </Link>
-
-          {/* Price */}
-          <div style={{ fontWeight: 700, fontSize: '21px', letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span className="dg-lime-text-gradient">${salePrice.toFixed(2)}</span>
+            {/* Discount badge */}
             {disc > 0 && (
-              <span style={{ fontSize: '13px', color: '#9CA3AF', fontWeight: 400, textDecoration: 'line-through' }}>
-                ${origPrice.toFixed(2)}
-              </span>
+              <div style={{ position: 'absolute', top: 8, left: 8, background: '#E53E3E', color: '#fff', fontSize: '10px', fontWeight: 800, padding: '3px 8px', borderRadius: '3px', letterSpacing: '0.05em', zIndex: 10 }}>
+                -{disc}% OFF
+              </div>
+            )}
+
+            {/* Restriction overlay */}
+            {isRestricted && (
+              <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+                <div style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid #fca5a5', borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '22px', marginBottom: '4px' }}>🚫</div>
+                  <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Local Restriction</span>
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Buttons */}
-          <div style={{ display: 'flex', gap: '7px' }}>
-            <button
-              onClick={async (e) => { e.stopPropagation(); if (!isRestricted) await addToCart(product.id, 1); }}
-              disabled={isRestricted}
-              style={isRestricted
-                ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: DD.grad, color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
-              onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
-            >
-              {isRestricted ? 'Unavailable' : 'Add to Cart'}
-            </button>
-            <Link
-              href={isRestricted ? '#' : `/product/${product.id}`}
-              style={{ flex: 1, border: `1.5px solid ${DD.accent}`, color: DD.accent, fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-              className="hover:bg-[#2d8f47] hover:text-white"
-            >
-              View Details
-            </Link>
+          {/* Body */}
+          <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
+            {brand && (
+              <p className="dg-lime-text-gradient" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
+                {brand}
+              </p>
+            )}
+            <h3 style={{ fontWeight: 600, color: DD.dark, fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 transition-opacity">
+              {product.name}
+            </h3>
+            
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+              <span style={{ fontWeight: 700, color: DD.accent, fontSize: '16px' }}>
+                ${salePrice.toFixed(2)}
+              </span>
+              {origPrice > salePrice && (
+                <span style={{ color: DD.muted, fontSize: '11px', textDecoration: 'line-through' }}>
+                  ${origPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
           </div>
+        </Link>
+
+        {/* Buttons */}
+        <div style={{ padding: '0 15px 15px', display: 'flex', gap: '7px' }}>
+          <button
+            onClick={async (e) => { 
+              e.preventDefault();
+              e.stopPropagation(); 
+              if (!isRestricted) await addToCart(product.id, 1); 
+            }}
+            disabled={isRestricted}
+            style={isRestricted
+              ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
+              : { flex: 1, background: DD.grad, color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
+            onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
+          >
+            {isRestricted ? 'Unavailable' : 'Add to Cart'}
+          </button>
+          <Link
+            href={`/product/${product.id}`}
+            style={{ flex: 1, border: `1.5px solid ${DD.accent}`, color: DD.accent, fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+            className="hover:bg-[#2d8f47] hover:text-white"
+          >
+            Details
+          </Link>
         </div>
       </div>
     );

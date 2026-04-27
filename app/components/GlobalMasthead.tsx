@@ -305,8 +305,8 @@ export default function GlobalMasthead() {
           border-right: none;
         }
         .dg-navlink:hover, .dg-navlink.active {
-          color: #ffffff;
-          border-bottom-color: rgba(255,255,255,0.8);
+          color: #A7F3D0;
+          border-bottom-color: #A7F3D0;
         }
 
         /* Vertical pipe dividers between nav items */
@@ -315,38 +315,40 @@ export default function GlobalMasthead() {
           display: block;
           width: 1px;
           height: 18px;
-          background: #E8E4D9;
+          background: rgba(255,255,255,0.35);
           flex-shrink: 0;
           align-self: center;
         }
 
-        /* ── Dropdown panel ── */
+        /* ── Dropdown panel ── (matches premium dark green header) */
         .dg-dropdown {
           position: absolute;
           top: 100%;
           left: 0;
-          min-width: 200px;
-          background: #ffffff;
-          border: 1px solid #E8E8E8;
-          border-top: 2px solid #2d8f47;
-          border-radius: 0 0 6px 6px;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+          min-width: 220px;
+          background: linear-gradient(to bottom, #145C3C, #0F4A30);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-top: 2px solid #A7F3D0;
+          border-radius: 0 0 8px 8px;
+          box-shadow: 0 12px 32px rgba(0,0,0,0.35);
           z-index: 200;
           padding: 8px 0;
         }
         .dg-dropdown-link {
           display: block;
-          padding: 9px 16px;
+          padding: 10px 18px;
           font-family: 'Fira Sans', sans-serif;
           font-size: 13px;
           font-weight: 500;
-          color: #2A2B2A;
+          color: #ffffff;
           text-decoration: none;
-          transition: background 0.1s, color 0.1s;
+          transition: background 0.15s, color 0.15s, padding-left 0.15s;
+          letter-spacing: 0.02em;
         }
         .dg-dropdown-link:hover {
-          background: #F5F5F5;
-          color: #2d8f47;
+          background: rgba(255,255,255,0.08);
+          color: #A7F3D0;
+          padding-left: 22px;
         }
 
         /* ── Right-side drawer + backdrop ── */
@@ -483,7 +485,7 @@ export default function GlobalMasthead() {
             {/* Logo + Wordmark */}
             <Link href="/" className="dg-logo-link" aria-label="Highway 420 home">
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
                 width={160}
                 height={160}
@@ -558,7 +560,7 @@ export default function GlobalMasthead() {
               }}
             >
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Aged%20Logo-Transparent.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
                 width={200}
                 height={200}

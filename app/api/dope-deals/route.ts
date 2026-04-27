@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { normalizeProductImages } from '../../../lib/utils/image-utils';
 
 /**
  * Dope Deals API Route
@@ -69,33 +70,14 @@ export async function GET(req: NextRequest) {
       return true;
     });
 
-    // Helper to parse image URLs that might be comma-separated strings
-    const parseImageUrls = (value?: string[] | string | null) => {
-      if (!value) return [] as string[];
-      if (Array.isArray(value)) {
-        return value
-          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
-          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
-          .filter(Boolean);
-      }
-      if (typeof value !== 'string') return [value].filter(Boolean);
-      return value
-        .split(',')
-        .map((entry) => entry.trim())
-        .filter(Boolean);
-    };
-
     // Take only the requested limit and normalize image data
     const products = uniqueProducts.slice(0, limit).map((product: any) => {
-      const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
-      ]));
+      const { image_url, image_urls } = normalizeProductImages(product);
 
       return {
         ...product,
-        image_url: normalizedImages[0] || product.image_url,
-        image_urls: normalizedImages
+        image_url,
+        image_urls
       };
     });
 

@@ -1,6 +1,5 @@
-"use strict";
-import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../../lib/storage';
+import { parseImageUrls } from '../../../../lib/utils/image-utils';
 
 // TypeScript interfaces for the new PDP response shape
 interface PDPImage {
@@ -123,11 +122,7 @@ function buildImagesArray(rawProduct: any): PDPImage[] {
 
   // 2. Gallery images from image_urls array
   if (rawProduct.image_urls) {
-    const urls = Array.isArray(rawProduct.image_urls) 
-      ? rawProduct.image_urls 
-      : (typeof rawProduct.image_urls === 'string' 
-          ? rawProduct.image_urls.split(',').map((u: string) => u.trim())
-          : []);
+    const urls = parseImageUrls(rawProduct.image_urls);
     urls.forEach((url: string) => addImage(url, 'gallery', false));
   }
 

@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { normalizeProductImages } from '../../../lib/utils/image-utils';
 import { applyRestrictedProductFilter } from '../../../lib/compliance-filters';
 
 // Module-level singleton — uses NEXT_PUBLIC_ vars baked in at build time (same pattern as /api/newest/products)
@@ -69,33 +69,14 @@ export async function GET(req: NextRequest) {
 
     const { count } = await countQuery;
 
-    // Helper to parse image URLs that might be comma-separated strings
-    const parseImageUrls = (value?: string[] | string | null) => {
-      if (!value) return [] as string[];
-      if (Array.isArray(value)) {
-        return value
-          .flatMap((entry) => (typeof entry === 'string' ? entry.split(',') : [entry]))
-          .map((entry) => (typeof entry === 'string' ? entry.trim() : entry))
-          .filter(Boolean);
-      }
-      if (typeof value !== 'string') return [value].filter(Boolean);
-      return value
-        .split(',')
-        .map((entry) => entry.trim())
-        .filter(Boolean);
-    };
-
     // Normalize products data
     const transformedProducts = (products || []).map((product: any) => {
-      const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
-      ]));
+      const { image_url, image_urls } = normalizeProductImages(product);
 
       return {
         ...product,
-        image_url: normalizedImages[0] || product.image_url,
-        image_urls: normalizedImages
+        image_url,
+        image_urls
       };
     });
 

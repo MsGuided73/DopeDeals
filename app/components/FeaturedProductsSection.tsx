@@ -223,9 +223,13 @@ export default function FeaturedProductsSection() {
         {/* Light navbar green top accent bar with white stripe */}
         <div style={{ height: '4px', background: '#ffffff', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', borderRadius: '6px 6px 0 0' }} />
 
-        {/* Image */}
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: '#ffffff', overflow: 'hidden' }}>
-          <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
+        {/* Image & Info Link Wrapper */}
+        <Link 
+          href={isRestricted ? '#' : `/product/${product.id}`}
+          className="block h-full no-underline"
+        >
+          {/* Image */}
+          <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: '#ffffff', overflow: 'hidden' }}>
             {transformedProduct.image_url ? (
               <img
                 src={transformedProduct.image_url}
@@ -267,7 +271,7 @@ export default function FeaturedProductsSection() {
                 <div style={{ fontSize: '11px', color: '#aaa' }}>No Image</div>
               </div>
             </div>
-          </Link>
+          </div>
 
           {/* Discount badge */}
           {transformedProduct.discount_percentage && (
@@ -300,56 +304,59 @@ export default function FeaturedProductsSection() {
               </div>
             </div>
           )}
-        </div>
 
-        {/* Info */}
-        <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-          {/* Brand */}
-          {transformedProduct.brand_name && transformedProduct.brand_name !== 'Unknown Brand' && (
-            <p className="dg-lime-text-gradient" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
-              {transformedProduct.brand_name}
-            </p>
-          )}
+          {/* Info */}
+          <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+            {/* Brand */}
+            {transformedProduct.brand_name && transformedProduct.brand_name !== 'Unknown Brand' && (
+              <p className="dg-lime-text-gradient" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
+                {transformedProduct.brand_name}
+              </p>
+            )}
 
-          {/* Name */}
-          <Link href={isRestricted ? '#' : `/product/${product.id}`}>
-            <h3 style={{ fontWeight: 600, color: '#1c1208', fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 group-hover:opacity-70 transition-opacity">
+            {/* Name */}
+            <h3 style={{ fontWeight: 600, color: '#1c1208', fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 transition-opacity">
               {transformedProduct.name}
             </h3>
-          </Link>
 
-          {/* Price */}
-          <div style={{ fontWeight: 700, fontSize: '21px', letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span className="dg-lime-text-gradient">${formatPrice(transformedProduct.price)}</span>
-            {transformedProduct.compare_at_price && (
-              <span style={{ fontSize: '13px', color: '#9CA3AF', fontWeight: 400, textDecoration: 'line-through' }}>
-                ${formatPrice(transformedProduct.compare_at_price)}
-              </span>
-            )}
-          </div>
+            {/* Price */}
+            <div style={{ fontWeight: 700, fontSize: '21px', letterSpacing: '0.03em', marginBottom: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="dg-lime-text-gradient">${formatPrice(transformedProduct.price)}</span>
+              {transformedProduct.compare_at_price && (
+                <span style={{ fontSize: '13px', color: '#9CA3AF', fontWeight: 400, textDecoration: 'line-through' }}>
+                  ${formatPrice(transformedProduct.compare_at_price)}
+                </span>
+              )}
+            </div>
 
-          {/* Two-button row */}
-          <div style={{ display: 'flex', gap: '7px' }}>
-            <button
-              onClick={(event) => !isRestricted && handleAddToCart(product.id, event)}
-              disabled={isRestricted || product.stock_quantity <= 0}
-              style={isRestricted || product.stock_quantity <= 0
-                ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: 'radial-gradient(ellipse at 50% 35%, #3cb05b 0%, #2d8f47 55%, #226b35 100%)', color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
-              onMouseEnter={e => { if (!isRestricted && product.stock_quantity > 0) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
-            >
-              {isRestricted ? 'Unavailable' : product.stock_quantity <= 0 ? 'Out of Stock' : 'Add to Cart'}
-            </button>
-            <Link
-              href={isRestricted ? '#' : `/product/${product.id}`}
-              style={{ flex: 1, border: '1.5px solid #2d8f47', color: '#2d8f47', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-              className="hover:bg-[#2d8f47] hover:text-white"
-            >
-              View Details
-            </Link>
+            {/* Two-button row */}
+            <div style={{ display: 'flex', gap: '7px' }}>
+              <button
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  if (!isRestricted && product.stock_quantity > 0) {
+                    handleAddToCart(product.id, event);
+                  }
+                }}
+                disabled={isRestricted || product.stock_quantity <= 0}
+                style={isRestricted || product.stock_quantity <= 0
+                  ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
+                  : { flex: 1, background: 'radial-gradient(ellipse at 50% 35%, #3cb05b 0%, #2d8f47 55%, #226b35 100%)', color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
+                onMouseEnter={e => { if (!isRestricted && product.stock_quantity > 0) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
+              >
+                {isRestricted ? 'Unavailable' : product.stock_quantity <= 0 ? 'Out of Stock' : 'Add to Cart'}
+              </button>
+              <div
+                style={{ flex: 1, border: '1.5px solid #2d8f47', color: '#2d8f47', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+                className="hover:bg-[#2d8f47] hover:text-white"
+              >
+                View Details
+              </div>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
     );
   };

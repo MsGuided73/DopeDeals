@@ -136,12 +136,12 @@ export default function StickyCartPopup() {
                 <div key={item.id} className="p-3 border-b border-gray-100 last:border-b-0">
                   <div className="flex gap-3">
                     {/* Product Image */}
-                    <div className="w-12 h-12 bg-gray-100 rounded flex-shrink-0 overflow-hidden">
+                    <div className="w-12 h-12 bg-gray-100 rounded flex-shrink-0 overflow-hidden p-1">
                       {item.product?.imageUrl ? (
                         <img
                           src={item.product.imageUrl}
                           alt={item.product.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-400">

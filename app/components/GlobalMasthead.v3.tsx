@@ -469,7 +469,7 @@ export default function GlobalMasthead() {
           <div className={`w-full flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
             <Link href="/" aria-label="Highway 420 home" className="flex items-center" style={{ gap: '8px' }}>
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
                 width={120}
                 height={120}
@@ -520,7 +520,7 @@ export default function GlobalMasthead() {
             <div ref={logoRef} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               {/* Shield — tall, spanning nearly full masthead height */}
               <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/Shield_Logo2.png"
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
                 width={120}
                 height={120}

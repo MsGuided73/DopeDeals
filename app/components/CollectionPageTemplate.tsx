@@ -771,13 +771,13 @@ export default function CollectionPageTemplate({
                     key={product.id}
                     className="group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
                   >
-                    <div className="relative aspect-square bg-gray-100 overflow-hidden">
+                    <div className="relative aspect-square bg-gray-100 overflow-hidden p-6">
                       <Link href={`/product/${product.id}`} className="block w-full h-full">
                         {transformedProduct.image_url ? (
                           <img
                             src={transformedProduct.image_url}
                             alt={transformedProduct.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-400">

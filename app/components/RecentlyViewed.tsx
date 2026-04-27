@@ -163,12 +163,12 @@ export default function RecentlyViewed() {
                 href={`/product/${product.id}`}
                 className="group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-96 border border-gray-200"
               >
-                <div className="relative w-full aspect-square bg-white overflow-hidden">
+                <div className="relative w-full aspect-square bg-white overflow-hidden p-6">
                   {transformedProduct.image_url ? (
                     <img
                       src={transformedProduct.image_url}
                       alt={transformedProduct.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">

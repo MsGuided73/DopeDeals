@@ -73,12 +73,12 @@ export default function ProductCard3Row({ product }: ProductCard3RowProps) {
         }`}
       >
         {/* Image Container - Larger for 3-row layout */}
-        <div className="relative w-full h-80 bg-white overflow-hidden">
+        <div className="relative w-full h-80 bg-white overflow-hidden p-6">
           {product.image_url ? (
             <img
               src={product.image_url}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
