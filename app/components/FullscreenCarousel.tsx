@@ -134,7 +134,7 @@ export default function FullscreenCarousel() {
 
         @media (min-width: 1024px) {
           .carousel-slide-img {
-            object-fit: cover;
+            object-fit: contain;
           }
         }
 

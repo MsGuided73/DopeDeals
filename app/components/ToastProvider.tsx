@@ -12,10 +12,10 @@ import { Toaster } from 'react-hot-toast';
 
 const sharedSign = {
   fontFamily: "'Highway Gothic', 'Oswald', 'Impact', 'Arial Narrow', sans-serif",
-  letterSpacing: '0.06em',
+  letterSpacing: '0.12em',
   textTransform: 'uppercase' as const,
   fontSize: '15px',
-  fontWeight: '700',
+  fontWeight: '500',
   padding: '14px 22px 14px 18px',
   borderRadius: '4px',
   boxShadow:

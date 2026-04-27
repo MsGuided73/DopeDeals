@@ -482,31 +482,20 @@ export default function GlobalMasthead() {
 
           {/* Compact top bar — mirrors desktop double-line navbar at bottom */}
           <div className={`dg-navbar flex items-center px-4 py-3 gap-3 ${isSearchOpen ? "invisible" : "visible"}`}>
-            {/* Logo + Wordmark */}
+            {/* Logo */}
             <Link href="/" className="dg-logo-link" aria-label="Highway 420 home">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
-                width={160}
-                height={160}
+                width={200}
+                height={200}
                 style={{
-                  height: '72px',
+                  height: '96px',
                   width: 'auto',
+                  transform: 'scale(1.15)',
+                  transformOrigin: 'left center',
                 }}
                 className="object-contain"
-                priority
-              />
-              <Image
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/3dassets/H420%20Wordmark-v3.png"
-                alt=""
-                width={320}
-                height={96}
-                style={{
-                  height: '68px',
-                  width: 'auto',
-                  marginLeft: '12px',
-                }}
-                className="hidden sm:block object-contain"
                 priority
               />
             </Link>
@@ -518,10 +507,38 @@ export default function GlobalMasthead() {
               <Search style={{ width: 20, height: 20 }} />
             </button>
 
-            {/* Cart */}
-            <Link href="/cart" className="dg-icon-btn relative" aria-label="Cart">
-              <ShoppingCart style={{ width: 20, height: 20 }} />
-              {cartCount > 0 && <span className="dg-cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>}
+            {/* Cart — styling matching desktop */}
+            <Link
+              href="/cart"
+              aria-label={`Cart (${cartCount} items)`}
+              style={{
+                position: 'relative',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '9px 14px',
+                background: '#ffffff',
+                borderRadius: '6px',
+                color: '#145C3C',
+                textDecoration: 'none',
+                transition: 'background 0.15s, transform 0.1s',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.18)',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.background = '#f0f0ec';
+                (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.background = '#ffffff';
+                (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
+              }}
+            >
+              <ShoppingCart style={{ width: 24, height: 24 }} />
+              {cartCount > 0 && (
+                <span className="dg-cart-badge" style={{ borderColor: '#145C3C' }}>
+                  {cartCount > 99 ? '99+' : String(cartCount)}
+                </span>
+              )}
             </Link>
 
             {/* Hamburger */}
@@ -562,14 +579,16 @@ export default function GlobalMasthead() {
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/logo_Highway420-official_transparent.png"
                 alt="HIGHWAY 420"
-                width={200}
-                height={200}
+                width={300}
+                height={300}
                 style={{
                   height: '100%',
                   width: 'auto',
-                  maxHeight: '120px',
-                  minHeight: '80px',
+                  maxHeight: '160px',
+                  minHeight: '100px',
                   display: 'block',
+                  transform: 'scale(1.35)',
+                  transformOrigin: 'left center',
                   filter: 'drop-shadow(0 4px 12px rgba(255,255,255,0.28)) drop-shadow(0 1px 4px rgba(255,255,255,0.18))',
                 }}
                 className="object-contain"
