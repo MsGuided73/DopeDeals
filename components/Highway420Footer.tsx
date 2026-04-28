@@ -275,10 +275,6 @@ export default function Highway420Footer() {
                   </Link>
                 </li>
               </ul>
-
-              <div className="mt-8 text-gray-800">
-                <h4 className="font-bold text-lg mb-2">Contact Us:</h4>
-              </div>
             </div>
 
             {/* Useful Links */}
