@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { normalizeProductImages } from '../../../lib/utils/image-utils';
 import { applyRestrictedProductFilter } from '../../../lib/compliance-filters';
@@ -12,8 +13,9 @@ export async function GET(req: NextRequest) {
   try {
     // Parse query parameters
     const url = new URL(req.url);
-    // NO LIMIT: Return all products
-    const limit = 5000;
+    const limitParam = url.searchParams.get('limit');
+    let limit = limitParam ? parseInt(limitParam) : 50; // Default to 50 instead of 5000
+    if (limit > 100) limit = 100; // Hard cap to prevent OOM
     const offset = parseInt(url.searchParams.get('offset') || '0');
     const category = url.searchParams.get('category');
 

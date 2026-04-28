@@ -448,10 +448,10 @@ export default function GlobalMasthead() {
       <header className="dg-header">
 
         {/* ══════════════════════════════════════════════════════════════
-            COMPACT (< 2xl) — hamburger layout for phones, tablets, and
+            COMPACT (< xl) — hamburger layout for phones, tablets, and
             narrow desktop/split-screen viewports
         ══════════════════════════════════════════════════════════════ */}
-        <div className="2xl:hidden relative">
+        <div className="xl:hidden relative">
 
           {/* Mobile search overlay */}
           {isSearchOpen && (
@@ -502,6 +502,36 @@ export default function GlobalMasthead() {
 
             <div className="flex-1" />
 
+            {/* Profile */}
+            <button
+              onClick={() => setShowProfileModal(true)}
+              aria-label="Account"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 12px',
+                background: 'transparent',
+                border: '1.5px solid rgba(255,255,255,0.80)',
+                borderRadius: '999px',
+                color: '#ffffff',
+                fontFamily: "'Fira Sans', sans-serif",
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              {displayName && (
+                <span className="hidden sm:block" style={{ maxWidth: '80px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {displayName}
+                </span>
+              )}
+              <User style={{ width: 18, height: 18 }} />
+            </button>
+
             {/* Search */}
             <button className="dg-icon-btn" onClick={() => setIsSearchOpen(true)} aria-label="Search">
               <Search style={{ width: 20, height: 20 }} />
@@ -549,9 +579,9 @@ export default function GlobalMasthead() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════════
-            DESKTOP (≥ 2xl) — full nav with centered links + right icons
+            DESKTOP (≥ xl) — full nav with centered links + right icons
         ══════════════════════════════════════════════════════════════ */}
-        <div className="hidden 2xl:block">
+        <div className="hidden xl:block">
           {/*
             Full-width stacked layout.
             The logo is absolutely positioned so BOTH the search row and the nav row
@@ -573,7 +603,7 @@ export default function GlobalMasthead() {
                 zIndex: 2,
                 display: 'flex',
                 alignItems: 'center',
-                padding: '2px 16px 14px 20px',
+                padding: '2px 16px 14px 4px',
               }}
             >
               <Image
@@ -587,7 +617,7 @@ export default function GlobalMasthead() {
                   maxHeight: '160px',
                   minHeight: '100px',
                   display: 'block',
-                  transform: 'scale(1.35)',
+                  transform: 'translateY(2px) scale(1.15)',
                   transformOrigin: 'left center',
                   filter: 'drop-shadow(0 4px 12px rgba(255,255,255,0.28)) drop-shadow(0 1px 4px rgba(255,255,255,0.18))',
                 }}

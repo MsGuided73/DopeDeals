@@ -359,6 +359,12 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     return NextResponse.json(response);
   } catch (error) {
     console.error('Failed to fetch product:', error);
-    return NextResponse.json({ message: 'Failed to fetch product' }, { status: 500 });
+    return NextResponse.json(
+      { 
+        message: 'Failed to fetch product',
+        error: error instanceof Error ? error.message : String(error)
+      }, 
+      { status: 500 }
+    );
   }
 }

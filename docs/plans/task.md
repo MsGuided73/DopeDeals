@@ -1,14 +1,12 @@
-# Task List: Fix Image Display and Truncation
+# Task Tracker: Variable Product / Variant Rendering
 
-| Task | Status | Description |
-| :--- | :---: | :--- |
-| Research truncation root cause | [x] | Identified `split(',')` in API routes as the cause for broken Cookies/RooR images. |
-| Identify path casing issue | [x] | Found that DB uses lowercase `/products/` but bucket uses uppercase `/PRODUCTS/`. |
-| Create `image-utils.ts` | [x] | Centralized logic for smart URL parsing that ignores commas in filenames. |
-| Update `app/api/dope-deals/route.ts` | [x] | Applied `normalizeProductImages` to deal results. |
-| Update `app/api/search/route.ts` | [x] | Applied `parseImageUrls` to search results. |
-| Update `app/api/newest/products/route.ts` | [x] | Applied `normalizeProductImages` to fresh drops. |
-| Update `app/api/products/route.ts` | [x] | Applied `normalizeProductImages` to main product list. |
-| Update category-specific API routes | [x] | All major routes updated to use the new image utility. |
-| Bulk-fix database URLs casing | [x] | Fixed 128 products by changing `/products/` to `/PRODUCTS/` in two batches. |
-| Verify image rendering in frontend | [x] | Confirmed RooR (Zeaker, etc.) and Cookies images are now visible on the live site. |
+| Task | Status | Notes |
+| :--- | :--- | :--- |
+| Update `lib/storage.ts` (variations logic) | [x] | Now uses `parent_product_id` and filters by `source_type`. |
+| Update `lib/product-service.ts` (filtering) | [x] | Added `source_type` filter to `getProducts` and `getProductCount`. |
+| Update `app/api/products/[id]/route.ts` (API payload) | [x] | FIXED IMPORTS; returns rich variant data + selectors. |
+| Implement dynamic state in `EnhancedPDP.tsx` | [x] | Added `selectedVariantId` and data merging. |
+| Implement variant selectors and swapping | [x] | Added button-based selectors for Flavor/Size axes. |
+| Update "Add to Cart" with variant ID | [x] | Now sends `selectedVariantId` to the cart API. |
+| Verify product grid "From $X" display | [x] | Updated `UniversalProductCard` with "From" prefix. |
+| Final manual verification & compliance check | [x] | Fixed API 500 error by adding missing imports. |

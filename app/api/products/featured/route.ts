@@ -14,8 +14,9 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const rawOffset = url.searchParams.get('offset');
 
-    // NO LIMIT: Return all products
-    const limit = 5000;
+    const limitParam = url.searchParams.get('limit');
+    let limit = limitParam ? parseInt(limitParam) : 20; // Default to 20 instead of 5000
+    if (limit > 100) limit = 100; // Hard cap to prevent OOM
     const offset = isNaN(parseInt(rawOffset || '0')) ? 0 : Math.max(0, parseInt(rawOffset || '0'));
 
     const effectiveLimit = limit;
