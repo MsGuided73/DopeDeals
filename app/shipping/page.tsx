@@ -216,7 +216,6 @@ export default function ShippingPage() {
                 Track Order
               </a>
             </div>
-            </div>
           </div>
 
         </div>
