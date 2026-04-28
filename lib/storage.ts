@@ -342,7 +342,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async getUserOrders(userId: string) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('orders')
         .select(`
           *,
@@ -359,7 +359,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async getOrder(id: string) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('orders')
         .select('*')
         .eq('id', id)
@@ -371,7 +371,7 @@ export async function getStorage(): Promise<IStorage> {
 
     // Product Similarity for Recommendations
     async getProductSimilarity(productId: string) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('product_similarity')
         .select('*')
         .eq('product_id', productId)
@@ -383,7 +383,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async createProductSimilarity(similarity: any) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('product_similarity')
         .insert(similarity)
         .select()
@@ -394,7 +394,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async createOrder(order: any) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('orders')
         .insert({
           user_id: order.userId,
@@ -426,7 +426,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async createOrderItem(item: any) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('order_items')
         .insert({
           order_id: item.orderId,
@@ -474,7 +474,7 @@ export async function getStorage(): Promise<IStorage> {
       if (updates.shippedAt) { dbUpdates.shipped_at = updates.shippedAt; delete dbUpdates.shippedAt; }
       if (updates.deliveredAt) { dbUpdates.delivered_at = updates.deliveredAt; delete dbUpdates.deliveredAt; }
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('orders')
         .update(dbUpdates)
         .eq('id', id)
@@ -487,14 +487,14 @@ export async function getStorage(): Promise<IStorage> {
 
     async clearCart(userId: string) {
       // Find the user's cart, then delete its items
-      const { data: cart } = await supabase
+      const { data: cart } = await (supabase as any)
         .from('carts')
         .select('id')
         .eq('user_id', userId)
         .single();
 
       if (cart?.id) {
-        await supabase
+        await (supabase as any)
           .from('cart_items')
           .delete()
           .eq('cart_id', cart.id);
@@ -502,8 +502,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async createTransaction(tx: any) {
-      const { data, error } = await supabase
-        // @ts-ignore
+      const { data, error } = await (supabase as any)
         .from('payment_transactions')
         .insert({
           order_id: tx.orderId,
@@ -540,8 +539,7 @@ export async function getStorage(): Promise<IStorage> {
       if (updates.paymentMethodData) { dbUpdates.payment_method_data = updates.paymentMethodData; delete dbUpdates.paymentMethodData; }
       if (updates.transactionDetails) { dbUpdates.transaction_details = updates.transactionDetails; delete dbUpdates.transactionDetails; }
 
-      const { data, error } = await supabase
-        // @ts-ignore
+      const { data, error } = await (supabase as any)
         .from('payment_transactions')
         .update(dbUpdates)
         .eq('id', id)
@@ -554,17 +552,16 @@ export async function getStorage(): Promise<IStorage> {
 
     async getUserTransactions(userId: string) {
       // First get all order IDs for this user
-      const { data: orders } = await supabase
+      const { data: orders } = await (supabase as any)
         .from('orders')
         .select('id')
         .eq('user_id', userId);
       
       if (!orders || orders.length === 0) return [];
       
-      const orderIds = orders.map(o => o.id);
+      const orderIds = (orders as any[]).map(o => o.id);
       
-      const { data, error } = await supabase
-        // @ts-ignore
+      const { data, error } = await (supabase as any)
         .from('payment_transactions')
         .select('*')
         .in('order_id', orderIds)
@@ -575,8 +572,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async getOrderTransactions(orderId: string) {
-      const { data, error } = await supabase
-        // @ts-ignore
+      const { data, error } = await (supabase as any)
         .from('payment_transactions')
         .select('*')
         .eq('order_id', orderId)
@@ -587,8 +583,7 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async createWebhookEvent(event: any) {
-      const { data, error } = await supabase
-        // @ts-ignore
+      const { data, error } = await (supabase as any)
         .from('kajapay_webhook_events')
         .insert({
           event_type: event.eventType,

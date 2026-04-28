@@ -27,7 +27,7 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
     material: true,
     height: false,
     joint: false,
-    percolator: false,
+    percolator: true,
     category: false,
     availability: true,
   });
@@ -39,7 +39,7 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
     }));
   };
 
-  // Extract unique values from products (updated for Supabase data structure)
+  // Extract unique values from products
   const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
   const uniqueMaterials = [...new Set(products.map(p => p.material).filter(Boolean) as string[])].sort();
   const uniqueHeights = [...new Set(products.map(p => p.height).filter(Boolean) as string[])].sort();
@@ -87,10 +87,10 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
     sectionKey: keyof typeof expandedSections; 
     children: React.ReactNode;
   }) => (
-    <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+    <div className="border-b border-gray-100 pb-5 mb-5">
       <button
         onClick={() => toggleSection(sectionKey)}
-        className="flex items-center justify-between w-full text-left font-medium text-gray-900 dark:text-white hover:text-dope-orange-500 transition-colors"
+        className="flex items-center justify-between w-full text-left font-bold text-[#1a1a1a] hover:text-[#2d8f47] transition-colors"
       >
         {title}
         {expandedSections[sectionKey] ? (
@@ -104,7 +104,7 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
         )}
       </button>
       {expandedSections[sectionKey] && (
-        <div className="mt-3 space-y-2">
+        <div className="mt-4 space-y-3">
           {children}
         </div>
       )}
@@ -112,12 +112,12 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
   );
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-4">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h3>
+    <div className="bg-white rounded-md shadow-sm border border-gray-100 p-6 sticky top-4">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-lg font-black tracking-widest text-[#1a1a1a] uppercase">Filters</h3>
         <button
           onClick={clearAllFilters}
-          className="text-sm text-dope-orange-500 hover:text-dope-orange-600 font-medium"
+          className="text-sm text-gray-500 hover:text-[#1a1a1a] font-medium transition-colors"
         >
           Clear All
         </button>
@@ -125,71 +125,88 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
 
       {/* Price Range */}
       <FilterSection title="Price Range" sectionKey="price">
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between text-sm text-[#1a1a1a] font-medium">
             <span>${filters.priceRange[0]}</span>
             <span>${filters.priceRange[1]}</span>
           </div>
           <input
             type="range"
             min="0"
-            max="2000"
+            max="1000"
             step="10"
             value={filters.priceRange[1]}
             onChange={(e) => setFilters((prev: any) => ({
               ...prev,
               priceRange: [prev.priceRange[0], parseInt(e.target.value)]
             }))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#1c352d]"
           />
         </div>
       </FilterSection>
 
       {/* Availability */}
       <FilterSection title="Availability" sectionKey="availability">
-        <div className="space-y-2">
-          <label className="flex items-center">
+        <div className="space-y-3">
+          <label className="flex items-center cursor-pointer group">
             <input
               type="checkbox"
               checked={filters.inStock}
               onChange={(e) => handleToggleChange('inStock', e.target.checked)}
-              className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
+              className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
             />
-            <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">In Stock Only</span>
+            <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">In Stock Only</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer group">
             <input
               type="checkbox"
               checked={filters.onSale}
               onChange={(e) => handleToggleChange('onSale', e.target.checked)}
-              className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
+              className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
             />
-            <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">On Sale</span>
+            <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">On Sale</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer group">
             <input
               type="checkbox"
               checked={filters.isNew}
               onChange={(e) => handleToggleChange('isNew', e.target.checked)}
-              className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
+              className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
             />
-            <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">New Arrivals</span>
+            <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">New Arrivals</span>
           </label>
         </div>
       </FilterSection>
 
       {/* Brand */}
       <FilterSection title="Brand" sectionKey="brand">
-        <div className="space-y-2 max-h-48 overflow-y-auto">
+        <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
           {uniqueBrands.map(brand => (
-            <label key={brand} className="flex items-center">
+            <label key={brand} className="flex items-center cursor-pointer group">
               <input
                 type="checkbox"
                 checked={filters.brands.includes(brand)}
                 onChange={(e) => handleCheckboxChange('brands', brand, e.target.checked)}
-                className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
+                className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{brand}</span>
+              <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">{brand}</span>
+            </label>
+          ))}
+        </div>
+      </FilterSection>
+
+      {/* Percolator */}
+      <FilterSection title="Perc Type" sectionKey="percolator">
+        <div className="space-y-3">
+          {uniquePercolators.map(perc => (
+            <label key={perc} className="flex items-center cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={filters.percolators.includes(perc)}
+                onChange={(e) => handleCheckboxChange('percolators', perc, e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
+              />
+              <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">{perc}</span>
             </label>
           ))}
         </div>
@@ -197,16 +214,16 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
 
       {/* Material */}
       <FilterSection title="Material" sectionKey="material">
-        <div className="space-y-2">
+        <div className="space-y-3">
           {uniqueMaterials.map(material => (
-            <label key={material} className="flex items-center">
+            <label key={material} className="flex items-center cursor-pointer group">
               <input
                 type="checkbox"
                 checked={filters.materials.includes(material)}
                 onChange={(e) => handleCheckboxChange('materials', material, e.target.checked)}
-                className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
+                className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{material}</span>
+              <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">{material}</span>
             </label>
           ))}
         </div>
@@ -214,16 +231,16 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
 
       {/* Height */}
       <FilterSection title="Height" sectionKey="height">
-        <div className="space-y-2">
+        <div className="space-y-3">
           {uniqueHeights.map(height => (
-            <label key={height} className="flex items-center">
+            <label key={height} className="flex items-center cursor-pointer group">
               <input
                 type="checkbox"
                 checked={filters.heights.includes(height)}
                 onChange={(e) => handleCheckboxChange('heights', height, e.target.checked)}
-                className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
+                className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{height}</span>
+              <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">{height}</span>
             </label>
           ))}
         </div>
@@ -231,50 +248,16 @@ export default function BongsFilters({ filters, setFilters, products }: BongsFil
 
       {/* Joint Size */}
       <FilterSection title="Joint Size" sectionKey="joint">
-        <div className="space-y-2">
+        <div className="space-y-3">
           {uniqueJointSizes.map(size => (
-            <label key={size} className="flex items-center">
+            <label key={size} className="flex items-center cursor-pointer group">
               <input
                 type="checkbox"
                 checked={filters.jointSizes.includes(size)}
                 onChange={(e) => handleCheckboxChange('jointSizes', size, e.target.checked)}
-                className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
+                className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d]"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{size}</span>
-            </label>
-          ))}
-        </div>
-      </FilterSection>
-
-      {/* Percolator */}
-      <FilterSection title="Percolator Type" sectionKey="percolator">
-        <div className="space-y-2">
-          {uniquePercolators.map(perc => (
-            <label key={perc} className="flex items-center">
-              <input
-                type="checkbox"
-                checked={filters.percolators.includes(perc)}
-                onChange={(e) => handleCheckboxChange('percolators', perc, e.target.checked)}
-                className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
-              />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{perc}</span>
-            </label>
-          ))}
-        </div>
-      </FilterSection>
-
-      {/* Category */}
-      <FilterSection title="Category" sectionKey="category">
-        <div className="space-y-2">
-          {uniqueCategories.map(category => (
-            <label key={category} className="flex items-center">
-              <input
-                type="checkbox"
-                checked={filters.categories.includes(category)}
-                onChange={(e) => handleCheckboxChange('categories', category, e.target.checked)}
-                className="rounded border-gray-300 text-dope-orange-500 focus:ring-dope-orange-500"
-              />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{category}</span>
+              <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a]">{size}</span>
             </label>
           ))}
         </div>

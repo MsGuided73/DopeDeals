@@ -218,22 +218,22 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
     );
   }
 
-  // Grid view - Traditional 3-column layout
+  // Grid view - Matches Bongs mockup styling
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {products.map((product) => (
-        <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
-          {/* Product Image */}
-          <div className="relative aspect-square bg-gray-100 overflow-hidden">
+        <div key={product.id} className="bg-white rounded-md overflow-hidden group">
+          {/* Product Image - Black Background */}
+          <Link href={`/product/${product.id}`} className="block relative aspect-square bg-[#0a0a0a] overflow-hidden">
             {product.image_url ? (
               <Image
                 src={product.image_url}
                 alt={product.name}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="w-full h-full flex items-center justify-center text-gray-600">
                 <div className="text-center">
                   <div className="text-3xl mb-2">📦</div>
                   <div className="text-sm">No Image</div>
@@ -244,97 +244,59 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
             {/* Badges */}
             <div className="absolute top-3 left-3 flex flex-col space-y-1">
               {product.isNew && (
-                <span className="bg-green-500 text-white px-2 py-1 rounded-md text-xs font-bold">
+                <span className="bg-green-500 text-white px-2 py-1 rounded-sm text-xs font-bold">
                   NEW
                 </span>
               )}
               {product.isSale && (
-                <span className="bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold">
+                <span className="bg-red-500 text-white px-2 py-1 rounded-sm text-xs font-bold">
                   SALE
                 </span>
               )}
-              {/* Variant Indicator */}
-              {product.image_urls && product.image_urls.length > 1 && (
-                <div className="bg-white/90 rounded p-1">
-                  <div className="flex gap-1">
-                    {product.image_urls.slice(0, 3).map((_, index) => (
-                      <div key={index} className="w-2 h-2 rounded-full bg-gray-300"></div>
-                    ))}
-                    {product.image_urls.length > 3 && (
-                      <div className="w-2 h-2 rounded-full bg-gray-500"></div>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
 
-            {/* Favorite Button */}
+            {/* Favorite Button - Floating Heart */}
             <button
-              onClick={() => toggleFavorite(product.id)}
-              className={`absolute top-3 right-3 p-2 rounded-full ${
-                favorites.has(product.id)
-                  ? 'text-red-500 bg-white'
-                  : 'text-gray-400 bg-white hover:text-red-500'
-              } shadow-sm`}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleFavorite(product.id);
+              }}
+              className="absolute top-3 right-3 p-2 z-10"
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+              <svg 
+                className={`w-6 h-6 transition-colors ${favorites.has(product.id) ? 'text-white fill-current' : 'text-white stroke-current stroke-2 fill-none hover:text-gray-300'}`} 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </button>
-          </div>
+          </Link>
 
           {/* Product Info */}
-          <div className="p-4">
-            <div className="flex items-start justify-between mb-2">
-              <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-medium font-sans text-gray-900 truncate">
-                  <Link href={`/product/${product.id}`} className="hover:text-[#2d8f47] transition-colors">
-                    {product.name}
-                  </Link>
-                </h3>
-                <p className="text-sm font-sans text-gray-500 mt-1">{product.brand}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-lg font-bold text-gray-900">${product.price}</span>
-                {product.compare_at_price && product.compare_at_price > product.price && (
-                  <span className="text-sm text-gray-500 line-through">${product.compare_at_price}</span>
-                )}
-              </div>
-
-              <div className="flex items-center space-x-1">
-                <div className={`w-2 h-2 rounded-full ${product.inStock ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                <span className={`text-xs ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
-                  {product.inStock ? 'In Stock' : 'Out of Stock'}
-                </span>
-              </div>
-            </div>
-
-            {/* Action Buttons - Bottom of Card */}
-            <div className="flex gap-2 mt-3">
-              <Link
-                href={`/product/${product.id}`}
-                className="flex-1 px-3 py-2 bg-transparent border-2 border-[#2d8f47] text-[#2d8f47] hover:bg-[#2d8f47] hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
-              >
-                View Product
+          <div className="pt-4 pb-2">
+            <h3 className="text-base font-bold text-[#1a1a1a] mb-1 line-clamp-2 leading-tight">
+              <Link href={`/product/${product.id}`} className="hover:text-[#2d8f47] transition-colors">
+                {product.name}
               </Link>
-              <button
-                onClick={async () => {
-                  if (product.inStock) {
-                    try {
-                      await addToCart(product.id, 1);
-                    } catch (error) {
-                      console.error('Failed to add to cart:', error);
-                    }
-                  }
-                }}
-                disabled={!product.inStock}
-                className="flex-1 px-3 py-2 bg-[#2d8f47] hover:bg-green-700 disabled:bg-gray-300 text-white disabled:text-gray-500 rounded-md text-sm font-medium transition-colors"
-              >
-                {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-              </button>
+            </h3>
+
+            {/* Mock Ratings */}
+            <div className="flex items-center gap-1 mb-2">
+              <div className="flex text-[#1c352d]">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                <svg className="w-4 h-4 fill-current text-gray-300" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              </div>
+              <span className="text-sm text-gray-500 font-medium">({Math.floor(Math.random() * 150) + 12})</span>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <span className="text-lg font-bold text-[#1a1a1a]">${product.price.toFixed(2)}</span>
+              {product.compare_at_price && product.compare_at_price > product.price && (
+                <span className="text-sm text-gray-500 line-through">${product.compare_at_price.toFixed(2)}</span>
+              )}
             </div>
           </div>
         </div>
