@@ -1,12 +1,9 @@
-# Task Tracker: Variable Product / Variant Rendering
+# Task Tracker: Edge Runtime Compatibility & Cleanup
 
 | Task | Status | Notes |
 | :--- | :--- | :--- |
-| Update `lib/storage.ts` (variations logic) | [x] | Now uses `parent_product_id` and filters by `source_type`. |
-| Update `lib/product-service.ts` (filtering) | [x] | Added `source_type` filter to `getProducts` and `getProductCount`. |
-| Update `app/api/products/[id]/route.ts` (API payload) | [x] | FIXED IMPORTS; returns rich variant data + selectors. |
-| Implement dynamic state in `EnhancedPDP.tsx` | [x] | Added `selectedVariantId` and data merging. |
-| Implement variant selectors and swapping | [x] | Added button-based selectors for Flavor/Size axes. |
-| Update "Add to Cart" with variant ID | [x] | Now sends `selectedVariantId` to the cart API. |
-| Verify product grid "From $X" display | [x] | Updated `UniversalProductCard` with "From" prefix. |
-| Final manual verification & compliance check | [x] | Fixed API 500 error by adding missing imports. |
+| Remove "Highway 420 Sign" from floating nav | [x] | Addressed branding issue in `FloatingNav.tsx`. |
+| Remove `@supabase/ssr` from `middleware.ts` | [x] | Switched to cookie-based auth check to avoid Edge runtime errors. |
+| Audit for abandoned variation/variable logic | [x] | Verified remnants are standard e-commerce variants. Edge warnings were solely due to Supabase pulling `process.version`. |
+| Force `nodejs` runtime on server handlers | [x] | Added `export const runtime = 'nodejs';` to files importing `@supabase/ssr`. |
+| Verify fix with `pnpm run build` | [x] | Build progresses past Edge warnings successfully. |

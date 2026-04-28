@@ -1,3 +1,4 @@
+export const runtime = 'nodejs';
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
@@ -63,3 +64,4 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     return NextResponse.json({ error: error.message || 'Failed to delete address' }, { status: 500 });
   }
 }
+

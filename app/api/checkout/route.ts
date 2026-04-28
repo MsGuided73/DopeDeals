@@ -1,3 +1,4 @@
+export const runtime = 'nodejs';
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../lib/storage';
 import { z } from 'zod';
@@ -369,3 +370,4 @@ export async function POST(req: NextRequest) {
   }, { status: 500 });
 }
 }
+

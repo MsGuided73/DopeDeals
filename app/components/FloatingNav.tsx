@@ -274,18 +274,6 @@ export default function FloatingNav() {
       <nav className="fn-bar" aria-label="Secondary navigation">
         <div className="fn-inner">
 
-          {/* Highway 420 Sign on the left */}
-          <Link href="/" className="flex items-center z-10 mr-5 shrink-0">
-            <Image
-              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Highway420%20Sign.png"
-              alt="Highway 420 Sign"
-              width={240}
-              height={60}
-              style={{ height: '52px', width: 'auto' }}
-              className="object-contain"
-              priority
-            />
-          </Link>
 
           {/* Nav links — centered within remaining space */}
           <div className="fn-links">

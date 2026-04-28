@@ -1,3 +1,4 @@
+export const runtime = 'nodejs';
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import { storage } from '@/../server/storage';
@@ -67,3 +68,4 @@ export default async function OrdersPage() {
     </div>
   );
 }
+
