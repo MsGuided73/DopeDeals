@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import GlobalMastheadV3 from '../components/GlobalMasthead.v3';
+import GlobalMasthead from '../components/GlobalMasthead';
 import ReducedFooter from '../components/ReducedFooter';
 import DealCard from '../components/DealCard';
 
@@ -48,7 +48,7 @@ export default function DealsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <GlobalMastheadV3 />
+      <GlobalMasthead />
       
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
