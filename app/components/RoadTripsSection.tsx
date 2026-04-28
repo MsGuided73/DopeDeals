@@ -76,11 +76,11 @@ export default function RoadTripsSection() {
           padding-bottom: 4px;
         }
         .rt-title {
-          font-family: "Chalets", "Oswald", "Fira Sans Extra Condensed", Impact, sans-serif;
-          font-size: clamp(40px, 6vw, 76px);
-          font-weight: 800;
-          letter-spacing: -0.01em;
-          line-height: 1.05;
+          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
+          font-size: clamp(32px, 5vw, 64px);
+          font-weight: 400;
+          letter-spacing: 0.02em;
+          line-height: 1;
           color: #111111;
           margin: 6px 0 8px;
         }
