@@ -1,5 +1,8 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '../../../../lib/storage';
 import { parseImageUrls } from '../../../../lib/utils/image-utils';
+
+export const runtime = 'nodejs';
 
 // TypeScript interfaces for the new PDP response shape
 interface PDPImage {
