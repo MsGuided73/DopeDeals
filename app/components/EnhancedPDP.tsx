@@ -342,19 +342,21 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                   Select Size / Quantity
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {variants.map((variant: any) => (
-                    <button
-                      key={variant.id}
-                      onClick={() => setSelectedVariantId(variant.id)}
-                      className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
-                        selectedVariantId === variant.id
-                          ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                          : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                      } ${!variant.in_stock ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      {variant.name} {variant.in_stock ? '' : '(Out of Stock)'}
-                    </button>
-                  ))}
+                  {variants.map((variant: any) => {
+                    return (
+                      <button
+                        key={variant.id}
+                        onClick={() => setSelectedVariantId(variant.id)}
+                        className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                          selectedVariantId === variant.id
+                            ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                            : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                        } ${!variant.in_stock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {variant.name} {variant.in_stock ? '' : '(Out of Stock)'}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

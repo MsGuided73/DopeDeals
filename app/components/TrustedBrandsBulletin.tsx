@@ -103,7 +103,7 @@ export default function TrustedBrandsBulletin() {
                     height: '100%',
                     maxWidth: '100%',
                     objectFit: 'contain',
-                    filter: brand.hasProducts ? 'none' : 'grayscale(100%) opacity(0.35)',
+                    filter: 'none',
                   }}
                   unoptimized
                 />
@@ -113,10 +113,10 @@ export default function TrustedBrandsBulletin() {
                 fontSize: '10px',
                 letterSpacing: '0.18em',
                 textTransform: 'uppercase',
-                color: brand.hasProducts ? '#9ca3af' : '#d1d5db',
+                color: '#9ca3af',
                 textAlign: 'center',
               }}>
-                {brand.hasProducts ? brand.name : `${brand.name} · Soon`}
+                {brand.name}
               </span>
             </>
           );

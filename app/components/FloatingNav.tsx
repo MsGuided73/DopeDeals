@@ -28,10 +28,10 @@ const NAV_LINKS = [
     ],
   },
   {
-    label: "Vapes & Carts",
+    label: "Vapes",
     href: "/vapes",
     children: [
-      { label: "All Vapes & Carts", href: "/vapes" },
+      { label: "All Vapes", href: "/vapes" },
       { label: "Cartridges", href: "/vapes?type=cartridge" },
       { label: "Disposables", href: "/vapes?type=disposable" },
       { label: "Desktop Vapes", href: "/vapes?type=vaporizer" },
@@ -47,7 +47,7 @@ const NAV_LINKS = [
     ],
   },
   { label: "Edibles", href: "/edibles", children: null },
-  { label: "Shrooms & More", href: "/mushrooms", children: null },
+  { label: "Shrooms", href: "/mushrooms", children: null },
   { label: "Accessories", href: "/accessories", children: null },
   { label: "THCA Flower", href: "/thca_flower", children: null },
 ];

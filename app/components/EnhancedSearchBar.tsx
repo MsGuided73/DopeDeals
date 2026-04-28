@@ -169,7 +169,7 @@ export default function EnhancedSearchBar({ compact = false }: { compact?: boole
         'Smoking Accessories': '/accessories',
         'THCA Flower': '/thca_flower',
         'Pre-Rolls': '/pre-rolls',
-        'Vapes & Carts': '/vapes',
+        'Vapes': '/vapes',
         'THCA Prerolls': '/pre-rolls',
         'THCA Vapes': '/vapes',
         'THCA Cartridges': '/vapes'

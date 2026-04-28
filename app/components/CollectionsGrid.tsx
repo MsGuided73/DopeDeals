@@ -28,7 +28,7 @@ const TOP_ROW: Collection[] = [
     image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Dab%20Rigs%20(1).png",
   },
   {
-    name: "Vapes & Carts",
+    name: "Vapes",
     tagline: "Compact. Clean. On the go.",
     route: "/vapes",
     image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Vapes%20&%20Carts%20(1).png",
