@@ -286,10 +286,9 @@ export default function DopeDealsSection() {
         </AutoScrollContainer>
       </div>
 
-      {/* CTA */}
       <div style={{ textAlign: 'center', marginTop: '44px' }}>
         <Link
-          href="/products"
+          href="/deals"
           style={{ display: 'inline-block', background: 'transparent', color: DD.accent, fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: `2px solid ${DD.accent}`, borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
           onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = DD.grad; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
           onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = DD.accent; }}
