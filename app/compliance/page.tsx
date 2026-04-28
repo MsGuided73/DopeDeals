@@ -216,12 +216,6 @@ export default function CompliancePage() {
                 <div className="space-y-2">
                   <p><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
                   <p><strong>Phone:</strong> (626) 656-6287</p>
-                  <p className="mt-4"><strong>Business Address:</strong></p>
-                  <p className="text-gray-300">
-                    BMB Wholesale, Inc.<br />
-                    10 Manor Pkwy<br />
-                    Salem, NH 03079
-                  </p>
                 </div>
               </div>
               <div>

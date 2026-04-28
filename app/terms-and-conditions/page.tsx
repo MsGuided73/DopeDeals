@@ -343,10 +343,6 @@ export default function TermsAndConditionsPage() {
                   <p><strong>Website:</strong> https://highway420store.com</p>
                   <p><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
                   <p><strong>Phone:</strong> (626) 656-6287</p>
-                  <p><strong>Address:</strong></p>
-                  <p>BMB Wholesale, Inc.</p>
-                  <p>10 Manor Pkwy</p>
-                  <p>Salem, NH 03079</p>
                 </div>
               </div>
             </section>

@@ -264,10 +264,6 @@ export default function ReturnsPage() {
               </button>
             </div>
             <div className="mt-8 text-sm leading-relaxed">
-              <p className="font-semibold">Mailing Address:</p>
-              <p>BMB Wholesale, Inc.</p>
-              <p>10 Manor Pkwy</p>
-              <p>Salem, NH 03079</p>
               <p className="mt-2"><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
               <p><strong>Phone:</strong> (626) 656-6287</p>
             </div>
