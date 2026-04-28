@@ -32,8 +32,9 @@ COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
 
 # Cap runtime Node heap at 1 GB
-ENV NODE_OPTIONS="--max-old-space-size=1024"
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 EXPOSE 3000
 CMD ["node", "server.js"]
+
 
