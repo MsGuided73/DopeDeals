@@ -58,6 +58,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const [loading, setLoading] = useState(!props.product);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any>(props.product ? props : null);
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
   
   // Destructure from data or props
   const product = data?.product || props.product;
@@ -69,6 +70,16 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const ingredients = data?.ingredients || props.ingredients || {};
   const ship_restrictions = data?.ship_restrictions || props.ship_restrictions || {};
   const ui_state = data?.ui_state || props.ui_state || {};
+  const variants = data?.variants || [];
+
+  // Auto-select first variant if available
+  React.useEffect(() => {
+    if (variants && variants.length > 0 && !selectedVariantId) {
+      setSelectedVariantId(variants[0].id);
+    }
+  }, [variants, selectedVariantId]);
+
+  const selectedVariant = variants.find((v: any) => v.id === selectedVariantId) || null;
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -127,11 +138,15 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     );
   }
 
-  // stock_quantity is now in the normalized product object
-  const stockCount = product.stock_quantity || 0;
-  const inStock = stockCount > 0;
-  const price = display_price_cents ? display_price_cents / 100 : 0;
-  const originalPrice = compare_at_price_cents ? compare_at_price_cents / 100 : null;
+  // Use selected variant data if available
+  const stockCount = selectedVariant ? (selectedVariant.in_stock ? 100 : 0) : (product.stock_quantity || 0); // fallback, ideally use actual variant stock
+  const inStock = selectedVariant ? selectedVariant.in_stock : (stockCount > 0);
+  const price = selectedVariant && selectedVariant.price_cents 
+    ? selectedVariant.price_cents / 100 
+    : (display_price_cents ? display_price_cents / 100 : 0);
+  const originalPrice = selectedVariant && selectedVariant.sale_price_cents 
+    ? selectedVariant.sale_price_cents / 100 
+    : (compare_at_price_cents ? compare_at_price_cents / 100 : null);
   const displayImages = images.length > 0 ? images.map((i: any) => i.url) : ['/api/placeholder/600/600'];
 
   // Handle Add to Cart
@@ -139,7 +154,9 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     setIsAdding(true);
     setCartMessage(null);
     try {
-      await addToCart(product.id, quantity);
+      // Add the specific variant if selected, otherwise the base product
+      const targetId = selectedVariantId || product.id;
+      await addToCart(targetId, quantity);
       refreshCart();
       setCartMessage({ type: 'success', text: 'Added to cart!' });
       setTimeout(() => setCartMessage(null), 3000);
@@ -317,6 +334,30 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                 </>
               )}
             </div>
+
+            {/* Variant Selector */}
+            {variants && variants.length > 0 && (
+              <div className="space-y-3 pt-2 pb-2">
+                <label className="block text-sm font-semibold text-slate-900">
+                  Select Size / Quantity
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {variants.map((variant: any) => (
+                    <button
+                      key={variant.id}
+                      onClick={() => setSelectedVariantId(variant.id)}
+                      className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                        selectedVariantId === variant.id
+                          ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                          : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                      } ${!variant.in_stock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {variant.name} {variant.in_stock ? '' : '(Out of Stock)'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Description Short */}
             <div className="text-slate-600 text-lg leading-relaxed space-y-4">
