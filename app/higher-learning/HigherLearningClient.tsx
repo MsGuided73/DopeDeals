@@ -14,7 +14,7 @@ const FEATURED_POST = {
   category: "DAB RIGS",
   isFeatured: true,
   readTime: "6 min read",
-  image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Puffco_Peak_Pro.jpg",
+  image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/dab%20and%20e-rg%20-%20Copy.png",
   href: "/higher-learning/e-rig-vs-dab-rig",
 };
 
@@ -34,7 +34,7 @@ const SECONDARY_POSTS = [
     description: "The right grind makes a big difference. Here's how to get the perfect consistency for any session.",
     category: "HOW TO",
     readTime: "4 min read",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Accessories/Grinder.jpg",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/Grinder%20Image%20for%20Blog%20and%20Grid.png",
     href: "/higher-learning/how-to-grind-weed",
   },
 ];
@@ -140,13 +140,12 @@ export default function HigherLearningClient() {
         </div>
         
         {/* Decorative Mountain Graphic (Right) */}
-        <div className="absolute right-0 top-0 opacity-20 pointer-events-none hidden md:block w-1/2 h-full">
-          <svg viewBox="0 0 800 300" fill="none" className="w-full h-full object-cover">
-            {/* Simple abstract mountain path vector */}
-            <path d="M100 250 L250 100 L350 180 L500 50 L650 200 L800 80" stroke="#1B7A4D" strokeWidth="2" fill="none" />
-            <path d="M150 280 L300 150 L400 220 L550 100 L700 250" stroke="#1B7A4D" strokeWidth="1" fill="none" />
-            <path d="M0 300 Q 200 250 400 300 T 800 300" fill="#f3f4f6" />
-          </svg>
+        <div className="absolute right-0 top-[-20px] pointer-events-none hidden md:block w-[50%] max-w-[600px] h-auto z-0">
+          <img 
+            src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/mountain_road.png" 
+            alt="Mountain Road Graphic" 
+            className="w-full h-auto object-contain opacity-80"
+          />
         </div>
       </div>
 
@@ -183,44 +182,47 @@ export default function HigherLearningClient() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-20">
         
         {/* Main Featured Article (Left) */}
-        <Link href={FEATURED_POST.href} className="lg:col-span-7 group relative rounded-xl overflow-hidden bg-neutral-900 aspect-square lg:aspect-auto lg:h-[600px] flex flex-col justify-end p-8 border border-neutral-200/20 shadow-sm">
-          {/* Background Image with Overlay */}
+        <Link href={FEATURED_POST.href} className="lg:col-span-7 group relative rounded-xl overflow-hidden bg-black aspect-square lg:aspect-auto lg:h-[700px] flex flex-col p-8 border border-neutral-200/20 shadow-sm">
+          {/* Background Image */}
           <div className="absolute inset-0 z-0">
-            {/* Fallback dark gradient in case image is missing */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10" />
             <img 
               src={FEATURED_POST.image} 
               alt={FEATURED_POST.title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80"
+              className="w-full h-full object-contain object-top transition-transform duration-700 group-hover:scale-105 opacity-100"
               onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1596525381831-299f2f8115eb?q=80&w=2070&auto=format&fit=crop"; }}
             />
           </div>
           
-          <div className="relative z-20 flex flex-col items-start text-white">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="relative z-20 flex flex-col h-full text-white">
+            {/* Top Badge */}
+            <div className="flex items-center mb-auto">
               {FEATURED_POST.isFeatured && (
-                <span className="bg-[#1b4332] text-[#4ade80] text-xs font-bold uppercase tracking-widest py-1 px-3 rounded-sm">
+                <span className="bg-[#1b4332] text-[#4ade80] text-[10px] font-bold uppercase tracking-widest py-1.5 px-3 rounded-sm">
                   FEATURED
                 </span>
               )}
-              <span className="bg-white/10 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-widest py-1 px-3 rounded-sm border border-white/20">
+            </div>
+            
+            {/* Bottom Content */}
+            <div className="mt-auto flex flex-col items-start w-full bg-gradient-to-t from-black via-black/80 to-transparent pt-12 pb-2">
+              <span className="bg-[#1b4332] text-[#4ade80] text-[10px] font-bold uppercase tracking-widest py-1 px-3 rounded-sm mb-3">
                 {FEATURED_POST.category}
               </span>
-            </div>
-            <h3 className="text-3xl md:text-5xl font-bold leading-tight mb-4 group-hover:text-[#4ade80] transition-colors">
-              {FEATURED_POST.title}
-            </h3>
-            <p className="text-neutral-300 text-base md:text-lg max-w-lg mb-8 line-clamp-2">
-              {FEATURED_POST.description}
-            </p>
-            <div className="flex items-center justify-between w-full">
-              <span className="flex items-center gap-2 text-sm font-semibold tracking-wider text-[#4ade80] uppercase">
-                READ MORE <ChevronRight size={16} />
-              </span>
-              <span className="text-neutral-400 text-sm flex items-center gap-1.5">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                {FEATURED_POST.readTime}
-              </span>
+              <h3 className="text-3xl md:text-[38px] font-bold leading-[1.1] mb-3 group-hover:text-[#4ade80] transition-colors max-w-md">
+                {FEATURED_POST.title}
+              </h3>
+              <p className="text-neutral-300 text-sm md:text-[15px] leading-relaxed max-w-sm mb-6 line-clamp-3">
+                {FEATURED_POST.description}
+              </p>
+              <div className="flex items-center justify-between w-full">
+                <span className="flex items-center gap-1.5 text-xs font-bold tracking-wider text-[#4ade80] uppercase">
+                  READ MORE <ChevronRight size={16} strokeWidth={2.5} />
+                </span>
+                <span className="text-neutral-300 text-[11px] flex items-center gap-1.5 font-medium tracking-wider uppercase">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {FEATURED_POST.readTime}
+                </span>
+              </div>
             </div>
           </div>
         </Link>
@@ -228,34 +230,41 @@ export default function HigherLearningClient() {
         {/* Secondary Articles (Right Stack) */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           {SECONDARY_POSTS.map((post) => (
-            <Link key={post.id} href={post.href} className="group relative rounded-xl overflow-hidden bg-neutral-900 h-full min-h-[280px] flex flex-col justify-end p-6 border border-neutral-200/20 shadow-sm">
+            <Link key={post.id} href={post.href} className="group relative rounded-xl overflow-hidden bg-black h-full min-h-[338px] flex flex-col p-6 lg:p-8 border border-neutral-200/20 shadow-sm">
               <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/20 z-10" />
                 <img 
                   src={post.image} 
                   alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-70"
+                  className="w-full h-full object-contain object-left transition-transform duration-700 group-hover:scale-105 opacity-100"
                   onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1629831410196-857c00e12d45?q=80&w=2070&auto=format&fit=crop"; }}
                 />
               </div>
-              <div className="relative z-20 flex flex-col items-start text-white">
-                <span className="bg-[#1b4332] text-[#4ade80] text-xs font-bold uppercase tracking-widest py-1 px-3 rounded-sm mb-3">
-                  {post.category}
-                </span>
-                <h3 className="text-xl md:text-2xl font-bold leading-tight mb-3 group-hover:text-[#4ade80] transition-colors">
-                  {post.title}
-                </h3>
-                <p className="text-neutral-300 text-sm mb-5 line-clamp-2">
-                  {post.description}
-                </p>
-                <div className="flex items-center justify-between w-full mt-auto">
-                  <span className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-[#4ade80] uppercase">
-                    READ MORE <ChevronRight size={14} />
+              <div className="relative z-20 flex w-full h-full text-white">
+                {/* Badge Top Left */}
+                <div className="absolute top-0 left-0">
+                  <span className="bg-[#1b4332] text-[#4ade80] text-[10px] font-bold uppercase tracking-widest py-1.5 px-2.5 rounded-sm inline-block">
+                    {post.category}
                   </span>
-                  <span className="text-neutral-400 text-xs flex items-center gap-1.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    {post.readTime}
-                  </span>
+                </div>
+                
+                {/* Text Content Right Half */}
+                <div className="ml-auto w-[52%] flex flex-col pt-1 h-full">
+                  <h3 className="text-xl lg:text-[24px] font-bold leading-[1.2] mb-2 group-hover:text-[#4ade80] transition-colors pr-2">
+                    {post.title}
+                  </h3>
+                  <p className="text-neutral-300 text-[13px] leading-[1.6] mb-auto line-clamp-4 pr-1">
+                    {post.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between w-full mt-6">
+                    <span className="flex items-center gap-1 text-[11px] font-bold tracking-wider text-[#4ade80] uppercase">
+                      READ MORE <ChevronRight size={14} strokeWidth={3} />
+                    </span>
+                    <span className="text-neutral-300 text-[10px] flex items-center gap-1 font-medium tracking-wider uppercase">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      {post.readTime}
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>

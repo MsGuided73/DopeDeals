@@ -45,8 +45,8 @@ export default function AgeGateModal() {
     }
 
     const dateOfBirth = new Date(dob);
-    if (isNaN(dateOfBirth.getTime())) {
-      setError('Please enter a valid date.');
+    if (dob.length !== 10 || isNaN(dateOfBirth.getTime())) {
+      setError('Please enter a valid date (MM/DD/YYYY).');
       return;
     }
 
@@ -153,12 +153,21 @@ export default function AgeGateModal() {
                     <div className="flex bg-black/60 border-2 border-white/20 rounded-xl h-14 items-center justify-between px-4 group-focus-within:border-orange-500 transition-all overflow-hidden relative">
                       <Calendar className="w-5 h-5 text-white/50 absolute left-4 pointer-events-none" />
                       <input
-                        type="date"
+                        type="text"
                         value={dob}
-                        onChange={(e) => setDob(e.target.value)}
-                        max={new Date().toISOString().split('T')[0]}
-                        className="w-full h-full bg-transparent border-none text-white font-bold text-lg focus:outline-none pl-8"
-                        style={{ colorScheme: 'dark' }}
+                        placeholder="MM/DD/YYYY"
+                        onChange={(e) => {
+                          let val = e.target.value.replace(/\D/g, '');
+                          if (val.length > 8) val = val.slice(0, 8);
+                          if (val.length >= 5) {
+                            val = `${val.slice(0, 2)}/${val.slice(2, 4)}/${val.slice(4)}`;
+                          } else if (val.length >= 3) {
+                            val = `${val.slice(0, 2)}/${val.slice(2)}`;
+                          }
+                          setDob(val);
+                        }}
+                        maxLength={10}
+                        className="w-full h-full bg-transparent border-none text-white font-bold text-lg focus:outline-none pl-8 placeholder-white/30"
                       />
                     </div>
                   </div>

@@ -10,7 +10,7 @@ const MOCK_ARTICLES = [
     description: "We break down the key differences between e-rigs and traditional dab rigs so you can choose the right setup.",
     category: "DAB RIGS",
     readTime: "6 min read",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Puffco_Peak_Pro.jpg",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/dab%20and%20e-rg%20-%20Copy.png",
     href: "/higher-learning/e-rig-vs-dab-rig",
   },
   {
@@ -28,7 +28,7 @@ const MOCK_ARTICLES = [
     description: "The right grind makes a big difference. Here's how to get the perfect consistency for any session.",
     category: "HOW TO",
     readTime: "4 min read",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Accessories/Grinder.jpg",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/Grinder%20Image%20for%20Blog%20and%20Grid.png",
     href: "/higher-learning/how-to-grind-weed",
   },
 ];
@@ -65,11 +65,10 @@ export default function HomeBlogArticles() {
           {MOCK_ARTICLES.map((post) => (
             <Link key={post.id} href={post.href} className="group relative rounded-xl overflow-hidden bg-neutral-900 h-[380px] flex flex-col justify-end p-6 border border-neutral-200/20 shadow-sm">
               <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/20 z-10" />
                 <img 
                   src={post.image} 
                   alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-70"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-100"
                   onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1629831410196-857c00e12d45?q=80&w=2070&auto=format&fit=crop"; }}
                 />
               </div>
