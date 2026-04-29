@@ -90,6 +90,7 @@ export async function GET(req: NextRequest) {
         short_description: product.short_description,
         sku: product.sku,
         stock_quantity: product.stock_quantity || 0,
+        inStock: (product.stock_quantity || 0) > 0,
         is_active: product.is_active,
         featured: product.featured || false,
         brand_name: product.brand_name,

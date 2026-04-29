@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PipesProductCard from './PipesProductCard';
 import UniversalProductCard from '../../components/UniversalProductCard';
+import SmartBgImage from '../../components/SmartBgImage';
 import { addToCart } from '../../lib/cart-utils';
 import type { PipeProduct } from '../PipesPageContent';
 
@@ -224,22 +225,23 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
     );
   }
 
-  // Grid view - Matches Bongs mockup styling
+  // Grid view — frameless cards, image fills the entire tile, 3-up on desktop.
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
       {products.map((product) => (
-        <div key={product.id} className="bg-white rounded-md overflow-hidden group">
-          {/* Product Image - Black Background */}
-          <Link href={`/product/${product.id}`} className="block relative aspect-square bg-[#0a0a0a] overflow-hidden">
+        <div key={product.id} className="overflow-hidden group">
+          {/* Product Image — full image visible; bg auto-matches dominant edge color when image doesn't fill the tile */}
+          <Link href={`/product/${product.id}`} className="block relative aspect-square overflow-hidden">
             {product.image_url ? (
-              <Image
+              <SmartBgImage
                 src={product.image_url}
                 alt={product.name}
                 fill
-                className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="object-contain group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-600">
+              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
                 <div className="text-center">
                   <div className="text-3xl mb-2">📦</div>
                   <div className="text-sm">No Image</div>
@@ -265,15 +267,16 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
             <button
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 toggleFavorite(product.id);
               }}
-              className="absolute top-3 right-3 p-2 z-10"
+              aria-label={favorites.has(product.id) ? 'Remove from favorites' : 'Add to favorites'}
+              className={`absolute top-3 right-3 p-2 rounded-full bg-white shadow-sm z-10 ${
+                favorites.has(product.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'
+              }`}
             >
-              <svg 
-                className={`w-6 h-6 transition-colors ${favorites.has(product.id) ? 'text-white fill-current' : 'text-white stroke-current stroke-2 fill-none hover:text-gray-300'}`} 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
               </svg>
             </button>
           </Link>
@@ -303,6 +306,36 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
               {product.compare_at_price && product.compare_at_price > product.price && (
                 <span className="text-sm text-gray-500 line-through">${formatPrice(product.compare_at_price)}</span>
               )}
+            </div>
+
+            {/* Action Buttons — ghost View Details on left, filled Add to Cart on right */}
+            <div className="flex gap-2 mt-3">
+              <Link
+                href={`/product/${product.id}`}
+                className="flex-1 px-3 py-2 bg-transparent border-2 border-dope-orange-600 text-dope-orange-600 hover:bg-dope-orange-600 hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
+              >
+                View Details
+              </Link>
+              {(() => {
+                const inStock = product.inStock ?? ((product.stock_quantity ?? 0) > 0);
+                return (
+                  <button
+                    onClick={async () => {
+                      if (inStock) {
+                        try {
+                          await addToCart(product.id, 1);
+                        } catch (error) {
+                          console.error('Failed to add to cart:', error);
+                        }
+                      }
+                    }}
+                    disabled={!inStock}
+                    className="flex-1 px-3 py-2 bg-dope-orange-600 hover:bg-dope-orange-700 disabled:bg-dope-orange-400 text-white rounded-md text-sm font-medium transition-colors disabled:cursor-not-allowed"
+                  >
+                    {inStock ? 'Add to Cart' : 'Out of Stock'}
+                  </button>
+                );
+              })()}
             </div>
           </div>
         </div>

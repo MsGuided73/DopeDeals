@@ -36,40 +36,23 @@ import ProductDescription from './ProductDescription';
 import ReviewButton from './reviews/ReviewButton';
 import ReviewsList from './reviews/ReviewsList';
 import ProductRatingBadge from './reviews/ProductRatingBadge';
+import { extractEdgeColor } from '../lib/image-edge-color';
 
-// Categories that are physical gear/hardware — not consumables.
-// Ingredients tab, Lab Testing tab, COA badge, and allergy warnings are
-// all hidden for these. Keep this list in sync with the category_slug
-// values in main_site_products.
-const GEAR_CATEGORY_SLUGS = new Set([
-  'bongs',
-  'dab_rig',
-  'dab_rig_attachment',
-  'dab_rig_accessories',
-  'pipes',
-  'bubblers',
-  'ash_catchers',
-  'ashtrays',
-  'recyclers',
-  'percolator_bongs',
-  'proxy_accessories',
-  'dab_tools',
-  'replacement_bowl',
-  'e_rig',
-  'electronic_dab_rig',
-  'dab_rig_e_rig',
-  'accessories',
-  'grinders',
-  'rolling_trays',
-  'storage',
-  'lighters',
-  'torches',
-]);
+// Data-driven tab gating. We show the Ingredients tab only when the
+// product actually has ingredients data, and the Lab Testing tab + COA
+// badge only when a real COA URL is attached. The product API already
+// nulls out the literal 'false' string from the legacy import. This
+// keeps gear PDPs (bongs, dab rigs, etc.) clean without a category
+// whitelist that would drift out of sync as new categories are added.
+const productHasIngredients = (product: any, ingredients: any): boolean => {
+  if (typeof product?.ingredients === 'string' && product.ingredients.trim() !== '') return true;
+  if (Array.isArray(ingredients?.contains) && ingredients.contains.length > 0) return true;
+  return false;
+};
 
-const isGearProduct = (product: any): boolean => {
-  if (!product) return false;
-  const slug = (product.category_slug || product.subcategory_slug || '').toString().toLowerCase();
-  return GEAR_CATEGORY_SLUGS.has(slug);
+const productHasCoa = (coa: any): boolean => {
+  const url = coa?.url;
+  return typeof url === 'string' && url.trim() !== '' && url.trim().toLowerCase() !== 'false';
 };
 
 // Types match your stack
@@ -117,6 +100,14 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const selectedVariant = variants.find((v: any) => v.id === selectedVariantId) || null;
 
   const [selectedImage, setSelectedImage] = useState(0);
+  // Background of the main image card — auto-matched to the dominant
+  // edge color of the displayed image so dark studio shots don't sit
+  // on a clashing white card. Resets on every image change; the onLoad
+  // handler refills it. Falls back to white until detection runs.
+  const [mainImageBg, setMainImageBg] = useState<string>('#ffffff');
+  React.useEffect(() => {
+    setMainImageBg('#ffffff');
+  }, [selectedImage]);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState<'details' | 'ingredients' | 'lab' | 'reviews'>('details');
@@ -137,11 +128,15 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     return () => setHasCustomFooter(false);
   }, [setHasCustomFooter]);
 
+  // If a deep-link lands on a tab that this product no longer renders
+  // (e.g. /product/x?tab=ingredients on a bong), fall back to details.
   React.useEffect(() => {
-    if (isGearProduct(product) && (activeTab === 'ingredients' || activeTab === 'lab')) {
+    if (activeTab === 'ingredients' && !productHasIngredients(product, ingredients)) {
+      setActiveTab('details');
+    } else if (activeTab === 'lab' && !productHasCoa(coa)) {
       setActiveTab('details');
     }
-  }, [product, activeTab]);
+  }, [product, ingredients, coa, activeTab]);
 
   React.useEffect(() => {
     if (!props.product && props.productId) {
@@ -190,7 +185,12 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     : (compare_at_price_cents ? compare_at_price_cents / 100 : null);
   const displayImages = images.length > 0 ? images.map((i: any) => i.url) : ['/api/placeholder/600/600'];
 
-  const isGear = isGearProduct(product);
+  const hasIngredients = productHasIngredients(product, ingredients);
+  const hasCoa = productHasCoa(coa);
+  // FAQ + trust-bar copy: if neither ingredients nor a COA is attached, treat
+  // it as gear-style messaging (authentic / brand verified) rather than the
+  // hemp-legal copy aimed at consumables.
+  const isConsumable = hasIngredients || hasCoa;
 
   // Handle Add to Cart
   const handleAddToCart = async () => {
@@ -211,8 +211,22 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     }
   };
 
-  const FAQS = isGear
+  const FAQS = isConsumable
     ? [
+        {
+          question: 'Is this product legal?',
+          answer: 'Yes, this product contains legal hemp-derived compounds and complies with federal regulations (2018 Farm Bill).'
+        },
+        {
+          question: 'How long does shipping take?',
+          answer: 'Standard shipping takes 3-5 business days. We ship via USPS with tracking provided.'
+        },
+        {
+          question: 'Is packaging discreet?',
+          answer: 'Absolutely. All proprietary packaging is plain and odorless for your privacy.'
+        }
+      ]
+    : [
         {
           question: 'Is this product authentic?',
           answer: 'Every piece is sourced directly from authorized brand distributors. We do not sell knockoffs or replicas.'
@@ -228,20 +242,6 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
         {
           question: 'What is your return policy on glass?',
           answer: 'Glass is inspected before shipping and packed for safe transit. Damaged-in-transit pieces are replaced or refunded — contact us within 48 hours of delivery with photos.'
-        }
-      ]
-    : [
-        {
-          question: 'Is this product legal?',
-          answer: 'Yes, this product contains legal hemp-derived compounds and complies with federal regulations (2018 Farm Bill).'
-        },
-        {
-          question: 'How long does shipping take?',
-          answer: 'Standard shipping takes 3-5 business days. We ship via USPS with tracking provided.'
-        },
-        {
-          question: 'Is packaging discreet?',
-          answer: 'Absolutely. All proprietary packaging is plain and odorless for your privacy.'
         }
       ];
 
@@ -267,11 +267,19 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
           {/* Left Column - Images */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="relative rounded-2xl overflow-hidden bg-white shadow-xl ring-1 ring-slate-200">
+            <div
+              className="relative rounded-2xl overflow-hidden shadow-xl ring-1 ring-slate-200 transition-colors duration-200"
+              style={{ backgroundColor: mainImageBg }}
+            >
               <div className="aspect-square relative group">
-                <img 
-                  src={displayImages[selectedImage]} 
+                <img
+                  src={displayImages[selectedImage]}
                   alt={product.display_name}
+                  crossOrigin="anonymous"
+                  onLoad={(e) => {
+                    const color = extractEdgeColor(e.currentTarget, { skipIfSquare: false });
+                    if (color) setMainImageBg(color);
+                  }}
                   className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 
@@ -282,7 +290,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                       SALE
                     </span>
                   )}
-                  {coa.url && !isGear && (
+                  {hasCoa && (
                     <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
                       <ShieldCheck className="w-4 h-4" />
                       LAB TESTED
@@ -334,8 +342,8 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
             <div className="grid grid-cols-3 gap-3 pt-4">
               <div className="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-xl border border-emerald-200 text-center">
                 <ShieldCheck className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-                <div className="text-xs font-semibold text-slate-900">{isGear ? 'Authentic' : 'Lab Tested'}</div>
-                <div className="text-xs text-slate-600">{isGear ? 'Brand Verified' : '3rd Party'}</div>
+                <div className="text-xs font-semibold text-slate-900">{hasCoa ? 'Lab Tested' : 'Authentic'}</div>
+                <div className="text-xs text-slate-600">{hasCoa ? '3rd Party' : 'Brand Verified'}</div>
               </div>
               <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-200 text-center">
                 <Truck className="w-8 h-8 text-blue-600 mx-auto mb-2" />
@@ -516,10 +524,8 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
             <div className="flex gap-4 md:gap-8 overflow-x-auto">
               {[
                 { id: 'details', label: 'Product Details', icon: Info },
-                ...(isGear ? [] : [
-                  { id: 'ingredients', label: 'Ingredients', icon: Leaf },
-                  { id: 'lab', label: 'Lab Testing', icon: ShieldCheck }
-                ]),
+                ...(hasIngredients ? [{ id: 'ingredients', label: 'Ingredients', icon: Leaf }] : []),
+                ...(hasCoa ? [{ id: 'lab', label: 'Lab Testing', icon: ShieldCheck }] : []),
                 { id: 'reviews', label: 'Reviews', icon: Star }
               ].map(tab => {
                 const Icon = tab.icon;
@@ -582,7 +588,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                   </div>
                 )}
 
-                {product.allergy_warning && !isGear && (
+                {product.allergy_warning && hasIngredients && (
                   <div className="mt-4 p-6 bg-red-50 text-red-900 border border-red-200 rounded-2xl text-md font-semibold flex items-start gap-3">
                     <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0" />
                     <div>
@@ -594,7 +600,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
               </div>
             )}
 
-            {activeTab === 'ingredients' && !isGear && (
+            {activeTab === 'ingredients' && hasIngredients && (
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                 <h3 className="text-2xl font-bold text-slate-900 mb-6">Ingredients</h3>
                 {typeof product.ingredients === 'string' ? (
@@ -614,7 +620,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
               </div>
             )}
 
-            {activeTab === 'lab' && !isGear && (
+            {activeTab === 'lab' && hasCoa && (
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                 <div className="flex items-start gap-4 mb-8">
                   <ShieldCheck className="w-12 h-12 text-emerald-600" />
@@ -627,27 +633,21 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                   </div>
                 </div>
 
-                {coa.url ? (
-                  <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-xl border-2 border-emerald-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="font-bold text-slate-900">Certificate of Analysis</span>
-                      <span className="text-sm text-slate-600">Verified</span>
-                    </div>
-                    <a 
-                      href={coa.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 px-6 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
-                    >
-                      <ShieldCheck className="w-5 h-5" />
-                      View COA (PDF)
-                    </a>
+                <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-xl border-2 border-emerald-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-bold text-slate-900">Certificate of Analysis</span>
+                    <span className="text-sm text-slate-600">Verified</span>
                   </div>
-                ) : (
-                   <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-center text-slate-500">
-                      COA currently being digitized. Please check back soon.
-                   </div>
-                )}
+                  <a
+                    href={coa.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 px-6 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                  >
+                    <ShieldCheck className="w-5 h-5" />
+                    View COA (PDF)
+                  </a>
+                </div>
               </div>
             )}
 

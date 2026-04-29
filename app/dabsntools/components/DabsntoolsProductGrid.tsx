@@ -168,22 +168,27 @@ export default function DabsntoolsProductGrid({ products, viewMode }: Dabsntools
     );
   }
 
-  // Grid view - Traditional 3-column layout for dab products
+  // Grid view — frameless cards, image fills the entire tile, info sits underneath.
+  // 3 columns on desktop (lg+), 2 on tablet, 1 on mobile.
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
       {products.map((product) => (
-        <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
-          {/* Product Image */}
-          <div className="relative aspect-square bg-gray-100 overflow-hidden">
+        <div key={product.id} className="group flex flex-col">
+          {/* Product Image — full image visible, neutral background fills the tile */}
+          <Link
+            href={`/product/${product.id}`}
+            className="relative aspect-square block overflow-hidden bg-white"
+          >
             {product.image_url ? (
               <Image
                 src={product.image_url}
                 alt={product.name}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="object-contain group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
                 <div className="text-center">
                   <div className="text-3xl mb-2">🧪</div>
                   <div className="text-sm">No Image</div>
@@ -207,33 +212,36 @@ export default function DabsntoolsProductGrid({ products, viewMode }: Dabsntools
 
             {/* Favorite Button */}
             <button
-              onClick={() => toggleFavorite(product.id)}
-              className={`absolute top-3 right-3 p-2 rounded-full ${
-                favorites.has(product.id)
-                  ? 'text-red-500 bg-white'
-                  : 'text-gray-400 bg-white hover:text-red-500'
-              } shadow-sm`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFavorite(product.id);
+              }}
+              aria-label={favorites.has(product.id) ? 'Remove from favorites' : 'Add to favorites'}
+              className={`absolute top-3 right-3 p-2 rounded-full bg-white shadow-sm ${
+                favorites.has(product.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'
+              }`}
             >
-              <svg className="w-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
               </svg>
             </button>
-          </div>
+          </Link>
 
-          {/* Product Info */}
-          <div className="p-4">
-            <div className="flex items-start justify-between mb-2">
+          {/* Product Info — clean, no card chrome */}
+          <div className="pt-4">
+            <div className="flex items-start justify-between mb-1">
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-medium text-gray-900 truncate">
+                <h3 className="text-base font-semibold text-gray-900 truncate">
                   <Link href={`/product/${product.id}`} className="hover:text-dope-orange-600 transition-colors">
                     {product.name}
                   </Link>
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">{product.brand}</p>
+                <p className="text-sm text-gray-500 mt-0.5">{product.brand}</p>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mt-2">
               <div className="flex items-center space-x-2">
                 <span className="text-lg font-bold text-gray-900">${product.price || product.our_price}</span>
                 {product.originalPrice && product.originalPrice > product.our_price && (
@@ -249,13 +257,13 @@ export default function DabsntoolsProductGrid({ products, viewMode }: Dabsntools
               </div>
             </div>
 
-            {/* Action Buttons - Bottom of Card */}
+            {/* Action Buttons */}
             <div className="flex gap-2 mt-3">
               <Link
                 href={`/product/${product.id}`}
                 className="flex-1 px-3 py-2 bg-transparent border-2 border-dope-orange-600 text-dope-orange-600 hover:bg-dope-orange-600 hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
               >
-                View Product
+                View Details
               </Link>
               <button
                 onClick={async () => {
@@ -268,7 +276,7 @@ export default function DabsntoolsProductGrid({ products, viewMode }: Dabsntools
                   }
                 }}
                 disabled={!product.inStock}
-                className="flex-1 px-3 py-2 bg-dope-orange-600 hover:bg-dope-orange-700 disabled:bg-gray-300 text-white disabled:text-gray-500 rounded-md text-sm font-medium transition-colors"
+                className="flex-1 px-3 py-2 bg-dope-orange-600 hover:bg-dope-orange-700 disabled:bg-dope-orange-400 text-white rounded-md text-sm font-medium transition-colors disabled:cursor-not-allowed"
               >
                 {product.inStock ? 'Add to Cart' : 'Out of Stock'}
               </button>
