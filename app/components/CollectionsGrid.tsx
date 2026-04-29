@@ -184,20 +184,30 @@ export default function CollectionsGrid() {
         .cg-card--sm {
           aspect-ratio: 2 / 3;
         }
-        .cg-card--lg {
-          aspect-ratio: 1 / 1;
+        
+        /* Mobile/tablet fix: prevent top row from collapsing */
+        @media (max-width: 1023px) {
+          .cg-card--lg {
+            aspect-ratio: 1 / 1;
+          }
         }
 
         .cg-card__media {
           position: relative;
-          display: flex;
+          display: block;
           width: 100%;
           height: 100%;
-          flex: 1;
-          min-height: 0;
           transform: scale(var(--cg-scale, 1.02)) translate(calc(var(--cg-offset-x, 0px) + 2px), calc(var(--cg-offset-y, 0px) - 2px));
         }
         
+        @media (max-width: 1023px) {
+          .cg-card__media {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+          }
+        }
+
         /* Pixel-perfect alignment adjustments for the top row */
         .cg-row--top .cg-card:nth-child(2) { --cg-offset-y: -3px; }
         .cg-row--top .cg-card:nth-child(3) { --cg-offset-y: -1px; }
