@@ -218,7 +218,8 @@ export default function CollectionsGrid() {
           transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .cg-card--lg .cg-card__media img {
-          object-fit: cover;
+          height: auto;
+          object-fit: contain;
         }
         .cg-card:hover .cg-card__media img {
           transform: scale(1.05);
