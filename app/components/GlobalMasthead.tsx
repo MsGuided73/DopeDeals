@@ -73,6 +73,16 @@ const NAV_LINKS = [
     href: "/thca_flower",
     children: null,
   },
+  {
+    label: "Brands",
+    href: "/#brands",
+    children: null,
+  },
+  {
+    label: "Higher Learning",
+    href: "/higher-learning",
+    children: null,
+  },
 ];
 
 

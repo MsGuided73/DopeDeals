@@ -102,7 +102,7 @@ export default function FullscreenCarousel() {
           position: relative;
           width: 100%;
           overflow: hidden;
-          background: #ffffff;
+          background: #000000;
           line-height: 0;
           aspect-ratio: 2 / 1;
           /* mobile masthead ≈ 70px */
@@ -112,7 +112,8 @@ export default function FullscreenCarousel() {
 
         @media (min-width: 768px) {
           .carousel-wrap {
-            height: calc((100vw * 4 / 15) + 75px);
+            height: auto;
+            aspect-ratio: 16 / 5;
           }
         }
 

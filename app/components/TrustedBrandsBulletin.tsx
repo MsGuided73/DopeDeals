@@ -37,7 +37,7 @@ const BRANDS: Brand[] = [
 
 export default function TrustedBrandsBulletin() {
   return (
-    <section style={{
+    <section id="brands" style={{
       position: 'relative',
       background: '#ffffff',
       padding: '56px 24px 60px',
@@ -92,12 +92,12 @@ export default function TrustedBrandsBulletin() {
         {BRANDS.map((brand) => {
           const inner = (
             <>
-              <div style={{ width: '100%', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '100%', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Image
                   src={brand.logo}
                   alt={`${brand.name} logo`}
-                  width={160}
-                  height={72}
+                  width={220}
+                  height={100}
                   style={{
                     width: 'auto',
                     height: '100%',
@@ -108,16 +108,6 @@ export default function TrustedBrandsBulletin() {
                   unoptimized
                 />
               </div>
-              <span style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '10px',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: '#9ca3af',
-                textAlign: 'center',
-              }}>
-                {brand.name}
-              </span>
             </>
           );
 

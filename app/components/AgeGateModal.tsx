@@ -157,7 +157,7 @@ export default function AgeGateModal() {
                         value={dob}
                         onChange={(e) => setDob(e.target.value)}
                         max={new Date().toISOString().split('T')[0]}
-                        className="w-full h-full bg-transparent border-none text-white font-bold text-lg focus:outline-none pl-8 cursor-pointer select-none appearance-none"
+                        className="w-full h-full bg-transparent border-none text-white font-bold text-lg focus:outline-none pl-8"
                         style={{ colorScheme: 'dark' }}
                       />
                     </div>
