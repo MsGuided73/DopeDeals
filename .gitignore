@@ -107,6 +107,15 @@ server/public
 vite.config.ts.*
 *.tar.gz
 
+# Scratch / WIP files (broke a deploy once when a UTF-16 PowerShell scratch
+# file at repo root tripped nixpacks during build planning).
+tmp_*
+scratch/
+*.scratch.*
+*.scratch
+ts_errors*.log
+typecheck_output.txt
+
 # Legacy documentation and migration files
 legacy-docs/
 *.backup
