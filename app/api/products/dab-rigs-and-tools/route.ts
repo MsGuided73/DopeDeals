@@ -24,7 +24,10 @@ export async function GET(req: NextRequest) {
     let query = supabase
       .from('main_site_products')
       .select('*')
-      .eq('is_active', true);
+      .eq('is_active', true)
+      // Hide variant children of enabled groups — only the master row should
+      // appear in the listing for products with variants_enabled=true.
+      .or('variants_enabled.eq.false,source_parent.is.null');
 
     // Apply centralized compliance filters
     query = applyRestrictedProductFilter(query);
@@ -60,7 +63,8 @@ export async function GET(req: NextRequest) {
     let dabCountQuery = supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
-      .eq('is_active', true);
+      .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null');
 
     // Apply centralized compliance filters
     dabCountQuery = applyRestrictedProductFilter(dabCountQuery);

@@ -39,6 +39,7 @@ export async function GET() {
         subcategory_slug
       `)
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .or(
         'category_slug.eq.bundles,' +
         'subcategory_slug.eq.bundles,' +

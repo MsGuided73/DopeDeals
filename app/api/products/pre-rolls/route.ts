@@ -57,6 +57,7 @@ export async function GET(_req: NextRequest) {
       `
       )
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .not('name', 'ilike', '%test%')
       .not('name', 'ilike', '%sample%');
 

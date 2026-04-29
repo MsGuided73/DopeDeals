@@ -97,6 +97,12 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     }
   }, [variants, selectedVariantId]);
 
+  // When the selected variant changes, reset the gallery to the first image
+  // (which will be the variant's own image after the displayImages logic runs).
+  React.useEffect(() => {
+    setSelectedImage(0);
+  }, [selectedVariantId]);
+
   const selectedVariant = variants.find((v: any) => v.id === selectedVariantId) || null;
 
   const [selectedImage, setSelectedImage] = useState(0);
@@ -183,7 +189,18 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   const originalPrice = selectedVariant && selectedVariant.sale_price_cents 
     ? selectedVariant.sale_price_cents / 100 
     : (compare_at_price_cents ? compare_at_price_cents / 100 : null);
-  const displayImages = images.length > 0 ? images.map((i: any) => i.url) : ['/api/placeholder/600/600'];
+  // When a variant is selected and it carries its own image (e.g. color
+  // variants on a glass pipe), lead the gallery with that image so the
+  // main image actually changes when the user toggles between variants.
+  const displayImages = (() => {
+    const baseUrls: string[] = images.length > 0 ? images.map((i: any) => i.url) : [];
+    const variantImg: string | undefined = selectedVariant?.image_url || undefined;
+    if (variantImg) {
+      const rest = baseUrls.filter((url) => url !== variantImg);
+      return [variantImg, ...rest];
+    }
+    return baseUrls.length > 0 ? baseUrls : ['/api/placeholder/600/600'];
+  })();
 
   const hasIngredients = productHasIngredients(product, ingredients);
   const hasCoa = productHasCoa(coa);

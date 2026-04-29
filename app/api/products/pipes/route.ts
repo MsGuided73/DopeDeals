@@ -28,6 +28,9 @@ export async function GET(req: NextRequest) {
         brand_name, category_id, category_slug, created_at, updated_at
       `)
       .eq('is_active', true) // Only active products
+      // Hide variant children of enabled groups — only the master row should
+      // appear in the listing for products with variants_enabled=true.
+      .or('variants_enabled.eq.false,source_parent.is.null')
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
       .not('name', 'ilike', '%battery%') // No batteries

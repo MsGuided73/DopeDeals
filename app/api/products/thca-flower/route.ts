@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
         brand_name, category_id, category_slug, created_at, updated_at
       `)
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .not('image_url', 'is', null)
       .neq('image_url', '');
 

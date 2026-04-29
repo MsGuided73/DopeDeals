@@ -56,6 +56,9 @@ export async function GET(req: NextRequest) {
         created_at
       `)
       .eq('is_active', true)
+      // Hide variant children of enabled groups — only the master row should
+      // appear in the listing for products with variants_enabled=true.
+      .or('variants_enabled.eq.false,source_parent.is.null')
       .not('name', 'ilike', '%test%')
       .not('name', 'ilike', '%sample%');
 

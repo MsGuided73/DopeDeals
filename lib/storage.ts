@@ -140,11 +140,12 @@ export async function getStorage(): Promise<IStorage> {
         .from('main_site_products')
         .select(`
           id, name, display_name, description, short_description, our_price, sale_price,
-          image_url, image_urls, gallery_images, sku, stock_quantity, is_active, featured, 
+          image_url, image_urls, gallery_images, sku, stock_quantity, is_active, featured,
           brand_id, brand_name, category_id, category_slug, product_type,
           nicotine_product, tobacco_product, source_id, source_parent, ingredients, materials,
           "coa-url", ship_restrictions, cannabinoid_profile, compliance_info,
           farm_bill_compliant, age_restricted, minimum_age,
+          variants_enabled,
           created_at, updated_at
         `)
         .eq('id', productId)
@@ -174,15 +175,30 @@ export async function getStorage(): Promise<IStorage> {
     async getProductVariations(product: any) {
       if (!product) return [];
 
-      const parentId = product.source_parent || product.source_id;
-      if (!parentId) return [];
+      // Per-product opt-in flag. The DB has source_id / source_parent linkage
+      // on many products that we haven't yet verified renders correctly as a
+      // variant group, so by default we suppress the variant selector and
+      // require an explicit `variants_enabled = true` per product to enable it.
+      if (!product.variants_enabled) return [];
 
+      // Variant linkage in the data is asymmetric: master rows store source_id
+      // as a bare number ('7025'), while children store source_parent with an
+      // 'id:' prefix ('id:7025'). Normalize both forms so the same query works
+      // whether the user landed on a child OR the master.
+      const parentRaw: string | null = product.source_parent || product.source_id;
+      if (!parentRaw) return [];
+      const parentBare = String(parentRaw).replace(/^id:/, '');
+      const parentPrefixed = `id:${parentBare}`;
+
+      // Return only children (rows whose source_parent points back to the
+      // master). The master itself isn't a purchasable variant — it's the
+      // group representative shown on the listing page.
       const { data, error } = await supabase
         .from('main_site_products')
         .select(`
-          id, name, image_url, image_urls, our_price, sale_price, stock_quantity, source_id, source_parent
+          id, name, image_url, image_urls, our_price, sale_price, stock_quantity, source_id, source_parent, description, short_description
         `)
-        .or(`source_id.eq.${parentId},source_parent.eq.${parentId}`)
+        .or(`source_parent.eq.${parentPrefixed},source_parent.eq.${parentBare}`)
         .eq('is_active', true)
         .order('name');
 

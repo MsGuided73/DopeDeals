@@ -47,6 +47,7 @@ export async function GET(req: NextRequest) {
         updated_at
       `)
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .eq('featured', true)
       .not('name', 'ilike', '%battery%');
 
@@ -78,6 +79,7 @@ export async function GET(req: NextRequest) {
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .eq('featured', true)
       .not('name', 'ilike', '%battery%');
 

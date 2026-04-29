@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
         specs, meta_data
       `)
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .in('category_slug', mushroomSlugs)
       .order('created_at', { ascending: false })
       .limit(limit);

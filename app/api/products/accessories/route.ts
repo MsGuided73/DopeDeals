@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
         created_at, updated_at
       `)
       .eq('is_active', true) // Only active products
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
       .or('category_slug.eq.ashtrays,category_slug.eq.torch,category_slug.eq.storage,category_slug.eq.lighters,category_slug.eq.accessories,category_slug.eq.accessory') // Category slug filtering

@@ -55,6 +55,7 @@ export async function GET(req: NextRequest) {
         updated_at
       `)
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       // STRICT: No Kratom or related substances
 
       .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
@@ -108,6 +109,7 @@ export async function GET(req: NextRequest) {
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
 
       .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
 

@@ -49,6 +49,7 @@ export async function GET(req: NextRequest) {
       `
       )
       .eq('is_active', true)
+      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .not('image_url', 'is', null)
       .neq('image_url', '')
       .not('name', 'ilike', '%battery%')

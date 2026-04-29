@@ -53,6 +53,9 @@ export interface ProductFormData {
   stock_quantity: number;
   is_active: boolean;
   featured: boolean;
+  // Per-product opt-in: enable the PDP variant selector for products that
+  // share source_id / source_parent linkage. Default off until verified.
+  variants_enabled: boolean;
 
   // Organization
   brand_id: string;
@@ -89,6 +92,7 @@ const defaultFormData: ProductFormData = {
   stock_quantity: 0,
   is_active: true,
   featured: false,
+  variants_enabled: false,
   brand_id: '',
   category_id: '',
   tags: [],
@@ -416,6 +420,26 @@ export default function ProductForm({
               className="rounded border-gray-300 text-dope-orange focus:ring-dope-orange"
             />
             <label htmlFor="featured" className="text-sm font-medium text-gray-700">Featured Product</label>
+          </div>
+
+          <div className="flex items-start space-x-2 pt-6">
+            <input
+              type="checkbox"
+              id="variants_enabled"
+              checked={formData.variants_enabled}
+              onChange={(e) => handleInputChange('variants_enabled', e.target.checked)}
+              className="rounded border-gray-300 text-dope-orange focus:ring-dope-orange mt-0.5"
+            />
+            <div>
+              <label htmlFor="variants_enabled" className="text-sm font-medium text-gray-700 block">
+                Variants Enabled
+              </label>
+              <p className="text-xs text-gray-500 mt-0.5">
+                When on, the PDP shows a variant selector across rows that share
+                <code className="mx-1 px-1 py-0.5 bg-gray-100 rounded text-xs">source_id / source_parent</code>
+                linkage. Enable on every row of a verified group.
+              </p>
+            </div>
           </div>
         </div>
       </div>

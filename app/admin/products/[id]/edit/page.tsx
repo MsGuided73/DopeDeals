@@ -48,6 +48,7 @@ export default function EditProductPage() {
           stock_quantity: productData.stock_quantity || 0,
           is_active: productData.is_active ?? true,
           featured: productData.featured ?? false,
+          variants_enabled: productData.variants_enabled ?? false,
           brand_id: productData.brand_id || '',
           category_id: productData.category_id || '',
           tags: productData.tags || [],
