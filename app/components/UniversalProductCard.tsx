@@ -661,7 +661,7 @@ export default function UniversalProductCard({
         <div className="flex-1 p-4 flex flex-col justify-between">
           {/* Top section - Title and brand */}
           <div className="mb-3">
-            <h3 className={`font-semibold ${config.title} mb-1 line-clamp-2 group-hover:text-dope-orange-600 transition-colors`}>
+            <h3 className={`font-bold ${config.title} mb-1 line-clamp-2 group-hover:text-dope-orange-600 transition-colors`}>
               {product.name}
             </h3>
 
@@ -702,7 +702,7 @@ export default function UniversalProductCard({
           {/* Bottom section - Price and actions */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className={`font-bold text-dope-orange-600 ${config.price}`}>
+              <span className={`font-medium text-dope-orange-600 ${config.price}`}>
                 ${price.toFixed(2)}
               </span>
               {hasDiscount && compareAtPrice && (
@@ -826,7 +826,7 @@ export default function UniversalProductCard({
 
         {/* Product name */}
         <div className="flex items-start gap-1 mb-1">
-          <h3 className={`font-semibold ${config.title} line-clamp-2 text-[#2A2B2A] flex-1`}>
+          <h3 className={`font-bold ${config.title} line-clamp-2 text-[#2A2B2A] flex-1`}>
             {product.name}
           </h3>
           {hasProductVariants(product.image_urls || []) && (

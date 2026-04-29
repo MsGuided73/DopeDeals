@@ -176,7 +176,7 @@ export default function DabsntoolsPageContent() {
         created_at: product.created_at,
         updated_at: product.updated_at,
         // Add compatibility fields
-        type: extractTypeFromName(product.name) || product.type || product.specs?.type || 'Rigs',
+        type: product.type || product.specs?.type || 'Glass Rigs',
         size: product.specs?.size || product.size || 'Standard',
         material: product.material || 'Glass',
         price: product.our_price,
@@ -304,16 +304,3 @@ export default function DabsntoolsPageContent() {
   );
 }
 
-// Helper function to extract product type from product name
-function extractTypeFromName(productName: string): string | null {
-  if (!productName) return null;
-
-  const nameLower = productName.toLowerCase();
-
-  if (nameLower.includes('e-rig') || nameLower.includes('erig') || nameLower.includes('electric') || nameLower.includes('puffco')) return 'E-Rigs';
-  if (nameLower.includes('portable')) return 'Portable';
-  if (nameLower.includes('tool') || nameLower.includes('dabber') || nameLower.includes('nail') || nameLower.includes('carb cap')) return 'Tools';
-  if (nameLower.includes('glass')) return 'Glass Rigs';
-
-  return null;
-}

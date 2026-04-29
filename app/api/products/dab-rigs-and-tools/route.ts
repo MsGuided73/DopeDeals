@@ -30,12 +30,12 @@ export async function GET(req: NextRequest) {
     query = applyRestrictedProductFilter(query);
 
     // ── Strict category_slug filter ──────────────────────────────────────────
-    // Database has three dab-rig slugs (confirmed via audit):
-    //   'dab-rig'              → 30 products  (all Puffco e-rigs, tools, rigs)
-    //   'dab-rig-attachment'   →  1 product   (Puffco Peak Ryan Fitt Recycler)
-    //   'dab-rig-accessories'  →  1 product   (Puffco Peak Bowl)
+    // Database stores slugs with underscores (confirmed via audit):
+    //   'dab_rig'              → 29 products  (all Puffco e-rigs, tools, rigs)
+    //   'dab_rig_attachment'   →  1 product   (Puffco Peak Ryan Fitt Recycler)
+    //   'dab_rig_accessories'  →  1 product   (Puffco Peak Bowl)
     query = query.or(
-      'category_slug.eq.dab-rig,category_slug.eq.dab-rig-attachment,category_slug.eq.dab-rig-accessories'
+      'category_slug.eq.dab_rig,category_slug.eq.dab_rig_attachment,category_slug.eq.dab_rig_accessories'
     );
 
     // Apply pagination
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
 
 
     const { count } = await dabCountQuery.or(
-      'category_slug.eq.dab-rig,category_slug.eq.dab-rig-attachment,category_slug.eq.dab-rig-accessories'
+      'category_slug.eq.dab_rig,category_slug.eq.dab_rig_attachment,category_slug.eq.dab_rig_accessories'
     );
 
 
@@ -102,24 +102,35 @@ export async function GET(req: NextRequest) {
         .filter(Boolean);
     };
 
+    // Map DB subcategory_slug → user-facing equipment type. Drives the Hero
+    // pills and sidebar filter buckets. Falls back to 'Glass Rigs' for unknown
+    // slugs so nothing silently disappears from the grid.
+    const SUBCATEGORY_TYPE_MAP: Record<string, string> = {
+      e_rig: 'E-Rigs',
+      electronic_dab_rig: 'E-Rigs',
+      dab_rig_e_rig: 'E-Rigs',
+      dab_rig: 'Glass Rigs',
+      recyclers: 'Glass Rigs',
+      percolator_bongs: 'Glass Rigs',
+      proxy_accessories: 'Portable',
+      dab_tools: 'Tools',
+      replacement_bowl: 'Tools',
+    };
+
     const transformedProducts = (products || []).map((product: any) => {
       const normalizedImages = Array.from(new Set([
         ...parseImageUrls(product.image_urls),
         ...parseImageUrls(product.image_url)
       ]));
 
-      let productType = 'Rigs';
-      const nameLower = product.name.toLowerCase();
+      let productType = SUBCATEGORY_TYPE_MAP[product.subcategory_slug] || 'Glass Rigs';
 
-      if (nameLower.includes('puffco') || nameLower.includes('e-rig') || nameLower.includes('electric')) {
-        productType = 'E-Rigs';
-      } else if (nameLower.includes('portable') || nameLower.includes('travel')) {
-        productType = 'Portable';
-      } else if (nameLower.includes('tool') || nameLower.includes('dabber') || nameLower.includes('nail') ||
-                 nameLower.includes('banger') || nameLower.includes('carb cap') || nameLower.includes('dart')) {
-        productType = 'Tools';
-      } else if (nameLower.includes('glass') || nameLower.includes('rig') || nameLower.includes('recycler')) {
-        productType = 'Glass Rigs';
+      // Disambiguate handheld e-rigs (Proxy line, travel kits) into Portable.
+      if (productType === 'E-Rigs') {
+        const nameLower = (product.name || '').toLowerCase();
+        if (nameLower.includes('proxy') || nameLower.includes('portable') || nameLower.includes('travel')) {
+          productType = 'Portable';
+        }
       }
 
       return {
@@ -129,6 +140,7 @@ export async function GET(req: NextRequest) {
         image_url: normalizedImages[0] || product.image_url,
         image_urls: normalizedImages,
         brand: brandsMap[product.brand_id] || 'House Brand',
+        type: productType,
         specs: {
           type: productType,
           size: product.size || 'Standard',
