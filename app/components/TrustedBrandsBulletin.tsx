@@ -48,16 +48,6 @@ export default function TrustedBrandsBulletin() {
 
       {/* Section header */}
       <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-        <p className="dg-lime-text-gradient" style={{
-          fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-          fontSize: '13px',
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          margin: '0 0 10px',
-        }}>
-          Road Tested Brands
-        </p>
-        <div style={{ width: '40px', height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
         <h2 style={{
           fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
           fontSize: 'clamp(42px, 6vw, 72px)',

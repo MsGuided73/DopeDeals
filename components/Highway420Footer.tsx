@@ -282,6 +282,11 @@ export default function Highway420Footer() {
               <h3 className="text-black font-bold text-2xl mb-6" style={{ fontFamily: "Inter, sans-serif !important" }}>Useful Links</h3>
               <ul className="space-y-3">
                 <li>
+                  <Link href="/higher-learning" className="text-gray-800 hover:text-green-600">
+                    Higher Learning Blog
+                  </Link>
+                </li>
+                <li>
                   <Link href="/sale" className="text-gray-800 hover:text-green-600">
                     On Sale
                   </Link>
