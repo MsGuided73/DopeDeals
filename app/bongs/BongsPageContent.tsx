@@ -100,14 +100,22 @@ export default function BongsPageContent() {
             p.short_description?.toLowerCase().includes('tube')
           );
           break;
-        case 'percolator-bongs':
+        case 'percolator-bongs': {
+          // Catch the common percolator vocabulary, not just the literal "percolator".
+          const PERC_KEYWORDS = ['percolator', 'perc', 'tree perc', 'arm tree', 'inline', 'showerhead', 'honeycomb', 'diffuser', 'matrix', 'turbine', 'spiral'];
+          const hasPercKeyword = (text?: string | null) => {
+            if (!text) return false;
+            const t = text.toLowerCase();
+            return PERC_KEYWORDS.some((kw) => t.includes(kw));
+          };
           filtered = filtered.filter((p: BongProduct) =>
-            p.name?.toLowerCase().includes('percolator') ||
-            p.description?.toLowerCase().includes('percolator') ||
-            p.short_description?.toLowerCase().includes('percolator') ||
-            p.percolator !== null
+            hasPercKeyword(p.name) ||
+            hasPercKeyword(p.description) ||
+            hasPercKeyword(p.short_description) ||
+            (p.percolator !== null && p.percolator !== undefined && p.percolator !== '')
           );
           break;
+        }
         case 'mini-bongs':
           filtered = filtered.filter((p: BongProduct) =>
             p.name?.toLowerCase().includes('mini') ||
@@ -252,7 +260,7 @@ export default function BongsPageContent() {
 
   return (
     <ErrorBoundary>
-      <div>
+      <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
       <BongsBreadcrumb />
 

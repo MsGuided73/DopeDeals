@@ -11,13 +11,50 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="bg-[#f9faf9] w-full border-b border-gray-200">
-      <div className="max-w-7xl mx-auto">
-        {/* Hero Content Section */}
-        <div className="relative pt-12 pb-24 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center min-h-[400px]">
-          
-          {/* Left Column - Text */}
+    <div className="bg-[#ffffff] w-full border-b border-gray-200 relative overflow-hidden">
+      {/* Hero photo — full viewport width so the illustration reads larger,
+          anchored to the right at its natural aspect ratio. The text column
+          below sits on its own white panel so the illustration that bleeds
+          behind the text doesn't compete with it. */}
+      <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
+        <Image
+          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad2T.png"
+          alt="Highway 420 — creekside road scene"
+          fill
+          sizes="(min-width: 768px) 100vw, 0px"
+          className="object-contain object-right"
+          priority
+        />
+        {/* Soft left-side fade — dissolves the illustration's left edge into
+            the white background so there's no hard contour where the trees /
+            mountains start. Keeps the right side fully visible. */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to right, #ffffff 0%, #ffffff 22%, rgba(255,255,255,0.92) 38%, rgba(255,255,255,0.55) 55%, rgba(255,255,255,0.18) 72%, transparent 88%)',
+          }}
+        />
+      </div>
+
+      {/* Hero Content Section — full viewport width so the headline reaches the page edge.
+          z-30 lifts the section above the category pills strip so the stats card,
+          which floats below the hero, doesn't get clipped behind the pills bar. */}
+      <div className="relative pt-12 pb-24 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center min-h-[600px] z-30">
+
+          {/* Left Column - Text — content centered horizontally within the left half.
+              Inner div uses a radial-gradient white panel that's solid in the middle
+              and feathers to transparent at the edges, so the headline sits on a
+              readable surface but there's no hard rectangle where it meets the
+              illustration. */}
           <div className="w-full md:w-1/2 z-10 relative">
+            <div
+              className="max-w-xl mx-auto p-6 lg:p-8"
+              style={{
+                background:
+                  'radial-gradient(ellipse 90% 100% at center, #ffffff 55%, rgba(255,255,255,0.85) 75%, rgba(255,255,255,0.4) 90%, transparent 100%)',
+              }}
+            >
             <h1 className="font-chalets text-[3.5rem] leading-[0.9] md:text-[5rem] lg:text-[6rem] text-[#1a1a1a] font-bold uppercase tracking-tight mb-4">
               BONGS & <br /> WATER PIPES
             </h1>
@@ -42,7 +79,7 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </button>
-            
+
             {/* Expandable Content */}
             <div className={`overflow-hidden transition-all duration-500 ease-in-out absolute top-full left-0 w-full z-20 ${isExpanded ? 'max-h-[800px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
               <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-xl">
@@ -70,114 +107,65 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Right Column - Illustration & Stats Box */}
-          <div className="w-full md:w-1/2 absolute right-0 top-0 h-full flex flex-col justify-end hidden md:flex pointer-events-none">
-            {/* Mountain Illustration Background */}
-            <div className="absolute inset-0 bg-no-repeat bg-right-top bg-contain opacity-60" style={{ backgroundImage: "url('/images/mountain-landscape.png')", mixBlendMode: 'multiply' }}></div>
-            
-            {/* Stats Box - Positioned over the illustration */}
-            <div className="absolute bottom-[-1.5rem] right-4 lg:right-8 bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-5 px-8 flex items-center justify-between gap-8 border border-gray-100 w-[90%] lg:w-auto pointer-events-auto z-20">
-              <div className="flex items-center gap-4">
-                <div className="text-[#2d8f47]">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-[#1a1a1a]">500+</div>
-                  <div className="text-sm text-gray-500 font-medium whitespace-nowrap">Premium Pieces</div>
-                </div>
-              </div>
-              
-              <div className="w-px h-12 bg-gray-200"></div>
-              
-              <div className="flex items-center gap-4">
-                <div className="text-[#2d8f47]">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-[#1a1a1a]">50+</div>
-                  <div className="text-sm text-gray-500 font-medium whitespace-nowrap">Trusted Brands</div>
-                </div>
-              </div>
-              
-              <div className="w-px h-12 bg-gray-200"></div>
-              
-              <div className="flex items-center gap-4">
-                <div className="text-[#2d8f47]">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-[#1a1a1a]">Fast & Discreet</div>
-                  <div className="text-sm text-gray-500 font-medium whitespace-nowrap">Shipping $50+</div>
-                </div>
-              </div>
             </div>
           </div>
+
+          {/* Category Pills wrapper — anchored to the bottom of the left half.
+              The inner row uses a calc'd padding-left that matches the centering
+              offset of the headline's max-w-xl wrapper, so the first pill's left
+              edge lines up exactly with the headline's left edge. The row itself
+              has no max-width, so it can extend the full width of the left half
+              without being clipped. */}
+          <div className="w-full md:w-1/2 absolute left-0 top-0 h-full hidden md:flex flex-col justify-end pointer-events-none z-10">
+            <div
+              className="absolute bottom-6 left-0 right-4 flex flex-nowrap gap-3 pointer-events-auto z-20"
+              style={{ paddingLeft: 'max(1rem, calc((100% - 36rem) / 2))' }}
+            >
+              <button
+                onClick={() => setActiveCategory('all-bongs')}
+                className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
+                  activeCategory === 'all-bongs'
+                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                }`}
+              >
+                All Bongs
+              </button>
+              <button
+                onClick={() => setActiveCategory('beaker-bongs')}
+                className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
+                  activeCategory === 'beaker-bongs'
+                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                }`}
+              >
+                Beaker Bongs
+              </button>
+              <button
+                onClick={() => setActiveCategory('straight-tubes')}
+                className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
+                  activeCategory === 'straight-tubes'
+                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                }`}
+              >
+                Straight Tubes
+              </button>
+              <button
+                onClick={() => setActiveCategory('percolator-bongs')}
+                className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
+                  activeCategory === 'percolator-bongs'
+                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                }`}
+              >
+                Percolator Bongs
+              </button>
+            </div>
+          </div>
+
         </div>
 
-        {/* Category Pills */}
-        <div className="px-4 sm:px-6 lg:px-8 py-6 bg-white relative z-10 border-t border-gray-100 pt-10">
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => setActiveCategory('all-bongs')}
-              className={`px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
-                activeCategory === 'all-bongs'
-                  ? 'bg-[#1c352d] text-white shadow-md'
-                  : 'bg-white text-gray-800 border border-gray-200 hover:border-[#1c352d] hover:text-[#1c352d]'
-              }`}
-            >
-              All Bongs
-            </button>
-            <button
-              onClick={() => setActiveCategory('beaker-bongs')}
-              className={`px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
-                activeCategory === 'beaker-bongs'
-                  ? 'bg-[#1c352d] text-white shadow-md'
-                  : 'bg-white text-gray-800 border border-gray-200 hover:border-[#1c352d] hover:text-[#1c352d]'
-              }`}
-            >
-              Beaker Bongs
-            </button>
-            <button
-              onClick={() => setActiveCategory('straight-tubes')}
-              className={`px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
-                activeCategory === 'straight-tubes'
-                  ? 'bg-[#1c352d] text-white shadow-md'
-                  : 'bg-white text-gray-800 border border-gray-200 hover:border-[#1c352d] hover:text-[#1c352d]'
-              }`}
-            >
-              Straight Tubes
-            </button>
-            <button
-              onClick={() => setActiveCategory('percolator-bongs')}
-              className={`px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
-                activeCategory === 'percolator-bongs'
-                  ? 'bg-[#1c352d] text-white shadow-md'
-                  : 'bg-white text-gray-800 border border-gray-200 hover:border-[#1c352d] hover:text-[#1c352d]'
-              }`}
-            >
-              Percolator Bongs
-            </button>
-            <button
-              onClick={() => setActiveCategory('mini-bongs')}
-              className={`px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
-                activeCategory === 'mini-bongs'
-                  ? 'bg-[#1c352d] text-white shadow-md'
-                  : 'bg-white text-gray-800 border border-gray-200 hover:border-[#1c352d] hover:text-[#1c352d]'
-              }`}
-            >
-              Mini Bongs
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
