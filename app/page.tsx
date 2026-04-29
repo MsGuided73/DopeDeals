@@ -56,9 +56,14 @@ export default function HomePage() {
           <FeaturedProductsSection />
         </Suspense>
 
-        {/* ── New Arrivals ── */}
+        {/* ── Fresh Drops (New Arrivals) ── */}
         <Suspense fallback={<SectionFallback />}>
           <NewProductsSection />
+        </Suspense>
+
+        {/* ── Dope Deals ── */}
+        <Suspense fallback={<SectionFallback />}>
+          <DopeDealsSection />
         </Suspense>
 
         {/* ── Popular Setups ── */}
@@ -74,11 +79,6 @@ export default function HomePage() {
         {/* ── Trusted Brands ── */}
         <Suspense fallback={<SectionFallback />}>
           <TrustedBrandsBulletin />
-        </Suspense>
-
-        {/* ── Deals ── */}
-        <Suspense fallback={<SectionFallback />}>
-          <DopeDealsSection />
         </Suspense>
 
         {/* ── Reviews ── */}

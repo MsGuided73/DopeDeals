@@ -182,7 +182,7 @@ export default function Highway420Footer() {
                 DISCREET SHIPPING
               </h3>
               <p className="text-black font-bold text-xl" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
-                Nothing to see here
+                Plain packaging, unmarked boxes, your privacy first
               </p>
             </div>
 

@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { addToCart } from '../lib/cart-utils';
-import AutoScrollContainer from './AutoScrollContainer';
+import AutoScrollContainer, { type ProductViewMode } from './AutoScrollContainer';
+import ViewModeToggle from './ViewModeToggle';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 // ── Dope Deals palette — mirrors Hot Products brand green ─────────────────
@@ -43,6 +44,7 @@ export default function DopeDealsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ProductViewMode>('auto');
 
   const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 
@@ -279,9 +281,12 @@ export default function DopeDealsSection() {
         </div>
       </div>
 
-      {/* Desktop auto-scroll */}
+      {/* Desktop view — toggle between auto-scroll, manual scroll, and grid */}
       <div className="hidden lg:block" style={{ padding: '0 24px' }}>
-        <AutoScrollContainer>
+        <div className="max-w-7xl mx-auto flex justify-end mb-4">
+          <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+        </div>
+        <AutoScrollContainer mode={viewMode}>
           {products.map(p => renderCard(p, true))}
         </AutoScrollContainer>
       </div>

@@ -3,6 +3,7 @@ import AppProviders from "./providers";
 import Highway420Footer from "../components/Highway420Footer";
 import FloatingNav from "./components/FloatingNav";
 import StickyCartPopup from "./components/StickyCartPopup";
+import TrustStrip from "./components/TrustStrip";
 import { NavigationProvider } from "./contexts/NavigationContext";
 import AgeGateModal from "./components/AgeGateModal";
 
@@ -100,6 +101,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AgeGateModal />
           <NavigationProvider>
             <div className="min-h-screen flex flex-col">
+              {/* Global trust strip — appears above the masthead on every page */}
+              <TrustStrip />
               <main className="flex-1">
                 {children}
               </main>

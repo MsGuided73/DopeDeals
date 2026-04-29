@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 
 const BANNER_SRC =
-  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/RideWithUs/Ride%20with%20Us.png";
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/RideWithUs/RIDE%20WITH%20US%20HOME%20PAGE%20IMAGE.png";
 
 export default function RideWithUsBanner() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,42 +66,39 @@ export default function RideWithUsBanner() {
     <section
       aria-label="Ride with Us"
       className="w-full relative"
-      style={{ padding: "60px 20px", background: "transparent" }}
+      style={{ background: "transparent" }}
     >
-      <div 
-        style={{ 
-          maxWidth: "900px", 
-          margin: "0 auto", 
-          cursor: "pointer", 
+      <div
+        style={{
+          width: "100%",
+          cursor: "pointer",
           position: "relative",
-          borderRadius: "8px",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)",
-          border: "1px solid rgba(0,0,0,0.05)"
-        }} 
-        onClick={() => setIsModalOpen(true)} 
+        }}
+        onClick={() => setIsModalOpen(true)}
         className="group"
       >
         <Image
           src={BANNER_SRC}
           alt="Ride with Us — join the Highway 420 community"
-          width={900}
-          height={300}
-          sizes="(max-width: 900px) 100vw, 900px"
-          style={{ width: "100%", height: "auto", borderRadius: "8px" }}
-          className="block transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+          width={2400}
+          height={800}
+          sizes="100vw"
+          style={{ width: "100%", height: "auto" }}
+          className="block transition-transform duration-700 ease-out group-hover:scale-[1.01]"
+          priority
         />
         {/* Overlay hover hint */}
-        <div 
-          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
-          style={{ background: "rgba(0,0,0,0.4)", borderRadius: "8px", pointerEvents: "none" }}
+        <div
+          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{ background: "rgba(0,0,0,0.35)", pointerEvents: "none" }}
         >
           <span style={{
             fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-            fontSize: "24px",
+            fontSize: "32px",
             letterSpacing: "0.06em",
             color: "#fff",
             background: "#2d8f47",
-            padding: "10px 24px",
+            padding: "14px 32px",
             borderRadius: "4px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
           }}>

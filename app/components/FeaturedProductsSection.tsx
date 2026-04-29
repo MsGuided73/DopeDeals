@@ -4,7 +4,8 @@ import { useEffect, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
 
 import { addToCart } from '../lib/cart-utils';
-import AutoScrollContainer from './AutoScrollContainer';
+import AutoScrollContainer, { type ProductViewMode } from './AutoScrollContainer';
+import ViewModeToggle from './ViewModeToggle';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 interface Product {
@@ -53,6 +54,7 @@ export default function FeaturedProductsSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<ProductViewMode>('auto');
   
   const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 
@@ -390,9 +392,12 @@ export default function FeaturedProductsSection() {
         </div>
       </div>
 
-      {/* Desktop auto-scroll */}
+      {/* Desktop view — toggle between auto-scroll, manual scroll, and grid */}
       <div className="hidden lg:block" style={{ padding: '0 24px' }}>
-        <AutoScrollContainer>
+        <div className="max-w-7xl mx-auto flex justify-end mb-4">
+          <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+        </div>
+        <AutoScrollContainer mode={viewMode}>
           {products.map((product) => renderProductCard(product, 'desktop'))}
         </AutoScrollContainer>
       </div>

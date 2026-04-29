@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { addToCart } from '../lib/cart-utils';
-import AutoScrollContainer from './AutoScrollContainer';
+import AutoScrollContainer, { type ProductViewMode } from './AutoScrollContainer';
+import ViewModeToggle from './ViewModeToggle';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 // ── Fresh Drops palette — clean white + lime green ────────────────────────
@@ -42,6 +43,8 @@ export default function NewProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Defaults to 'grid' since the original layout was a static grid.
+  const [viewMode, setViewMode] = useState<ProductViewMode>('grid');
 
   const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 
@@ -242,11 +245,16 @@ export default function NewProductsSection() {
         <div style={{ borderTop: `1px dashed rgba(20,92,60,0.5)`, margin: '20px auto 0', maxWidth: '360px' }} />
       </div>
 
-      {/* Static responsive grid — all breakpoints */}
-      <div style={{ padding: '0 24px' }}>
-        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      {/* View mode toggle — desktop only (mobile keeps the dense static grid) */}
+      <div className="hidden lg:flex max-w-7xl mx-auto justify-end mb-4 px-6">
+        <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+      </div>
+
+      {/* Mobile: keep the original dense static grid (no scroll on small screens) */}
+      <div className="block lg:hidden" style={{ padding: '0 24px' }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4">
           {loading
-            ? Array(10).fill(null).map((_, i) => (
+            ? Array(6).fill(null).map((_, i) => (
                 <div key={i} style={{ background: RS.white, overflow: 'hidden', borderRadius: '6px' }} className="animate-pulse">
                   <div style={{ height: '4px', background: `${RS.accent}30` }} />
                   <div className="aspect-square" style={{ background: '#f0f0f0' }} />
@@ -254,16 +262,21 @@ export default function NewProductsSection() {
                     <div className="h-2 rounded mb-2 w-1/3" style={{ background: '#e0e0e0' }} />
                     <div className="h-4 rounded mb-3" style={{ background: '#e0e0e0' }} />
                     <div className="h-6 rounded w-1/2 mb-3" style={{ background: '#e0e0e0' }} />
-                    <div style={{ display: 'flex', gap: '7px' }}>
-                      <div className="h-9 flex-1 rounded" style={{ background: '#e0e0e0' }} />
-                      <div className="h-9 flex-1 rounded" style={{ background: '#e0e0e0' }} />
-                    </div>
                   </div>
                 </div>
               ))
-            : products.slice(0, 10).map((product) => renderCard(product, false))
+            : products.slice(0, 6).map((product) => renderCard(product, false))
           }
         </div>
+      </div>
+
+      {/* Desktop: AutoScrollContainer driven by the selected view mode.
+          Pass isDesktop=true so cards have fixed width + flex-shrink:0,
+          which is what auto/manual scroll modes need to render correctly. */}
+      <div className="hidden lg:block" style={{ padding: '0 24px' }}>
+        <AutoScrollContainer mode={viewMode}>
+          {products.slice(0, 10).map((product) => renderCard(product, true))}
+        </AutoScrollContainer>
       </div>
 
       {/* CTA */}
