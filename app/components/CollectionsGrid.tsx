@@ -184,12 +184,17 @@ export default function CollectionsGrid() {
         .cg-card--sm {
           aspect-ratio: 2 / 3;
         }
+        .cg-card--lg {
+          aspect-ratio: 1 / 1;
+        }
 
         .cg-card__media {
           position: relative;
-          display: block;
+          display: flex;
           width: 100%;
           height: 100%;
+          flex: 1;
+          min-height: 0;
           transform: scale(var(--cg-scale, 1.02)) translate(calc(var(--cg-offset-x, 0px) + 2px), calc(var(--cg-offset-y, 0px) - 2px));
         }
         
@@ -213,8 +218,7 @@ export default function CollectionsGrid() {
           transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .cg-card--lg .cg-card__media img {
-          height: auto;
-          object-fit: contain;
+          object-fit: cover;
         }
         .cg-card:hover .cg-card__media img {
           transform: scale(1.05);
