@@ -229,7 +229,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
       {products.map((product) => (
-        <div key={product.id} className="overflow-hidden group">
+        <div key={product.id} className="overflow-hidden group flex flex-col h-full">
           {/* Product Image — full image visible; bg auto-matches dominant edge color when image doesn't fill the tile */}
           <Link href={`/product/${product.id}`} className="block relative aspect-square overflow-hidden">
             {product.image_url ? (
@@ -281,8 +281,8 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
             </button>
           </Link>
 
-          {/* Product Info */}
-          <div className="pt-4 pb-2">
+          {/* Product Info — flex column so buttons can pin to bottom regardless of title length */}
+          <div className="pt-4 pb-2 flex flex-col flex-1">
             <h3 className="text-base font-bold text-[#1a1a1a] mb-1 line-clamp-2 leading-tight">
               <Link href={`/product/${product.id}`} className="hover:text-[#2d8f47] transition-colors">
                 {product.name}
@@ -308,14 +308,9 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
               )}
             </div>
 
-            {/* Action Buttons — ghost View Details on left, filled Add to Cart on right */}
-            <div className="flex gap-2 mt-3">
-              <Link
-                href={`/product/${product.id}`}
-                className="flex-1 px-3 py-2 bg-transparent border-2 border-dope-orange-600 text-dope-orange-600 hover:bg-dope-orange-600 hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
-              >
-                View Details
-              </Link>
+            {/* Action Buttons — filled Add to Cart on left, ghost View Details on right.
+                mt-auto pins this row to the bottom so cards in the same row line up. */}
+            <div className="flex gap-2 mt-auto pt-3">
               {(() => {
                 const inStock = product.inStock ?? ((product.stock_quantity ?? 0) > 0);
                 return (
@@ -336,6 +331,12 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                   </button>
                 );
               })()}
+              <Link
+                href={`/product/${product.id}`}
+                className="flex-1 px-3 py-2 bg-transparent border-2 border-dope-orange-500 text-dope-orange-500 hover:bg-dope-orange-500 hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
+              >
+                View Details
+              </Link>
             </div>
           </div>
         </div>
