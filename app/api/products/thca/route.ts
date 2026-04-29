@@ -108,7 +108,8 @@ export async function GET(req: NextRequest) {
           brand: product.brand_name,
           category: 'THCA',
           subcategory: product.short_description || 'Premium THCA',
-          price: product.our_price,
+          price: (product.sale_price && product.sale_price < product.our_price) ? product.sale_price : product.our_price,
+          compare_at_price: (product.sale_price && product.sale_price < product.our_price) ? product.our_price : undefined,
           image_url: normalizedImages[0] || product.image_url,
           image_urls: normalizedImages,
           inStock: (product.stock_quantity || 0) > 0

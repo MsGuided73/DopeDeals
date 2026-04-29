@@ -33,7 +33,8 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true) // ONLY active products
       .not('image_url', 'is', null) // Must have image_url
       .neq('image_url', '') // Must not be empty string
-      .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
+      .not('name', 'ilike', '%battery%')
+      .not('description', 'ilike', '%battery%')
       .not('name', 'ilike', '%tincture%')
       .not('name', 'ilike', '%salve%')
       .not('description', 'ilike', '%tincture%')
@@ -47,12 +48,12 @@ export async function GET(req: NextRequest) {
     }
 
     // Remove duplicates by ID, name, and SKU (ensure unique products only)
-    const seenIds = new Set<number>();
+    const seenIds = new Set<string>();
     const seenNames = new Set<string>();
     const seenSkus = new Set<string>();
     const uniqueProducts = (rawProducts || []).filter(product => {
       // Check ID duplicates
-      if (seenIds.has(product.id)) {
+      if (seenIds.has(String(product.id))) {
         return false;
       }
       
@@ -68,7 +69,7 @@ export async function GET(req: NextRequest) {
       }
       
       // Add to tracking sets
-      seenIds.add(product.id);
+      seenIds.add(String(product.id));
       if (normalizedName) seenNames.add(normalizedName);
       if (product.sku) seenSkus.add(product.sku);
       
@@ -79,10 +80,18 @@ export async function GET(req: NextRequest) {
     const products = uniqueProducts.slice(0, limit).map((product: any) => {
       const { image_url, image_urls } = normalizeProductImages(product);
 
+      const ourPrice = product.our_price ?? 0;
+      const salePrice = product.sale_price;
+      const hasValidSale = salePrice !== null && salePrice !== undefined && salePrice < ourPrice;
+      const price = hasValidSale ? salePrice : ourPrice;
+      const compare_at_price = hasValidSale ? ourPrice : undefined;
+
       return {
         ...product,
         image_url,
-        image_urls
+        image_urls,
+        price,
+        compare_at_price
       };
     });
 

@@ -53,7 +53,19 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ products: products ?? [] });
+    const transformedProducts = (products || []).map((product: any) => {
+      const parsedOurPrice = product.our_price ? parseFloat(product.our_price) : 0;
+      const parsedSalePrice = product.sale_price ? parseFloat(product.sale_price) : undefined;
+      
+      return {
+        ...product,
+        price: (parsedSalePrice && parsedSalePrice < parsedOurPrice) ? parsedSalePrice : parsedOurPrice,
+        compare_at_price: (parsedSalePrice && parsedSalePrice < parsedOurPrice) ? parsedOurPrice : undefined,
+        inStock: (product.stock_quantity || 0) > 0
+      };
+    });
+
+    return NextResponse.json({ products: transformedProducts });
   } catch (err) {
     console.error('Unexpected error in /api/products/bundles:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

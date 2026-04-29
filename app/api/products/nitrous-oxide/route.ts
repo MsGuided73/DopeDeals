@@ -92,11 +92,11 @@ export async function GET(req: NextRequest) {
 
       return {
         ...product,
-        price: parseFloat(product.our_price || 0),
+        price: (product.sale_price && parseFloat(product.sale_price) < parseFloat(product.our_price || 0)) ? parseFloat(product.sale_price) : parseFloat(product.our_price || 0),
         our_price: parseFloat(product.our_price || 0),
         vip_price: product.fire_price ? parseFloat(product.fire_price) : undefined,
         sale_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
-        compare_at_price: product.sale_price ? parseFloat(product.sale_price) : undefined,
+        compare_at_price: (product.sale_price && parseFloat(product.sale_price) < parseFloat(product.our_price || 0)) ? parseFloat(product.our_price || 0) : undefined,
         image_url: normalizedImages[0] || product.image_url,
         image_urls: normalizedImages,
         inStock: (product.stock_quantity || 0) > 0

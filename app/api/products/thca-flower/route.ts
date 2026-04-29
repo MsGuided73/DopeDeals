@@ -66,7 +66,8 @@ export async function GET(req: NextRequest) {
 
       return {
         ...product,
-        price: product.our_price,
+        price: (product.sale_price && product.sale_price < product.our_price) ? product.sale_price : product.our_price,
+        compare_at_price: (product.sale_price && product.sale_price < product.our_price) ? product.our_price : undefined,
         image: normalizedImages[0] || product.image_url,
         image_url: normalizedImages[0] || product.image_url,
         image_urls: normalizedImages,

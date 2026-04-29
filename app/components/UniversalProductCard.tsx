@@ -140,21 +140,21 @@ export default function UniversalProductCard({
   const sizeConfig = {
     small: {
       container: 'w-full max-w-xs',
-      image: 'h-32',
+      image: 'aspect-square',
       title: 'text-sm',
       price: 'text-lg',
       button: 'px-2 py-1 text-xs'
     },
     medium: {
       container: 'w-full max-w-sm',
-      image: 'h-48',
+      image: 'aspect-square',
       title: 'text-base',
       price: 'text-xl',
       button: 'px-3 py-2 text-sm'
     },
     large: {
       container: 'w-full max-w-md',
-      image: 'h-64',
+      image: 'aspect-square',
       title: 'text-lg',
       price: 'text-2xl',
       button: 'px-4 py-2 text-base'

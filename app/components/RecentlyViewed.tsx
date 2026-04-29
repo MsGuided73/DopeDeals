@@ -92,7 +92,9 @@ export default function RecentlyViewed() {
     return {
       id: product.id,
       name: product.name,
-      price: product.our_price.toString(),
+      price: (product.sale_price && product.sale_price < (product.our_price ?? 0)
+        ? product.sale_price
+        : (product.our_price ?? 0)).toString(),
       image_url: primaryImageUrl || undefined,
       featured: product.featured,
       stock_quantity: product.stock_quantity,
@@ -100,9 +102,11 @@ export default function RecentlyViewed() {
       short_description: getProductDescription(product),
       description: getProductDescription(product),
       sku: product.sku || '',
-      compare_at_price: product.sale_price && product.sale_price < product.our_price ? product.sale_price : undefined,
-      discount_percentage: product.sale_price && product.sale_price < product.our_price
-        ? Math.round(((product.our_price - product.sale_price) / product.our_price) * 100)
+      compare_at_price: product.sale_price && product.sale_price < (product.our_price ?? 0) 
+        ? product.our_price 
+        : undefined,
+      discount_percentage: product.sale_price && product.sale_price < (product.our_price ?? 0) && (product.our_price ?? 0) > 0
+        ? Math.round((((product.our_price ?? 0) - product.sale_price) / (product.our_price ?? 0)) * 100)
         : undefined,
     };
   };

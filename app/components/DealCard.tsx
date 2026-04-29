@@ -22,7 +22,8 @@ export default function DealCard({ product }: { product: Product }) {
   
   const getDiscountPercent = (p: Product) => p.DD15 ? 15 : p.DD10 ? 10 : 0;
   const disc = getDiscountPercent(product);
-  const salePrice = disc > 0 ? product.our_price * (1 - disc / 100) : product.our_price;
+  const safeOurPrice = product.our_price ?? 0;
+  const salePrice = disc > 0 ? safeOurPrice * (1 - disc / 100) : safeOurPrice;
   const imageUrl = product.image_url || (product.image_urls?.[0]) || null;
   const brand = product.brand_name && product.brand_name !== 'Unknown Brand' ? product.brand_name : null;
 
@@ -78,9 +79,9 @@ export default function DealCard({ product }: { product: Product }) {
           <span className="font-bold text-[#1A472A] text-xl" style={{ fontFamily: "'BebasNeue', 'Bebas Neue', sans-serif", letterSpacing: '0.02em' }}>
             ${salePrice.toFixed(2)}
           </span>
-          {product.our_price > salePrice && (
+          {safeOurPrice > salePrice && (
             <span className="text-gray-400 text-sm line-through font-medium">
-              ${product.our_price.toFixed(2)}
+              ${safeOurPrice.toFixed(2)}
             </span>
           )}
         </div>

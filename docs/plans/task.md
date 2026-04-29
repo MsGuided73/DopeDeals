@@ -1,9 +1,11 @@
-# Task Tracker: Edge Runtime Compatibility & Cleanup
+# Task Tracker: API Pricing Standardization
 
 | Task | Status | Notes |
 | :--- | :--- | :--- |
-| Remove "Highway 420 Sign" from floating nav | [x] | Addressed branding issue in `FloatingNav.tsx`. |
-| Remove `@supabase/ssr` from `middleware.ts` | [x] | Switched to cookie-based auth check to avoid Edge runtime errors. |
-| Audit for abandoned variation/variable logic | [x] | Verified remnants are standard e-commerce variants. Edge warnings were solely due to Supabase pulling `process.version`. |
-| Force `nodejs` runtime on server handlers | [x] | Added `export const runtime = 'nodejs';` to files importing `@supabase/ssr`. |
-| Verify fix with `pnpm run build` | [x] | Build progresses past Edge warnings successfully. |
+| Standardize Pipes API price fields | [x] | Fixed `pipes/route.ts` to map `price` and `compare_at_price` avoiding `toFixed` crashes. |
+| Standardize Flower API price fields | [x] | Fixed `flower/route.ts` and `thca-flower/route.ts` |
+| Standardize Concentrates/Rigs API price fields | [x] | Fixed `dab-rigs-and-tools/route.ts` |
+| Standardize Vapes/Prerolls API price fields | [x] | Fixed `vapes/route.ts`, `thca-pre-rolls/route.ts`, `pre-rolls/route.ts` |
+| Standardize other product APIs | [x] | Fixed `accessories/route.ts`, `edibles/route.ts`, `bongs/route.ts`, `bubblers/route.ts`, `nitrous-oxide/route.ts`, `mushrooms/route.ts`, `thca/route.ts` |
+| Update Bundles API pricing | [x] | Implemented map logic to standard pricing structure. |
+| Test changes with `pnpm build` | [x] | Build successfully compiles (ignoring Windows-specific EPERM symlink warning). |

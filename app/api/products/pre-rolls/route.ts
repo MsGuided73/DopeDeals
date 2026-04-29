@@ -151,11 +151,11 @@ export async function GET(_req: NextRequest) {
       return {
         id: product.id,
         name: product.name,
-        price: ourPrice,
+        price: isSale ? salePrice : ourPrice,
         our_price: ourPrice,
         vip_price: product.fire_price ? Number(product.fire_price) : undefined,
         sale_price: salePrice,
-        compare_at_price: salePrice,
+        compare_at_price: isSale ? ourPrice : undefined,
         image_url: normalizedImages[0] || product.image_url,
         image_urls: normalizedImages,
         brand_id: product.brand_name,

@@ -78,7 +78,7 @@ export default function DopeDealsSection() {
 
   const getSalePrice = (p: Product) => {
     const disc = getDiscountPercent(p);
-    const base = parseFloat(p.our_price.toString());
+    const base = parseFloat((p.our_price ?? 0).toString());
     return disc > 0 ? base * (1 - disc / 100) : base;
   };
 
@@ -89,7 +89,7 @@ export default function DopeDealsSection() {
     const isRestricted = restrictedProductIds.includes(product.id);
     const disc = getDiscountPercent(product);
     const salePrice = getSalePrice(product);
-    const origPrice = parseFloat(product.our_price.toString());
+    const origPrice = parseFloat((product.our_price ?? 0).toString());
     const imageUrl = getImageUrl(product);
     const brand = product.brand_name && product.brand_name !== 'Unknown Brand'
       ? product.brand_name : null;

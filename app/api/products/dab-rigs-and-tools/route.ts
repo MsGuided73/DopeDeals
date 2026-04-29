@@ -124,6 +124,8 @@ export async function GET(req: NextRequest) {
 
       return {
         ...product,
+        price: (product.sale_price && product.sale_price < product.our_price) ? product.sale_price : product.our_price,
+        compare_at_price: (product.sale_price && product.sale_price < product.our_price) ? product.our_price : undefined,
         image_url: normalizedImages[0] || product.image_url,
         image_urls: normalizedImages,
         brand: brandsMap[product.brand_id] || 'House Brand',

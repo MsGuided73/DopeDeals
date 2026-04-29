@@ -150,7 +150,7 @@ export default function AutosuggestRecommendations({
     return {
       id: product.id,
       name: product.name,
-      price: displayPrice.toString(),
+      price: (product.sale_price && product.sale_price < displayPrice ? product.sale_price : displayPrice).toString(),
       image_url: primaryImageUrl || undefined,
       featured: product.featured,
       stock_quantity: product.stock_quantity,
@@ -158,9 +158,9 @@ export default function AutosuggestRecommendations({
       short_description: getProductDescription(product),
       description: getProductDescription(product),
       sku: product.sku || '',
-      compare_at_price: product.sale_price && product.sale_price < product.our_price ? product.sale_price : undefined,
-      discount_percentage: product.sale_price && product.sale_price < product.our_price
-        ? Math.round(((product.our_price - product.sale_price) / product.our_price) * 100)
+      compare_at_price: product.sale_price && product.sale_price < displayPrice ? displayPrice : undefined,
+      discount_percentage: product.sale_price && product.sale_price < displayPrice && displayPrice > 0
+        ? Math.round(((displayPrice - product.sale_price) / displayPrice) * 100)
         : undefined,
     };
   };

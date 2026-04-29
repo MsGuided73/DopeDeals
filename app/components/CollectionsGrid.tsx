@@ -199,7 +199,7 @@ export default function CollectionsGrid() {
           height: 100%;
           transform: scale(var(--cg-scale, 1.02)) translate(calc(var(--cg-offset-x, 0px) + 2px), calc(var(--cg-offset-y, 0px) - 2px));
         }
-        
+
         @media (max-width: 1023px) {
           .cg-card__media {
             display: flex;
@@ -219,6 +219,7 @@ export default function CollectionsGrid() {
         .cg-row--bottom .cg-card:nth-child(4) { --cg-offset-y: 4px; --cg-offset-x: 5px; --cg-scale: 1.07; }
         .cg-row--bottom .cg-card:nth-child(5) { --cg-offset-y: 4px; --cg-offset-x: -1px; }
         .cg-row--bottom .cg-card:nth-child(6) { --cg-offset-y: -4px; --cg-offset-x: 3px; --cg-scale: 1.06; }
+        
         .cg-card__media img {
           display: block;
           width: 100%;

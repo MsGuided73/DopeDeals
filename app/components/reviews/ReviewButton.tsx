@@ -49,7 +49,7 @@ export default function ReviewButton({ productId, productName, onReviewSubmitted
     } catch {
       // Network/server error — fall back to "not signed in" CTA so the user
       // still has a path forward instead of seeing nothing.
-      setEligibility({ canReview: false, reason: "not_signed_in", orderItemId: null, existingReviewId: null });
+      setEligibility({ canReview: false, reason: "not_signed_in", orderItemId: null, isVerifiedBuyer: false, existingReviewId: null });
     } finally {
       setLoading(false);
     }

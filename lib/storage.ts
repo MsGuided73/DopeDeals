@@ -157,12 +157,13 @@ export async function getStorage(): Promise<IStorage> {
 
       // STRICT COMPLIANCE: Verify product is not Kratom-related
       if (data) {
-        const name = data.name?.toLowerCase() || '';
-        const desc = data.description?.toLowerCase() || '';
+        const prod = data as any;
+        const name = prod.name?.toLowerCase() || '';
+        const desc = prod.description?.toLowerCase() || '';
         const prohibited = ['kratom', '7-oh', '7-hydroxy', 'mitragynine', '7-ohmz'];
         
         if (prohibited.some(term => name.includes(term) || desc.includes(term))) {
-          console.warn(`🛑 COMPLIANCE: Blocked fetching prohibited product ID ${productId}: ${data.name}`);
+          console.warn(`🛑 COMPLIANCE: Blocked fetching prohibited product ID ${productId}: ${prod.name}`);
           return null;
         }
       }

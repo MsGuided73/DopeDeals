@@ -20,7 +20,7 @@ export default function MinimalProductCard({ product }: { product: Product }) {
   const getDiscountPercent = (p: Product) => p.DD15 ? 15 : p.DD10 ? 10 : 0;
   
   const disc = getDiscountPercent(product);
-  const basePrice = parseFloat(product.our_price.toString());
+  const basePrice = parseFloat((product.our_price ?? 0).toString());
   const salePrice = disc > 0 ? basePrice * (1 - disc / 100) : basePrice;
   const imageUrl = product.image_url || (product.image_urls?.[0]) || null;
   

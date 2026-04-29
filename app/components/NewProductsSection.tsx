@@ -76,8 +76,17 @@ export default function NewProductsSection() {
   };
 
   const getPrice = (p: Product) => {
-    const num = parseFloat(p.our_price.toString());
+    const activePrice = p.sale_price && p.sale_price < (p.our_price ?? 0) ? p.sale_price : (p.our_price ?? 0);
+    const num = parseFloat(activePrice.toString());
     return Number.isFinite(num) ? num.toFixed(2) : '0.00';
+  };
+
+  const getOriginalPrice = (p: Product) => {
+    if (p.sale_price && p.sale_price < (p.our_price ?? 0)) {
+      const num = parseFloat((p.our_price ?? 0).toString());
+      return Number.isFinite(num) ? num.toFixed(2) : null;
+    }
+    return null;
   };
 
   const handleAddToCart = async (productId: string, event: React.MouseEvent) => {
@@ -165,8 +174,15 @@ export default function NewProductsSection() {
           </Link>
 
           {/* Price */}
-          <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '21px', color: RS.accent, letterSpacing: '0.03em', marginBottom: '11px' }}>
-            ${getPrice(product)}
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '11px' }}>
+            <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '21px', color: RS.accent, letterSpacing: '0.03em' }}>
+              ${getPrice(product)}
+            </div>
+            {getOriginalPrice(product) && (
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', color: '#9ca3af', textDecoration: 'line-through' }}>
+                ${getOriginalPrice(product)}
+              </div>
+            )}
           </div>
 
           {/* Side-by-side buttons */}
