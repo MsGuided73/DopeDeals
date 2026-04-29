@@ -14,6 +14,12 @@ interface ThcaPnvProductGridProps {
 export default function ThcaPnvProductGrid({ products, viewMode }: ThcaPnvProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
+  const formatPrice = (price: any) => {
+    if (price === undefined || price === null) return '0.00';
+    const num = typeof price === 'string' ? parseFloat(price) : Number(price);
+    return Number.isFinite(num) ? num.toFixed(2) : '0.00';
+  };
+
   const toggleFavorite = (productId: string) => {
     const newFavorites = new Set(favorites);
     if (newFavorites.has(productId)) {
@@ -119,9 +125,9 @@ export default function ThcaPnvProductGrid({ products, viewMode }: ThcaPnvProduc
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-gray-900 dark:text-white">${product.price?.toFixed(2) || product.our_price.toFixed(2)}</span>
-                    {product.sale_price && product.sale_price > product.our_price && (
-                      <span className="text-lg text-gray-500 line-through">${product.sale_price.toFixed(2)}</span>
+                    <span className="text-2xl font-bold text-gray-900 dark:text-white">${formatPrice(product.price ?? product.our_price)}</span>
+                    {product.sale_price && product.sale_price > (product.our_price || 0) && (
+                      <span className="text-lg text-gray-500 line-through">${formatPrice(product.sale_price)}</span>
                     )}
                   </div>
 
@@ -235,9 +241,9 @@ export default function ThcaPnvProductGrid({ products, viewMode }: ThcaPnvProduc
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <span className="text-lg font-bold text-gray-900">${product.price || product.our_price}</span>
-                {product.sale_price && product.sale_price > product.our_price && (
-                  <span className="text-sm text-gray-500 line-through">${product.sale_price}</span>
+                <span className="text-lg font-bold text-gray-900">${formatPrice(product.price ?? product.our_price)}</span>
+                {product.sale_price && product.sale_price > (product.our_price || 0) && (
+                  <span className="text-sm text-gray-500 line-through">${formatPrice(product.sale_price)}</span>
                 )}
               </div>
 

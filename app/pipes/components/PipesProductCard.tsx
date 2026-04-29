@@ -161,7 +161,7 @@ export default function PipesProductCard({ product }: PipesProductCardProps) {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500 line-through">
-                    ${product.compare_at_price?.toFixed(2) || '0.00'}
+                    ${typeof product.compare_at_price === 'number' ? product.compare_at_price.toFixed(2) : Number(product.compare_at_price || 0).toFixed(2)}
                   </span>
                   <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
                     Save {discountPercentage}%

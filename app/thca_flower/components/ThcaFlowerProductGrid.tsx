@@ -15,6 +15,12 @@ interface ThcaFlowerProductGridProps {
 export default function ThcaFlowerProductGrid({ products, viewMode }: ThcaFlowerProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
+  const formatPrice = (price: any) => {
+    if (price === undefined || price === null) return '0.00';
+    const num = typeof price === 'string' ? parseFloat(price) : Number(price);
+    return Number.isFinite(num) ? num.toFixed(2) : '0.00';
+  };
+
   const toggleFavorite = (productId: string) => {
     const newFavorites = new Set(favorites);
     if (newFavorites.has(productId)) {
@@ -121,16 +127,16 @@ export default function ThcaFlowerProductGrid({ products, viewMode }: ThcaFlower
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                      ${product.price.toFixed(2)}
+                      ${formatPrice(product.price)}
                     </span>
                     {product.compare_at_price && product.compare_at_price > product.price && (
                       <span className="text-lg text-gray-500 line-through">
-                        ${product.compare_at_price.toFixed(2)}
+                        ${formatPrice(product.compare_at_price)}
                       </span>
                     )}
                     {product.vip_price && (
                       <span className="text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-medium dark:bg-purple-900 dark:text-purple-200">
-                        VIP: ${product.vip_price.toFixed(2)}
+                        VIP: ${formatPrice(product.vip_price)}
                       </span>
                     )}
                   </div>
@@ -245,9 +251,9 @@ export default function ThcaFlowerProductGrid({ products, viewMode }: ThcaFlower
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <span className="text-lg font-bold text-gray-900">${product.price.toFixed(2)}</span>
+                <span className="text-lg font-bold text-gray-900">${formatPrice(product.price)}</span>
                 {product.compare_at_price && product.compare_at_price > product.price && (
-                  <span className="text-sm text-gray-500 line-through">${product.compare_at_price.toFixed(2)}</span>
+                  <span className="text-sm text-gray-500 line-through">${formatPrice(product.compare_at_price)}</span>
                 )}
               </div>
 
