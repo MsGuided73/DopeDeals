@@ -27,7 +27,7 @@ const BRANDS: Brand[] = [
   { name: "Urth Farmacy",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Urth_Farmacy_logo.webp",         href: "/search?q=Urth+Farmacy",        hasProducts: true  },
   { name: "Astro Eight",         logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Astro%20Eight.png",            href: "/search?q=Astro+Eight",         hasProducts: false },
   { name: "Puffco",              logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/puffco_logo.webp",                     href: "/search?q=Puffco",              hasProducts: true  },
-  { name: "RooR",                logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/RooR%20Logo.avif",                    href: "/search?q=ROOR",                hasProducts: true  },
+  { name: "RooR",                logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/RooR_LogoRed_resize.png",               href: "/search?q=ROOR",                hasProducts: true  },
   { name: "Diamond Glass",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/diamond-glass_logo.webp",             href: "/search?q=Diamond+Glass",       hasProducts: false },
   { name: "Mellow Fellow",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/mellow-fellow_logo2.png",             href: "/search?q=Mellow+Fellow",       hasProducts: false },
   { name: "NEO",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/NEO-Hookah_logo.webp",                href: "/search?q=NEO",                 hasProducts: false },
@@ -124,7 +124,7 @@ export default function TrustedBrandsBulletin() {
                 gap: '10px',
                 textDecoration: 'none',
                 padding: '12px 8px',
-                transition: 'transform 0.18s ease, opacity 0.18s ease',
+                transition: 'transform 0.18s ease',
               }}
             >
               {inner}
@@ -165,13 +165,6 @@ export default function TrustedBrandsBulletin() {
         }
         .brand-item:hover {
           transform: translateY(-4px) scale(1.04);
-          opacity: 1 !important;
-        }
-        .brand-item:hover span {
-          color: #2d8f47 !important;
-        }
-        .brand-grid:hover .brand-item:not(:hover) {
-          opacity: 0.5;
         }
       `}</style>
     </section>
