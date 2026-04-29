@@ -119,8 +119,8 @@ export async function GET(req: NextRequest) {
 
     const transformedProducts = (products || []).map((product: any) => {
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(product.image_url),
+        ...parseImageUrls(product.image_urls)
       ]));
 
       let productType = SUBCATEGORY_TYPE_MAP[product.subcategory_slug] || 'Glass Rigs';

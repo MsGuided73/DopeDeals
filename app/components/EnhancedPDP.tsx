@@ -37,6 +37,41 @@ import ReviewButton from './reviews/ReviewButton';
 import ReviewsList from './reviews/ReviewsList';
 import ProductRatingBadge from './reviews/ProductRatingBadge';
 
+// Categories that are physical gear/hardware — not consumables.
+// Ingredients tab, Lab Testing tab, COA badge, and allergy warnings are
+// all hidden for these. Keep this list in sync with the category_slug
+// values in main_site_products.
+const GEAR_CATEGORY_SLUGS = new Set([
+  'bongs',
+  'dab_rig',
+  'dab_rig_attachment',
+  'dab_rig_accessories',
+  'pipes',
+  'bubblers',
+  'ash_catchers',
+  'ashtrays',
+  'recyclers',
+  'percolator_bongs',
+  'proxy_accessories',
+  'dab_tools',
+  'replacement_bowl',
+  'e_rig',
+  'electronic_dab_rig',
+  'dab_rig_e_rig',
+  'accessories',
+  'grinders',
+  'rolling_trays',
+  'storage',
+  'lighters',
+  'torches',
+]);
+
+const isGearProduct = (product: any): boolean => {
+  if (!product) return false;
+  const slug = (product.category_slug || product.subcategory_slug || '').toString().toLowerCase();
+  return GEAR_CATEGORY_SLUGS.has(slug);
+};
+
 // Types match your stack
 interface EnhancedPDPProps {
   productId?: string; // Make optional if we support direct passing
@@ -103,6 +138,12 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   }, [setHasCustomFooter]);
 
   React.useEffect(() => {
+    if (isGearProduct(product) && (activeTab === 'ingredients' || activeTab === 'lab')) {
+      setActiveTab('details');
+    }
+  }, [product, activeTab]);
+
+  React.useEffect(() => {
     if (!props.product && props.productId) {
       setLoading(true);
       fetch(`/api/products/${props.productId}`)
@@ -149,6 +190,8 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     : (compare_at_price_cents ? compare_at_price_cents / 100 : null);
   const displayImages = images.length > 0 ? images.map((i: any) => i.url) : ['/api/placeholder/600/600'];
 
+  const isGear = isGearProduct(product);
+
   // Handle Add to Cart
   const handleAddToCart = async () => {
     setIsAdding(true);
@@ -168,20 +211,39 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
     }
   };
 
-  const FAQS = [
-    {
-      question: 'Is this product legal?',
-      answer: 'Yes, this product contains legal hemp-derived compounds and complies with federal regulations (2018 Farm Bill).'
-    },
-    {
-      question: 'How long does shipping take?',
-      answer: 'Standard shipping takes 3-5 business days. We ship via USPS with tracking provided.'
-    },
-    {
-      question: 'Is packaging discreet?',
-      answer: 'Absolutely. All proprietary packaging is plain and odorless for your privacy.'
-    }
-  ];
+  const FAQS = isGear
+    ? [
+        {
+          question: 'Is this product authentic?',
+          answer: 'Every piece is sourced directly from authorized brand distributors. We do not sell knockoffs or replicas.'
+        },
+        {
+          question: 'How long does shipping take?',
+          answer: 'Standard shipping takes 3-5 business days. We ship via USPS with tracking provided.'
+        },
+        {
+          question: 'Is packaging discreet?',
+          answer: 'Absolutely. All packaging is plain and odorless for your privacy.'
+        },
+        {
+          question: 'What is your return policy on glass?',
+          answer: 'Glass is inspected before shipping and packed for safe transit. Damaged-in-transit pieces are replaced or refunded — contact us within 48 hours of delivery with photos.'
+        }
+      ]
+    : [
+        {
+          question: 'Is this product legal?',
+          answer: 'Yes, this product contains legal hemp-derived compounds and complies with federal regulations (2018 Farm Bill).'
+        },
+        {
+          question: 'How long does shipping take?',
+          answer: 'Standard shipping takes 3-5 business days. We ship via USPS with tracking provided.'
+        },
+        {
+          question: 'Is packaging discreet?',
+          answer: 'Absolutely. All proprietary packaging is plain and odorless for your privacy.'
+        }
+      ];
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
@@ -220,7 +282,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                       SALE
                     </span>
                   )}
-                  {coa.url && (
+                  {coa.url && !isGear && (
                     <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
                       <ShieldCheck className="w-4 h-4" />
                       LAB TESTED
@@ -272,8 +334,8 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
             <div className="grid grid-cols-3 gap-3 pt-4">
               <div className="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-xl border border-emerald-200 text-center">
                 <ShieldCheck className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-                <div className="text-xs font-semibold text-slate-900">Lab Tested</div>
-                <div className="text-xs text-slate-600">3rd Party</div>
+                <div className="text-xs font-semibold text-slate-900">{isGear ? 'Authentic' : 'Lab Tested'}</div>
+                <div className="text-xs text-slate-600">{isGear ? 'Brand Verified' : '3rd Party'}</div>
               </div>
               <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-200 text-center">
                 <Truck className="w-8 h-8 text-blue-600 mx-auto mb-2" />
@@ -454,8 +516,10 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
             <div className="flex gap-4 md:gap-8 overflow-x-auto">
               {[
                 { id: 'details', label: 'Product Details', icon: Info },
-                { id: 'ingredients', label: 'Ingredients', icon: Leaf },
-                { id: 'lab', label: 'Lab Testing', icon: ShieldCheck },
+                ...(isGear ? [] : [
+                  { id: 'ingredients', label: 'Ingredients', icon: Leaf },
+                  { id: 'lab', label: 'Lab Testing', icon: ShieldCheck }
+                ]),
                 { id: 'reviews', label: 'Reviews', icon: Star }
               ].map(tab => {
                 const Icon = tab.icon;
@@ -518,7 +582,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                   </div>
                 )}
 
-                {product.allergy_warning && (
+                {product.allergy_warning && !isGear && (
                   <div className="mt-4 p-6 bg-red-50 text-red-900 border border-red-200 rounded-2xl text-md font-semibold flex items-start gap-3">
                     <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0" />
                     <div>
@@ -530,7 +594,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
               </div>
             )}
 
-            {activeTab === 'ingredients' && (
+            {activeTab === 'ingredients' && !isGear && (
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                 <h3 className="text-2xl font-bold text-slate-900 mb-6">Ingredients</h3>
                 {typeof product.ingredients === 'string' ? (
@@ -550,7 +614,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
               </div>
             )}
 
-            {activeTab === 'lab' && (
+            {activeTab === 'lab' && !isGear && (
               <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                 <div className="flex items-start gap-4 mb-8">
                   <ShieldCheck className="w-12 h-12 text-emerald-600" />
