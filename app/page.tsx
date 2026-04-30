@@ -23,7 +23,6 @@ const RideWithUsBanner        = nextDynamic(() => import("./components/RideWithU
 const RoadTripsSection        = nextDynamic(() => import("./components/RoadTripsSection"));
 const HomeBlogArticles        = nextDynamic(() => import("./components/HomeBlogArticles"));
 const HomeTopicLinksBar       = nextDynamic(() => import("./components/HomeTopicLinksBar"));
-const PopularSetupsSection    = nextDynamic(() => import("./components/PopularSetupsSection"));
 
 // Force dynamic rendering to avoid static generation issues
 export const dynamic = "force-dynamic";
@@ -64,11 +63,6 @@ export default function HomePage() {
         {/* ── Dope Deals ── */}
         <Suspense fallback={<SectionFallback />}>
           <DopeDealsSection />
-        </Suspense>
-
-        {/* ── Popular Setups ── */}
-        <Suspense fallback={<SectionFallback />}>
-          <PopularSetupsSection />
         </Suspense>
 
         {/* ── Road Trips ── */}
