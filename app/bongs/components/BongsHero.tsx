@@ -37,19 +37,33 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
               left portion of the hero is the page's white bg, so the headline
               sits cleanly on white with no rectangular box edge to soften. */}
           <div className="w-full md:w-1/2 z-10 relative">
-            <div className="max-w-xl mx-auto">
+            <div className="max-w-xl mx-auto relative">
+            {/* Soft elliptical white wash behind the text — opaque in the
+                center (covering through the "S" in PIPES) and fades to fully
+                transparent at the outer ring. Heavy blur smooths every stop
+                so there are no perceptible seams or contours. */}
+            <div
+              aria-hidden="true"
+              className="absolute pointer-events-none -inset-x-40 -inset-y-24 z-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse 95% 85% at center, rgba(255,255,255,0.98) 45%, rgba(255,255,255,0.88) 62%, rgba(255,255,255,0.5) 80%, transparent 100%)',
+                filter: 'blur(44px)',
+              }}
+            />
+            <div className="relative z-10">
             <h1 className="font-chalets text-[3.5rem] leading-[0.9] md:text-[5rem] lg:text-[6rem] text-[#1a1a1a] font-bold uppercase tracking-tight mb-4">
               BONGS & <br /> WATER PIPES
             </h1>
-            
+
             <h2 className="text-[#2d8f47] text-2xl md:text-3xl font-bold mb-3">
               Cleaner Hits. Smoother Pulls.
             </h2>
-            
+
             <p className="text-gray-700 text-lg max-w-lg mb-8 leading-relaxed font-medium">
               Premium glass designed for better airflow, cooler smoke, and a smoother experience every time.
             </p>
-            
+
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="inline-flex items-center px-5 py-3 border-2 border-[#2d8f47] text-[#2d8f47] bg-white rounded font-semibold hover:bg-green-50 transition-colors shadow-sm"
@@ -89,6 +103,7 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
                   </div>
                 </div>
               </div>
+            </div>
             </div>
             </div>
           </div>
