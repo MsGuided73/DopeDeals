@@ -59,10 +59,6 @@ export default function AccessoriesClientPage() {
         colors={['#10b981', '#059669', '#047857']}
       />
 
-
-      {/* Universal Layout Components */}
-      <GlobalMasthead />
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
