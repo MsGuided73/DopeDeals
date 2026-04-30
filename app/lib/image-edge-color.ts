@@ -43,14 +43,25 @@ export function extractEdgeColor(
     let r = 0;
     let g = 0;
     let b = 0;
+    let opaqueCount = 0;
     for (const [x, y] of pts) {
       const px = ctx.getImageData(x, y, 1, 1).data;
+      // Skip transparent pixels — canvas reports RGB=0,0,0 for fully
+      // transparent samples, which would average to a black tile behind
+      // any image that bleeds to its edges with transparency (e.g. PNG
+      // product renders with cut-out backgrounds). Treat those as "no
+      // signal" and let the caller keep its white fallback.
+      const alpha = px[3];
+      if (alpha < 32) continue;
       r += px[0];
       g += px[1];
       b += px[2];
+      opaqueCount += 1;
     }
-    const n = pts.length;
-    return `rgb(${Math.round(r / n)}, ${Math.round(g / n)}, ${Math.round(b / n)})`;
+    // Need a meaningful sample — bail if fewer than half the edge points
+    // were opaque (mostly-transparent edges → no reliable edge color).
+    if (opaqueCount < pts.length / 2) return null;
+    return `rgb(${Math.round(r / opaqueCount)}, ${Math.round(g / opaqueCount)}, ${Math.round(b / opaqueCount)})`;
   } catch {
     // Canvas tainted by CORS — let the caller keep its fallback.
     return null;

@@ -48,10 +48,7 @@ const NAV_LINKS = [
   {
     label: "Pre-Rolls",
     href: "/pre-rolls",
-    children: [
-      { label: "All Pre-Rolls", href: "/pre-rolls" },
-      { label: "Rolling Papers & Wraps", href: "/accessories?type=rolling" },
-    ],
+    children: null,
   },
   {
     label: "Edibles",

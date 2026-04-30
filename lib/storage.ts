@@ -269,13 +269,13 @@ export async function getStorage(): Promise<IStorage> {
     },
 
     async updateUser(id: string, updates: any) {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('users')
         .update(updates)
         .eq('id', id)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data;
     },

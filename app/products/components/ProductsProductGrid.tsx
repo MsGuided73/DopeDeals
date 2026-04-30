@@ -45,8 +45,11 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
         {products.map((product) => (
           <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center space-x-6">
-              {/* Product Image */}
-              <div className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg overflow-hidden">
+              {/* Product Image — clickable through to PDP */}
+              <Link
+                href={`/product/${product.id}`}
+                className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-lg overflow-hidden block"
+              >
                 {product.imageUrl ? (
                   <Image
                     src={product.imageUrl}
@@ -63,7 +66,7 @@ export default function ProductsProductGrid({ products, viewMode }: ProductsProd
                     </div>
                   </div>
                 )}
-              </div>
+              </Link>
 
               {/* Product Info */}
               <div className="flex-1 min-w-0">

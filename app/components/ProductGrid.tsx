@@ -80,8 +80,11 @@ export default function ProductGrid({ products, viewMode }: ProductGridProps) {
         {products.map((product) => (
           <div key={product.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
             <div className="flex">
-              {/* Product Image */}
-              <div className="relative w-48 h-48 flex-shrink-0 bg-gray-100">
+              {/* Product Image — clickable through to PDP */}
+              <Link
+                href={`/product/${product.id}`}
+                className="relative w-48 h-48 flex-shrink-0 bg-gray-100 block"
+              >
                 {product.image_url ? (
                   <Image
                     src={product.image_url}
@@ -107,7 +110,7 @@ export default function ProductGrid({ products, viewMode }: ProductGridProps) {
                     SALE
                   </span>
                 )}
-              </div>
+              </Link>
 
               {/* Product Info */}
               <div className="flex-1 p-6">

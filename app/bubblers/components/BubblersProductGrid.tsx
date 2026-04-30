@@ -57,9 +57,12 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
             className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex flex-col sm:flex-row gap-6">
-              {/* Product Image */}
+              {/* Product Image — clickable through to PDP */}
               <div className="flex-shrink-0">
-                <div className="relative w-32 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <Link
+                  href={`/product/${product.id}`}
+                  className="relative w-32 h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden block"
+                >
                   <Image
                     src={getImageUrl(product)}
                     alt={product.name}
@@ -75,7 +78,7 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
                       <span className="text-white text-sm font-medium">Out of Stock</span>
                     </div>
                   )}
-                </div>
+                </Link>
               </div>
 
               {/* Product Info */}
@@ -158,8 +161,11 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
           key={product.id}
           className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow group"
         >
-          {/* Product Image */}
-          <div className="relative aspect-square bg-gray-100 dark:bg-gray-700">
+          {/* Product Image — clickable through to PDP */}
+          <Link
+            href={`/product/${product.id}`}
+            className="relative aspect-square bg-gray-100 dark:bg-gray-700 block"
+          >
             <Image
               src={getImageUrl(product)}
               alt={product.name}
@@ -175,21 +181,25 @@ export default function BubblersProductGrid({ products, viewMode }: BubblersProd
                 <span className="text-white text-sm font-medium">Out of Stock</span>
               </div>
             )}
-            
-            {/* Overlay Actions */}
+
+            {/* Overlay Actions — stop propagation so they don't trigger the wrapping link */}
             <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
-                onClick={() => toggleFavorite(product.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleFavorite(product.id);
+                }}
                 className="p-2 bg-white/90 dark:bg-gray-800/90 rounded-full text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors"
               >
-                <Heart 
+                <Heart
                   className={`w-4 h-4 ${
                     favorites.includes(product.id) ? 'fill-red-500 text-red-500' : ''
-                  }`} 
+                  }`}
                 />
               </button>
             </div>
-          </div>
+          </Link>
 
           {/* Product Info */}
           <div className="p-4">

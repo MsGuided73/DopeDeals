@@ -598,9 +598,12 @@ export default function UniversalProductCard({
   // Homepage featured view - Image on left, content on right with full height image
   if (viewMode === 'homepage-featured') {
     return (
-      <div className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 relative ${
-        isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-lg'
-      } ${config.container} ${className}`}>
+      <Link
+        href={isRestricted ? '#' : `/product/${product.id}`}
+        className={`group flex bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 relative ${
+          isRestricted ? 'opacity-60 grayscale cursor-not-allowed' : 'hover:shadow-lg'
+        } ${config.container} ${className}`}
+      >
         {/* Large Product Image - Left Side - Full Height */}
         <div className="relative w-64 h-80 flex-shrink-0 bg-white overflow-hidden">
           {hasImage ? (
@@ -757,7 +760,7 @@ export default function UniversalProductCard({
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
 
