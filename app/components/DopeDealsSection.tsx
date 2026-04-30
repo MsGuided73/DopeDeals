@@ -44,7 +44,7 @@ export default function DopeDealsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<ProductViewMode>('auto');
+  const [viewMode, setViewMode] = useState<ProductViewMode>('manual');
 
   const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 

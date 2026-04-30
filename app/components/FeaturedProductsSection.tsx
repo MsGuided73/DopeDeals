@@ -54,7 +54,7 @@ export default function FeaturedProductsSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const [viewMode, setViewMode] = useState<ProductViewMode>('auto');
+  const [viewMode, setViewMode] = useState<ProductViewMode>('manual');
   
   const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 

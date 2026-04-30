@@ -43,8 +43,7 @@ export default function NewProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Defaults to 'grid' since the original layout was a static grid.
-  const [viewMode, setViewMode] = useState<ProductViewMode>('grid');
+  const [viewMode, setViewMode] = useState<ProductViewMode>('manual');
 
   const { restrictedProductIds, checkProductEligibility, userZipCode } = useCompliance();
 
