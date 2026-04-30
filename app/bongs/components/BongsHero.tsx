@@ -123,8 +123,8 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
                 onClick={() => setActiveCategory('all-bongs')}
                 className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
                   activeCategory === 'all-bongs'
-                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
-                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                    ? 'bg-[#2d8f47] text-white border-2 border-[#2d8f47] shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
                 }`}
               >
                 All Bongs
@@ -133,8 +133,8 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
                 onClick={() => setActiveCategory('beaker-bongs')}
                 className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
                   activeCategory === 'beaker-bongs'
-                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
-                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                    ? 'bg-[#2d8f47] text-white border-2 border-[#2d8f47] shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
                 }`}
               >
                 Beaker Bongs
@@ -143,8 +143,8 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
                 onClick={() => setActiveCategory('straight-tubes')}
                 className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
                   activeCategory === 'straight-tubes'
-                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
-                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                    ? 'bg-[#2d8f47] text-white border-2 border-[#2d8f47] shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
                 }`}
               >
                 Straight Tubes
@@ -153,8 +153,8 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
                 onClick={() => setActiveCategory('percolator-bongs')}
                 className={`whitespace-nowrap px-5 py-2.5 text-sm md:text-base rounded-lg font-bold transition-all duration-200 ${
                   activeCategory === 'percolator-bongs'
-                    ? 'bg-[#2d8f47] text-white shadow-md border-2 border-[#2d8f47]'
-                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white'
+                    ? 'bg-[#2d8f47] text-white border-2 border-[#2d8f47] shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
+                    : 'bg-white text-[#2d8f47] border-2 border-[#2d8f47] hover:bg-[#2d8f47] hover:text-white shadow-[0_4px_10px_rgba(0,0,0,0.18),0_0_28px_8px_rgba(255,255,255,0.9)]'
                 }`}
               >
                 Percolator Bongs
