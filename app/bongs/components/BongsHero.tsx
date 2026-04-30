@@ -116,7 +116,7 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
               without being clipped. */}
           <div className="w-full md:w-1/2 absolute left-0 top-0 h-full hidden md:flex flex-col justify-end pointer-events-none z-10">
             <div
-              className="absolute bottom-6 left-0 right-4 flex flex-nowrap gap-3 pointer-events-auto z-20"
+              className="absolute bottom-0 left-0 right-4 flex flex-nowrap gap-3 pointer-events-auto z-20"
               style={{ paddingLeft: 'max(1rem, calc((100% - 36rem) / 2))' }}
             >
               <button
