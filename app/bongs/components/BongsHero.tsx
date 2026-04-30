@@ -18,7 +18,7 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
           behind the text doesn't compete with it. */}
       <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
         <Image
-          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad3T.png"
+          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad2-5T.png"
           alt="Highway 420 — creekside road scene"
           fill
           sizes="(min-width: 768px) 100vw, 0px"
@@ -33,18 +33,11 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
       <div className="relative pt-12 pb-24 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center min-h-[600px] z-30">
 
           {/* Left Column - Text — content centered horizontally within the left half.
-              Inner div uses a radial-gradient white panel that's solid in the middle
-              and feathers to transparent at the edges, so the headline sits on a
-              readable surface but there's no hard rectangle where it meets the
-              illustration. */}
+              No panel chrome: the illustration is anchored to the right and the
+              left portion of the hero is the page's white bg, so the headline
+              sits cleanly on white with no rectangular box edge to soften. */}
           <div className="w-full md:w-1/2 z-10 relative">
-            <div
-              className="max-w-xl mx-auto p-6 lg:p-8"
-              style={{
-                background:
-                  'radial-gradient(ellipse 90% 100% at center, #ffffff 55%, rgba(255,255,255,0.85) 75%, rgba(255,255,255,0.4) 90%, transparent 100%)',
-              }}
-            >
+            <div className="max-w-xl mx-auto">
             <h1 className="font-chalets text-[3.5rem] leading-[0.9] md:text-[5rem] lg:text-[6rem] text-[#1a1a1a] font-bold uppercase tracking-tight mb-4">
               BONGS & <br /> WATER PIPES
             </h1>
