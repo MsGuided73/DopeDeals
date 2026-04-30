@@ -23,12 +23,12 @@ interface PipesFiltersProps {
 
 export default function PipesFilters({ filters, setFilters, products }: PipesFiltersProps) {
   const [expandedSections, setExpandedSections] = useState({
-    price: true,
-    brand: true,
-    style: true,
-    material: true,
+    price: false,
+    brand: false,
+    style: false,
+    material: false,
     size: false,
-    availability: true,
+    availability: false,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {

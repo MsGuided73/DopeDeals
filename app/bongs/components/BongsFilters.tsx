@@ -22,14 +22,14 @@ interface BongsFiltersProps {
 
 export default function BongsFilters({ filters, setFilters, products }: BongsFiltersProps) {
   const [expandedSections, setExpandedSections] = useState({
-    price: true,
-    brand: true,
-    material: true,
+    price: false,
+    brand: false,
+    material: false,
     height: false,
     joint: false,
-    percolator: true,
+    percolator: false,
     category: false,
-    availability: true,
+    availability: false,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
