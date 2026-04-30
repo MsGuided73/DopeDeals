@@ -11,6 +11,8 @@ import ThcaFlowerHero from './components/ThcaFlowerHero';
 import ThcaFlowerSortBar from './components/ThcaFlowerSortBar';
 import ThcaFlowerViewToggle from './components/ThcaFlowerViewToggle';
 import ThcaFlowerInfoSection from './components/ThcaFlowerInfoSection';
+import { SlidersHorizontal } from 'lucide-react';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface ThcaFlowerProduct {
   id: string;
@@ -56,6 +58,7 @@ export default function ThcaFlowerPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
@@ -261,8 +264,8 @@ export default function ThcaFlowerPageContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:w-64 flex-shrink-0">
+          {/* Filters Sidebar — desktop only; mobile uses the drawer */}
+          <div className="hidden lg:block lg:w-64 flex-shrink-0">
             <ThcaFlowerFilters
               filters={filters}
               setFilters={setFilters}
@@ -272,9 +275,17 @@ export default function ThcaFlowerPageContent() {
 
           {/* Main Content */}
           <div className="flex-1">
-            {/* Sort and View Controls */}
+            {/* Sort and View Controls — Filters button on mobile */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="lg:hidden inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filters
+                </button>
                 <ThcaFlowerSortBar sortBy={sortBy} setSortBy={setSortBy} />
                 <ThcaFlowerViewToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
@@ -282,6 +293,11 @@ export default function ThcaFlowerPageContent() {
                 Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
               </div>
             </div>
+
+            {/* Mobile filter drawer */}
+            <MobileFilterDrawer open={mobileFiltersOpen} onClose={() => setMobileFiltersOpen(false)}>
+              <ThcaFlowerFilters filters={filters} setFilters={setFilters} products={products} />
+            </MobileFilterDrawer>
 
             {/* Products Grid */}
             <ThcaFlowerProductGrid products={currentProducts} viewMode={viewMode} />

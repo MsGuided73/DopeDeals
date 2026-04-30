@@ -12,6 +12,8 @@ import ThcaPnvBreadcrumb from './components/ThcaPnvBreadcrumb';
 import ThcaPnvHero from './components/ThcaPnvHero';
 import ThcaPnvSortBar from './components/ThcaPnvSortBar';
 import ThcaPnvViewToggle from './components/ThcaPnvViewToggle';
+import { SlidersHorizontal } from 'lucide-react';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface ThcaPnvProduct {
   id: string;
@@ -52,6 +54,7 @@ export default function VapesPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Filter states - focused on Vapes and Carts
   const [filters, setFilters] = useState({
@@ -237,8 +240,8 @@ export default function VapesPageContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters - cloned from BongsFilters */}
-          <div className="lg:w-1/4">
+          {/* Sidebar Filters — desktop only; mobile uses the drawer */}
+          <div className="hidden lg:block lg:w-1/4">
             <ThcaPnvFilters
               filters={filters}
               setFilters={setFilters}
@@ -248,6 +251,21 @@ export default function VapesPageContent() {
 
           {/* Main Content */}
           <div className="lg:w-3/4">
+            {/* Mobile filter trigger + drawer */}
+            <div className="lg:hidden mb-4">
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                Filters
+              </button>
+            </div>
+            <MobileFilterDrawer open={mobileFiltersOpen} onClose={() => setMobileFiltersOpen(false)}>
+              <ThcaPnvFilters filters={filters} setFilters={setFilters} products={products} />
+            </MobileFilterDrawer>
+
             {/* Product Type Tabs - Focused on Vapes */}
             <div className="mb-6">
               <div className="border-b border-gray-200 dark:border-gray-700">

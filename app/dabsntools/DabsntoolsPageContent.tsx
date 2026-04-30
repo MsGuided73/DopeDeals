@@ -12,6 +12,8 @@ import DabsntoolsBreadcrumb from './components/DabsntoolsBreadcrumb';
 import DabsntoolsHero from './components/DabsntoolsHero';
 import DabsntoolsSortBar from './components/DabsntoolsSortBar';
 import DabsntoolsViewToggle from './components/DabsntoolsViewToggle';
+import { SlidersHorizontal } from 'lucide-react';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface DabsntoolsProduct {
   id: string;
@@ -57,6 +59,7 @@ export default function DabsntoolsPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Filter states - adapted for dab products
   const [filters, setFilters] = useState({
@@ -228,8 +231,8 @@ export default function DabsntoolsPageContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters - adapted from ThcaPnvFilters */}
-          <div className="lg:w-1/4">
+          {/* Sidebar Filters — desktop only; mobile uses the drawer */}
+          <div className="hidden lg:block lg:w-1/4">
             <DabsntoolsFilters
               filters={filters}
               setFilters={setFilters}
@@ -239,9 +242,17 @@ export default function DabsntoolsPageContent() {
 
           {/* Main Content */}
           <div className="lg:w-3/4">
-            {/* Sort Bar and View Toggle */}
+            {/* Sort Bar and View Toggle — Filters button on mobile */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="lg:hidden inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filters
+                </button>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
                 </p>
@@ -252,6 +263,11 @@ export default function DabsntoolsPageContent() {
                 <DabsntoolsViewToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
             </div>
+
+            {/* Mobile filter drawer */}
+            <MobileFilterDrawer open={mobileFiltersOpen} onClose={() => setMobileFiltersOpen(false)}>
+              <DabsntoolsFilters filters={filters} setFilters={setFilters} products={products} />
+            </MobileFilterDrawer>
 
             {/* Product Grid - adapted from ThcaPnvProductGrid */}
             <DabsntoolsProductGrid

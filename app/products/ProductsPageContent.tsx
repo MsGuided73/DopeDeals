@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp, SlidersHorizontal } from 'lucide-react';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 import { supabaseBrowser } from '../lib/supabase-browser';
 import ProductsFilters from './components/ProductsFilters';
 import ProductsProductGrid from './components/ProductsProductGrid';
@@ -47,6 +48,7 @@ export default function ProductsPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
@@ -333,9 +335,9 @@ export default function ProductsPageContent() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters */}
-          <div className="lg:w-1/4">
-            <ProductsFilters 
+          {/* Sidebar Filters — desktop only; mobile uses the drawer */}
+          <div className="hidden lg:block lg:w-1/4">
+            <ProductsFilters
               filters={filters}
               onFiltersChange={setFilters}
               products={products}
@@ -344,6 +346,20 @@ export default function ProductsPageContent() {
 
           {/* Products Section */}
           <div className="lg:w-3/4">
+            {/* Mobile filter trigger + drawer */}
+            <div className="lg:hidden mb-4">
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                Filters
+              </button>
+            </div>
+            <MobileFilterDrawer open={mobileFiltersOpen} onClose={() => setMobileFiltersOpen(false)}>
+              <ProductsFilters filters={filters} onFiltersChange={setFilters} products={products} />
+            </MobileFilterDrawer>
             {/* Brand Detection Banner */}
             {detectedBrand && (
               <div className="mb-4 p-4 bg-gradient-to-r from-dope-orange-50 to-yellow-50 border border-dope-orange-200 rounded-lg">

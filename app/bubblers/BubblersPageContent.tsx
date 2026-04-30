@@ -11,6 +11,8 @@ import BubblersHero from './components/BubblersHero';
 import BubblersSortBar from './components/BubblersSortBar';
 import BubblersViewToggle from './components/BubblersViewToggle';
 import { supabaseBrowser } from '../lib/supabase-browser';
+import { SlidersHorizontal } from 'lucide-react';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface BubblerProduct {
   id: string;
@@ -41,6 +43,7 @@ export default function BubblersPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -189,9 +192,9 @@ export default function BubblersPageContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters */}
-          <div className="lg:w-1/4">
-            <BubblersFilters 
+          {/* Sidebar Filters — desktop only; mobile uses the drawer */}
+          <div className="hidden lg:block lg:w-1/4">
+            <BubblersFilters
               filters={filters}
               setFilters={setFilters}
               products={products}
@@ -200,9 +203,17 @@ export default function BubblersPageContent() {
 
           {/* Main Content */}
           <div className="lg:w-3/4">
-            {/* Sort and View Controls */}
+            {/* Sort and View Controls — Filters button on mobile */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="lg:hidden inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filters
+                </button>
                 <BubblersSortBar sortBy={sortBy} setSortBy={setSortBy} />
                 <BubblersViewToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
@@ -210,6 +221,11 @@ export default function BubblersPageContent() {
                 Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
               </div>
             </div>
+
+            {/* Mobile filter drawer */}
+            <MobileFilterDrawer open={mobileFiltersOpen} onClose={() => setMobileFiltersOpen(false)}>
+              <BubblersFilters filters={filters} setFilters={setFilters} products={products} />
+            </MobileFilterDrawer>
 
             {/* Products Grid */}
             <BubblersProductGrid products={currentProducts} viewMode={viewMode} />

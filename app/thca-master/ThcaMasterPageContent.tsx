@@ -13,6 +13,8 @@ import ThcaMasterHero from './components/ThcaMasterHero';
 import ThcaMasterSortBar from './components/ThcaMasterSortBar';
 import ThcaMasterViewToggle from './components/ThcaMasterViewToggle';
 import ThcaMasterCategoryNav from './components/ThcaMasterCategoryNav';
+import { SlidersHorizontal } from 'lucide-react';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface ThcaMasterProduct {
   id: string;
@@ -140,6 +142,7 @@ export default function ThcaMasterPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   // Filter state (client-side refinements you still want)
@@ -371,8 +374,8 @@ export default function ThcaMasterPageContent() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Sidebar Filters */}
-            <div className="lg:w-1/4">
+            {/* Sidebar Filters — desktop only; mobile uses the drawer */}
+            <div className="hidden lg:block lg:w-1/4">
               <ThcaMasterFilters
                 filters={filters}
                 setFilters={setFilters}
@@ -383,7 +386,15 @@ export default function ThcaMasterPageContent() {
             {/* Main Content */}
             <div className="lg:w-3/4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setMobileFiltersOpen(true)}
+                    className="lg:hidden inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+                  >
+                    <SlidersHorizontal className="w-4 h-4" />
+                    Filters
+                  </button>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Showing {filteredProducts.length ? indexOfFirstProduct + 1 : 0}–
                     {Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
@@ -397,6 +408,11 @@ export default function ThcaMasterPageContent() {
                   <ThcaMasterViewToggle viewMode={viewMode} setViewMode={setViewMode} />
                 </div>
               </div>
+
+              {/* Mobile filter drawer */}
+              <MobileFilterDrawer open={mobileFiltersOpen} onClose={() => setMobileFiltersOpen(false)}>
+                <ThcaMasterFilters filters={filters} setFilters={setFilters} products={products} />
+              </MobileFilterDrawer>
 
               <ThcaMasterProductGrid products={currentProducts} viewMode={viewMode} />
 
