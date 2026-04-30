@@ -25,11 +25,13 @@ export default function ThcaPnvHero({ activeCategory, setActiveCategory }: Vapes
       subhead="Pure Hits. On the Go."
       paragraph="Premium cartridges, disposables, and hardware built for clean draws and consistent flavor — anywhere the road takes you."
       ctaLabel="Learn How to Choose Your Vape"
-      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/Vapes-CampingT.png"
-      illustrationAlt="Highway 420 — vapes camping scene"
+      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/Vapes-CreekSide420Series.png"
+      illustrationAlt="Highway 420 — CreekSide 420 Series vapes"
       pills={VAPES_PILLS}
       activePillId={activeCategory}
       onPillChange={setActiveCategory}
+      heroBgClassName="bg-[#F8F5EE]"
+      haloColorRGB="248,245,238"
       expandedContent={
         <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-xl">
           <h4 className="text-xl font-semibold text-black mb-4">💨 Why Vapes Win for On-the-Go</h4>

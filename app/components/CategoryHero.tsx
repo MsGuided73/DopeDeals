@@ -32,6 +32,12 @@ type CategoryHeroProps = {
   pills: ReadonlyArray<CategoryHeroPill>;
   activePillId: string;
   onPillChange: (id: string) => void;
+
+  /** Optional Tailwind class for the hero wrapper background. Defaults to "bg-[#ffffff]". */
+  heroBgClassName?: string;
+
+  /** Optional RGB string for the halo gradient. Defaults to "255,255,255". */
+  haloColorRGB?: string;
 };
 
 const PILL_BASE =
@@ -57,12 +63,14 @@ export default function CategoryHero({
   pills,
   activePillId,
   onPillChange,
+  heroBgClassName = 'bg-[#ffffff]',
+  haloColorRGB = '255,255,255',
 }: CategoryHeroProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <>
-    <div className="bg-[#ffffff] w-full relative overflow-hidden">
+    <div className={`${heroBgClassName} w-full relative overflow-hidden`}>
       {/* Hero photo — full viewport width, anchored right at natural aspect ratio.
           Skipped entirely when no illustrationSrc is provided. */}
       {illustrationSrc ? (
@@ -72,7 +80,7 @@ export default function CategoryHero({
             alt={illustrationAlt ?? ''}
             fill
             sizes="(min-width: 768px) 100vw, 0px"
-            className="object-contain object-right brightness-[1.35]"
+            className="object-contain object-right"
             priority
           />
         </div>
@@ -90,7 +98,7 @@ export default function CategoryHero({
               className="absolute pointer-events-none -inset-x-40 -inset-y-24 z-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 95% 85% at center, rgba(255,255,255,0.98) 45%, rgba(255,255,255,0.88) 62%, rgba(255,255,255,0.5) 80%, transparent 100%)',
+                  `radial-gradient(ellipse 95% 85% at center, rgba(${haloColorRGB},0.98) 45%, rgba(${haloColorRGB},0.88) 62%, rgba(${haloColorRGB},0.5) 80%, transparent 100%)`,
                 filter: 'blur(44px)',
               }}
             />
@@ -158,7 +166,7 @@ export default function CategoryHero({
         the hero's overflow-hidden wrapper). */}
     {expandedContent && ctaLabel ? (
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out bg-[#ffffff] ${
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${heroBgClassName} ${
           isExpanded ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'
         }`}
         aria-hidden={!isExpanded}
