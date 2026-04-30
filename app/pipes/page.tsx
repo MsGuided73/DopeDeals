@@ -3,8 +3,8 @@ import PipesPageContent from './PipesPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export const metadata = {
-  title: 'Glass Pipes & Hand Pipes | Highway 420 - Premium Smoking Pipes Collection',
-  description: 'Shop premium glass pipes, hand pipes, spoon pipes, and chillums at Highway 420. Borosilicate glass, unique designs, and affordable prices. Free shipping on orders over $50.',
+  title: 'Glass Pipes & Hand Pipes | HIGHWAY 420 - Premium Smoking Pipes Collection',
+  description: 'Shop premium glass pipes, hand pipes, spoon pipes, and chillums at HIGHWAY 420. Borosilicate glass, unique designs, and free shipping on orders over $50.',
   keywords: 'glass pipes, hand pipes, spoon pipes, chillums, one hitters, sherlock pipes, glass smoking pipes, borosilicate glass pipes, premium pipes',
   openGraph: {
     title: 'Premium Glass Pipes & Hand Pipes | Highway 420',
@@ -98,7 +98,7 @@ export default function PipesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-[#F7F6F2]">
       {/* Universal Layout Components */}
       <GlobalMasthead />
 

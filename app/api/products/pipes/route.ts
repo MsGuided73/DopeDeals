@@ -25,7 +25,9 @@ export async function GET(req: NextRequest) {
       .select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured,
-        brand_name, category_id, category_slug, created_at, updated_at
+        brand_name, category_id, category_slug, subcategory_slug,
+        materials, specs, attributes, tags,
+        created_at, updated_at
       `)
       .eq('is_active', true) // Only active products
       // Hide variant children of enabled groups — only the master row should
@@ -99,6 +101,11 @@ export async function GET(req: NextRequest) {
         brand_name: product.brand_name,
         category_id: product.category_id,
         category_slug: product.category_slug,
+        subcategory_slug: product.subcategory_slug,
+        materials: product.materials,
+        specs: product.specs,
+        attributes: product.attributes,
+        tags: product.tags,
         created_at: product.created_at,
         updated_at: product.updated_at
       };

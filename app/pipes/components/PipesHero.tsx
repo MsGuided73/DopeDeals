@@ -11,17 +11,13 @@ const PIPES_PILLS: ReadonlyArray<CategoryHeroPill> = [
   { id: 'all-pipes', label: 'All Pipes' },
   { id: 'spoon-pipes', label: 'Spoon' },
   { id: 'sherlock-pipes', label: 'Sherlock' },
+  { id: 'hammer-pipes', label: 'Hammer' },
   { id: 'chillums', label: 'Chillums' },
-  { id: 'one-hitters', label: 'One-Hitters' },
 ];
 
 // Hand pipes / glass pipes hero. Uses the shared CategoryHero template so
 // it inherits the same illustration anchoring, halo behind text, and
 // brand-green pill styling validated on the bongs page.
-//
-// TODO: swap illustrationSrc for a hand-pipes-specific illustration when
-// the asset is ready. Using the bongs creekside scene as a placeholder so
-// the visual rhythm is consistent during the rollout.
 export default function PipesHero({ activeCategory, setActiveCategory }: PipesHeroProps) {
   return (
     <CategoryHero
@@ -33,8 +29,8 @@ export default function PipesHero({ activeCategory, setActiveCategory }: PipesHe
       subhead="Pocket Power. Pure Glass."
       paragraph="Hand-blown pipes crafted for everyday sessions. Smooth draws, premium materials, and styles for every preference."
       ctaLabel="Learn How to Choose Your Pipe"
-      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad2-5T.png"
-      illustrationAlt="Highway 420 — creekside road scene"
+      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/Pipes_Page-Coastal_Road.png"
+      illustrationAlt="Highway 420 — coastal road scene"
       pills={PIPES_PILLS}
       activePillId={activeCategory}
       onPillChange={setActiveCategory}
