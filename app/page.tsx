@@ -50,6 +50,9 @@ export default function HomePage() {
           <CollectionsGrid />
         </section>
 
+        {/* ── NEW SECTION SLOT ── (replaces the old Popular Setups placeholder)
+            Drop the new homepage feature section here, above Hot Products. */}
+
         {/* ── Hot Products ── */}
         <Suspense fallback={<SectionFallback />}>
           <FeaturedProductsSection />
