@@ -18,22 +18,12 @@ export default function BongsHero({ activeCategory, setActiveCategory }: BongsHe
           behind the text doesn't compete with it. */}
       <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
         <Image
-          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad2T.png"
+          src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad3T.png"
           alt="Highway 420 — creekside road scene"
           fill
           sizes="(min-width: 768px) 100vw, 0px"
           className="object-contain object-right"
           priority
-        />
-        {/* Soft left-side fade — dissolves the illustration's left edge into
-            the white background so there's no hard contour where the trees /
-            mountains start. Keeps the right side fully visible. */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to right, #ffffff 0%, #ffffff 22%, rgba(255,255,255,0.92) 38%, rgba(255,255,255,0.55) 55%, rgba(255,255,255,0.18) 72%, transparent 88%)',
-          }}
         />
       </div>
 
