@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { SlidersHorizontal } from 'lucide-react';
 import PipesFilters from './components/PipesFilters';
 import PipesProductGrid from './components/PipesProductGrid';
 import PipesBreadcrumb from './components/PipesBreadcrumb';
@@ -12,6 +13,7 @@ import PipesSortBar from './components/PipesSortBar';
 import PipesViewToggle from './components/PipesViewToggle';
 import PipesInfoSection from './components/PipesInfoSection';
 import ActiveFilters from './components/ActiveFilters';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface PipeProduct {
   id: string;
@@ -58,6 +60,7 @@ export default function PipesPageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
   const [activeCategory, setActiveCategory] = useState('all-pipes');
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Get search query from URL parameters
   const searchQuery = searchParams.get('q') || '';
@@ -308,9 +311,9 @@ export default function PipesPageContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:w-64 flex-shrink-0">
-            <PipesFilters 
+          {/* Filters Sidebar — desktop only; mobile uses the drawer below */}
+          <div className="hidden lg:block lg:w-64 flex-shrink-0">
+            <PipesFilters
               filters={filters}
               setFilters={setFilters}
               products={products}
@@ -319,9 +322,17 @@ export default function PipesPageContent() {
 
           {/* Main Content */}
           <div className="flex-1">
-            {/* Sort and View Controls */}
+            {/* Sort and View Controls — Filters button visible only on mobile */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="lg:hidden inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filters
+                </button>
                 <PipesSortBar sortBy={sortBy} setSortBy={setSortBy} />
                 <PipesViewToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
@@ -329,6 +340,18 @@ export default function PipesPageContent() {
                 Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
               </div>
             </div>
+
+            {/* Mobile filter drawer — same PipesFilters component, just inside a slide-in panel */}
+            <MobileFilterDrawer
+              open={mobileFiltersOpen}
+              onClose={() => setMobileFiltersOpen(false)}
+            >
+              <PipesFilters
+                filters={filters}
+                setFilters={setFilters}
+                products={products}
+              />
+            </MobileFilterDrawer>
 
             {/* Products Grid */}
             <PipesProductGrid products={currentProducts} viewMode={viewMode} />

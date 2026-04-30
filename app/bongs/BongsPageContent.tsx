@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { SlidersHorizontal } from 'lucide-react';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import LoadingState, { useLoadingState } from '../../components/LoadingState';
 import BongsFilters from './components/BongsFilters';
@@ -12,6 +13,7 @@ import BongsBreadcrumb from './components/BongsBreadcrumb';
 import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
 import BongsViewToggle from './components/BongsViewToggle';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface BongProduct {
   id: string;
@@ -56,6 +58,7 @@ export default function BongsPageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
   const [activeCategory, setActiveCategory] = useState('all-bongs');
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -272,8 +275,8 @@ export default function BongsPageContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters */}
-          <div className="lg:w-1/4">
+          {/* Sidebar Filters — desktop only; mobile uses the drawer below */}
+          <div className="hidden lg:block lg:w-1/4">
             <BongsFilters
               filters={filters}
               setFilters={setFilters}
@@ -283,9 +286,17 @@ export default function BongsPageContent() {
 
           {/* Main Content */}
           <div className="lg:w-3/4">
-            {/* Sort Bar and View Toggle */}
+            {/* Sort Bar — Filters button visible only on mobile */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="lg:hidden inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filters
+                </button>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
                 </p>
@@ -296,6 +307,18 @@ export default function BongsPageContent() {
                 <BongsViewToggle viewMode={viewMode} setViewMode={setViewMode} />
               </div>
             </div>
+
+            {/* Mobile filter drawer — same BongsFilters component, just inside a slide-in panel */}
+            <MobileFilterDrawer
+              open={mobileFiltersOpen}
+              onClose={() => setMobileFiltersOpen(false)}
+            >
+              <BongsFilters
+                filters={filters}
+                setFilters={setFilters}
+                products={products}
+              />
+            </MobileFilterDrawer>
 
             {/* Product Grid */}
             <PipesProductGrid
