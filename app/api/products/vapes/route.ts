@@ -44,6 +44,11 @@ export async function GET(req: NextRequest) {
         brand_name,
         category_id,
         category_slug,
+        subcategory_slug,
+        materials,
+        specs,
+        attributes,
+        tags,
         created_at,
         updated_at
       `
@@ -116,6 +121,11 @@ export async function GET(req: NextRequest) {
         brand: product.brand_name,
         category_id: product.category_id,
         category_slug: product.category_slug,
+        subcategory_slug: product.subcategory_slug,
+        materials: product.materials,
+        specs: product.specs,
+        attributes: product.attributes,
+        tags: product.tags,
         created_at: product.created_at,
         updated_at: product.updated_at,
         inStock: (product.stock_quantity || 0) > 0,

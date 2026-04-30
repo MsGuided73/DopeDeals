@@ -60,6 +60,7 @@ export default function CategoryHero({
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
+    <>
     <div className="bg-[#ffffff] w-full relative overflow-hidden">
       {/* Hero photo — full viewport width, anchored right at natural aspect ratio. */}
       <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
@@ -68,7 +69,7 @@ export default function CategoryHero({
           alt={illustrationAlt}
           fill
           sizes="(min-width: 768px) 100vw, 0px"
-          className="object-contain object-right"
+          className="object-contain object-right brightness-[1.35]"
           priority
         />
       </div>
@@ -103,28 +104,25 @@ export default function CategoryHero({
               </p>
 
               {expandedContent && ctaLabel ? (
-                <>
-                  <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="inline-flex items-center px-5 py-3 border-2 border-[#2d8f47] text-[#2d8f47] bg-white rounded font-semibold hover:bg-green-50 transition-colors shadow-sm"
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="inline-flex items-center px-5 py-3 border-2 border-[#2d8f47] text-[#2d8f47] bg-white rounded font-semibold hover:bg-green-50 transition-colors shadow-sm"
+                  aria-expanded={isExpanded}
+                >
+                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  {ctaLabel}
+                  <svg
+                    className={`w-5 h-5 ml-2 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    {ctaLabel}
-                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </button>
-
-                  <div
-                    className={`overflow-hidden transition-all duration-500 ease-in-out absolute top-full left-0 w-full z-20 ${
-                      isExpanded ? 'max-h-[800px] opacity-100 mt-4' : 'max-h-0 opacity-0'
-                    }`}
-                  >
-                    {expandedContent}
-                  </div>
-                </>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </button>
               ) : null}
             </div>
           </div>
@@ -150,5 +148,22 @@ export default function CategoryHero({
         </div>
       </div>
     </div>
+
+    {/* Expanded explainer panel — renders as a sibling of the hero so it pushes
+        page content down (instead of being absolutely positioned + clipped by
+        the hero's overflow-hidden wrapper). */}
+    {expandedContent && ctaLabel ? (
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out bg-[#ffffff] ${
+          isExpanded ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+        aria-hidden={!isExpanded}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {expandedContent}
+        </div>
+      </div>
+    ) : null}
+    </>
   );
 }

@@ -1,7 +1,5 @@
 'use client';
 
-import { Grid, List } from 'lucide-react';
-
 interface ThcaPnvViewToggleProps {
   viewMode: 'grid' | 'list';
   setViewMode: (mode: 'grid' | 'list') => void;
@@ -9,28 +7,32 @@ interface ThcaPnvViewToggleProps {
 
 export default function ThcaPnvViewToggle({ viewMode, setViewMode }: ThcaPnvViewToggleProps) {
   return (
-    <div className="flex items-center bg-gray-100 rounded-lg p-1">
+    <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
       <button
         onClick={() => setViewMode('grid')}
-        className={`flex items-center justify-center w-8 h-8 rounded-md transition-colors ${
+        className={`p-2 ${
           viewMode === 'grid'
-            ? 'bg-white text-gray-900 shadow-sm'
-            : 'text-gray-600 hover:text-gray-900'
-        }`}
-        title="Grid view"
+            ? 'bg-dope-orange-500 text-white'
+            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+        } transition-colors`}
+        title="Grid View"
       >
-        <Grid className="w-4 h-4" />
+        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+        </svg>
       </button>
       <button
         onClick={() => setViewMode('list')}
-        className={`flex items-center justify-center w-8 h-8 rounded-md transition-colors ${
+        className={`p-2 ${
           viewMode === 'list'
-            ? 'bg-white text-gray-900 shadow-sm'
-            : 'text-gray-600 hover:text-gray-900'
-        }`}
-        title="List view"
+            ? 'bg-dope-orange-500 text-white'
+            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+        } transition-colors`}
+        title="List View"
       >
-        <List className="w-4 h-4" />
+        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+        </svg>
       </button>
     </div>
   );
