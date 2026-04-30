@@ -20,7 +20,6 @@ const AboutHighway420         = nextDynamic(() => import("./components/AboutHigh
 const SpotlightReviews        = nextDynamic(() => import("./components/SpotlightReviews"));
 const DopeDealsSection        = nextDynamic(() => import("./components/DopeDealsSection"));
 const RideWithUsBanner        = nextDynamic(() => import("./components/RideWithUsBanner"));
-const RoadTripsSection        = nextDynamic(() => import("./components/RoadTripsSection"));
 const HomeBlogArticles        = nextDynamic(() => import("./components/HomeBlogArticles"));
 const HomeTopicLinksBar       = nextDynamic(() => import("./components/HomeTopicLinksBar"));
 
@@ -66,11 +65,6 @@ export default function HomePage() {
         {/* ── Dope Deals ── */}
         <Suspense fallback={<SectionFallback />}>
           <DopeDealsSection />
-        </Suspense>
-
-        {/* ── Road Trips ── */}
-        <Suspense fallback={<SectionFallback />}>
-          <RoadTripsSection />
         </Suspense>
 
         {/* ── Trusted Brands ── */}
