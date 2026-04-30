@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { SlidersHorizontal } from 'lucide-react';
 import PipesFilters from './components/PipesFilters';
-import PipesProductGrid from './components/PipesProductGrid';
+import ProductGrid from '../components/ProductGrid';
 import PipesBreadcrumb from './components/PipesBreadcrumb';
 import PipesHero from './components/PipesHero';
 import PipesSortBar from './components/PipesSortBar';
@@ -354,7 +354,7 @@ export default function PipesPageContent() {
             </MobileFilterDrawer>
 
             {/* Products Grid */}
-            <PipesProductGrid products={currentProducts} viewMode={viewMode} />
+            <ProductGrid products={currentProducts} viewMode={viewMode} />
 
             {/* Pagination */}
             {totalPages > 1 && (

@@ -3,21 +3,48 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import PipesProductCard from './PipesProductCard';
-import UniversalProductCard from '../../components/UniversalProductCard';
-import SmartBgImage from '../../components/SmartBgImage';
-import { addToCart } from '../../lib/cart-utils';
-import type { PipeProduct } from '../PipesPageContent';
+import UniversalProductCard from './UniversalProductCard';
+import SmartBgImage from './SmartBgImage';
+import { addToCart } from '../lib/cart-utils';
 
-interface PipesProductGridProps {
-  products: PipeProduct[];
+// Minimal shape the grid needs from each product. Category-specific page
+// types (PipeProduct, BongProduct, BubblerProduct, etc.) all satisfy this
+// structurally — TypeScript will accept any object that has these fields,
+// so consumers don't need to remap their data shape.
+export interface ProductGridItem {
+  id: string;
+  name: string;
+  price: number | string;
+  compare_at_price?: number;
+  vip_price?: number;
+  image_url?: string;
+  brand?: string;
+  description?: string;
+  short_description?: string;
+  style?: string;
+  material?: string;
+  size?: string;
+  stock_quantity?: number;
+  inStock?: boolean;
+  isNew?: boolean;
+  isSale?: boolean;
+  featured?: boolean;
+}
+
+interface ProductGridProps {
+  products: ProductGridItem[];
   viewMode: 'grid' | 'list' | 'sidebar';
 }
 
-export default function PipesProductGrid({ products, viewMode }: PipesProductGridProps) {
+// Shared product grid used by every category listing page (bongs, pipes,
+// dab-rigs, vapes, bubblers, etc.). Three view modes:
+//   - grid    : 3-up frameless cards, image fills the tile, smart bg color
+//   - list    : horizontal layout with product details + actions
+//   - sidebar : 2-column UniversalProductCard layout
+export default function ProductGrid({ products, viewMode }: ProductGridProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
-  const formatPrice = (price: any) => {
+  const formatPrice = (price: number | string | undefined | null) => {
     if (price === undefined || price === null) return '0.00';
     const num = typeof price === 'string' ? parseFloat(price) : Number(price);
     return Number.isFinite(num) ? num.toFixed(2) : '0.00';
@@ -41,7 +68,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8l-4 4m0 0l-4-4m4 4V3" />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No pipes found</h3>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No products found</h3>
         <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters to see more products.</p>
       </div>
     );
@@ -50,7 +77,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
   if (viewMode === 'list') {
     return (
       <div className="space-y-4">
-        {products.map(product => (
+        {products.map((product) => (
           <div key={product.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
             <div className="flex">
               {/* Product Image */}
@@ -65,7 +92,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-400">
                     <div className="text-center">
-                      <div className="text-3xl mb-2">🚬</div>
+                      <div className="text-3xl mb-2">📦</div>
                       <div className="text-sm">No Image</div>
                     </div>
                   </div>
@@ -99,7 +126,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                   >
                     {favorites.has(product.id) ? (
                       <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                       </svg>
                     ) : (
                       <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +155,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                 </div>
 
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                  {product.short_description || product.description || 'Premium quality glass pipe with excellent craftsmanship.'}
+                  {product.short_description || product.description || 'Premium quality product with excellent craftsmanship.'}
                 </p>
 
                 <div className="flex items-center justify-between">
@@ -136,7 +163,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                     <span className="text-2xl font-bold text-gray-900 dark:text-white">
                       ${formatPrice(product.price)}
                     </span>
-                    {product.compare_at_price && product.compare_at_price > product.price && (
+                    {product.compare_at_price && product.compare_at_price > Number(product.price) && (
                       <span className="text-lg text-gray-500 line-through">
                         ${formatPrice(product.compare_at_price)}
                       </span>
@@ -147,7 +174,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
                       </span>
                     )}
                   </div>
-                  
+
                   <Link
                     href={`/product/${product.id}`}
                     className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg font-medium transition-colors dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
@@ -191,7 +218,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
     );
   }
 
-  // Sidebar view - Image on left, content on right (your requested layout)
+  // Sidebar view — image on left, content on right
   if (viewMode === 'sidebar') {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -205,7 +232,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
               image_url: product.image_url,
               brand_name: product.brand,
               short_description: product.description,
-              stock_quantity: product.inStock ? 10 : 0, // Mock stock data
+              stock_quantity: product.inStock ? 10 : 0,
               featured: product.featured,
             }}
             viewMode="sidebar"
@@ -225,7 +252,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
     );
   }
 
-  // Grid view — frameless cards, image fills the entire tile, 3-up on desktop.
+  // Grid view — frameless cards, smart-bg image fills the tile, 3-up on desktop.
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
       {products.map((product) => (
@@ -263,7 +290,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
               )}
             </div>
 
-            {/* Favorite Button - Floating Heart */}
+            {/* Favorite — floating heart */}
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -281,7 +308,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
             </button>
           </Link>
 
-          {/* Product Info — flex column so buttons can pin to bottom regardless of title length */}
+          {/* Product info — flex column so buttons pin to bottom regardless of title length */}
           <div className="pt-4 pb-2 flex flex-col flex-1">
             {product.brand && (
               <p className="text-[10px] font-bold text-[#2d8f47] tracking-[0.15em] uppercase mb-1">
@@ -294,9 +321,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
               </Link>
             </h3>
 
-            {/* Reviews placeholder — no aggregated data on the grid yet, so we
-                show an empty state nudging shoppers to be first to review. The
-                full PDP fetches the real aggregate via ProductRatingBadge. */}
+            {/* Reviews placeholder — empty state nudging shoppers to be first to review */}
             <Link
               href={`/product/${product.id}#reviews`}
               className="flex items-center gap-1 mb-2 group/reviews"
@@ -316,7 +341,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-baseline gap-2">
                 <span className="text-lg font-semibold text-[#1a1a1a]">${formatPrice(product.price)}</span>
-                {product.compare_at_price && product.compare_at_price > product.price && (
+                {product.compare_at_price && product.compare_at_price > Number(product.price) && (
                   <span className="text-sm text-gray-500 line-through">${formatPrice(product.compare_at_price)}</span>
                 )}
               </div>
@@ -331,7 +356,7 @@ export default function PipesProductGrid({ products, viewMode }: PipesProductGri
               })()}
             </div>
 
-            {/* Action Buttons — filled Add to Cart on left, ghost View Details on right.
+            {/* Action buttons — filled Add to Cart on left, ghost View Details on right.
                 mt-auto pins this row to the bottom so cards in the same row line up. */}
             <div className="flex gap-2 mt-auto pt-3">
               {(() => {

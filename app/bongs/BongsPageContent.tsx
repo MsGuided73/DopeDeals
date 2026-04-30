@@ -8,7 +8,7 @@ import { SlidersHorizontal } from 'lucide-react';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import LoadingState, { useLoadingState } from '../../components/LoadingState';
 import BongsFilters from './components/BongsFilters';
-import PipesProductGrid from '../pipes/components/PipesProductGrid';
+import ProductGrid from '../components/ProductGrid';
 import BongsBreadcrumb from './components/BongsBreadcrumb';
 import BongsHero from './components/BongsHero';
 import BongsSortBar from './components/BongsSortBar';
@@ -321,7 +321,7 @@ export default function BongsPageContent() {
             </MobileFilterDrawer>
 
             {/* Product Grid */}
-            <PipesProductGrid
+            <ProductGrid
               products={currentProducts.map(product => ({
                 id: product.id,
                 name: product.name,
