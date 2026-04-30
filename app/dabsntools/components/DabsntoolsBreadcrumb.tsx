@@ -1,71 +1,42 @@
-'use client';
-
 import Link from 'next/link';
 
 export default function DabsntoolsBreadcrumb() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <nav className="flex" aria-label="Breadcrumb">
-        <ol className="inline-flex items-center space-x-1 md:space-x-3">
-          <li className="inline-flex items-center">
+    <nav className="bg-white dark:bg-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <ol className="flex items-center space-x-2 text-sm">
+          <li>
             <Link
               href="/"
-              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-dope-orange-600 dark:text-gray-400 dark:hover:text-white"
+              className="text-gray-500 hover:text-dope-orange-500 transition-colors flex items-center"
             >
-              <svg
-                className="mr-2 w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2A1 1 0 0 0 2 10h1v8a2 2 0 0 0 2 2h4a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h4a2 2 0 0 0 2-2v-8h1a1 1 0 0 0 .707-1.707Z" />
+              <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
               Home
             </Link>
           </li>
+          <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
           <li>
-            <div className="flex items-center">
-              <svg
-                className="w-5 h-5 text-gray-400 mx-1"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <Link
-                href="/products"
-                className="ml-1 text-sm font-medium text-gray-700 hover:text-dope-orange-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-              >
-                Products
-              </Link>
-            </div>
+            <Link
+              href="/products"
+              className="text-gray-500 hover:text-dope-orange-500 transition-colors"
+            >
+              Products
+            </Link>
           </li>
-          <li aria-current="page">
-            <div className="flex items-center">
-              <svg
-                className="w-5 h-5 text-gray-400 mx-1"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="ml-1 text-sm font-medium text-dope-orange-600 md:ml-2 dark:text-dope-orange-400">
-                Dab Rigs & Tools
-              </span>
-            </div>
+          <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+          <li>
+            <span className="text-gray-900 dark:text-white font-medium">
+              Dab Rigs &amp; Tools
+            </span>
           </li>
         </ol>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 }

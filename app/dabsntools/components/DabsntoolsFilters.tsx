@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { DabsntoolsProduct } from '../DabsntoolsPageContent';
 
 interface DabsntoolsFiltersProps {
@@ -9,7 +8,7 @@ interface DabsntoolsFiltersProps {
     priceRange: [number, number];
     brands: string[];
     materials: string[];
-    equipmentTypes: string[]; // Glass Rigs, E-Rigs, Portable, Tools, Accessories
+    equipmentTypes: string[]; // Glass Rigs / E-Rigs / Portable / Tools
     sizes: string[];
     categories: string[];
     inStock: boolean;
@@ -21,41 +20,58 @@ interface DabsntoolsFiltersProps {
 }
 
 export default function DabsntoolsFilters({ filters, setFilters, products }: DabsntoolsFiltersProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    price: false,
+    brand: false,
+    type: false,
+    size: false,
+    availability: false,
+  });
+
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   // Extract unique values from products
-  const brands = Array.from(new Set(products.map(p => p.brand).filter(Boolean) as string[])).sort();
-  const availableTypes = Array.from(new Set(products.map(p => p.type).filter(Boolean) as string[])).sort();
-  const sizes = Array.from(new Set(products.map(p => p.size).filter(Boolean) as string[])).sort();
+  const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
+  const uniqueTypes = [...new Set(products.map(p => p.type).filter(Boolean) as string[])].sort();
+  const uniqueSizes = [...new Set(products.map(p => p.size).filter(Boolean) as string[])].sort();
 
-  const handlePriceRangeChange = (min: number, max: number) => {
-    setFilters({ ...filters, priceRange: [min, max] as [number, number] });
+  // Actual catalog price bounds — used as the default min/max in the
+  // price inputs and as the reset target for "Clear All".
+  const catalogPrices = products
+    .map(p => p.our_price ?? p.price ?? 0)
+    .filter(n => Number.isFinite(n) && n > 0);
+  const dataMinPrice = catalogPrices.length > 0 ? Math.floor(Math.min(...catalogPrices)) : 0;
+  const dataMaxPrice = catalogPrices.length > 0 ? Math.ceil(Math.max(...catalogPrices)) : 300;
+
+  // Per-option product counts
+  const brandCount = (b: string) => products.filter(p => p.brand === b).length;
+  const typeCount = (t: string) => products.filter(p => p.type === t).length;
+  const sizeCount = (s: string) => products.filter(p => p.size === s).length;
+
+  const handleCheckboxChange = (filterType: string, value: string, checked: boolean) => {
+    setFilters((prev: any) => ({
+      ...prev,
+      [filterType]: checked
+        ? [...prev[filterType], value]
+        : prev[filterType].filter((item: string) => item !== value)
+    }));
   };
 
-  const handleBrandToggle = (brand: string) => {
-    const newBrands = filters.brands.includes(brand)
-      ? filters.brands.filter(b => b !== brand)
-      : [...filters.brands, brand];
-    setFilters({ ...filters, brands: newBrands });
-  };
-
-  const handleTypeToggle = (type: string) => {
-    const newTypes = filters.equipmentTypes.includes(type)
-      ? filters.equipmentTypes.filter(t => t !== type)
-      : [...filters.equipmentTypes, type];
-    setFilters({ ...filters, equipmentTypes: newTypes });
-  };
-
-  const handleSizeToggle = (size: string) => {
-    const newSizes = filters.sizes.includes(size)
-      ? filters.sizes.filter(s => s !== size)
-      : [...filters.sizes, size];
-    setFilters({ ...filters, sizes: newSizes });
+  const handleToggleChange = (filterType: string, checked: boolean) => {
+    setFilters((prev: any) => ({
+      ...prev,
+      [filterType]: checked
+    }));
   };
 
   const clearAllFilters = () => {
     setFilters({
-      priceRange: [0, 300],
+      priceRange: [dataMinPrice, dataMaxPrice],
       brands: [],
       materials: [],
       equipmentTypes: [],
@@ -67,196 +83,192 @@ export default function DabsntoolsFilters({ filters, setFilters, products }: Dab
     });
   };
 
-  const activeFiltersCount =
-    filters.brands.length +
-    filters.equipmentTypes.length +
-    filters.sizes.length +
-    (filters.inStock ? 1 : 0) +
-    (filters.onSale ? 1 : 0) +
-    (filters.isNew ? 1 : 0) +
-    (filters.priceRange[0] > 0 || filters.priceRange[1] < 300 ? 1 : 0);
+  const FilterSection = ({
+    title,
+    sectionKey,
+    children
+  }: {
+    title: string;
+    sectionKey: keyof typeof expandedSections;
+    children: React.ReactNode;
+  }) => (
+    <div className="border-b border-gray-100 pb-5 mb-5">
+      <button
+        onClick={() => toggleSection(sectionKey)}
+        className="flex items-center justify-between w-full text-left font-bold text-[#1a1a1a] hover:text-[#2d8f47] transition-colors"
+      >
+        {title}
+        {expandedSections[sectionKey] ? (
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+          </svg>
+        ) : (
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        )}
+      </button>
+      {expandedSections[sectionKey] && (
+        <div className="mt-4 space-y-3">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+
+  const CheckboxRow = ({
+    label,
+    checked,
+    onChange,
+    count,
+  }: {
+    label: string;
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+    count?: number;
+  }) => (
+    <label className="flex items-center justify-between cursor-pointer group">
+      <div className="flex items-center min-w-0">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          className="w-4 h-4 rounded border-gray-300 text-[#1c352d] focus:ring-[#1c352d] flex-shrink-0"
+        />
+        <span className="ml-3 text-sm text-gray-700 group-hover:text-[#1a1a1a] truncate">{label}</span>
+      </div>
+      {count !== undefined && (
+        <span className="text-xs text-gray-400 ml-2 flex-shrink-0">{count}</span>
+      )}
+    </label>
+  );
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
-        {activeFiltersCount > 0 && (
-          <button
-            onClick={clearAllFilters}
-            className="text-sm text-dope-orange-600 hover:text-dope-orange-700 font-medium"
-          >
-            Clear All ({activeFiltersCount})
-          </button>
-        )}
+    <div className="bg-white rounded-md shadow-sm border border-gray-100 p-6 sticky top-4">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-lg font-black tracking-widest text-[#1a1a1a] uppercase">Filters</h3>
+        <button
+          onClick={clearAllFilters}
+          className="text-sm text-gray-500 hover:text-[#1a1a1a] font-medium transition-colors"
+        >
+          Clear All
+        </button>
       </div>
 
-      {/* Price Range */}
-      <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">Price Range</h4>
+      {/* Price Range — defaults to the actual lowest/highest price in the catalog. */}
+      <FilterSection title="Price Range" sectionKey="price">
         <div className="flex items-center gap-2">
           <input
             type="number"
-            placeholder="Min"
-            value={filters.priceRange[0] === 0 ? '' : filters.priceRange[0]}
-            onChange={(e) => handlePriceRangeChange(Number(e.target.value) || 0, filters.priceRange[1])}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-dope-orange-500 focus:outline-none"
+            min={0}
+            placeholder={`${dataMinPrice}`}
+            value={filters.priceRange[0]}
+            onChange={(e) => {
+              const raw = e.target.value;
+              const v = raw === '' ? dataMinPrice : parseInt(raw, 10);
+              setFilters((prev: any) => ({
+                ...prev,
+                priceRange: [Number.isNaN(v) ? dataMinPrice : v, prev.priceRange[1]],
+              }));
+            }}
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md text-[#1a1a1a] placeholder:text-gray-400 focus:outline-none focus:border-[#2d8f47] focus:ring-1 focus:ring-[#2d8f47]"
           />
-          <span className="text-gray-500">-</span>
+          <span className="text-gray-400" aria-hidden="true">–</span>
           <input
             type="number"
-            placeholder="Max"
-            value={filters.priceRange[1] === 300 ? '' : filters.priceRange[1]}
-            onChange={(e) => handlePriceRangeChange(filters.priceRange[0], Number(e.target.value) || 300)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-dope-orange-500 focus:outline-none"
+            min={0}
+            placeholder={`${dataMaxPrice}`}
+            value={filters.priceRange[1]}
+            onChange={(e) => {
+              const raw = e.target.value;
+              const v = raw === '' ? dataMaxPrice : parseInt(raw, 10);
+              setFilters((prev: any) => ({
+                ...prev,
+                priceRange: [prev.priceRange[0], Number.isNaN(v) ? dataMaxPrice : v],
+              }));
+            }}
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md text-[#1a1a1a] placeholder:text-gray-400 focus:outline-none focus:border-[#2d8f47] focus:ring-1 focus:ring-[#2d8f47]"
           />
         </div>
-      </div>
+      </FilterSection>
 
-      {/* Equipment Type */}
-      <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">Equipment Type</h4>
-        <div className="space-y-2">
-          {availableTypes.map((type) => (
-            <label key={type} className="flex items-center">
-              <input
-                type="checkbox"
+      {/* Availability */}
+      <FilterSection title="Availability" sectionKey="availability">
+        <div className="space-y-3">
+          <CheckboxRow
+            label="In Stock Only"
+            checked={filters.inStock}
+            onChange={(c) => handleToggleChange('inStock', c)}
+          />
+          <CheckboxRow
+            label="On Sale"
+            checked={filters.onSale}
+            onChange={(c) => handleToggleChange('onSale', c)}
+          />
+          <CheckboxRow
+            label="New Arrivals"
+            checked={filters.isNew}
+            onChange={(c) => handleToggleChange('isNew', c)}
+          />
+        </div>
+      </FilterSection>
+
+      {/* Equipment Type — Glass Rigs / E-Rigs / Portable / Tools */}
+      <FilterSection title="Type" sectionKey="type">
+        <div className="space-y-3">
+          {uniqueTypes.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No type data yet</p>
+          ) : (
+            uniqueTypes.map(type => (
+              <CheckboxRow
+                key={type}
+                label={type}
                 checked={filters.equipmentTypes.includes(type)}
-                onChange={() => handleTypeToggle(type)}
-                className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
+                onChange={(c) => handleCheckboxChange('equipmentTypes', type, c)}
+                count={typeCount(type)}
               />
-              <span className="text-sm text-gray-700">{type}</span>
-            </label>
-          ))}
-
-          {/* Add default equipment types if none are available yet */}
-          {availableTypes.length === 0 && (
-            <>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={filters.equipmentTypes.includes('Glass Rigs')}
-                  onChange={() => handleTypeToggle('Glass Rigs')}
-                  className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-                />
-                <span className="text-sm text-gray-700">Glass Rigs</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={filters.equipmentTypes.includes('E-Rigs')}
-                  onChange={() => handleTypeToggle('E-Rigs')}
-                  className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-                />
-                <span className="text-sm text-gray-700">E-Rigs</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={filters.equipmentTypes.includes('Portable')}
-                  onChange={() => handleTypeToggle('Portable')}
-                  className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-                />
-                <span className="text-sm text-gray-700">Portable</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={filters.equipmentTypes.includes('Tools')}
-                  onChange={() => handleTypeToggle('Tools')}
-                  className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-                />
-                <span className="text-sm text-gray-700">Tools</span>
-              </label>
-            </>
+            ))
           )}
         </div>
-      </div>
-
-      {/* Brands */}
-      {brands.length > 0 && (
-        <div className="mb-6">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 mb-3"
-          >
-            Brands
-            {isExpanded ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </button>
-
-          <div className={`space-y-2 overflow-hidden transition-all duration-300 ${
-            isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}>
-            {brands.map((brand) => (
-              <label key={brand} className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={filters.brands.includes(brand)}
-                  onChange={() => handleBrandToggle(brand)}
-                  className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-                />
-                <span className="text-sm text-gray-700">{brand}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
+      </FilterSection>
 
       {/* Size */}
-      <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">Size</h4>
-        <div className="space-y-2">
-          {sizes.map((size) => (
-            <label key={size} className="flex items-center">
-              <input
-                type="checkbox"
+      <FilterSection title="Size" sectionKey="size">
+        <div className="space-y-3">
+          {uniqueSizes.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No size data yet</p>
+          ) : (
+            uniqueSizes.map(size => (
+              <CheckboxRow
+                key={size}
+                label={size}
                 checked={filters.sizes.includes(size)}
-                onChange={() => handleSizeToggle(size)}
-                className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
+                onChange={(c) => handleCheckboxChange('sizes', size, c)}
+                count={sizeCount(size)}
               />
-              <span className="text-sm text-gray-700">{size}</span>
-            </label>
-          ))}
+            ))
+          )}
         </div>
-      </div>
+      </FilterSection>
 
-      {/* Quick Filters */}
-      <div className="space-y-3">
-        <h4 className="text-sm font-medium text-gray-900">Quick Filters</h4>
-
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            checked={filters.inStock}
-            onChange={(e) => setFilters({ ...filters, inStock: e.target.checked })}
-            className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-          />
-          <span className="text-sm text-gray-700">In Stock</span>
-        </label>
-
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            checked={filters.onSale}
-            onChange={(e) => setFilters({ ...filters, onSale: e.target.checked })}
-            className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-          />
-          <span className="text-sm text-gray-700">On Sale</span>
-        </label>
-
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            checked={filters.isNew}
-            onChange={(e) => setFilters({ ...filters, isNew: e.target.checked })}
-            className="mr-2 h-4 w-4 text-dope-orange-600 focus:ring-dope-orange-500 border-gray-300 rounded"
-          />
-          <span className="text-sm text-gray-700">New Arrivals</span>
-        </label>
-      </div>
+      {/* Brand */}
+      <FilterSection title="Brand" sectionKey="brand">
+        <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+          {uniqueBrands.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No brand data yet</p>
+          ) : (
+            uniqueBrands.map(brand => (
+              <CheckboxRow
+                key={brand}
+                label={brand}
+                checked={filters.brands.includes(brand)}
+                onChange={(c) => handleCheckboxChange('brands', brand, c)}
+                count={brandCount(brand)}
+              />
+            ))
+          )}
+        </div>
+      </FilterSection>
     </div>
   );
 }

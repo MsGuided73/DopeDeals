@@ -2,17 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import ErrorBoundary from '../../components/ErrorBoundary';
-import LoadingState, { useLoadingState } from '../../components/LoadingState';
+import { SlidersHorizontal } from 'lucide-react';
+import ErrorBoundary from '../components/ErrorBoundary';
+import LoadingState from '../components/LoadingState';
 import DabsntoolsFilters from './components/DabsntoolsFilters';
-import DabsntoolsProductGrid from './components/DabsntoolsProductGrid';
+import ProductGrid from '../components/ProductGrid';
 import DabsntoolsBreadcrumb from './components/DabsntoolsBreadcrumb';
 import DabsntoolsHero from './components/DabsntoolsHero';
 import DabsntoolsSortBar from './components/DabsntoolsSortBar';
 import DabsntoolsViewToggle from './components/DabsntoolsViewToggle';
-import { SlidersHorizontal } from 'lucide-react';
 import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
 export interface DabsntoolsProduct {
@@ -21,8 +19,9 @@ export interface DabsntoolsProduct {
   our_price: number;
   sale_price?: number;
   image_url: string | null;
-  imageUrl?: string; // Add alias for compatibility
-  image?: string; // Add alias for compatibility
+  imageUrl?: string;
+  image?: string;
+  image_urls?: string[];
   description?: string | null;
   short_description?: string | null;
   sku: string | null;
@@ -33,22 +32,34 @@ export interface DabsntoolsProduct {
   category_id: string | null;
   created_at: string;
   updated_at: string;
-  // Add missing properties that components expect
-  price?: number; // For compatibility
+  // Compatibility fields
+  price?: number;
   isNew?: boolean;
   isSale?: boolean;
   originalPrice?: number;
   inStock?: boolean;
-  brand?: string; // For compatibility
-  category?: string; // For compatibility
-  type?: string; // Product type (Rigs, E-Rigs, Tools)
-  size?: string; // Product size specifications
+  brand?: string;
+  category?: string;
+  // Dab-specific fields
+  type?: string; // Glass Rigs / E-Rigs / Portable / Tools
+  size?: string;
+  material?: string;
+  materials?: string[];
   specs?: {
     type?: string;
     size?: string;
     material?: string;
   };
 }
+
+// Map activeCategory pill IDs → equipment type strings used in the filter.
+const CATEGORY_TO_TYPE: Record<string, string | null> = {
+  'all-dabsntools': null,
+  'glass-rigs': 'Glass Rigs',
+  'e-rigs': 'E-Rigs',
+  'portable-rigs': 'Portable',
+  'concentrate-tools': 'Tools',
+};
 
 export default function DabsntoolsPageContent() {
   const searchParams = useSearchParams();
@@ -59,14 +70,17 @@ export default function DabsntoolsPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
+  const [activeCategory, setActiveCategory] = useState('all-dabsntools');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  // Filter states - adapted for dab products
+  const searchQuery = searchParams.get('q') || '';
+
+  // Filter states
   const [filters, setFilters] = useState({
     priceRange: [0, 300] as [number, number],
     brands: [] as string[],
     materials: [] as string[],
-    equipmentTypes: [] as string[], // Glass Rigs, E-Rigs, Portable, Tools
+    equipmentTypes: [] as string[],
     sizes: [] as string[],
     categories: [] as string[],
     inStock: false,
@@ -75,7 +89,6 @@ export default function DabsntoolsPageContent() {
   });
 
   useEffect(() => {
-    // Load real dab rig & tool products from Supabase
     loadDabsntoolsProducts();
   }, []);
 
@@ -83,23 +96,56 @@ export default function DabsntoolsPageContent() {
     // Apply filters and sorting
     let filtered = [...products];
 
-    // Apply filters - using available fields from API
-    if (filters.brands.length > 0) {
-      filtered = filtered.filter((p: DabsntoolsProduct) => p.brand && filters.brands.includes(p.brand));
+    // Hero-pill category filter
+    const pillType = CATEGORY_TO_TYPE[activeCategory];
+    if (pillType) {
+      filtered = filtered.filter((p) => p.type === pillType || p.specs?.type === pillType);
     }
-    if (filters.inStock) {
-      filtered = filtered.filter((p: DabsntoolsProduct) => p.stock_quantity > 0);
-    }
-    if (filters.equipmentTypes.length > 0) {
-      filtered = filtered.filter((p: DabsntoolsProduct) => {
-        // Use the product type field that we set in the API
-        const productType = p.type || p.specs?.type;
-        return productType && filters.equipmentTypes.includes(productType);
+
+    // Apply search query filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((p) => {
+        const searchableText = [
+          p.name,
+          p.description,
+          p.short_description,
+          p.brand,
+          p.category,
+          p.sku,
+          p.type,
+          p.size,
+          p.material,
+        ].filter(Boolean).join(' ').toLowerCase();
+        return searchableText.includes(query);
       });
     }
 
-    // Price range filter - use our_price field
-    filtered = filtered.filter((p: DabsntoolsProduct) => {
+    // Sidebar filters
+    if (filters.brands.length > 0) {
+      filtered = filtered.filter((p) => p.brand && filters.brands.includes(p.brand));
+    }
+    if (filters.equipmentTypes.length > 0) {
+      filtered = filtered.filter((p) => {
+        const productType = p.type || p.specs?.type;
+        return productType !== undefined && productType !== null && filters.equipmentTypes.includes(productType);
+      });
+    }
+    if (filters.sizes.length > 0) {
+      filtered = filtered.filter((p) => p.size !== undefined && p.size !== null && filters.sizes.includes(p.size));
+    }
+    if (filters.inStock) {
+      filtered = filtered.filter((p) => p.stock_quantity > 0);
+    }
+    if (filters.onSale) {
+      filtered = filtered.filter((p) => p.isSale);
+    }
+    if (filters.isNew) {
+      filtered = filtered.filter((p) => p.isNew);
+    }
+
+    // Price range filter
+    filtered = filtered.filter((p) => {
       const price = p.our_price || p.price || 0;
       return price >= filters.priceRange[0] && price <= filters.priceRange[1];
     });
@@ -107,28 +153,27 @@ export default function DabsntoolsPageContent() {
     // Apply sorting
     switch (sortBy) {
       case 'price-low':
-        filtered.sort((a: DabsntoolsProduct, b: DabsntoolsProduct) => {
+        filtered.sort((a, b) => {
           const priceA = a.our_price || a.price || 0;
           const priceB = b.our_price || b.price || 0;
           return priceA - priceB;
         });
         break;
       case 'price-high':
-        filtered.sort((a: DabsntoolsProduct, b: DabsntoolsProduct) => {
+        filtered.sort((a, b) => {
           const priceA = a.our_price || a.price || 0;
           const priceB = b.our_price || b.price || 0;
           return priceB - priceA;
         });
         break;
       case 'name':
-        filtered.sort((a: DabsntoolsProduct, b: DabsntoolsProduct) => a.name.localeCompare(b.name));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       case 'newest':
-        filtered.sort((a: DabsntoolsProduct, b: DabsntoolsProduct) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         break;
       default: // featured
-        // Sort by newest first, then by stock quantity
-        filtered.sort((a: DabsntoolsProduct, b: DabsntoolsProduct) => {
+        filtered.sort((a, b) => {
           const dateA = new Date(a.created_at).getTime();
           const dateB = new Date(b.created_at).getTime();
           if (dateA !== dateB) return dateB - dateA;
@@ -137,14 +182,13 @@ export default function DabsntoolsPageContent() {
     }
 
     setFilteredProducts(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
-  }, [products, filters, sortBy]);
+    setCurrentPage(1);
+  }, [products, filters, sortBy, activeCategory, searchQuery]);
 
   const loadDabsntoolsProducts = async () => {
     try {
       setLoading(true);
 
-      // Use the API endpoint for dab products (we'll create this)
       const response = await fetch('/api/products/dab-rigs-and-tools');
 
       if (!response.ok) {
@@ -157,42 +201,55 @@ export default function DabsntoolsPageContent() {
         throw new Error(data.error);
       }
 
-      console.log(`✅ API returned ${data.totalCount} dab rig & tool products`);
+      console.log(`✅ API returned ${data.totalCount ?? data.products?.length ?? 0} dab rig & tool products`);
 
-      // The API should return properly formatted products with valid images
-      const transformedProducts = data.products.map((product: any) => ({
+      const transformedProducts: DabsntoolsProduct[] = (data.products || []).map((product: any) => ({
         id: product.id,
         name: product.name,
-        our_price: product.price,
-        sale_price: product.compare_at_price,
+        our_price: product.our_price ?? product.price,
+        sale_price: product.sale_price,
         image_url: product.image_url,
-        imageUrl: product.image_url, // Compatibility alias
-        image: product.image_url, // Compatibility alias
+        imageUrl: product.image_url,
+        image: product.image_url,
+        image_urls: product.image_urls,
         description: product.description,
         short_description: product.short_description,
         sku: product.sku,
         stock_quantity: product.stock_quantity || 0,
         is_active: product.is_active,
         featured: product.featured || false,
-        brand_id: product.brand_id,
-        category_id: product.category_id,
+        brand_id: product.brand_id ?? null,
+        category_id: product.category_id ?? null,
         created_at: product.created_at,
         updated_at: product.updated_at,
-        // Add compatibility fields
-        type: product.type || product.specs?.type || 'Glass Rigs',
-        size: product.specs?.size || product.size || 'Standard',
-        material: product.material || 'Glass',
-        price: product.our_price,
+        // Compatibility fields
+        price: product.price ?? product.our_price,
         isNew: product.isNew,
-        isSale: product.isSale,
-        originalPrice: product.compare_at_price,
-        inStock: product.inStock,
-        brand: product.brand,
-        category: 'Dab Rigs & Tools'
+        isSale: product.isSale ?? Boolean(product.sale_price && product.sale_price < product.our_price),
+        originalPrice: product.compare_at_price ?? product.our_price,
+        inStock: product.inStock ?? (product.stock_quantity || 0) > 0,
+        brand: product.brand ?? product.brand_name,
+        category: 'Dab Rigs & Tools',
+        type: product.type ?? product.specs?.type ?? 'Glass Rigs',
+        size: product.specs?.size ?? product.size ?? 'Standard',
+        material: product.material ?? product.specs?.material ?? 'Glass',
+        materials: product.materials || [],
+        specs: product.specs,
       }));
 
       setProducts(transformedProducts);
       setFilteredProducts(transformedProducts);
+
+      // Seed the price-range filter to the actual catalog min/max so the
+      // sidebar inputs show real bounds instead of 0–300.
+      const prices = transformedProducts
+        .map((p) => p.our_price ?? p.price ?? 0)
+        .filter((n: number) => Number.isFinite(n) && n > 0);
+      if (prices.length > 0) {
+        const minP = Math.floor(Math.min(...prices));
+        const maxP = Math.ceil(Math.max(...prices));
+        setFilters((prev) => ({ ...prev, priceRange: [minP, maxP] }));
+      }
     } catch (error) {
       console.error('Error loading dab rig & tool products:', error);
       setProducts([]);
@@ -222,16 +279,19 @@ export default function DabsntoolsPageContent() {
 
   return (
     <ErrorBoundary>
-      <div>
+      <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
       <DabsntoolsBreadcrumb />
 
       {/* Hero Section */}
-      <DabsntoolsHero filters={filters} setFilters={setFilters} />
+      <DabsntoolsHero
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters — desktop only; mobile uses the drawer */}
+          {/* Sidebar Filters — desktop only; mobile uses the drawer below */}
           <div className="hidden lg:block lg:w-1/4">
             <DabsntoolsFilters
               filters={filters}
@@ -242,7 +302,7 @@ export default function DabsntoolsPageContent() {
 
           {/* Main Content */}
           <div className="lg:w-3/4">
-            {/* Sort Bar and View Toggle — Filters button on mobile */}
+            {/* Sort Bar — Filters button visible only on mobile */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div className="flex items-center gap-3">
                 <button
@@ -265,13 +325,58 @@ export default function DabsntoolsPageContent() {
             </div>
 
             {/* Mobile filter drawer */}
-            <MobileFilterDrawer open={mobileFiltersOpen} onClose={() => setMobileFiltersOpen(false)}>
-              <DabsntoolsFilters filters={filters} setFilters={setFilters} products={products} />
+            <MobileFilterDrawer
+              open={mobileFiltersOpen}
+              onClose={() => setMobileFiltersOpen(false)}
+            >
+              <DabsntoolsFilters
+                filters={filters}
+                setFilters={setFilters}
+                products={products}
+              />
             </MobileFilterDrawer>
 
-            {/* Product Grid - adapted from ThcaPnvProductGrid */}
-            <DabsntoolsProductGrid
-              products={currentProducts}
+            {/* Product Grid */}
+            <ProductGrid
+              products={currentProducts.map(product => ({
+                id: product.id,
+                name: product.name,
+                price: product.price || product.our_price,
+                vip_price: undefined,
+                compare_at_price: product.originalPrice || product.sale_price,
+                image_url: product.image_url || undefined,
+                image_urls: product.image_urls && product.image_urls.length > 0
+                  ? product.image_urls
+                  : product.image_url ? [product.image_url] : [],
+                brand_id: product.brand_id || undefined,
+                category_id: product.category_id || undefined,
+                sku: product.sku || undefined,
+                stock_quantity: product.stock_quantity,
+                materials: product.materials && product.materials.length > 0
+                  ? product.materials
+                  : product.material ? [product.material] : [],
+                vip_exclusive: false,
+                featured: product.featured,
+                is_active: product.is_active,
+                description: product.description || undefined,
+                short_description: product.short_description || undefined,
+                specs: {
+                  type: product.type,
+                  size: product.size,
+                  material: product.material,
+                },
+                attributes: {},
+                brand: product.brand,
+                category: product.category,
+                material: product.material,
+                style: product.type,
+                size: product.size,
+                inStock: product.inStock || product.stock_quantity > 0,
+                isNew: product.isNew,
+                isSale: product.isSale,
+                features: [],
+                tags: []
+              }))}
               viewMode={viewMode}
             />
 
@@ -319,4 +424,3 @@ export default function DabsntoolsPageContent() {
     </ErrorBoundary>
   );
 }
-
