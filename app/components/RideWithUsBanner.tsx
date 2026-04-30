@@ -75,7 +75,6 @@ export default function RideWithUsBanner() {
           position: "relative",
         }}
         onClick={() => setIsModalOpen(true)}
-        className="group"
       >
         <Image
           src={BANNER_SRC}
@@ -84,27 +83,9 @@ export default function RideWithUsBanner() {
           height={800}
           sizes="100vw"
           style={{ width: "100%", height: "auto" }}
-          className="block transition-transform duration-700 ease-out group-hover:scale-[1.01]"
+          className="block"
           priority
         />
-        {/* Overlay hover hint */}
-        <div
-          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{ background: "rgba(0,0,0,0.35)", pointerEvents: "none" }}
-        >
-          <span style={{
-            fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-            fontSize: "32px",
-            letterSpacing: "0.06em",
-            color: "#fff",
-            background: "#2d8f47",
-            padding: "14px 32px",
-            borderRadius: "4px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
-          }}>
-            BECOME A VIP
-          </span>
-        </div>
       </div>
 
       {isModalOpen && (
