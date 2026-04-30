@@ -230,7 +230,7 @@ export default function UniversalProductCard({
               src={imageUrl}
               alt={product.name}
               fill
-              className="object-contain p-1"
+              className="object-contain mix-blend-multiply p-1"
               sizes="64px"
               priority={priority === 'high'}
               onError={handleImageError}
@@ -276,7 +276,7 @@ export default function UniversalProductCard({
               src={imageUrl}
               alt={product.name}
               fill
-              className={`object-contain p-3 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+              className={`object-contain mix-blend-multiply p-3 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
               sizes="192px"
               priority={priority === 'high'}
               onError={handleImageError}
@@ -446,7 +446,7 @@ export default function UniversalProductCard({
                 src={imageUrl}
                 alt={product.name}
                 fill
-                className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+                className={`object-contain mix-blend-multiply p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
                 sizes="192px"
                 priority={priority === 'high'}
                 onError={handleImageError}
@@ -611,7 +611,7 @@ export default function UniversalProductCard({
               src={imageUrl}
               alt={product.name}
               fill
-              className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+              className={`object-contain mix-blend-multiply p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
               sizes="256px"
               priority={priority === 'high'}
               onError={handleImageError}
@@ -787,7 +787,7 @@ export default function UniversalProductCard({
             src={imageUrl}
             alt={product.name}
             fill
-            className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+            className={`object-contain mix-blend-multiply p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
             sizes={size === 'small' ? '200px' : size === 'large' ? '400px' : '300px'}
             priority={priority === 'high'}
             onError={handleImageError}

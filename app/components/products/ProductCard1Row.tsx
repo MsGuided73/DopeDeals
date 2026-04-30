@@ -72,7 +72,7 @@ export default function ProductCard1Row({ product }: ProductCard1RowProps) {
                 <img
                   src={product.image_url}
                   alt={product.name}
-                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">

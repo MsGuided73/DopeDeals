@@ -110,7 +110,7 @@ export default function RecentlyViewedProducts() {
                         src={product.image_url}
                         alt={product.name}
                         fill
-                        className="object-contain group-hover:scale-105 transition-transform duration-300"
+                        className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
                         sizes="200px"
                       />
                     ) : (

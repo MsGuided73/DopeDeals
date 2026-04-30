@@ -141,7 +141,7 @@ export default function StickyCartPopup() {
                         <img
                           src={item.product.imageUrl}
                           alt={item.product.name}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain mix-blend-multiply"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-400">

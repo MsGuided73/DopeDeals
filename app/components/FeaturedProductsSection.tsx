@@ -256,6 +256,7 @@ export default function FeaturedProductsSection() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
+                  mixBlendMode: 'multiply',
                   padding: '12px',
                   transition: 'transform 0.3s',
                 }}

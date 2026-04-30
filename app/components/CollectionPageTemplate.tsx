@@ -777,7 +777,7 @@ export default function CollectionPageTemplate({
                           <img
                             src={transformedProduct.image_url}
                             alt={transformedProduct.name}
-                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-400">

@@ -129,7 +129,7 @@ export default function DopeDealsSection() {
                 alt={product.name}
                 fill
                 sizes="(max-width: 1024px) 50vw, 260px"
-                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                className="object-contain mix-blend-multiply p-3 group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
               <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: DD.muted, background: '#f5f5f5', position: 'absolute', inset: 0 }}>

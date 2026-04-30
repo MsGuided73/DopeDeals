@@ -133,7 +133,7 @@ export default function NewProductsSection() {
                 alt={product.name}
                 fill
                 sizes="(max-width: 768px) 50vw, 290px"
-                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                className="object-contain mix-blend-multiply p-3 group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
               <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: RS.muted }}>

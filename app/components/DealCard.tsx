@@ -37,7 +37,7 @@ export default function DealCard({ product }: { product: Product }) {
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-contain p-4 group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="object-contain mix-blend-multiply p-4 group-hover:scale-105 transition-transform duration-500 ease-out"
           />
         ) : (
           <div className="absolute inset-0 bg-gray-50 flex items-center justify-center text-gray-400">

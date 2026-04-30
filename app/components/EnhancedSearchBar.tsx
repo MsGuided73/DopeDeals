@@ -347,7 +347,7 @@ export default function EnhancedSearchBar({ compact = false }: { compact?: boole
                             alt={suggestion.text}
                             width={40}
                             height={40}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-contain mix-blend-multiply"
                           />
                         </div>
                       ) : (

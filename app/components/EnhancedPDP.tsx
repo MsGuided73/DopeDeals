@@ -297,7 +297,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                     const color = extractEdgeColor(e.currentTarget, { skipIfSquare: false });
                     if (color) setMainImageBg(color);
                   }}
-                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
                 />
                 
                 {/* Badges */}
@@ -348,7 +348,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
                   <img 
                     src={image} 
                     alt={`${product.display_name} ${index + 1}`}
-                    className="w-full h-full object-contain p-1"
+                    className="w-full h-full object-contain mix-blend-multiply p-1"
                   />
                 </button>
               ))}
