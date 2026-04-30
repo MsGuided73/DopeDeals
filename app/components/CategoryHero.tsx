@@ -23,9 +23,10 @@ type CategoryHeroProps = {
 
   /** Illustration shown on the right side of the hero (full viewport width
    *  wrapper, object-contain object-right so it anchors to the right edge
-   *  at its natural aspect ratio). */
-  illustrationSrc: string;
-  illustrationAlt: string;
+   *  at its natural aspect ratio). Optional — when omitted the right half
+   *  is left empty (used for THCA Flower and other text-only heroes). */
+  illustrationSrc?: string;
+  illustrationAlt?: string;
 
   /** Category pills anchored to the bottom of the left half. */
   pills: ReadonlyArray<CategoryHeroPill>;
@@ -62,17 +63,20 @@ export default function CategoryHero({
   return (
     <>
     <div className="bg-[#ffffff] w-full relative overflow-hidden">
-      {/* Hero photo — full viewport width, anchored right at natural aspect ratio. */}
-      <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
-        <Image
-          src={illustrationSrc}
-          alt={illustrationAlt}
-          fill
-          sizes="(min-width: 768px) 100vw, 0px"
-          className="object-contain object-right brightness-[1.35]"
-          priority
-        />
-      </div>
+      {/* Hero photo — full viewport width, anchored right at natural aspect ratio.
+          Skipped entirely when no illustrationSrc is provided. */}
+      {illustrationSrc ? (
+        <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
+          <Image
+            src={illustrationSrc}
+            alt={illustrationAlt ?? ''}
+            fill
+            sizes="(min-width: 768px) 100vw, 0px"
+            className="object-contain object-right brightness-[1.35]"
+            priority
+          />
+        </div>
+      ) : null}
 
       {/* Hero content section — full viewport width with safe-zone padding. */}
       <div className="relative pt-12 pb-24 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center min-h-[600px] z-30">

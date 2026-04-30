@@ -1,30 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-import type { ThcaFlowerProduct } from '../ThcaFlowerPageContent';
+import type { ThcaPnvProduct } from '../ThcaPnvPageContent';
 
-interface ThcaFlowerFiltersProps {
+interface ThcaPnvFiltersProps {
   filters: {
     priceRange: [number, number];
     brands: string[];
-    materials: string[];
-    styles: string[]; // Indica / Sativa / Hybrid (strain type)
-    sizes: string[];  // 3.5g / 7g / 14g / 28g
+    types: string[];
+    strains: string[];
+    sizes: string[];
     categories: string[];
     inStock: boolean;
     onSale: boolean;
     isNew: boolean;
-    featured: boolean;
-    vipExclusive: boolean;
   };
   setFilters: (filters: any) => void;
-  products: ThcaFlowerProduct[];
+  products: ThcaPnvProduct[];
 }
 
-export default function ThcaFlowerFilters({ filters, setFilters, products }: ThcaFlowerFiltersProps) {
+export default function ThcaPnvFilters({ filters, setFilters, products }: ThcaPnvFiltersProps) {
   const [expandedSections, setExpandedSections] = useState({
     price: false,
     brand: false,
+    type: false,
     strain: false,
     size: false,
     availability: false,
@@ -39,20 +38,22 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
 
   // Extract unique values from products
   const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
-  const uniqueStyles = [...new Set(products.map(p => p.style).filter(Boolean) as string[])].sort();
+  const uniqueTypes = [...new Set(products.map(p => p.type).filter(Boolean) as string[])].sort();
+  const uniqueStrains = [...new Set(products.map(p => p.strain).filter(Boolean) as string[])].sort();
   const uniqueSizes = [...new Set(products.map(p => p.size).filter(Boolean) as string[])].sort();
 
   // Actual catalog price bounds — used as the default min/max in the
   // price inputs and as the reset target for "Clear All".
   const catalogPrices = products
-    .map(p => p.price ?? 0)
+    .map(p => p.our_price ?? p.price ?? 0)
     .filter(n => Number.isFinite(n) && n > 0);
   const dataMinPrice = catalogPrices.length > 0 ? Math.floor(Math.min(...catalogPrices)) : 0;
-  const dataMaxPrice = catalogPrices.length > 0 ? Math.ceil(Math.max(...catalogPrices)) : 100;
+  const dataMaxPrice = catalogPrices.length > 0 ? Math.ceil(Math.max(...catalogPrices)) : 200;
 
-  // Per-option product counts
+  // Per-option product counts so users can see how many products match each option.
   const brandCount = (b: string) => products.filter(p => p.brand === b).length;
-  const styleCount = (s: string) => products.filter(p => p.style === s).length;
+  const typeCount = (t: string) => products.filter(p => p.type === t).length;
+  const strainCount = (s: string) => products.filter(p => p.strain === s).length;
   const sizeCount = (s: string) => products.filter(p => p.size === s).length;
 
   const handleCheckboxChange = (filterType: string, value: string, checked: boolean) => {
@@ -75,22 +76,20 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
     setFilters({
       priceRange: [dataMinPrice, dataMaxPrice],
       brands: [],
-      materials: [],
-      styles: [],
+      types: [],
+      strains: [],
       sizes: [],
       categories: [],
       inStock: false,
       onSale: false,
       isNew: false,
-      featured: false,
-      vipExclusive: false,
     });
   };
 
   const FilterSection = ({
     title,
     sectionKey,
-    children,
+    children
   }: {
     title: string;
     sectionKey: keyof typeof expandedSections;
@@ -217,26 +216,45 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
         </div>
       </FilterSection>
 
-      {/* Strain — Indica / Sativa / Hybrid (derived from name/description). */}
-      <FilterSection title="Strain" sectionKey="strain">
-        <div className="space-y-3">
-          {uniqueStyles.length === 0 ? (
-            <p className="text-xs text-gray-400 italic">No strain data yet</p>
+      {/* Type — Pre-Roll / Cartridge / Disposable */}
+      <FilterSection title="Type" sectionKey="type">
+        <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+          {uniqueTypes.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No type data yet</p>
           ) : (
-            uniqueStyles.map(style => (
+            uniqueTypes.map(type => (
               <CheckboxRow
-                key={style}
-                label={style}
-                checked={filters.styles.includes(style)}
-                onChange={(c) => handleCheckboxChange('styles', style, c)}
-                count={styleCount(style)}
+                key={type}
+                label={type}
+                checked={filters.types.includes(type)}
+                onChange={(c) => handleCheckboxChange('types', type, c)}
+                count={typeCount(type)}
               />
             ))
           )}
         </div>
       </FilterSection>
 
-      {/* Size — 3.5g / 7g / 14g / 28g (derived from product name) */}
+      {/* Strain — Indica / Sativa / Hybrid */}
+      <FilterSection title="Strain" sectionKey="strain">
+        <div className="space-y-3">
+          {uniqueStrains.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No strain data yet</p>
+          ) : (
+            uniqueStrains.map(strain => (
+              <CheckboxRow
+                key={strain}
+                label={strain}
+                checked={filters.strains.includes(strain)}
+                onChange={(c) => handleCheckboxChange('strains', strain, c)}
+                count={strainCount(strain)}
+              />
+            ))
+          )}
+        </div>
+      </FilterSection>
+
+      {/* Size — gram weights (0.5g, 1g, 2g, etc.) */}
       <FilterSection title="Size" sectionKey="size">
         <div className="space-y-3">
           {uniqueSizes.length === 0 ? (

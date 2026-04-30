@@ -1,11 +1,11 @@
 'use client';
 
-interface ThcaFlowerSortBarProps {
+interface EdiblesSortBarProps {
   sortBy: string;
   setSortBy: (sort: string) => void;
 }
 
-export default function ThcaFlowerSortBar({ sortBy, setSortBy }: ThcaFlowerSortBarProps) {
+export default function EdiblesSortBar({ sortBy, setSortBy }: EdiblesSortBarProps) {
   const sortOptions = [
     { value: 'featured', label: 'Featured' },
     { value: 'price-low', label: 'Price: Low to High' },

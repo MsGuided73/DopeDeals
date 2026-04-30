@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import type { ThcaFlowerProduct } from '../ThcaFlowerPageContent';
+import type { PreRollProduct } from '../PreRollsPageContent';
 
-interface ThcaFlowerFiltersProps {
+interface PreRollsFiltersProps {
   filters: {
     priceRange: [number, number];
     brands: string[];
     materials: string[];
-    styles: string[]; // Indica / Sativa / Hybrid (strain type)
-    sizes: string[];  // 3.5g / 7g / 14g / 28g
+    styles: string[]; // Strain: Indica / Sativa / Hybrid (derived)
+    sizes: string[];  // 0.5g / 1g / 2g / Mini / etc.
+    types: string[];  // Single / Multi-Pack / Infused
     categories: string[];
     inStock: boolean;
     onSale: boolean;
@@ -18,14 +19,15 @@ interface ThcaFlowerFiltersProps {
     vipExclusive: boolean;
   };
   setFilters: (filters: any) => void;
-  products: ThcaFlowerProduct[];
+  products: PreRollProduct[];
 }
 
-export default function ThcaFlowerFilters({ filters, setFilters, products }: ThcaFlowerFiltersProps) {
+export default function PreRollsFilters({ filters, setFilters, products }: PreRollsFiltersProps) {
   const [expandedSections, setExpandedSections] = useState({
     price: false,
     brand: false,
     strain: false,
+    type: false,
     size: false,
     availability: false,
   });
@@ -40,6 +42,7 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
   // Extract unique values from products
   const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
   const uniqueStyles = [...new Set(products.map(p => p.style).filter(Boolean) as string[])].sort();
+  const uniqueTypes = [...new Set(products.map(p => p.type).filter(Boolean) as string[])].sort();
   const uniqueSizes = [...new Set(products.map(p => p.size).filter(Boolean) as string[])].sort();
 
   // Actual catalog price bounds — used as the default min/max in the
@@ -53,6 +56,7 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
   // Per-option product counts
   const brandCount = (b: string) => products.filter(p => p.brand === b).length;
   const styleCount = (s: string) => products.filter(p => p.style === s).length;
+  const typeCount = (t: string) => products.filter(p => p.type === t).length;
   const sizeCount = (s: string) => products.filter(p => p.size === s).length;
 
   const handleCheckboxChange = (filterType: string, value: string, checked: boolean) => {
@@ -78,6 +82,7 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
       materials: [],
       styles: [],
       sizes: [],
+      types: [],
       categories: [],
       inStock: false,
       onSale: false,
@@ -236,7 +241,26 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
         </div>
       </FilterSection>
 
-      {/* Size — 3.5g / 7g / 14g / 28g (derived from product name) */}
+      {/* Type — Single / Multi-Pack / Infused / etc. (from API-provided type). */}
+      <FilterSection title="Type" sectionKey="type">
+        <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+          {uniqueTypes.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No type data yet</p>
+          ) : (
+            uniqueTypes.map(type => (
+              <CheckboxRow
+                key={type}
+                label={type}
+                checked={filters.types.includes(type)}
+                onChange={(c) => handleCheckboxChange('types', type, c)}
+                count={typeCount(type)}
+              />
+            ))
+          )}
+        </div>
+      </FilterSection>
+
+      {/* Size — 0.5g / 1g / 2g / Mini (derived from product name) */}
       <FilterSection title="Size" sectionKey="size">
         <div className="space-y-3">
           {uniqueSizes.length === 0 ? (

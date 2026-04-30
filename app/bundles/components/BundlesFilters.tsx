@@ -1,33 +1,44 @@
 'use client';
 
 import { useState } from 'react';
-import type { ThcaFlowerProduct } from '../ThcaFlowerPageContent';
+import type { BundleProduct } from '../BundlesPageContent';
 
-interface ThcaFlowerFiltersProps {
+interface BundlesFiltersProps {
   filters: {
     priceRange: [number, number];
     brands: string[];
-    materials: string[];
-    styles: string[]; // Indica / Sativa / Hybrid (strain type)
-    sizes: string[];  // 3.5g / 7g / 14g / 28g
-    categories: string[];
+    bundleTypes: string[];
+    savings: string[];
     inStock: boolean;
     onSale: boolean;
     isNew: boolean;
     featured: boolean;
-    vipExclusive: boolean;
   };
   setFilters: (filters: any) => void;
-  products: ThcaFlowerProduct[];
+  products: BundleProduct[];
 }
 
-export default function ThcaFlowerFilters({ filters, setFilters, products }: ThcaFlowerFiltersProps) {
+// Savings buckets — derived per-product from compare_at_price vs current price.
+const SAVINGS_BUCKETS: Array<{ label: string; min: number }> = [
+  { label: '10%+ off', min: 10 },
+  { label: '20%+ off', min: 20 },
+  { label: '30%+ off', min: 30 },
+];
+
+const computeSavings = (p: BundleProduct): number => {
+  const price = p.price ?? 0;
+  const compare = p.compare_at_price ?? 0;
+  if (!compare || compare <= price) return 0;
+  return Math.round(((compare - price) / compare) * 100);
+};
+
+export default function BundlesFilters({ filters, setFilters, products }: BundlesFiltersProps) {
   const [expandedSections, setExpandedSections] = useState({
     price: false,
-    brand: false,
-    strain: false,
-    size: false,
     availability: false,
+    bundleType: false,
+    savings: false,
+    brand: false,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -39,8 +50,7 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
 
   // Extract unique values from products
   const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
-  const uniqueStyles = [...new Set(products.map(p => p.style).filter(Boolean) as string[])].sort();
-  const uniqueSizes = [...new Set(products.map(p => p.size).filter(Boolean) as string[])].sort();
+  const uniqueBundleTypes = [...new Set(products.map(p => p.bundleType).filter(Boolean) as string[])].sort();
 
   // Actual catalog price bounds — used as the default min/max in the
   // price inputs and as the reset target for "Clear All".
@@ -48,12 +58,12 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
     .map(p => p.price ?? 0)
     .filter(n => Number.isFinite(n) && n > 0);
   const dataMinPrice = catalogPrices.length > 0 ? Math.floor(Math.min(...catalogPrices)) : 0;
-  const dataMaxPrice = catalogPrices.length > 0 ? Math.ceil(Math.max(...catalogPrices)) : 100;
+  const dataMaxPrice = catalogPrices.length > 0 ? Math.ceil(Math.max(...catalogPrices)) : 1000;
 
   // Per-option product counts
   const brandCount = (b: string) => products.filter(p => p.brand === b).length;
-  const styleCount = (s: string) => products.filter(p => p.style === s).length;
-  const sizeCount = (s: string) => products.filter(p => p.size === s).length;
+  const bundleTypeCount = (t: string) => products.filter(p => p.bundleType === t).length;
+  const savingsCount = (minPct: number) => products.filter(p => computeSavings(p) >= minPct).length;
 
   const handleCheckboxChange = (filterType: string, value: string, checked: boolean) => {
     setFilters((prev: any) => ({
@@ -75,22 +85,19 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
     setFilters({
       priceRange: [dataMinPrice, dataMaxPrice],
       brands: [],
-      materials: [],
-      styles: [],
-      sizes: [],
-      categories: [],
+      bundleTypes: [],
+      savings: [],
       inStock: false,
       onSale: false,
       isNew: false,
       featured: false,
-      vipExclusive: false,
     });
   };
 
   const FilterSection = ({
     title,
     sectionKey,
-    children,
+    children
   }: {
     title: string;
     sectionKey: keyof typeof expandedSections;
@@ -214,41 +221,47 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
             checked={filters.isNew}
             onChange={(c) => handleToggleChange('isNew', c)}
           />
+          <CheckboxRow
+            label="Featured Bundles"
+            checked={filters.featured}
+            onChange={(c) => handleToggleChange('featured', c)}
+          />
         </div>
       </FilterSection>
 
-      {/* Strain — Indica / Sativa / Hybrid (derived from name/description). */}
-      <FilterSection title="Strain" sectionKey="strain">
-        <div className="space-y-3">
-          {uniqueStyles.length === 0 ? (
-            <p className="text-xs text-gray-400 italic">No strain data yet</p>
+      {/* Bundle Type — derived from the product name (Glass / Vape / Flower / Starter) */}
+      <FilterSection title="Bundle Type" sectionKey="bundleType">
+        <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+          {uniqueBundleTypes.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No bundle-type data yet</p>
           ) : (
-            uniqueStyles.map(style => (
+            uniqueBundleTypes.map(type => (
               <CheckboxRow
-                key={style}
-                label={style}
-                checked={filters.styles.includes(style)}
-                onChange={(c) => handleCheckboxChange('styles', style, c)}
-                count={styleCount(style)}
+                key={type}
+                label={type}
+                checked={filters.bundleTypes.includes(type)}
+                onChange={(c) => handleCheckboxChange('bundleTypes', type, c)}
+                count={bundleTypeCount(type)}
               />
             ))
           )}
         </div>
       </FilterSection>
 
-      {/* Size — 3.5g / 7g / 14g / 28g (derived from product name) */}
-      <FilterSection title="Size" sectionKey="size">
+      {/* Savings — % off vs. compare_at_price. Only render buckets that match
+          at least one product. */}
+      <FilterSection title="Savings" sectionKey="savings">
         <div className="space-y-3">
-          {uniqueSizes.length === 0 ? (
-            <p className="text-xs text-gray-400 italic">No size data yet</p>
+          {SAVINGS_BUCKETS.filter(b => savingsCount(b.min) > 0).length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No discount data yet</p>
           ) : (
-            uniqueSizes.map(size => (
+            SAVINGS_BUCKETS.filter(b => savingsCount(b.min) > 0).map(bucket => (
               <CheckboxRow
-                key={size}
-                label={size}
-                checked={filters.sizes.includes(size)}
-                onChange={(c) => handleCheckboxChange('sizes', size, c)}
-                count={sizeCount(size)}
+                key={bucket.label}
+                label={bucket.label}
+                checked={filters.savings.includes(bucket.label)}
+                onChange={(c) => handleCheckboxChange('savings', bucket.label, c)}
+                count={savingsCount(bucket.min)}
               />
             ))
           )}

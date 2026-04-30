@@ -2,7 +2,6 @@
 
 import { Suspense } from 'react';
 import AccessoriesPageContent from './AccessoriesPageContent';
-import PrismaticBurst from '../components/PrismaticBurst';
 import GlobalMasthead from '../components/GlobalMasthead';
 
 export default function AccessoriesClientPage() {
@@ -15,7 +14,7 @@ export default function AccessoriesClientPage() {
     "mainEntity": {
       "@type": "ItemList",
       "name": "Smoking Accessories Collection",
-      "description": "High-quality smoking accessories including storage containers, rolling papers, and more",
+      "description": "High-quality smoking accessories including lighters, torches, ashtrays, storage, and more",
       "numberOfItems": "100+",
       "itemListElement": [
         {
@@ -51,13 +50,9 @@ export default function AccessoriesClientPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F7F6F2]">
+      {/* Universal Layout Components */}
       <GlobalMasthead />
-      <PrismaticBurst
-        intensity={3}
-        speed={0.7}
-        colors={['#10b981', '#059669', '#047857']}
-      />
 
       <script
         type="application/ld+json"
@@ -66,7 +61,7 @@ export default function AccessoriesClientPage() {
 
       <Suspense fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-dope-orange-500"></div>
         </div>
       }>
         <AccessoriesPageContent />

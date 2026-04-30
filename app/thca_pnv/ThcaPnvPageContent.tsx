@@ -2,297 +2,488 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { addToCart } from '../lib/cart-utils';
+import { SlidersHorizontal } from 'lucide-react';
+import ErrorBoundary from '../components/ErrorBoundary';
+import LoadingState from '../components/LoadingState';
+import ThcaPnvFilters from './components/ThcaPnvFilters';
+import ProductGrid from '../components/ProductGrid';
+import ThcaPnvBreadcrumb from './components/ThcaPnvBreadcrumb';
+import ThcaPnvHero from './components/ThcaPnvHero';
+import ThcaPnvSortBar from './components/ThcaPnvSortBar';
+import ThcaPnvViewToggle from './components/ThcaPnvViewToggle';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
 
-interface Product {
+export interface ThcaPnvProduct {
   id: string;
   name: string;
-  description: string | null;
-  short_description: string | null;
   our_price: number;
-  sale_price?: number | null;
+  sale_price?: number;
   image_url: string | null;
-  image_urls?: string[] | null;
+  imageUrl?: string;
+  image?: string;
+  image_urls?: string[];
+  description?: string | null;
+  short_description?: string | null;
   sku: string | null;
   stock_quantity: number;
   is_active: boolean;
   featured: boolean;
-  brand_name: string | null;
-  nicotine_product: boolean;
-  tobacco_product: boolean;
+  brand_id: string | null;
+  category_id: string | null;
+  category_slug?: string | null;
+  created_at: string;
+  updated_at: string;
+  // Compatibility fields
+  price?: number;
+  isNew?: boolean;
+  isSale?: boolean;
+  originalPrice?: number;
+  inStock?: boolean;
+  brand?: string;
+  category?: string;
+  // THCA pre-roll & vape specific fields
+  type?: string; // Pre-Roll / Cartridge / Disposable
+  strain?: string; // Indica / Sativa / Hybrid
+  size?: string; // 0.5g / 1g / 2g
+  material?: string;
+  materials?: string[];
 }
+
+// Type derivation: pre-roll / cartridge / disposable. Run once per product at
+// load time so the filter has data even when the catalog lacks an explicit
+// `type` column.
+const PNV_TYPES: Array<{ label: string; keywords: string[] }> = [
+  { label: 'Pre-Roll', keywords: ['preroll', 'pre-roll', 'pre roll', 'joint', 'blunt'] },
+  { label: 'Disposable', keywords: ['disposable', 'disposible', 'all-in-one', 'all in one'] },
+  { label: 'Cartridge', keywords: ['cartridge', 'cart '] },
+];
+const deriveType = (p: any): string | null => {
+  if (p.type) return p.type;
+  if (p.specs?.type) return p.specs.type;
+  const haystack = `${p.name ?? ''} ${p.short_description ?? ''} ${p.description ?? ''} ${p.subcategory_slug ?? ''}`.toLowerCase();
+  for (const t of PNV_TYPES) {
+    if (t.keywords.some((kw) => haystack.includes(kw))) return t.label;
+  }
+  // category_slug fallback
+  const slug = (p.category_slug ?? '').toLowerCase();
+  if (slug === 'cartridges' || slug === 'carts') return 'Cartridge';
+  if (slug === 'disposables') return 'Disposable';
+  if (slug === 'prerolls' || slug === 'pre-rolls') return 'Pre-Roll';
+  return null;
+};
+
+// Strain-type vocabulary derived from product names. Keeps the filter populated
+// even when the catalog lacks a structured strain column.
+const STRAIN_KEYWORDS: Array<{ label: string; keywords: string[] }> = [
+  { label: 'Indica', keywords: ['indica'] },
+  { label: 'Sativa', keywords: ['sativa'] },
+  { label: 'Hybrid', keywords: ['hybrid'] },
+];
+const deriveStrain = (p: any): string | null => {
+  if (p.strain) return p.strain;
+  if (p.specs?.strain) return p.specs.strain;
+  const haystack = `${p.name ?? ''} ${p.short_description ?? ''} ${p.description ?? ''}`.toLowerCase();
+  for (const s of STRAIN_KEYWORDS) {
+    if (s.keywords.some((kw) => haystack.includes(kw))) return s.label;
+  }
+  return null;
+};
+
+// Match common gram-weight patterns ("0.5g", ".5g", "1g", "2g", "1 gram") in
+// the product name to derive a size when specs.size is empty.
+const deriveSize = (p: any): string | null => {
+  if (p.size) return p.size;
+  if (p.specs?.size) return p.specs.size;
+  const haystack = `${p.name ?? ''} ${p.short_description ?? ''}`;
+  const match = haystack.match(/(\d+(?:\.\d+)?)\s*(?:g|gram|grams)\b/i);
+  return match ? `${match[1]}g` : null;
+};
 
 export default function ThcaPnvPageContent() {
   const searchParams = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ThcaPnvProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ThcaPnvProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState('featured');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(24);
+  const [activeCategory, setActiveCategory] = useState('all-thca-pnv');
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const searchQuery = searchParams.get('q') || '';
+
+  // Filter states
+  const [filters, setFilters] = useState({
+    priceRange: [0, 200] as [number, number],
+    brands: [] as string[],
+    types: [] as string[],
+    strains: [] as string[],
+    sizes: [] as string[],
+    categories: [] as string[],
+    inStock: false,
+    onSale: false,
+    isNew: false,
+  });
 
   useEffect(() => {
-    fetchThcaPnvProducts();
+    loadThcaPnvProducts();
   }, []);
 
-  const fetchThcaPnvProducts = async () => {
+  useEffect(() => {
+    // Apply filters and sorting
+    let filtered = [...products];
+
+    // Hero-pill category filter
+    if (activeCategory !== 'all-thca-pnv') {
+      switch (activeCategory) {
+        case 'prerolls':
+          filtered = filtered.filter((p) =>
+            (p.category_slug && ['prerolls', 'pre-rolls'].includes(p.category_slug.toLowerCase())) ||
+            p.type === 'Pre-Roll'
+          );
+          break;
+        case 'cartridges':
+          filtered = filtered.filter((p) =>
+            (p.category_slug && ['cartridges', 'carts'].includes(p.category_slug.toLowerCase())) ||
+            p.type === 'Cartridge'
+          );
+          break;
+        case 'disposables':
+          filtered = filtered.filter((p) =>
+            (p.category_slug && p.category_slug.toLowerCase() === 'disposables') ||
+            p.type === 'Disposable'
+          );
+          break;
+      }
+    }
+
+    // Apply search query filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((p) => {
+        const searchableText = [
+          p.name,
+          p.description,
+          p.short_description,
+          p.brand,
+          p.category,
+          p.sku,
+          p.type,
+          p.strain,
+          p.size,
+        ].filter(Boolean).join(' ').toLowerCase();
+        return searchableText.includes(query);
+      });
+    }
+
+    // Apply other filters
+    if (filters.brands.length > 0) {
+      filtered = filtered.filter((p) => p.brand && filters.brands.includes(p.brand));
+    }
+    if (filters.types.length > 0) {
+      filtered = filtered.filter((p) => p.type !== undefined && p.type !== null && filters.types.includes(p.type));
+    }
+    if (filters.strains.length > 0) {
+      filtered = filtered.filter((p) => p.strain !== undefined && p.strain !== null && filters.strains.includes(p.strain));
+    }
+    if (filters.sizes.length > 0) {
+      filtered = filtered.filter((p) => p.size !== undefined && p.size !== null && filters.sizes.includes(p.size));
+    }
+    if (filters.inStock) {
+      filtered = filtered.filter((p) => p.stock_quantity > 0 || p.inStock);
+    }
+    if (filters.onSale) {
+      filtered = filtered.filter((p) => p.isSale);
+    }
+    if (filters.isNew) {
+      filtered = filtered.filter((p) => p.isNew);
+    }
+
+    // Price range filter
+    filtered = filtered.filter((p) => {
+      const price = p.our_price || p.price || 0;
+      return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+    });
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'price-low':
+        filtered.sort((a, b) => {
+          const priceA = a.our_price || a.price || 0;
+          const priceB = b.our_price || b.price || 0;
+          return priceA - priceB;
+        });
+        break;
+      case 'price-high':
+        filtered.sort((a, b) => {
+          const priceA = a.our_price || a.price || 0;
+          const priceB = b.our_price || b.price || 0;
+          return priceB - priceA;
+        });
+        break;
+      case 'name':
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'newest':
+        filtered.sort((a, b) => {
+          const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+          return dateB - dateA;
+        });
+        break;
+      default: // featured
+        filtered.sort((a, b) => {
+          const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+          if (dateA !== dateB) return dateB - dateA;
+          return (b.stock_quantity || 0) - (a.stock_quantity || 0);
+        });
+    }
+
+    setFilteredProducts(filtered);
+    setCurrentPage(1);
+  }, [products, filters, sortBy, activeCategory, searchQuery]);
+
+  const loadThcaPnvProducts = async () => {
     try {
       setLoading(true);
-      console.log('Fetching THCA PNV products...');
+
+      // PRESERVE existing API endpoint URL — /api/products/thca-pre-rolls
       const response = await fetch('/api/products/thca-pre-rolls?limit=30');
 
       if (!response.ok) {
-        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch (e) {
-          // If we can't parse JSON, use the status text
-        }
-        console.error('THCA PNV API error:', errorMessage);
-        throw new Error(`Failed to fetch THCA PNV products: ${errorMessage}`);
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
-      console.log('THCA PNV data received:', data);
 
-      if (!data.products) {
-        console.warn('No THCA PNV products data received');
-        setProducts([]);
-        return;
+      if (data.error) {
+        throw new Error(data.error);
       }
 
-      setProducts(data.products);
-    } catch (err) {
-      console.error('Error fetching THCA PNV products:', err);
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      const totalCount = data.totalCount ?? data.total ?? data.products?.length ?? 0;
+      console.log(`✅ API returned ${totalCount} THCA pre-roll/vape products`);
+
+      const transformedProducts: ThcaPnvProduct[] = (data.products || []).map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        our_price: product.our_price ?? product.price,
+        sale_price: product.sale_price,
+        image_url: product.image_url,
+        imageUrl: product.image_url,
+        image: product.image_url,
+        image_urls: product.image_urls,
+        description: product.description,
+        short_description: product.short_description,
+        sku: product.sku,
+        stock_quantity: product.stock_quantity || 0,
+        is_active: product.is_active,
+        featured: product.featured || false,
+        brand_id: product.brand_id ?? null,
+        category_id: product.category_id ?? null,
+        category_slug: product.category_slug ?? null,
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+        // Compatibility fields
+        price: product.price ?? product.our_price,
+        isNew: product.isNew,
+        isSale: product.isSale ?? Boolean(product.sale_price && product.sale_price < product.our_price),
+        originalPrice: product.compare_at_price ?? product.our_price,
+        inStock: product.inStock ?? (product.stock_quantity || 0) > 0,
+        brand: product.brand ?? product.brand_name,
+        category: 'THCA Pre-Rolls & Vapes',
+        type: deriveType(product),
+        strain: deriveStrain(product),
+        size: deriveSize(product),
+        material: product.material || product.specs?.material,
+        materials: product.materials || [],
+      }));
+
+      setProducts(transformedProducts);
+      setFilteredProducts(transformedProducts);
+
+      // Seed the price-range filter to the actual catalog min/max so the
+      // sidebar inputs show real bounds instead of 0–200.
+      const prices = transformedProducts
+        .map((p) => p.our_price ?? p.price ?? 0)
+        .filter((n: number) => Number.isFinite(n) && n > 0);
+      if (prices.length > 0) {
+        const minP = Math.floor(Math.min(...prices));
+        const maxP = Math.ceil(Math.max(...prices));
+        setFilters((prev) => ({ ...prev, priceRange: [minP, maxP] }));
+      }
+    } catch (error) {
+      console.error('Error loading THCA pre-roll/vape products:', error);
+      setProducts([]);
+      setFilteredProducts([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const getProductDescription = (product: Product): string => {
-    return product.short_description || product.description || 'Premium quality THCA pre-rolls and vape products';
-  };
-
-  const transformProductForCard = (product: Product) => {
-    const primaryImageUrl = product.image_url ||
-                           (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
-
-    return {
-      id: product.id,
-      name: product.name,
-      originalPrice: product.our_price,
-      salePrice: product.sale_price || product.our_price,
-      discountPercent: product.sale_price ? Math.round(((product.our_price - product.sale_price) / product.our_price) * 100) : 0,
-      image_url: primaryImageUrl || undefined,
-      skilled: product.featured,
-      stock_quantity: product.stock_quantity,
-      brand_name: product.brand_name || 'Unknown Brand',
-      short_description: getProductDescription(product),
-      description: getProductDescription(product),
-      sku: product.sku || '',
-      compare_at_price: product.sale_price && product.sale_price < product.our_price ? product.our_price : undefined,
-    };
-  };
+  // Pagination
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          {/* Hero Section Skeleton */}
-          <div className="text-center mb-16">
-            <div className="h-16 bg-white/20 rounded-lg mb-4 animate-pulse mx-auto max-w-2xl"></div>
-            <div className="h-6 bg-white/10 rounded-lg mb-2 animate-pulse mx-auto max-w-xl"></div>
-            <div className="h-6 bg-white/10 rounded-lg animate-pulse mx-auto max-w-lg"></div>
-          </div>
-
-          {/* Products Grid Skeleton */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
-              <div key={i} className="bg-white rounded-xl overflow-hidden shadow-lg animate-pulse">
-                <div className="aspect-square bg-gray-200"></div>
-                <div className="p-4">
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded mb-3"></div>
-                  <div className="flex items-center justify-between">
-                    <div className="h-5 bg-gray-200 rounded w-16"></div>
-                  </div>
-                  <div className="h-8 bg-gray-200 rounded mt-4"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-r from-red-400 via-pink-500 to-purple-600">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-display-twilight">
-              🌿 Premium THCA Pre-Rolls & Vapes
-            </h1>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-2xl mx-auto">
-              <h2 className="text-2xl font-bold text-white mb-4">Oops! Something went wrong</h2>
-              <p className="text-white/90 mb-6">{error}</p>
-              <button
-                onClick={fetchThcaPnvProducts}
-                className="bg-white text-purple-600 px-6 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors"
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (products.length === 0) {
-    return (
-      <div className="min-h-screen bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-display-twilight">
-              🌿 Premium THCA Pre-Rolls & Vapes
-            </h1>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 max-w-2xl mx-auto">
-              <h2 className="text-3xl font-bold text-white mb-4">Coming Soon</h2>
-              <p className="text-white/90 text-lg">
-                Our premium THCA pre-rolls and vape cartridges are currently being curated.
-                We're working hard to bring you the highest quality products.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <LoadingState
+        loading={loading}
+        onRetry={loadThcaPnvProducts}
+        timeout={15000}
+      >
+        <div>THCA Pre-Rolls &amp; Vapes Page Content</div>
+      </LoadingState>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600">
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 font-display-twilight">
-            🌿 Premium THCA Pre-Rolls & Vapes
-          </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Discover our curated collection of premium THCA pre-rolls and vape cartridges
-          </p>
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3">
-            <span className="text-white font-medium">{products.length} Products Available</span>
+    <ErrorBoundary>
+      <div className="bg-white min-h-screen">
+      {/* Breadcrumb */}
+      <ThcaPnvBreadcrumb />
+
+      {/* Hero Section — no illustration on this page */}
+      <ThcaPnvHero
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Sidebar Filters — desktop only; mobile uses the drawer below */}
+          <div className="hidden lg:block lg:w-1/4">
+            <ThcaPnvFilters
+              filters={filters}
+              setFilters={setFilters}
+              products={products}
+            />
           </div>
-        </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-          {products.map((product) => {
-            const transformedProduct = transformProductForCard(product);
-            return (
-              <Link
-                key={product.id}
-                href={`/product/${product.id}`}
-                className="group bg-white rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block"
-              >
-                <div className="relative w-full aspect-square bg-white dark:bg-gray-800 overflow-hidden">
-                  {transformedProduct.image_url ? (
-                    <img
-                      src={transformedProduct.image_url}
-                      alt={transformedProduct.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gradient-to-br from-gray-100 to-gray-200">
-                      <div className="text-center">
-                        <div className="text-6xl mb-4">🌿</div>
-                        <div className="text-sm font-medium">Image Coming Soon</div>
-                      </div>
-                    </div>
-                  )}
+          {/* Main Content */}
+          <div className="lg:w-3/4">
+            {/* Sort Bar — Filters button visible only on mobile */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(true)}
+                  className="lg:hidden inline-flex items-center gap-2 px-4 py-2 border-2 border-[#2d8f47] text-[#2d8f47] rounded-md text-sm font-bold hover:bg-[#2d8f47] hover:text-white transition-colors"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filters
+                </button>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Showing {filteredProducts.length === 0 ? 0 : indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of {filteredProducts.length} products
+                </p>
+              </div>
 
-                  {/* Featured Badge */}
-                  {product.featured && (
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-emerald-400 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                      ⭐ Featured
-                    </div>
-                  )}
+              <div className="flex items-center gap-4">
+                <ThcaPnvSortBar sortBy={sortBy} setSortBy={setSortBy} />
+                <ThcaPnvViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+              </div>
+            </div>
 
-                  {/* Brand Badge */}
-                  {transformedProduct.brand_name && transformedProduct.brand_name !== 'Unknown Brand' && (
-                    <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium">
-                      {transformedProduct.brand_name}
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-4 flex flex-col">
-                  <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-green-600 transition-colors">
-                    {transformedProduct.name}
-                  </h3>
-
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 flex-grow">
-                    {transformedProduct.short_description}
-                  </p>
-
-                  <div className="mt-auto">
-                    <div className="mb-4">
-                      {transformedProduct.compare_at_price ? (
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-500 line-through">
-                              ${transformedProduct.compare_at_price.toFixed(2)}
-                            </span>
-                            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                              {transformedProduct.discountPercent}% OFF
-                            </span>
-                          </div>
-                          <div className="text-2xl font-bold text-green-600">
-                            ${transformedProduct.salePrice.toFixed(2)}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                          ${transformedProduct.salePrice.toFixed(2)}
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      className="w-full px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold rounded-full transition-all duration-300 text-center text-sm hover:from-emerald-600 hover:to-green-700 hover:scale-105 hover:shadow-lg"
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        await addToCart(product.id);
-                      }}
-                    >
-                      Add to Cart 🛒
-                    </button>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-white mb-4">Need More Options?</h2>
-            <p className="text-white/90 mb-6">
-              Check out our full catalog of premium cannabinoid products and wellness items.
-            </p>
-            <Link
-              href="/products"
-              className="inline-block bg-white text-green-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors"
+            {/* Mobile filter drawer */}
+            <MobileFilterDrawer
+              open={mobileFiltersOpen}
+              onClose={() => setMobileFiltersOpen(false)}
             >
-              Browse All Products →
-            </Link>
+              <ThcaPnvFilters
+                filters={filters}
+                setFilters={setFilters}
+                products={products}
+              />
+            </MobileFilterDrawer>
+
+            {/* Product Grid */}
+            <ProductGrid
+              products={currentProducts.map(product => ({
+                id: product.id,
+                name: product.name,
+                price: product.price || product.our_price,
+                vip_price: undefined,
+                compare_at_price: product.originalPrice || product.sale_price,
+                image_url: product.image_url || undefined,
+                image_urls: product.image_urls && product.image_urls.length > 0
+                  ? product.image_urls
+                  : product.image_url ? [product.image_url] : [],
+                brand_id: product.brand_id || undefined,
+                category_id: product.category_id || undefined,
+                sku: product.sku || undefined,
+                stock_quantity: product.stock_quantity,
+                materials: product.materials && product.materials.length > 0
+                  ? product.materials
+                  : product.material ? [product.material] : [],
+                vip_exclusive: false,
+                featured: product.featured,
+                is_active: product.is_active,
+                description: product.description || undefined,
+                short_description: product.short_description || undefined,
+                specs: {
+                  type: product.type,
+                  strain: product.strain,
+                  size: product.size,
+                },
+                attributes: {},
+                brand: product.brand,
+                category: product.category,
+                material: product.material,
+                style: product.strain,
+                size: product.size,
+                inStock: product.inStock || product.stock_quantity > 0,
+                isNew: product.isNew,
+                isSale: product.isSale,
+                features: [],
+                tags: []
+              }))}
+              viewMode={viewMode}
+            />
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center mt-12 space-x-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+
+                {Array.from({ length: Math.min(5, totalPages) }, (_: number, i: number) => {
+                  const pageNum = i + 1;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`px-4 py-2 border rounded-md text-sm font-medium ${
+                        currentPage === pageNum
+                          ? 'bg-dope-orange-500 text-white border-dope-orange-500'
+                          : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }

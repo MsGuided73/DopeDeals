@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function ThcaFlowerBreadcrumb() {
+export default function BundlesBreadcrumb() {
   return (
     <nav className="bg-white dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -21,10 +21,10 @@ export default function ThcaFlowerBreadcrumb() {
           </svg>
           <li>
             <Link
-              href="/thca"
+              href="/products"
               className="text-gray-500 hover:text-dope-orange-500 transition-colors"
             >
-              THCA &amp; More
+              Products
             </Link>
           </li>
           <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,7 +32,7 @@ export default function ThcaFlowerBreadcrumb() {
           </svg>
           <li>
             <span className="text-gray-900 dark:text-white font-medium">
-              THCA Flower
+              Bundles
             </span>
           </li>
         </ol>

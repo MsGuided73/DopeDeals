@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import type { ThcaFlowerProduct } from '../ThcaFlowerPageContent';
+import type { EdibleProduct } from '../EdiblesPageContent';
 
-interface ThcaFlowerFiltersProps {
+interface EdiblesFiltersProps {
   filters: {
     priceRange: [number, number];
     brands: string[];
-    materials: string[];
-    styles: string[]; // Indica / Sativa / Hybrid (strain type)
-    sizes: string[];  // 3.5g / 7g / 14g / 28g
+    materials: string[]; // Used for Cannabinoid (CBD/THC/Delta-8/THCA)
+    styles: string[];    // Used for Type (Gummies/Chocolates/Beverages/Tinctures)
+    sizes: string[];
     categories: string[];
     inStock: boolean;
     onSale: boolean;
@@ -18,15 +18,15 @@ interface ThcaFlowerFiltersProps {
     vipExclusive: boolean;
   };
   setFilters: (filters: any) => void;
-  products: ThcaFlowerProduct[];
+  products: EdibleProduct[];
 }
 
-export default function ThcaFlowerFilters({ filters, setFilters, products }: ThcaFlowerFiltersProps) {
+export default function EdiblesFilters({ filters, setFilters, products }: EdiblesFiltersProps) {
   const [expandedSections, setExpandedSections] = useState({
     price: false,
     brand: false,
-    strain: false,
-    size: false,
+    style: false,
+    material: false,
     availability: false,
   });
 
@@ -40,20 +40,23 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
   // Extract unique values from products
   const uniqueBrands = [...new Set(products.map(p => p.brand).filter(Boolean) as string[])].sort();
   const uniqueStyles = [...new Set(products.map(p => p.style).filter(Boolean) as string[])].sort();
-  const uniqueSizes = [...new Set(products.map(p => p.size).filter(Boolean) as string[])].sort();
+  const uniqueMaterials = [...new Set([
+    ...products.map(p => p.material).filter(Boolean) as string[],
+    ...products.flatMap(p => p.materials || []).filter(Boolean) as string[],
+  ])].sort();
 
   // Actual catalog price bounds — used as the default min/max in the
   // price inputs and as the reset target for "Clear All".
   const catalogPrices = products
-    .map(p => p.price ?? 0)
+    .map(p => p.our_price ?? p.price ?? 0)
     .filter(n => Number.isFinite(n) && n > 0);
   const dataMinPrice = catalogPrices.length > 0 ? Math.floor(Math.min(...catalogPrices)) : 0;
-  const dataMaxPrice = catalogPrices.length > 0 ? Math.ceil(Math.max(...catalogPrices)) : 100;
+  const dataMaxPrice = catalogPrices.length > 0 ? Math.ceil(Math.max(...catalogPrices)) : 1000;
 
   // Per-option product counts
   const brandCount = (b: string) => products.filter(p => p.brand === b).length;
   const styleCount = (s: string) => products.filter(p => p.style === s).length;
-  const sizeCount = (s: string) => products.filter(p => p.size === s).length;
+  const materialCount = (m: string) => products.filter(p => p.material === m || (p.materials || []).includes(m)).length;
 
   const handleCheckboxChange = (filterType: string, value: string, checked: boolean) => {
     setFilters((prev: any) => ({
@@ -90,7 +93,7 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
   const FilterSection = ({
     title,
     sectionKey,
-    children,
+    children
   }: {
     title: string;
     sectionKey: keyof typeof expandedSections;
@@ -159,7 +162,7 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
         </button>
       </div>
 
-      {/* Price Range — defaults to the actual lowest/highest price in the catalog. */}
+      {/* Price Range */}
       <FilterSection title="Price Range" sectionKey="price">
         <div className="flex items-center gap-2">
           <input
@@ -214,14 +217,24 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
             checked={filters.isNew}
             onChange={(c) => handleToggleChange('isNew', c)}
           />
+          <CheckboxRow
+            label="Featured Products"
+            checked={filters.featured}
+            onChange={(c) => handleToggleChange('featured', c)}
+          />
+          <CheckboxRow
+            label="VIP Exclusive"
+            checked={filters.vipExclusive}
+            onChange={(c) => handleToggleChange('vipExclusive', c)}
+          />
         </div>
       </FilterSection>
 
-      {/* Strain — Indica / Sativa / Hybrid (derived from name/description). */}
-      <FilterSection title="Strain" sectionKey="strain">
-        <div className="space-y-3">
+      {/* Type — edible-specific (Gummies, Chocolates, Beverages, Tinctures, etc.) */}
+      <FilterSection title="Type" sectionKey="style">
+        <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
           {uniqueStyles.length === 0 ? (
-            <p className="text-xs text-gray-400 italic">No strain data yet</p>
+            <p className="text-xs text-gray-400 italic">No type data yet</p>
           ) : (
             uniqueStyles.map(style => (
               <CheckboxRow
@@ -236,19 +249,19 @@ export default function ThcaFlowerFilters({ filters, setFilters, products }: Thc
         </div>
       </FilterSection>
 
-      {/* Size — 3.5g / 7g / 14g / 28g (derived from product name) */}
-      <FilterSection title="Size" sectionKey="size">
-        <div className="space-y-3">
-          {uniqueSizes.length === 0 ? (
-            <p className="text-xs text-gray-400 italic">No size data yet</p>
+      {/* Cannabinoid — CBD / THC / Delta-8 / THCA / etc. */}
+      <FilterSection title="Cannabinoid" sectionKey="material">
+        <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+          {uniqueMaterials.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No cannabinoid data yet</p>
           ) : (
-            uniqueSizes.map(size => (
+            uniqueMaterials.map(material => (
               <CheckboxRow
-                key={size}
-                label={size}
-                checked={filters.sizes.includes(size)}
-                onChange={(c) => handleCheckboxChange('sizes', size, c)}
-                count={sizeCount(size)}
+                key={material}
+                label={material}
+                checked={filters.materials.includes(material)}
+                onChange={(c) => handleCheckboxChange('materials', material, c)}
+                count={materialCount(material)}
               />
             ))
           )}

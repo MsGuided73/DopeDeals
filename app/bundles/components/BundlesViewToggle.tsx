@@ -1,11 +1,11 @@
 'use client';
 
-interface ThcaFlowerViewToggleProps {
+interface BundlesViewToggleProps {
   viewMode: 'grid' | 'list';
   setViewMode: (mode: 'grid' | 'list') => void;
 }
 
-export default function ThcaFlowerViewToggle({ viewMode, setViewMode }: ThcaFlowerViewToggleProps) {
+export default function BundlesViewToggle({ viewMode, setViewMode }: BundlesViewToggleProps) {
   return (
     <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
       <button

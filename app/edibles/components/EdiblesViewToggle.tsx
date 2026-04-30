@@ -1,11 +1,11 @@
 'use client';
 
-interface ThcaFlowerViewToggleProps {
+interface EdiblesViewToggleProps {
   viewMode: 'grid' | 'list';
   setViewMode: (mode: 'grid' | 'list') => void;
 }
 
-export default function ThcaFlowerViewToggle({ viewMode, setViewMode }: ThcaFlowerViewToggleProps) {
+export default function EdiblesViewToggle({ viewMode, setViewMode }: EdiblesViewToggleProps) {
   return (
     <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
       <button

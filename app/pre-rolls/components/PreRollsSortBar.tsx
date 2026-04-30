@@ -1,11 +1,11 @@
 'use client';
 
-interface ThcaFlowerSortBarProps {
+interface PreRollsSortBarProps {
   sortBy: string;
   setSortBy: (sort: string) => void;
 }
 
-export default function ThcaFlowerSortBar({ sortBy, setSortBy }: ThcaFlowerSortBarProps) {
+export default function PreRollsSortBar({ sortBy, setSortBy }: PreRollsSortBarProps) {
   const sortOptions = [
     { value: 'featured', label: 'Featured' },
     { value: 'price-low', label: 'Price: Low to High' },
