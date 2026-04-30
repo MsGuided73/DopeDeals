@@ -318,6 +318,17 @@ export default function PipesPageContent() {
 
       setProducts(transformedProducts);
       setFilteredProducts(transformedProducts);
+
+      // Seed the price-range filter to the actual catalog min/max so the
+      // sidebar inputs show real bounds (e.g. $14 – $189) instead of 0–1000.
+      const prices = transformedProducts
+        .map((p) => p.our_price ?? p.price ?? 0)
+        .filter((n: number) => Number.isFinite(n) && n > 0);
+      if (prices.length > 0) {
+        const minP = Math.floor(Math.min(...prices));
+        const maxP = Math.ceil(Math.max(...prices));
+        setFilters((prev) => ({ ...prev, priceRange: [minP, maxP] }));
+      }
     } catch (error) {
       console.error('Error loading pipe products:', error);
       setProducts([]);

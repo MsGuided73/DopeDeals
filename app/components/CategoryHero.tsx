@@ -60,7 +60,7 @@ export default function CategoryHero({
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="bg-[#ffffff] w-full border-b border-gray-200 relative overflow-hidden">
+    <div className="bg-[#ffffff] w-full relative overflow-hidden">
       {/* Hero photo — full viewport width, anchored right at natural aspect ratio. */}
       <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
         <Image
