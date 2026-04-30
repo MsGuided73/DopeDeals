@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 // Lazy-load below-the-fold sections for faster initial page load
+const CuratedKits             = nextDynamic(() => import("./components/CuratedKits"));
 const FeaturedProductsSection = nextDynamic(() => import("./components/FeaturedProductsSection"));
 const NewProductsSection      = nextDynamic(() => import("./components/NewProductsSection"));
 const TrustedBrandsBulletin   = nextDynamic(() => import("./components/TrustedBrandsBulletin"));
@@ -52,6 +53,9 @@ export default function HomePage() {
 
         {/* ── NEW SECTION SLOT ── (replaces the old Popular Setups placeholder)
             Drop the new homepage feature section here, above Hot Products. */}
+        <Suspense fallback={<SectionFallback />}>
+          <CuratedKits />
+        </Suspense>
 
         {/* ── Hot Products ── */}
         <Suspense fallback={<SectionFallback />}>
