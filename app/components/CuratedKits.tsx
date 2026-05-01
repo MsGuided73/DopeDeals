@@ -8,8 +8,8 @@ export default function CuratedKits() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-          <p className="text-[#415d39] font-bold tracking-widest text-sm mb-3 uppercase">
-            Everything you need. Ready to ride.
+          <p className="text-[#415d39] font-extrabold tracking-[0.15em] text-base mb-3 uppercase">
+            EVERYTHING YOU NEED. READY TO RIDE.
           </p>
           <div style={{ height: '4px', width: '48px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
           <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
