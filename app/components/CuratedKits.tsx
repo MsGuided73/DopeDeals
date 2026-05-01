@@ -8,7 +8,7 @@ export default function CuratedKits() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-          <p className="text-[#415d39] font-extrabold tracking-[0.15em] text-base mb-3 uppercase">
+          <p className="text-[#415d39] font-black tracking-[0.25em] text-xl mb-3 uppercase">
             EVERYTHING YOU NEED. READY TO RIDE.
           </p>
           <div style={{ height: '4px', width: '48px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
@@ -142,14 +142,14 @@ export default function CuratedKits() {
 
         {/* Footer Banner */}
         <div className="mt-8 flex justify-center">
-          <div className="bg-[#e6e2d6] rounded-xl py-3 px-6 inline-flex flex-col md:flex-row items-center justify-center gap-5 shadow-sm border border-[#d8d4c7]">
+          <div className="bg-[#e6e2d6] rounded-xl py-1.5 px-4 inline-flex flex-col md:flex-row items-center justify-center gap-4 shadow-sm border border-[#d8d4c7]">
             <div className="flex items-center gap-3">
               <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
                 <Image 
-                  src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Black%20LogoTB.png"
+                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Black%20LogoTB.png"
                   alt="Highway 420 Logo"
                   fill
-                  className="object-contain scale-[1.35]"
+                  className="object-contain scale-[1.65]"
                 />
               </div>
               <p className="text-[#1a1c19] font-medium text-base">Not sure which setup is right for you?</p>

@@ -1,8 +1,8 @@
 "use client";
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import SmartBgImage from './SmartBgImage';
 import { ShoppingCart, Heart, Eye, Star } from 'lucide-react';
 import { addToCart } from '../lib/cart-utils';
 import {
@@ -20,7 +20,9 @@ interface UniversalProductCardProps {
   product: {
     id: string;
     name: string;
-    price: string | number;
+    price?: string | number;
+    our_price?: string | number;
+    sale_price?: string | number;
     image_url?: string;
     imageUrl?: string;
     image?: string;
@@ -126,10 +128,13 @@ export default function UniversalProductCard({
     ? extractProductDescription(product.short_description) || cleanProductDescription(product.short_description)
     : generateProductDescription(product);
 
-  const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
-  const compareAtPrice = product.compare_at_price;
-  const hasDiscount = compareAtPrice && compareAtPrice > price;
-  const discountPercentage = hasDiscount 
+  // Ensure price is a valid number, checking various common property names
+  const rawPrice = product.price ?? product.our_price ?? product.sale_price ?? 0;
+  const price = typeof rawPrice === 'string' ? (parseFloat(rawPrice) || 0) : (Number(rawPrice) || 0);
+  
+  const compareAtPrice = typeof product.compare_at_price === 'number' ? product.compare_at_price : undefined;
+  const hasDiscount = !!(compareAtPrice && price && compareAtPrice > price);
+  const discountPercentage = hasDiscount && compareAtPrice
     ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100)
     : product.discount_percentage;
 
@@ -226,11 +231,11 @@ export default function UniversalProductCard({
       >
         <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-md overflow-hidden">
           {hasImage ? (
-            <Image
+            <SmartBgImage
               src={imageUrl}
               alt={product.name}
               fill
-              className="object-contain mix-blend-multiply p-1"
+              className="object-contain p-1"
               sizes="64px"
               priority={priority === 'high'}
               onError={handleImageError}
@@ -272,11 +277,11 @@ export default function UniversalProductCard({
         {/* Large Product Image - Left Side */}
         <div className="relative w-48 h-48 flex-shrink-0 bg-white overflow-hidden">
           {hasImage ? (
-            <Image
+            <SmartBgImage
               src={imageUrl}
               alt={product.name}
               fill
-              className={`object-contain mix-blend-multiply p-3 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+              className={`object-contain p-3 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
               sizes="192px"
               priority={priority === 'high'}
               onError={handleImageError}
@@ -442,11 +447,11 @@ export default function UniversalProductCard({
           {/* Product Image */}
           <div className="relative w-48 h-48 flex-shrink-0 bg-white">
             {hasImage ? (
-              <Image
+              <SmartBgImage
                 src={imageUrl}
                 alt={product.name}
                 fill
-                className={`object-contain mix-blend-multiply p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+                className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
                 sizes="192px"
                 priority={priority === 'high'}
                 onError={handleImageError}
@@ -607,11 +612,11 @@ export default function UniversalProductCard({
         {/* Large Product Image - Left Side - Full Height */}
         <div className="relative w-64 h-80 flex-shrink-0 bg-white overflow-hidden">
           {hasImage ? (
-            <Image
+            <SmartBgImage
               src={imageUrl}
               alt={product.name}
               fill
-              className={`object-contain mix-blend-multiply p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+              className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
               sizes="256px"
               priority={priority === 'high'}
               onError={handleImageError}
@@ -781,13 +786,13 @@ export default function UniversalProductCard({
         </div>
       )}
       {/* Product image zone */}
-      <div className={`relative ${config.image} bg-white flex-shrink-0 overflow-hidden`}>
+      <div className={`relative ${config.image} flex-shrink-0 overflow-hidden`}>
         {hasImage ? (
-          <Image
+          <SmartBgImage
             src={imageUrl}
             alt={product.name}
             fill
-            className={`object-contain mix-blend-multiply p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+            className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
             sizes={size === 'small' ? '200px' : size === 'large' ? '400px' : '300px'}
             priority={priority === 'high'}
             onError={handleImageError}

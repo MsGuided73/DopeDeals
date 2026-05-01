@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer, { type ProductViewMode } from './AutoScrollContainer';
 import ViewModeToggle from './ViewModeToggle';
+import UniversalProductCard from './UniversalProductCard';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 // ── Dope Deals palette — mirrors Hot Products brand green ─────────────────
@@ -88,126 +88,20 @@ export default function DopeDealsSection() {
     p.image_url || (p.image_urls && p.image_urls.length > 0 ? p.image_urls[0] : null);
 
   const renderCard = (product: Product, isDesktop: boolean) => {
-    const isRestricted = restrictedProductIds.includes(product.id);
-    const disc = getDiscountPercent(product);
-    const salePrice = getSalePrice(product);
-    const origPrice = parseFloat((product.our_price ?? 0).toString());
-    const imageUrl = getImageUrl(product);
-    const brand = product.brand_name && product.brand_name !== 'Unknown Brand'
-      ? product.brand_name : null;
-
     return (
-      <div
+      <UniversalProductCard
         key={product.id}
-        className="group"
-        style={{
-          background: DD.white,
-          overflow: 'hidden',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-          transition: 'box-shadow 0.3s, transform 0.3s',
-          flexShrink: isDesktop ? 0 : undefined,
-          width: isDesktop ? '260px' : undefined,
-          opacity: isRestricted ? 0.6 : 1,
-          filter: isRestricted ? 'grayscale(1)' : undefined,
-          position: 'relative',
-          borderRadius: '6px',
+        product={{
+          ...product,
+          price: getSalePrice(product),
+          compare_at_price: product.our_price,
         }}
-      >
-        {/* Lime-green top accent bar */}
-        <div style={{ height: '4px', background: `linear-gradient(90deg, ${DD.accentL}, ${DD.accent})`, borderRadius: '6px 6px 0 0' }} />
-
-        {/* Image & Info Link Wrapper */}
-        <Link 
-          href={isRestricted ? '#' : `/product/${product.id}`}
-          className="block no-underline"
-        >
-          {/* Image */}
-          <div style={{ position: 'relative', width: '100%', aspectRatio: '1', background: DD.white, overflow: 'hidden' }}>
-            {imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt={product.name}
-                fill
-                sizes="(max-width: 1024px) 50vw, 260px"
-                className="object-contain mix-blend-multiply p-3 group-hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: DD.muted, background: '#f5f5f5', position: 'absolute', inset: 0 }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '36px', marginBottom: '8px' }}>📦</div>
-                  <div style={{ fontSize: '11px', color: '#aaa' }}>No Image</div>
-                </div>
-              </div>
-            )}
-
-            {/* Discount badge */}
-            {disc > 0 && (
-              <div style={{ position: 'absolute', top: 8, left: 8, background: '#E53E3E', color: '#fff', fontSize: '10px', fontWeight: 800, padding: '3px 8px', borderRadius: '3px', letterSpacing: '0.05em', zIndex: 10 }}>
-                -{disc}% OFF
-              </div>
-            )}
-
-            {/* Restriction overlay */}
-            {isRestricted && (
-              <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
-                <div style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid #fca5a5', borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '22px', marginBottom: '4px' }}>🚫</div>
-                  <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Local Restriction</span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Body */}
-          <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
-            {brand && (
-              <p className="dg-lime-text-gradient" style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
-                {brand}
-              </p>
-            )}
-            <h3 style={{ fontWeight: 600, color: DD.dark, fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 transition-opacity">
-              {product.name}
-            </h3>
-            
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-              <span style={{ fontWeight: 700, color: DD.accent, fontSize: '16px' }}>
-                ${salePrice.toFixed(2)}
-              </span>
-              {origPrice > salePrice && (
-                <span style={{ color: DD.muted, fontSize: '11px', textDecoration: 'line-through' }}>
-                  ${origPrice.toFixed(2)}
-                </span>
-              )}
-            </div>
-          </div>
-        </Link>
-
-        {/* Buttons */}
-        <div style={{ padding: '0 15px 15px', display: 'flex', gap: '7px' }}>
-          <button
-            onClick={async (e) => { 
-              e.preventDefault();
-              e.stopPropagation(); 
-              if (!isRestricted) await addToCart(product.id, 1); 
-            }}
-            disabled={isRestricted}
-            style={isRestricted
-              ? { flex: 1, background: '#e5e5e5', color: '#999', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-              : { flex: 1, background: DD.grad, color: 'white', fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
-            onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
-          >
-            {isRestricted ? 'Unavailable' : 'Add to Cart'}
-          </button>
-          <Link
-            href={`/product/${product.id}`}
-            style={{ flex: 1, border: `1.5px solid ${DD.accent}`, color: DD.accent, fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-            className="hover:bg-[#2d8f47] hover:text-white"
-          >
-            Details
-          </Link>
-        </div>
-      </div>
+        viewMode="grid"
+        size="medium"
+        showQuickView={false}
+        context="homepage"
+        className={isDesktop ? 'w-[260px] flex-shrink-0' : ''}
+      />
     );
   };
 

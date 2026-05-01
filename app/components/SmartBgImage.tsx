@@ -24,10 +24,16 @@ export default function SmartBgImage({ fallbackBg = '#ffffff', className, ...res
 
   return (
     <div
-      style={{ backgroundColor: bg }}
       className="absolute inset-0 transition-colors duration-200"
+      style={{ backgroundColor: bg }}
     >
-      <Image {...rest} onLoad={handleLoad} className={className} />
+      <div className="relative w-full h-full z-10">
+        <Image 
+          {...rest} 
+          onLoad={handleLoad} 
+          className={className ? className.replace('mix-blend-multiply', '') : ''} 
+        />
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer from './AutoScrollContainer';
+import UniversalProductCard from './UniversalProductCard';
 
 interface Product {
   id: string;
@@ -139,135 +140,6 @@ export default function AutosuggestRecommendations({
     return product.short_description || product.description || 'Premium quality product';
   };
 
-  const transformProductForCard = (product: Product) => {
-    const primaryImageUrl = product.image_url ||
-                           (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
-
-    // Use our_price as the primary price, fallback to price if our_price is not available
-    // Ensure we handle both potential property names from different API responses
-    const displayPrice = product.our_price || (product as any).price || 0;
-
-    return {
-      id: product.id,
-      name: product.name,
-      price: (product.sale_price && product.sale_price < displayPrice ? product.sale_price : displayPrice).toString(),
-      image_url: primaryImageUrl || undefined,
-      featured: product.featured,
-      stock_quantity: product.stock_quantity,
-      brand_name: product.brand_name || 'Unknown Brand',
-      short_description: getProductDescription(product),
-      description: getProductDescription(product),
-      sku: product.sku || '',
-      compare_at_price: product.sale_price && product.sale_price < displayPrice ? displayPrice : undefined,
-      discount_percentage: product.sale_price && product.sale_price < displayPrice && displayPrice > 0
-        ? Math.round(((displayPrice - product.sale_price) / displayPrice) * 100)
-        : undefined,
-    };
-  };
-
-  const renderProductCard = (product: Product) => {
-     const transformedProduct = transformProductForCard(product);
-     const cardClasses = compact 
-        ? "group bg-white rounded-lg border border-gray-100 hover:border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full"
-        : "group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-96";
-     
-     const imageClasses = compact
-        ? "relative w-full aspect-square bg-gray-50 overflow-hidden p-3"
-        : "relative w-full aspect-square bg-white overflow-hidden p-6";
-        
-     return (
-        <Link
-          key={product.id}
-          href={`/product/${product.id}`}
-          className={cardClasses}
-        >
-          <div className={imageClasses}>
-            {transformedProduct.image_url ? (
-              <img
-                src={transformedProduct.image_url}
-                alt={transformedProduct.name}
-                className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                <div className="text-center">
-                  <div className="text-2xl mb-1">📦</div>
-                  {!compact && <div className="text-sm font-medium">No Image</div>}
-                </div>
-              </div>
-            )}
-
-            {/* Favorite Button - hide on compact */}
-            {!compact && (
-              <button
-                className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
-                onClick={(e) => e.stopPropagation()}>
-                <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
-            )}
-          </div>
-
-          <div className={`flex flex-col flex-1 ${compact ? 'p-3' : 'p-4'}`}>
-            {transformedProduct.brand_name && (
-              <p className="text-[10px] font-black text-dope-orange-600 mb-1 uppercase tracking-wide leading-tight" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-                {transformedProduct.brand_name}
-              </p>
-            )}
-
-            <h3 className={`font-bold text-gray-900 leading-tight mb-2 line-clamp-2 group-hover:text-dope-orange-700 transition-colors ${compact ? 'text-sm' : 'text-lg'}`} style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
-              {transformedProduct.name}
-            </h3>
-
-            <div className="mt-auto">
-              <div className={compact ? "mb-2" : "mb-4"}>
-                {transformedProduct.compare_at_price ? (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 line-through">
-                        ${parseFloat(transformedProduct.compare_at_price.toString()).toFixed(2)}
-                      </span>
-                    </div>
-                    <div className={`${compact ? 'text-sm' : 'text-xl'} font-bold text-green-600`}>
-                      ${parseFloat(transformedProduct.price).toFixed(2)}
-                    </div>
-                  </div>
-                ) : (
-                  <div className={`${compact ? 'text-base' : 'text-xl'} font-bold text-gray-900`}>
-                    ${parseFloat(transformedProduct.price).toFixed(2)}
-                  </div>
-                )}
-              </div>
-
-              <button
-                className={`w-full bg-transparent text-green-800 border border-green-800 font-bold rounded-full transition-all duration-300 text-center hover:bg-green-800 hover:text-white ${compact ? 'py-1.5 text-xs' : 'py-3 text-sm hover:scale-105 hover:shadow-lg'}`}
-                style={{
-                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                  letterSpacing: '0.05em',
-                }}
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  e.preventDefault(); // Prevent link navigation
-                  try {
-                    const success = await addToCart(product.id, 1);
-                    if (success) {
-                      // Success flow is handled by addToCart function with toast notifications
-                      // and cart state updates via window.dispatchEvent
-                    }
-                  } catch (error) {
-                    console.error('Error adding item to cart:', error);
-                    // Error handling is already done by addToCart function with toast notifications
-                  }
-                }}
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </Link>
-     );
-  }
 
   if (loading) {
     return (
@@ -318,12 +190,29 @@ export default function AutosuggestRecommendations({
               scrollAmount={384} // Approximately width of one card (96 * 4)
               className="max-w-6xl mx-auto"
             >
-              {products.slice(0, 8).map(renderProductCard)}
+              {products.slice(0, 8).map((product) => (
+                <UniversalProductCard
+                  key={product.id}
+                  product={product}
+                  size="medium"
+                  className="flex-shrink-0 w-96"
+                  showBrand={true}
+                  showRating={true}
+                />
+              ))}
             </AutoScrollContainer>
         ) : (
             /* Grid layout */
             <div className={`grid grid-cols-2 ${limit === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-3 lg:grid-cols-4'} gap-4`}>
-                {products.slice(0, limit).map(renderProductCard)}
+                {products.slice(0, limit).map((product) => (
+                  <UniversalProductCard
+                    key={product.id}
+                    product={product}
+                    size={compact ? "small" : "medium"}
+                    showBrand={true}
+                    showRating={true}
+                  />
+                ))}
             </div>
         )}
       </div>

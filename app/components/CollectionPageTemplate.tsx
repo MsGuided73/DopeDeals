@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import GlobalMasthead from './GlobalMasthead';
+import UniversalProductCard from './UniversalProductCard';
 import { addToCart } from '../lib/cart-utils';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -360,23 +361,6 @@ export default function CollectionPageTemplate({
     (onSaleOnly ? 1 : 0) +
     (priceRange[0] > minProductPrice || priceRange[1] < maxProductPrice ? 1 : 0);
 
-  const transformProductForCard = (product: Product) => {
-    const primaryImageUrl = product.image_url ||
-                           (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
-
-    return {
-      id: product.id,
-      name: product.name,
-      originalPrice: product.our_price,
-      salePrice: product.sale_price || product.our_price,
-      discountPercent: product.sale_price ? Math.round(((product.our_price - product.sale_price) / product.our_price) * 100) : 0,
-      image_url: primaryImageUrl || undefined,
-      featured: product.featured,
-      stock_quantity: product.stock_quantity,
-      brand_name: product.brand_name || 'Unknown Brand',
-      compare_at_price: product.sale_price && product.sale_price < product.our_price ? product.our_price : undefined,
-    };
-  };
 
   const gradientClass = `bg-gradient-to-r ${gradientFrom} ${gradientVia} ${gradientTo}`;
 
@@ -764,101 +748,16 @@ export default function CollectionPageTemplate({
 
             {/* Products Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => {
-                const transformedProduct = transformProductForCard(product);
-                return (
-                  <div
-                    key={product.id}
-                    className="group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
-                  >
-                    <div className="relative aspect-square bg-gray-100 overflow-hidden p-6">
-                      <Link href={`/product/${product.id}`} className="block w-full h-full">
-                        {transformedProduct.image_url ? (
-                          <img
-                            src={transformedProduct.image_url}
-                            alt={transformedProduct.name}
-                            className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            <div className="text-center">
-                              <div className="text-3xl mb-2">{icon}</div>
-                              <div className="text-sm">No Image</div>
-                            </div>
-                          </div>
-                        )}
-                      </Link>
-
-                      {/* Featured Badge */}
-                      {product.featured && (
-                        <span className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-md text-xs font-bold">
-                          FEATURED
-                        </span>
-                      )}
-                      
-                      {/* Sale Badge */}
-                      {transformedProduct.compare_at_price && (
-                        <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold">
-                          SALE
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="p-4">
-                      <div className="mb-2">
-                        <h3 className="text-sm font-medium text-gray-900 truncate">
-                          <Link href={`/product/${product.id}`} className="hover:text-green-600 transition-colors">
-                            {transformedProduct.name}
-                          </Link>
-                        </h3>
-                        {transformedProduct.brand_name !== 'Unknown Brand' && (
-                          <p className="text-sm text-gray-500 mt-1">{transformedProduct.brand_name}</p>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-lg font-bold text-gray-900">
-                            ${transformedProduct.salePrice.toFixed(2)}
-                          </span>
-                          {transformedProduct.compare_at_price && (
-                            <span className="text-sm text-gray-500 line-through">
-                              ${transformedProduct.compare_at_price.toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <div className={`w-2 h-2 rounded-full ${product.stock_quantity > 0 ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                          <span className={`text-xs ${product.stock_quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                            {product.stock_quantity > 0 ? 'In Stock' : 'Out of Stock'}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex gap-2">
-                        <Link
-                          href={`/product/${product.id}`}
-                          className="flex-1 px-3 py-2 bg-transparent border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-md text-sm font-medium transition-all duration-300 text-center"
-                        >
-                          View Product
-                        </Link>
-                        <button
-                          onClick={async () => {
-                            if (product.stock_quantity > 0) {
-                              await addToCart(product.id);
-                            }
-                          }}
-                          disabled={product.stock_quantity === 0}
-                          className="flex-1 px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white disabled:text-gray-500 rounded-md text-sm font-medium transition-colors"
-                        >
-                          {product.stock_quantity > 0 ? 'Add to Cart' : 'Out of Stock'}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {filteredProducts.map((product) => (
+                <UniversalProductCard
+                  key={product.id}
+                  product={product}
+                  size="medium"
+                  showBrand={true}
+                  showRating={true}
+                  showFavorite={true}
+                />
+              ))}
             </div>
           </div>
         </div>

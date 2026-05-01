@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { addToCart } from '../lib/cart-utils';
 import AutoScrollContainer, { type ProductViewMode } from './AutoScrollContainer';
 import ViewModeToggle from './ViewModeToggle';
+import UniversalProductCard from './UniversalProductCard';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 // ── Fresh Drops palette — clean white + lime green ────────────────────────
@@ -98,118 +98,24 @@ export default function NewProductsSection() {
   };
 
   const renderCard = (product: Product, isDesktop: boolean) => {
-    const isRestricted = restrictedProductIds.includes(product.id);
-    const imageUrl = product.image_url ||
-      (product.image_urls && product.image_urls.length > 0 ? product.image_urls[0] : null);
-    const brand = product.brand_name && product.brand_name !== 'Unknown Brand'
-      ? product.brand_name : null;
-
     return (
-      <div
+      <UniversalProductCard
         key={product.id}
-        className="group"
-        style={{
-          background: RS.white,
-          overflow: 'hidden',
-          boxShadow: '0 2px 12px rgba(28,18,8,0.10)',
-          transition: 'box-shadow 0.3s, transform 0.3s',
-          flexShrink: isDesktop ? 0 : undefined,
-          width: isDesktop ? '290px' : undefined,
-          opacity: isRestricted ? 0.6 : 1,
-          filter: isRestricted ? 'grayscale(1)' : undefined,
-          pointerEvents: isRestricted ? 'none' : undefined,
-          position: 'relative',
+        product={{
+          ...product,
+          price: product.sale_price && product.sale_price < (product.our_price ?? 0) 
+            ? product.sale_price 
+            : (product.our_price ?? 0),
+          compare_at_price: product.sale_price && product.sale_price < (product.our_price ?? 0) 
+            ? product.our_price 
+            : undefined,
         }}
-      >
-        {/* Light navbar green top accent bar with white stripe */}
-        <div style={{ height: '4px', background: '#ffffff', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', borderRadius: '1px 1px 0 0' }} />
-
-        {/* Image */}
-        <div style={{ position: 'relative', aspectRatio: '1', background: RS.bg, overflow: 'hidden' }}>
-          <Link href={isRestricted ? '#' : `/product/${product.id}`} className="block w-full h-full">
-            {imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt={product.name}
-                fill
-                sizes="(max-width: 768px) 50vw, 290px"
-                className="object-contain mix-blend-multiply p-3 group-hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: RS.muted }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '36px', marginBottom: '8px' }}>📦</div>
-                  <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px' }}>No Image</div>
-                </div>
-              </div>
-            )}
-          </Link>
-
-          {/* "NEW ARRIVAL" ribbon badge */}
-          <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 10, background: RS.accent, color: 'white', fontSize: '9px', fontWeight: 700, fontFamily: "'DM Sans',sans-serif", padding: '3px 8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-            🆕 NEW
-          </div>
-
-          {/* Restriction overlay */}
-          {isRestricted && (
-            <div style={{ position: 'absolute', inset: 0, zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', pointerEvents: 'none' }}>
-              <div style={{ background: 'rgba(0,0,0,0.85)', border: '1px solid rgba(239,68,68,0.5)', borderRadius: '12px', padding: '18px', textAlign: 'center', transform: 'rotate(2deg)' }}>
-                <div style={{ fontSize: '26px', marginBottom: '6px', color: '#ef4444' }}>🚫</div>
-                <span style={{ color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 900, textTransform: 'uppercase', fontSize: '14px', lineHeight: 1, display: 'block' }}>Local Restriction</span>
-                <span style={{ color: '#f87171', fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.18em', marginTop: '4px', display: 'block' }}>Limited Availability</span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Body */}
-        <div style={{ padding: '13px 15px 15px', display: 'flex', flexDirection: 'column' }}>
-          {brand && (
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', fontWeight: 700, color: RS.accent, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '3px' }}>
-              {brand}
-            </p>
-          )}
-          <Link href={isRestricted ? '#' : `/product/${product.id}`}>
-            <h3 style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 600, color: RS.dark, fontSize: '14px', lineHeight: 1.35, marginBottom: '6px' }} className="line-clamp-2 group-hover:opacity-70 transition-opacity">
-              {product.name}
-            </h3>
-          </Link>
-
-          {/* Price */}
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '11px' }}>
-            <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '21px', color: RS.accent, letterSpacing: '0.03em' }}>
-              ${getPrice(product)}
-            </div>
-            {getOriginalPrice(product) && (
-              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', color: '#9ca3af', textDecoration: 'line-through' }}>
-                ${getOriginalPrice(product)}
-              </div>
-            )}
-          </div>
-
-          {/* Side-by-side buttons */}
-          <div style={{ display: 'flex', gap: '7px' }}>
-            <button
-              onClick={(e) => !isRestricted && handleAddToCart(product.id, e)}
-              disabled={isRestricted}
-              style={isRestricted
-                ? { flex: 1, background: '#e5e5e5', color: '#999', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'not-allowed', textTransform: 'uppercase', borderRadius: '4px' }
-                : { flex: 1, background: 'linear-gradient(to bottom, #3cb05b, #2d8f47)', color: 'white', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '9px 4px', border: 'none', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px', boxShadow: '0 2px 6px rgba(82,196,26,0.30)', transition: 'box-shadow 0.18s, transform 0.1s' }}
-              onMouseEnter={e => { if (!isRestricted) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(82,196,26,0.45)'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(82,196,26,0.30)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; }}
-            >
-              {isRestricted ? 'Unavailable' : 'Add to Cart'}
-            </button>
-            <Link
-              href={isRestricted ? '#' : `/product/${product.id}`}
-              style={{ flex: 1, border: '1.5px solid #2d8f47', color: '#2d8f47', fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.05em', padding: '8px 4px', textAlign: 'center', display: 'block', background: 'transparent', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
-              className="hover:bg-[#2d8f47] hover:text-white"
-            >
-              View Details
-            </Link>
-          </div>
-        </div>
-      </div>
+        viewMode="grid"
+        size="medium"
+        showQuickView={false}
+        context="homepage"
+        className={isDesktop ? 'w-[290px] flex-shrink-0' : ''}
+      />
     );
   };
 
