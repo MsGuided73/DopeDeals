@@ -38,6 +38,8 @@ type CategoryHeroProps = {
 
   /** Optional RGB string for the halo gradient. Defaults to "255,255,255". */
   haloColorRGB?: string;
+  /** Whether to align content to the left edge instead of centering. */
+  isLeftAligned?: boolean;
 };
 
 const PILL_BASE =
@@ -65,6 +67,7 @@ export default function CategoryHero({
   onPillChange,
   heroBgClassName = 'bg-[#ffffff]',
   haloColorRGB = '255,255,255',
+  isLeftAligned = false,
 }: CategoryHeroProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -87,10 +90,12 @@ export default function CategoryHero({
       ) : null}
 
       {/* Hero content section — full viewport width with safe-zone padding. */}
-      <div className="relative pt-12 pb-24 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center min-h-[600px] z-30">
+      <div className={`relative pt-12 pb-24 pr-4 sm:pr-6 lg:pr-8 flex flex-col md:flex-row items-center min-h-[600px] z-30 ${
+        isLeftAligned ? 'pl-6' : 'px-4 sm:px-6 lg:px-8'
+      }`}>
         {/* Left column — text content centered horizontally within the left half. */}
         <div className="w-full md:w-1/2 z-10 relative">
-          <div className="max-w-xl mx-auto relative">
+          <div className={`max-w-xl relative ${isLeftAligned ? 'ml-0' : 'mx-auto'}`}>
             {/* Soft radial-gradient halo behind the text — opaque core, blurred
                 fade to transparent. No perceptible seams. */}
             <div
@@ -144,8 +149,10 @@ export default function CategoryHero({
             row extends rightward into the left half. Hidden on mobile. */}
         <div className="w-full md:w-1/2 absolute left-0 top-0 h-full hidden md:flex flex-col justify-end pointer-events-none z-10">
           <div
-            className="absolute bottom-0 left-0 right-4 flex flex-nowrap gap-3 pointer-events-auto z-20"
-            style={{ paddingLeft: 'max(1rem, calc((100% - 36rem) / 2))' }}
+            className={`absolute bottom-0 left-0 right-4 flex flex-nowrap gap-3 pointer-events-auto z-20 ${
+              isLeftAligned ? 'pl-6' : ''
+            }`}
+            style={!isLeftAligned ? { paddingLeft: 'max(1rem, calc((100% - 36rem) / 2))' } : undefined}
           >
             {pills.map((pill) => (
               <button

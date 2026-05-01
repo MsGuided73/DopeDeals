@@ -28,5 +28,8 @@
   "coderabbit.autoReviewMode": "auto",
   "coderabbit.selfHostedUrl": "",
   "tfa.cache.autoClean": true,
-  "tfa.cache.warningSize": 300
+  "tfa.cache.warningSize": 300,
+  "window.density.editorTabHeight": "default",
+  "workbench.editor.tabActionCloseVisibility": false,
+  "workbench.editor.showTabs": "single"
 }
