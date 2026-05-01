@@ -90,6 +90,8 @@ export default function ProductGrid({ products, viewMode }: ProductGridProps) {
             stock_quantity: product.stock_quantity ?? (product.inStock ? 10 : 0),
             featured: product.featured,
             compare_at_price: product.compare_at_price,
+            rating: product.rating,
+            review_count: product.review_count,
           }}
           viewMode={viewMode === 'sidebar' ? 'sidebar' : viewMode === 'list' ? 'list' : 'grid'}
           size="medium"

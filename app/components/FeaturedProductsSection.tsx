@@ -27,6 +27,8 @@ interface Product {
   category_id: string | null;
   created_at: string;
   updated_at: string;
+  rating?: number;
+  review_count?: number;
 }
 
 interface ProductCardData {
@@ -42,6 +44,8 @@ interface ProductCardData {
   sku: string;
   compare_at_price?: number;
   discount_percentage?: number;
+  rating?: number;
+  review_count?: number;
 }
 
 const formatPrice = (value: string | number): string => {
@@ -151,6 +155,8 @@ export default function FeaturedProductsSection() {
         product.sale_price && product.sale_price < (product.our_price ?? 0) && (product.our_price ?? 0) > 0
           ? Math.round((((product.our_price ?? 0) - product.sale_price) / (product.our_price ?? 0)) * 100)
           : undefined,
+      rating: product.rating,
+      review_count: product.review_count,
     };
   };
 

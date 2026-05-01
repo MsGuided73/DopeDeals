@@ -29,6 +29,8 @@ interface Product {
     thc_variants?: Record<string, number>;
     other_cannabinoids?: Record<string, number>;
   };
+  rating?: number;
+  review_count?: number;
 }
 
 interface CollectionPageTemplateProps {

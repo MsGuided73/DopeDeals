@@ -792,7 +792,7 @@ export default function UniversalProductCard({
             src={imageUrl}
             alt={product.name}
             fill
-            className={`object-contain p-4 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
+            className={`object-contain p-0 group-hover:scale-105 transition-transform duration-300 ${imageClassName}`}
             sizes={size === 'small' ? '200px' : size === 'large' ? '400px' : '300px'}
             priority={priority === 'high'}
             onError={handleImageError}
@@ -848,22 +848,25 @@ export default function UniversalProductCard({
         </div>
 
         {/* Star rating */}
-        {showRating && product.rating && (
+        {/* Star rating */}
+        {showRating && (
           <div className="flex items-center gap-1 mb-2">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
                   className={`w-3.5 h-3.5 ${
-                    i < Math.floor(product.rating!)
+                    i < Math.floor(product.rating || 5)
                       ? 'fill-[#F59E0B] text-[#F59E0B]'
                       : 'text-gray-200'
                   }`}
                 />
               ))}
             </div>
-            {product.review_count && (
+            {product.review_count && product.review_count > 0 ? (
               <span className="text-xs text-gray-500">({product.review_count})</span>
+            ) : (
+              <span className="text-xs text-dg-green hover:underline cursor-pointer">Write a review</span>
             )}
           </div>
         )}

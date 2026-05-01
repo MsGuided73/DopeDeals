@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import MinimalProductCard from '../components/MinimalProductCard';
+import UniversalProductCard from '../components/UniversalProductCard';
 import Link from 'next/link';
 import { Search, ChevronDown, Star } from 'lucide-react';
 
@@ -30,16 +30,14 @@ export default function DopeDealsClient() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // The Global Masthead is ~150-200px tall. Once we scroll past 150px, we trigger the sticky state.
       setIsSticky(window.scrollY > 150);
     };
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initially
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    // Fetch dope deals
     const fetchDeals = async () => {
       try {
         const response = await fetch('/api/dope-deals?limit=40');
@@ -70,7 +68,6 @@ export default function DopeDealsClient() {
 
   return (
     <div className="bg-white">
-      {/* DOPE DEALS Header */}
       <div style={{ textAlign: 'center', margin: '44px 0 24px', padding: '0 16px' }}>
         <div style={{ height: '3px', width: '48px', background: DD.accent, margin: '0 auto 14px' }} />
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
@@ -83,10 +80,8 @@ export default function DopeDealsClient() {
       </div>
 
       <div className="max-w-[1440px] mx-auto w-full px-4 sm:px-8 py-12 flex items-start gap-12 bg-white">
-        {/* LEFT SIDEBAR */}
         <aside className="hidden lg:block w-[240px] flex-shrink-0">
-          <div className={`sticky top-8 transition-all duration-700 ease-out`}>
-            {/* Animated Title that fades/slides in when scrolled */}
+          <div className="sticky top-8 transition-all duration-700 ease-out">
             <div className="overflow-hidden mb-6 h-[24px]">
               <h2 
                 className="text-[14px] font-bold tracking-widest text-[#145C3C] uppercase whitespace-nowrap transition-transform duration-700 ease-out"
@@ -100,7 +95,6 @@ export default function DopeDealsClient() {
               </h2>
             </div>
 
-            {/* Search bar matching screenshot */}
             <div className="flex mb-8 border border-gray-300 rounded-sm overflow-hidden h-[38px]">
               <input 
                 type="text" 
@@ -113,7 +107,6 @@ export default function DopeDealsClient() {
               </button>
             </div>
 
-            {/* Filter by Price Mockup */}
             <div className="mb-10">
               <h3 className="text-[12px] font-bold uppercase tracking-widest text-gray-800 mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>
                 Filter By Price
@@ -133,7 +126,6 @@ export default function DopeDealsClient() {
               </div>
             </div>
 
-            {/* Links */}
             <ul className="flex flex-col gap-4">
               {sidebarCategories.map((cat, i) => (
                 <li 
@@ -154,61 +146,70 @@ export default function DopeDealsClient() {
               ))}
             </ul>
 
-          {/* Average Rating Mockup */}
-          <div className="mt-12">
-            <h3 className="text-[12px] font-bold uppercase tracking-widest text-gray-800 mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>
-              Average Rating
-            </h3>
-            <div className="flex flex-col gap-3">
-              {[5, 4].map(stars => (
-                <div key={stars} className="flex items-center gap-2 cursor-pointer group">
-                  <div className="flex text-[#d2691e]">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={11} fill={i < stars ? "currentColor" : "none"} strokeWidth={i < stars ? 0 : 1} className={i >= stars ? "text-gray-300" : ""} />
-                    ))}
+            <div className="mt-12">
+              <h3 className="text-[12px] font-bold uppercase tracking-widest text-gray-800 mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                Average Rating
+              </h3>
+              <div className="flex flex-col gap-3">
+                {[5, 4].map(stars => (
+                  <div key={stars} className="flex items-center gap-2 cursor-pointer group">
+                    <div className="flex text-[#d2691e]">
+                      {[...Array(stars)].map((_, i) => (
+                        <Star key={i} size={11} fill="currentColor" strokeWidth={0} />
+                      ))}
+                      {[...Array(5 - stars)].map((_, i) => (
+                        <Star key={i + stars} size={11} fill="none" strokeWidth={1} className="text-gray-300" />
+                      ))}
+                    </div>
+                    <span className="text-[11px] text-gray-500 group-hover:text-gray-800 transition-colors">({Math.floor(Math.random() * 20) + 1})</span>
                   </div>
-                  <span className="text-[11px] text-gray-500 group-hover:text-gray-800 transition-colors">({Math.floor(Math.random() * 20) + 1})</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <main className="flex-1 min-w-0 pb-20">
+          <div className="flex justify-between items-center mb-8 pb-3" style={{ fontFamily: "'Fira Sans', sans-serif" }}>
+            <div className="text-[12px] text-gray-500 font-medium">
+              Showing 1–{products.length} of {products.length} results
+            </div>
+            <select className="text-[12px] bg-transparent border-none outline-none text-gray-700 cursor-pointer hover:text-black">
+              <option>Sort by latest</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+            </select>
+          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12 animate-pulse">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="flex flex-col gap-3">
+                  <div className="aspect-square bg-[#f8f8f8] w-full rounded-sm" />
+                  <div className="h-3 w-3/4 bg-gray-200 rounded-sm" />
+                  <div className="h-3 w-1/4 bg-gray-200 rounded-sm" />
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* RIGHT MAIN CONTENT */}
-      <main className="flex-1 min-w-0 pb-20">
-        {/* Top Header Row */}
-        <div className="flex justify-between items-center mb-8 pb-3" style={{ fontFamily: "'Fira Sans', sans-serif" }}>
-          <div className="text-[12px] text-gray-500 font-medium">
-            Showing 1–{products.length} of {products.length} results
-          </div>
-          <select className="text-[12px] bg-transparent border-none outline-none text-gray-700 cursor-pointer hover:text-black">
-            <option>Sort by latest</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-          </select>
-        </div>
-
-        {/* Product Grid */}
-        {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12 animate-pulse">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="flex flex-col gap-3">
-                <div className="aspect-square bg-[#f8f8f8] w-full rounded-sm" />
-                <div className="h-3 w-3/4 bg-gray-200 rounded-sm" />
-                <div className="h-3 w-1/4 bg-gray-200 rounded-sm" />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-14">
-            {products.map(p => (
-              <MinimalProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        )}
-      </main>
-    </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-14">
+              {products.map(p => (
+                <UniversalProductCard 
+                  key={p.id} 
+                  product={{
+                    ...p,
+                    price: (p.DD15 ? 0.85 : p.DD10 ? 0.90 : 1) * p.our_price,
+                    compare_at_price: p.our_price,
+                  }} 
+                  size="medium"
+                  showRating={true}
+                  showBrand={true}
+                />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

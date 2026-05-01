@@ -931,8 +931,8 @@ p.eyebrow-label {
 /* Product card — white, subtle border, hover shadow */
 .dg-card {
   background: #ffffff;
-  border: 1px solid var(--dg-border);
-  border-radius: 6px;
+  border: none;
+  border-radius: 0;
   overflow: hidden;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }

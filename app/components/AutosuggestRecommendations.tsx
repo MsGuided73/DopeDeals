@@ -25,6 +25,8 @@ interface Product {
   category_id: string | null;
   created_at: string;
   updated_at: string;
+  rating?: number;
+  review_count?: number;
 }
 
 export default function AutosuggestRecommendations({ 
