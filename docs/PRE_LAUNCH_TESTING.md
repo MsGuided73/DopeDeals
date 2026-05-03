@@ -376,9 +376,9 @@ uploaded and live.
 
 ### 4.3 Redirect & webhook wiring
 
-- [ ] Approve redirect → `https://highway420.com/order-confirmation/{{invoice}}`
-- [ ] Decline redirect → `https://highway420.com/checkout/error`
-- [ ] Webhook URL → `https://highway420.com/api/kajapay/webhook`
+- [ ] Approve redirect → `https://highway420store.com/order-confirmation/{{invoice}}`
+- [ ] Decline redirect → `https://highway420store.com/checkout/error`
+- [ ] Webhook URL → `https://highway420store.com/api/kajapay/webhook`
 - [ ] Webhook secret matches the `KAJAPAY_WEBHOOK_SECRET` env var — sign
       a test event and confirm signature verification passes in
       [app/api/kajapay/webhook/route.ts](../app/api/kajapay/webhook/route.ts).

@@ -7,7 +7,7 @@ import GlobalMasthead from "./components/GlobalMasthead";
 export const metadata: Metadata = {
   title: "HIGHWAY 420 — Premium Cannabis Culture & Smoke Shop",
   description: "Life is a Highway, Ride With Us. Premium cannabis products at the lowest prices — glass, bongs, dab rigs, vapes, edibles & more. Free shipping over $75.",
-  alternates: { canonical: 'https://highway420.com' },
+  alternates: { canonical: 'https://highway420store.com' },
 };
 
 // Lazy-load below-the-fold sections for faster initial page load

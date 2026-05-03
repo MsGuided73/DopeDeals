@@ -15,7 +15,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://highway420.com',
+    url: 'https://highway420store.com',
     siteName: 'HIGHWAY 420',
     title: 'HIGHWAY 420 — Premium Products, Lowest Prices 🌿',
     description: 'Top-quality cannabis accessories, edibles & more — all at the lowest prices. Free shipping over $75. Life is a Highway, Ride With Us. 🚚 #Highway420',

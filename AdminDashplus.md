@@ -274,7 +274,7 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
-FROM_EMAIL=noreply@highway420.com
+FROM_EMAIL=noreply@highway420store.com
 FROM_NAME=Highway 420
 ```
 
@@ -387,7 +387,7 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
-FROM_EMAIL=noreply@highway420.com
+FROM_EMAIL=noreply@highway420store.com
 FROM_NAME=Highway 420
 
 # Shipstation (when implementing)

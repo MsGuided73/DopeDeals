@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const FROM = process.env.EMAIL_USER || 'noreply@highway420.com';
+const FROM = process.env.EMAIL_USER || 'noreply@highway420store.com';
 const STORE_NAME = 'Highway 420';
 
 interface OrderEmailData {
@@ -86,7 +86,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData): Promise<
         <p>We'll send you another email when your order ships with tracking info.</p>
 
         <p style="color: #666; font-size: 12px; margin-top: 32px; border-top: 1px solid #eee; padding-top: 16px;">
-          Questions? Reply to this email or visit highway420.com/help<br>
+          Questions? Reply to this email or visit highway420store.com/help<br>
           ${STORE_NAME} — Life is a Highway, Ride With Us
         </p>
       </div>
@@ -155,7 +155,7 @@ export async function sendOrderStatusEmail(data: StatusEmailData): Promise<void>
           <p style="margin: 0;"><strong>Order Number:</strong> ${data.orderNumber}</p>
         </div>
         <p style="color: #666; font-size: 12px; margin-top: 32px; border-top: 1px solid #eee; padding-top: 16px;">
-          Questions? Reply to this email or visit highway420.com/help<br>
+          Questions? Reply to this email or visit highway420store.com/help<br>
           ${STORE_NAME} — Life is a Highway, Ride With Us
         </p>
       </div>

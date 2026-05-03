@@ -249,7 +249,7 @@ export default function AdminSettingsPage() {
 
           <p>We'll send you shipping updates as your order progresses.</p>
 
-          <p>Questions? Contact us at support@highway420.com</p>
+          <p>Questions? Contact us at support@highway420store.com</p>
 
           <p>Happy smoking!<br>
           The Highway 420 Team</p>
@@ -270,7 +270,7 @@ export default function AdminSettingsPage() {
 
           <p>You can track your package at the carrier's website using the tracking number above.</p>
 
-          <p>Questions? Contact us at support@highway420.com</p>
+          <p>Questions? Contact us at support@highway420store.com</p>
 
           <p>The Highway 420 Team</p>
         </div>

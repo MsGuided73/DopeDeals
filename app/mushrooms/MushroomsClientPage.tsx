@@ -192,7 +192,7 @@ export default function MushroomsClientPage() {
     name: 'Shrooms — Coming Soon | Highway 420',
     description:
       'Premium mushroom products coming soon to Highway 420. Join the list for early access.',
-    url: 'https://highway420.com/mushrooms',
+    url: 'https://highway420store.com/mushrooms',
   };
 
   return (

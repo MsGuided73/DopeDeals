@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const smtpPort = parseInt(process.env.SMTP_PORT || '587');
     const smtpUser = process.env.SMTP_USER;
     const smtpPassword = process.env.SMTP_PASSWORD;
-    const fromEmail = process.env.FROM_EMAIL || 'noreply@highway420.com';
+    const fromEmail = process.env.FROM_EMAIL || 'noreply@highway420store.com';
     const fromName = process.env.FROM_NAME || 'Highway 420';
 
     if (!smtpUser || !smtpPassword) {
@@ -62,11 +62,11 @@ export async function POST(request: NextRequest) {
       cart_total: '$127.50',
       discount_code: 'SAVE10',
       expiration_time: '24',
-      verification_link: 'https://highway420.com/verify?token=abc123',
+      verification_link: 'https://highway420store.com/verify?token=abc123',
       store_features: 'Premium products, fast shipping, expert support',
       special_offer: 'Get 10% off your next order with code WELCOME10',
       featured_products: '<li>Premium Glass Bong - $89.99</li><li>THCA Flower 1g - $45.00</li>',
-      unsubscribe_link: 'https://highway420.com/unsubscribe?email=' + testEmail
+      unsubscribe_link: 'https://highway420store.com/unsubscribe?email=' + testEmail
     };
 
     // Replace template variables

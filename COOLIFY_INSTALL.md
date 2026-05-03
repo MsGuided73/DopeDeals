@@ -29,5 +29,5 @@ curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
 ## 4. Domain Mapping
 
 1.  In Coolify, go to the **Settings** of your application.
-2.  Add your domain (e.g., `https://highway420.com`).
+2.  Add your domain (e.g., `https://highway420store.com`).
 3.  Ensure your DNS A Record points to the Droplet IP. Coolify will automatically handle SSL via Let's Encrypt.

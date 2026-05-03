@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "HIGHWAY 420 — Premium Headshop | Bongs, Vapes, Edibles & More",
   description:
     "Your online headshop for premium glass, bongs, dab rigs, vapes, edibles & more. Free shipping over $75. Shop the best brands at the lowest prices.",
-  alternates: { canonical: "https://highway420.com" },
+  alternates: { canonical: "https://highway420store.com" },
 };
 
 // Lazy-load below-the-fold sections for faster initial page load

@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         brand: product.brand_id ? { '@type': 'Brand', name: product.brand_id } : undefined,
         offers: {
           '@type': 'Offer',
-          url: `https://highway420.com/product/${id}`,
+          url: `https://highway420store.com/product/${id}`,
           priceCurrency: 'USD',
           price: price.toFixed(2),
           availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',

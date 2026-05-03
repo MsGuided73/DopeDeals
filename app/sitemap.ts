@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 export default async function sitemap() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://highway420.com';
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://highway420store.com';
   const now = new Date();
 
   // Static pages

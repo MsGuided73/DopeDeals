@@ -24,9 +24,9 @@ dashboard and configure so KajaPay renders it at pay-link time.
 
 **Environment right now:** [sandbox / production — fill in]
 **Payment Page slug I'm editing:** [slug, e.g. `HW420_PROD_01`]
-**Approve / success redirect:** `https://highway420.com/order-confirmation/{{invoice}}`
-**Decline / cancel redirect:** `https://highway420.com/checkout/error`
-**Webhook already wired at:** `https://highway420.com/api/kajapay/webhook`
+**Approve / success redirect:** `https://highway420store.com/order-confirmation/{{invoice}}`
+**Decline / cancel redirect:** `https://highway420store.com/checkout/error`
+**Webhook already wired at:** `https://highway420store.com/api/kajapay/webhook`
 
 **Token placeholders I used in the HTML:**
 `{{amount}}`, `{{amount_formatted}}`, `{{invoice}}`, `{{subtotal}}`,

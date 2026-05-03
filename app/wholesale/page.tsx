@@ -262,17 +262,17 @@ export default function WholesalePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Wholesale Sales</h4>
-              <p className="text-gray-600">wholesale@highway420.com</p>
+              <p className="text-gray-600">marketing@highway420store.com</p>
               <p className="text-gray-600">1-800-WHOLESALE</p>
             </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Account Management</h4>
-              <p className="text-gray-600">accounts@highway420.com</p>
+              <p className="text-gray-600">info@highway420store.com</p>
               <p className="text-gray-600">1-800-ACCOUNTS</p>
             </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Support</h4>
-              <p className="text-gray-600">support@highway420.com</p>
+              <p className="text-gray-600">support@highway420store.com</p>
               <p className="text-gray-600">1-800-SUPPORT</p>
             </div>
           </div>

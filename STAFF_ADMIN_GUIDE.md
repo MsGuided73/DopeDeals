@@ -5,7 +5,7 @@
 
 ## 🔑 **How to Access the Admin Panel**
 
-1.  **Open your browser** and go to: `https://highway420.com/admin` (or your specific store URL).
+1.  **Open your browser** and go to: `https://highway420store.com/admin` (or your specific store URL).
 2.  **Log in** using your staff email and password.
 3.  **The Dashboard:** Once logged in, you will see the main Dashboard, which gives you a high-level summary of today's sales, active customers, and any items that are low on stock.
 
