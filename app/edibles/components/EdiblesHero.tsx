@@ -26,8 +26,8 @@ export default function EdiblesHero({ activeCategory, setActiveCategory }: Edibl
       subhead="Tasty. Precise. Lab-Tested."
       paragraph="Premium hemp-derived edibles — gummies, chocolates, beverages, and tinctures — dosed for consistency and crafted for everyday wellness."
       ctaLabel="Learn About Edibles"
-      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/N-ediblesPP.png"
-      illustrationAlt="Highway 420 — Premium Edibles & Wellness"
+      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/New/THCA%20EDIBLES%20category%20final.png"
+      illustrationAlt="Highway 420 THCA edibles — gummies, chocolates, beverages, and tinctures"
       pills={EDIBLES_PILLS}
       activePillId={activeCategory}
       onPillChange={setActiveCategory}

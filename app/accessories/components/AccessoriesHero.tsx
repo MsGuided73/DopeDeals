@@ -9,14 +9,14 @@ interface AccessoriesHeroProps {
 
 const ACCESSORIES_PILLS: ReadonlyArray<CategoryHeroPill> = [
   { id: 'all-accessories', label: 'All Accessories' },
-  { id: 'lighters', label: 'Lighters' },
+  { id: 'grinders', label: 'Grinders' },
   { id: 'torches', label: 'Torches' },
   { id: 'ashtrays', label: 'Ashtrays' },
   { id: 'storage', label: 'Storage' },
 ];
 
-// Smoking accessories hero. Uses the shared CategoryHero template with NO
-// illustration (right half stays clean), matching the THCA Flower pattern.
+// Smoking accessories hero. Uses the shared CategoryHero template with the
+// Accessories illustration anchored to the right half.
 export default function AccessoriesHero({ activeCategory, setActiveCategory }: AccessoriesHeroProps) {
   return (
     <CategoryHero
@@ -28,10 +28,12 @@ export default function AccessoriesHero({ activeCategory, setActiveCategory }: A
       subhead="Everything Else You Need."
       paragraph="The supporting cast that makes every session better — lighters, torches, ashtrays, and stash storage. Functional, durable, built to last."
       ctaLabel="See Why Accessories Matter"
-      // No illustration on this page — keep the right half clean.
+      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/New/accessories%20version%20a.png"
+      illustrationAlt="Highway 420 smoking accessories — lighters, torches, ashtrays, and stash storage"
       pills={ACCESSORIES_PILLS}
       activePillId={activeCategory}
       onPillChange={setActiveCategory}
+      isLeftAligned={true}
       expandedContent={
         <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-xl">
           <h4 className="text-xl font-semibold text-black mb-4">🔧 The Right Tools for the Job</h4>

@@ -48,7 +48,14 @@ export interface BongProduct {
   percolator?: string;
 }
 
-export default function BongsPageContent() {
+interface BongsPageContentProps {
+  /** Optional pre-selected pill id. Used by dedicated sub-collection routes
+   *  like /percolator-bongs that want to land on a specific category filter
+   *  without forcing the user through the all-bongs default. */
+  initialCategory?: string;
+}
+
+export default function BongsPageContent({ initialCategory = 'all-bongs' }: BongsPageContentProps = {}) {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<BongProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<BongProduct[]>([]);
@@ -57,7 +64,7 @@ export default function BongsPageContent() {
   const [sortBy, setSortBy] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(24);
-  const [activeCategory, setActiveCategory] = useState('all-bongs');
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Filter states

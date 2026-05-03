@@ -27,11 +27,12 @@ export default function ThcaFlowerHero({ activeCategory, setActiveCategory }: Th
       subhead="Lab-Tested. Federally Compliant."
       paragraph="Premium hemp-derived THCA flower in eighths, quarters, halves, and ounces — plus infused prerolls. Cultivated for terpene profile, tested for purity."
       ctaLabel="Learn About THCA Flower"
-      // No illustration on this page — keep the right half clean and let the
-      // brand-green pills + halo-backed text carry the hero on their own.
+      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/New/Flower%20Category.png"
+      illustrationAlt="Highway 420 THCA flower — eighths, quarters, halves, ounces, and infused prerolls"
       pills={FLOWER_PILLS}
       activePillId={activeCategory}
       onPillChange={setActiveCategory}
+      isLeftAligned={true}
       expandedContent={
         <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-xl">
           <h4 className="text-xl font-semibold text-black mb-4">🌿 What is THCA Flower?</h4>

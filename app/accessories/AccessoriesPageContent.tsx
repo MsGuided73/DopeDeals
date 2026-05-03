@@ -101,7 +101,7 @@ const deriveMaterials = (p: any): string[] => {
 // activeCategory filter. Returns null for "all" which means no filtering.
 const CATEGORY_MATCHERS: Record<string, ((p: AccessoryProduct) => boolean) | null> = {
   'all-accessories': null,
-  lighters: (p) => p.type === 'Lighter' || p.category_slug === 'lighters',
+  grinders: (p) => p.type === 'Grinder' || p.category_slug === 'grinders',
   torches: (p) => p.type === 'Torch' || p.category_slug === 'torch',
   ashtrays: (p) => p.type === 'Ashtray' || p.category_slug === 'ashtrays',
   storage: (p) => p.type === 'Storage' || p.category_slug === 'storage',

@@ -50,7 +50,7 @@ export default function TrustedBrandsBulletin() {
       <div style={{ textAlign: 'center', marginBottom: '48px' }}>
         <h2 style={{
           fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-          fontSize: 'clamp(42px, 6vw, 72px)',
+          fontSize: 'clamp(32px, 5vw, 64px)',
           lineHeight: 1,
           letterSpacing: '0.02em',
           color: '#1c1208',

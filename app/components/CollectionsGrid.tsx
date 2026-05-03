@@ -19,7 +19,7 @@ const TOP_ROW: Collection[] = [
     name: "Bongs & Water Pipes",
     tagline: "Smooth hits. Elevated sessions.",
     route: "/bongs",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Bongs.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/BONGS%20ROOR%20FOR%20GRID%20HIGH%20RES%20%20A.png",
   },
   {
     name: "Dab Rigs",
@@ -209,6 +209,7 @@ export default function CollectionsGrid() {
         }
 
         /* Pixel-perfect alignment adjustments for the top row */
+        .cg-row--top .cg-card:nth-child(1) { --cg-scale: 1.35; --cg-offset-x: 75px; --cg-offset-y: 48px; }
         .cg-row--top .cg-card:nth-child(2) { --cg-offset-y: -3px; }
         .cg-row--top .cg-card:nth-child(3) { --cg-offset-y: -1px; }
 

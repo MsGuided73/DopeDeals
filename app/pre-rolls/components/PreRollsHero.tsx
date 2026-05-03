@@ -24,11 +24,12 @@ export default function PreRollsHero({ activeCategory, setActiveCategory }: PreR
       subhead="Roll Up. Light Up."
       paragraph="Expertly rolled, ready-to-smoke joints in singles and multi-packs. From classic strain-specific pre-rolls to potent infused options — premium flower in every paper."
       ctaLabel="Learn About Our Pre-Rolls"
-      // No illustration on this page — keep the right half clean and let the
-      // brand-green pills + halo-backed text carry the hero on their own.
+      illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/New/Preroll%20category%20final%20A.png"
+      illustrationAlt="Highway 420 pre-rolls — singles, multi-packs, and infused joints"
       pills={PRE_ROLLS_PILLS}
       activePillId={activeCategory}
       onPillChange={setActiveCategory}
+      isLeftAligned={true}
       expandedContent={
         <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-xl">
           <h4 className="text-xl font-semibold text-black mb-4">🚬 Why Buy Pre-Rolls?</h4>

@@ -232,7 +232,7 @@ export default function MushroomsClientPage() {
             <span className="text-gray-900 font-medium">Shrooms</span>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-12 items-center">
             {/* Left — copy + signup */}
             <div>
               <p className="text-[#2d8f47] text-sm font-bold tracking-[0.2em] uppercase border-b-2 border-[#2d8f47] inline-block pb-1 mb-6">
@@ -254,14 +254,18 @@ export default function MushroomsClientPage() {
               </div>
             </div>
 
-            {/* Right — product image */}
-            <div className="relative aspect-square max-w-xl mx-auto w-full">
+            {/* Right — product image. Container uses a 3:4 portrait aspect
+                that matches the source product photo so the image fills the
+                frame edge-to-edge instead of getting letterboxed inside a
+                square. `mx-auto` plus a max-width keeps the image centered
+                within the wider grid column on large viewports. */}
+            <div className="relative w-full max-w-2xl aspect-[3/4] mx-auto">
               <Image
                 src={PRODUCT_IMAGE_URL}
                 alt="Shroom Gummies by Highway 420 — Balance, Focus, Elevate"
                 fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-contain"
+                sizes="(max-width: 1024px) 100vw, 672px"
+                className="object-contain object-center"
                 priority
               />
             </div>

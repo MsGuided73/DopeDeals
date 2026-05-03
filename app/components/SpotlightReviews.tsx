@@ -304,7 +304,7 @@ export default function SpotlightReviews() {
 
           <h2
             style={{
-              fontSize: "clamp(40px, 5vw, 62px)",
+              fontSize: "clamp(32px, 5vw, 64px)",
               fontWeight: 700,
               color: "rgba(8,16,8,0.92)",
               lineHeight: 1.1,

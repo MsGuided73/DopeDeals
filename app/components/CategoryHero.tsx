@@ -89,8 +89,12 @@ export default function CategoryHero({
         </div>
       ) : null}
 
-      {/* Hero content section — full viewport width with safe-zone padding. */}
-      <div className={`relative pt-12 pb-24 pr-4 sm:pr-6 lg:pr-8 flex flex-col md:flex-row items-center min-h-[600px] z-30 ${
+      {/* Hero content section — full viewport width with safe-zone padding.
+          `items-start` (rather than items-center) keeps the text + pill block
+          anchored to the top of the hero so the pill row sits high — well
+          away from the bottom edge — instead of getting vertically centered
+          and drifting back down toward the bottom. */}
+      <div className={`relative pt-12 pb-24 pr-4 sm:pr-6 lg:pr-8 flex flex-col md:flex-row items-start min-h-[600px] z-30 ${
         isLeftAligned ? 'pl-6' : 'px-4 sm:px-6 lg:px-8'
       }`}>
         {/* Left column — text content centered horizontally within the left half. */}
@@ -141,28 +145,30 @@ export default function CategoryHero({
                   </svg>
                 </button>
               ) : null}
-            </div>
-          </div>
-        </div>
 
-        {/* Pill bar — bottom-left, first pill aligns with headline left edge,
-            row extends rightward into the left half. Hidden on mobile. */}
-        <div className="w-full md:w-1/2 absolute left-0 top-0 h-full hidden md:flex flex-col justify-end pointer-events-none z-10">
-          <div
-            className={`absolute bottom-0 left-0 right-4 flex flex-nowrap gap-3 pointer-events-auto z-20 ${
-              isLeftAligned ? 'pl-6' : ''
-            }`}
-            style={!isLeftAligned ? { paddingLeft: 'max(1rem, calc((100% - 36rem) / 2))' } : undefined}
-          >
-            {pills.map((pill) => (
-              <button
-                key={pill.id}
-                onClick={() => onPillChange(pill.id)}
-                className={`${PILL_BASE} ${activePillId === pill.id ? PILL_ACTIVE : PILL_INACTIVE}`}
+              {/* Pill bar — sits directly under the hero text/CTA so the
+                  filter chips read as part of the headline block. First pill
+                  aligns with the headline left edge; the row stays on a single
+                  line and is allowed to extend rightward past the max-w-xl
+                  text column into the illustration area when needed. Hidden on
+                  mobile (the mobile layout exposes filtering through the
+                  drawer instead). */}
+              <div
+                className="hidden md:flex flex-nowrap gap-3 mt-8"
+                style={{ width: 'max-content' }}
               >
-                {pill.label}
-              </button>
-            ))}
+                {pills.map((pill) => (
+                  <button
+                    key={pill.id}
+                    onClick={() => onPillChange(pill.id)}
+                    aria-pressed={activePillId === pill.id}
+                    className={`${PILL_BASE} flex-shrink-0 ${activePillId === pill.id ? PILL_ACTIVE : PILL_INACTIVE}`}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

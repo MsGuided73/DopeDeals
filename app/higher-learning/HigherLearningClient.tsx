@@ -25,7 +25,7 @@ const SECONDARY_POSTS = [
     description: "Discover how percolators work, the benefits they offer, and whether they're worth the upgrade.",
     category: "BONGS & GLASS",
     readTime: "5 min read",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/glass_bong_setup.jpg",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/Percolator%20Bong%20Comp%20for%20Higher%20Learning%20Blog.png",
     href: "/higher-learning/percolator-vs-regular-bong",
   },
   {
