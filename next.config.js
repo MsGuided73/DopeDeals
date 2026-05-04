@@ -17,11 +17,6 @@ const nextConfig = {
   // Enable standalone output for Docker deployment
   output: 'standalone',
 
-  experimental: {
-    memoryBasedWorkersCount: true,
-    cpus: 2,
-  },
-
   // Redirects to hide N2O and Accessories temporarily
   async redirects() {
     return [

@@ -37,6 +37,98 @@ async function logWebhookEvent(eventType: string, transactionId: number | undefi
   }
 }
 
+// Release the ShipStation order from `on_hold` (created at checkout) to
+// `awaiting_shipment` so the warehouse can pick, pack and ship. If no
+// ShipStation order exists yet (checkout-time creation failed), create one.
+// All failures are logged and swallowed — never block the webhook 200.
+async function releaseShipstationOrder(order: any): Promise<void> {
+  try {
+    const apiKey = process.env.SHIPSTATION_API_KEY;
+    if (!apiKey) {
+      console.warn('[KajaPay Webhook] SHIPSTATION_API_KEY not set — skipping ShipStation release');
+      return;
+    }
+
+    const { ShipstationClient } = await import('../../../../lib/services/shipstation/client');
+    const client = new ShipstationClient({ apiKey });
+
+    const ship = order.shipping_address || {};
+    const bill = order.billing_address || ship;
+
+    const toAddress = (a: any) => ({
+      name:
+        `${a.firstName ?? a.first_name ?? ''} ${a.lastName ?? a.last_name ?? ''}`.trim() ||
+        `${order.customer_first_name ?? ''} ${order.customer_last_name ?? ''}`.trim() ||
+        'Customer',
+      street1: a.address1 ?? a.street1 ?? '',
+      street2: a.address2 ?? a.street2 ?? undefined,
+      city: a.city ?? '',
+      state: a.state ?? '',
+      postalCode: a.postalCode ?? a.postal_code ?? a.zip ?? '',
+      country: a.country ?? 'US',
+      phone: a.phone ?? order.customer_phone ?? undefined,
+    });
+
+    const { data: items } = await supabase
+      .from('order_items')
+      .select('product_name, product_sku, product_image_url, unit_price, quantity')
+      .eq('order_id', order.id);
+
+    const ssItems = (items || []).map((it: any) => ({
+      name: it.product_name || 'Item',
+      sku: it.product_sku || undefined,
+      imageUrl: it.product_image_url || undefined,
+      quantity: Number(it.quantity || 1),
+      unitPrice: Number(it.unit_price || 0),
+    }));
+
+    const payload: any = {
+      orderNumber: order.order_number || order.id,
+      orderDate: new Date(order.created_at || Date.now()).toISOString(),
+      paymentDate: new Date().toISOString(),
+      orderStatus: 'awaiting_shipment',
+      customerEmail: order.customer_email,
+      billTo: toAddress(bill),
+      shipTo: toAddress(ship),
+      items: ssItems,
+      orderTotal: Number(order.total_amount || 0),
+      amountPaid: Number(order.total_amount || 0),
+      taxAmount: Number(order.tax_amount || 0),
+      shippingAmount: Number(order.shipping_amount || 0),
+      paymentMethod: 'KajaPay',
+    };
+
+    let response;
+    if (order.shipstation_order_id) {
+      const ssOrderId = Number(order.shipstation_order_id);
+      if (Number.isFinite(ssOrderId)) {
+        response = await client.updateOrder(ssOrderId, payload);
+      } else {
+        response = await client.createOrder(payload);
+      }
+    } else {
+      response = await client.createOrder(payload);
+    }
+
+    if (!response.success) {
+      console.error('[KajaPay Webhook] ShipStation release failed:', response.error);
+      return;
+    }
+
+    const ssOrderId = response.data?.orderId;
+    if (ssOrderId && !order.shipstation_order_id) {
+      await supabase
+        .from('orders')
+        .update({ shipstation_order_id: String(ssOrderId) })
+        .eq('id', order.id);
+    }
+
+    console.log(`[KajaPay Webhook] ✅ ShipStation order released — ssOrderId: ${ssOrderId}, orderId: ${order.id}`);
+  } catch (error) {
+    console.error('[KajaPay Webhook] ShipStation release error (non-blocking):', error);
+  }
+}
+
 // Mark webhook event processed
 async function markProcessed(kajaPayTransactionId: number | undefined, success: boolean, errorMsg?: string) {
   if (!kajaPayTransactionId) return;
@@ -147,6 +239,10 @@ async function handleTransactionApproved(body: any): Promise<NextResponse> {
       // Email failure should never block the webhook response
       console.error('[KajaPay Webhook] Email send failed (non-blocking):', emailError);
     }
+
+    // 5. Release the ShipStation order from on_hold → awaiting_shipment so the
+    //    warehouse can pick & pack. Non-blocking; logs but does not fail the webhook.
+    await releaseShipstationOrder(order);
 
     await markProcessed(kajaPayTransactionId, true);
 
