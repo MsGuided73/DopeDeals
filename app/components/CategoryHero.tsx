@@ -90,11 +90,10 @@ export default function CategoryHero({
       ) : null}
 
       {/* Hero content section — full viewport width with safe-zone padding.
-          `items-start` (rather than items-center) keeps the text + pill block
-          anchored to the top of the hero so the pill row sits high — well
-          away from the bottom edge — instead of getting vertically centered
-          and drifting back down toward the bottom. */}
-      <div className={`relative pt-12 pb-24 pr-4 sm:pr-6 lg:pr-8 flex flex-col md:flex-row items-start min-h-[600px] z-30 ${
+          `items-center` vertically centers the text + pill block within the
+          min-h-[600px] hero so it visually balances with the right-side
+          illustration. */}
+      <div className={`relative pt-12 pb-24 pr-4 sm:pr-6 lg:pr-8 flex flex-col md:flex-row items-center min-h-[600px] z-30 ${
         isLeftAligned ? 'pl-6' : 'px-4 sm:px-6 lg:px-8'
       }`}>
         {/* Left column — text content centered horizontally within the left half. */}
@@ -112,7 +111,7 @@ export default function CategoryHero({
               }}
             />
             <div className="relative z-10">
-              <h1 className="font-chalets text-[3.5rem] leading-[0.9] md:text-[5rem] lg:text-[6rem] text-[#1a1a1a] font-bold uppercase tracking-tight mb-4">
+              <h1 className="font-chalets text-[3rem] leading-[0.9] md:text-[4rem] lg:text-[5rem] text-[#1a1a1a] font-bold uppercase tracking-tight mb-4">
                 {headline}
               </h1>
 

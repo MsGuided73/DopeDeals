@@ -1,10 +1,17 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, type ReactNode } from 'react';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+type SlideCopy = {
+  eyebrow: string;
+  headline: ReactNode;
+  tagline: ReactNode;
+};
+
 // ─── Carousel slides ──────────────────────────────────────────────────────────
-const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string }[] = [
+const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string; objectFit?: 'cover' | 'contain'; copy?: SlideCopy }[] = [
   {
     id: 'slide-1',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test2.png',
@@ -21,10 +28,16 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
   },
   {
     id: 'slide-3',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/Bundles-V1.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/16x5-bundles-carousel.png',
     alt: 'Highway 420 — Bundles',
     href: '/bundles',
     objectPosition: 'center center',
+    objectFit: 'cover',
+    copy: {
+      eyebrow: 'Curated for Convenience',
+      headline: <>Popular<br />Set-Ups</>,
+      tagline: <>Everything you need.<br />Nothing you don&rsquo;t.</>,
+    },
   },
   {
     id: 'slide-4',
@@ -108,6 +121,9 @@ export default function FullscreenCarousel() {
           /* mobile masthead ≈ 70px */
           max-height: calc(70vh - 35px);
           max-height: calc(70svh - 35px);
+          /* Establish a container so child copy can size with cqi units. */
+          container-type: inline-size;
+          container-name: carousel;
         }
 
         @media (min-width: 768px) {
@@ -139,6 +155,118 @@ export default function FullscreenCarousel() {
           }
         }
 
+        /* Slide copy panel — left-side text block with no solid background.
+           A soft cream radial-gradient halo sits behind the text and a
+           downward text-shadow makes the cream "glow" appear to emanate
+           from the underside of each letter. */
+        .carousel-copy {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 42%;
+          /* Left padding matches the masthead shield logo's pl-4 (16px) so
+             the headline's left edge aligns vertically with the shield. */
+          padding: 6% 5% 6% 16px;
+          color: #1f4d2e;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          z-index: 5;
+          pointer-events: none;
+        }
+        @media (min-width: 1024px) {
+          .carousel-copy {
+            /* Matches masthead lg:pl-6 (24px). */
+            padding-left: 24px;
+          }
+        }
+        /* Cream halo — wide, blurred radial behind the text block, biased
+           toward the bottom so it visually pools beneath the letters. */
+        .carousel-copy::before {
+          content: '';
+          position: absolute;
+          inset: -8% -18% -4% -12%;
+          background: radial-gradient(
+            ellipse 70% 60% at 45% 65%,
+            rgba(241, 234, 210, 0.92) 0%,
+            rgba(241, 234, 210, 0.7) 30%,
+            rgba(241, 234, 210, 0.4) 55%,
+            rgba(241, 234, 210, 0.15) 75%,
+            transparent 95%
+          );
+          filter: blur(36px);
+          z-index: 0;
+          pointer-events: none;
+        }
+        .carousel-copy > * {
+          position: relative;
+          z-index: 1;
+        }
+        /* Cream glow emanating from the underside of each letter — three
+           stacked shadows offset progressively downward and softened. */
+        .carousel-copy-eyebrow,
+        .carousel-copy-headline,
+        .carousel-copy-tagline {
+          text-shadow:
+            0 1px 4px rgba(241, 234, 210, 0.95),
+            0 4px 12px rgba(241, 234, 210, 0.85),
+            0 10px 28px rgba(241, 234, 210, 0.6);
+        }
+        .carousel-copy-eyebrow {
+          font-size: clamp(7px, 1.0cqi, 28px);
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          margin-bottom: clamp(4px, 1.3cqi, 32px);
+        }
+        .carousel-copy-headline {
+          font-family: 'BebasNeue', 'Bebas Neue', 'Impact', sans-serif;
+          /* Scales with the carousel's inline (width) size via container
+             query units. Wide range — shrinks below 22px at narrow
+             widths and grows past 200px on 4K hero displays. */
+          font-size: clamp(18px, 6cqi, 220px);
+          line-height: 0.9;
+          font-weight: 400;
+          letter-spacing: -0.04em;
+          text-transform: uppercase;
+          margin: 0 0 clamp(8px, 1.8cqi, 40px) 0;
+          transform: scaleX(0.92);
+          transform-origin: left center;
+        }
+        .carousel-copy-divider {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: clamp(10px, 1.4vw, 20px);
+        }
+        .carousel-copy-divider::before,
+        .carousel-copy-divider::after {
+          content: '';
+          flex: 0 0 28px;
+          height: 2px;
+          background: #1f4d2e;
+        }
+        .carousel-copy-divider svg {
+          width: clamp(14px, 1.4vw, 22px);
+          height: clamp(14px, 1.4vw, 22px);
+          color: #1f4d2e;
+        }
+        .carousel-copy-tagline {
+          font-size: clamp(9px, 1.3cqi, 36px);
+          line-height: 1.35;
+          font-weight: 500;
+          color: #1a3a23;
+        }
+
+        @media (max-width: 767px) {
+          .carousel-copy {
+            width: 55%;
+            /* Keep left padding aligned with shield (16px) on mobile too. */
+            padding: 5% 4% 5% 16px;
+          }
+        }
+
         /* Slide fade */
         .carousel-slide {
           position: absolute;
@@ -146,7 +274,8 @@ export default function FullscreenCarousel() {
           transition: opacity 0.9s ease-in-out;
         }
 
-        /* Arrows */
+        /* Arrows — clustered as a [<] [>] pair at bottom-right so they
+           don't overlap left-side copy panels. */
         .carousel-arrow {
           position: absolute;
           bottom: 24px;
@@ -168,13 +297,15 @@ export default function FullscreenCarousel() {
         }
         .carousel-arrow:hover { background: rgba(0,0,0,0.55); }
         .carousel-arrow:active { transform: scale(0.93); }
-        .carousel-arrow-left  { left:  16px; }
+        /* Right edge: 16px gap. Left arrow sits to the immediate left of
+           the right arrow with an 8px gap between them. */
         .carousel-arrow-right { right: 16px; }
+        .carousel-arrow-left  { right: calc(16px + 40px + 8px); }
 
         @media (min-width: 768px) {
           .carousel-arrow { width: 44px; height: 44px; }
-          .carousel-arrow-left  { left: 28px; }
           .carousel-arrow-right { right: 28px; }
+          .carousel-arrow-left  { right: calc(28px + 44px + 10px); }
         }
 
         /* Dots */
@@ -225,13 +356,30 @@ export default function FullscreenCarousel() {
             aria-hidden={idx !== current}
             tabIndex={idx !== current ? -1 : 0}
           >
-            {/* eslint-disable-next-line */}
-            <img
+            <Image
               className="carousel-slide-img"
               src={slide.src}
               alt={slide.alt}
-              style={{ objectPosition: slide.objectPosition ?? 'center center' }}
+              fill
+              sizes="100vw"
+              priority={idx === 0}
+              style={{
+                objectPosition: slide.objectPosition ?? 'center center',
+                objectFit: slide.objectFit ?? 'contain',
+              }}
             />
+            {slide.copy ? (
+              <div className="carousel-copy">
+                <div className="carousel-copy-eyebrow">{slide.copy.eyebrow}</div>
+                <h2 className="carousel-copy-headline">{slide.copy.headline}</h2>
+                <div className="carousel-copy-divider" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2c-.5 3-2 5-4.5 6 1.5 1 2.5 2.5 3 4.5-2.5-.5-4.5-2-5.5-4.5-.5 3 .5 5.5 2.5 7.5-1 .5-2 1.5-2.5 3 2-.5 4-1 5.5-2.5.5 1 1 2 1.5 3 .5-1 1-2 1.5-3 1.5 1.5 3.5 2 5.5 2.5-.5-1.5-1.5-2.5-2.5-3 2-2 3-4.5 2.5-7.5-1 2.5-3 4-5.5 4.5.5-2 1.5-3.5 3-4.5C14 7 12.5 5 12 2z" />
+                  </svg>
+                </div>
+                <div className="carousel-copy-tagline">{slide.copy.tagline}</div>
+              </div>
+            ) : null}
           </a>
         ))}
 

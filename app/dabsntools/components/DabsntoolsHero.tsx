@@ -18,11 +18,7 @@ const DABS_PILLS: ReadonlyArray<CategoryHeroPill> = [
 export default function DabsntoolsHero({ activeCategory, setActiveCategory }: DabsntoolsHeroProps) {
   return (
     <CategoryHero
-      headline={
-        <>
-          DAB RIGS &amp; <br /> CONCENTRATE TOOLS
-        </>
-      }
+      headline={<>DAB RIGS</>}
       subhead="Pure Flavor. Precise Hits."
       paragraph="Glass rigs, e-rigs, portable devices, and the tools to run them — built to preserve terpenes and dial in every dab."
       ctaLabel="Learn How to Choose Your Rig"

@@ -265,7 +265,7 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <GlobalMasthead />
-      <div className="flex-grow bg-gradient-to-br from-slate-50 via-white to-emerald-50">
+      <div className="flex-grow bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Breadcrumb - Adapted to Next.js Link */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center space-x-2 text-sm text-slate-600">
