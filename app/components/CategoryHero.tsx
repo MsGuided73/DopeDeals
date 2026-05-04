@@ -27,6 +27,10 @@ type CategoryHeroProps = {
    *  is left empty (used for THCA Flower and other text-only heroes). */
   illustrationSrc?: string;
   illustrationAlt?: string;
+  /** Optional horizontal pixel offset applied to the illustration. Positive
+   *  values push the image to the right (the right edge is clipped by the
+   *  hero wrapper's overflow-hidden). Useful for fine-tuning per page. */
+  illustrationOffsetX?: number;
 
   /** Category pills anchored to the bottom of the left half. */
   pills: ReadonlyArray<CategoryHeroPill>;
@@ -62,6 +66,7 @@ export default function CategoryHero({
   expandedContent,
   illustrationSrc,
   illustrationAlt,
+  illustrationOffsetX,
   pills,
   activePillId,
   onPillChange,
@@ -77,7 +82,14 @@ export default function CategoryHero({
       {/* Hero photo — full viewport width, anchored right at natural aspect ratio.
           Skipped entirely when no illustrationSrc is provided. */}
       {illustrationSrc ? (
-        <div className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0">
+        <div
+          className="absolute inset-0 hidden md:block pointer-events-none overflow-hidden z-0"
+          style={
+            illustrationOffsetX
+              ? { transform: `translateX(${illustrationOffsetX}px)` }
+              : undefined
+          }
+        >
           <Image
             src={illustrationSrc}
             alt={illustrationAlt ?? ''}

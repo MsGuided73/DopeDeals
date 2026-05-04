@@ -1,20 +1,11 @@
 'use client';
 
-import CategoryHero, { type CategoryHeroPill } from '../../components/CategoryHero';
+import CategoryHero from '../../components/CategoryHero';
 
 interface ThcaFlowerHeroProps {
   activeCategory: string;
   setActiveCategory: (category: string) => void;
 }
-
-const FLOWER_PILLS: ReadonlyArray<CategoryHeroPill> = [
-  { id: 'all-flower', label: 'All Flower' },
-  { id: 'eighth', label: '3.5g' },
-  { id: 'quarter', label: '7g' },
-  { id: 'half', label: '14g' },
-  { id: 'ounce', label: '28g' },
-  { id: 'infused-prerolls', label: 'Infused Prerolls' },
-];
 
 export default function ThcaFlowerHero({ activeCategory, setActiveCategory }: ThcaFlowerHeroProps) {
   return (
@@ -26,10 +17,11 @@ export default function ThcaFlowerHero({ activeCategory, setActiveCategory }: Th
       }
       subhead="Lab-Tested. Federally Compliant."
       paragraph="Premium hemp-derived THCA flower in eighths, quarters, halves, and ounces — plus infused prerolls. Cultivated for terpene profile, tested for purity."
-      ctaLabel="Learn About THCA Flower"
       illustrationSrc="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/New/Flower%20Category.png"
       illustrationAlt="Highway 420 THCA flower — eighths, quarters, halves, ounces, and infused prerolls"
-      pills={FLOWER_PILLS}
+      illustrationOffsetX={100}
+      ctaLabel="Learn About THCA Flower"
+      pills={[]}
       activePillId={activeCategory}
       onPillChange={setActiveCategory}
       isLeftAligned={true}
