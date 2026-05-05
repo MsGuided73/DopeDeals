@@ -160,7 +160,6 @@ export default function DopeDealsSection() {
 
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <div style={{ height: '3px', width: '48px', background: DD.accent, margin: '0 auto 14px' }} />
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           DOPE DEALS
         </h2>
