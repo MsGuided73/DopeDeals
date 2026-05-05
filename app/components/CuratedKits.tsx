@@ -8,14 +8,13 @@ export default function CuratedKits() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-          <p className="text-[#415d39] font-black tracking-[0.25em] text-xl mb-3 uppercase">
-            EVERYTHING YOU NEED. READY TO RIDE.
-          </p>
-          <div style={{ height: '4px', width: '48px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D', margin: '0 auto 14px' }} />
-          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+          <span style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '13px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2F6B3A', display: 'inline-block', borderBottom: '2px solid #2F6B3A', paddingBottom: '4px', margin: '0 0 10px' }}>
+            Everything You Need. Ready To Ride.
+          </span>
+          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: '6px 0 8px' }}>
             CURATED KITS
           </h2>
-          <p style={{ fontSize: '15px', color: '#6B7280', margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>
+          <p style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '15px', color: '#5B6560', margin: 0, lineHeight: 1.5 }}>
             Bundles for every kind of session.
           </p>
           <div style={{ borderTop: '1px dashed rgba(20,92,60,0.4)', margin: '20px auto 0', maxWidth: '360px' }} />

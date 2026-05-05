@@ -286,21 +286,23 @@ export default function SpotlightReviews() {
         >
         {/* Left-aligned header block */}
         <div style={{ marginBottom: "40px" }}>
-          <p
+          <span
             className="eyebrow-label"
             style={{
-              fontFamily: "'MontserratExtraBold', 'Montserrat', sans-serif",
-              fontSize: "14px",
-              fontWeight: 800,
-              letterSpacing: "0.35em",
+              fontFamily: "'Fira Sans', 'Inter', sans-serif",
+              fontSize: "13px",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "#1a6b3a",
-              WebkitTextStroke: "0.6px #1a6b3a",
-              marginBottom: "8px",
+              color: "#2F6B3A",
+              display: "inline-block",
+              borderBottom: "2px solid #2F6B3A",
+              paddingBottom: "4px",
+              marginBottom: "6px",
             }}
           >
-            FROM THE ROAD
-          </p>
+            From The Road
+          </span>
 
           <h2
             style={{
@@ -308,7 +310,7 @@ export default function SpotlightReviews() {
               fontWeight: 700,
               color: "rgba(8,16,8,0.92)",
               lineHeight: 1.1,
-              margin: "0 0 12px",
+              margin: "6px 0 8px",
             }}
             className="font-serif-heading"
           >
@@ -317,11 +319,12 @@ export default function SpotlightReviews() {
 
           <p
             style={{
-              fontFamily: "'DM Sans', 'Inter', system-ui, sans-serif",
+              fontFamily: "'Fira Sans', 'Inter', sans-serif",
               fontSize: "15px",
-              color: "rgba(10,14,20,0.65)",
+              color: "#5B6560",
               lineHeight: 1.55,
               maxWidth: "340px",
+              margin: 0,
             }}
           >
             Real experiences from real customers.<br />

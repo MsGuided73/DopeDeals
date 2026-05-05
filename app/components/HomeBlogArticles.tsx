@@ -42,6 +42,7 @@ export default function HomeBlogArticles() {
             <h2 style={{
               fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
               fontSize: 'clamp(32px, 5vw, 64px)',
+              fontWeight: 400,
               lineHeight: 1,
               letterSpacing: '0.02em',
               color: '#1c1208',
@@ -49,7 +50,7 @@ export default function HomeBlogArticles() {
             }}>
               HIGHER LEARNING
             </h2>
-            <p className="text-[#4b5563] text-lg max-w-md">
+            <p style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '15px', color: '#5B6560', margin: 0, maxWidth: '28rem' }}>
               Tips, guides, and expert advice to get the most out of every puff.
             </p>
           </div>

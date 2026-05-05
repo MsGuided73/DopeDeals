@@ -37,10 +37,16 @@ export default function AboutHighway420() {
       <div className="max-w-[1300px] mx-auto px-4 w-full">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-gray-900 dark:text-white">
+          <h2
+            className="font-serif font-bold mb-3 text-gray-900 dark:text-white"
+            style={{ fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 1.1, letterSpacing: '0.02em', margin: '0 0 12px' }}
+          >
             Why Highway 420
           </h2>
-          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300">
+          <p
+            className="text-gray-700 dark:text-gray-300"
+            style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '15px', color: '#5B6560', margin: 0 }}
+          >
             Premium products. Verified quality. Better prices.
           </p>
         </div>

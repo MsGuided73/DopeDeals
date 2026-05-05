@@ -57,6 +57,7 @@ export default function TrustedBrandsBulletin() {
         <h2 style={{
           fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
           fontSize: 'clamp(32px, 5vw, 64px)',
+          fontWeight: 400,
           lineHeight: 1,
           letterSpacing: '0.02em',
           color: '#1c1208',
@@ -65,10 +66,9 @@ export default function TrustedBrandsBulletin() {
           SHOP BY BRAND
         </h2>
         <p style={{
-          fontSize: '13px',
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: '#9ca3af',
+          fontFamily: "'Fira Sans','Inter',sans-serif",
+          fontSize: '15px',
+          color: '#5B6560',
           margin: 0,
         }}>
           Road Tested. Rider Approved.
