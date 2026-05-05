@@ -202,24 +202,6 @@ export default function FullscreenCarousel() {
           transform: scaleX(0.92);
           transform-origin: left center;
         }
-        .carousel-copy-divider {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: clamp(10px, 1.4vw, 20px);
-        }
-        .carousel-copy-divider::before,
-        .carousel-copy-divider::after {
-          content: '';
-          flex: 0 0 28px;
-          height: 2px;
-          background: #1f4d2e;
-        }
-        .carousel-copy-divider svg {
-          width: clamp(14px, 1.4vw, 22px);
-          height: clamp(14px, 1.4vw, 22px);
-          color: #1f4d2e;
-        }
         .carousel-copy-tagline {
           font-size: clamp(9px, 1.3cqi, 36px);
           line-height: 1.35;
@@ -340,11 +322,6 @@ export default function FullscreenCarousel() {
               <div className="carousel-copy">
                 <div className="carousel-copy-eyebrow">{slide.copy.eyebrow}</div>
                 <h2 className="carousel-copy-headline">{slide.copy.headline}</h2>
-                <div className="carousel-copy-divider" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2c-.5 3-2 5-4.5 6 1.5 1 2.5 2.5 3 4.5-2.5-.5-4.5-2-5.5-4.5-.5 3 .5 5.5 2.5 7.5-1 .5-2 1.5-2.5 3 2-.5 4-1 5.5-2.5.5 1 1 2 1.5 3 .5-1 1-2 1.5-3 1.5 1.5 3.5 2 5.5 2.5-.5-1.5-1.5-2.5-2.5-3 2-2 3-4.5 2.5-7.5-1 2.5-3 4-5.5 4.5.5-2 1.5-3.5 3-4.5C14 7 12.5 5 12 2z" />
-                  </svg>
-                </div>
                 <div className="carousel-copy-tagline">{slide.copy.tagline}</div>
               </div>
             ) : null}
