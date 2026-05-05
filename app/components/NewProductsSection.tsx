@@ -5,6 +5,7 @@ import Image from 'next/image';
 import AutoScrollContainer, { type ProductViewMode } from './AutoScrollContainer';
 import ViewModeToggle from './ViewModeToggle';
 import UniversalProductCard from './UniversalProductCard';
+import { addToCart } from '../lib/cart-utils';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 // ── Fresh Drops palette — clean white + lime green ────────────────────────

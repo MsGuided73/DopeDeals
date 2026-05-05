@@ -76,10 +76,12 @@ export async function POST(req: Request) {
           "tobacco_product",
           "created_at",
         ].join(","),
-        { count: "planned" }
-      )
-      .not("image_url", "is", null)
-      .neq("image_url", "");
+        { count: "exact" }
+      );
+    // Note: image_url filter intentionally removed so imageless products
+    // surface in search results — this is how the merch team identifies
+    // which SKUs still need product photography. The relevance/sort
+    // ordering below puts products WITH images first as a tiebreaker.
 
     // Apply centralized compliance filters
     q1 = applyRestrictedProductFilter(q1);
@@ -98,7 +100,16 @@ export async function POST(req: Request) {
       ].join(","));
     }
 
-    if (filters?.brand_slug?.length) q1 = q1.in("brand_name", filters.brand_slug);
+    if (filters?.brand_slug?.length) {
+      // Case-insensitive: DB stores brands like "CRAVE" / "RooR" but the
+      // bulletin links pass display-cased values ("Crave"). Build an OR
+      // of `brand_name.ilike.<value>` per brand so we match regardless
+      // of stored casing.
+      const brandConds = filters.brand_slug
+        .map((b) => `brand_name.ilike.${b.replace(/,/g, "")}`)
+        .join(",");
+      q1 = q1.or(brandConds);
+    }
     if (typeof filters?.price_min === "number")
       q1 = q1.gte(PRICE_EXPR as any, filters.price_min as any);
     if (typeof filters?.price_max === "number")

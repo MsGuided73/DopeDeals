@@ -6,6 +6,7 @@ import Link from 'next/link';
 import AutoScrollContainer, { type ProductViewMode } from './AutoScrollContainer';
 import ViewModeToggle from './ViewModeToggle';
 import UniversalProductCard from './UniversalProductCard';
+import { addToCart } from '../lib/cart-utils';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 interface Product {

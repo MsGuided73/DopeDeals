@@ -17,27 +17,31 @@ import { VariantIndicator, hasProductVariants } from './VariantSelector';
 import { useCompliance } from '../contexts/ComplianceContext';
 
 interface UniversalProductCardProps {
+  // Source data is Supabase rows where nullable text/number columns come
+  // back as `null`, so the prop type accepts `null` alongside the value
+  // and `undefined`. The component renders these via truthy/`||`/`??`
+  // checks and already short-circuits on null.
   product: {
     id: string;
     name: string;
-    price?: string | number;
-    our_price?: string | number;
-    sale_price?: string | number;
-    image_url?: string;
-    imageUrl?: string;
-    image?: string;
-    image_urls?: string[]; // Added for variant support
-    featured?: boolean;
-    stock_quantity?: number;
-    brand_name?: string;
-    short_description?: string;
-    description?: string;
-    rating?: number;
-    review_count?: number;
-    category?: string;
-    tags?: string[];
-    compare_at_price?: number;
-    discount_percentage?: number;
+    price?: string | number | null;
+    our_price?: string | number | null;
+    sale_price?: string | number | null;
+    image_url?: string | null;
+    imageUrl?: string | null;
+    image?: string | null;
+    image_urls?: string[] | null; // Added for variant support
+    featured?: boolean | null;
+    stock_quantity?: number | null;
+    brand_name?: string | null;
+    short_description?: string | null;
+    description?: string | null;
+    rating?: number | null;
+    review_count?: number | null;
+    category?: string | null;
+    tags?: string[] | null;
+    compare_at_price?: number | null;
+    discount_percentage?: number | null;
   };
   
   // Layout Options

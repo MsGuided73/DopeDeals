@@ -29,6 +29,8 @@ export interface ProductGridItem {
   isNew?: boolean;
   isSale?: boolean;
   featured?: boolean;
+  rating?: number;
+  review_count?: number;
 }
 
 interface ProductGridProps {

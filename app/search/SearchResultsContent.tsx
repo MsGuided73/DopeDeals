@@ -65,9 +65,12 @@ export default function SearchResultsContent() {
   const router = useRouter();
   
   const initialQuery = searchParams.get('q') || '';
+  const initialBrand = searchParams.get('brand') || 'all';
+  const initialCategory = searchParams.get('category') || 'all';
+  const hasInitialFilter = initialBrand !== 'all' || initialCategory !== 'all';
 
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(initialQuery.length >= 2);
+  const [loading, setLoading] = useState(initialQuery.length >= 2 || hasInitialFilter);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -81,8 +84,8 @@ export default function SearchResultsContent() {
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [filters, setFilters] = useState<SearchFilters>({
-    category: searchParams.get('category') || 'all',
-    brand: searchParams.get('brand') || 'all',
+    category: initialCategory,
+    brand: initialBrand,
     priceMin: searchParams.get('priceMin') || '',
     priceMax: searchParams.get('priceMax') || '',
     stockStatus: searchParams.get('stockStatus') || 'all',
@@ -91,11 +94,16 @@ export default function SearchResultsContent() {
     tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
   });
 
-  // Debounced search function
-  const performSearch = useCallback(async (query: string, currentFilters: SearchFilters, sort: string) => {
-    if (!query || query.length < 2) {
+  // Debounced search function. `page` is passed explicitly because
+  // useCallback's [] deps would otherwise capture a stale currentPage
+  // and break pagination (every page request would re-fetch page 1).
+  const performSearch = useCallback(async (query: string, currentFilters: SearchFilters, sort: string, page: number) => {
+    const hasQuery = !!query && query.length >= 2;
+    const hasFilter = currentFilters.brand !== 'all' || currentFilters.category !== 'all';
+    if (!hasQuery && !hasFilter) {
       setResults([]);
       setTotal(0);
+      setTotalPages(0);
       return;
     }
 
@@ -120,7 +128,7 @@ export default function SearchResultsContent() {
       };
 
       const requestBody = {
-        q: query,
+        q: hasQuery ? query : undefined,
         category: currentFilters.category !== 'all' ? currentFilters.category : undefined,
         filters: {
           brand_slug: currentFilters.brand !== 'all' ? [currentFilters.brand] : [],
@@ -132,7 +140,7 @@ export default function SearchResultsContent() {
           tags: currentFilters.tags
         },
         sort: sortMapping[sort] || 'relevance',
-        page: currentPage,
+        page,
         page_size: 24
       };
 
@@ -208,22 +216,25 @@ export default function SearchResultsContent() {
   // Handle search
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
+    setCurrentPage(1);
     updateURL(query, filters);
-    performSearch(query, filters, sortBy);
+    performSearch(query, filters, sortBy, 1);
   }, [filters, sortBy, updateURL, performSearch]);
 
   // Handle filter changes
   const handleFilterChange = useCallback((key: keyof SearchFilters, value: any) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
+    setCurrentPage(1);
     updateURL(searchQuery, newFilters);
-    performSearch(searchQuery, newFilters, sortBy);
+    performSearch(searchQuery, newFilters, sortBy, 1);
   }, [filters, searchQuery, sortBy, updateURL, performSearch]);
 
   // Handle sort change
   const handleSortChange = useCallback((newSort: string) => {
     setSortBy(newSort);
-    performSearch(searchQuery, filters, newSort);
+    setCurrentPage(1);
+    performSearch(searchQuery, filters, newSort, 1);
   }, [searchQuery, filters, performSearch]);
 
   // Fetch suggestions when no results are found
@@ -247,12 +258,16 @@ export default function SearchResultsContent() {
     }
   }, []);
 
-  // Initial search on mount
+  // Initial search on mount / when the URL query changes.
+  // Fires when there's a `q`, OR when a brand/category filter is set in
+  // the URL (so brand-bulletin links like /search?brand=Crave run).
   useEffect(() => {
     const query = searchParams.get('q') || '';
-    if (query) {
+    const hasFilter = filters.brand !== 'all' || filters.category !== 'all';
+    if (query || hasFilter) {
       setSearchQuery(query);
-      performSearch(query, filters, sortBy);
+      setCurrentPage(1);
+      performSearch(query, filters, sortBy, 1);
     }
   }, [searchParams, filters, sortBy, performSearch]);
 
@@ -357,20 +372,27 @@ export default function SearchResultsContent() {
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
                   Searching...
                 </div>
-              ) : (
-                <>
-                  {total > 0 ? (
+              ) : (() => {
+                const brandLabel = filters.brand !== 'all' ? filters.brand : null;
+                const scopeLabel = searchQuery
+                  ? `"${searchQuery}"`
+                  : brandLabel
+                  ? `${brandLabel}`
+                  : null;
+
+                if (total > 0) {
+                  return (
                     <>
                       Showing {results.length} of {total} results
-                      {searchQuery && ` for "${searchQuery}"`}
+                      {scopeLabel && ` for ${scopeLabel}`}
                     </>
-                  ) : searchQuery ? (
-                    `No results found for "${searchQuery}"`
-                  ) : (
-                    'Enter a search term to find products'
-                  )}
-                </>
-              )}
+                  );
+                }
+                if (scopeLabel) {
+                  return `No results found for ${scopeLabel}`;
+                }
+                return 'Enter a search term to find products';
+              })()}
             </div>
           </div>
         </div>
@@ -638,7 +660,8 @@ export default function SearchResultsContent() {
                       key={`${suggestion.type}-${suggestion.text}-${index}`}
                       onClick={() => {
                         setSearchQuery(suggestion.text);
-                        performSearch(suggestion.text, filters, sortBy);
+                        setCurrentPage(1);
+                        performSearch(suggestion.text, filters, sortBy, 1);
                         updateURL(suggestion.text, filters);
                       }}
                       className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
@@ -715,7 +738,8 @@ export default function SearchResultsContent() {
               onClick={() => {
                 const newPage = Math.max(currentPage - 1, 1);
                 setCurrentPage(newPage);
-                performSearch(searchQuery, filters, sortBy);
+                performSearch(searchQuery, filters, sortBy, newPage);
+                if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               disabled={currentPage === 1}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -733,7 +757,8 @@ export default function SearchResultsContent() {
                   key={pageNum}
                   onClick={() => {
                     setCurrentPage(pageNum);
-                    performSearch(searchQuery, filters, sortBy);
+                    performSearch(searchQuery, filters, sortBy, pageNum);
+                    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className={`px-4 py-2 border rounded-md text-sm font-medium ${
                     currentPage === pageNum
@@ -750,7 +775,8 @@ export default function SearchResultsContent() {
               onClick={() => {
                 const newPage = Math.min(currentPage + 1, totalPages);
                 setCurrentPage(newPage);
-                performSearch(searchQuery, filters, sortBy);
+                performSearch(searchQuery, filters, sortBy, newPage);
+                if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               disabled={currentPage === totalPages}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"

@@ -6,7 +6,13 @@
  * Option 1 – Clean, frameless logo row.
  * Full-colour logos float directly on a white background.
  * No cards, no borders, no boxes. Each brand links to a
- * filtered search results page: /search?q=BrandName
+ * brand-scoped results page: /search?brand=BrandName
+ *
+ * Why `brand=` and not `q=`: a free-text query matches the brand
+ * name as a substring across name / short_description, which pulls
+ * in unrelated SKUs (e.g. an Astro Eight product whose copy
+ * mentions "crave"). The `brand` param maps to a brand_name filter
+ * on the API side.
  */
 
 import Image from "next/image";
@@ -20,19 +26,19 @@ type Brand = {
 };
 
 const BRANDS: Brand[] = [
-  { name: "Cookies",             logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Cookies%20Logo.webp",            href: "/search?q=Cookies",             hasProducts: true  },
-  { name: "Crave",               logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/crave-logo-black-150x96.png",    href: "/search?q=Crave",               hasProducts: true  },
-  { name: "Hidden Hills",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Hidden-Hills_logo.webp",         href: "/search?q=Hidden+Hills",        hasProducts: false },
-  { name: "Truemoola",           logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Truemoola.png",                  href: "/search?q=Truemoola",           hasProducts: false },
-  { name: "Urth Farmacy",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Urth_Farmacy_logo.webp",         href: "/search?q=Urth+Farmacy",        hasProducts: true  },
-  { name: "Astro Eight",         logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Astro%20Eight.png",            href: "/search?q=Astro+Eight",         hasProducts: false },
-  { name: "Puffco",              logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/puffco_logo.webp",                     href: "/search?q=Puffco",              hasProducts: true  },
-  { name: "RooR",                logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/RooR_LogoRed_resize.png",               href: "/search?q=ROOR",                hasProducts: true  },
-  { name: "Diamond Glass",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/diamond-glass_logo.webp",             href: "/search?q=Diamond+Glass",       hasProducts: false },
-  { name: "Mellow Fellow",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/mellow-fellow_logo2.png",             href: "/search?q=Mellow+Fellow",       hasProducts: false },
-  { name: "NEO",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/NEO-Hookah_logo.webp",                href: "/search?q=NEO",                 hasProducts: false },
-  { name: "RAW",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/raw_logo.png",                        href: "/search?q=RAW",                 hasProducts: false },
-  { name: "Twenty-One Cannabis", logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/Twenty-One-Cannabis-Logo.webp",       href: "/search?q=Twenty-One+Cannabis", hasProducts: false },
+  { name: "Cookies",             logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Cookies%20Logo.webp",            href: "/search?brand=Cookies",             hasProducts: true  },
+  { name: "Crave",               logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/crave-logo-black-150x96.png",    href: "/search?brand=Crave",               hasProducts: true  },
+  { name: "Hidden Hills",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Hidden-Hills_logo.webp",         href: "/search?brand=Hidden+Hills",        hasProducts: false },
+  { name: "Truemoola",           logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Truemoola.png",                  href: "/search?brand=Truemoola",           hasProducts: false },
+  { name: "Urth Farmacy",        logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Brand%20Logos/Urth_Farmacy_logo.webp",         href: "/search?brand=Urth+Farmacy",        hasProducts: true  },
+  { name: "Astro Eight",         logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Logos/Astro%20Eight.png",            href: "/search?brand=Astro+Eight",         hasProducts: false },
+  { name: "Puffco",              logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/puffco_logo.webp",                     href: "/search?brand=Puffco",              hasProducts: true  },
+  { name: "RooR",                logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/RooR_LogoRed_resize.png",               href: "/search?brand=RooR",                hasProducts: true  },
+  { name: "Diamond Glass",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/diamond-glass_logo.webp",             href: "/search?brand=Diamond+Glass",       hasProducts: false },
+  { name: "Mellow Fellow",       logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/mellow-fellow_logo2.png",             href: "/search?brand=Mellow+Fellow",       hasProducts: false },
+  { name: "NEO",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/NEO-Hookah_logo.webp",                href: "/search?brand=NEO",                 hasProducts: false },
+  { name: "RAW",                 logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/raw_logo.png",                        href: "/search?brand=RAW",                 hasProducts: false },
+  { name: "Twenty-One Cannabis", logo: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Logos/Twenty-One-Cannabis-Logo.webp",       href: "/search?brand=Twenty-One+Cannabis", hasProducts: false },
 ];
 
 export default function TrustedBrandsBulletin() {
