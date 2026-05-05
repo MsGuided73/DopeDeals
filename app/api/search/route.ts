@@ -76,24 +76,24 @@ export async function POST(req: Request) {
           "tobacco_product",
           "created_at",
         ].join(","),
-        { count: "exact" }
+        { count: "planned" }
       )
       .not("image_url", "is", null)
-      .neq("image_url", "")
-      .eq('is_active', true);
+      .neq("image_url", "");
 
     // Apply centralized compliance filters
     q1 = applyRestrictedProductFilter(q1);
 
     if (category) q1 = q1.eq("category_slug", category);
 
-    // Temporarily disable FTS until search_vec column is properly configured
+    // Temporarily disable FTS until search_vec column is properly configured.
+    // Description is intentionally excluded — it's a long text column with no
+    // trigram index, and ILIKE %q% over it forces a full scan per row.
     if (queryText) {
       const like = `%${queryText}%`;
       q1 = q1.or([
         `name.ilike.${like}`,
         `brand_name.ilike.${like}`,
-        `description.ilike.${like}`,
         `short_description.ilike.${like}`,
       ].join(","));
     }

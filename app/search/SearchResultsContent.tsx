@@ -64,8 +64,10 @@ export default function SearchResultsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
+  const initialQuery = searchParams.get('q') || '';
+
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(initialQuery.length >= 2);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -76,8 +78,8 @@ export default function SearchResultsContent() {
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
-  
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [filters, setFilters] = useState<SearchFilters>({
     category: searchParams.get('category') || 'all',
     brand: searchParams.get('brand') || 'all',

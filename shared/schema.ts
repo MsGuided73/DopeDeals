@@ -871,3 +871,34 @@ export * from './concierge-schema';
 export const insertVipSignupSchema = createInsertSchema(vipSignups).omit({ id: true, createdAt: true });
 export type VipSignup = typeof vipSignups.$inferSelect;
 export type InsertVipSignup = z.infer<typeof insertVipSignupSchema>;
+
+// ─── Higher Learning article recommendations ───────────────────────────────
+// Editor-curated product picks per article. Read by the article layout to
+// render the right-rail "Shop This Setup" list (slot='rail') and the
+// mid-article "Upgrade Your Setup" carousel (slot='inline').
+//
+// productId is a UUID FK to main_site_products(id). main_site_products is not
+// (yet) modeled in this Drizzle schema, so the reference is kept as an
+// untyped uuid column — same precedent as orderItems.productId. Supersession
+// columns (superseded_by_product_id, supersession_note) live on
+// main_site_products itself; see migration 20260504_article_recommendations_and_supersession.sql.
+export const articleRecommendedProducts = pgTable("article_recommended_products", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  articleSlug: text("article_slug").notNull(),
+  productId: uuid("product_id").notNull(),
+  // 'rail' = sticky right-rail; 'inline' = mid-article carousel.
+  slot: text("slot").notNull(),
+  position: integer("position").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ({
+  slotPositionUnique: unique("article_recommended_products_slot_position_unique")
+    .on(table.articleSlug, table.slot, table.position),
+  slotProductUnique: unique("article_recommended_products_slot_product_unique")
+    .on(table.articleSlug, table.slot, table.productId),
+}));
+
+export const insertArticleRecommendedProductSchema = createInsertSchema(articleRecommendedProducts)
+  .omit({ id: true, createdAt: true, updatedAt: true });
+export type ArticleRecommendedProduct = typeof articleRecommendedProducts.$inferSelect;
+export type InsertArticleRecommendedProduct = z.infer<typeof insertArticleRecommendedProductSchema>;
