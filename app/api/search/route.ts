@@ -91,13 +91,30 @@ export async function POST(req: Request) {
     // Temporarily disable FTS until search_vec column is properly configured.
     // Description is intentionally excluded — it's a long text column with no
     // trigram index, and ILIKE %q% over it forces a full scan per row.
+    //
+    // category_slug is included so a free-text query like "bongs" matches
+    // products by category, not just by literal text in name/short_description.
+    // (Most Crave bongs, for example, have "Crave 8000" in the name and
+    // category_slug='bongs' but never spell out the word "bong".)
+    //
+    // Multi-word queries ("crave bongs") are tokenized so each word must
+    // match SOMEWHERE — in any of the 4 columns. This finds products where
+    // one column has "crave" and another has "bongs", which a single
+    // literal-substring search would miss.
     if (queryText) {
-      const like = `%${queryText}%`;
-      q1 = q1.or([
-        `name.ilike.${like}`,
-        `brand_name.ilike.${like}`,
-        `short_description.ilike.${like}`,
-      ].join(","));
+      const tokens = queryText
+        .split(/\s+/)
+        .map((t) => t.replace(/,/g, "")) // commas separate PostgREST or-clauses
+        .filter((t) => t.length >= 2);
+      for (const token of tokens) {
+        const like = `%${token}%`;
+        q1 = q1.or([
+          `name.ilike.${like}`,
+          `brand_name.ilike.${like}`,
+          `short_description.ilike.${like}`,
+          `category_slug.ilike.${like}`,
+        ].join(","));
+      }
     }
 
     if (filters?.brand_slug?.length) {
