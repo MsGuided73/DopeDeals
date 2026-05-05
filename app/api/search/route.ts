@@ -31,6 +31,24 @@ const Body = z.object({
 const PRICE_EXPR = "coalesce(sale_price, our_price)";
 export const dynamic = "force-dynamic";
 
+// Category-slug aliases. The DB has historically used multiple slug spellings
+// for the same merchandising category (hyphen vs underscore, singular vs plural).
+// When a user's free-text query or explicit category filter implies one of these
+// groups, we want every variant returned, not just the literal match.
+const CATEGORY_ALIASES: Array<{ test: RegExp; slugs: string[] }> = [
+  {
+    test: /\bdab[\s_-]*rigs?\b/i,
+    slugs: ["dab-rig", "dab_rig", "dab-rigs", "dab_rigs"],
+  },
+];
+
+function findAliasForQuery(text: string) {
+  return CATEGORY_ALIASES.find((a) => a.test.test(text));
+}
+function findAliasForSlug(slug: string) {
+  return CATEGORY_ALIASES.find((a) => a.slugs.includes(slug));
+}
+
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
@@ -86,7 +104,14 @@ export async function POST(req: Request) {
     // Apply centralized compliance filters
     q1 = applyRestrictedProductFilter(q1);
 
-    if (category) q1 = q1.eq("category_slug", category);
+    if (category) {
+      const slugAlias = findAliasForSlug(category);
+      if (slugAlias) {
+        q1 = q1.in("category_slug", slugAlias.slugs);
+      } else {
+        q1 = q1.eq("category_slug", category);
+      }
+    }
 
     // Temporarily disable FTS until search_vec column is properly configured.
     // Description is intentionally excluded — it's a long text column with no
@@ -102,18 +127,28 @@ export async function POST(req: Request) {
     // one column has "crave" and another has "bongs", which a single
     // literal-substring search would miss.
     if (queryText) {
+      const queryAlias = findAliasForQuery(queryText);
       const tokens = queryText
         .split(/\s+/)
         .map((t) => t.replace(/,/g, "")) // commas separate PostgREST or-clauses
         .filter((t) => t.length >= 2);
       for (const token of tokens) {
         const like = `%${token}%`;
-        q1 = q1.or([
+        const conditions = [
           `name.ilike.${like}`,
           `brand_name.ilike.${like}`,
           `short_description.ilike.${like}`,
           `category_slug.ilike.${like}`,
-        ].join(","));
+        ];
+        // If the overall query matches a category alias (e.g. "dab rigs"),
+        // every slug variant satisfies this token — without this, plural
+        // queries miss the singular slugs (`%rigs%` does not match `dab-rig`).
+        if (queryAlias) {
+          for (const slug of queryAlias.slugs) {
+            conditions.push(`category_slug.eq.${slug}`);
+          }
+        }
+        q1 = q1.or(conditions.join(","));
       }
     }
 
