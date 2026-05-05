@@ -184,6 +184,9 @@ export default function FullscreenCarousel() {
           letter-spacing: 0.18em;
           text-transform: uppercase;
           margin-bottom: clamp(4px, 1.3cqi, 32px);
+          align-self: flex-start;
+          border-bottom: 2px solid currentColor;
+          padding-bottom: clamp(8px, 1.0cqi, 24px);
         }
         .carousel-copy-headline {
           font-family: 'BebasNeue', 'Bebas Neue', 'Impact', sans-serif;
