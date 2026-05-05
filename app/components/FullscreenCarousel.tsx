@@ -155,10 +155,7 @@ export default function FullscreenCarousel() {
           }
         }
 
-        /* Slide copy panel — left-side text block with no solid background.
-           A soft cream radial-gradient halo sits behind the text and a
-           downward text-shadow makes the cream "glow" appear to emanate
-           from the underside of each letter. */
+        /* Slide copy panel — left-side text block, no background wash. */
         .carousel-copy {
           position: absolute;
           top: 0;
@@ -180,38 +177,6 @@ export default function FullscreenCarousel() {
             /* Matches masthead lg:pl-6 (24px). */
             padding-left: 24px;
           }
-        }
-        /* Cream halo — wide, blurred radial behind the text block, biased
-           toward the bottom so it visually pools beneath the letters. */
-        .carousel-copy::before {
-          content: '';
-          position: absolute;
-          inset: -8% -18% -4% -12%;
-          background: radial-gradient(
-            ellipse 70% 60% at 45% 65%,
-            rgba(241, 234, 210, 0.92) 0%,
-            rgba(241, 234, 210, 0.7) 30%,
-            rgba(241, 234, 210, 0.4) 55%,
-            rgba(241, 234, 210, 0.15) 75%,
-            transparent 95%
-          );
-          filter: blur(36px);
-          z-index: 0;
-          pointer-events: none;
-        }
-        .carousel-copy > * {
-          position: relative;
-          z-index: 1;
-        }
-        /* Cream glow emanating from the underside of each letter — three
-           stacked shadows offset progressively downward and softened. */
-        .carousel-copy-eyebrow,
-        .carousel-copy-headline,
-        .carousel-copy-tagline {
-          text-shadow:
-            0 1px 4px rgba(241, 234, 210, 0.95),
-            0 4px 12px rgba(241, 234, 210, 0.85),
-            0 10px 28px rgba(241, 234, 210, 0.6);
         }
         .carousel-copy-eyebrow {
           font-size: clamp(7px, 1.0cqi, 28px);
