@@ -136,5 +136,10 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
+  },
+  "pnpm": {
+    "overrides": {
+      "@exodus/bytes": "1.14.0"
+    }
   }
 }
