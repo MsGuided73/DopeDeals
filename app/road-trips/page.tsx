@@ -1,6 +1,5 @@
 import React from "react";
 import GlobalMasthead from "../components/GlobalMasthead";
-import EssentialsFooter from "../components/EssentialsFooter";
 import { Waves, Mountain, Sun, Building2, Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -568,8 +567,6 @@ export default function RoadTripsPage() {
           GET FEATURED <ArrowRight size={16} />
         </Link>
       </section>
-
-      <EssentialsFooter />
     </div>
   );
 }

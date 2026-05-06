@@ -81,8 +81,8 @@ export default function SignUpForm() {
       if (result.error) {
         toast.error(result.error);
       } else {
-        toast.success('Account created successfully! Please check your email to verify your account.');
-        router.push('/signin?message=Account created successfully. Please sign in.');
+        toast.success('Welcome to Highway 420! Check your email to verify your account.');
+        router.push('/');
       }
     } catch (error) {
       toast.error('An unexpected error occurred');

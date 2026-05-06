@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle } from 'lucide-react';
-import BlogFooter from '../../components/BlogFooter';
 
 export default function CannabisHistoryArticle() {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -310,10 +309,6 @@ export default function CannabisHistoryArticle() {
         </article>
       </div>
 
-        {/* NEW BLOG FOOTER */}
-        <div className="-mx-4 sm:-mx-6 lg:-mx-8">
-          <BlogFooter />
-        </div>
       </main>
     </div>
   );

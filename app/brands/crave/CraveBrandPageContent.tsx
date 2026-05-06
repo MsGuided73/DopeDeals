@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import GlobalMasthead from '../../components/GlobalMasthead';
 import { supabaseBrowser } from '../../lib/supabase-browser';
-import Highway420Footer from '../../../components/Highway420Footer';
 
 import Image from 'next/image';
 import { Search, Filter, Grid, List, SlidersHorizontal } from 'lucide-react';
@@ -327,8 +326,6 @@ export default function CraveBrandPageContent() {
           </div>
         </div>
       </div>
-
-      <Highway420Footer />
     </div>
   );
 }

@@ -31,7 +31,6 @@ import { useNavigation } from '../contexts/NavigationContext';
 import { addToCart } from '../lib/cart-utils';
 import { ShippingSection } from './ShippingSection';
 import GlobalMasthead from './GlobalMasthead';
-import EssentialsFooter from './EssentialsFooter';
 import ProductDescription from './ProductDescription';
 import ReviewButton from './reviews/ReviewButton';
 import ReviewsList from './reviews/ReviewsList';
@@ -733,7 +732,6 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
 
       </div>
       </div>
-      <EssentialsFooter />
     </div>
   );
 }

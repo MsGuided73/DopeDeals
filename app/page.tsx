@@ -12,11 +12,17 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://highway420store.com" },
 };
 
+// TrustedBrandsBulletin eager-loads because the masthead nav has an
+// anchor link (Brands → /#brands) that scrolls to <section id="brands">
+// inside it. If it's lazy, the anchor target isn't in the DOM when the
+// browser processes the hash on initial load, and the scroll silently
+// goes to top.
+import TrustedBrandsBulletin from "./components/TrustedBrandsBulletin";
+
 // Lazy-load below-the-fold sections for faster initial page load
 const CuratedKits             = nextDynamic(() => import("./components/CuratedKits"));
 const FeaturedProductsSection = nextDynamic(() => import("./components/FeaturedProductsSection"));
 const NewProductsSection      = nextDynamic(() => import("./components/NewProductsSection"));
-const TrustedBrandsBulletin   = nextDynamic(() => import("./components/TrustedBrandsBulletin"));
 const AboutHighway420         = nextDynamic(() => import("./components/AboutHighway420"));
 const SpotlightReviews        = nextDynamic(() => import("./components/SpotlightReviews"));
 const DopeDealsSection        = nextDynamic(() => import("./components/DopeDealsSection"));

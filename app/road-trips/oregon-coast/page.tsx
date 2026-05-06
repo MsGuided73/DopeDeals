@@ -10,7 +10,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import GlobalMasthead from "../../components/GlobalMasthead";
-import EssentialsFooter from "../../components/EssentialsFooter";
 
 export const metadata = {
   title: "Oregon Coast Sessions | Highway 420 Road Trips",
@@ -1102,7 +1101,6 @@ export default function OregonCoastPage() {
         </Link>
       </section>
 
-      <EssentialsFooter />
     </div>
   );
 }

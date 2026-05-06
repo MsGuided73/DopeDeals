@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, Flame, Zap, Search } from 'lucide-react';
 import BlogArticlesGrid from '../components/BlogArticlesGrid';
-import BlogFooter from '../components/BlogFooter';
 import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 import GlobalMasthead from '../components/GlobalMasthead';
 
@@ -227,8 +226,6 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* NEW BLOG FOOTER */}
-      <BlogFooter />
     </div>
   );
 }

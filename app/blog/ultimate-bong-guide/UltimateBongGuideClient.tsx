@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 import GlobalMasthead from '../../components/GlobalMasthead';
-import BlogFooter from '../../components/BlogFooter';
 import BlogComments from '../../components/comments/BlogComments';
 
 type Props = {
@@ -80,8 +79,6 @@ export default function UltimateBongGuideClient({
           />
         </div>
       </div>
-
-      <BlogFooter />
     </>
   );
 }
