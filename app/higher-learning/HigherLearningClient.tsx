@@ -93,34 +93,41 @@ const TOPICS = [
   },
 ];
 
+// Real catalog SKUs (sourced from main_site_products with image_url populated).
+// Clicking SHOP NOW runs a sitewide search for the product, matching the rest
+// of the blog's category-link policy.
 const POPULAR_SETUPS = [
   {
     id: "setup-1",
-    name: "Pulsar Peak Pro 3D Chamber E-Rig",
-    price: 249.99,
-    imageUrl: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Dab%20Rigs/Puffco_Peak_Pro.jpg",
-    slug: "pulsar-peak-pro",
+    name: "Puffco Peak Pro V2",
+    price: 377.99,
+    imageUrl:
+      "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/PRODUCTS/DabRigs/Puffco/puffco-new-peak-pro-v2-884.jpg",
+    searchQuery: "Puffco Peak Pro V2",
   },
   {
     id: "setup-2",
-    name: "Pulsar Guardian Bubbler Dab Rig",
-    price: 129.99,
-    imageUrl: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Dab%20Rigs/Pulsar_Dab_Rig.jpg",
-    slug: "pulsar-guardian-bubbler",
+    name: 'RooR Tech 18" Inline Dab Rig',
+    price: 359.99,
+    imageUrl:
+      "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/PRODUCTS/Bongs/RooR/roor-tech-18-inline-smokey-331.jpg",
+    searchQuery: "RooR Inline Dab Rig",
   },
   {
     id: "setup-3",
-    name: "7mm Beaker Perc Bong",
-    price: 59.99,
-    imageUrl: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Bongs/Beaker_Bong.jpg",
-    slug: "7mm-beaker-perc-bong",
+    name: 'RooR PD Classic 18" Beaker',
+    price: 269.99,
+    imageUrl:
+      "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/PRODUCTS/Bongs/RooR/roor-pd-classic-18-beaker-45x5mm-white-no-ice-pinches-389.jpg",
+    searchQuery: "RooR Beaker Bong",
   },
   {
     id: "setup-4",
-    name: "Santa Cruz Shredder® 4-Piece Grinder",
+    name: "4-Piece Grinder",
     price: 64.99,
-    imageUrl: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Accessories/Santa_Cruz_Grinder.jpg",
-    slug: "santa-cruz-shredder-4-piece",
+    imageUrl:
+      "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/website-images/Accessories/Santa_Cruz_Grinder.jpg",
+    searchQuery: "Grinder",
   },
 ];
 
@@ -282,9 +289,12 @@ export default function HigherLearningClient() {
               </div>
               <h4 className="font-bold text-sm text-neutral-900 mb-2 line-clamp-2 h-10">{product.name}</h4>
               <p className="text-lg font-bold text-neutral-900 mb-4">${product.price}</p>
-              <button className="w-full bg-[#1B4332] hover:bg-[#133221] text-white py-3 rounded-sm font-bold text-xs tracking-widest uppercase transition-colors mt-auto">
+              <Link
+                href={`/search?q=${encodeURIComponent(product.searchQuery)}`}
+                className="w-full bg-[#1B4332] hover:bg-[#133221] text-white py-3 rounded-sm font-bold text-xs tracking-widest uppercase transition-colors mt-auto inline-flex items-center justify-center"
+              >
                 SHOP NOW
-              </button>
+              </Link>
             </div>
           ))}
         </div>

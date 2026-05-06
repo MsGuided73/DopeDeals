@@ -19,6 +19,7 @@ import {
   Truck,
 } from "lucide-react";
 import HigherLearningArticleLayout from "../_components/HigherLearningArticleLayout";
+import { searchHref } from "../../../lib/search-link";
 import IconRowSection from "../_components/IconRowSection";
 import InlineHighlightCallout from "../_components/InlineHighlightCallout";
 import CheckmarkList from "../_components/CheckmarkList";
@@ -96,7 +97,7 @@ export default function ThcaLegalAlternativePage() {
           alt: "THCA flower beside a U.S. map outline and scales of justice — illustrating the federal vs. state legal framework.",
         }}
         heroOverlay={<HeroBadgeRow />}
-        shopAllRail={{ href: "/shop/thca", label: "Shop All THCA" }}
+        shopAllRail={{ href: searchHref("THCA"), label: "Shop All THCA" }}
         railHeading="Shop THCA Products"
         inlineUpgradePosition="none"
         // Replace with the merchandiser's real product slugs once committed.
@@ -416,7 +417,7 @@ function ExploreThcaBanner() {
           </p>
         </div>
         <Link
-          href="/shop/thca"
+          href={searchHref("THCA Flower & Edibles")}
           className="inline-flex items-center justify-center px-6 py-3 bg-[#1B4332] hover:bg-[#133221] text-white rounded-md font-bold text-[13px] tracking-widest uppercase transition-colors shrink-0"
         >
           Shop THCA Now

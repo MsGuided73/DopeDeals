@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Target, Waves, Zap } from "lucide-react";
 import HigherLearningArticleLayout from "../_components/HigherLearningArticleLayout";
+import { searchHref } from "../../../lib/search-link";
 import ArticleQuickAnswer from "../_components/ArticleQuickAnswer";
 import ComparisonBlock from "../_components/ComparisonBlock";
 import DecisionBlock from "../_components/DecisionBlock";
@@ -13,10 +14,14 @@ const ASSETS_BASE =
 // Hero / cover image (already in the bucket — used by HomeBlogArticles + Higher Learning index).
 const HERO_IMAGE = `${ASSETS_BASE}/Percolator%20Bong%20Comp%20for%20Higher%20Learning%20Blog.png`;
 
-// Comparison-block images. Replace with cropped or standalone shots once
-// uploaded; until then both blocks fall back to the hero composite.
-const REGULAR_BONG_IMAGE = `${ASSETS_BASE}/regular-beaker-bong.png`;
-const PERCOLATOR_BONG_IMAGE = `${ASSETS_BASE}/tree-percolator-bong.png`;
+// Comparison-block images. Sourced from real catalog SKUs in main_site_products
+// so the photos always reflect a product Highway 420 actually sells.
+//   Regular     → RooR PD Classic 18" Beaker 45x5mm White ($269.99)
+//   Percolator  → RooR Tech Fixed 18" Straight 50x5mm 10 Arm Tree Perc ($511.99)
+const REGULAR_BONG_IMAGE =
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/PRODUCTS/Bongs/RooR/roor-pd-classic-18-beaker-45x5mm-white-no-ice-pinches-389.jpg";
+const PERCOLATOR_BONG_IMAGE =
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/PRODUCTS/Bongs/RooR/roor-tech-fixed-18-straight-50x5mm-10-arm-tree-perc-263.jpg";
 
 export const metadata: Metadata = {
   title:
@@ -66,7 +71,7 @@ export default function PercolatorVsRegularBongPage() {
           src: HERO_IMAGE,
           alt: "Side-by-side comparison of a classic beaker bong and a percolator bong.",
         }}
-        shopAllRail={{ href: "/bongs", label: "Shop All Bongs" }}
+        shopAllRail={{ href: searchHref("Bongs"), label: "Shop All Bongs" }}
         railHeading="Shop This Setup"
         inlineUpgradeHeading="Upgrade Your Setup"
         // Replace with the merchandiser's real product slugs once committed.
@@ -122,13 +127,13 @@ export default function PercolatorVsRegularBongPage() {
             {
               label: "Best for simplicity & power",
               value: "Regular Bong",
-              href: "/bongs?type=beaker",
+              href: searchHref("Beaker Bong"),
               icon: "star",
             },
             {
               label: "Best for smoothness & comfort",
               value: "Percolator",
-              href: "/bongs?type=percolator",
+              href: searchHref("Percolator Bong"),
               icon: "flame",
             },
           ]}
@@ -150,7 +155,7 @@ export default function PercolatorVsRegularBongPage() {
             pros={["Easy to use", "Lower cost", "Minimal maintenance"]}
             cons={["Harsher hits", "Less filtration", "Warmer smoke"]}
             bestForCopy="Users who want simplicity, power, and a no-fuss experience."
-            bestForHref="/bongs?type=beaker"
+            bestForHref={searchHref("Beaker Bong")}
           />
 
           <ComparisonBlock
@@ -173,7 +178,7 @@ export default function PercolatorVsRegularBongPage() {
               "Slightly more airflow resistance",
             ]}
             bestForCopy="Users who prioritize smoothness, comfort, and a refined experience."
-            bestForHref="/bongs?type=percolator"
+            bestForHref={searchHref("Percolator Bong")}
           />
         </div>
 

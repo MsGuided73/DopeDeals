@@ -29,7 +29,13 @@ const Body = z.object({
   page_size: z.number().int().min(1).max(1000).optional().default(48),
 });
 
-const PRICE_EXPR = "coalesce(sale_price, our_price)";
+// PostgREST treats the column argument as a literal identifier, not SQL —
+// `coalesce(sale_price, our_price)` does not parse and 500s the request.
+// Until a generated `effective_price` column is added, sort/filter on
+// `our_price` directly. Tradeoff: rows with `sale_price` set won't sort or
+// filter by the discounted price (they'll use `our_price`). The displayed
+// price still prefers `sale_price` via the response mapping below.
+const PRICE_SORT_COL = "our_price";
 export const dynamic = "force-dynamic";
 
 // Category-slug aliases. The DB has historically used multiple slug spellings
@@ -166,9 +172,9 @@ export async function POST(req: Request) {
       q1 = q1.or(brandConds);
     }
     if (typeof filters?.price_min === "number")
-      q1 = q1.gte(PRICE_EXPR as any, filters.price_min as any);
+      q1 = q1.gte(PRICE_SORT_COL, filters.price_min as any);
     if (typeof filters?.price_max === "number")
-      q1 = q1.lte(PRICE_EXPR as any, filters.price_max as any);
+      q1 = q1.lte(PRICE_SORT_COL, filters.price_max as any);
     if (filters?.in_stock_only)
       q1 = q1.in("inventory_status", ["in_stock", "low_stock"]);
     if (filters?.inventory_status?.length)
@@ -182,12 +188,12 @@ export async function POST(req: Request) {
     switch (sort) {
       case "price_asc":
         q1 = q1
-          .order(PRICE_EXPR as any, { ascending: true } as any)
+          .order(PRICE_SORT_COL, { ascending: true } as any)
           .order("image_url", { ascending: false, nullsFirst: false });
         break;
       case "price_desc":
         q1 = q1
-          .order(PRICE_EXPR as any, { ascending: false } as any)
+          .order(PRICE_SORT_COL, { ascending: false } as any)
           .order("image_url", { ascending: false, nullsFirst: false });
         break;
       case "newest":

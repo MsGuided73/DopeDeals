@@ -3,6 +3,7 @@ import HigherLearningArticleLayout from "../_components/HigherLearningArticleLay
 import ArticleQuickAnswer from "../_components/ArticleQuickAnswer";
 import ComparisonBlock from "../_components/ComparisonBlock";
 import DecisionBlock from "../_components/DecisionBlock";
+import { searchHref } from "../../../lib/search-link";
 
 const ARTICLE_SLUG = "e-rig-vs-dab-rig";
 
@@ -60,7 +61,7 @@ export default function ERigVsDabRigPage() {
           src: `${ASSETS_BASE}/Dab-Rigs/dab%20vs%20image.png`,
           alt: "An electronic e-rig sitting next to a traditional glass dab rig.",
         }}
-        shopAllRail={{ href: "/dabsntools", label: "Shop All Dab Rigs" }}
+        shopAllRail={{ href: searchHref("Dab Rigs"), label: "Shop All Dab Rigs" }}
         railHeading="Shop This Setup"
         inlineUpgradeHeading="Upgrade Your Setup"
         // Editor fallbacks — used only until article_recommended_products has rows.
@@ -108,13 +109,13 @@ export default function ERigVsDabRigPage() {
             {
               label: "Best for beginners",
               value: "E-Rig",
-              href: "/dabsntools?type=e-rigs",
+              href: searchHref("E-Rig"),
               icon: "star",
             },
             {
               label: "Best for enthusiasts",
               value: "Traditional Rig",
-              href: "/dabsntools?type=glass-rigs",
+              href: searchHref("Glass Dab Rig"),
               icon: "flame",
             },
           ]}
@@ -139,7 +140,7 @@ export default function ERigVsDabRigPage() {
               "Less portable",
             ]}
             bestForCopy="People who want the authentic, hands-on experience."
-            bestForHref="/dabsntools?type=glass-rigs"
+            bestForHref={searchHref("Glass Dab Rig")}
           />
 
           <ComparisonBlock
@@ -147,8 +148,8 @@ export default function ERigVsDabRigPage() {
             heading="What Is an E-Rig?"
             description="An e-rig is an electronic dab device that heats your concentrate with the press of a button. It offers precise temperature control, consistent hits, and is incredibly easy to use—making it perfect for everyday sessions and beginners."
             image={{
-              src: `${ASSETS_BASE}/Puffco_Peak_Pro_Hero.png`,
-              alt: "An electronic e-rig with chamber and mouthpiece visible.",
+              src: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/PRODUCTS/DabRigs/Puffco/puffco-new-peak-pro-v2-884.jpg",
+              alt: "Puffco Peak Pro V2 electronic dab rig with chamber and mouthpiece visible.",
             }}
             pros={[
               "Easy to use",
@@ -161,7 +162,7 @@ export default function ERigVsDabRigPage() {
               "Needs charging",
             ]}
             bestForCopy="Convenience, portability, and plug-and-play sessions."
-            bestForHref="/dabsntools?type=e-rigs"
+            bestForHref={searchHref("E-Rig")}
           />
         </div>
 
