@@ -194,7 +194,7 @@ export default function BlogPortalPage() {
               Become part of our exclusive community to comment on articles, engage in discussions, and access premium educational content.
             </p>
             <Link
-              href="/join-community"
+              href="/h420-vip"
               className="inline-flex items-center gap-2 bg-white text-dope-orange font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <BookOpen className="w-5 h-5" />
@@ -375,7 +375,7 @@ export default function BlogPortalPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/join-community"
+              href="/h420-vip"
               className="bg-dope-orange hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
             >
               <Users className="w-5 h-5" />

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const BANNER_SRC =
@@ -68,13 +69,14 @@ export default function RideWithUsBanner() {
       className="w-full relative"
       style={{ background: "transparent" }}
     >
-      <div
+      <Link
+        href="/h420-vip"
+        aria-label="Join the Highway 420 VIP community"
         style={{
           width: "100%",
-          cursor: "pointer",
+          display: "block",
           position: "relative",
         }}
-        onClick={() => setIsModalOpen(true)}
       >
         <Image
           src={BANNER_SRC}
@@ -86,7 +88,7 @@ export default function RideWithUsBanner() {
           className="block"
           priority
         />
-      </div>
+      </Link>
 
       {isModalOpen && (
         <div 

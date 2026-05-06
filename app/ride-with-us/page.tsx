@@ -168,7 +168,7 @@ export default function RideWithUsPage() {
               that comes with being part of something bigger. Your journey starts here.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/join-community" className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 hover:scale-105 highway-glow-green text-center">
+              <a href="/h420-vip" className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 hover:scale-105 highway-glow-green text-center">
                 Join the Community
               </a>
             </div>

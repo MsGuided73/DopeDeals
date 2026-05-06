@@ -207,7 +207,7 @@ export default function BlogComments({ blogSlug, isCommunityMember = false, user
               Only community members can participate in discussions and share their insights on our educational content.
             </p>
             <Link
-              href="/join-community"
+              href="/h420-vip"
               className="inline-flex items-center gap-2 bg-dope-orange text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors"
             >
               <Users className="w-4 h-4" />
