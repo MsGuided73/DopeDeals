@@ -41,7 +41,7 @@ const ASSETS_BASE =
 // Both are referenced below and on the homepage cards. Once uploaded to the
 // Supabase `Highway420_assets/Blog` bucket with these names, the page renders
 // end-to-end. No code change required.
-const THCA_HERO_IMAGE = `${ASSETS_BASE}/thca-legal-alternative-hero.png`;
+const THCA_HERO_IMAGE = `${ASSETS_BASE}/THCA/map%20and%20flower%20and%20scale%20only.png`;
 
 export const metadata: Metadata = {
   title:

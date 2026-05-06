@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description:
       "Not sure which setup fits your style? Here's exactly how they compare.",
     type: "article",
-    images: [`${ASSETS_BASE}/dab%20and%20e-rg%20-%20Copy.png`],
+    images: [`${ASSETS_BASE}/Dab-Rigs/dab%20vs%20image.png`],
   },
 };
 
@@ -57,7 +57,7 @@ export default function ERigVsDabRigPage() {
         readTime="6 min read"
         authorAvatar={`${ASSETS_BASE}/highway420_avatar.png`}
         hero={{
-          src: `${ASSETS_BASE}/dab%20and%20e-rg%20-%20Copy.png`,
+          src: `${ASSETS_BASE}/Dab-Rigs/dab%20vs%20image.png`,
           alt: "An electronic e-rig sitting next to a traditional glass dab rig.",
         }}
         shopAllRail={{ href: "/dabsntools", label: "Shop All Dab Rigs" }}

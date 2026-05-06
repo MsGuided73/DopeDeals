@@ -30,7 +30,7 @@ export default function CuratedKits() {
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Starter%20Kit.png" 
                 alt="The Starter Kit" 
                 fill 
-                className="object-cover transition-transform duration-500 group-hover:scale-105" 
+                className="object-contain transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute top-4 left-4 bg-[#3a5a3a] text-white text-[10px] font-bold px-3 py-1.5 rounded-sm uppercase tracking-wider z-10 text-center leading-tight">
                 Perfect<br/>Start
@@ -60,7 +60,7 @@ export default function CuratedKits() {
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Bong%20Kit.png" 
                 alt="The Bong Setup" 
                 fill 
-                className="object-cover object-[50%_35%] transition-transform duration-500 group-hover:scale-105" 
+                className="object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
             <div className="p-6 flex flex-col flex-grow relative z-20 bg-[#1a1c19]">
@@ -87,7 +87,7 @@ export default function CuratedKits() {
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Dab%20kit.png" 
                 alt="The Dab Setup" 
                 fill 
-                className="object-cover object-[50%_35%] transition-transform duration-500 group-hover:scale-105" 
+                className="object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
             <div className="p-6 flex flex-col flex-grow relative z-20 bg-[#1a1c19]">
@@ -114,7 +114,7 @@ export default function CuratedKits() {
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Travel%20kit.png"
                 alt="The High Roller Kit"
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-contain transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute top-4 left-4 bg-[#3a5a3a] text-white text-[10px] font-bold px-3 py-1.5 rounded-sm uppercase tracking-wider z-10 text-center leading-tight">
                 Top<br/>Shelf
