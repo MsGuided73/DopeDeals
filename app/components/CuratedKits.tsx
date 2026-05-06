@@ -44,8 +44,8 @@ export default function CuratedKits() {
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
                 Everything you need to get rolling with ease.
               </p>
-              <Link 
-                href="/collections/starter-kits" 
+              <Link
+                href="/bundles?kit=starter"
                 className="bg-[#48663e] hover:bg-[#3b5433] transition-colors text-white text-sm font-bold py-3 px-4 rounded text-center w-full uppercase tracking-widest flex items-center justify-center gap-2"
               >
                 Shop This Setup <ArrowRight className="w-4 h-4" />
@@ -71,8 +71,8 @@ export default function CuratedKits() {
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
                 Timeless pieces for smooth, reliable sessions.
               </p>
-              <Link 
-                href="/collections/bong-bundles" 
+              <Link
+                href="/bundles?kit=bong"
                 className="bg-[#48663e] hover:bg-[#3b5433] transition-colors text-white text-sm font-bold py-3 px-4 rounded text-center w-full uppercase tracking-widest flex items-center justify-center gap-2"
               >
                 Shop This Setup <ArrowRight className="w-4 h-4" />
@@ -98,8 +98,8 @@ export default function CuratedKits() {
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
                 Elevate your experience with cleaner hits and richer flavor.
               </p>
-              <Link 
-                href="/collections/dab-bundles" 
+              <Link
+                href="/bundles?kit=dab"
                 className="bg-[#48663e] hover:bg-[#3b5433] transition-colors text-white text-sm font-bold py-3 px-4 rounded text-center w-full uppercase tracking-widest flex items-center justify-center gap-2"
               >
                 Shop This Setup <ArrowRight className="w-4 h-4" />
@@ -129,7 +129,7 @@ export default function CuratedKits() {
                 Premium picks for elevated sessions.
               </p>
               <Link
-                href="/collections/travel-kits"
+                href="/bundles?kit=travel"
                 className="bg-[#48663e] hover:bg-[#3b5433] transition-colors text-white text-sm font-bold py-3 px-4 rounded text-center w-full uppercase tracking-widest flex items-center justify-center gap-2"
               >
                 Shop This Setup <ArrowRight className="w-4 h-4" />

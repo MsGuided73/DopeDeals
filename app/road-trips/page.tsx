@@ -1,6 +1,6 @@
 import React from "react";
 import GlobalMasthead from "../components/GlobalMasthead";
-import { Waves, Mountain, Sun, Building2, Calendar, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
@@ -15,9 +15,13 @@ const TRIPS = `${ASSETS}/Road-Trips`;
 const HERO_IMG = `${COMMUNITY}/Road%20Trips%20landing%20hero.png`;
 const BANNER_IMG = `${COMMUNITY}/Road%20Trips%20bottom%20image.png`;
 
-const FEATURED_BIG_IMG = `${COMMUNITY}/Coastal%20stroll%20at%20sunset.png`;
-const FEATURED_MOUNTAIN_IMG = `${COMMUNITY}/Golden%20hour%20on%20the%20mountain%20rock.png`;
-const FEATURED_DESERT_IMG = `${COMMUNITY}/Desert%20road%20trip%20at%20sunset.png`;
+// Featured Trips images — pulled from the real trip hero photos so the section
+// matches the trips that actually exist in our catalog.
+const FEATURED_OREGON_IMG = `${TRIPS}/Oregon%20Coastal%20Sessions.png`;
+const FEATURED_TAHOE_IMG = `${COMMUNITY}/Vintage%20camper%20van%20in%20mountain%20clearing.png`;
+const FEATURED_MALIBU_IMG = `${TRIPS}/Malibu%20Sessions.png`;
+
+const COMMUNITY_SUBMIT_HREF = "mailto:derek@sierrawestdistro.com?subject=Highway%20420%20%E2%80%94%20Share%20My%20Session";
 
 const EXPLORE_MALIBU_IMG = `${TRIPS}/Malibu%20Sessions.png`;
 const EXPLORE_DENVER_IMG = `${TRIPS}/Denver%20Cannabis%20Sessions.png`;
@@ -434,65 +438,42 @@ export default function RoadTripsPage() {
         <div className="rt-container">
           <div className="rt-section-header">
             <h2 className="rt-section-title">FEATURED TRIPS</h2>
-            <Link href="#all" className="rt-view-all">VIEW ALL TRIPS <ArrowRight size={16} /></Link>
+            <Link href="#explore" className="rt-view-all">VIEW ALL TRIPS <ArrowRight size={16} /></Link>
           </div>
-          
+
           <div className="rt-featured-grid">
-            {/* Left Large Card */}
-            <Link href="#big-sur" className="rt-card large">
-              <img src={FEATURED_BIG_IMG} alt="" className="rt-bg-img" />
+            {/* Left Large Card — Oregon Coast (only finished trip) */}
+            <Link href="/road-trips/oregon-coast" className="rt-card large">
+              <img src={FEATURED_OREGON_IMG} alt="" className="rt-bg-img" />
               <div className="rt-card-scrim" />
               <div className="rt-card-content">
-                <h3 className="rt-card-title">BIG SUR ADVENTURE</h3>
-                <p className="rt-card-desc">Exploring the California Coast</p>
+                <h3 className="rt-card-title">OREGON COAST SESSIONS</h3>
+                <p className="rt-card-desc">Where ocean views meet smooth sessions.</p>
                 <div className="rt-card-btn">EXPLORE <ArrowRight size={14} /></div>
               </div>
             </Link>
 
             {/* Right Stacked Cards */}
             <div className="rt-featured-right">
-              <Link href="#mountain" className="rt-card small">
-                <img src={FEATURED_MOUNTAIN_IMG} alt="" className="rt-bg-img" />
+              <Link href="/road-trips/lake-tahoe" className="rt-card small">
+                <img src={FEATURED_TAHOE_IMG} alt="" className="rt-bg-img" />
                 <div className="rt-card-scrim" />
                 <div className="rt-card-content">
-                  <h3 className="rt-card-title">MOUNTAIN ESCAPE</h3>
-                  <p className="rt-card-desc">Stunning Alpine Getaway</p>
+                  <h3 className="rt-card-title">LAKE TAHOE ESCAPE</h3>
+                  <p className="rt-card-desc">Crystal water. Pine forests. The loop drive.</p>
                   <div className="rt-card-btn">EXPLORE <ArrowRight size={14} /></div>
                 </div>
               </Link>
-              <Link href="#desert" className="rt-card small">
-                <img src={FEATURED_DESERT_IMG} alt="" className="rt-bg-img" />
+              <Link href="/road-trips/malibu" className="rt-card small">
+                <img src={FEATURED_MALIBU_IMG} alt="" className="rt-bg-img" />
                 <div className="rt-card-scrim" />
                 <div className="rt-card-content">
-                  <h3 className="rt-card-title">DESERT CRUISIN&rsquo;</h3>
-                  <p className="rt-card-desc">Into the Wild West</p>
+                  <h3 className="rt-card-title">MALIBU SESSIONS</h3>
+                  <p className="rt-card-desc">Coastal pull-offs. Easy hangs. Sunset sessions.</p>
                   <div className="rt-card-btn">EXPLORE <ArrowRight size={14} /></div>
                 </div>
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Category Nav */}
-      <section className="rt-cat-nav">
-        <div className="rt-container">
-          <div className="rt-cat-list">
-            <Link href="#coastal" className="rt-cat-item">
-              <Waves size={24} /> COASTAL CRUISES
-            </Link>
-            <Link href="#mountain" className="rt-cat-item">
-              <Mountain size={24} /> MOUNTAIN RIDES
-            </Link>
-            <Link href="#desert" className="rt-cat-item">
-              <Sun size={24} /> DESERT GETAWAYS
-            </Link>
-            <Link href="#city" className="rt-cat-item">
-              <Building2 size={24} /> CITY SESSIONS
-            </Link>
-            <Link href="#events" className="rt-cat-item">
-              <Calendar size={24} /> EVENTS
-            </Link>
           </div>
         </div>
       </section>
@@ -502,7 +483,6 @@ export default function RoadTripsPage() {
         <div className="rt-container">
           <div className="rt-section-header">
             <h2 className="rt-section-title">EXPLORE MORE TRIPS</h2>
-            <Link href="#all" className="rt-view-all">VIEW ALL TRIPS <ArrowRight size={16} /></Link>
           </div>
           
           <div className="rt-explore-grid">
@@ -542,7 +522,7 @@ export default function RoadTripsPage() {
               <h2 className="rt-section-title" style={{ color: '#2F6B3A' }}>FROM THE HIGHWAY COMMUNITY</h2>
               <p className="rt-community-subtitle">Real sessions from our community. Tag #RideHighway420 to be featured.</p>
             </div>
-            <Link href="#share" className="rt-btn" style={{ background: '#2F6B3A' }}>
+            <Link href={COMMUNITY_SUBMIT_HREF} className="rt-btn" style={{ background: '#2F6B3A' }}>
               SHARE YOUR SESSION <ArrowRight size={16} />
             </Link>
           </div>
@@ -563,7 +543,7 @@ export default function RoadTripsPage() {
         <div className="rt-banner-scrim" />
         <h2>RIDE WITH US</h2>
         <p>Join the journey and share your adventures.</p>
-        <Link href="#featured" className="rt-btn" style={{ background: '#2F6B3A' }}>
+        <Link href={COMMUNITY_SUBMIT_HREF} className="rt-btn" style={{ background: '#2F6B3A' }}>
           GET FEATURED <ArrowRight size={16} />
         </Link>
       </section>

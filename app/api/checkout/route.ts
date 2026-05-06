@@ -125,36 +125,55 @@ export async function POST(req: NextRequest) {
     }
 
     if (stateToCheck) {
-      // Fetch compliance rules for this state
+      // Fetch compliance rules for this state. Pull `category` so the THCA
+      // fallback below can match by category string.
       const { data: rules } = await supabase
         .from('compliance_rules')
-        .select('id')
+        .select('id, category')
         .contains('restricted_states', [stateToCheck]);
 
       if (rules && rules.length > 0) {
-        const ruleIds = rules.map((r: any) => r.id);
         const productIds = items.map(i => i.productId);
-        
-        const { data: restrictions } = await supabase
-          .from('product_compliance')
-          .select('product_id')
-          .in('product_id', productIds)
-          .in('compliance_id', ruleIds);
 
-        const restrictedProductIds = restrictions ? restrictions.map((r: any) => r.product_id) : [];
+        // product_compliance schema: { product_id, categories[], flags, last_classified_at }
+        // — there is NO compliance_id FK. Match by overlapping the product's
+        // classified `categories` array with the rule categories that apply
+        // to this state.
+        const ruleCategories = rules
+          .map((r: any) => r.category)
+          .filter((c: any): c is string => typeof c === 'string' && c.length > 0);
 
-        // Fallback THCA check based on category properties and names
+        const restrictedProductIds: string[] = [];
+
+        if (ruleCategories.length > 0) {
+          const { data: restrictions } = await supabase
+            .from('product_compliance')
+            .select('product_id')
+            .in('product_id', productIds)
+            .overlaps('categories', ruleCategories);
+
+          if (restrictions) {
+            for (const r of restrictions as Array<{ product_id: string }>) {
+              if (!restrictedProductIds.includes(r.product_id)) {
+                restrictedProductIds.push(r.product_id);
+              }
+            }
+          }
+        }
+
+        // Fallback THCA check based on category properties and product names.
+        // main_site_products has category_slug + category_id (no plain `category`).
         const { data: productDetails } = await supabase
           .from('main_site_products')
-          .select('id, name, category, category_id')
+          .select('id, name, category_slug, category_id')
           .in('id', productIds);
-          
+
         if (productDetails) {
-          for (const p of productDetails) {
+          for (const p of productDetails as Array<{ id: string; name: string | null; category_slug: string | null; category_id: string | null }>) {
             const nameLower = p.name?.toLowerCase() || '';
-            const isThca = p.category?.toLowerCase().includes('thca') || 
+            const isThca = p.category_slug?.toLowerCase().includes('thca') ||
                            p.category_id?.toLowerCase().startsWith('thca-') ||
-                           nameLower.includes('thca') || 
+                           nameLower.includes('thca') ||
                            nameLower.includes('thc-a');
             if (isThca) {
               const thcaRule = rules.find((r: any) => r.category?.toLowerCase().includes('thca'));
