@@ -100,16 +100,23 @@ export default function BongsPageContent({ initialCategory = 'all-bongs' }: Bong
             p.short_description?.toLowerCase().includes('beaker')
           );
           break;
-        case 'straight-tubes':
+        case 'straight-tubes': {
+          // The literal word "straight" is the only reliable signal we have —
+          // we *don't* match on "tube" alone because words like downtube,
+          // percolator tube, glass tube, inline tube appear all over beaker
+          // and perc-bong descriptions and would balloon the result set.
+          // (Misses a small number of straight bongs that don't say "straight"
+          // in copy; corrected by adding "straight" to those names/descs in the
+          // catalog, not by widening this filter.)
+          const isStraight = (text?: string | null) =>
+            !!text && text.toLowerCase().includes('straight');
           filtered = filtered.filter((p: BongProduct) =>
-            p.name?.toLowerCase().includes('straight') ||
-            p.name?.toLowerCase().includes('tube') ||
-            p.description?.toLowerCase().includes('straight') ||
-            p.description?.toLowerCase().includes('tube') ||
-            p.short_description?.toLowerCase().includes('straight') ||
-            p.short_description?.toLowerCase().includes('tube')
+            isStraight(p.name) ||
+            isStraight(p.description) ||
+            isStraight(p.short_description)
           );
           break;
+        }
         case 'percolator-bongs': {
           // Catch the common percolator vocabulary, not just the literal "percolator".
           const PERC_KEYWORDS = ['percolator', 'perc', 'tree perc', 'arm tree', 'inline', 'showerhead', 'honeycomb', 'diffuser', 'matrix', 'turbine', 'spiral'];
