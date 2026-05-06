@@ -25,7 +25,7 @@ export default function CuratedKits() {
           
           {/* The Starter Kit */}
           <div className="bg-[#1a1c19] rounded-xl overflow-hidden flex flex-col group border border-[#2a2c29] shadow-lg">
-            <div className="relative h-[250px] w-full bg-[#121411]">
+            <div className="relative aspect-[5/4] w-full bg-[#121411]">
               <Image 
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Starter%20Kit.png" 
                 alt="The Starter Kit" 
@@ -55,7 +55,7 @@ export default function CuratedKits() {
 
           {/* The Bong Setup */}
           <div className="bg-[#1a1c19] rounded-xl overflow-hidden flex flex-col group border border-[#2a2c29] shadow-lg">
-            <div className="relative h-[250px] w-full bg-[#121411]">
+            <div className="relative aspect-[5/4] w-full bg-[#121411]">
               <Image 
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Bong%20Kit.png" 
                 alt="The Bong Setup" 
@@ -82,7 +82,7 @@ export default function CuratedKits() {
 
           {/* The Dab Setup */}
           <div className="bg-[#1a1c19] rounded-xl overflow-hidden flex flex-col group border border-[#2a2c29] shadow-lg">
-            <div className="relative h-[250px] w-full bg-[#121411]">
+            <div className="relative aspect-[5/4] w-full bg-[#121411]">
               <Image 
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Dab%20kit.png" 
                 alt="The Dab Setup" 
@@ -109,7 +109,7 @@ export default function CuratedKits() {
 
           {/* The Travel Kit */}
           <div className="bg-[#1a1c19] rounded-xl overflow-hidden flex flex-col group border border-[#2a2c29] shadow-lg">
-            <div className="relative h-[250px] w-full bg-[#121411]">
+            <div className="relative aspect-[5/4] w-full bg-[#121411]">
               <Image
                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Travel%20kit.png"
                 alt="The High Roller Kit"

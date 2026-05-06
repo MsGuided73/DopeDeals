@@ -29,13 +29,13 @@ const SECONDARY_POSTS = [
     href: "/higher-learning/percolator-vs-regular-bong",
   },
   {
-    id: "how-to-grind-weed",
-    title: "How to Grind Weed the Right Way",
-    description: "The right grind makes a big difference. Here's how to get the perfect consistency for any session.",
-    category: "HOW TO",
-    readTime: "4 min read",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/Grinder%20Image%20for%20Blog%20and%20Grid.png",
-    href: "/higher-learning/how-to-grind-weed",
+    id: "thca-legal-alternative",
+    title: "THCA: The Legal Alternative",
+    description: "How hemp-derived THCA fits inside the 2018 Farm Bill and why it's accessible in states without medical or recreational THC.",
+    category: "COMPLIANCE",
+    readTime: "8 min read",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Blog/Home%20Page/map%20and%20flower%20and%20scale%20only.png",
+    href: "/higher-learning/thca-legal-alternative",
   },
 ];
 

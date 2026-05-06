@@ -82,7 +82,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
       cta: 'Shop Bundles',
     },
     imageLabels: [
-      { text: 'Starter Kit', left: '50%' },
+      { text: 'Starter Kit', left: 'calc(44% + 10px)' },
       { text: 'High Roller Kit', left: '78%' },
     ],
   },

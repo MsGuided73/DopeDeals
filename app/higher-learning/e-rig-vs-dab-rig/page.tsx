@@ -83,12 +83,12 @@ export default function ERigVsDabRigPage() {
             },
           },
           {
-            href: "/higher-learning/how-to-grind-weed",
-            title: "How to Grind Properly for a Smoother Smoke",
-            category: "How To",
+            href: "/higher-learning/thca-legal-alternative",
+            title: "THCA: The Legal Alternative",
+            category: "Compliance",
             image: {
-              src: `${ASSETS_BASE}/Grinder%20Image%20for%20Blog%20and%20Grid.png`,
-              alt: "Cannabis grinder with freshly ground flower beside it.",
+              src: `${ASSETS_BASE}/Home%20Page/map%20and%20flower%20and%20scale%20only.png`,
+              alt: "THCA flower beside a U.S. map and scales of justice.",
             },
           },
           {

@@ -44,6 +44,12 @@ export interface HigherLearningArticleLayoutProps {
   relatedArticles?: RelatedArticle[];
   /** Right-rail secondary nav. Falls back to defaults inside ExpertGuidesNav when omitted. */
   expertGuides?: ExpertGuideLink[];
+  /** Optional content overlaid on the hero image (e.g., trust-badge row anchored to bottom). */
+  heroOverlay?: ReactNode;
+  /** Optional extra widgets appended to the right-rail aside (between Shop rail and Expert guides). */
+  extraRailContent?: ReactNode;
+  /** When true, renders RelatedArticles inside the right-rail aside instead of the article column. */
+  relatedArticlesInRail?: boolean;
 }
 
 /**
@@ -109,6 +115,11 @@ export default async function HigherLearningArticleLayout(
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
+              {props.heroOverlay && (
+                <div className="absolute inset-x-0 bottom-0 z-10">
+                  {props.heroOverlay}
+                </div>
+              )}
             </div>
           </div>
         </header>
@@ -125,9 +136,11 @@ export default async function HigherLearningArticleLayout(
               />
             )}
 
-            {props.relatedArticles && props.relatedArticles.length > 0 && (
-              <RelatedArticles items={props.relatedArticles} />
-            )}
+            {!props.relatedArticlesInRail &&
+              props.relatedArticles &&
+              props.relatedArticles.length > 0 && (
+                <RelatedArticles items={props.relatedArticles} />
+              )}
           </article>
 
           <aside className="lg:col-span-4 space-y-5">
@@ -140,6 +153,17 @@ export default async function HigherLearningArticleLayout(
                 shopAllLabel={props.shopAllRail?.label}
                 heading={props.railHeading}
               />
+
+              {props.extraRailContent}
+
+              {props.relatedArticlesInRail &&
+                props.relatedArticles &&
+                props.relatedArticles.length > 0 && (
+                  <RelatedArticles
+                    items={props.relatedArticles}
+                    variant="rail"
+                  />
+                )}
 
               <ExpertGuidesNav links={props.expertGuides} />
             </div>

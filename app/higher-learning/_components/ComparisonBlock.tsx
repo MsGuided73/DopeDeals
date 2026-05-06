@@ -9,6 +9,10 @@ export interface ComparisonBlockProps {
   description: string;
   /** Hero image for the option. */
   image: { src: string; alt: string };
+  /** Optional "Typical features" list rendered above Pros/Cons. */
+  features?: string[];
+  /** Override for the features list heading. */
+  featuresHeading?: string;
   pros: string[];
   cons: string[];
   /** "Best for: People who want the authentic, hands-on experience." */
@@ -31,6 +35,8 @@ export default function ComparisonBlock({
   heading,
   description,
   image,
+  features,
+  featuresHeading = "Typical features:",
   pros,
   cons,
   bestForCopy,
@@ -58,6 +64,19 @@ export default function ComparisonBlock({
         </div>
 
         <div className="flex flex-col gap-4">
+          {features && features.length > 0 && (
+            <div>
+              <h3 className="text-base font-bold text-neutral-900 mb-1.5">
+                {featuresHeading}
+              </h3>
+              <ul className="list-disc list-inside text-sm text-neutral-800 space-y-1 marker:text-neutral-400">
+                {features.map((f, i) => (
+                  <li key={i}>{f}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div>
             <h3 className="text-base font-bold text-[#1B7A4D] mb-1.5">Pros</h3>
             <ul className="list-disc list-inside text-sm text-neutral-800 space-y-1 marker:text-neutral-400">
