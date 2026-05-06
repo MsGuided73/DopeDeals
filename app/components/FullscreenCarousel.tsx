@@ -28,7 +28,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
   },
   {
     id: 'slide-3',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/16x5-bundles-carousel.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/1.png',
     alt: 'Highway 420 — Bundles',
     href: '/bundles',
     objectPosition: 'center center',
@@ -48,7 +48,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
   },
   {
     id: 'slide-5',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/DabRigs_Carousel%20(1).png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/Dab-Rig/2.png',
     alt: 'Highway 420 — Dab Rigs',
     href: '/dabsntools',
     objectPosition: 'center center',

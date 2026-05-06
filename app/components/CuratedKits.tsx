@@ -141,26 +141,18 @@ export default function CuratedKits() {
 
         {/* Footer Banner */}
         <div className="mt-8 flex justify-center">
-          <div className="bg-[#e6e2d6] rounded-xl py-1.5 px-4 inline-flex flex-col md:flex-row items-center justify-center gap-4 shadow-sm border border-[#d8d4c7]">
-            <div className="flex items-center gap-3">
-              <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
-                <Image 
-                   src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Black%20LogoTB.png"
-                  alt="Highway 420 Logo"
-                  fill
-                  className="object-contain scale-[1.65]"
-                />
-              </div>
-              <p className="text-[#1a1c19] font-medium text-base">Not sure which setup is right for you?</p>
+          <div className="bg-[#e6e2d6] rounded-xl py-1.5 px-6 inline-flex items-center justify-center gap-3 shadow-sm border border-[#d8d4c7]">
+            <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
+              <Image
+                 src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Black%20LogoTB.png"
+                alt="Highway 420 Logo"
+                fill
+                className="object-contain scale-[1.65]"
+              />
             </div>
-            <div className="hidden md:block w-px h-6 bg-gray-400 opacity-50"></div>
-            <Link 
-              href="/collections/bundles" 
-              className="text-[#415d39] font-bold hover:text-[#2d4227] transition-colors flex items-center gap-2 text-base group whitespace-nowrap"
-            >
-              Compare Bundles 
-              <ArrowRight className="w-4 h-4 transform transition-transform group-hover:translate-x-1" />
-            </Link>
+            <p className="text-[#1a1c19] font-bold text-base uppercase tracking-[0.14em] whitespace-nowrap">
+              Bundled For The Long Haul.
+            </p>
           </div>
         </div>
 

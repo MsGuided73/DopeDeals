@@ -236,9 +236,6 @@ export default function FeaturedProductsSection() {
 
   return (
     <section style={{ background: '#ffffff', padding: '60px 0 72px', position: 'relative' }}>
-      {/* Thin light navbar green top rule with white stripe */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D' }} />
-
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
@@ -279,8 +276,6 @@ export default function FeaturedProductsSection() {
         </Link>
       </div>
 
-      {/* Thin light navbar green bottom rule with white stripe */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: 'transparent', borderTop: '1px solid #1B7A4D', borderBottom: '1px solid #1B7A4D' }} />
     </section>
   );
 }

@@ -155,9 +155,6 @@ export default function DopeDealsSection() {
 
   return (
     <section id="dope-deals" style={{ background: DD.white, padding: '60px 0 72px', position: 'relative' }}>
-      {/* Thin lime green top rule */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: `linear-gradient(90deg, ${DD.accentL}, ${DD.accent})` }} />
-
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
         <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
@@ -197,8 +194,6 @@ export default function DopeDealsSection() {
         </Link>
       </div>
 
-      {/* Thin lime green bottom rule */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: `linear-gradient(90deg, ${DD.accent}, ${DD.accentL})` }} />
     </section>
   );
 }
