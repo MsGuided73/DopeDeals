@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { normalizeProductImages } from '../../../../lib/utils/image-utils';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 /**
  * Fresh Drops API Route
@@ -23,16 +24,19 @@ export async function GET(req: NextRequest) {
 
     // Get active products only with images, ordered by newest first
     // Fetch extra to account for duplicates and battery filtering
-    const { data: rawProducts, error } = await supabase
+    let newestQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product,
         brand_name, category_id, created_at, updated_at
       `)
-      .eq('is_active', true) // ONLY active products
-      .not('image_url', 'is', null) // Must have image_url
-      .neq('image_url', '') // Must not be empty string
+      .eq('is_active', true); // ONLY active products
+
+    // Hide products without a usable image (mid-import state).
+    newestQuery = applyImageRequiredFilter(newestQuery);
+
+    const { data: rawProducts, error } = await newestQuery
       .not('name', 'ilike', '%battery%')
       .not('description', 'ilike', '%battery%')
       .not('name', 'ilike', '%tincture%')

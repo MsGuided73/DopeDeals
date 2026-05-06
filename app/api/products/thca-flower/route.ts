@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -35,6 +36,9 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     flowerQuery = applyRestrictedProductFilter(flowerQuery);
 
+    // Hide products without a usable image (mid-import state).
+    flowerQuery = applyImageRequiredFilter(flowerQuery);
+
     const { data: rawProducts, error } = await flowerQuery
       .eq('category_slug', 'flower')
       .order('created_at', { ascending: false })
@@ -62,9 +66,10 @@ export async function GET(req: NextRequest) {
     };
 
     const transformedProducts = (rawProducts || []).map((product: any) => {
+      // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(product.image_url),
+        ...parseImageUrls(product.image_urls)
       ]));
 
       return {

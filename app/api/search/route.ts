@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 import { normalizeProductImages } from "../../../lib/utils/image-utils";
 import { applyRestrictedProductFilter } from "../../../lib/compliance-filters";
+import { applyImageRequiredFilter } from "../../../lib/product-display-filters";
 
 const Body = z.object({
   q: z.string().trim().max(200).optional().nullable(),
@@ -95,14 +96,16 @@ export async function POST(req: Request) {
           "created_at",
         ].join(","),
         { count: "exact" }
-      );
-    // Note: image_url filter intentionally removed so imageless products
-    // surface in search results — this is how the merch team identifies
-    // which SKUs still need product photography. The relevance/sort
-    // ordering below puts products WITH images first as a tiebreaker.
-
+      )
+      .eq("is_active", true);
     // Apply centralized compliance filters
     q1 = applyRestrictedProductFilter(q1);
+
+    // Hide products without a usable image (mid-import state).
+    // Note: previously, this endpoint intentionally surfaced imageless products
+    // for the merch team. That decision was reversed — customer-facing search
+    // should not show imageless SKUs. Use admin tooling to find them.
+    q1 = applyImageRequiredFilter(q1);
 
     if (category) {
       const slugAlias = findAliasForSlug(category);

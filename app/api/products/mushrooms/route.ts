@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -27,7 +28,7 @@ export async function GET(req: NextRequest) {
       'shrooms'
     ];
 
-    const { data: rawProducts, error } = await supabase
+    let mushroomQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
@@ -36,7 +37,12 @@ export async function GET(req: NextRequest) {
         specs, meta_data
       `)
       .eq('is_active', true)
-      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
+      .or('variants_enabled.eq.false,source_parent.is.null'); // Hide variant children of enabled groups
+
+    // Hide products without a usable image (mid-import state).
+    mushroomQuery = applyImageRequiredFilter(mushroomQuery);
+
+    const { data: rawProducts, error } = await mushroomQuery
       .in('category_slug', mushroomSlugs)
       .order('created_at', { ascending: false })
       .limit(limit);
@@ -74,9 +80,10 @@ export async function GET(req: NextRequest) {
     };
 
     const transformedProducts = (rawProducts || []).map((p: any) => {
+      // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(p.image_urls),
-        ...parseImageUrls(p.image_url)
+        ...parseImageUrls(p.image_url),
+        ...parseImageUrls(p.image_urls)
       ]));
 
       const finalImageUrl = normalizedImages[0] || null;

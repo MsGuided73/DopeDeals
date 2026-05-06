@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 /**
  * GET /api/products/pre-rolls
@@ -64,6 +65,9 @@ export async function GET(_req: NextRequest) {
     // Apply centralized compliance filters
     prerollQuery = applyRestrictedProductFilter(prerollQuery);
 
+    // Hide products without a usable image (mid-import state).
+    prerollQuery = applyImageRequiredFilter(prerollQuery);
+
     const { data: allProducts, error: allError } = await prerollQuery
       .limit(MAX_PRODUCTS);
 
@@ -82,7 +86,7 @@ export async function GET(_req: NextRequest) {
       const name = String(product.name ?? '').toLowerCase();
       const categorySlug = String(product.category_slug ?? '').toLowerCase();
 
-      if (categorySlug !== 'prerolls') return false;
+      if (categorySlug !== 'pre-rolls') return false;
 
       const excludedKeywords = ['tray', 'battery', 'glass', 'pipe', 'bong', 'grinder'];
       const isExcluded = excludedKeywords.some(
@@ -142,10 +146,11 @@ export async function GET(_req: NextRequest) {
         product.created_at &&
         new Date(product.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
+      // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(
         new Set([
-          ...parseImageUrls(product.image_urls),
           ...parseImageUrls(product.image_url),
+          ...parseImageUrls(product.image_urls),
         ])
       );
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 /**
  * Edibles API Route
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
     const limit = 5000;
 
     // Get edibles products with comprehensive filtering
-    const { data: rawProducts, error } = await supabase
+    let ediblesQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
@@ -28,9 +29,12 @@ export async function GET(req: NextRequest) {
         brand_name, category_id, category_slug, created_at, updated_at
       `)
       .eq('is_active', true) // Only active products
-      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
-      .not('image_url', 'is', null) // Must have image_url
-      .neq('image_url', '') // Must not be empty string
+      .or('variants_enabled.eq.false,source_parent.is.null'); // Hide variant children of enabled groups
+
+    // Hide products without a usable image (mid-import state).
+    ediblesQuery = applyImageRequiredFilter(ediblesQuery);
+
+    const { data: rawProducts, error } = await ediblesQuery
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
       .in('category_slug', [
@@ -67,9 +71,10 @@ export async function GET(req: NextRequest) {
 
     // Transform products to match expected interface
     const transformedProducts = (rawProducts || []).map((product: any) => {
+      // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(product.image_url),
+        ...parseImageUrls(product.image_urls)
       ]));
 
       return {

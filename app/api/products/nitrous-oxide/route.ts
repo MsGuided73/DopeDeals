@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -28,7 +29,7 @@ export async function GET(req: NextRequest) {
     const effectiveLimit = limit;
 
     // Query nitrous oxide products from main_site_products table
-    const { data: rawProducts, error } = await supabase
+    let nitrousQuery = supabase
       .from('main_site_products')
       .select(`
         id,
@@ -55,9 +56,13 @@ export async function GET(req: NextRequest) {
         updated_at
       `)
       .eq('is_active', true)
-      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
+      .or('variants_enabled.eq.false,source_parent.is.null'); // Hide variant children of enabled groups
       // STRICT: No Kratom or related substances
 
+    // Hide products without a usable image (mid-import state).
+    nitrousQuery = applyImageRequiredFilter(nitrousQuery);
+
+    const { data: rawProducts, error } = await nitrousQuery
       .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
       .order('created_at', { ascending: false })
       .limit(effectiveLimit)
@@ -86,9 +91,10 @@ export async function GET(req: NextRequest) {
 
     // Map products to include consistent pricing fields
     const products = (rawProducts || []).map((product: any) => {
+      // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(product.image_url),
+        ...parseImageUrls(product.image_urls)
       ]));
 
       return {
@@ -105,12 +111,16 @@ export async function GET(req: NextRequest) {
     });
 
     // Get total count for pagination info
-    const { count } = await supabase
+    let nitrousCountQuery = supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
-      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
+      .or('variants_enabled.eq.false,source_parent.is.null'); // Hide variant children of enabled groups
 
+    // Match list-query image filter so the count matches what the user sees.
+    nitrousCountQuery = applyImageRequiredFilter(nitrousCountQuery);
+
+    const { count } = await nitrousCountQuery
       .or('category_slug.ilike.%n2o%,category_slug.ilike.%nitrous%')
 
     return NextResponse.json({

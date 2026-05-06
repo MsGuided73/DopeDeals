@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -46,9 +47,10 @@ export async function GET(req: NextRequest) {
 
     // Transform products to match the expected format
     const transformedProducts = result.products.map((product: any) => {
+      // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(product.image_url),
+        ...parseImageUrls(product.image_urls)
       ]));
 
       return {
@@ -96,6 +98,9 @@ async function performRegularSearch(supabase: any, options: any) {
 
   // Apply centralized compliance filters
   thcaPrerollQuery = applyRestrictedProductFilter(thcaPrerollQuery);
+
+  // Hide products without a usable image (mid-import state).
+  thcaPrerollQuery = applyImageRequiredFilter(thcaPrerollQuery);
 
   const { data, error } = await thcaPrerollQuery
     .or('name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%thca%,name.ilike.%thc-a%,name.ilike.%THC-A%,name.ilike.%THC-a%')

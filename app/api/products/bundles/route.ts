@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 import { config } from 'dotenv';
 import * as path from 'path';
 
@@ -19,7 +20,7 @@ export async function GET() {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { data: products, error } = await supabase
+    let bundlesQuery = supabase
       .from('main_site_products')
       .select(`
         id,
@@ -39,7 +40,12 @@ export async function GET() {
         subcategory_slug
       `)
       .eq('is_active', true)
-      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
+      .or('variants_enabled.eq.false,source_parent.is.null'); // Hide variant children of enabled groups
+
+    // Hide products without a usable image (mid-import state).
+    bundlesQuery = applyImageRequiredFilter(bundlesQuery);
+
+    const { data: products, error } = await bundlesQuery
       .or(
         'category_slug.eq.bundles,' +
         'subcategory_slug.eq.bundles,' +

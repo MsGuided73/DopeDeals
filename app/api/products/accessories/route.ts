@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 /**
  * Accessories API Route
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
     const limit = 5000;
 
     // Get accessories products with category_slug filtering
-    const { data: rawProducts, error } = await supabase
+    let accessoriesQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
@@ -29,9 +30,12 @@ export async function GET(req: NextRequest) {
         created_at, updated_at
       `)
       .eq('is_active', true) // Only active products
-      .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
-      .not('image_url', 'is', null) // Must have image_url
-      .neq('image_url', '') // Must not be empty string
+      .or('variants_enabled.eq.false,source_parent.is.null'); // Hide variant children of enabled groups
+
+    // Hide products without a usable image (mid-import state).
+    accessoriesQuery = applyImageRequiredFilter(accessoriesQuery);
+
+    const { data: rawProducts, error } = await accessoriesQuery
       .or('category_slug.eq.ashtrays,category_slug.eq.torch,category_slug.eq.storage,category_slug.eq.lighters,category_slug.eq.accessories,category_slug.eq.accessory') // Category slug filtering
       .not('name', 'ilike', '%battery%') // No batteries
       .not('description', 'ilike', '%battery%')
@@ -61,9 +65,10 @@ export async function GET(req: NextRequest) {
 
     // Transform products to match expected interface
     const transformedProducts = (rawProducts || []).map((product: any) => {
+      // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(product.image_url),
+        ...parseImageUrls(product.image_urls)
       ]));
 
       return {

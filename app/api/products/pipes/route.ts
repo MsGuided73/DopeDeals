@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 /**
  * Pipes API Route
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
     const limit = 5000;
 
     // Get pipes products with comprehensive filtering
-    const { data: rawProducts, error } = await supabase
+    let pipesQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
@@ -32,9 +33,12 @@ export async function GET(req: NextRequest) {
       .eq('is_active', true) // Only active products
       // Hide variant children of enabled groups — only the master row should
       // appear in the listing for products with variants_enabled=true.
-      .or('variants_enabled.eq.false,source_parent.is.null')
-      .not('image_url', 'is', null) // Must have image_url
-      .neq('image_url', '') // Must not be empty string
+      .or('variants_enabled.eq.false,source_parent.is.null');
+
+    // Hide products without a usable image (mid-import state).
+    pipesQuery = applyImageRequiredFilter(pipesQuery);
+
+    const { data: rawProducts, error } = await pipesQuery
       .not('name', 'ilike', '%battery%') // No batteries
       // Removed Supabase description filter because it silently drops products with NULL descriptions
       // ── Strict slug-based filter ──────────────────────────────────────────
@@ -77,9 +81,12 @@ export async function GET(req: NextRequest) {
         return true;
       })
       .map((product: any) => {
+      // image_url is the primary (current) URL; image_urls is the legacy gallery,
+      // which historically contained sigdistro.com links that are now 404. Order
+      // matters: the card uses normalizedImages[0], so the Supabase URL must come first.
       const normalizedImages = Array.from(new Set([
-        ...parseImageUrls(product.image_urls),
-        ...parseImageUrls(product.image_url)
+        ...parseImageUrls(product.image_url),
+        ...parseImageUrls(product.image_urls)
       ]));
 
       return {

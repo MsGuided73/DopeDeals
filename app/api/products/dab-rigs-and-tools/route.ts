@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -32,13 +33,16 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     query = applyRestrictedProductFilter(query);
 
+    // Hide products without a usable image (mid-import state).
+    query = applyImageRequiredFilter(query);
+
     // ── Strict category_slug filter ──────────────────────────────────────────
-    // Database stores slugs with underscores (confirmed via audit):
-    //   'dab_rig'              → 29 products  (all Puffco e-rigs, tools, rigs)
-    //   'dab_rig_attachment'   →  1 product   (Puffco Peak Ryan Fitt Recycler)
-    //   'dab_rig_accessories'  →  1 product   (Puffco Peak Bowl)
+    // Slugs use kebab-case (matches URL path; normalized 2026-05-05):
+    //   'dab-rig', 'dab-rig-attachment', 'dab-rig-accessories'
     query = query.or(
-      'category_slug.eq.dab_rig,category_slug.eq.dab_rig_attachment,category_slug.eq.dab_rig_accessories'
+      // Per Dana's taxonomy: dab rigs ∋ {dab_rigs, dab-rigs, dab_rig, dab-rig}.
+// Attachments/accessories follow the same kebab/underscore drift; accept both.
+'category_slug.eq.dab_rigs,category_slug.eq.dab-rigs,category_slug.eq.dab_rig,category_slug.eq.dab-rig,category_slug.eq.dab_rig_attachment,category_slug.eq.dab-rig-attachment,category_slug.eq.dab_rig_accessories,category_slug.eq.dab-rig-accessories'
     );
 
     // Apply pagination
@@ -69,9 +73,14 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     dabCountQuery = applyRestrictedProductFilter(dabCountQuery);
 
+    // Match list-query image filter so the count matches what the user sees.
+    dabCountQuery = applyImageRequiredFilter(dabCountQuery);
+
 
     const { count } = await dabCountQuery.or(
-      'category_slug.eq.dab_rig,category_slug.eq.dab_rig_attachment,category_slug.eq.dab_rig_accessories'
+      // Per Dana's taxonomy: dab rigs ∋ {dab_rigs, dab-rigs, dab_rig, dab-rig}.
+// Attachments/accessories follow the same kebab/underscore drift; accept both.
+'category_slug.eq.dab_rigs,category_slug.eq.dab-rigs,category_slug.eq.dab_rig,category_slug.eq.dab-rig,category_slug.eq.dab_rig_attachment,category_slug.eq.dab-rig-attachment,category_slug.eq.dab_rig_accessories,category_slug.eq.dab-rig-accessories'
     );
 
 

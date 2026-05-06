@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -25,9 +26,10 @@ const parseImageUrls = (value?: string[] | string | null) => {
 
 const normalizeProducts = (productList: any[]) => {
   return productList.map((product) => {
+    // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
     const normalizedImages = Array.from(new Set([
-      ...parseImageUrls(product.image_urls),
-      ...parseImageUrls(product.image_url)
+      ...parseImageUrls(product.image_url),
+      ...parseImageUrls(product.image_urls)
     ]));
 
     return {
@@ -58,8 +60,10 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     arrivalsQuery = applyRestrictedProductFilter(arrivalsQuery);
 
+    // Hide products without a usable image (mid-import state).
+    arrivalsQuery = applyImageRequiredFilter(arrivalsQuery);
+
     const { data: products, error } = await arrivalsQuery
-      .not('image_url', 'is', null)
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -83,6 +87,9 @@ export async function GET(req: NextRequest) {
 
       // Apply centralized compliance filters
       fallbackArrivalsQuery = applyRestrictedProductFilter(fallbackArrivalsQuery);
+
+      // Hide products without a usable image (mid-import state).
+      fallbackArrivalsQuery = applyImageRequiredFilter(fallbackArrivalsQuery);
 
       const { data: fallbackProducts, error: fallbackError } = await fallbackArrivalsQuery
         .order('created_at', { ascending: false })

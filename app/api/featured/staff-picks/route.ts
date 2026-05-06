@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -49,6 +50,9 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     staffQuery = applyRestrictedProductFilter(staffQuery);
 
+    // Hide products without a usable image (mid-import state).
+    staffQuery = applyImageRequiredFilter(staffQuery);
+
     const { data: products, error } = await staffQuery
       .eq('featured', true)
       .gte('our_price', 50) // Higher priced items for staff picks
@@ -75,6 +79,9 @@ export async function GET(req: NextRequest) {
 
       // Apply centralized compliance filters
       fallbackQuery = applyRestrictedProductFilter(fallbackQuery);
+
+      // Hide products without a usable image (mid-import state).
+      fallbackQuery = applyImageRequiredFilter(fallbackQuery);
 
       const { data: fallbackProducts, error: fallbackError } = await fallbackQuery
         .gte('our_price', 30)

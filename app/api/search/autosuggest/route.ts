@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -79,6 +80,9 @@ export async function GET(request: NextRequest) {
 
     // Apply centralized compliance filters
     autosuggestQuery = applyRestrictedProductFilter(autosuggestQuery);
+
+    // Hide products without a usable image (mid-import state).
+    autosuggestQuery = applyImageRequiredFilter(autosuggestQuery);
 
     const { data: products, error: productsError } = await autosuggestQuery
       .limit(50);

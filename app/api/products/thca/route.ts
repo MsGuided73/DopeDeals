@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 export async function GET(req: NextRequest) {
   try {
@@ -57,6 +58,9 @@ export async function GET(req: NextRequest) {
     // Apply centralized compliance filters
     thcaQuery = applyRestrictedProductFilter(thcaQuery);
 
+    // Hide products without a usable image (mid-import state).
+    thcaQuery = applyImageRequiredFilter(thcaQuery);
+
     const { data: rawProducts, error } = await thcaQuery
       .or('name.ilike.%thca%,name.ilike.%packman%,name.ilike.%crave%,name.ilike.%hidden.hills%,name.ilike.%hidden-hills%,name.ilike.%flower%,name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%concentrate%,name.ilike.%edible%,brand_name.ilike.%thca%,brand_name.ilike.%packman%,brand_name.ilike.%crave%,brand_name.ilike.%hidden.hills%,brand_name.ilike.%hidden-hills%,brand_name.ilike.%flower%,brand_name.ilike.%preroll%,brand_name.ilike.%cartridge%,brand_name.ilike.%vape%,brand_name.ilike.%concentrate%,brand_name.ilike.%edible%,description.ilike.%thca%,description.ilike.%packman%,description.ilike.%crave%,description.ilike.%hidden.hills%,description.ilike.%hidden-hills%,description.ilike.%flower%,description.ilike.%preroll%,description.ilike.%cartridge%,description.ilike.%vape%,description.ilike.%concentrate%,description.ilike.%edible%')
       .order('created_at', { ascending: false })
@@ -99,9 +103,10 @@ export async function GET(req: NextRequest) {
         return true;
       })
       .map((product: any) => {
+        // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
         const normalizedImages = Array.from(new Set([
-          ...parseImageUrls(product.image_urls),
-          ...parseImageUrls(product.image_url)
+          ...parseImageUrls(product.image_url),
+          ...parseImageUrls(product.image_urls)
         ]));
 
         return {
@@ -118,13 +123,18 @@ export async function GET(req: NextRequest) {
       });
 
     // Get total count
-    const { count } = await supabase
+    let thcaCountQuery = supabase
       .from('main_site_products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
       .or('variants_enabled.eq.false,source_parent.is.null') // Hide variant children of enabled groups
       .not('image_url', 'is', null)
-      .neq('image_url', '')
+      .neq('image_url', '');
+
+    // Match list-query image filter so the count matches what the user sees.
+    thcaCountQuery = applyImageRequiredFilter(thcaCountQuery);
+
+    const { count } = await thcaCountQuery
       .or('name.ilike.%thca%,name.ilike.%packman%,name.ilike.%crave%,name.ilike.%hidden.hills%,name.ilike.%hidden-hills%,name.ilike.%flower%,name.ilike.%preroll%,name.ilike.%cartridge%,name.ilike.%vape%,name.ilike.%concentrate%,name.ilike.%edible%,brand_name.ilike.%thca%,brand_name.ilike.%packman%,brand_name.ilike.%crave%,brand_name.ilike.%hidden.hills%,brand_name.ilike.%hidden-hills%,brand_name.ilike.%flower%,brand_name.ilike.%preroll%,brand_name.ilike.%cartridge%,brand_name.ilike.%vape%,brand_name.ilike.%concentrate%,brand_name.ilike.%edible%,description.ilike.%thca%,description.ilike.%packman%,description.ilike.%crave%,description.ilike.%hidden.hills%,description.ilike.%hidden-hills%,description.ilike.%flower%,description.ilike.%preroll%,description.ilike.%cartridge%,description.ilike.%vape%,description.ilike.%concentrate%,description.ilike.%edible%');
 
     return NextResponse.json({

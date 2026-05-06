@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { normalizeProductImages } from '../../../lib/utils/image-utils';
+import { applyImageRequiredFilter } from '../../../lib/product-display-filters';
 
 /**
  * Dope Deals API Route
@@ -21,17 +22,20 @@ export async function GET(req: NextRequest) {
 
     // Get products that have active dope deal flags and images
     // Fetch extra to account for duplicates and battery filtering
-    const { data: rawProducts, error } = await supabase
+    let dopeDealsQuery = supabase
       .from('main_site_products')
       .select(`
         id, name, description, short_description, our_price, sale_price,
         image_url, image_urls, sku, stock_quantity, is_active, featured, featured_product,
         brand_name, category_id, created_at, updated_at, DD10, DD15
       `)
+      .eq('is_active', true); // Only active products
+
+    // Hide products without a usable image (mid-import state).
+    dopeDealsQuery = applyImageRequiredFilter(dopeDealsQuery);
+
+    const { data: rawProducts, error } = await dopeDealsQuery
       .or('DD10.eq.true,DD15.eq.true') // Products with either DD10 or DD15 flag
-      .eq('is_active', true) // Only active products
-      .not('image_url', 'is', null) // Must have image_url
-      .neq('image_url', '') // Must not be empty string
       .or('name.not.ilike.%battery%,description.not.ilike.%battery%,short_description.not.ilike.%battery%') // No batteries
       .order('created_at', { ascending: false })
       .limit(limit * 2); // Fetch extra to ensure we have enough after deduplication

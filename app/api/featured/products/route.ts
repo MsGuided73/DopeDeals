@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyRestrictedProductFilter } from '../../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../../lib/product-display-filters';
 
 /**
  * Featured Products API Route
@@ -97,6 +98,9 @@ export async function GET(req: NextRequest) {
       // Apply centralized compliance filters
       featuredQuery1 = applyRestrictedProductFilter(featuredQuery1);
 
+      // Hide products without a usable image (mid-import state).
+      featuredQuery1 = applyImageRequiredFilter(featuredQuery1);
+
       const { data: featuredProducts, error: featuredError } = await featuredQuery1
       .or('featured_product.eq.true,featured_product.eq."YES"') // Get featured_product items (both boolean true and string "YES")
       .order('created_at', { ascending: false });
@@ -128,6 +132,9 @@ export async function GET(req: NextRequest) {
 
       // Apply centralized compliance filters
       featuredQuery2 = applyRestrictedProductFilter(featuredQuery2);
+
+      // Hide products without a usable image (mid-import state).
+      featuredQuery2 = applyImageRequiredFilter(featuredQuery2);
 
       const { data: priorityProducts, error } = await featuredQuery2
         .eq('featured', true) // Get featured products as fallback

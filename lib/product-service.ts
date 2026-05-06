@@ -1,5 +1,6 @@
 import { createSupabaseClient } from './supabase-client-factory';
 import { transformImageUrl } from './image-url-utils';
+import { applyImageRequiredFilter } from './product-display-filters';
 
 /**
  * Enhanced product service that ensures all components:
@@ -58,6 +59,9 @@ export class ProductService {
         .from('main_site_products')
         .select('*')
         .eq('is_active', true);
+
+      // Customer-facing list: hide products without a usable image (mid-import state).
+      query = applyImageRequiredFilter(query);
 
       // Apply filters
       if (filters.category) {
@@ -155,9 +159,14 @@ export class ProductService {
    */
   async getProductsByIds(ids: string[]): Promise<Product[]> {
     if (!ids || ids.length === 0) return [];
-    
+
     try {
       const supabase = await this.getSupabaseClient();
+      // NOTE: getProductsByIds is used by both customer-facing recommendation
+      // surfaces AND cart hydration. Cart hydration must succeed even if an
+      // item's image was cleared mid-checkout, so this method does NOT apply
+      // the image-required filter. Callers presenting these as a browsable list
+      // (e.g. recommendations) should post-filter with hasUsableImage().
       const { data, error } = await supabase
         .from('main_site_products')
         .select('*')
@@ -229,6 +238,9 @@ export class ProductService {
         .from('main_site_products')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
+
+      // Customer-facing list: count must match getProducts() filter.
+      query = applyImageRequiredFilter(query);
 
       // Apply the same filters as getProducts but only for counting
       if (filters.category) {

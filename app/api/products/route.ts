@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { normalizeProductImages } from '../../../lib/utils/image-utils';
 import { applyRestrictedProductFilter } from '../../../lib/compliance-filters';
+import { applyImageRequiredFilter } from '../../../lib/product-display-filters';
 
 // Module-level singleton — uses NEXT_PUBLIC_ vars baked in at build time (same pattern as /api/newest/products)
 const supabase = createClient(
@@ -32,6 +33,9 @@ export async function GET(req: NextRequest) {
 
     // Apply centralized compliance filters
     query = applyRestrictedProductFilter(query, ['name', 'description', 'short_description']);
+
+    // Hide products without a usable image (mid-import state).
+    query = applyImageRequiredFilter(query);
 
     // Apply category filter if provided
     if (category) {
@@ -65,6 +69,9 @@ export async function GET(req: NextRequest) {
 
     // Apply centralized compliance filters
     countQuery = applyRestrictedProductFilter(countQuery, ['name', 'description', 'short_description']);
+
+    // Match list-query image filter so the count matches what the user sees.
+    countQuery = applyImageRequiredFilter(countQuery);
 
     // Apply category filter to count query if provided
     if (category) {
