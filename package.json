@@ -16,7 +16,8 @@
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.typecheck.json",
     "typecheck:server": "tsc -p tsconfig.server.json",
-    "sync:airtable": "tsx scripts/sync_airtable_to_supabase.ts"
+    "sync:airtable": "tsx scripts/sync_airtable_to_supabase.ts",
+    "compliance:legiscan-ingest": "tsx scripts/legiscan_daily_ingest.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

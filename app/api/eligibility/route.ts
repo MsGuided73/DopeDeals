@@ -55,11 +55,20 @@ export async function GET(req: NextRequest) {
 
     const restrictedCategories = (rules || []).map((r: any) => r.category);
 
+    // Build a per-category grid for the ZIP — used by the storefront location chip
+    // and the /shipping-eligibility landing page even when no productIds are supplied.
+    const categoryGrid = (rules || []).map((r: any) => ({
+      category: r.category,
+      status: 'restricted' as const,
+      ageRequirement: r.age_requirement ?? null,
+      shippingRestrictions: r.shipping_restrictions ?? null,
+    }));
+
     // If productIds are provided, check which specific products are restricted
     const productIds = searchParams.get('productIds')?.split(',').filter(Boolean) || [];
     let restrictedProducts: string[] = [];
     let customWarning = '';
-    
+
     if (productIds.length > 0) {
       // 1. Check state-level restrictions via compliance rules mappings
       if (rules && rules.length > 0) {
@@ -145,7 +154,8 @@ export async function GET(req: NextRequest) {
       city: zipRow.city,
       county: zipRow.county,
       restrictedCategories: Array.from(new Set(restrictedCategories)),
-      restrictedProducts, 
+      restrictedProducts,
+      categoryGrid,
       shippingRestrictions: shipping,
       warning: customWarning || undefined,
     });

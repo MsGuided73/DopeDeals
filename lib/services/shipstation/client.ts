@@ -367,6 +367,10 @@ export class ShipstationClient {
     dimensions?: { length: number; width: number; height: number; unit: 'inch' | 'centimeter' };
     shipFrom?: { postalCode?: string; countryCode?: string };
   }): Promise<ShipstationApiResponse<any[]>> {
+    const shipFromPostalCode = params.shipFrom?.postalCode || process.env.SHIPSTATION_FROM_POSTAL_CODE;
+    if (!shipFromPostalCode) {
+      throw new Error('SHIPSTATION_FROM_POSTAL_CODE is not set and no shipFrom.postalCode was provided');
+    }
     const payload = {
       rate_options: {
         carrier_ids: [], // empty = all connected carriers
@@ -383,7 +387,7 @@ export class ShipstationClient {
           name: 'Ship To'
         },
         ship_from: {
-          postal_code: params.shipFrom?.postalCode || (process.env.SHIPSTATION_FROM_POSTAL_CODE || '78701'),
+          postal_code: shipFromPostalCode,
           country_code: params.shipFrom?.countryCode || 'US',
           address_line1: '',
           city_locality: '',
