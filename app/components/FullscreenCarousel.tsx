@@ -103,7 +103,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
   },
   {
     id: 'slide-7',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/RoadTrips-No_Font.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/RoadTrips-Original.png',
     alt: 'Highway 420 — Road Trips',
     href: '/road-trips',
     objectPosition: 'center center',
@@ -112,7 +112,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
       headline: (
         <>
           Find Your Next<br />
-          <span className="carousel-hero-accent carousel-hero-accent--dark">Road Trips</span>
+          <span className="carousel-hero-accent">Road Trips</span>
         </>
       ),
       tagline: (
@@ -323,12 +323,6 @@ export default function FullscreenCarousel() {
         .carousel-hero-accent {
           /* Default hero accent — lime green, used on slide 1 ("Better Vibes"). */
           color: #a8d96b;
-        }
-        /* Dark variant — used on slide 7 ("Find Your Next Road Trips") so the
-           accent line ("ROAD TRIPS") reads as black against a brighter photo
-           while the green cannabis-leaf divider still ties it back to slide 1. */
-        .carousel-hero-accent--dark {
-          color: #0a0a0a;
         }
         .carousel-hero-divider {
           display: flex;
