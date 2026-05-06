@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, type ReactNode } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Check, ArrowRight, Leaf } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, ArrowRight, Cannabis } from 'lucide-react';
 
 type SlideCopy = {
   /** "header" (default): standard H420 eyebrow + Bebas headline + tagline.
@@ -112,7 +112,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
       headline: (
         <>
           Find Your Next<br />
-          <span className="carousel-hero-accent">Road Trips</span>
+          <span className="carousel-hero-accent carousel-hero-accent--dark">Road Trips</span>
         </>
       ),
       tagline: (
@@ -321,8 +321,14 @@ export default function FullscreenCarousel() {
           text-shadow: 0 2px 18px rgba(0,0,0,0.45);
         }
         .carousel-hero-accent {
-          /* "BETTER VIBES" lime accent. */
+          /* Default hero accent — lime green, used on slide 1 ("Better Vibes"). */
           color: #a8d96b;
+        }
+        /* Dark variant — used on slide 7 ("Find Your Next Road Trips") so the
+           accent line ("ROAD TRIPS") reads as black against a brighter photo
+           while the green cannabis-leaf divider still ties it back to slide 1. */
+        .carousel-hero-accent--dark {
+          color: #0a0a0a;
         }
         .carousel-hero-divider {
           display: flex;
@@ -474,7 +480,7 @@ export default function FullscreenCarousel() {
                 <div className="carousel-copy carousel-copy--hero">
                   <h2 className="carousel-hero-headline">{slide.copy.headline}</h2>
                   <div className="carousel-hero-divider" aria-hidden>
-                    <Leaf strokeWidth={2} />
+                    <Cannabis strokeWidth={2} />
                   </div>
                   <p className="carousel-hero-tagline">{slide.copy.tagline}</p>
                 </div>
