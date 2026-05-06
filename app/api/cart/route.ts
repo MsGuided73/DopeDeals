@@ -482,6 +482,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Claim any pre-login guest cart so we don't collide with the
+    // UNIQUE(session_id) constraint when creating the user's cart below.
+    if (userId && sessionId) {
+      await mergeCarts(sessionId, userId);
+    }
+
     // Get product details
     const { data: product, error: productError } = await supabase
       .from('main_site_products')
@@ -592,6 +598,11 @@ export async function PUT(request: NextRequest) {
         { error: 'Authentication required - please refresh the page to establish a session' },
         { status: 401 }
       );
+    }
+
+    // Claim guest cart before mutating — same reason as POST.
+    if (userId && sessionId) {
+      await mergeCarts(sessionId, userId);
     }
 
     // Check if we have access to this cart item via RLS
