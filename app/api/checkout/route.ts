@@ -331,9 +331,18 @@ export async function POST(req: NextRequest) {
     // Prioritize NEXT_PUBLIC_SITE_URL if defined, otherwise fall back to dynamic host
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${host}`;
 
+    // The DB column is snake_case (order_number), some upstream code paths
+    // also expose it camelCased (orderNumber). Check both before falling back
+    // to the UUID id, otherwise customers see the long UUID on the KajaPay
+    // payment page instead of the friendly "DC-YYYYMMDD-####" invoice number.
+    const friendlyInvoice =
+      (order as any).order_number ||
+      (order as any).orderNumber ||
+      order.id;
+
     const hostedFormResponse = await kajaPayClient.createHostedForm({
       amount: Number(total),
-      orderNumber: order.orderNumber || order.id,
+      orderNumber: friendlyInvoice,
       orderDescription: `Highway 420 Order: ${createdItems.length} item${createdItems.length !== 1 ? 's' : ''}`,
       taxAmount: Number(tax),
       shippingAmount: Number(shipping),
