@@ -810,9 +810,9 @@ export default function UniversalProductCard({
           </div>
         )}
 
-        {/* Discount badge — top left */}
+        {/* Discount badge — top left. z-20 sits above SmartBgImage's z-10 image wrapper. */}
         {showDiscount && discountPercentage && (
-          <div className="dg-price-badge" style={{ position: 'absolute', top: 8, left: 8 }}>
+          <div className="dg-price-badge" style={{ position: 'absolute', top: 8, left: 8, zIndex: 20 }}>
             -{discountPercentage}%
           </div>
         )}
@@ -821,7 +821,7 @@ export default function UniversalProductCard({
         {showFavorite && (
           <button
             onClick={handleToggleFavorite}
-            className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-50"
+            className="absolute top-2 right-2 z-20 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-50"
             aria-label="Add to wishlist"
           >
             <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
