@@ -47,31 +47,23 @@ export default function HigherLearningMasthead() {
         .hl-mast-inner {
           max-width: 1440px;
           margin: 0 auto;
-          padding: 14px 24px;
+          padding: 4px 24px;
           display: flex;
           align-items: center;
           gap: 24px;
         }
         .hl-brand {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 12px;
           text-decoration: none;
           color: #0E2A1F;
           flex-shrink: 0;
         }
         .hl-brand-img {
-          width: 52px;
-          height: 52px;
+          height: 110px;
+          width: auto;
           object-fit: contain;
           display: block;
-        }
-        .hl-brand-text {
-          font-family: 'Bebas Neue','Arial Narrow',sans-serif;
-          font-size: 28px;
-          font-weight: 400;
-          letter-spacing: 0.06em;
-          color: #0E2A1F;
         }
         .hl-nav {
           flex: 1;
@@ -187,12 +179,11 @@ export default function HigherLearningMasthead() {
             <Image
               src={BLACK_LOGO_URL}
               alt="Highway 420"
-              width={104}
-              height={104}
+              width={440}
+              height={220}
               className="hl-brand-img"
               priority
             />
-            <span className="hl-brand-text">HIGHWAY 420</span>
           </Link>
 
           {/* Nav links (desktop) */}
