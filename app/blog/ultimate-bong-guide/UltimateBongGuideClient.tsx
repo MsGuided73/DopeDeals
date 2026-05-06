@@ -36,7 +36,7 @@ export default function UltimateBongGuideClient() {
 
   return (
     <>
-      <GlobalMasthead />
+      <GlobalMasthead theme="dark" />
 
       <div className="min-h-screen bg-[#000] text-white selection:bg-[#ff6b35] selection:text-black overflow-x-hidden font-sans pb-0 relative">
         {/* NOISE OVERLAY */}

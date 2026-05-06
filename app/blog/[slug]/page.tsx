@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { sanitizeHtml } from '../../../lib/sanitize-html';
 import { FALLBACK_POSTS } from '../../../lib/blog-data';
 import GlobalBreadcrumbs from '../../components/GlobalBreadcrumbs';
+import GlobalMasthead from '../../components/GlobalMasthead';
 
 // Force dynamic rendering since we are checking params
 export const dynamic = 'force-dynamic';
@@ -47,6 +48,8 @@ export default function BlogPostPage({ params }: PageProps) {
 
   return (
     <article className="min-h-screen bg-white">
+      <GlobalMasthead theme="dark" />
+
       {/* Hero Header */}
       <div className="relative h-[60vh] w-full bg-gray-900">
         <img

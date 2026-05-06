@@ -2,63 +2,126 @@
 
 import { useState, useEffect, useCallback, type ReactNode } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, ArrowRight, Leaf } from 'lucide-react';
 
 type SlideCopy = {
-  eyebrow: string;
+  /** "header" (default): standard H420 eyebrow + Bebas headline + tagline.
+   *  "hero": Road Trip sub-brand variant — two-tone display headline,
+   *  leaf-accent divider, body subline. Used on slides 1 and 7. */
+  style?: 'header' | 'hero';
+  eyebrow?: string;
   headline: ReactNode;
   tagline: ReactNode;
+  bullets?: string[];
+  cta?: string;
 };
 
 // ─── Carousel slides ──────────────────────────────────────────────────────────
 const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string; objectFit?: 'cover' | 'contain'; copy?: SlideCopy }[] = [
   {
     id: 'slide-1',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/BetterVibes_Carousel_Test2.png',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/Better%20Vibes%20No%20Text.png',
     alt: 'Highway 420 — Better Vibes',
     href: '/road-trips',
     objectPosition: 'center center',
+    copy: {
+      style: 'hero',
+      headline: (
+        <>
+          Road To<br />
+          <span className="carousel-hero-accent">Better Vibes</span>
+        </>
+      ),
+      tagline: (
+        <>
+          Premium gear for every journey.<br />
+          Elevate the ride.
+        </>
+      ),
+    },
   },
   {
     id: 'slide-2',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/Membership2.png',
-    alt: 'Highway 420 — VIP Membership',
-    href: '/rewards',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/CRAVE/2.png',
+    alt: 'Highway 420 — CRAVE',
+    href: '/brands/crave',
     objectPosition: 'center center',
+    objectFit: 'contain',
   },
   {
     id: 'slide-3',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/1.png',
-    alt: 'Highway 420 — Bundles',
-    href: '/bundles',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/Membership.png',
+    alt: 'Highway 420 — VIP Membership',
+    href: '/rewards',
     objectPosition: 'center center',
-    objectFit: 'cover',
     copy: {
-      eyebrow: 'Curated for Convenience',
-      headline: <>Popular<br />Set-Ups</>,
-      tagline: <>Everything you need.<br />Nothing you don&rsquo;t.</>,
+      eyebrow: 'Members Only',
+      headline: <>Free VIP<br />Membership</>,
+      tagline: <>Unlock exclusive pricing, drops, and perks &mdash; no cost to join.</>,
+      bullets: ['Discount Prices', 'Early Access', 'Free Gifts'],
+      cta: 'Join the Ride',
     },
   },
   {
     id: 'slide-4',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/RooR%20Carousel.jpeg',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/Bundle_love.png',
+    alt: 'Highway 420 — Bundles',
+    href: '/bundles',
+    objectPosition: 'center center',
+    copy: {
+      eyebrow: 'Curated for Convenience',
+      headline: <>Popular<br />Set-Ups</>,
+      tagline: <>Everything you need.<br />Nothing you don&rsquo;t.</>,
+      cta: 'Shop Bundles',
+    },
+  },
+  {
+    id: 'slide-5',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RooR/Roor%20Hero%20New%20B.png',
     alt: 'Highway 420 — RooR Bongs',
     href: '/bongs',
     objectPosition: 'center center',
   },
   {
-    id: 'slide-5',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Products/Dab-Rig/2.png',
+    id: 'slide-6',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Dab%20Final%20A.png',
     alt: 'Highway 420 — Dab Rigs',
     href: '/dabsntools',
     objectPosition: 'center center',
+    copy: {
+      eyebrow: 'Tech. Flavor. Elevated.',
+      headline: <>Dab Rigs</>,
+      tagline: (
+        <>
+          Discover high-performance rigs<br />
+          designed for precision and<br />
+          smooth sessions.
+        </>
+      ),
+      cta: 'Shop Dab Rigs',
+    },
   },
   {
-    id: 'slide-6',
-    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/RoadTrips.png',
+    id: 'slide-7',
+    src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/RoadTrips-No_Font.png',
     alt: 'Highway 420 — Road Trips',
     href: '/road-trips',
     objectPosition: 'center center',
+    copy: {
+      style: 'hero',
+      headline: (
+        <>
+          Find Your Next<br />
+          <span className="carousel-hero-accent">Road Trips</span>
+        </>
+      ),
+      tagline: (
+        <>
+          Spots. Scenes. Sessions.<br />
+          Across the Highway.
+        </>
+      ),
+    },
   },
 ];
 
@@ -68,7 +131,6 @@ export default function FullscreenCarousel() {
   const [current,  setCurrent]  = useState(0);
   const [paused,   setPaused]   = useState(false);
   const [mounted,  setMounted]  = useState(false);
-  const [progress, setProgress] = useState(0);
   const total = SLIDES.length;
 
   useEffect(() => { setMounted(true); }, []);
@@ -88,20 +150,6 @@ export default function FullscreenCarousel() {
     const id = setInterval(() => setCurrent(c => (c + 1) % total), SLIDE_DURATION);
     return () => clearInterval(id);
   }, [paused, total]);
-
-  // Progress bar
-  useEffect(() => {
-    if (paused || total <= 1) return;
-    setProgress(0);
-    const step  = 50;
-    const ticks = SLIDE_DURATION / step;
-    let count   = 0;
-    const id = setInterval(() => {
-      count++;
-      setProgress(Math.min((count / ticks) * 100, 100));
-    }, step);
-    return () => clearInterval(id);
-  }, [current, paused, total]);
 
   return (
     <>
@@ -164,7 +212,7 @@ export default function FullscreenCarousel() {
           width: 42%;
           /* Left padding matches the masthead shield logo's pl-4 (16px) so
              the headline's left edge aligns vertically with the shield. */
-          padding: 6% 5% 6% 16px;
+          padding: 5% 5% 5% 16px;
           color: #1f4d2e;
           display: flex;
           flex-direction: column;
@@ -191,22 +239,118 @@ export default function FullscreenCarousel() {
         .carousel-copy-headline {
           font-family: 'BebasNeue', 'Bebas Neue', 'Impact', sans-serif;
           /* Scales with the carousel's inline (width) size via container
-             query units. Wide range — shrinks below 22px at narrow
-             widths and grows past 200px on 4K hero displays. */
-          font-size: clamp(18px, 6cqi, 220px);
+             query units. Sized to leave room for optional bullets + CTA
+             below; pre-bullets layout was clamp(18px, 6cqi, 220px). */
+          font-size: clamp(16px, 4.5cqi, 170px);
           line-height: 0.9;
           font-weight: 400;
           letter-spacing: -0.04em;
           text-transform: uppercase;
-          margin: 0 0 clamp(8px, 1.8cqi, 40px) 0;
+          color: #0a0a0a;
+          margin: 0 0 clamp(6px, 1.2cqi, 28px) 0;
           transform: scaleX(0.92);
           transform-origin: left center;
         }
         .carousel-copy-tagline {
-          font-size: clamp(9px, 1.3cqi, 36px);
+          font-size: clamp(8px, 1.05cqi, 24px);
           line-height: 1.35;
           font-weight: 500;
           color: #1a3a23;
+        }
+        .carousel-copy-bullets {
+          list-style: none;
+          padding: 0;
+          margin: clamp(8px, 1.4cqi, 30px) 0 0;
+          display: flex;
+          flex-direction: column;
+          gap: clamp(4px, 0.8cqi, 16px);
+          font-size: clamp(9px, 1.15cqi, 26px);
+          color: #1a3a23;
+          font-weight: 500;
+        }
+        .carousel-copy-bullets li {
+          display: flex;
+          align-items: center;
+          gap: clamp(5px, 0.7cqi, 14px);
+        }
+        .carousel-copy-bullets svg {
+          flex-shrink: 0;
+          color: #1f6b3a;
+          width: clamp(12px, 1.5cqi, 32px);
+          height: clamp(12px, 1.5cqi, 32px);
+        }
+        .carousel-copy-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: clamp(4px, 0.6cqi, 12px);
+          background: #1f4d2e;
+          color: #ffffff;
+          padding: clamp(7px, 1.1cqi, 22px) clamp(14px, 2.2cqi, 36px);
+          border-radius: 4px;
+          font-family: 'BebasNeue', 'Bebas Neue', 'Impact', sans-serif;
+          font-size: clamp(11px, 1.3cqi, 28px);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          margin-top: clamp(10px, 1.6cqi, 36px);
+          align-self: flex-start;
+        }
+        .carousel-copy-cta svg {
+          width: clamp(11px, 1.3cqi, 26px);
+          height: clamp(11px, 1.3cqi, 26px);
+        }
+
+        /* ── Road Trip hero sub-style (slides 1 + 7) ────────────────── */
+        .carousel-copy--hero {
+          /* Wider panel for the larger display type. */
+          width: 60%;
+          color: #ffffff;
+          justify-content: center;
+        }
+        .carousel-hero-headline {
+          /* BebasNeue (brand font), oversized for the hero treatment.
+             !important is required to beat the global h2 rule in
+             globals.css that forces Fira Sans 800 on every h2. */
+          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif !important;
+          font-weight: 400 !important;
+          letter-spacing: -0.02em !important;
+          font-size: clamp(38px, 8.5cqi, 220px);
+          line-height: 0.92;
+          text-transform: uppercase;
+          margin: 0;
+          color: #ffffff;
+          text-shadow: 0 2px 18px rgba(0,0,0,0.45);
+        }
+        .carousel-hero-accent {
+          /* "BETTER VIBES" lime accent. */
+          color: #a8d96b;
+        }
+        .carousel-hero-divider {
+          display: flex;
+          align-items: center;
+          gap: clamp(8px, 1.2cqi, 22px);
+          margin: clamp(10px, 1.6cqi, 32px) 0;
+          color: #a8d96b;
+        }
+        .carousel-hero-divider::before,
+        .carousel-hero-divider::after {
+          content: "";
+          height: 2px;
+          width: clamp(40px, 6cqi, 140px);
+          background: currentColor;
+        }
+        .carousel-hero-divider svg {
+          width: clamp(16px, 2cqi, 42px);
+          height: clamp(16px, 2cqi, 42px);
+          flex-shrink: 0;
+        }
+        .carousel-hero-tagline {
+          font-family: "Inter", "Fira Sans", system-ui, sans-serif;
+          font-size: clamp(13px, 1.6cqi, 36px);
+          font-weight: 500;
+          color: #ffffff;
+          line-height: 1.4;
+          text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+          margin: 0;
         }
 
         @media (max-width: 767px) {
@@ -258,16 +402,13 @@ export default function FullscreenCarousel() {
           .carousel-arrow-left  { right: calc(28px + 44px + 10px); }
         }
 
-        /* Dots */
+        /* Dots — sit centered below the carousel, above the progress bar. */
         .carousel-dots {
-          position: absolute;
-          bottom: 14px;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 20;
           display: flex;
           gap: 8px;
           align-items: center;
+          justify-content: center;
+          margin: 12px auto 0;
         }
         .carousel-dot {
           height: 9px;
@@ -275,20 +416,30 @@ export default function FullscreenCarousel() {
           border: none;
           cursor: pointer;
           transition: width 0.3s, background 0.3s;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.5);
         }
 
-        /* Progress bar */
+        /* Progress bar — sits centered immediately below the carousel. */
         .carousel-progress-track {
-          position: absolute;
-          bottom: 0; left: 0; right: 0;
-          height: 3px;
-          background: rgba(0,0,0,0.22);
-          z-index: 20;
+          position: relative;
+          width: 200px;
+          height: 2px;
+          background: rgba(0,0,0,0.12);
+          margin: 12px auto 0;
+          overflow: hidden;
+          border-radius: 999px;
         }
         .carousel-progress-fill {
           height: 100%;
-          background: linear-gradient(90deg, #C5A059 0%, #8B6914 100%);
+          width: 100%;
+          background: #2d8f47;
+          transform: scaleX(0);
+          transform-origin: left center;
+          animation: carousel-progress-grow ${SLIDE_DURATION}ms linear forwards;
+          will-change: transform;
+        }
+        @keyframes carousel-progress-grow {
+          from { transform: scaleX(0); }
+          to   { transform: scaleX(1); }
         }
       `}</style>
 
@@ -315,15 +466,41 @@ export default function FullscreenCarousel() {
               priority={idx === 0}
               style={{
                 objectPosition: slide.objectPosition ?? 'center center',
-                objectFit: slide.objectFit ?? 'contain',
+                objectFit: slide.objectFit ?? 'cover',
               }}
             />
             {slide.copy ? (
-              <div className="carousel-copy">
-                <div className="carousel-copy-eyebrow">{slide.copy.eyebrow}</div>
-                <h2 className="carousel-copy-headline">{slide.copy.headline}</h2>
-                <div className="carousel-copy-tagline">{slide.copy.tagline}</div>
-              </div>
+              slide.copy.style === 'hero' ? (
+                <div className="carousel-copy carousel-copy--hero">
+                  <h2 className="carousel-hero-headline">{slide.copy.headline}</h2>
+                  <div className="carousel-hero-divider" aria-hidden>
+                    <Leaf strokeWidth={2} />
+                  </div>
+                  <p className="carousel-hero-tagline">{slide.copy.tagline}</p>
+                </div>
+              ) : (
+                <div className="carousel-copy">
+                  <div className="carousel-copy-eyebrow">{slide.copy.eyebrow}</div>
+                  <h2 className="carousel-copy-headline">{slide.copy.headline}</h2>
+                  <div className="carousel-copy-tagline">{slide.copy.tagline}</div>
+                  {slide.copy.bullets && slide.copy.bullets.length > 0 && (
+                    <ul className="carousel-copy-bullets">
+                      {slide.copy.bullets.map((b, i) => (
+                        <li key={i}>
+                          <Check strokeWidth={3} aria-hidden />
+                          {b}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {slide.copy.cta && (
+                    <span className="carousel-copy-cta">
+                      {slide.copy.cta}
+                      <ArrowRight strokeWidth={2.5} aria-hidden />
+                    </span>
+                  )}
+                </div>
+              )
             ) : null}
           </a>
         ))}
@@ -340,8 +517,11 @@ export default function FullscreenCarousel() {
           </>
         )}
 
-        {/* ── Dots (only when 2+ slides) ── */}
-        {total > 1 && (
+      </section>
+
+      {/* ── Dots + slide-timing progress bar (sit below the carousel, centered) ── */}
+      {total > 1 && (
+        <>
           <div className="carousel-dots">
             {SLIDES.map((_, idx) => (
               <button
@@ -352,21 +532,21 @@ export default function FullscreenCarousel() {
                 style={{
                   width: idx === current ? '26px' : '9px',
                   background: idx === current
-                    ? 'linear-gradient(90deg,#C5A059,#8B6914)'
-                    : 'rgba(255,255,255,0.42)',
+                    ? '#2d8f47'
+                    : 'rgba(0,0,0,0.18)',
                 }}
               />
             ))}
           </div>
-        )}
-
-        {/* ── Gold progress bar ── */}
-        {total > 1 && (
           <div className="carousel-progress-track">
-            <div className="carousel-progress-fill" style={{ width: `${progress}%` }} />
+            <div
+              key={current}
+              className="carousel-progress-fill"
+              style={{ animationPlayState: paused ? 'paused' : 'running' }}
+            />
           </div>
-        )}
-      </section>
+        </>
+      )}
     </>
   );
 }

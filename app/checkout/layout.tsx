@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { getSessionUser } from '@/lib/supabase-server-ssr';
 import Link from 'next/link';
+import CartConsumableDisclaimer from '../components/CartConsumableDisclaimer';
 
 export default async function CheckoutLayout({ children }: { children: ReactNode }) {
   // Allow guest checkout: get user if they exist, but don't redirect if they don't
@@ -18,7 +19,7 @@ export default async function CheckoutLayout({ children }: { children: ReactNode
             <span className="text-white">Checkout</span>
           </nav>
         </div>
-        
+
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">Secure Checkout</h1>
@@ -26,8 +27,11 @@ export default async function CheckoutLayout({ children }: { children: ReactNode
               Complete your order securely. Your information is protected with SSL encryption.
             </p>
           </div>
-          
+
           {children}
+
+          {/* THC disclaimer footer — only renders if cart contains a consumable. */}
+          <CartConsumableDisclaimer />
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import { ArrowUpRight, Flame, Zap, Search } from 'lucide-react';
 import BlogArticlesGrid from '../components/BlogArticlesGrid';
 import BlogFooter from '../components/BlogFooter';
 import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
+import GlobalMasthead from '../components/GlobalMasthead';
 
 interface BlogPost {
   id: string;
@@ -62,18 +63,8 @@ export default function BlogPage() {
            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
       />
 
-      {/* HEADER / NAV AREA */}
-      <header className="fixed top-0 left-0 w-full z-40 px-6 py-6 flex justify-between items-center mix-blend-difference text-white">
-        <Link href="/" className="font-bold tracking-tighter text-2xl uppercase hover:scale-105 transition-transform">Highway<span className="text-[#ff6b35]">420</span></Link>
-        <div className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest">
-            {['Latest', 'Culture', 'Products', 'Events'].map((item) => (
-                <Link key={item} href="#" className="relative group overflow-hidden">
-                    <span className="block group-hover:-translate-y-full transition-transform duration-300">{item}</span>
-                    <span className="absolute top-0 left-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 text-[#ff6b35]">{item}</span>
-                </Link>
-            ))}
-        </div>
-      </header>
+      {/* HEADER / NAV AREA — dark variant of the site-wide masthead */}
+      <GlobalMasthead theme="dark" />
 
       {/* HERO SECTION */}
       <section className="relative h-[90vh] flex flex-col justify-center items-center px-4 pt-20 overflow-hidden">

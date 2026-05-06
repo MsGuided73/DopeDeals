@@ -36,7 +36,9 @@ import ProductDescription from './ProductDescription';
 import ReviewButton from './reviews/ReviewButton';
 import ReviewsList from './reviews/ReviewsList';
 import ProductRatingBadge from './reviews/ProductRatingBadge';
+import ThcDisclaimer from './ThcDisclaimer';
 import { extractEdgeColor } from '../lib/image-edge-color';
+import { isConsumableCategorySlug } from '../../lib/consumable-categories';
 
 // Data-driven tab gating. We show the Ingredients tab only when the
 // product actually has ingredients data, and the Lab Testing tab + COA
@@ -204,10 +206,12 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
 
   const hasIngredients = productHasIngredients(product, ingredients);
   const hasCoa = productHasCoa(coa);
-  // FAQ + trust-bar copy: if neither ingredients nor a COA is attached, treat
-  // it as gear-style messaging (authentic / brand verified) rather than the
-  // hemp-legal copy aimed at consumables.
-  const isConsumable = hasIngredients || hasCoa;
+  // FAQ + trust-bar copy + THC disclaimer: ingestible/inhalable products are
+  // identified by ingredients data, a COA, or a known consumable category
+  // slug. The slug fallback covers consumables not yet onboarded with COA
+  // or ingredients metadata so the legal disclaimer still renders.
+  const isConsumable =
+    hasIngredients || hasCoa || isConsumableCategorySlug(product?.category_slug);
 
   // Handle Add to Cart
   const handleAddToCart = async () => {
@@ -534,6 +538,13 @@ export default function EnhancedPDP(props: EnhancedPDPProps) {
            
           </div>
         </div>
+
+        {/* THC Disclaimer — only on consumables (ingestible/inhalable). */}
+        {isConsumable && (
+          <div className="mt-12">
+            <ThcDisclaimer />
+          </div>
+        )}
 
         {/* Product Details Tabs */}
         <div className="mt-16">

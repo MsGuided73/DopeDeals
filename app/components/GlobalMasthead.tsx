@@ -84,7 +84,17 @@ const NAV_LINKS = [
 
 
 
-export default function GlobalMasthead() {
+interface GlobalMastheadProps {
+  /**
+   * Visual theme. `green` is the default brand masthead used site-wide.
+   * `dark` swaps in a black background with brand-orange accents — used on
+   * the blog ("The High Chronicles") so the masthead blends with the dark
+   * editorial layout instead of clashing.
+   */
+  theme?: "green" | "dark";
+}
+
+export default function GlobalMasthead({ theme = "green" }: GlobalMastheadProps = {}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -96,6 +106,17 @@ export default function GlobalMasthead() {
   const { user } = useAuth();
   const { cartCount } = useCart();
   const { setHasMasthead } = useNavigation();
+
+  const isDark = theme === "dark";
+  // Theme tokens used by inline styles (CSS-block colors are driven by the
+  // [data-theme="dark"] override rules below).
+  const cartBtnBg = isDark ? "#ff6b35" : "#ffffff";
+  const cartBtnBgHover = isDark ? "#ff8556" : "#f0f0ec";
+  const cartBtnText = isDark ? "#ffffff" : "#145C3C";
+  const cartBadgeBorder = isDark ? "#000000" : "#145C3C";
+  const logoFilter = isDark
+    ? "drop-shadow(0 4px 14px rgba(255,107,53,0.32)) drop-shadow(0 1px 4px rgba(255,255,255,0.10))"
+    : "drop-shadow(0 4px 12px rgba(255,255,255,0.28)) drop-shadow(0 1px 4px rgba(255,255,255,0.18))";
 
   const displayName = user
     ? (user.user_metadata?.first_name || user.user_metadata?.firstName || user.email?.split("@")[0] || "You")
@@ -449,10 +470,66 @@ export default function GlobalMasthead() {
           padding: 0 12px;
           gap: 8px;
         }
+
+        /* ══════════════════════════════════════════════════════════════
+           DARK THEME — used on /blog routes. Black background with
+           brand-orange (#ff6b35) accents. See GlobalMastheadProps.theme.
+        ══════════════════════════════════════════════════════════════ */
+        .dg-header[data-theme="dark"] {
+          background: #000000;
+          border-bottom: 1px solid #1a1a1a;
+        }
+        .dg-header[data-theme="dark"] .dg-search-btn {
+          background: #ff6b35;
+        }
+        .dg-header[data-theme="dark"] .dg-search-btn:hover {
+          background: #ff8556;
+        }
+        .dg-header[data-theme="dark"] .dg-cart-badge {
+          border-color: #000000;
+        }
+        .dg-header[data-theme="dark"] .dg-navbar {
+          border-bottom-color: rgba(255,107,53,0.85);
+        }
+        .dg-header[data-theme="dark"] .dg-navbar::before {
+          background: rgba(255,107,53,0.55);
+        }
+        .dg-header[data-theme="dark"] .dg-navlink:hover,
+        .dg-header[data-theme="dark"] .dg-navlink.active {
+          color: #ff6b35;
+          border-bottom-color: #ff6b35;
+        }
+        .dg-header[data-theme="dark"] .dg-navitem + .dg-navitem::before {
+          background: rgba(255,255,255,0.20);
+        }
+        .dg-header[data-theme="dark"] .dg-dropdown {
+          background: #0a0a0a;
+          border-color: rgba(255,255,255,0.12);
+          border-top-color: #ff6b35;
+        }
+        .dg-header[data-theme="dark"] .dg-dropdown-link {
+          color: #ffffff;
+        }
+        .dg-header[data-theme="dark"] .dg-dropdown-link:hover {
+          background: rgba(255,107,53,0.10);
+          color: #ff6b35;
+        }
+        .dg-header[data-theme="dark"] .dg-mobile-search {
+          background: #000000;
+        }
+
+        .dg-drawer[data-theme="dark"] {
+          background: #000000;
+          border-left-color: rgba(255,107,53,0.25);
+        }
+        .dg-drawer[data-theme="dark"] .dg-drawer-link:hover {
+          background: rgba(255,107,53,0.10);
+          color: #ff6b35;
+        }
       `}</style>
 
 
-      <header className="dg-header">
+      <header className="dg-header" data-theme={theme}>
 
         {/* ══════════════════════════════════════════════════════════════
             COMPACT (< xl) — hamburger layout for phones, tablets, and
@@ -554,25 +631,25 @@ export default function GlobalMasthead() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '9px 14px',
-                background: '#ffffff',
+                background: cartBtnBg,
                 borderRadius: '6px',
-                color: '#145C3C',
+                color: cartBtnText,
                 textDecoration: 'none',
                 transition: 'background 0.15s, transform 0.1s',
                 boxShadow: '0 1px 4px rgba(0,0,0,0.18)',
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.background = '#f0f0ec';
+                (e.currentTarget as HTMLElement).style.background = cartBtnBgHover;
                 (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
               }}
               onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.background = '#ffffff';
+                (e.currentTarget as HTMLElement).style.background = cartBtnBg;
                 (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
               }}
             >
               <ShoppingCart style={{ width: 24, height: 24 }} />
               {cartCount > 0 && (
-                <span className="dg-cart-badge" style={{ borderColor: '#145C3C' }}>
+                <span className="dg-cart-badge" style={{ borderColor: cartBadgeBorder }}>
                   {cartCount > 99 ? '99+' : String(cartCount)}
                 </span>
               )}
@@ -626,7 +703,7 @@ export default function GlobalMasthead() {
                   display: 'block',
                   transform: 'translateY(2px) scale(1.15)',
                   transformOrigin: 'left center',
-                  filter: 'drop-shadow(0 4px 12px rgba(255,255,255,0.28)) drop-shadow(0 1px 4px rgba(255,255,255,0.18))',
+                  filter: logoFilter,
                 }}
                 className="object-contain"
                 priority
@@ -699,7 +776,7 @@ export default function GlobalMasthead() {
                   <User style={{ width: 18, height: 18, flexShrink: 0 }} />
                 </button>
 
-                {/* Cart — solid white, enlarged icon, no text */}
+                {/* Cart — themed: white on green theme, brand-orange on dark */}
                 <Link
                   href="/cart"
                   aria-label={`Cart (${cartCount} items)`}
@@ -709,25 +786,25 @@ export default function GlobalMasthead() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: '9px 14px',
-                    background: '#ffffff',
+                    background: cartBtnBg,
                     borderRadius: '6px',
-                    color: '#145C3C',
+                    color: cartBtnText,
                     textDecoration: 'none',
                     transition: 'background 0.15s, transform 0.1s',
                     boxShadow: '0 1px 4px rgba(0,0,0,0.18)',
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.background = '#f0f0ec';
+                    (e.currentTarget as HTMLElement).style.background = cartBtnBgHover;
                     (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.background = '#ffffff';
+                    (e.currentTarget as HTMLElement).style.background = cartBtnBg;
                     (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
                   }}
                 >
                   <ShoppingCart style={{ width: 26, height: 26 }} />
                   {cartCount > 0 && (
-                    <span className="dg-cart-badge" style={{ borderColor: '#145C3C' }}>
+                    <span className="dg-cart-badge" style={{ borderColor: cartBadgeBorder }}>
                       {cartCount > 99 ? '99+' : String(cartCount)}
                     </span>
                   )}
@@ -806,6 +883,7 @@ export default function GlobalMasthead() {
           />
           <aside
             className="dg-drawer xl:hidden"
+            data-theme={theme}
             role="dialog"
             aria-modal="true"
             aria-label="Main menu"

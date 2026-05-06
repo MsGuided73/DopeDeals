@@ -1,6 +1,8 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 // ─── Collection data ──────────────────────────────────────────────────────────
 // Top row = 3 large hero cards. Bottom row = 6 smaller cards.
@@ -9,29 +11,45 @@ import Link from "next/link";
 
 type Collection = {
   name: string;
+  // Optional render override — use to force line breaks in the title
+  // (e.g., split "Bongs & Water Pipes" across two lines).
+  displayName?: ReactNode;
   tagline: string;
   route: string;
   image: string;
+  // When true, render the title/tagline/CTA overlay via JSX. Use for cards
+  // whose source image has no text baked in. Cards with baked-in text
+  // (e.g., Dab Rigs, Vapes) leave this off to avoid double-rendering.
+  hasTextOverlay?: boolean;
 };
 
 const TOP_ROW: Collection[] = [
   {
     name: "Bongs & Water Pipes",
+    displayName: (
+      <>
+        Bongs &amp;<br />
+        Water Pipes
+      </>
+    ),
     tagline: "Smooth hits. Elevated sessions.",
     route: "/bongs",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/BONGS%20ROOR%20FOR%20GRID%20HIGH%20RES%20%20A.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Bongs_for_Grid-No_Font.png",
+    hasTextOverlay: true,
   },
   {
     name: "Dab Rigs",
     tagline: "Clean flavor. Next level.",
     route: "/dabsntools",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Dab%20Rigs%20(1).png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-DabRig.png",
+    hasTextOverlay: true,
   },
   {
-    name: "Vapes",
+    name: "Vapes & Carts",
     tagline: "Compact. Clean. On the go.",
     route: "/vapes",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Vapes%20&%20Carts%20(1).png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-Vapes&Carts.png",
+    hasTextOverlay: true,
   },
 ];
 
@@ -40,37 +58,43 @@ const BOTTOM_ROW: Collection[] = [
     name: "Hand Pipes",
     tagline: "Simple. Classic. Always a vibe.",
     route: "/pipes",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Pipes_2.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-Pipes.png",
+    hasTextOverlay: true,
   },
   {
     name: "Flower",
     tagline: "Top shelf. Fresh. Always fire.",
     route: "/thca_flower",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Flower_2.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-Flower.png",
+    hasTextOverlay: true,
   },
   {
     name: "Pre-Rolls",
     tagline: "Ready when you are.",
     route: "/pre-rolls",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/PreRolls_2.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-Prerolls.png",
+    hasTextOverlay: true,
   },
   {
     name: "Edibles",
     tagline: "Delicious. Discreet. Dialed in.",
     route: "/edibles",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Edibles_2.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-Edibles.png",
+    hasTextOverlay: true,
   },
   {
     name: "Shrooms",
     tagline: "Elevate your mind. Naturally.",
     route: "/mushrooms",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Shrooms.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-Mushrooms.png",
+    hasTextOverlay: true,
   },
   {
     name: "Accessories",
     tagline: "Everything you need. All in one.",
     route: "/accessories",
-    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/Accessories_2.png",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/CollectionGridv2/NF-Cards/NF-Accessories.png",
+    hasTextOverlay: true,
   },
 ];
 
@@ -92,6 +116,19 @@ function CategoryCard({ col, size }: { col: Collection; size: "lg" | "sm" }) {
           <div className="cg-card__placeholder" aria-hidden="true" />
         )}
       </div>
+      {col.hasTextOverlay && (
+        <>
+          <div className="cg-card__scrim" aria-hidden="true" />
+          <div className="cg-card__body">
+            <h3 className="cg-card__title">{col.displayName ?? col.name}</h3>
+            <p className="cg-card__tagline">{col.tagline}</p>
+            <span className="cg-card__cta">
+              Shop Now
+              <ArrowRight className="cg-card__cta-arrow" aria-hidden="true" strokeWidth={2.5} />
+            </span>
+          </div>
+        </>
+      )}
     </Link>
   );
 }
@@ -208,10 +245,8 @@ export default function CollectionsGrid() {
           }
         }
 
-        /* Pixel-perfect alignment adjustments for the top row */
-        .cg-row--top .cg-card:nth-child(1) { --cg-scale: 1.35; --cg-offset-x: 75px; --cg-offset-y: 48px; }
-        .cg-row--top .cg-card:nth-child(2) { --cg-offset-y: -3px; }
-        .cg-row--top .cg-card:nth-child(3) { --cg-offset-y: -1px; }
+        /* Top-row alignment is now handled by object-fit: cover + object-position: bottom center.
+           No per-card transforms needed. */
 
         /* Pixel-perfect image alignment adjustments for the bottom row */
         .cg-row--bottom .cg-card:nth-child(1) { --cg-offset-y: 5px; --cg-offset-x: 4px; --cg-scale: 1.06; }
@@ -230,8 +265,8 @@ export default function CollectionsGrid() {
           transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .cg-card--lg .cg-card__media img {
-          height: auto;
-          object-fit: contain;
+          height: 100%;
+          object-fit: cover;
         }
         .cg-card:hover .cg-card__media img {
           transform: scale(1.05);
@@ -272,42 +307,78 @@ export default function CollectionsGrid() {
           right: 0;
           bottom: 0;
           z-index: 2;
-          padding: 18px 20px;
+          /* Tight padding so SHOP NOW sits close to the bottom-left
+             corner — matches the baked-in cards. Bottom-row (sm) keeps
+             its own override. */
+          padding: 10px 14px;
         }
-        .cg-card--sm .cg-card__body { padding: 14px 16px; }
+        .cg-card--sm .cg-card__body { padding: 10px 12px; }
 
         .cg-card__title {
-          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
-          font-weight: 400;
-          letter-spacing: 0.02em;
-          line-height: 1;
+          /* Anton — narrow condensed display sans with the skinny "O"
+             and tall glyphs the baked-in card text uses. !important is
+             required to override the global h3 rule in globals.css that
+             forces Inter on every <h3>. */
+          /* BebasNeue is the site-wide brand font, preloaded in
+             layout.tsx for first-paint render. Anton was removed from
+             the chain after testing — it caused a brief FOUT swap on
+             slower loads and added a needless Google Fonts request. */
+          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif !important;
+          font-weight: 400 !important;
+          letter-spacing: 0 !important;
+          /* Tight line-height brings the two title lines (BONGS & /
+             WATER PIPES) close together. */
+          line-height: 0.88;
           color: #ffffff;
-          margin: 0 0 6px;
-          font-size: clamp(22px, 2.4vw, 30px);
+          margin: 0 0 4px;
+          /* Top-row (lg) hero size — one notch down from clamp(34px, 3.8vw, 52px). */
+          font-size: clamp(28px, 3.2vw, 44px);
+          text-transform: uppercase;
         }
         .cg-card--sm .cg-card__title {
-          font-size: clamp(18px, 1.8vw, 22px);
+          font-size: clamp(22px, 2.4vw, 30px);
+          margin-bottom: 3px;
         }
         .cg-card__tagline {
           font-family: "Fira Sans", "Inter", system-ui, sans-serif;
-          font-size: 13px;
+          font-size: 15px;
           font-weight: 400;
           color: rgba(255,255,255,0.85);
-          line-height: 1.35;
-          margin: 0 0 8px;
+          line-height: 1.25;
+          margin: 0 0 4px;
         }
-        .cg-card--sm .cg-card__tagline { font-size: 12px; }
+        .cg-card--sm .cg-card__tagline {
+          font-size: 12px;
+          margin-bottom: 4px;
+        }
+        .cg-card--sm .cg-card__cta {
+          font-size: 12px;
+          gap: 8px;
+        }
+        .cg-card--sm .cg-card__cta-arrow {
+          width: 15px;
+          height: 15px;
+        }
 
         .cg-card__cta {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          font-family: "Fira Sans", "Inter", sans-serif;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.12em;
+          gap: 10px;
+          /* Match the tagline's clean sans-serif so the CTA reads as
+             body text in caps, not as a condensed display label. */
+          font-family: "Fira Sans", "Inter", system-ui, sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
           color: #ffffff;
+        }
+        .cg-card__cta-arrow {
+          width: 18px;
+          height: 18px;
+          /* Slight downward nudge to optically center the SVG glyph
+             with the cap-height baseline of the surrounding text. */
+          transform: translateY(1px);
         }
         .cg-card__cta span {
           transition: transform 0.2s ease;
