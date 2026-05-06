@@ -9,6 +9,36 @@ export const metadata = {
   description: "Discover spots, scenes, and sessions across the country.",
 };
 
+const ASSETS = "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets";
+const COMMUNITY = `${ASSETS}/Road-Trips/General%20Community`;
+const TRIPS = `${ASSETS}/Road-Trips`;
+
+const HERO_IMG = `${COMMUNITY}/Road%20Trips%20landing%20hero.png`;
+const BANNER_IMG = `${COMMUNITY}/Road%20Trips%20bottom%20image.png`;
+
+const FEATURED_BIG_IMG = `${COMMUNITY}/Coastal%20stroll%20at%20sunset.png`;
+const FEATURED_MOUNTAIN_IMG = `${COMMUNITY}/Golden%20hour%20on%20the%20mountain%20rock.png`;
+const FEATURED_DESERT_IMG = `${COMMUNITY}/Desert%20road%20trip%20at%20sunset.png`;
+
+const EXPLORE_MALIBU_IMG = `${TRIPS}/Malibu%20Sessions.png`;
+const EXPLORE_DENVER_IMG = `${TRIPS}/Denver%20Cannabis%20Sessions.png`;
+const EXPLORE_AUSTIN_IMG = `${TRIPS}/Austin%20Chill%20Sessions.png`;
+const EXPLORE_TAHOE_IMG = `${COMMUNITY}/Vintage%20camper%20van%20in%20mountain%20clearing.png`;
+
+const COMMUNITY_PHOTOS = [
+  `${COMMUNITY}/Coastal%20stroll%20at%20sunset.png`,
+  `${COMMUNITY}/Vintage%20camper%20van%20in%20mountain%20clearing.png`,
+  `${COMMUNITY}/Golden%20hour%20on%20the%20mountain%20rock.png`,
+  `${COMMUNITY}/Friends%20enjoying%20sunset%20on%20rooftop.png`,
+  `${COMMUNITY}/Desert%20road%20trip%20at%20sunset.png`,
+  `${COMMUNITY}/Beach%20day%20with%20a%20relaxing%20view.png`,
+  `${COMMUNITY}/Relaxing%20in%20the%20cannabis%20lounge.png`,
+  `${COMMUNITY}/Cali%20Roots.png`,
+  `${COMMUNITY}/Chicago%20SMoke%20and%20Sound.png`,
+  `${COMMUNITY}/Friends%20enjoying%20sunset%20on%20rooftop.png`,
+  `${COMMUNITY}/Beach%20day%20with%20a%20relaxing%20view.png`,
+];
+
 export default function RoadTripsPage() {
   return (
     <div style={{ backgroundColor: "#F5F5F0", minHeight: "100vh" }}>
@@ -37,6 +67,17 @@ export default function RoadTripsPage() {
           color: #2F6B3A;
         }
         
+        /* ─── Shared backdrop image ─── */
+        .rt-bg-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: 0;
+          display: block;
+        }
+
         /* ─── Hero Section ─── */
         .rt-hero {
           position: relative;
@@ -44,7 +85,7 @@ export default function RoadTripsPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #2a2b2a; /* Placeholder */
+          background: #2a2b2a; /* Fallback */
           color: #ffffff;
           text-align: center;
           overflow: hidden;
@@ -52,7 +93,8 @@ export default function RoadTripsPage() {
         .rt-hero-placeholder {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+          z-index: 1;
+          background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%);
         }
         .rt-hero-content {
           position: relative;
@@ -322,11 +364,19 @@ export default function RoadTripsPage() {
           .rt-photo:nth-child(11) { grid-column: span 1; grid-row: span 1; }
         }
         .rt-photo {
-          background: #444; /* Placeholder */
+          background: #444;
           border-radius: 8px;
           width: 100%;
           height: 100%;
           min-height: 150px;
+          overflow: hidden;
+          position: relative;
+        }
+        .rt-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
 
         /* ─── Ride With Us Banner ─── */
@@ -337,6 +387,19 @@ export default function RoadTripsPage() {
           padding: 80px 24px;
           position: relative;
           overflow: hidden;
+          isolation: isolate;
+        }
+        .rt-banner-scrim {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.8) 100%);
+        }
+        .rt-banner > h2,
+        .rt-banner > p,
+        .rt-banner > a {
+          position: relative;
+          z-index: 2;
         }
         .rt-banner h2 {
           font-size: clamp(40px, 6vw, 64px);
@@ -356,6 +419,7 @@ export default function RoadTripsPage() {
 
       {/* 1. Hero Section */}
       <section className="rt-hero">
+        <img src={HERO_IMG} alt="" className="rt-bg-img" />
         <div className="rt-hero-placeholder" />
         <div className="rt-hero-content">
           <h1>ROAD TRIPS</h1>
@@ -377,6 +441,7 @@ export default function RoadTripsPage() {
           <div className="rt-featured-grid">
             {/* Left Large Card */}
             <Link href="#big-sur" className="rt-card large">
+              <img src={FEATURED_BIG_IMG} alt="" className="rt-bg-img" />
               <div className="rt-card-scrim" />
               <div className="rt-card-content">
                 <h3 className="rt-card-title">BIG SUR ADVENTURE</h3>
@@ -384,10 +449,11 @@ export default function RoadTripsPage() {
                 <div className="rt-card-btn">EXPLORE <ArrowRight size={14} /></div>
               </div>
             </Link>
-            
+
             {/* Right Stacked Cards */}
             <div className="rt-featured-right">
               <Link href="#mountain" className="rt-card small">
+                <img src={FEATURED_MOUNTAIN_IMG} alt="" className="rt-bg-img" />
                 <div className="rt-card-scrim" />
                 <div className="rt-card-content">
                   <h3 className="rt-card-title">MOUNTAIN ESCAPE</h3>
@@ -396,9 +462,10 @@ export default function RoadTripsPage() {
                 </div>
               </Link>
               <Link href="#desert" className="rt-card small">
+                <img src={FEATURED_DESERT_IMG} alt="" className="rt-bg-img" />
                 <div className="rt-card-scrim" />
                 <div className="rt-card-content">
-                  <h3 className="rt-card-title">DESERT CRUISIN'</h3>
+                  <h3 className="rt-card-title">DESERT CRUISIN&rsquo;</h3>
                   <p className="rt-card-desc">Into the Wild West</p>
                   <div className="rt-card-btn">EXPLORE <ArrowRight size={14} /></div>
                 </div>
@@ -440,22 +507,26 @@ export default function RoadTripsPage() {
           </div>
           
           <div className="rt-explore-grid">
-            <Link href="#malibu" className="rt-explore-card">
+            <Link href="/road-trips/malibu" className="rt-explore-card">
+              <img src={EXPLORE_MALIBU_IMG} alt="" className="rt-bg-img" />
               <div className="rt-card-scrim" />
               <h3 className="rt-explore-title">MALIBU</h3>
               <span className="rt-explore-label">Destination</span>
             </Link>
-            <Link href="#denver" className="rt-explore-card">
+            <Link href="/road-trips/denver-fest" className="rt-explore-card">
+              <img src={EXPLORE_DENVER_IMG} alt="" className="rt-bg-img" />
               <div className="rt-card-scrim" />
               <h3 className="rt-explore-title">DENVER CANNABIS FEST</h3>
               <span className="rt-explore-label">Event</span>
             </Link>
-            <Link href="#austin" className="rt-explore-card">
+            <Link href="/road-trips/austin" className="rt-explore-card">
+              <img src={EXPLORE_AUSTIN_IMG} alt="" className="rt-bg-img" />
               <div className="rt-card-scrim" />
               <h3 className="rt-explore-title">AUSTIN CHILL SPOT</h3>
               <span className="rt-explore-label">Community</span>
             </Link>
-            <Link href="#tahoe" className="rt-explore-card">
+            <Link href="/road-trips/lake-tahoe" className="rt-explore-card">
+              <img src={EXPLORE_TAHOE_IMG} alt="" className="rt-bg-img" />
               <div className="rt-card-scrim" />
               <h3 className="rt-explore-title">LAKE TAHOE</h3>
               <span className="rt-explore-label">Destination</span>
@@ -478,24 +549,19 @@ export default function RoadTripsPage() {
           </div>
 
           <div className="rt-community-grid">
-            {/* 11 Placeholders to match the masonry feel of the mockup */}
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
-            <div className="rt-photo"></div>
+            {COMMUNITY_PHOTOS.map((src, i) => (
+              <div key={i} className="rt-photo">
+                <img src={src} alt={`Highway 420 community session ${i + 1}`} loading="lazy" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* 6. Ride With Us Banner */}
       <section className="rt-banner">
+        <img src={BANNER_IMG} alt="" className="rt-bg-img" />
+        <div className="rt-banner-scrim" />
         <h2>RIDE WITH US</h2>
         <p>Join the journey and share your adventures.</p>
         <Link href="#featured" className="rt-btn" style={{ background: '#2F6B3A' }}>

@@ -19,8 +19,8 @@ const NAV_LINKS = [
   { label: "ABOUT",           href: "/about" },
 ];
 
-const BLACK_LOGO_URL =
-  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Black%20LogoTB.png";
+const SIGN_URL =
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/assets/Highway420%20Sign.png";
 
 export default function HigherLearningMasthead() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,7 +39,6 @@ export default function HigherLearningMasthead() {
       <style>{`
         .hl-mast {
           background: #F7F6F2;
-          border-bottom: 1px solid #E5E1D8;
           position: sticky;
           top: 0;
           z-index: 80;
@@ -47,14 +46,15 @@ export default function HigherLearningMasthead() {
         .hl-mast-inner {
           max-width: 1440px;
           margin: 0 auto;
-          padding: 4px 24px;
+          padding: 0 24px;
           display: flex;
-          align-items: center;
+          align-items: stretch;
           gap: 24px;
         }
         .hl-brand {
           display: inline-flex;
           align-items: center;
+          padding: 0;
           text-decoration: none;
           color: #0E2A1F;
           flex-shrink: 0;
@@ -177,9 +177,9 @@ export default function HigherLearningMasthead() {
           {/* Brand */}
           <Link href="/" className="hl-brand" aria-label="Highway 420 home">
             <Image
-              src={BLACK_LOGO_URL}
+              src={SIGN_URL}
               alt="Highway 420"
-              width={440}
+              width={220}
               height={220}
               className="hl-brand-img"
               priority
