@@ -110,26 +110,26 @@ export default function CuratedKits() {
           {/* The Travel Kit */}
           <div className="bg-[#1a1c19] rounded-xl overflow-hidden flex flex-col group border border-[#2a2c29] shadow-lg">
             <div className="relative h-[250px] w-full bg-[#121411]">
-              <Image 
-                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Travel%20kit.png" 
-                alt="The Travel Kit" 
-                fill 
-                className="object-cover transition-transform duration-500 group-hover:scale-105" 
+              <Image
+                src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Travel%20kit.png"
+                alt="The High Roller Kit"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute top-4 left-4 bg-[#3a5a3a] text-white text-[10px] font-bold px-3 py-1.5 rounded-sm uppercase tracking-wider z-10 text-center leading-tight">
-                Built For<br/>Adventure
+                Top<br/>Shelf
               </div>
             </div>
             <div className="p-6 flex flex-col flex-grow relative z-20 bg-[#1a1c19]">
               <div className="flex items-center gap-3 mb-3">
                 <Briefcase className="text-[#dfca97] w-6 h-6" strokeWidth={1.5} />
-                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">The Travel Kit</h3>
+                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">The High Roller Kit</h3>
               </div>
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
-                Compact, discreet, and built for sessions anywhere.
+                Premium picks for elevated sessions.
               </p>
-              <Link 
-                href="/collections/travel-kits" 
+              <Link
+                href="/collections/travel-kits"
                 className="bg-[#48663e] hover:bg-[#3b5433] transition-colors text-white text-sm font-bold py-3 px-4 rounded text-center w-full uppercase tracking-widest flex items-center justify-center gap-2"
               >
                 Shop This Setup <ArrowRight className="w-4 h-4" />

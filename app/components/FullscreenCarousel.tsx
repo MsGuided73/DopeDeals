@@ -16,8 +16,14 @@ type SlideCopy = {
   cta?: string;
 };
 
+// Optional overlay labels rendered on top of the slide image (not the copy
+// panel). Used to caption parts of a composite image — e.g. naming each kit
+// in the bundles slide. `left` is a CSS percentage of slide width measured
+// to the label's center; `bottom` defaults to 7% of slide height.
+type SlideImageLabel = { text: string; left: string; bottom?: string };
+
 // ─── Carousel slides ──────────────────────────────────────────────────────────
-const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string; objectFit?: 'cover' | 'contain'; copy?: SlideCopy }[] = [
+const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string; objectFit?: 'cover' | 'contain'; copy?: SlideCopy; imageLabels?: SlideImageLabel[] }[] = [
   {
     id: 'slide-1',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/Better%20Vibes%20No%20Text.png',
@@ -38,13 +44,14 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
           Elevate the ride.
         </>
       ),
+      cta: 'Gear Up',
     },
   },
   {
     id: 'slide-2',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/CRAVE/2.png',
     alt: 'Highway 420 — CRAVE',
-    href: '/brands/crave',
+    href: '/search?brand=Crave',
     objectPosition: 'center center',
     objectFit: 'contain',
   },
@@ -74,6 +81,10 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
       tagline: <>Everything you need.<br />Nothing you don&rsquo;t.</>,
       cta: 'Shop Bundles',
     },
+    imageLabels: [
+      { text: 'Starter Kit', left: '50%' },
+      { text: 'High Roller Kit', left: '78%' },
+    ],
   },
   {
     id: 'slide-5',
@@ -112,7 +123,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
       headline: (
         <>
           Find Your Next<br />
-          <span className="carousel-hero-accent">Road Trips</span>
+          <span className="carousel-hero-accent">Road Trip</span>
         </>
       ),
       tagline: (
@@ -121,6 +132,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
           Across the Highway.
         </>
       ),
+      cta: 'Explore Road Trips',
     },
   },
 ];
@@ -313,7 +325,7 @@ export default function FullscreenCarousel() {
           font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif !important;
           font-weight: 400 !important;
           letter-spacing: -0.02em !important;
-          font-size: clamp(38px, 8.5cqi, 220px);
+          font-size: clamp(34px, 7cqi, 175px);
           line-height: 0.92;
           text-transform: uppercase;
           margin: 0;
@@ -328,7 +340,7 @@ export default function FullscreenCarousel() {
           display: flex;
           align-items: center;
           gap: clamp(8px, 1.2cqi, 22px);
-          margin: clamp(10px, 1.6cqi, 32px) 0;
+          margin: clamp(4px, 0.7cqi, 14px) 0 clamp(4px, 0.7cqi, 14px);
           color: #a8d96b;
         }
         .carousel-hero-divider::before,
@@ -352,6 +364,45 @@ export default function FullscreenCarousel() {
           text-shadow: 0 1px 8px rgba(0,0,0,0.35);
           margin: 0;
         }
+        /* Hero CTA — text label + circular arrow chip, mirroring the
+           secondary-card pattern in RoadTripsSection (.rt-card__arrow).
+           No filled button — keeps the slide breathing on the photo. */
+        .carousel-hero-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: clamp(8px, 1.2cqi, 22px);
+          font-family: 'Fira Sans', 'Inter', sans-serif;
+          font-size: clamp(11px, 1.25cqi, 24px);
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #ffffff;
+          margin-top: clamp(10px, 1.4cqi, 28px);
+          align-self: flex-start;
+          text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+          pointer-events: auto;
+        }
+        .carousel-hero-cta__arrow {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: clamp(30px, 3.2cqi, 64px);
+          height: clamp(30px, 3.2cqi, 64px);
+          border-radius: 50%;
+          background: #ffffff;
+          color: #1a3a23;
+          transition: transform 0.25s ease, background 0.2s ease, color 0.2s ease;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+        .carousel-hero-cta:hover .carousel-hero-cta__arrow {
+          transform: translateX(4px);
+          background: #a8d96b;
+          color: #0f2616;
+        }
+        .carousel-hero-cta__arrow svg {
+          width: clamp(13px, 1.5cqi, 28px);
+          height: clamp(13px, 1.5cqi, 28px);
+        }
 
         @media (max-width: 767px) {
           .carousel-copy {
@@ -359,6 +410,49 @@ export default function FullscreenCarousel() {
             /* Keep left padding aligned with shield (16px) on mobile too. */
             padding: 5% 4% 5% 16px;
           }
+        }
+
+        /* Image-overlay labels — captions placed on top of the slide image
+           (not the copy panel). Centered horizontally on the supplied left
+           value via translateX(-50%); styled to mirror the cannabis-leaf
+           ornament used on slides 1 and 7. */
+        .carousel-image-label {
+          position: absolute;
+          z-index: 4;
+          transform: translateX(-50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: clamp(4px, 0.6cqi, 12px);
+          pointer-events: none;
+        }
+        .carousel-image-label__text {
+          font-family: 'Fira Sans', 'Inter', sans-serif;
+          font-size: clamp(10px, 1.3cqi, 26px);
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #ffffff;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.55);
+          white-space: nowrap;
+        }
+        .carousel-image-label__divider {
+          display: flex;
+          align-items: center;
+          gap: clamp(4px, 0.7cqi, 12px);
+          color: #a8d96b;
+        }
+        .carousel-image-label__divider::before,
+        .carousel-image-label__divider::after {
+          content: "";
+          height: 1px;
+          width: clamp(20px, 3cqi, 60px);
+          background: currentColor;
+        }
+        .carousel-image-label__divider svg {
+          width: clamp(11px, 1.4cqi, 24px);
+          height: clamp(11px, 1.4cqi, 24px);
+          flex-shrink: 0;
         }
 
         /* Slide fade */
@@ -469,6 +563,19 @@ export default function FullscreenCarousel() {
                 objectFit: slide.objectFit ?? 'cover',
               }}
             />
+            {slide.imageLabels?.map((label, i) => (
+              <div
+                key={i}
+                className="carousel-image-label"
+                style={{ left: label.left, bottom: label.bottom ?? '7%' }}
+                aria-hidden
+              >
+                <span className="carousel-image-label__text">{label.text}</span>
+                <span className="carousel-image-label__divider">
+                  <Cannabis strokeWidth={2} />
+                </span>
+              </div>
+            ))}
             {slide.copy ? (
               slide.copy.style === 'hero' ? (
                 <div className="carousel-copy carousel-copy--hero">
@@ -477,6 +584,14 @@ export default function FullscreenCarousel() {
                     <Cannabis strokeWidth={2} />
                   </div>
                   <p className="carousel-hero-tagline">{slide.copy.tagline}</p>
+                  {slide.copy.cta && (
+                    <span className="carousel-hero-cta">
+                      {slide.copy.cta}
+                      <span className="carousel-hero-cta__arrow" aria-hidden>
+                        <ArrowRight strokeWidth={2.5} />
+                      </span>
+                    </span>
+                  )}
                 </div>
               ) : (
                 <div className="carousel-copy">
