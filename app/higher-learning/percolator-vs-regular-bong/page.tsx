@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { Target, Waves, Zap } from "lucide-react";
-import GlobalMasthead from "../../components/GlobalMasthead";
 import HigherLearningArticleLayout from "../_components/HigherLearningArticleLayout";
 import ArticleQuickAnswer from "../_components/ArticleQuickAnswer";
 import ComparisonBlock from "../_components/ComparisonBlock";
@@ -50,9 +49,7 @@ export const metadata: Metadata = {
  */
 export default function PercolatorVsRegularBongPage() {
   return (
-    <>
-      <GlobalMasthead />
-      <HigherLearningArticleLayout
+    <HigherLearningArticleLayout
         articleSlug={ARTICLE_SLUG}
         breadcrumbs={[
           { name: "Higher Learning", href: "/higher-learning" },
@@ -204,8 +201,7 @@ export default function PercolatorVsRegularBongPage() {
         />
 
         <FinalTake />
-      </HigherLearningArticleLayout>
-    </>
+    </HigherLearningArticleLayout>
   );
 }
 

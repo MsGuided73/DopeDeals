@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import GlobalMasthead from "../../components/GlobalMasthead";
 import HigherLearningArticleLayout from "../_components/HigherLearningArticleLayout";
 import ArticleQuickAnswer from "../_components/ArticleQuickAnswer";
 import ComparisonBlock from "../_components/ComparisonBlock";
@@ -44,9 +43,7 @@ export const metadata: Metadata = {
  */
 export default function ERigVsDabRigPage() {
   return (
-    <>
-      <GlobalMasthead />
-      <HigherLearningArticleLayout
+    <HigherLearningArticleLayout
         articleSlug={ARTICLE_SLUG}
         breadcrumbs={[
           { name: "Higher Learning", href: "/higher-learning" },
@@ -202,7 +199,6 @@ export default function ERigVsDabRigPage() {
             Many experienced users keep both in rotation depending on the situation.
           </p>
         </section>
-      </HigherLearningArticleLayout>
-    </>
+    </HigherLearningArticleLayout>
   );
 }

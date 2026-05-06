@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import GlobalMasthead from "../components/GlobalMasthead";
 import HigherLearningClient from "./HigherLearningClient";
 
 export const metadata: Metadata = {
@@ -9,11 +8,8 @@ export const metadata: Metadata = {
 
 export default function HigherLearningPage() {
   return (
-    <>
-      <GlobalMasthead />
-      <div className="bg-[#F7F6F2] min-h-screen">
-        <HigherLearningClient />
-      </div>
-    </>
+    <div className="bg-[#F7F6F2] min-h-screen">
+      <HigherLearningClient />
+    </div>
   );
 }

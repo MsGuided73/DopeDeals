@@ -18,7 +18,6 @@ import {
   Target,
   Truck,
 } from "lucide-react";
-import GlobalMasthead from "../../components/GlobalMasthead";
 import HigherLearningArticleLayout from "../_components/HigherLearningArticleLayout";
 import IconRowSection from "../_components/IconRowSection";
 import InlineHighlightCallout from "../_components/InlineHighlightCallout";
@@ -79,9 +78,7 @@ export const metadata: Metadata = {
  */
 export default function ThcaLegalAlternativePage() {
   return (
-    <>
-      <GlobalMasthead />
-      <HigherLearningArticleLayout
+    <HigherLearningArticleLayout
         articleSlug={ARTICLE_SLUG}
         breadcrumbs={[
           { name: "Higher Learning", href: "/higher-learning" },
@@ -297,8 +294,7 @@ export default function ThcaLegalAlternativePage() {
         </div>
 
         <ExploreThcaBanner />
-      </HigherLearningArticleLayout>
-    </>
+    </HigherLearningArticleLayout>
   );
 }
 
