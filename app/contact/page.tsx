@@ -120,7 +120,11 @@ export default function ContactPage() {
                     <Mail className="w-6 h-6 text-dope-orange-500 mr-4 mt-1" />
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white font-inter">Email</h3>
-                      <p className="text-gray-600 dark:text-gray-300 font-inter">bmbwholesale2025@gmail.com</p>
+                      <p className="text-gray-600 dark:text-gray-300 font-inter">
+                        <a href="mailto:info@highway420store.com" className="hover:text-dope-orange-500 transition-colors">
+                          info@highway420store.com
+                        </a>
+                      </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400 font-inter">We respond within 24 hours</p>
                     </div>
                   </div>

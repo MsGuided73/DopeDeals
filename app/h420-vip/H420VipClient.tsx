@@ -27,7 +27,8 @@ const ASSETS =
 // Swap to a dedicated VIP hero (model + van + sunset per the mockup) when one
 // is uploaded to Highway420_assets.
 const HERO_IMAGE = `${ASSETS}/Road-Trips/General%20Community/Vintage%20camper%20van%20in%20mountain%20clearing.png`;
-const FORM_PRODUCT_IMAGE = `${ASSETS}/Road-Trips/General%20Community/Pre-roll%20travel%20kit.png`;
+// VIP form product shot (H420 hat + THCA flower bag composition)
+const FORM_PRODUCT_IMAGE = `${ASSETS}/RideWithUs/420%20emembership%20product%20image.png`;
 
 export default function H420VipClient() {
   const [email, setEmail] = useState("");
