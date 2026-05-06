@@ -57,7 +57,8 @@ API routes live under [app/api/](app/api/) (Next.js Route Handlers). The legacy 
 [DATABASE_POLICY.md](DATABASE_POLICY.md) is binding for any product query:
 
 - **Use only the `main_site_products` table.** `products` and `products_compat` are deprecated. Do not introduce queries against them.
-- **Do not filter by `is_active`** while Zoho Inventory is disconnected. Adding `.eq('is_active', true)` to a `main_site_products` query will hide live SKUs.
+- **Customer-facing list queries MUST filter `.eq('is_active', true)`** (policy reversed 2026-05-05; previous rule was the opposite). Single-product / cart / admin paths still must NOT filter `is_active`. See [DATABASE_POLICY.md](DATABASE_POLICY.md).
+- **Customer-facing list queries MUST also use `applyImageRequiredFilter()`** from [lib/product-display-filters.ts](lib/product-display-filters.ts) so mid-import SKUs without images don't appear on the storefront.
 
 When in doubt, mirror existing query shapes in [lib/product-service.ts](lib/product-service.ts) and `app/api/products/`.
 
