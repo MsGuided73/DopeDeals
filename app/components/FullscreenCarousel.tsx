@@ -59,7 +59,7 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
     id: 'slide-3',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/VIPMembership/Membership.png',
     alt: 'Highway 420 — VIP Membership',
-    href: '/rewards',
+    href: '/h420-vip',
     objectPosition: 'center center',
     copy: {
       eyebrow: 'Members Only',

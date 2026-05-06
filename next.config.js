@@ -17,12 +17,30 @@ const nextConfig = {
   // Enable standalone output for Docker deployment
   output: 'standalone',
 
-  // Redirects to hide N2O and Accessories temporarily
   async redirects() {
     return [
+      // Hide N2O while we sort compliance
       {
         source: '/nitrous-oxide',
         destination: '/',
+        permanent: false,
+      },
+      // Funnel all VIP / membership / newsletter intents through the canonical
+      // conversion page. Old links (bookmarks, emails, search results) still
+      // resolve — they just land on /h420-vip instead of the legacy variants.
+      {
+        source: '/rewards',
+        destination: '/h420-vip',
+        permanent: false,
+      },
+      {
+        source: '/ride-with-us',
+        destination: '/h420-vip',
+        permanent: false,
+      },
+      {
+        source: '/join-community',
+        destination: '/h420-vip',
         permanent: false,
       },
     ];
