@@ -415,10 +415,12 @@ export default function H420VipClient() {
           background: var(--vip-cream);
           padding: 0 0 80px;
         }
+        /* Bigger than the previous 1280 cap but proportionally constrained,
+           so the image's 4:3 aspect ratio drives the column height as the
+           grid grows wider — image and form stay in scale together. */
         .vip-form-grid {
-          /* Span the full viewport width — 50/50 image + form on desktop. */
-          max-width: none;
-          margin: 0;
+          max-width: 1600px;
+          margin: 0 auto;
           width: 100%;
           display: grid;
           grid-template-columns: 1fr;
@@ -431,7 +433,11 @@ export default function H420VipClient() {
         .vip-form-image {
           position: relative;
           background: linear-gradient(135deg, #2A2B2A 0%, #1A1B1A 100%);
-          min-height: 420px;
+          min-height: 480px;
+          /* Lock the image cell to a 4:3 ratio so it scales vertically as
+             the grid widens. The form card stretches to match via
+             align-items: stretch. */
+          aspect-ratio: 4 / 3;
           overflow: hidden;
         }
         .vip-form-image img {
@@ -441,7 +447,7 @@ export default function H420VipClient() {
         }
         .vip-form-card {
           background: #fff;
-          padding: 56px 48px 48px;
+          padding: 64px 56px 56px;
           display: flex;
           flex-direction: column;
           justify-content: center;
