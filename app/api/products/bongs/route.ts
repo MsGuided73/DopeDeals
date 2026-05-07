@@ -105,8 +105,23 @@ export async function GET(req: NextRequest) {
         .filter(Boolean);
     };
 
+    // Default sort: RooR products lead, everything else preserves the
+    // newest-first ordering returned by the query above. JS .sort() is
+    // stable in all modern engines so non-RooR rows keep their relative
+    // order. Brand match is case-insensitive + substring so any variant
+    // of the name ("RooR", "Roor", "ROOR Inc.") groups together.
+    // Client-side filter/sort UI overrides this default — this only
+    // affects the initial unfiltered listing.
+    const sortedRaw = (rawProducts || []).slice().sort((a: any, b: any) => {
+      const aIsRoor = (a.brand_name || '').toLowerCase().includes('roor');
+      const bIsRoor = (b.brand_name || '').toLowerCase().includes('roor');
+      if (aIsRoor && !bIsRoor) return -1;
+      if (!aIsRoor && bIsRoor) return 1;
+      return 0;
+    });
+
     // Transform products to match our interface
-    const transformedProducts = (rawProducts || []).map((product: any) => {
+    const transformedProducts = sortedRaw.map((product: any) => {
       // image_url is primary; image_urls is the legacy gallery (often dead sigdistro.com URLs).
       const normalizedImages = Array.from(new Set([
         ...parseImageUrls(product.image_url),
