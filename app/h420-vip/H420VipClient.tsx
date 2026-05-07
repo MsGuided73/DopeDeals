@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import Link from "next/link";
 import {
   Tag,
@@ -18,15 +18,13 @@ import {
   Lock,
   ShoppingBag,
 } from "lucide-react";
-import GlobalMasthead from "../components/GlobalMasthead";
+import { useNavigation } from "../contexts/NavigationContext";
 
 const ASSETS =
   "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets";
 
-// Hero hero photo — closest existing atmospheric shot in our library.
-// Swap to a dedicated VIP hero (model + van + sunset per the mockup) when one
-// is uploaded to Highway420_assets.
-const HERO_IMAGE = `${ASSETS}/Road-Trips/General%20Community/Vintage%20camper%20van%20in%20mountain%20clearing.png`;
+// Dedicated VIP hero — Ride With Us "full" treatment.
+const HERO_IMAGE = `${ASSETS}/RideWithUs/ride%20with%20us%20full.png`;
 // VIP form product shot (H420 hat + THCA flower bag composition)
 const FORM_PRODUCT_IMAGE = `${ASSETS}/RideWithUs/420%20emembership%20product%20image.png`;
 
@@ -36,6 +34,14 @@ export default function H420VipClient() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Suppress the global Highway420Footer for this page — we render our own
+  // minimal black footer below.
+  const { setHasCustomFooter } = useNavigation();
+  useEffect(() => {
+    setHasCustomFooter(true);
+    return () => setHasCustomFooter(false);
+  }, [setHasCustomFooter]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -79,8 +85,6 @@ export default function H420VipClient() {
 
   return (
     <>
-      <GlobalMasthead />
-
       <style>{`
         :root {
           --vip-cream: #F4EFE3;
@@ -128,43 +132,55 @@ export default function H420VipClient() {
           margin-bottom: 36px;
         }
         .vip-hero-shield img {
-          height: 84px;
+          height: 140px;
           width: auto;
-          filter: drop-shadow(0 4px 14px rgba(0,0,0,0.4));
+          filter: drop-shadow(0 4px 14px rgba(0,0,0,0.5));
+        }
+        /* Text block: shifted left of the inner container on desktop. */
+        .vip-hero-text {
+          margin-left: 0;
+        }
+        @media (min-width: 1024px) {
+          .vip-hero-text { margin-left: -120px; }
         }
         .vip-hero h1 {
           font-family: 'BebasNeue','Bebas Neue','Impact',sans-serif;
           font-weight: 400;
-          font-size: clamp(56px, 9vw, 110px);
-          line-height: 0.92;
+          font-size: clamp(88px, 12vw, 160px);
+          line-height: 0.86;
           letter-spacing: 0.01em;
-          margin: 0 0 20px;
+          margin: 0 0 24px;
           text-shadow: 0 4px 22px rgba(0,0,0,0.45);
-          max-width: 720px;
+          max-width: 1000px;
           text-transform: uppercase;
         }
         .vip-hero h1 span.accent {
+          font-family: 'BebasNeue','Bebas Neue','Impact',sans-serif;
           color: #C8D5B9;
+          font-size: inherit;
+          line-height: 0.86;
+          letter-spacing: 0.14em;
+          display: inline-block;
         }
         .vip-hero-tagline {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: clamp(15px, 1.6vw, 18px);
+          font-size: clamp(18px, 1.9vw, 22px);
           font-weight: 500;
-          margin: 0 0 30px;
-          max-width: 460px;
+          margin: 0 0 32px;
+          max-width: 540px;
           color: rgba(255,255,255,0.92);
-          line-height: 1.45;
+          line-height: 1.4;
         }
         .vip-hero-cta {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 18px 32px;
+          gap: 12px;
+          padding: 20px 36px;
           background: var(--vip-forest);
           color: #fff;
           border-radius: 4px;
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 13px;
+          font-size: 16px;
           font-weight: 800;
           letter-spacing: 0.16em;
           text-transform: uppercase;
@@ -179,17 +195,17 @@ export default function H420VipClient() {
         .vip-trust-row {
           display: flex;
           flex-wrap: wrap;
-          gap: 28px;
-          margin-top: 40px;
+          gap: 40px;
+          margin-top: 48px;
         }
         .vip-trust-pill {
           display: inline-flex;
           align-items: center;
-          gap: 12px;
+          gap: 16px;
           font-family: 'Fira Sans','Inter',sans-serif;
         }
         .vip-trust-pill-icon {
-          width: 32px; height: 32px;
+          width: 48px; height: 48px;
           border-radius: 50%;
           border: 1.5px solid rgba(200, 213, 185, 0.6);
           display: inline-flex;
@@ -198,58 +214,72 @@ export default function H420VipClient() {
           color: #C8D5B9;
           flex-shrink: 0;
         }
+        .vip-trust-pill-icon svg {
+          width: 22px;
+          height: 22px;
+        }
         .vip-trust-pill-text {
-          color: rgba(255,255,255,0.9);
-          font-size: 12px;
-          font-weight: 600;
-          line-height: 1.3;
+          color: rgba(255,255,255,0.92);
+          font-size: 19px;
+          font-weight: 700;
+          line-height: 1.25;
           letter-spacing: 0.02em;
         }
         .vip-trust-pill-text strong {
           color: #fff;
-          font-weight: 700;
+          font-weight: 800;
         }
         .vip-trust-pill-text small {
           display: block;
-          color: rgba(255,255,255,0.7);
-          font-weight: 400;
-          font-size: 11px;
+          color: rgba(255,255,255,0.78);
+          font-weight: 500;
+          font-size: 16px;
+          margin-top: 2px;
         }
 
         /* ── Section: Perks ─────────────────────────────── */
         .vip-perks {
           background: var(--vip-cream);
-          padding: 80px 24px;
+          padding: 40px 24px 80px;
         }
+        /* H420 Header Layout — centered ~1/3-screen-wide block:
+           eyebrow (with underline) / Bebas headline / tagline. Tight stack. */
         .vip-section-header {
           text-align: center;
-          margin: 0 auto 56px;
-          max-width: 760px;
+          margin: 0 auto 44px;
+          max-width: 720px;
         }
         .vip-eyebrow {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 12px;
-          font-weight: 800;
-          letter-spacing: 0.22em;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: var(--vip-forest-mid);
-          margin: 0 0 14px;
+          color: var(--vip-forest);
+          margin: 0 0 10px;
+          display: inline-block;
+          border-bottom: 2px solid currentColor;
+          padding-bottom: 6px;
         }
         .vip-section-title {
           font-family: 'BebasNeue','Bebas Neue','Impact',sans-serif;
           font-weight: 400;
-          font-size: clamp(36px, 5vw, 56px);
-          line-height: 1;
+          font-size: clamp(28px, 3.4vw, 52px);
+          line-height: 0.95;
           letter-spacing: 0.02em;
+          text-transform: uppercase;
           color: var(--vip-ink);
-          margin: 0 0 14px;
+          margin: 6px 0 8px;
+          white-space: nowrap;
         }
         .vip-section-deck {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 15px;
+          font-size: clamp(15px, 1.4vw, 18px);
+          font-weight: 500;
           color: var(--vip-muted);
-          margin: 0;
-          line-height: 1.5;
+          margin: 0 auto;
+          line-height: 1.3;
+          max-width: 560px;
         }
         .vip-perks-grid {
           max-width: 1120px;
@@ -293,7 +323,7 @@ export default function H420VipClient() {
         }
         .vip-perk h3 {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 800;
           letter-spacing: 0.16em;
           text-transform: uppercase;
@@ -302,10 +332,10 @@ export default function H420VipClient() {
         }
         .vip-perk p {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 14px;
+          font-size: 17px;
           color: var(--vip-ink);
           margin: 0;
-          line-height: 1.5;
+          line-height: 1.55;
         }
 
         /* ── Community trust card ─────────────────────── */
@@ -340,7 +370,7 @@ export default function H420VipClient() {
         }
         .vip-community-copy h4 {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 800;
           letter-spacing: 0.04em;
           text-transform: uppercase;
@@ -349,10 +379,10 @@ export default function H420VipClient() {
         }
         .vip-community-copy p {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 14px;
+          font-size: 16px;
           color: var(--vip-muted);
           margin: 0;
-          line-height: 1.4;
+          line-height: 1.5;
         }
         .vip-community-stat {
           display: flex;
@@ -439,7 +469,7 @@ export default function H420VipClient() {
         .vip-form-card h2 {
           font-family: 'BebasNeue','Bebas Neue','Impact',sans-serif;
           font-weight: 400;
-          font-size: clamp(34px, 4vw, 46px);
+          font-size: clamp(42px, 4.6vw, 60px);
           line-height: 1;
           letter-spacing: 0.02em;
           text-align: center;
@@ -448,7 +478,7 @@ export default function H420VipClient() {
         }
         .vip-form-card .lead {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 15px;
+          font-size: 17px;
           color: var(--vip-muted);
           text-align: center;
           margin: 0 0 28px;
@@ -464,11 +494,11 @@ export default function H420VipClient() {
         }
         .vip-input-row input {
           width: 100%;
-          padding: 14px 44px 14px 16px;
+          padding: 16px 48px 16px 18px;
           border: 1px solid var(--vip-line);
           border-radius: 4px;
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 15px;
+          font-size: 17px;
           color: var(--vip-ink);
           background: #fff;
           outline: none;
@@ -490,14 +520,14 @@ export default function H420VipClient() {
         }
         .vip-form-submit {
           width: 100%;
-          padding: 16px;
+          padding: 18px;
           margin-top: 6px;
           background: var(--vip-forest);
           color: #fff;
           border: none;
           border-radius: 4px;
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 13px;
+          font-size: 16px;
           font-weight: 800;
           letter-spacing: 0.16em;
           text-transform: uppercase;
@@ -516,9 +546,9 @@ export default function H420VipClient() {
           gap: 10px;
           margin: 18px 0 0;
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 12px;
+          font-size: 14px;
           color: var(--vip-muted);
-          line-height: 1.4;
+          line-height: 1.45;
         }
         .vip-form-fineprint svg { flex-shrink: 0; margin-top: 2px; color: var(--vip-forest-mid); }
         .vip-form-error {
@@ -586,7 +616,7 @@ export default function H420VipClient() {
         .vip-how-title {
           font-family: 'BebasNeue','Bebas Neue','Impact',sans-serif;
           font-weight: 400;
-          font-size: clamp(36px, 5vw, 56px);
+          font-size: clamp(48px, 6vw, 76px);
           letter-spacing: 0.02em;
           text-align: center;
           color: #fff;
@@ -638,7 +668,7 @@ export default function H420VipClient() {
         }
         .vip-how-step h4 {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 800;
           letter-spacing: 0.16em;
           text-transform: uppercase;
@@ -647,11 +677,11 @@ export default function H420VipClient() {
         }
         .vip-how-step p {
           font-family: 'Fira Sans','Inter',sans-serif;
-          font-size: 14px;
-          color: rgba(255,255,255,0.78);
+          font-size: 17px;
+          color: rgba(255,255,255,0.85);
           margin: 0;
-          line-height: 1.5;
-          max-width: 240px;
+          line-height: 1.55;
+          max-width: 280px;
           margin-left: auto;
           margin-right: auto;
         }
@@ -693,17 +723,17 @@ export default function H420VipClient() {
         }
         .vip-trust-strip-text strong {
           display: block;
-          font-size: 12px;
+          font-size: 14px;
           font-weight: 800;
           letter-spacing: 0.14em;
           text-transform: uppercase;
           color: #C8D5B9;
-          margin-bottom: 2px;
+          margin-bottom: 4px;
         }
         .vip-trust-strip-text span {
-          font-size: 12px;
-          color: rgba(255,255,255,0.78);
-          line-height: 1.3;
+          font-size: 14px;
+          color: rgba(255,255,255,0.82);
+          line-height: 1.35;
         }
       `}</style>
 
@@ -715,45 +745,47 @@ export default function H420VipClient() {
           </div>
           <div className="vip-hero-scrim" />
           <div className="vip-hero-inner">
-            <div className="vip-hero-shield" aria-hidden="true">
-              <img
-                src={`${ASSETS}/assets/Highway420%20Sign.png`}
-                alt="Highway 420 sign"
-              />
-            </div>
-            <h1>
-              Join the Ride.<br />
-              <span className="accent">Unlock VIP Perks.</span>
-            </h1>
-            <p className="vip-hero-tagline">
-              Early access. Exclusive drops.<br />
-              Better prices. Better sessions.
-            </p>
-            <button
-              type="button"
-              className="vip-hero-cta"
-              onClick={scrollToForm}
-            >
-              Get VIP Access — It&rsquo;s Free <ArrowRight size={16} />
-            </button>
+            <div className="vip-hero-text">
+              <div className="vip-hero-shield" aria-hidden="true">
+                <img
+                  src={`${ASSETS}/Logos/H420_logo/logo_Highway420-official_transparent.png`}
+                  alt="Highway 420"
+                />
+              </div>
+              <h1 className="font-bebas">
+                Join the Ride.<br />
+                <span className="accent">Unlock VIP Perks.</span>
+              </h1>
+              <p className="vip-hero-tagline">
+                Early access. Exclusive drops.<br />
+                Better prices. Better sessions.
+              </p>
+              <button
+                type="button"
+                className="vip-hero-cta"
+                onClick={scrollToForm}
+              >
+                Get VIP Access — It&rsquo;s Free <ArrowRight size={16} />
+              </button>
 
-            <div className="vip-trust-row">
-              <span className="vip-trust-pill">
-                <span className="vip-trust-pill-icon"><Tag size={14} strokeWidth={1.8} /></span>
-                <span className="vip-trust-pill-text"><strong>100% FREE</strong><small>to join</small></span>
-              </span>
-              <span className="vip-trust-pill">
-                <span className="vip-trust-pill-icon"><DollarSign size={14} strokeWidth={1.8} /></span>
-                <span className="vip-trust-pill-text"><strong>No spam.</strong><small>Just perks.</small></span>
-              </span>
-              <span className="vip-trust-pill">
-                <span className="vip-trust-pill-icon"><Lock size={14} strokeWidth={1.8} /></span>
-                <span className="vip-trust-pill-text"><strong>Opt out</strong><small>anytime.</small></span>
-              </span>
-              <span className="vip-trust-pill">
-                <span className="vip-trust-pill-icon"><ShieldCheck size={14} strokeWidth={1.8} /></span>
-                <span className="vip-trust-pill-text"><strong>No purchase</strong><small>required.</small></span>
-              </span>
+              <div className="vip-trust-row">
+                <span className="vip-trust-pill">
+                  <span className="vip-trust-pill-icon"><Tag size={14} strokeWidth={1.8} /></span>
+                  <span className="vip-trust-pill-text"><strong>100% FREE</strong><small>to join</small></span>
+                </span>
+                <span className="vip-trust-pill">
+                  <span className="vip-trust-pill-icon"><DollarSign size={14} strokeWidth={1.8} /></span>
+                  <span className="vip-trust-pill-text"><strong>No spam.</strong><small>Just perks.</small></span>
+                </span>
+                <span className="vip-trust-pill">
+                  <span className="vip-trust-pill-icon"><Lock size={14} strokeWidth={1.8} /></span>
+                  <span className="vip-trust-pill-text"><strong>Opt out</strong><small>anytime.</small></span>
+                </span>
+                <span className="vip-trust-pill">
+                  <span className="vip-trust-pill-icon"><ShieldCheck size={14} strokeWidth={1.8} /></span>
+                  <span className="vip-trust-pill-text"><strong>No purchase</strong><small>required.</small></span>
+                </span>
+              </div>
             </div>
           </div>
         </section>
@@ -761,8 +793,8 @@ export default function H420VipClient() {
         {/* ── 2. Perks ───────────────────────────── */}
         <section className="vip-perks">
           <header className="vip-section-header">
-            <p className="vip-eyebrow">VIP Perks</p>
-            <h2 className="vip-section-title">More Perks. Better Sessions.</h2>
+            <p className="vip-eyebrow">VIP PERKS</p>
+            <h2 className="vip-section-title font-bebas">MORE PERKS. BETTER SESSIONS.</h2>
             <p className="vip-section-deck">
               Exclusive benefits that elevate every part of your journey.
             </p>
@@ -938,6 +970,57 @@ export default function H420VipClient() {
           </div>
         </section>
       </div>
+
+      {/* ── Minimal black footer (replaces the global extensive footer) ── */}
+      <footer className="vip-mini-footer">
+        <style>{`
+          .vip-mini-footer {
+            background: #000000;
+            color: rgba(255,255,255,0.78);
+            padding: 22px 24px;
+            font-family: 'Fira Sans','Inter',sans-serif;
+            font-size: 13px;
+          }
+          .vip-mini-footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px 24px;
+          }
+          .vip-mini-footer-copy {
+            color: rgba(255,255,255,0.65);
+            letter-spacing: 0.02em;
+          }
+          .vip-mini-footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+          }
+          .vip-mini-footer-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: color 0.15s;
+          }
+          .vip-mini-footer-links a:hover { color: #C8D5B9; }
+        `}</style>
+        <div className="vip-mini-footer-inner">
+          <span className="vip-mini-footer-copy">
+            © {new Date().getFullYear()} Highway 420. All rights reserved.
+          </span>
+          <nav className="vip-mini-footer-links" aria-label="Footer">
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/contact">Contact</Link>
+          </nav>
+        </div>
+      </footer>
     </>
   );
 }
