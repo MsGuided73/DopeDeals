@@ -74,7 +74,12 @@ export default function FloatingNav() {
     dropdownTimerRef.current = setTimeout(() => setOpenDropdown(null), 150);
   };
 
-  if (!isScrolled || pathname === "/cart" || pathname === "/checkout") {
+  // Hide on cart/checkout (transactional flows) and across the blog
+  // (reading experience — the floating category nav competes with article
+  // typography). `/blog/*` covers blog index + individual posts; the
+  // `/blog-portal` admin tool is intentionally not excluded here.
+  const isBlogRoute = pathname === "/blog" || pathname.startsWith("/blog/");
+  if (!isScrolled || pathname === "/cart" || pathname === "/checkout" || isBlogRoute) {
     return null;
   }
 
