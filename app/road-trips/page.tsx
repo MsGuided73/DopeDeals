@@ -372,14 +372,29 @@ export default function RoadTripsPage() {
           width: 100%;
           height: 100%;
           min-height: 150px;
+          aspect-ratio: 1 / 1;
           overflow: hidden;
           position: relative;
+        }
+        @media (min-width: 768px) {
+          /* On desktop, grid-auto-rows controls the height; drop the square ratio. */
+          .rt-photo { aspect-ratio: auto; }
         }
         .rt-photo img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center;
           display: block;
+        }
+        /* Defensive sweep — any direct image inside a Road Trips section
+           covers its container and never distorts. */
+        .rt-hero img,
+        .rt-card img,
+        .rt-explore-card img,
+        .rt-banner img {
+          object-fit: cover;
+          object-position: center;
         }
 
         /* ─── Ride With Us Banner ─── */

@@ -177,15 +177,22 @@ export default function FullscreenCarousel() {
           overflow: hidden;
           background: #000000;
           line-height: 0;
-          aspect-ratio: 2 / 1;
-          /* mobile masthead ≈ 70px */
-          max-height: calc(70vh - 35px);
-          max-height: calc(70svh - 35px);
+          /* Mobile: nearly square (4 / 5) so portrait & landscape source
+             images have room to breathe. The black background fills any
+             letterbox seamlessly, so no crop is ever required. */
+          aspect-ratio: 4 / 5;
+          max-height: calc(85vh - 35px);
+          max-height: calc(85svh - 35px);
           /* Establish a container so child copy can size with cqi units. */
           container-type: inline-size;
           container-name: carousel;
         }
 
+        @media (min-width: 640px) {
+          .carousel-wrap {
+            aspect-ratio: 3 / 2;
+          }
+        }
         @media (min-width: 768px) {
           .carousel-wrap {
             height: auto;
@@ -405,10 +412,11 @@ export default function FullscreenCarousel() {
         }
 
         @media (max-width: 767px) {
+          /* On phones, the slide image is the hero — hide the side text
+             panel so the image is fully visible without competition. The
+             slide is still tappable (the link wraps the whole carousel). */
           .carousel-copy {
-            width: 55%;
-            /* Keep left padding aligned with shield (16px) on mobile too. */
-            padding: 5% 4% 5% 16px;
+            display: none;
           }
         }
 
@@ -560,7 +568,11 @@ export default function FullscreenCarousel() {
               priority={idx === 0}
               style={{
                 objectPosition: slide.objectPosition ?? 'center center',
-                objectFit: slide.objectFit ?? 'cover',
+                /* Default to `contain` so the entire slide image is always
+                   visible regardless of viewport. The slide carousel-wrap's
+                   black background fills any letterboxing. Per-slide override
+                   is honored when a slide explicitly wants cover. */
+                objectFit: slide.objectFit ?? 'contain',
               }}
             />
             {slide.imageLabels?.map((label, i) => (

@@ -416,8 +416,10 @@ export default function H420VipClient() {
           padding: 0 0 80px;
         }
         .vip-form-grid {
-          max-width: 1280px;
-          margin: 0 auto;
+          /* Span the full viewport width — 50/50 image + form on desktop. */
+          max-width: none;
+          margin: 0;
+          width: 100%;
           display: grid;
           grid-template-columns: 1fr;
           gap: 0;
@@ -977,9 +979,9 @@ export default function H420VipClient() {
           .vip-mini-footer {
             background: #000000;
             color: rgba(255,255,255,0.78);
-            padding: 22px 24px;
+            padding: 28px 32px;
             font-family: 'Fira Sans','Inter',sans-serif;
-            font-size: 13px;
+            font-size: 14px;
           }
           .vip-mini-footer-inner {
             max-width: 1280px;
@@ -988,7 +990,26 @@ export default function H420VipClient() {
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 12px 24px;
+            gap: 16px 32px;
+          }
+          .vip-mini-footer-brand {
+            display: inline-flex;
+            align-items: center;
+            flex-shrink: 0;
+          }
+          .vip-mini-footer-brand img {
+            height: 115px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+            /* Black PNG → render white on the black footer */
+            filter: brightness(0) invert(1);
+          }
+          .vip-mini-footer-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
           }
           .vip-mini-footer-copy {
             color: rgba(255,255,255,0.65);
@@ -997,7 +1018,7 @@ export default function H420VipClient() {
           .vip-mini-footer-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 18px;
+            gap: 22px;
           }
           .vip-mini-footer-links a {
             color: rgba(255,255,255,0.85);
@@ -1005,20 +1026,36 @@ export default function H420VipClient() {
             font-weight: 600;
             letter-spacing: 0.04em;
             text-transform: uppercase;
-            font-size: 12px;
+            font-size: 13px;
             transition: color 0.15s;
           }
           .vip-mini-footer-links a:hover { color: #C8D5B9; }
+          @media (max-width: 640px) {
+            .vip-mini-footer-inner {
+              justify-content: center;
+              text-align: center;
+            }
+            .vip-mini-footer-meta { align-items: center; }
+            .vip-mini-footer-brand img { height: 100px; }
+          }
         `}</style>
         <div className="vip-mini-footer-inner">
-          <span className="vip-mini-footer-copy">
-            © {new Date().getFullYear()} Highway 420. All rights reserved.
-          </span>
-          <nav className="vip-mini-footer-links" aria-label="Footer">
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
+          <Link href="/" className="vip-mini-footer-brand" aria-label="Highway 420 home">
+            <img
+              src={`${ASSETS}/Logos/H420_logo/Black%20LogoTB.png`}
+              alt="Highway 420"
+            />
+          </Link>
+          <div className="vip-mini-footer-meta">
+            <nav className="vip-mini-footer-links" aria-label="Footer">
+              <Link href="/privacy">Privacy</Link>
+              <Link href="/terms">Terms</Link>
+              <Link href="/contact">Contact</Link>
+            </nav>
+            <span className="vip-mini-footer-copy">
+              © {new Date().getFullYear()} Highway 420. All rights reserved.
+            </span>
+          </div>
         </div>
       </footer>
     </>

@@ -168,7 +168,15 @@ export default function RoadTripsSection() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center;
+          display: block;
           transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        /* Defensive sweep — every image inside a Road Trips card covers
+           its container and never distorts, regardless of class. */
+        .rt-section img {
+          object-fit: cover;
+          object-position: center;
         }
         .rt-featured:hover .rt-media img,
         .rt-card:hover .rt-media img {
