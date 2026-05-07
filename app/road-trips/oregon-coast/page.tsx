@@ -149,10 +149,15 @@ export default function OregonCoastPage() {
           --rt-green-bright: #1B7A4D;
         }
         .rtd-wrap {
-          max-width: 1440px;
+          width: 100%;
+          max-width: 100%;
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 0 16px;
+          box-sizing: border-box;
         }
+        @media (min-width: 640px)  { .rtd-wrap { padding: 0 24px; } }
+        @media (min-width: 1024px) { .rtd-wrap { padding: 0 40px; } }
+        @media (min-width: 1440px) { .rtd-wrap { padding: 0 64px; } }
         h2.rtd-title, h3.rtd-card-title {
           font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
           font-weight: 400;
@@ -205,10 +210,14 @@ export default function OregonCoastPage() {
         }
         .rtd-hero-inner {
           width: 100%;
-          max-width: 1440px;
+          max-width: 100%;
           margin: 0 auto;
-          padding: 48px 24px 56px;
+          padding: 32px 16px 40px;
+          box-sizing: border-box;
         }
+        @media (min-width: 640px)  { .rtd-hero-inner { padding: 40px 24px 48px; } }
+        @media (min-width: 1024px) { .rtd-hero-inner { padding: 48px 40px 56px; } }
+        @media (min-width: 1440px) { .rtd-hero-inner { padding: 56px 64px 64px; } }
         .rtd-hero h1 {
           font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
           font-weight: 400;
@@ -346,7 +355,7 @@ export default function OregonCoastPage() {
           align-items: start;
         }
         @media (min-width: 1024px) {
-          .rtd-ride-grid { grid-template-columns: 280px 1fr; gap: 48px; }
+          .rtd-ride-grid { grid-template-columns: 1fr 2fr; gap: 48px; }
         }
         .rtd-ride-copy h2 {
           font-family: "Fira Sans", "Inter", sans-serif;
@@ -385,7 +394,7 @@ export default function OregonCoastPage() {
         /* Route map placeholder — corridor variant */
         .rtd-map {
           position: relative;
-          aspect-ratio: 16/10;
+          aspect-ratio: 21/9;
           border-radius: 12px;
           overflow: hidden;
           background:
@@ -570,6 +579,10 @@ export default function OregonCoastPage() {
           color: #fff;
           padding: 56px 0;
           margin-top: 48px;
+        }
+        /* Section background stays edge-to-edge; content is capped + centered. */
+        .rtd-kits .rtd-wrap {
+          max-width: 1200px;
         }
         .rtd-kits-header {
           text-align: center;
