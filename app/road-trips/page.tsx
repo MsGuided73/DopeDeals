@@ -152,7 +152,15 @@ export default function RoadTripsPage() {
           border-bottom: 1px solid #d1d5db;
         }
         .rt-section-title {
-          font-size: clamp(32px, 4vw, 42px);
+          /* Landing-page section-header weight (Fira Sans 800, tight
+             tracking, uppercase). Sized to match the .rt-banner h2 rule
+             below so the section labels and the RIDE WITH US banner
+             read at the same typographic level across the page. */
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-weight: 800;
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
+          font-size: clamp(28px, 3.5vw, 44px);
           color: #111111;
         }
         .rt-view-all {
@@ -419,7 +427,13 @@ export default function RoadTripsPage() {
           z-index: 2;
         }
         .rt-banner h2 {
-          font-size: clamp(40px, 6vw, 64px);
+          /* Same Fira Sans 800 treatment as landing-page section headers,
+             scaled to this banner's footprint. */
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-weight: 800;
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
+          font-size: clamp(28px, 3.5vw, 44px);
           position: relative;
           z-index: 2;
           margin-bottom: 12px;

@@ -329,10 +329,11 @@ export default function OregonCoastPage() {
           .rtd-ride-grid { grid-template-columns: 280px 1fr; gap: 48px; }
         }
         .rtd-ride-copy h2 {
-          font-family: "Inter", "Fira Sans", sans-serif;
-          font-size: clamp(22px, 2.4vw, 28px);
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-size: clamp(28px, 3.5vw, 44px);
           font-weight: 800;
           letter-spacing: -0.01em;
+          text-transform: uppercase;
           line-height: 1.2;
           color: var(--rt-ink);
           margin: 8px 0 14px;
@@ -441,10 +442,11 @@ export default function OregonCoastPage() {
         }
         .rtd-stops-header .rtd-eyebrow { display: inline-block; }
         .rtd-stops-header h2 {
-          font-family: "Inter", "Fira Sans", sans-serif;
-          font-size: clamp(28px, 3.2vw, 36px);
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-size: clamp(28px, 3.5vw, 44px);
           font-weight: 800;
           letter-spacing: -0.01em;
+          text-transform: uppercase;
           color: var(--rt-ink);
           margin: 6px 0 0;
         }
@@ -554,10 +556,11 @@ export default function OregonCoastPage() {
           margin-bottom: 32px;
         }
         .rtd-kits-header h2 {
-          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
-          font-weight: 400;
-          font-size: clamp(34px, 4vw, 46px);
-          letter-spacing: 0.02em;
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-weight: 800;
+          font-size: clamp(28px, 3.5vw, 44px);
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
           color: #fff;
           margin: 0 0 6px;
         }
@@ -674,10 +677,10 @@ export default function OregonCoastPage() {
           margin-bottom: 22px;
         }
         .rtd-community-header h2 {
-          font-family: "Inter", "Fira Sans", sans-serif;
-          font-size: clamp(22px, 2.4vw, 28px);
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-size: clamp(28px, 3.5vw, 44px);
           font-weight: 800;
-          letter-spacing: 0.02em;
+          letter-spacing: -0.01em;
           text-transform: uppercase;
           color: var(--rt-ink);
           margin: 4px 0 6px;
@@ -751,10 +754,11 @@ export default function OregonCoastPage() {
           margin-bottom: 22px;
         }
         .rtd-keep-header h2 {
-          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
-          font-weight: 400;
-          font-size: clamp(28px, 3vw, 36px);
-          letter-spacing: 0.04em;
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-weight: 800;
+          font-size: clamp(28px, 3.5vw, 44px);
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
           color: var(--rt-ink);
           margin: 0;
         }
@@ -849,10 +853,11 @@ export default function OregonCoastPage() {
             linear-gradient(135deg, #243a2c 0%, #1a1a1a 100%);
         }
         .rtd-join h2 {
-          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif;
-          font-weight: 400;
-          font-size: clamp(36px, 5vw, 56px);
-          letter-spacing: 0.04em;
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-weight: 800;
+          font-size: clamp(28px, 3.5vw, 44px);
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
           color: #fff;
           margin: 0 0 8px;
         }

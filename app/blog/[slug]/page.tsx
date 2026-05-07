@@ -63,7 +63,8 @@ export default function BlogPostPage({ params }: PageProps) {
             <span className="inline-block px-4 py-1.5 bg-dope-orange text-white text-sm font-bold rounded-full uppercase tracking-wider">
               {post.category}
             </span>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight font-display-twilight shadow-sm">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight shadow-sm"
+                style={{ fontFamily: "'Fira Sans','Inter',sans-serif", letterSpacing: '0.02em' }}>
               {post.title}
             </h1>
             <div className="flex items-center space-x-6 text-gray-300 text-sm md:text-base">

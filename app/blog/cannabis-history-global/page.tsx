@@ -128,7 +128,7 @@ export default function CannabisHistoryArticle() {
         <div className="bg-white text-black p-8 md:p-12 lg:p-16 rounded-sm shadow-[0_0_40px_rgba(255,107,53,0.1)] border-4 border-[#ff6b35] relative mb-20 overflow-hidden">
           <article className="prose prose-lg prose-gray max-w-none">            {/* Ancient Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 mt-0">Ancient Beginnings: The OG Days</h2>
+            <h2 className="text-3xl font-fira-heading text-gray-900 mb-6 mt-0">Ancient Beginnings: The OG Days</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               We're talking way back – like 10,000+ years ago. Archaeological evidence shows humans have been cultivating cannabis longer than we've had written language. This plant didn't just grow; it was one of our first agricultural experiments.
             </p>
@@ -154,7 +154,7 @@ export default function CannabisHistoryArticle() {
           
           {/* Colonial Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Colonial America: Hemp Hustle</h2>
+            <h2 className="text-3xl font-fira-heading text-gray-900 mb-6">Colonial America: Hemp Hustle</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               Fast forward to the 1600s, and cannabis hits North America through European colonization.
               But here's the plot twist – it wasn't about getting high. It was about getting rich.
@@ -189,7 +189,7 @@ export default function CannabisHistoryArticle() {
 
           {/* Prohibition Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">The Dark Ages: Prohibition & Propaganda</h2>
+            <h2 className="text-3xl font-fira-heading text-gray-900 mb-6">The Dark Ages: Prohibition & Propaganda</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               Despite thousands of years of productive use, the 20th century brought the hammer down.
               A combination of racism, politics, and corporate greed turned cannabis from medicine to menace.
@@ -219,7 +219,7 @@ export default function CannabisHistoryArticle() {
 
           {/* Counterculture Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">The Revolution: Counterculture & Comeback</h2>
+            <h2 className="text-3xl font-fira-heading text-gray-900 mb-6">The Revolution: Counterculture & Comeback</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               Cannabis never really went away. The 1960s and 1970s counterculture movement brought it back into the spotlight,
               and this time it wasn't going anywhere.
@@ -248,7 +248,7 @@ export default function CannabisHistoryArticle() {
 
           {/* Modern Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Modern Renaissance: Legalization & Innovation</h2>
+            <h2 className="text-3xl font-fira-heading text-gray-900 mb-6">Modern Renaissance: Legalization & Innovation</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               Today, cannabis is experiencing a renaissance. From medical breakthroughs to technological innovations,
               the plant is being appreciated for its full potential.
@@ -281,7 +281,7 @@ export default function CannabisHistoryArticle() {
 
           {/* Future Section */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">The Future: Where We're Headed</h2>
+            <h2 className="text-3xl font-fira-heading text-gray-900 mb-6">The Future: Where We're Headed</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
               Cannabis has come full circle – from ancient medicine to prohibition and back to mainstream acceptance.
               As legalization expands globally, new research and technology continue shaping how we use and understand this remarkable plant.
@@ -300,7 +300,7 @@ export default function CannabisHistoryArticle() {
 
           {/* Conclusion */}
           <div className="bg-gray-900 text-white p-8 rounded-lg text-center mt-12 mb-8">
-            <h2 className="text-2xl font-bold mb-4">One Thing's Clear: Cannabis is Here to Stay</h2>
+            <h2 className="text-2xl font-fira-heading mb-4">One Thing's Clear: Cannabis is Here to Stay</h2>
             <p className="text-lg text-gray-300 leading-relaxed">
               After 10,000+ years of human relationship with this plant, one thing is crystal clear:
               cannabis isn't going anywhere. It's evolved from ancient medicine to modern industry,

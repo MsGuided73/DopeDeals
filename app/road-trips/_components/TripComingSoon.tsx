@@ -161,10 +161,11 @@ export default function TripComingSoon({
           text-align: center;
         }
         .tcs-body h2 {
-          font-family: 'Inter','Fira Sans',sans-serif;
-          font-size: clamp(24px, 2.6vw, 30px);
+          font-family: 'Fira Sans','Inter',sans-serif;
+          font-size: clamp(28px, 3.5vw, 44px);
           font-weight: 800;
           letter-spacing: -0.01em;
+          text-transform: uppercase;
           color: var(--rt-ink);
           margin: 0 0 14px;
         }

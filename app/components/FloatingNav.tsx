@@ -74,12 +74,18 @@ export default function FloatingNav() {
     dropdownTimerRef.current = setTimeout(() => setOpenDropdown(null), 150);
   };
 
-  // Hide on cart/checkout (transactional flows) and across the blog
-  // (reading experience — the floating category nav competes with article
-  // typography). `/blog/*` covers blog index + individual posts; the
-  // `/blog-portal` admin tool is intentionally not excluded here.
-  const isBlogRoute = pathname === "/blog" || pathname.startsWith("/blog/");
-  if (!isScrolled || pathname === "/cart" || pathname === "/checkout" || isBlogRoute) {
+  // Hide on cart/checkout (transactional flows) and across all
+  // long-form reading surfaces — both the `/blog/*` tree and the
+  // `/higher-learning/*` article tree (Highway 420 treats Higher
+  // Learning as part of "the blog section"). The floating category
+  // nav competes with article typography on these pages.
+  // The `/blog-portal` admin tool is intentionally NOT excluded.
+  const isReadingRoute =
+    pathname === "/blog" ||
+    pathname.startsWith("/blog/") ||
+    pathname === "/higher-learning" ||
+    pathname.startsWith("/higher-learning/");
+  if (!isScrolled || pathname === "/cart" || pathname === "/checkout" || isReadingRoute) {
     return null;
   }
 

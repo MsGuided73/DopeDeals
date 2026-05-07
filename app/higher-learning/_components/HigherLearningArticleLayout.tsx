@@ -81,7 +81,8 @@ export default async function HigherLearningArticleLayout(
         {/* Header: title + deck on the left, hero image on the right */}
         <header className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 mb-10">
           <div className="lg:col-span-6 flex flex-col justify-center order-2 lg:order-1">
-            <h1 className="font-bold text-3xl md:text-4xl lg:text-[44px] leading-[1.1] text-neutral-900 mb-4">
+            <h1 className="font-bold text-3xl md:text-4xl lg:text-[44px] leading-[1.1] text-neutral-900 mb-4"
+                style={{ fontFamily: "'Fira Sans','Inter',sans-serif", letterSpacing: '0.02em' }}>
               {props.title}
             </h1>
             <p className="text-base text-neutral-600 leading-relaxed mb-5 max-w-md">

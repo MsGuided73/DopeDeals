@@ -123,7 +123,7 @@ export default function BlogPage() {
       {featuredPost && (
         <section className="py-32 px-4 md:px-8 max-w-[1920px] mx-auto">
           <div className="flex items-baseline justify-between mb-12 border-b border-white/10 pb-4">
-             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white">
+             <h2 className="text-5xl md:text-7xl font-fira-heading uppercase text-white">
                Featured <span className="text-stroke-1 text-transparent stroke-white" style={{ WebkitTextStroke: '1px white' }}>Story</span>
              </h2>
              <span className="hidden md:block text-[#ff6b35] font-mono text-sm">[01]</span>
@@ -149,7 +149,7 @@ export default function BlogPage() {
                    <span className="bg-[#ff6b35] text-black px-3 py-1 text-xs font-bold uppercase tracking-widest">Featured</span>
                    <span className="text-white/60 text-sm font-mono">{featuredPost.readTime || '5 min'} READ</span>
                 </div>
-                <h3 className="text-4xl md:text-7xl font-black uppercase leading-[0.9] mb-6 group-hover:text-[#ff6b35] transition-colors duration-300">
+                <h3 className="text-4xl md:text-7xl font-fira-heading uppercase leading-[0.9] mb-6 group-hover:text-[#ff6b35] transition-colors duration-300">
                   {featuredPost.title}
                 </h3>
                 <p className="text-lg md:text-2xl text-gray-300 max-w-2xl font-light leading-relaxed mb-8 line-clamp-3">
@@ -199,7 +199,7 @@ export default function BlogPage() {
              <GlobalBreadcrumbs paths={[{ name: "The High Chronicles" }]} />
 
              <div className="flex items-baseline justify-between mb-12 border-b border-white/10 pb-4 mt-6">
-                <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+                <h2 className="text-4xl md:text-6xl font-fira-heading uppercase text-white">
                   The <span className="text-[#ff6b35]">Feed</span>
                 </h2>
                 <div className="flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full focus-within:border-[#ff6b35] transition-colors">

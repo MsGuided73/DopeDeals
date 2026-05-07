@@ -67,21 +67,52 @@ HIGHWAY 420
 
 #### **Typography Hierarchy**
 
-**Headlines (H1-H2)**
-- **Font**: Highway Gothic (NEVER BOLD)
-- **Weight**: Normal (400) - CRITICAL: Never use bold
-- **Sizes**:
-  - H1: 3xl-6xl (mobile-desktop)
-  - H2: 2xl-4xl (mobile-desktop)
-- **Color**: White or Orange
-- **Treatment**: All caps, tight tracking (-0.02em)
+**Section Headers — Landing page section h2s, category hero H1s** *(canonical preference, established 2026-05-07)*
+- **Font**: **Fira Sans 800** (heavy bold sans-serif)
+- **Weight**: 800
+- **Letter-spacing**: -0.01em (tight)
+- **Sizes**: clamp(32px, 5vw, 64px) for section h2; clamp(48px, 5vw, 80px) for category hero h1
+- **Color**: Brand dark `#1c1208` / `#0E2A1A` / `#111111` (varies per surface), or white on dark backgrounds
+- **Treatment**: All caps, tight tracking
+- **Implementation**: `className="font-fira-heading"` (utility class with `!important` rules in [globals.css](app/globals.css)) OR inline `style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontWeight: 800, letterSpacing: '-0.01em' }}`
+- **Why**: Tested Bebas Neue (too skinny — even at 64px reads spindly), Anton (didn't load reliably from Google Fonts), Archivo Black (too geometrically stretched), text-stroke hacks (made Bebas look puffy). Fira Sans 800 is reliably loaded site-wide via Google Fonts (weights 400–800 imported), reads as substantial brand-weight, and matches what production rendered before the global `!important` cleanup.
 
-**Subheadings (H3-H4)**
-- **Font**: Highway Gothic (NEVER BOLD)
-- **Weight**: Normal (400) - CRITICAL: Never use bold
+**Article Titles — Blog post H1s, Higher Learning post H1s**
+- **Font**: Fira Sans (same family as section headers, lighter weight)
+- **Weight**: 700 (Tailwind `font-bold`) — slightly less heavy than section headers
+- **Letter-spacing**: **0.02em** (slightly open — reads as a magazine headline rather than crammed)
+- **Sizes**: clamp(28px, 4vw, 44px) — smaller than section/hero h1 since article body should hold more weight
+- **Treatment**: Sentence case (NOT uppercase) — they're long-form titles, not labels
+- **Why this differs from section headers**: Long article titles ("THCA: The Legal Alternative in States Without Medical or Recreational THC") cram visually with the tighter `-0.01em` tracking that works for short uppercase section labels. Looser tracking + lighter weight reads as editorial.
+- **Implementation**: Tailwind `font-bold` className + inline `style={{ fontFamily: "'Fira Sans','Inter',sans-serif", letterSpacing: '0.02em' }}`
+
+**Brand Display — Carousel hero headlines (and only those)**
+- **Font**: BebasNeue (self-hosted from Supabase)
+- **Weight**: 400 (single-weight font)
+- **Sizes**: clamp(34px, 7cqi, 175px) hero variant; clamp(22px, 6cqi, 220px) header variant
+- **Treatment**: Uppercase, condensed
+- **Implementation**: Local CSS in [FullscreenCarousel.tsx](app/components/FullscreenCarousel.tsx) — explicitly Bebas
+- **Why**: Carousel is a hero/display moment where the condensed road-sign aesthetic is the point. Acceptable to differ from the rest of the site here.
+
+**Editorial Accent — "High Praise" reviews section, similar editorial surfaces**
+- **Font**: Inter Black (900)
+- **Weight**: 900
+- **Letter-spacing**: -0.03em
+- **Treatment**: Title Case (NOT uppercase)
+- **Implementation**: `className="font-serif-heading"` (utility class)
+- **Use sparingly** — only when an editorial/magazine voice is intended. Don't use for routine section headers; it'll fight the brand.
+
+**Subheadings (H3-H4) — Body context**
+- **Font**: Highway Gothic (NEVER BOLD) on brand surfaces; Inter on utility/admin surfaces
+- **Weight**: Normal (400)
 - **Sizes**: xl-2xl
-- **Color**: White, Gray-100, or Gold
 - **Treatment**: Sentence case or Title Case, tight tracking (-0.01em)
+- Highway Gothic / `.font-chalets` rule is **never bold** — `font-weight: normal !important` enforced globally.
+
+**Utility / Dense surfaces** *(admin, checkout, account, legal pages)*
+- Default heading font is Fira Sans 800 via the `.font-fira-heading` wrapper applied at the layout/page level.
+- These wrappers are already in place across `/admin`, `/account`, `/orders`, `/checkout`, `/cart`, and the legal pages (`/terms`, `/privacy`, `/shipping`, `/help`, `/returns`, `/compliance`, `/sitemap-page`, `/signin`, `/forgot-password`).
+- Don't change these to Bebas or any condensed display face — they're transactional/dense surfaces where condensed reads wrong.
 
 **Body Text**
 - **Font**: Inter (fallback to system fonts)

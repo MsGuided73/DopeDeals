@@ -256,22 +256,25 @@ export default function FullscreenCarousel() {
           padding-bottom: clamp(8px, 1.0cqi, 24px);
         }
         .carousel-copy-headline {
-          font-family: 'BebasNeue', 'Bebas Neue', 'Impact', sans-serif;
-          /* Scales with the carousel's inline (width) size via container
-             query units. Bumped back up to the pre-bullets size now that
-             Bebas Neue is actually rendering — the prior 4.5cqi assumed
-             the global !important was forcing chunky Fira Sans 800,
-             which filled more horizontal space per character than the
-             condensed Bebas the local CSS had specified all along. */
-          font-size: clamp(22px, 6cqi, 220px);
+          /* Header-variant carousel slides (3/4/6 — VIP Membership,
+             Bundles, Dab Rigs) — Fira Sans 800. This is the canonical
+             "before" rendering: prior to the global !important cleanup
+             the rule was being silently overridden to Fira Sans 800;
+             rather than rely on that override, set it explicitly here
+             so the original visual is reproducible without depending on
+             a global side-effect. Hero-variant (slides 1/7) stays Bebas
+             via .carousel-hero-headline below. Size held at 4.5cqi/170px
+             (NOT bumped) because Fira Sans 800 occupies more horizontal
+             space per glyph than Bebas — leaving the panel headroom for
+             bullets/CTA below. */
+          font-family: "Fira Sans", "Inter", sans-serif;
+          font-size: clamp(16px, 4.5cqi, 170px);
           line-height: 0.9;
-          font-weight: 400;
-          letter-spacing: -0.04em;
+          font-weight: 800;
+          letter-spacing: -0.02em;
           text-transform: uppercase;
           color: #0a0a0a;
           margin: 0 0 clamp(6px, 1.2cqi, 28px) 0;
-          transform: scaleX(0.92);
-          transform-origin: left center;
         }
         .carousel-copy-tagline {
           font-size: clamp(8px, 1.05cqi, 24px);
