@@ -99,10 +99,12 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
     alt: 'Highway 420 — Dab Rigs',
     href: '/dabsntools',
     objectPosition: 'center center',
-    /* This slide's image is meant to sit on a light/white background.
-       Without this override the carousel-wrap's default black shows
-       through the contain-letterbox and swallows the dark text panel. */
-    bgColor: '#ffffff',
+    /* Warm cream that matches the actual background color baked into
+       "Dab Final A.png" (see iPhone reference where the image fills the
+       full width). Without this override the carousel-wrap's default
+       black shows through the contain-letterbox and creates a hard seam
+       beside the cream image edge. */
+    bgColor: '#ebe2cc',
     copy: {
       eyebrow: 'Tech. Flavor. Elevated.',
       headline: <>Dab Rigs</>,
@@ -217,13 +219,7 @@ export default function FullscreenCarousel() {
           inset: 0;
           width: 100%;
           height: 100%;
-          object-fit: contain;
-        }
-
-        @media (min-width: 1024px) {
-          .carousel-slide-img {
-            object-fit: contain;
-          }
+          object-fit: cover;
         }
 
         /* Slide copy panel — left-side text block, no background wash. */
@@ -415,15 +411,6 @@ export default function FullscreenCarousel() {
           height: clamp(13px, 1.5cqi, 28px);
         }
 
-        @media (max-width: 767px) {
-          /* On phones, the slide image is the hero — hide the side text
-             panel so the image is fully visible without competition. The
-             slide is still tappable (the link wraps the whole carousel). */
-          .carousel-copy {
-            display: none;
-          }
-        }
-
         /* Image-overlay labels — captions placed on top of the slide image
            (not the copy panel). Centered horizontally on the supplied left
            value via translateX(-50%); styled to mirror the cannabis-leaf
@@ -576,11 +563,11 @@ export default function FullscreenCarousel() {
               priority={idx === 0}
               style={{
                 objectPosition: slide.objectPosition ?? 'center center',
-                /* Default to `contain` so the entire slide image is always
-                   visible regardless of viewport. The slide carousel-wrap's
-                   black background fills any letterboxing. Per-slide override
-                   is honored when a slide explicitly wants cover. */
-                objectFit: slide.objectFit ?? 'contain',
+                /* Default to `cover` so the image fills the slide edge-to-edge
+                   with no letterbox bands — matches the behavior of the
+                   product-category cards (CollectionsGrid). Per-slide override
+                   to `contain` for logo-style images that must not crop. */
+                objectFit: slide.objectFit ?? 'cover',
               }}
             />
             {slide.imageLabels?.map((label, i) => (

@@ -136,17 +136,23 @@ export default function H420VipClient() {
           width: auto;
           filter: drop-shadow(0 4px 14px rgba(0,0,0,0.5));
         }
-        /* Text block: shifted left of the inner container on desktop. */
+        /* Text block. On very wide monitors (>=1680px) we let it break
+           out of the 1440px inner container by 120px for a deliberate
+           off-grid feel. Below that, the inner container's gutter is
+           too small to absorb the offset and the headline/shield/CTA
+           bleed off the left edge of the viewport — so keep it flush. */
         .vip-hero-text {
           margin-left: 0;
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1680px) {
           .vip-hero-text { margin-left: -120px; }
         }
         .vip-hero h1 {
           font-family: 'BebasNeue','Bebas Neue','Impact',sans-serif;
           font-weight: 400;
-          font-size: clamp(88px, 12vw, 160px);
+          /* Floor lowered from 88px so the headline fits a 320px phone
+             without horizontal overflow. 12vw still scales up cleanly. */
+          font-size: clamp(44px, 12vw, 160px);
           line-height: 0.86;
           letter-spacing: 0.01em;
           margin: 0 0 24px;
@@ -235,6 +241,55 @@ export default function H420VipClient() {
           font-weight: 500;
           font-size: 16px;
           margin-top: 2px;
+        }
+
+        /* Hero — phone scaling. Hero was authored desktop-first; on phones
+           the shield, trust pills, and CTA need to shrink so they fit a
+           320–480px viewport without horizontal overflow. */
+        @media (max-width: 767px) {
+          .vip-hero {
+            min-height: clamp(440px, 70vh, 600px);
+          }
+          .vip-hero-inner {
+            padding: 36px 18px;
+          }
+          .vip-hero-shield {
+            margin-bottom: 22px;
+          }
+          .vip-hero-shield img {
+            height: 88px;
+          }
+          .vip-hero-tagline {
+            font-size: 15px;
+            margin-bottom: 22px;
+          }
+          .vip-hero-cta {
+            padding: 14px 22px;
+            font-size: 13px;
+            letter-spacing: 0.10em;
+            gap: 8px;
+          }
+          .vip-trust-row {
+            gap: 14px 22px;
+            margin-top: 28px;
+          }
+          .vip-trust-pill {
+            gap: 10px;
+          }
+          .vip-trust-pill-icon {
+            width: 36px;
+            height: 36px;
+          }
+          .vip-trust-pill-icon svg {
+            width: 16px;
+            height: 16px;
+          }
+          .vip-trust-pill-text {
+            font-size: 13px;
+          }
+          .vip-trust-pill-text small {
+            font-size: 11px;
+          }
         }
 
         /* ── Section: Perks ─────────────────────────────── */
@@ -857,7 +912,7 @@ export default function H420VipClient() {
             </div>
             <div className="vip-form-card">
               <p className="vip-form-eyebrow">Join the Ride</p>
-              <h2>Become a VIP Member</h2>
+              <h2 className="font-bebas">Become a VIP Member</h2>
 
               {success ? (
                 <div className="vip-form-success">
@@ -920,7 +975,7 @@ export default function H420VipClient() {
         {/* ── 4. How It Works ─────────────────────── */}
         <section className="vip-how">
           <p className="vip-eyebrow">How It Works</p>
-          <h2 className="vip-how-title">Join. Unlock. Enjoy.</h2>
+          <h2 className="vip-how-title font-bebas">Join. Unlock. Enjoy.</h2>
 
           <div className="vip-how-grid">
             <div className="vip-how-step">
