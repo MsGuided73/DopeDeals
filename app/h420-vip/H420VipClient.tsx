@@ -1008,8 +1008,6 @@ export default function H420VipClient() {
             width: auto;
             object-fit: contain;
             display: block;
-            /* Black PNG → render white on the black footer */
-            filter: brightness(0) invert(1);
           }
           .vip-mini-footer-meta {
             display: flex;
@@ -1048,7 +1046,7 @@ export default function H420VipClient() {
         <div className="vip-mini-footer-inner">
           <Link href="/" className="vip-mini-footer-brand" aria-label="Highway 420 home">
             <img
-              src={`${ASSETS}/Logos/H420_logo/Black%20LogoTB.png`}
+              src={`${ASSETS}/Logos/H420_logo/logo_Highway420-official_transparent.png`}
               alt="Highway 420"
             />
           </Link>
