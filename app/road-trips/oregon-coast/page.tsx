@@ -18,7 +18,7 @@ export const metadata = {
 };
 
 const HERO_IMAGE =
-  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon%20Coastal%20Sessions.png";
+  "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/oregon%20sessions%20hero.png";
 
 const COMMUNITY_BASE =
   "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/General%20Community";
@@ -45,19 +45,19 @@ const STOPS: Stop[] = [
     n: "01",
     name: "Cliffside Pull-Off",
     bullets: ["Wide ocean views", "Space to set up", "Low traffic"],
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Oregon%20stop%201.png",
   },
   {
     n: "02",
     name: "Forest Overlook",
     bullets: ["More private", "Wind protection", "Chill vibe"],
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Oregon%20stop%202.png",
   },
   {
     n: "03",
     name: "Hidden Beach Access",
     bullets: ["Short walk", "Best at sunset", "Bring good shoes"],
-    image: "",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Oregon%20stop%203.png",
   },
 ];
 
@@ -75,25 +75,25 @@ const KITS: Kit[] = [
     name: "Pre-Roll Kit",
     blurb: "Simple. Portable. Ready anywhere.",
     cta: "Shop Pre-Roll Gear",
-    href: "/shop/pre-roll",
+    href: "/bundles",
     icon: "leaf",
-    image: `${COMMUNITY_BASE}/Pre-roll%20travel%20kit.png`,
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Preroll%20Kit%20Oregon.png",
   },
   {
     name: "Bong Kit",
     blurb: "Smooth sessions, wherever you stop.",
     cta: "Shop Bong Setups",
-    href: "/shop/bongs",
+    href: "/bundles",
     icon: "flask",
-    image: `${COMMUNITY_BASE}/Bong%20travel%20kit.png`,
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Bong%20Kit%20Oregon.png",
   },
   {
     name: "Dab Kit",
     blurb: "High-performance, road-ready.",
     cta: "Shop Dab Rigs",
-    href: "/shop/dab-rigs",
+    href: "/bundles",
     icon: "drop",
-    image: `${COMMUNITY_BASE}/Dab%20Travel%20Kit%20image.png`,
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Dab%20Kit%20Oregon.png",
   },
 ];
 
@@ -105,10 +105,30 @@ type KeepRiding = {
 };
 
 const KEEP_RIDING: KeepRiding[] = [
-  { name: "Malibu Sessions", region: "California", href: "/road-trips/malibu", image: "" },
-  { name: "Big Sur Adventure", region: "California", href: "/road-trips/big-sur", image: "" },
-  { name: "PDX Day Sessions", region: "Oregon", href: "/road-trips/pdx", image: "" },
-  { name: "Lake Tahoe Escape", region: "California / Nevada", href: "/road-trips/lake-tahoe", image: "" },
+  {
+    name: "Malibu Sessions",
+    region: "California",
+    href: "/road-trips/malibu",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Malbu%20Keep%20Riding.png",
+  },
+  {
+    name: "Big Sur Adventure",
+    region: "California",
+    href: "/road-trips/big-sur",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Big%20Sur%20Keep%20Riding.png",
+  },
+  {
+    name: "PDX Day Sessions",
+    region: "Oregon",
+    href: "/road-trips/pdx",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/PDX%20Keep%20riding.png",
+  },
+  {
+    name: "Lake Tahoe Escape",
+    region: "California / Nevada",
+    href: "/road-trips/lake-tahoe",
+    image: "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Tahoe%20Keep%20riding.png",
+  },
 ];
 
 export default function OregonCoastPage() {
@@ -850,6 +870,7 @@ export default function OregonCoastPage() {
           z-index: -2;
           background:
             linear-gradient(180deg, rgba(20,20,20,0.55), rgba(20,20,20,0.85)),
+            url("https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Oregon%20session%20the%20Ride.png") center/cover no-repeat,
             linear-gradient(135deg, #243a2c 0%, #1a1a1a 100%);
         }
         .rtd-join h2 {
@@ -957,36 +978,16 @@ export default function OregonCoastPage() {
             </Link>
           </div>
 
-          {/* Route map placeholder — corridor variant */}
-          <div className="rtd-map" aria-label="Route map">
-            <svg className="rtd-map-svg" viewBox="0 0 800 500" preserveAspectRatio="none" aria-hidden="true">
-              {/* Ocean wash on the left edge */}
-              <path
-                d="M0,0 L120,0 Q90,250 130,500 L0,500 Z"
-                fill="rgba(120, 165, 180, 0.18)"
-              />
-              {/* Highway 101 — soft S-curve down the spine */}
-              <path
-                d="M170,30 C 240,140 200,260 280,340 C 360,420 340,460 410,490"
-                stroke="#1F4D2E"
-                strokeWidth="3.5"
-                strokeDasharray="6 8"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <path
-                d="M170,30 C 240,140 200,260 280,340 C 360,420 340,460 410,490"
-                stroke="rgba(31, 77, 46, 0.18)"
-                strokeWidth="14"
-                fill="none"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="rtd-map-label" style={{ left: '4%', top: '6%' }}>Pacific Ocean</span>
-            <span className="rtd-map-label" style={{ right: '6%', top: '8%' }}>Coast Range</span>
-            <div className="rtd-map-pin" style={{ left: '32%', top: '18%' }}>Cliffside Pull-Off</div>
-            <div className="rtd-map-pin" style={{ left: '40%', top: '52%' }}>Forest Overlook</div>
-            <div className="rtd-map-pin" style={{ left: '58%', top: '88%' }}>Hidden Beach Access</div>
+          {/* Route map — Oregon coast session photo standing in for the
+              illustrated map placeholder. Inherits .rtd-map's aspect-ratio
+              16/10, border-radius, and overflow:hidden so the image fits
+              the same slot the SVG corridor used to occupy. */}
+          <div className="rtd-map" aria-label="Oregon Coast route">
+            <img
+              src="https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Road-Trips/Oregon/Oregon%20session%20the%20Ride.png"
+              alt="Oregon Coast Sessions — the ride"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
         </div>
       </section>

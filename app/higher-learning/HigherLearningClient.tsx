@@ -139,13 +139,10 @@ export default function HigherLearningClient() {
       <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
         <div>
           <h1
-            className="font-bebas text-[#0E2A1F] uppercase"
+            className="font-fira-heading text-[#0E2A1F] uppercase"
             style={{
-              fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
-              fontSize: "clamp(48px, 7vw, 88px)",
+              fontSize: "clamp(36px, 5vw, 64px)",
               lineHeight: 0.95,
-              letterSpacing: "0.01em",
-              fontWeight: 400,
               margin: 0,
             }}
           >
@@ -228,10 +225,10 @@ export default function HigherLearningClient() {
 
       {/* ─── Explore By Topic ───────────────────────────────────────────────── */}
       <div id="all-articles" className="mb-20">
-        <div className="text-center mb-10">
-          <h3 className="font-bebas text-3xl md:text-4xl tracking-wider text-[#1c1208] uppercase">
+        <div className="mb-10">
+          <h2 className="font-fira-heading text-[#1c1208] uppercase" style={{ fontSize: 'clamp(28px, 3.5vw, 44px)' }}>
             EXPLORE BY <span className="border-b-4 border-[#1B7A4D] pb-1">TOPIC</span>
-          </h3>
+          </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {TOPICS.map((topic) => (
@@ -271,10 +268,10 @@ export default function HigherLearningClient() {
 
       {/* ─── Popular Setups ─────────────────────────────────────────────────── */}
       <div className="mb-20">
-        <div className="text-center mb-10">
-          <h3 className="font-bebas text-3xl md:text-4xl tracking-wider text-[#1c1208] uppercase">
+        <div className="mb-10">
+          <h2 className="font-fira-heading text-[#1c1208] uppercase" style={{ fontSize: 'clamp(28px, 3.5vw, 44px)' }}>
             POPULAR SETUPS <span className="border-b-4 border-[#1B7A4D] pb-1">FOR BETTER SESSIONS</span>
-          </h3>
+          </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {POPULAR_SETUPS.map((product) => (

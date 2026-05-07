@@ -687,7 +687,7 @@ export default function GlobalMasthead({ theme = "green" }: GlobalMastheadProps 
                 zIndex: 2,
                 display: 'flex',
                 alignItems: 'center',
-                padding: '2px 16px 14px 4px',
+                padding: '2px 16px 14px 0',
               }}
             >
               <Image
@@ -701,6 +701,8 @@ export default function GlobalMasthead({ theme = "green" }: GlobalMastheadProps 
                   maxHeight: '160px',
                   minHeight: '100px',
                   display: 'block',
+                  objectFit: 'contain',
+                  objectPosition: 'left center',
                   transform: 'translateY(2px) scale(1.15)',
                   transformOrigin: 'left center',
                   filter: logoFilter,
