@@ -203,10 +203,10 @@ export default function OregonCoastPage() {
           background: linear-gradient(
             180deg,
             rgba(0,0,0,0.0) 0%,
-            rgba(0,0,0,0.0) 30%,
-            rgba(0,0,0,0.55) 100%
+            rgba(0,0,0,0.0) 35%,
+            rgba(0,0,0,0.35) 100%
           ),
-          linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0) 100%);
+          linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.03) 60%, rgba(0,0,0,0) 100%);
         }
         .rtd-hero-inner {
           width: 100%;
