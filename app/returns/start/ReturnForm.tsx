@@ -125,7 +125,7 @@ Please process this return request and provide a Return Authorization (RA) numbe
     }
 
     const { subject, body } = generateEmailContent();
-    const mailtoLink = `mailto:bmbwholesale2025@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoLink = `mailto:info@highway420store.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     // Open email client
     window.location.href = mailtoLink;

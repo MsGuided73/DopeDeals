@@ -175,8 +175,7 @@ export default function PrivacyPage() {
                   please contact us:
                 </p>
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
-                  <p><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
-                  <p><strong>Phone:</strong> (626) 656-6287</p>
+                  <p><strong>Email:</strong> info@highway420store.com</p>
                 </div>
               </div>
             </section>

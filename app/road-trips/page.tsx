@@ -39,7 +39,6 @@ const COMMUNITY_PHOTOS = [
   `${COMMUNITY}/Cali%20Roots.png`,
   `${COMMUNITY}/Chicago%20SMoke%20and%20Sound.png`,
   `${COMMUNITY}/Friends%20enjoying%20sunset%20on%20rooftop.png`,
-  `${COMMUNITY}/Beach%20day%20with%20a%20relaxing%20view.png`,
 ];
 
 export default function RoadTripsPage() {

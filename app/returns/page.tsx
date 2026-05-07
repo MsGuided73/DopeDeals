@@ -264,8 +264,7 @@ export default function ReturnsPage() {
               </button>
             </div>
             <div className="mt-8 text-sm leading-relaxed">
-              <p className="mt-2"><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
-              <p><strong>Phone:</strong> (626) 656-6287</p>
+              <p className="mt-2"><strong>Email:</strong> info@highway420store.com</p>
             </div>
           </div>
 

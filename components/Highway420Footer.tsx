@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Instagram, Twitter, Facebook, Youtube, Phone, Truck, RotateCcw, Building2 } from "lucide-react";
+import { Instagram, Twitter, Facebook, Youtube, Truck, RotateCcw, Building2 } from "lucide-react";
 import { useNavigation } from "../app/contexts/NavigationContext";
 
 export default function Highway420Footer() {
@@ -35,25 +35,7 @@ export default function Highway420Footer() {
         {/* Checkout Support & Billing Info Section */}
         <div className="bg-gray-50/50 py-12 border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-              {/* Help Box */}
-              <div className="bg-white p-6 border border-gray-100 shadow-sm rounded-xl">
-                <div className="flex gap-4">
-                  <div className="mt-1">
-                    <Phone className="w-5 h-5 text-gray-400" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Help</h3>
-                    <p className="text-sm text-gray-600 mb-1">
-                      Call us on <a href="tel:6266566287" className="text-gray-900 font-medium hover:underline underline-offset-4">(626) 656-6287</a>
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Monday - Friday: 9am - 6pm EST
-                    </p>
-                  </div>
-                </div>
-              </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
               {/* Delivery Box */}
               <div className="bg-white p-6 border border-gray-100 shadow-sm rounded-xl">
                 <div className="flex gap-4">

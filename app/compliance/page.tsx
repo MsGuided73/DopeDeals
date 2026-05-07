@@ -214,8 +214,7 @@ export default function CompliancePage() {
                   If you have questions about our compliance practices or need clarification on any regulations, our compliance team is here to help.
                 </p>
                 <div className="space-y-2">
-                  <p><strong>Email:</strong> bmbwholesale2025@gmail.com</p>
-                  <p><strong>Phone:</strong> (626) 656-6287</p>
+                  <p><strong>Email:</strong> info@highway420store.com</p>
                 </div>
               </div>
               <div>

@@ -194,8 +194,7 @@ export default function TermsPage() {
                   If you have any questions about these Terms of Service, please contact us:
                 </p>
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
-                  <p><strong>Email:</strong> legal@dopecity.com</p>
-                  <p><strong>Phone:</strong> 1-800-DOPE-CITY</p>
+                  <p><strong>Email:</strong> legal@highway420store.com</p>
                   <p><strong>Mail:</strong> Highway 420 Legal Department<br />
                   [Address to be added]</p>
                 </div>
