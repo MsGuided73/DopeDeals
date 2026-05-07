@@ -7,6 +7,12 @@
 /* Google Fonts — Fira Sans (primary UI font, DankGeek-style) */
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&display=swap');
 
+/* Archivo Black — single-weight heavy geometric sans-serif. Used on
+   landing-page section headers. Visually distinct from Bebas Neue
+   (not condensed) and from Fira Sans 800 (more geometric). */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+
 
 /* Swiper Carousel Styles */
 @import "swiper/css";
@@ -132,16 +138,46 @@
   font-weight: bold !important;
 }
 
-/* 2. Section & Page Header Font System — Fira Sans 800 on h1/h2 */
+/* 2. Section & Page Header Font System — Bebas Neue (the brand display
+   face) is now the global default for h1/h2 across the site. Utility /
+   dense surfaces where a condensed display face reads wrong (admin,
+   checkout, account, legal pages) opt back into Fira Sans 800 by
+   wrapping the surface in `.font-fira-heading`, or by adding the class
+   directly to the heading. No !important: component-scoped CSS that
+   sets its own font on h1/h2 wins naturally. */
 h1,
 h2,
-.font-heading,
-.font-heading *,
 .heading {
+  /* Brand display font (BebasNeue) is the global default. Impact is in the
+     fallback chain because it's bundled with Windows and reads similar in
+     mass when BebasNeue's network load is delayed — keeps headers from
+     visibly de-weighting on first paint. */
+  font-family: "BebasNeue", "Bebas Neue", "Impact", "Fira Sans", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* Opt-in: Fira Sans 800 display heading (was the previous global default).
+   Apply to a wrapper to scope to all descendant h1/h2/.heading, or apply
+   directly to a heading element. `.font-heading` is kept as a legacy
+   alias of the same treatment for backward compatibility.
+   `!important` is scoped to this opt-in class only — necessary to beat
+   inline `style={{ fontFamily: 'BebasNeue,...' }}` set by individual
+   section-header components (FeaturedProductsSection, NewProductsSection,
+   DopeDealsSection, TrustedBrandsBulletin). The carousel sits outside
+   any `.font-fira-heading` scope, so its Bebas styling is unaffected. */
+.font-fira-heading h1,
+.font-fira-heading h2,
+.font-fira-heading .heading,
+h1.font-fira-heading,
+h2.font-fira-heading,
+.font-heading,
+.font-heading * {
   font-family: "Fira Sans", "Inter", system-ui, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: -0.01em !important;
 }
+
 
 /* h3-h6: revert to clean Inter/system stack — used in cards, navigation, etc. */
 h3,

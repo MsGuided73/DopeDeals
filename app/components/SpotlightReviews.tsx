@@ -306,13 +306,14 @@ export default function SpotlightReviews() {
 
           <h2
             style={{
+              fontFamily: "'Fira Sans','Inter',sans-serif",
               fontSize: "clamp(32px, 5vw, 64px)",
-              fontWeight: 700,
+              fontWeight: 800,
+              letterSpacing: "-0.01em",
               color: "rgba(8,16,8,0.92)",
               lineHeight: 1.1,
               margin: "6px 0 8px",
             }}
-            className="font-serif-heading"
           >
             High Praise
           </h2>

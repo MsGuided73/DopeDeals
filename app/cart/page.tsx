@@ -76,7 +76,7 @@ export default function CartPage() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center font-fira-heading">
         <Loader2 className="w-12 h-12 text-black animate-spin mb-4" />
         <p className="text-gray-500">Loading your cart...</p>
       </div>
@@ -85,7 +85,7 @@ export default function CartPage() {
 
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+      <div className="min-h-screen bg-gray-50 pt-20 pb-12 font-fira-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -117,7 +117,7 @@ export default function CartPage() {
   const remainingForFreeShipping = Math.max(freeShippingThreshold - cart.subtotal, 0);
 
   return (
-    <div className="min-h-screen bg-white pt-8 pb-24 font-sans">
+    <div className="min-h-screen bg-white pt-8 pb-24 font-sans font-fira-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb & Header */}

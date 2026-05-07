@@ -258,9 +258,12 @@ export default function FullscreenCarousel() {
         .carousel-copy-headline {
           font-family: 'BebasNeue', 'Bebas Neue', 'Impact', sans-serif;
           /* Scales with the carousel's inline (width) size via container
-             query units. Sized to leave room for optional bullets + CTA
-             below; pre-bullets layout was clamp(18px, 6cqi, 220px). */
-          font-size: clamp(16px, 4.5cqi, 170px);
+             query units. Bumped back up to the pre-bullets size now that
+             Bebas Neue is actually rendering — the prior 4.5cqi assumed
+             the global !important was forcing chunky Fira Sans 800,
+             which filled more horizontal space per character than the
+             condensed Bebas the local CSS had specified all along. */
+          font-size: clamp(22px, 6cqi, 220px);
           line-height: 0.9;
           font-weight: 400;
           letter-spacing: -0.04em;
@@ -316,6 +319,91 @@ export default function FullscreenCarousel() {
         .carousel-copy-cta svg {
           width: clamp(11px, 1.3cqi, 26px);
           height: clamp(11px, 1.3cqi, 26px);
+        }
+
+        /* Mobile (<640px): the carousel-wrap aspect ratio flips to 4/5
+           (taller than wide), so cqi-based sizing collapses every element
+           to its clamp floor and the copy panel becomes unreadable.
+           Override with viewport-relative sizes calibrated for phones,
+           widen the panel slightly, and drop bullets — they're the
+           biggest vertical hog and the eyebrow + headline + tagline +
+           CTA already carry the message. */
+        @media (max-width: 639px) {
+          .carousel-copy {
+            width: 52%;
+            padding: 4% 3% 4% 12px;
+          }
+          .carousel-copy-eyebrow {
+            font-size: 9px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            letter-spacing: 0.14em;
+          }
+          .carousel-copy-headline {
+            font-size: clamp(20px, 7vw, 36px);
+            margin-bottom: 6px;
+          }
+          .carousel-copy-tagline {
+            font-size: 11px;
+            line-height: 1.3;
+          }
+          .carousel-copy-bullets {
+            display: none;
+          }
+          .carousel-copy-cta {
+            font-size: 11px;
+            padding: 7px 14px;
+            margin-top: 10px;
+            gap: 6px;
+            letter-spacing: 0.06em;
+          }
+          .carousel-copy-cta svg {
+            width: 12px;
+            height: 12px;
+          }
+        }
+
+        /* Hero variant (slides 1 + 7) — same mobile treatment for the
+           larger display headline. Leave the divider/leaf and CTA pill
+           but scale them to the viewport so they don't dominate. */
+        @media (max-width: 639px) {
+          .carousel-copy--hero {
+            width: 92%;
+            padding: 6% 4% 6% 16px;
+          }
+          .carousel-hero-headline {
+            font-size: clamp(28px, 9vw, 48px) !important;
+            line-height: 0.95;
+          }
+          .carousel-hero-tagline {
+            font-size: 12px;
+            line-height: 1.35;
+          }
+          .carousel-hero-divider {
+            margin: 6px 0;
+          }
+          .carousel-hero-divider::before,
+          .carousel-hero-divider::after {
+            width: 28px;
+          }
+          .carousel-hero-divider svg {
+            width: 14px;
+            height: 14px;
+          }
+          .carousel-hero-cta {
+            font-size: 10px;
+            margin-top: 12px;
+            gap: 8px;
+            letter-spacing: 0.14em;
+          }
+          .carousel-hero-cta__arrow {
+            width: 28px;
+            height: 28px;
+          }
+          .carousel-hero-cta__arrow svg {
+            width: 12px;
+            height: 12px;
+          }
         }
 
         /* ── Road Trip hero sub-style (slides 1 + 7) ────────────────── */

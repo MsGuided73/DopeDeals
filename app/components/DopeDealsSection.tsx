@@ -144,7 +144,7 @@ export default function DopeDealsSection() {
     return (
       <section style={{ background: DD.white, padding: '60px 0 72px', position: 'relative' }}>
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', letterSpacing: '0.02em' }}>DOPE DEALS</h2>
+          <h2 style={{ fontFamily: "'Fira Sans','Inter',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 800, letterSpacing: '-0.01em' }}>DOPE DEALS</h2>
           <p style={{ color: '#ef4444', marginTop: '16px' }}>Unable to load deals. Please refresh.</p>
         </div>
       </section>
@@ -157,7 +157,7 @@ export default function DopeDealsSection() {
     <section id="dope-deals" style={{ background: DD.white, padding: '60px 0 72px', position: 'relative' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'Fira Sans','Inter',sans-serif", color: DD.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 800, lineHeight: 1, letterSpacing: '-0.01em', margin: 0 }}>
           DOPE DEALS
         </h2>
         <p style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '15px', color: '#5B6560', margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>
@@ -186,7 +186,7 @@ export default function DopeDealsSection() {
       <div style={{ textAlign: 'center', marginTop: '44px' }}>
         <Link
           href="/dope-deals"
-          style={{ display: 'inline-block', background: 'transparent', color: DD.accent, fontFamily: "'BebasNeue','Bebas Neue',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: `2px solid ${DD.accent}`, borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
+          style={{ display: 'inline-block', background: 'transparent', color: DD.accent, fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '19px', letterSpacing: '0.06em', padding: '12px 48px', textDecoration: 'none', border: `2px solid ${DD.accent}`, borderRadius: '4px', transition: 'background 0.18s, color 0.18s' }}
           onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = DD.grad; (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff'; }}
           onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; (e.currentTarget as HTMLAnchorElement).style.color = DD.accent; }}
         >

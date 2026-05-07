@@ -7,7 +7,7 @@ export default async function OrdersLayout({ children }: { children: ReactNode }
   const user = await requireAuthWithRedirect();
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white font-fira-heading">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <nav className="flex items-center space-x-2 text-sm text-gray-400">

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen font-fira-heading">
       <GlobalMasthead />
       
       <div className="min-h-screen bg-white dark:bg-gray-950">

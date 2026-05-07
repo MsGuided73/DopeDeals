@@ -238,7 +238,7 @@ export default function FeaturedProductsSection() {
     <section style={{ background: '#ffffff', padding: '60px 0 72px', position: 'relative' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'Fira Sans','Inter',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', fontWeight: 800, lineHeight: 1, letterSpacing: '-0.01em', margin: 0 }}>
           HOT PRODUCTS
         </h2>
         <p style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '15px', color: '#5B6560', margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>

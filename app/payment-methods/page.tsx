@@ -41,7 +41,7 @@ export default function PaymentMethodsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 font-fira-heading">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white py-16">
           <div className="max-w-6xl mx-auto px-6 text-center">

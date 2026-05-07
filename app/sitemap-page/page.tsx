@@ -97,7 +97,7 @@ export default function SiteMapPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-fira-heading">
       {/* Masthead */}
       <div className="bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

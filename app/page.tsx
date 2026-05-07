@@ -109,6 +109,7 @@ export default function HomePage() {
       <Suspense fallback={<SectionFallback />}>
         <HomeTopicLinksBar />
       </Suspense>
+
     </div>
   );
 }

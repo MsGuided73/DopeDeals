@@ -126,7 +126,7 @@ export default function NewProductsSection() {
     return (
       <section style={{ marginTop: '64px', background: RS.bg, padding: '64px 16px' }}>
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(32px,5vw,64px)', letterSpacing: '0.02em' }}>FRESH DROPS</h2>
+          <h2 style={{ fontFamily: "'Fira Sans','Inter',sans-serif", color: RS.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 800, letterSpacing: '-0.01em' }}>FRESH DROPS</h2>
           <p style={{ fontFamily: "'DM Sans',sans-serif", color: '#ef4444', marginTop: '16px' }}>Unable to load new products. Please refresh the page.</p>
         </div>
       </section>
@@ -140,7 +140,7 @@ export default function NewProductsSection() {
     <section style={{ background: RS.bg, padding: '60px 0 72px', position: 'relative' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '44px', padding: '0 16px' }}>
-        <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: RS.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+        <h2 style={{ fontFamily: "'Fira Sans','Inter',sans-serif", color: RS.dark, fontSize: 'clamp(32px,5vw,64px)', fontWeight: 800, lineHeight: 1, letterSpacing: '-0.01em', margin: 0 }}>
           FRESH DROPS
         </h2>
         <p style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '15px', color: '#5B6560', margin: '10px 0 0', maxWidth: '500px', marginInline: 'auto', lineHeight: 1.5 }}>

@@ -3,7 +3,7 @@ import GlobalMasthead from '../components/GlobalMasthead';
 
 export default function CompliancePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-fira-heading">
       <GlobalMasthead />
       
       <div className="max-w-4xl mx-auto py-12 px-4">

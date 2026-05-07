@@ -123,7 +123,7 @@ export default function CategoryHero({
               }}
             />
             <div className="relative z-10">
-              <h1 className="font-chalets text-[3rem] leading-[0.9] md:text-[4rem] lg:text-[5rem] text-[#1a1a1a] font-bold uppercase tracking-tight mb-4">
+              <h1 className="font-fira-heading text-[3rem] leading-[0.9] md:text-[4rem] lg:text-[5rem] text-[#1a1a1a] uppercase mb-4">
                 {headline}
               </h1>
 

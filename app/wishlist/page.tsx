@@ -42,7 +42,7 @@ export default function WishlistPage() {
     <>
       <GlobalMasthead />
       
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 font-fira-heading">
         {/* Hero Section - Clean White */}
         <div className="bg-white py-8 border-b border-gray-200">
           <div className="w-full max-w-none mx-0 px-6 text-center">

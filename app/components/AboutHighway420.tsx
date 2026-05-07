@@ -38,8 +38,8 @@ export default function AboutHighway420() {
         {/* Header Section */}
         <div className="text-center mb-16">
           <h2
-            className="font-serif font-bold mb-3 text-gray-900 dark:text-white"
-            style={{ fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 1.1, letterSpacing: '0.02em', margin: '0 0 12px' }}
+            className="mb-3 text-gray-900 dark:text-white"
+            style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: 'clamp(32px, 5vw, 64px)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.01em', margin: '0 0 12px' }}
           >
             Why Highway 420
           </h2>

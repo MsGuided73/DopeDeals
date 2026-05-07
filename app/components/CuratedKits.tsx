@@ -11,7 +11,7 @@ export default function CuratedKits() {
           <span style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '13px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2F6B3A', display: 'inline-block', borderBottom: '2px solid #2F6B3A', paddingBottom: '4px', margin: '0 0 10px' }}>
             Everything You Need. Ready To Ride.
           </span>
-          <h2 style={{ fontFamily: "'BebasNeue','Bebas Neue',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '0.02em', margin: '6px 0 8px' }}>
+          <h2 style={{ fontFamily: "'Fira Sans','Inter',sans-serif", color: '#1c1208', fontSize: 'clamp(32px,5vw,64px)', fontWeight: 800, lineHeight: 1, letterSpacing: '-0.01em', margin: '6px 0 8px' }}>
             CURATED KITS
           </h2>
           <p style={{ fontFamily: "'Fira Sans','Inter',sans-serif", fontSize: '15px', color: '#5B6560', margin: 0, lineHeight: 1.5 }}>
@@ -39,7 +39,7 @@ export default function CuratedKits() {
             <div className="p-6 flex flex-col flex-grow relative z-20 bg-[#1a1c19]">
               <div className="flex items-center gap-3 mb-3">
                 <Leaf className="text-[#dfca97] w-6 h-6" strokeWidth={1.5} />
-                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">The Starter Kit</h3>
+                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">Starter Kit</h3>
               </div>
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
                 Everything you need to get rolling with ease.
@@ -66,7 +66,7 @@ export default function CuratedKits() {
             <div className="p-6 flex flex-col flex-grow relative z-20 bg-[#1a1c19]">
               <div className="flex items-center gap-3 mb-3">
                 <FlaskConical className="text-[#dfca97] w-6 h-6" strokeWidth={1.5} />
-                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">The Bong Setup</h3>
+                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">Bong Setup</h3>
               </div>
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
                 Timeless pieces for smooth, reliable sessions.
@@ -93,7 +93,7 @@ export default function CuratedKits() {
             <div className="p-6 flex flex-col flex-grow relative z-20 bg-[#1a1c19]">
               <div className="flex items-center gap-3 mb-3">
                 <Droplet className="text-[#dfca97] w-6 h-6" strokeWidth={1.5} />
-                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">The Dab Setup</h3>
+                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">Dab Setup</h3>
               </div>
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
                 Elevate your experience with cleaner hits and richer flavor.
@@ -123,7 +123,7 @@ export default function CuratedKits() {
             <div className="p-6 flex flex-col flex-grow relative z-20 bg-[#1a1c19]">
               <div className="flex items-center gap-3 mb-3">
                 <Briefcase className="text-[#dfca97] w-6 h-6" strokeWidth={1.5} />
-                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">The High Roller Kit</h3>
+                <h3 className="text-[#dfca97] font-bold text-xl uppercase tracking-wider">High Roller Kit</h3>
               </div>
               <p className="text-gray-300 text-sm mb-6 flex-grow leading-relaxed">
                 Premium picks for elevated sessions.

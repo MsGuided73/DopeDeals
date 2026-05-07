@@ -55,11 +55,11 @@ export default function TrustedBrandsBulletin() {
       {/* Section header */}
       <div style={{ textAlign: 'center', marginBottom: '48px' }}>
         <h2 style={{
-          fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
+          fontFamily: "'Fira Sans','Inter',sans-serif",
           fontSize: 'clamp(32px, 5vw, 64px)',
-          fontWeight: 400,
+          fontWeight: 800,
           lineHeight: 1,
-          letterSpacing: '0.02em',
+          letterSpacing: '-0.01em',
           color: '#1c1208',
           margin: '0 0 10px',
         }}>

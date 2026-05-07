@@ -40,11 +40,11 @@ export default function HomeBlogArticles() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12">
           <div>
             <h2 style={{
-              fontFamily: "'BebasNeue','Bebas Neue',sans-serif",
+              fontFamily: "'Fira Sans','Inter',sans-serif",
               fontSize: 'clamp(32px, 5vw, 64px)',
-              fontWeight: 400,
+              fontWeight: 800,
               lineHeight: 1,
-              letterSpacing: '0.02em',
+              letterSpacing: '-0.01em',
               color: '#1c1208',
               margin: '0 0 10px',
             }}>

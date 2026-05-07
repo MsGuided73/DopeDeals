@@ -71,7 +71,7 @@ export default function AdminShell({ children, user }: { children: ReactNode; us
   })).filter(group => group.items.length > 0 || searchQuery === '');
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 font-fira-heading">
       {/* Sidebar */}
       <aside className={`bg-white shadow-xl transition-all duration-300 border-r border-gray-200 ${collapsed ? 'w-16' : 'w-80'}`}>
         {/* Logo & Search */}
