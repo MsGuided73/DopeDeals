@@ -23,7 +23,7 @@ type SlideCopy = {
 type SlideImageLabel = { text: string; left: string; bottom?: string };
 
 // ─── Carousel slides ──────────────────────────────────────────────────────────
-const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string; objectFit?: 'cover' | 'contain'; copy?: SlideCopy; imageLabels?: SlideImageLabel[] }[] = [
+const SLIDES: { id: string; src: string; alt: string; href: string; objectPosition?: string; objectFit?: 'cover' | 'contain'; bgColor?: string; copy?: SlideCopy; imageLabels?: SlideImageLabel[] }[] = [
   {
     id: 'slide-1',
     src: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/RoadTrips/Better%20Vibes%20No%20Text.png',
@@ -99,6 +99,10 @@ const SLIDES: { id: string; src: string; alt: string; href: string; objectPositi
     alt: 'Highway 420 — Dab Rigs',
     href: '/dabsntools',
     objectPosition: 'center center',
+    /* This slide's image is meant to sit on a light/white background.
+       Without this override the carousel-wrap's default black shows
+       through the contain-letterbox and swallows the dark text panel. */
+    bgColor: '#ffffff',
     copy: {
       eyebrow: 'Tech. Flavor. Elevated.',
       headline: <>Dab Rigs</>,
@@ -555,7 +559,11 @@ export default function FullscreenCarousel() {
             key={slide.id}
             href={slide.href}
             className="carousel-slide"
-            style={{ opacity: idx === current ? 1 : 0, zIndex: idx === current ? 1 : 0 }}
+            style={{
+              opacity: idx === current ? 1 : 0,
+              zIndex: idx === current ? 1 : 0,
+              ...(slide.bgColor ? { background: slide.bgColor } : null),
+            }}
             aria-hidden={idx !== current}
             tabIndex={idx !== current ? -1 : 0}
           >
