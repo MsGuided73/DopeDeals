@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import BundlesClientPage from './BundlesClientPage';
 
 export const metadata = {
@@ -42,5 +43,11 @@ export const metadata = {
 };
 
 export default function BundlesPage() {
-  return <BundlesClientPage />;
+  // Suspense wrapper is required because BundlesClientPage reads ?kit=
+  // via useSearchParams; Next.js 15 throws during prerender otherwise.
+  return (
+    <Suspense fallback={null}>
+      <BundlesClientPage />
+    </Suspense>
+  );
 }

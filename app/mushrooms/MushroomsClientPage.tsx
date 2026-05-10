@@ -15,9 +15,6 @@ import GlobalMasthead from '../components/GlobalMasthead';
 const PRODUCT_IMAGE_URL =
   'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/SHROOMS%20PRODUCT%20.png';
 
-const BACKDROP_URL =
-  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad2-5T.png';
-
 // Custom mushroom SVG — Lucide doesn't ship one and the third feature
 // column visually needs the mushroom shape.
 function MushroomIcon({ className = '' }: { className?: string }) {
@@ -205,20 +202,6 @@ export default function MushroomsClientPage() {
 
       {/* ── Top hero ────────────────────────────────────────────────────── */}
       <section className="relative bg-[#f7f3ec] overflow-hidden">
-        {/* Subtle mountain backdrop on the left */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-y-0 left-0 w-1/2 hidden md:block pointer-events-none opacity-25"
-        >
-          <Image
-            src={BACKDROP_URL}
-            alt=""
-            fill
-            sizes="50vw"
-            className="object-cover object-left"
-          />
-        </div>
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 relative">
           <nav className="text-sm text-gray-600 mb-8 flex items-center gap-2">
             <Link href="/" className="hover:text-[#2d8f47] transition-colors">
@@ -320,16 +303,6 @@ export default function MushroomsClientPage() {
                   getting early access to new drops.
                 </span>
               </p>
-            </div>
-            {/* Soft mountain accent on the right */}
-            <div className="hidden md:block flex-1 max-w-xs h-16 relative opacity-40">
-              <Image
-                src={BACKDROP_URL}
-                alt=""
-                fill
-                sizes="320px"
-                className="object-contain object-right"
-              />
             </div>
           </div>
         </div>

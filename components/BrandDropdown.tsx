@@ -66,29 +66,29 @@ export function BrandDropdown({ isOpen, onClose }: BrandDropdownProps) {
             <div className="px-4 py-2 text-sm text-red-500">{error}</div>
             <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
             {/* Fallback to static brands */}
-            <Link 
-              href="/brands/raw" 
+            <Link
+              href="/search?brand=RAW"
               className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors"
               onClick={onClose}
             >
               RAW
             </Link>
-            <Link 
-              href="/brands/puffco" 
+            <Link
+              href="/search?brand=Puffco"
               className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors"
               onClick={onClose}
             >
               Puffco
             </Link>
-            <Link 
-              href="/brands/storz-bickel" 
+            <Link
+              href="/search?brand=Storz+%26+Bickel"
               className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors"
               onClick={onClose}
             >
               Storz & Bickel
             </Link>
-            <Link 
-              href="/brands/roor" 
+            <Link
+              href="/search?brand=RooR"
               className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors"
               onClick={onClose}
             >
@@ -100,7 +100,7 @@ export function BrandDropdown({ isOpen, onClose }: BrandDropdownProps) {
             {brands.map((brand) => (
               <Link
                 key={brand.id}
-                href={`/brands/${brand.slug}`}
+                href={`/search?brand=${encodeURIComponent(brand.name)}`}
                 className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors flex justify-between items-center"
                 onClick={onClose}
               >
@@ -113,8 +113,8 @@ export function BrandDropdown({ isOpen, onClose }: BrandDropdownProps) {
               </Link>
             ))}
             <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-            <Link 
-              href="/brands" 
+            <Link
+              href="/#brands"
               className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium text-dope-orange"
               onClick={onClose}
             >
@@ -128,8 +128,8 @@ export function BrandDropdown({ isOpen, onClose }: BrandDropdownProps) {
               Run enhanced sync to populate brands
             </div>
             <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-            <Link 
-              href="/brands" 
+            <Link
+              href="/#brands"
               className="block px-4 py-2 text-sm hover:bg-dope-orange/20 transition-colors font-medium"
               onClick={onClose}
             >

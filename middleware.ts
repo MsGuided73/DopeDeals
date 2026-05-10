@@ -18,6 +18,23 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  // The legacy /brands hub is retired. /brands → homepage "Shop By Brand"
+  // anchor; /brands/<slug> → brand-filtered search results so we still honor
+  // any inbound bookmarks or external links pointing at the old per-brand pages.
+  if (pathname === '/brands' || pathname === '/brands/') {
+    return NextResponse.redirect(new URL('/#brands', request.url));
+  }
+  if (pathname.startsWith('/brands/')) {
+    const slug = pathname.replace(/^\/brands\//, '').replace(/\/$/, '');
+    const brandName = slug
+      .split('-')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+    const redirectUrl = new URL('/search', request.url);
+    redirectUrl.searchParams.set('brand', brandName);
+    return NextResponse.redirect(redirectUrl);
+  }
+
   // Basic check for auth cookie presence
   // Note: We don't use Supabase client here because Edge runtime issues with process.version
   const hasAuthCookie = request.cookies.getAll().some(
@@ -46,7 +63,6 @@ export async function middleware(request: NextRequest) {
     '/products',
     '/product',
     '/categories',
-    '/brands',
     '/search',
     '/about',
     '/contact',

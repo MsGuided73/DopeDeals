@@ -38,8 +38,6 @@ export default function SiteMapPage() {
     { path: '/product/[id]', name: 'Product Detail', status: 'needs-work', description: 'Individual product pages - needs real data integration', priority: 'high' },
     { path: '/orders', name: 'Order History', status: 'needs-work', description: 'User order history - needs masthead/nav and real data', priority: 'medium' },
     { path: '/orders/[id]', name: 'Order Detail', status: 'needs-work', description: 'Individual order details - needs masthead/nav', priority: 'medium' },
-    { path: '/brands', name: 'Brands Listing', status: 'needs-work', description: 'Brand directory - needs masthead/nav', priority: 'medium' },
-    { path: '/brands/[id]', name: 'Brand Pages', status: 'needs-work', description: 'Individual brand pages - needs implementation', priority: 'medium' },
     { path: '/categories', name: 'Categories', status: 'needs-work', description: 'Category listing - needs masthead/nav', priority: 'medium' },
     { path: '/rewards', name: 'Loyalty Program', status: 'needs-work', description: 'Rewards/loyalty page - needs full implementation', priority: 'medium' },
 
@@ -130,7 +128,7 @@ export default function SiteMapPage() {
       <nav className="bg-gray-100 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center space-x-8 h-12">
-            <Link href="/brands" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">Shop by Brand</Link>
+            <Link href="/#brands" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">Shop by Brand</Link>
             <Link href="/products?category=thca" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">THCA & More</Link>
             <Link href="/bongs" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">Bongs</Link>
             <Link href="/pipes" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-dope-orange">Pipes</Link>

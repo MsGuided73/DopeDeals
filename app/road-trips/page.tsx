@@ -216,9 +216,15 @@ export default function RoadTripsPage() {
           position: relative;
           z-index: 2;
         }
+        /* Same cascade-override as .rt-explore-title — globals.css forces
+           every h3 to Inter !important; we beat it here so the Featured
+           Trips card titles stay in the brand display face. */
         .rt-card-title {
+          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif !important;
+          font-weight: 400 !important;
+          letter-spacing: 0.02em !important;
+          line-height: 0.9 !important;
           font-size: clamp(28px, 3vw, 42px);
-          line-height: 1;
           margin: 0 0 8px;
         }
         .rt-card-desc {
@@ -323,7 +329,15 @@ export default function RoadTripsPage() {
           text-decoration: none;
           isolation: isolate;
         }
+        /* Globals.css forces every h3 to Inter via !important. Beat it
+           with !important here so the Explore More card titles render
+           in the brand display face like the rest of the page's hero/
+           section headers. */
         .rt-explore-title {
+          font-family: "BebasNeue", "Bebas Neue", "Impact", sans-serif !important;
+          font-weight: 400 !important;
+          letter-spacing: 0.02em !important;
+          line-height: 0.9 !important;
           font-size: 26px;
           margin: 0 0 4px;
           position: relative;

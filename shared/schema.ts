@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, numeric, timestamp, uuid, jsonb, unique, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, numeric, timestamp, date, uuid, jsonb, unique, primaryKey } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -516,17 +516,112 @@ export const loyaltyPoints = pgTable("loyalty_points", {
 });
 
 // Compliance Engine Tables
+//
+// Schema is wide because hemp-derived cannabinoid law is volatile and per-row
+// auditability is the point of the table. See migration
+// supabase/migrations/20260508_compliance_rules_expansion.sql for triggers
+// (last_updated_at maintained on UPDATE) and the generated next_review_due_at
+// column. Drizzle doesn't model trigger-maintained or STORED-generated columns
+// directly; the columns are present here so reads return them, but writes
+// should never set last_updated_at or next_review_due_at — the DB owns those.
 export const complianceRules = pgTable("compliance_rules", {
   id: uuid("id").defaultRandom().primaryKey(),
-  category: text("category").notNull(), // "THCA", "Kratom", "Nicotine", "7-Hydroxy"
+  category: text("category").notNull(), // "THCA Flower", "Delta-8", "HHC", "Adaptogenic Mushrooms", etc.
   substanceType: text("substance_type"), // optional finer detail
   restrictedStates: text("restricted_states").array().default([]), // ["ID","IN","UT"]
   ageRequirement: integer("age_requirement").default(21), // 18 or 21
   labTestingRequired: boolean("lab_testing_required").default(false),
   batchTrackingRequired: boolean("batch_tracking_required").default(false),
   warningLabels: text("warning_labels").array().default([]), // ["Not FDA approved"]
-  shippingRestrictions: jsonb("shipping_restrictions"), // weight limits, carrier restrictions
+  shippingRestrictions: jsonb("shipping_restrictions"), // legacy free-form blob; new code should prefer carrierPolicies rows
+  // Synthetic / Nov 2026 federal change tracking
+  synthetic: boolean("synthetic").default(false), // HHC / D8 / D10 / THC-P — excluded from hemp definition Nov 2026
+  excludedFromHempAt: date("excluded_from_hemp_at"), // 2026-11-12 for the synthetic isomers
+  effectiveFrom: date("effective_from"), // when this rule starts applying
+  effectiveUntil: date("effective_until"), // null = currently in force
+  totalThcLimitMgPerContainer: numeric("total_thc_limit_mg_per_container", { precision: 10, scale: 3 }), // 0.4mg federal cap
+  totalThcFormula: text("total_thc_formula"), // "(THCA × 0.877) + Delta-9 THC"
+  description: text("description"),
+  seizureRiskLevel: text("seizure_risk_level"), // 'low' | 'medium' | 'high' | 'very_high'
+  intermediateProductRestricted: boolean("intermediate_product_restricted").default(false), // distillate/isolate-to-consumer ban
+  miscRestrictions: jsonb("misc_restrictions").default([]), // [{type, jurisdiction, note}, ...]
+  sourceReportId: uuid("source_report_id"), // FK → compliance_reports.id (set up in migration)
+  // Review-cadence tracking
+  lastReviewedAt: timestamp("last_reviewed_at", { withTimezone: true }),
+  lastUpdatedAt: timestamp("last_updated_at", { withTimezone: true }).defaultNow(), // maintained by trigger; do not set from app code
+  nextReviewDueAt: timestamp("next_review_due_at", { withTimezone: true }), // STORED generated column = last_reviewed_at + 7 days
+  reviewedBy: uuid("reviewed_by"), // FK to users(id), nullable for service accounts / report imports
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// Per-(rule, carrier) shipping policy. Replaces the unstructured
+// compliance_rules.shipping_restrictions jsonb for new code.
+export const carrierPolicies = pgTable("carrier_policies", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  ruleId: uuid("rule_id").references(() => complianceRules.id, { onDelete: "cascade" }).notNull(),
+  carrier: text("carrier").notNull(), // 'USPS' | 'UPS' | 'FedEx' | 'DHL' | 'OnTrac' | 'Other'
+  status: text("status").notNull(), // 'permitted' | 'gray_area' | 'conditional' | 'prohibited'
+  requirements: text("requirements").array().default([]), // ['COA', 'ASR', 'Hemp agreement', 'License verification']
+  prohibitedItems: text("prohibited_items").array().default([]),
+  exceptions: text("exceptions"),
+  notes: text("notes"),
+  sourceReportId: uuid("source_report_id"),
+  lastReviewedAt: timestamp("last_reviewed_at", { withTimezone: true }),
+  lastUpdatedAt: timestamp("last_updated_at", { withTimezone: true }).defaultNow(),
+  nextReviewDueAt: timestamp("next_review_due_at", { withTimezone: true }), // STORED generated
+  reviewedBy: uuid("reviewed_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// State / city / county-level limits and bans that don't fit a single column
+// on compliance_rules (e.g. CT 3mg/container, MN 5mg/serving, Chicago bans).
+export const complianceStateLimits = pgTable("compliance_state_limits", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  ruleId: uuid("rule_id").references(() => complianceRules.id, { onDelete: "cascade" }).notNull(),
+  jurisdictionType: text("jurisdiction_type").notNull(), // 'state' | 'city' | 'county' | 'territory'
+  stateAbbr: text("state_abbr").notNull(),
+  jurisdictionName: text("jurisdiction_name"), // 'Chicago, IL' for sub-state
+  limitType: text("limit_type").notNull(), // see migration CHECK for allowed values
+  limitValueMg: numeric("limit_value_mg", { precision: 10, scale: 3 }),
+  isOutrightBan: boolean("is_outright_ban").default(false),
+  citation: text("citation"), // statute / regulation reference
+  notes: text("notes"),
+  sourceReportId: uuid("source_report_id"),
+  lastReviewedAt: timestamp("last_reviewed_at", { withTimezone: true }),
+  lastUpdatedAt: timestamp("last_updated_at", { withTimezone: true }).defaultNow(),
+  nextReviewDueAt: timestamp("next_review_due_at", { withTimezone: true }),
+  reviewedBy: uuid("reviewed_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// Append-only audit trail of every review event across compliance tables.
+// Insert one row per manual review or automated update; never UPDATE/DELETE.
+export const complianceReviewLog = pgTable("compliance_review_log", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  tableName: text("table_name").notNull(), // 'compliance_rules' | 'carrier_policies' | 'compliance_state_limits' | 'compliance_reports'
+  recordId: uuid("record_id").notNull(),
+  action: text("action").notNull(), // 'created' | 'updated' | 'deactivated' | 'reactivated' | 'reviewed_no_change' | 'imported_from_report'
+  reviewedBy: uuid("reviewed_by"),
+  reviewerName: text("reviewer_name"), // captured at write-time so log stays meaningful even if user record is later deleted
+  diff: jsonb("diff"), // { before: {...}, after: {...} } for updates
+  source: text("source"), // 'manual_review' | 'admin_edit' | 'report_ingest' | 'automated_check'
+  notes: text("notes"),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true }).defaultNow(),
+});
+
+// Source documents of record. Stores each ingested compliance report verbatim
+// so any rule change can be traced back to its source.
+export const complianceReports = pgTable("compliance_reports", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  reportDate: date("report_date").notNull(),
+  effectiveAsOf: text("effective_as_of"), // free-form, e.g. "March 2026"
+  federalChanges: jsonb("federal_changes"),
+  rawPayload: jsonb("raw_payload").notNull(),
+  sourceUrl: text("source_url"),
+  ingestedAt: timestamp("ingested_at", { withTimezone: true }).defaultNow(),
+  ingestedBy: uuid("ingested_by"),
+  notes: text("notes"),
 });
 
 export const productCompliance = pgTable("product_compliance", {

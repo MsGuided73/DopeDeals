@@ -142,21 +142,21 @@ export default function Highway420Header() {
                       Shop by Brand
                     </div>
                     <Link
-                      href="/brands"
+                      href="/#brands"
                       className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
                       onClick={() => setIsShopDropdownOpen(false)}
                     >
                       🏪 All Brands
                     </Link>
                     <Link
-                      href="/brands/roor"
+                      href="/search?brand=RooR"
                       className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
                       onClick={() => setIsShopDropdownOpen(false)}
                     >
                       👑 RooR
                     </Link>
                     <Link
-                      href="/brands/puffco"
+                      href="/search?brand=Puffco"
                       className="block px-4 py-2 text-white hover:text-yellow-400 hover:bg-white/10 transition-all duration-200 font-medium"
                       onClick={() => setIsShopDropdownOpen(false)}
                     >
@@ -311,13 +311,13 @@ export default function Highway420Header() {
                 Shop by Brand
               </div>
               <div className="space-y-2">
-                <Link href="/brands" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/#brands" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   🏪 All Brands
                 </Link>
-                <Link href="/brands/roor" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/search?brand=RooR" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   👑 RooR
                 </Link>
-                <Link href="/brands/puffco" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/search?brand=Puffco" className="block text-white hover:text-yellow-400 transition-colors py-2 pl-4 border-l-2 border-gray-600 hover:border-yellow-400" onClick={() => setIsMenuOpen(false)}>
                   🅿️ Puffco
                 </Link>
               </div>

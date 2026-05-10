@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { Mail, Phone, Calendar, Tag, Bell, ArrowRight, ShieldCheck, Truck, Award, Lock, Package } from 'lucide-react';
 import GlobalMasthead from '../components/GlobalMasthead';
@@ -12,11 +13,17 @@ import GlobalMasthead from '../components/GlobalMasthead';
 // subscribers are tagged via lastName "Bundles-Coming-Soon" so they can
 // be filtered and notified when bundle drops go live.
 
-const PRODUCT_IMAGE_URL =
+const DEFAULT_PRODUCT_IMAGE_URL =
   'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Carousel-LP/Bundles/Bundle_love.png';
 
-const BACKDROP_URL =
-  'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Product_Pages/CreeksideRoad2-5T.png';
+// Per-kit hero image overrides. URL hits this page with `?kit=<id>` from
+// e.g. the Oregon Coast "Pack Your Ride" kit cards; we swap the photo
+// without otherwise changing the page so the coming-soon flow still
+// captures email signups under the same `Bundles-Coming-Soon` tag.
+const KIT_IMAGES: Record<string, string> = {
+  dab: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Dab%20kit.png',
+  bong: 'https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets/Bundles/Bong%20Kit.png',
+};
 
 const FEATURES = [
   {
@@ -172,6 +179,10 @@ function SignupForm({
 }
 
 export default function BundlesClientPage() {
+  const searchParams = useSearchParams();
+  const kit = (searchParams.get('kit') ?? '').toLowerCase();
+  const heroImageUrl = KIT_IMAGES[kit] ?? DEFAULT_PRODUCT_IMAGE_URL;
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -191,22 +202,8 @@ export default function BundlesClientPage() {
 
       {/* ── Top hero ────────────────────────────────────────────────────── */}
       <section className="relative bg-[#f7f3ec] overflow-hidden">
-        {/* Subtle mountain backdrop on the left */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-y-0 left-0 w-1/2 hidden md:block pointer-events-none opacity-25"
-        >
-          <Image
-            src={BACKDROP_URL}
-            alt=""
-            fill
-            sizes="50vw"
-            className="object-cover object-left"
-          />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 relative">
-          <nav className="text-sm text-gray-600 mb-8 flex items-center gap-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-12 lg:pt-6 lg:pb-16 relative">
+          <nav className="text-sm text-gray-600 mb-4 flex items-center gap-2">
             <Link href="/" className="hover:text-[#2d8f47] transition-colors">
               Home
             </Link>
@@ -220,7 +217,12 @@ export default function BundlesClientPage() {
               <p className="text-[#2d8f47] text-sm font-bold tracking-[0.2em] uppercase border-b-2 border-[#2d8f47] inline-block pb-1 mb-6">
                 BUNDLES
               </p>
-              <h1 className="font-chalets text-[4.5rem] leading-[0.9] md:text-[7rem] lg:text-[8rem] text-[#1a1a1a] font-bold uppercase tracking-tight mb-6">
+              {/* Fira Sans 800 — same chunky display treatment used by the
+                  Road Trips section headers ("FEATURED TRIPS", "RIDE WITH
+                  US", etc.). .font-heading sets family/weight/letter-spacing
+                  via globals.css !important. Don't add font-bold or
+                  tracking-* utilities — they'd be silently overridden. */}
+              <h1 className="font-heading text-[4.5rem] leading-[0.9] md:text-[7rem] lg:text-[8rem] text-[#1a1a1a] uppercase mb-6">
                 COMING <br /> SOON
               </h1>
               <h2 className="text-[#2d8f47] text-2xl md:text-3xl font-bold mb-4">
@@ -236,17 +238,16 @@ export default function BundlesClientPage() {
               </div>
             </div>
 
-            {/* Right — product image. Container uses a 3:4 portrait aspect
-                that matches the source product photo so the image fills the
-                frame edge-to-edge instead of getting letterboxed inside a
-                square. `mx-auto` plus a max-width keeps the image centered
-                within the wider grid column on large viewports. */}
-            <div className="relative w-full max-w-2xl aspect-[3/4] mx-auto">
+            {/* Right — product image. Container fills the grid column
+                (no max-w cap) and uses a square aspect to match the kit
+                photos' roughly 1:1 framing — sized to fill the half-page
+                hero frame without cream gutters around the image. */}
+            <div className="relative w-full aspect-square">
               <Image
-                src={PRODUCT_IMAGE_URL}
+                src={heroImageUrl}
                 alt="Highway 420 Bundles — Curated kits for every kind of session"
                 fill
-                sizes="(max-width: 1024px) 100vw, 672px"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain object-center"
                 priority
               />
@@ -302,16 +303,6 @@ export default function BundlesClientPage() {
                   getting early access to new drops.
                 </span>
               </p>
-            </div>
-            {/* Soft mountain accent on the right */}
-            <div className="hidden md:block flex-1 max-w-xs h-16 relative opacity-40">
-              <Image
-                src={BACKDROP_URL}
-                alt=""
-                fill
-                sizes="320px"
-                className="object-contain object-right"
-              />
             </div>
           </div>
         </div>

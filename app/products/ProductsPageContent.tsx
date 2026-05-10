@@ -374,7 +374,7 @@ export default function ProductsPageContent() {
                     </p>
                   </div>
                   <Link
-                    href={`/brands/${detectedBrand.slug || detectedBrand.id}`}
+                    href={`/search?brand=${encodeURIComponent(detectedBrand.name)}`}
                     className="px-4 py-2 bg-dope-orange-500 hover:bg-dope-orange-600 text-white rounded-lg transition-colors text-sm font-medium"
                   >
                     View Brand Page

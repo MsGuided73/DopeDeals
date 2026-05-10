@@ -163,7 +163,7 @@ export async function GET(request: NextRequest) {
         id: brand.id,
         title: brand.name,
         subtitle: 'Brand',
-        url: `/brands/${brand.slug || brand.id}`,
+        url: `/search?brand=${encodeURIComponent(brand.name)}`,
         relevanceScore: calculateRelevanceScore({ name: brand.name }, searchTerm),
       }))
       .sort((a, b) => b.relevanceScore - a.relevanceScore);

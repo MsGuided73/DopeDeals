@@ -274,7 +274,7 @@ export default function Highway420Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/brands" className="text-gray-800 hover:text-green-600">
+                  <Link href="/#brands" className="text-gray-800 hover:text-green-600">
                     Shop by Brand
                   </Link>
                 </li>
