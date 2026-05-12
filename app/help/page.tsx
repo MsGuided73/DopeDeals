@@ -3,13 +3,20 @@ import Link from 'next/link';
 import GlobalMasthead from '../components/GlobalMasthead';
 import GlobalBreadcrumbs from '../components/GlobalBreadcrumbs';
 import { Search, Package, CreditCard, Truck, RotateCcw, Shield, MessageCircle, Phone } from 'lucide-react';
+import { fetchActiveComplianceRules } from '../../lib/compliance-rules-server';
+import StateLegalityWidget from './_components/StateLegalityWidget';
 
 export const metadata: Metadata = {
   title: 'Help Center - Highway 420',
   description: 'Find answers to frequently asked questions about orders, shipping, returns, and more at Highway 420.',
 };
 
-export default function HelpPage() {
+// Fetch on every request so merchandiser edits to compliance_rules are picked
+// up without a deploy.
+export const dynamic = 'force-dynamic';
+
+export default async function HelpPage() {
+  const complianceRules = await fetchActiveComplianceRules();
   const faqCategories = [
     {
       title: 'Orders & Payment',
@@ -119,8 +126,13 @@ export default function HelpPage() {
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow group cursor-pointer">
               <Phone className="w-12 h-12 text-dope-orange-500 mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Call Us</h3>
-              <p className="text-gray-600 dark:text-gray-300">1-800-DOPE-CITY</p>
+              <p className="text-gray-600 dark:text-gray-300">Coming soon</p>
             </div>
+          </div>
+
+          {/* State legality picker — pulls live from `compliance_rules` */}
+          <div className="mb-12">
+            <StateLegalityWidget rules={complianceRules} />
           </div>
 
           {/* FAQ Categories */}
