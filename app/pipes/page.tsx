@@ -2,6 +2,9 @@ import { Suspense } from 'react';
 import PipesPageContent from './PipesPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Glass Pipes & Hand Pipes | HIGHWAY 420 - Premium Smoking Pipes Collection',
   description: 'Shop premium glass pipes, hand pipes, spoon pipes, and chillums at HIGHWAY 420. Borosilicate glass, unique designs, and free shipping on orders over $50.',

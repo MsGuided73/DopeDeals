@@ -2,6 +2,9 @@ import { Suspense } from 'react';
 import ThcaFlowerPageContent from './ThcaFlowerPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'THCA Flower | Premium Hemp Flower Products | Highway 420',
   description: 'Shop premium THCA flower products including 3.5g, 7g, 14g, and 28g options. High-quality hemp flower with infused prerolls. Free shipping on orders over $50.',

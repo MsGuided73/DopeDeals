@@ -2,6 +2,9 @@ import { Suspense } from 'react';
 import ThcaPnvPageContent from './ThcaPnvPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'THCA Pre-Rolls & Vapes | Premium Cannabinoid Products | Highway 420',
   description: 'Explore our premium THCA pre-rolls and vape cartridges. Vector-powered search with advanced filtering. Free shipping over $75.',

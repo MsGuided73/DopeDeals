@@ -2,6 +2,9 @@ import { Suspense } from 'react';
 import EdiblesPageContent from './EdiblesPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Edibles | HIGHWAY 420 - Premium Hemp-Derived Edibles',
   description: 'Shop premium edibles at HIGHWAY 420 — gummies, chocolates, beverages, and tinctures. Lab-tested, precisely dosed, and federally compliant. Free shipping on orders over $75.',

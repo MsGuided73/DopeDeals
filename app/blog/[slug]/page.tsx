@@ -5,8 +5,8 @@ import { FALLBACK_POSTS } from '../../../lib/blog-data';
 import GlobalBreadcrumbs from '../../components/GlobalBreadcrumbs';
 import GlobalMasthead from '../../components/GlobalMasthead';
 
-// Force dynamic rendering since we are checking params
-export const dynamic = 'force-dynamic';
+// Blog post bodies rarely change post-publish — cache for an hour.
+export const revalidate = 3600;
 
 interface PageProps {
   params: {

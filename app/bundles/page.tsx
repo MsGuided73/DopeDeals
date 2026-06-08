@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
 import BundlesClientPage from './BundlesClientPage';
 
+// Curated bundles — slow-changing.
+export const revalidate = 3600;
+
 export const metadata = {
   title: 'Bundles — Coming Soon | Highway 420',
   description:

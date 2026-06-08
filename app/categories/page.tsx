@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   },
 };
 
-// Ensure request-time rendering (prevents prerender from running request-scoped code)
-export const dynamic = 'force-dynamic';
+// Categories index — refresh every 10 minutes.
+export const revalidate = 600;
 
 type Category = {
   id?: string | number;

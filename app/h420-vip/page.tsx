@@ -1,5 +1,8 @@
 import H420VipClient from "./H420VipClient";
 
+// VIP landing — slow-changing campaign page.
+export const revalidate = 3600;
+
 export const metadata = {
   title: "Highway 420 VIP — Join the Ride. Unlock VIP Perks.",
   description:

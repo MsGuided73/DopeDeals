@@ -5,5 +5,5 @@ export default function SalePage() {
   redirect('/products?onSale=true');
 }
 
-// Force dynamic rendering to avoid caching issues
-export const dynamic = 'force-dynamic';
+// Pure redirect — sale prices update frequently; 60s cache is fine.
+export const revalidate = 60;

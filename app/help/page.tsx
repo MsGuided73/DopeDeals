@@ -11,9 +11,9 @@ export const metadata: Metadata = {
   description: 'Find answers to frequently asked questions about orders, shipping, returns, and more at Highway 420.',
 };
 
-// Fetch on every request so merchandiser edits to compliance_rules are picked
-// up without a deploy.
-export const dynamic = 'force-dynamic';
+// Cache for 5 minutes — long enough to absorb traffic, short enough that
+// merchandiser edits to compliance_rules surface quickly without a deploy.
+export const revalidate = 300;
 
 export default async function HelpPage() {
   const complianceRules = await fetchActiveComplianceRules();

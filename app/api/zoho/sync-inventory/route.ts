@@ -1,5 +1,28 @@
+/**
+ * ============================================================================
+ *  ZOHO INVENTORY SYNC — STOCK FIELDS ONLY
+ * ============================================================================
+ *  Zoho is the source of truth for INVENTORY ONLY — never B2C pricing.
+ *
+ *  This route is the safe path: it writes only to the `inventory` table
+ *  (stock counts) and intentionally ignores Zoho's `rate` field. Storefront
+ *  pricing lives in `main_site_products.our_price` / `.sale_price` and must
+ *  never be overwritten from Zoho.
+ *
+ *  After a successful stock update for a product, this route calls
+ *  `revalidatePath('/product/<id>')` so the PDP reflects the new stock value
+ *  immediately, bypassing the 5-minute ISR window.
+ *
+ *  NOTE: The inventory table currently keys on Zoho's item_id, while PDP URLs
+ *  use the main_site_products.id (UUID). For each successful stock update we
+ *  resolve the corresponding storefront UUID via main_site_products.zoho_item_id
+ *  and revalidate that PDP. If the lookup fails (e.g., product not yet present
+ *  on the storefront), the revalidate is skipped with a warning.
+ * ============================================================================
+ */
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: NextRequest) {
   try {
@@ -151,6 +174,22 @@ async function syncInventoryFromZoho(supabase: any, accessToken: string) {
 
           results.updated++;
           console.log(`[Zoho Inventory Sync] Updated inventory: ${zohoItem.name} (${zohoItem.item_id}) - Stock: ${inventoryData.available}`);
+
+          // Resolve the storefront product UUID and bust its PDP cache so
+          // the new stock value surfaces immediately. Best-effort — if the
+          // product isn't on the storefront yet, skip silently.
+          try {
+            const { data: storefrontRow } = await supabase
+              .from('main_site_products')
+              .select('id')
+              .eq('zoho_item_id', zohoItem.item_id)
+              .maybeSingle();
+            if (storefrontRow?.id) {
+              revalidatePath(`/product/${storefrontRow.id}`);
+            }
+          } catch (revalErr) {
+            console.warn(`[Zoho Inventory Sync] revalidatePath skipped for ${zohoItem.item_id}:`, revalErr);
+          }
         } else {
           // Create new inventory record
           const { error: insertError } = await supabase

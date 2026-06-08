@@ -31,8 +31,10 @@ const RoadTripsSection        = nextDynamic(() => import("./components/RoadTrips
 const HomeBlogArticles        = nextDynamic(() => import("./components/HomeBlogArticles"));
 const HomeTopicLinksBar       = nextDynamic(() => import("./components/HomeTopicLinksBar"));
 
-// Force dynamic rendering to avoid static generation issues
-export const dynamic = "force-dynamic";
+// Cache the home page for an hour. Pre-launch this was force-dynamic to dodge
+// build-time prerender issues — those should now be resolved by the App
+// Router server-component shape. If a regression surfaces, revert.
+export const revalidate = 3600;
 
 function SectionFallback() {
   return <div className="h-40 animate-pulse bg-gray-100 mx-0 my-0" />;

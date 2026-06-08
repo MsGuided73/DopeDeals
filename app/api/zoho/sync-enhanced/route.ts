@@ -1,9 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 
 /**
- * ENHANCED ZOHO SYNC - Pulls ALL available data from Zoho
- * This endpoint ensures we capture every piece of information BMB provides
+ * ============================================================================
+ *  ENHANCED ZOHO SYNC — INVENTORY-ONLY POLICY
+ * ============================================================================
+ *  Pulls additional metadata (custom fields, images, compliance flags) from
+ *  Zoho beyond the basic sync. Subject to the same hard rule as the basic
+ *  sync route:
+ *
+ *  Zoho is the source of truth for INVENTORY ONLY — never B2C pricing.
+ *
+ *  This route MUST update stock fields only. It MUST NOT import or apply
+ *  Zoho price fields (`rate`, `compare_at_price`, `msrp`, etc.) to
+ *  storefront pricing columns (`our_price`, `sale_price`, `fire_price`)
+ *  under any circumstance.
+ *
+ *  After a successful stock sync for a product, this route calls
+ *  `revalidatePath('/product/<id>')` so the PDP reflects new stock
+ *  immediately.
+ * ============================================================================
  */
 
 export async function POST(request: NextRequest) {
@@ -288,16 +305,13 @@ async function syncSingleProductWithAllData(
 ) {
   const item = detailedItem || basicItem;
   
-  // Build product data using snake_case column names for Supabase
+  // Inventory-only payload. Zoho's `rate` is intentionally NOT imported —
+  // pricing is owned by main_site_products.our_price and must never be
+  // overwritten from Zoho. See policy banner at top.
   const productData: any = {
-    // Core fields that exist in your products table
     name: item.name,
     sku: item.sku || null,
     description: item.description || '',
-    price: parseFloat(item.rate || '0'),
-
-    // Fields that exist in your products schema (using camelCase property names for Drizzle)
-    // imageUrl: item.image_name || null, // Temporarily disabled due to schema cache issue
     material: item.manufacturer || null,
     inStock: (item.stock_on_hand || item.available_stock || 0) > 0,
 
@@ -364,6 +378,13 @@ async function syncSingleProductWithAllData(
     productId = existingProduct.id;
     results.updated++;
     console.log(`[Enhanced Zoho Sync] Updated product: ${item.name}`);
+
+    // Bust the PDP cache so new stock surfaces immediately.
+    try {
+      revalidatePath(`/product/${existingProduct.id}`);
+    } catch (revalErr) {
+      console.warn(`[Enhanced Zoho Sync] revalidatePath failed for ${existingProduct.id}:`, revalErr);
+    }
   } else {
     // Create new product
     const { data: newProduct, error: insertError } = await supabase
@@ -419,10 +440,10 @@ function extractComplianceData(customFields: any[], customFieldsMap: Record<stri
       complianceData.restricted_states = Array.isArray(fieldValue) ? fieldValue : [fieldValue];
     }
     
-    if (fieldName.includes('msrp') || fieldName.includes('retail')) {
-      complianceData.compare_at_price = parseFloat(fieldValue) || null;
-    }
-    
+    // NOTE: Zoho MSRP / retail price fields are intentionally NOT imported.
+    // Storefront pricing (`our_price`, `sale_price`, `compare_at_price`) is
+    // owned by main_site_products and must never be overwritten from Zoho.
+
     if (fieldName.includes('description') && fieldName.includes('dtc')) {
       complianceData.short_description = fieldValue;
     }

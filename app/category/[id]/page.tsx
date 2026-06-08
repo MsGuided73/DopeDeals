@@ -3,9 +3,8 @@ import ProductCard from '../../products/components/ProductCard';
 import { Hero } from '../../components/design/NikeIndustrial';
 import { supabaseServer } from '../../../lib/supabase-server';
 
-// Render at request time to avoid prerender pitfalls
-export const dynamic = 'force-dynamic';
-// Optional: export const revalidate = 0;
+// Category landing — inventory/sale prices change but not by the second.
+export const revalidate = 120;
 
 export async function generateMetadata(
   { params }: { params: { id: string } }

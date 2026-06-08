@@ -3,6 +3,9 @@ import DabsntoolsPageContent from './DabsntoolsPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 import { Metadata } from 'next';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: 'Dab Rigs & Concentrate Tools | Highway420 - Premium Concentrate Equipment',
   description: 'Shop premium dab rigs, e-rigs, glass concentrate equipment, and concentrate tools at Highway 420. Electric rigs, glass rigs, portable devices, bangers, and more. Free shipping $50+.',

@@ -71,4 +71,42 @@ Used by `app/components/AgeGateModal.tsx` and `app/checkout/shipping/page.tsx`. 
 
 ## 5. Open product / data items (carried from prior turns)
 - **Effective price column** — `main_site_products` lacks a `COALESCE(sale_price, our_price)` generated column. Search currently sorts/filters on `our_price` only, ignoring sale prices. Add `effective_price` generated column + Drizzle update before launch if any sale prices are populated.
-- **Product slug column** — `main_site_products.slug` referenced in `lib/article-recommendations.ts` but doesn't exist. Article rails fall back silently. Add column + backfill, or rewrite recommendation queries to match by name/SKU.
+- **Article-rail slug values** — `main_site_products.slug` exists and is populated for all 4,133 rows (earlier "missing column" intel was wrong). The silent failure is from **fabricated slug strings** in the article files (`puffco-peak-pro` vs DB's `puffco-peak-pro-v2`, etc.). Two fix paths on the table: (A) backfill the 12 fallback slugs in the article files with real DB values, (B) add a name-token ILIKE fallback in `lib/article-recommendations.ts`. Awaiting Dana's pick.
+
+---
+
+## 6. Imageless active products — data-quality task (2026-05-11)
+
+The sitemap's `image_url IS NOT NULL AND <> ''` filter ([app/sitemap.ts](app/sitemap.ts)) excludes products that have no image. As of today the gap is **601 active products** that should be in the sitemap but aren't:
+
+- **Live sitemap product URLs:** 258 (active + non-kratom + has image)
+- **All active non-kratom products:** 859
+- **Imageless but active:** **601** ← these are missing from the sitemap
+
+This is intentional — Google deprioritizes thin/imageless PDPs and we don't want to surface them — but the underlying data needs cleanup.
+
+### Concentration (highly skewed, very tractable)
+
+**By category:**
+| Category | Imageless | % of gap |
+|---|---|---|
+| `bongs` | 553 | 92% |
+| `dab-rig` | 36 | 6% |
+| `pipes` | 12 | 2% |
+
+**By brand:**
+| Brand | Imageless | % of gap |
+|---|---|---|
+| House Brand | 342 | 57% |
+| CRAVE | 124 | 21% |
+| Diamond Glass | 75 | 12% |
+| APO | 50 | 8% |
+| Limited Edition | 5 | <1% |
+| GORILLA | 5 | <1% |
+
+**Pareto:** 92% of the gap is bongs. 78% of the gap is House Brand + CRAVE. Sourcing images for those two brand catalogs would close the bulk of the deficit.
+
+### Action
+- Decision needed: prioritize image sourcing for House Brand + CRAVE bong catalog, or accept reduced indexing footprint at launch
+- As products gain images, the sitemap auto-includes them on next render — no code change needed
+- Service-role key in prod **is verified working** ✅ (859 product URLs proved end-to-end DB enumeration). The `ci-placeholder` fallback in `next.config.js` is a build-time-only safety net and does NOT affect runtime sitemap generation — leave as-is.

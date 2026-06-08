@@ -2,6 +2,9 @@ import { Suspense } from 'react';
 import VapesPageContent from './VapesPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Vapes & Cartridges | Highway 420 - Premium THC & CBD Vapes',
   description: 'Shop premium cartridges, disposable vapes, and vaporizer hardware at Highway 420. High-quality THCA, Delta 8, and specialty vape products. Free shipping over $75.',

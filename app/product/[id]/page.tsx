@@ -2,6 +2,10 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { getStorage } from '../../../lib/storage';
 
+// PDP — 5-minute ISR. When a Zoho stock webhook lands, call
+// revalidatePath(`/product/${id}`) to bust the cache for that SKU on demand.
+export const revalidate = 300;
+
 // Dynamic import for client components
 const EnhancedPDP = dynamic(() => import('../../components/EnhancedPDP'), {
   loading: () => (

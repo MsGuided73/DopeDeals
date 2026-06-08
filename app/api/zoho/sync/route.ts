@@ -1,5 +1,22 @@
+/**
+ * ============================================================================
+ *  ZOHO SYNC — INVENTORY-ONLY POLICY
+ * ============================================================================
+ *  Zoho is the source of truth for INVENTORY ONLY — never B2C pricing.
+ *
+ *  This route MUST update stock fields only (stock_quantity, inventory_status,
+ *  in-stock flags). It MUST NOT import or apply Zoho price fields
+ *  (`rate`, `compare_at_price`, `msrp`, etc.) to storefront pricing columns
+ *  (`our_price`, `sale_price`, `fire_price`) under any circumstance.
+ *
+ *  After a successful stock sync for a product, this route calls
+ *  `revalidatePath('/product/<id>')` so the PDP reflects new stock
+ *  immediately without waiting for the 5-minute ISR window.
+ * ============================================================================
+ */
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
   return NextResponse.json({
@@ -137,15 +154,17 @@ async function syncProductsFromZoho(accessToken: string, orgId: string, dc: stri
             throw new Error(`Database search error: ${searchError.message}`);
           }
           
+          // Inventory-only payload. Zoho's `rate` field is intentionally NOT
+          // imported — pricing is owned in `main_site_products.our_price`
+          // and must never be overwritten from Zoho. See policy banner at top.
           const productData = {
             name: zohoItem.name,
-            sku: zohoItem.sku || null, // BMB manages SKUs, we just store them
+            sku: zohoItem.sku || null,
             description: zohoItem.description || '',
-            price: parseFloat(zohoItem.rate || '0'),
-            zoho_item_id: zohoItem.item_id, // Primary key for matching
+            zoho_item_id: zohoItem.item_id,
             category_id: zohoItem.category_id || null,
             stock_quantity: zohoItem.stock_on_hand || zohoItem.available_stock || 0,
-            is_active: (zohoItem.stock_on_hand || zohoItem.available_stock || 0) > 0, // Available if in stock
+            is_active: (zohoItem.stock_on_hand || zohoItem.available_stock || 0) > 0,
             updated_at: new Date().toISOString()
           };
           
@@ -156,13 +175,21 @@ async function syncProductsFromZoho(accessToken: string, orgId: string, dc: stri
               .from('products')
               .update(productData)
               .eq('id', existingProduct.id);
-              
+
             if (updateError) {
               throw new Error(`Update error: ${updateError.message}`);
             }
-            
+
             results.updated++;
             console.log(`[Zoho Sync] Updated product: ${zohoItem.name} (${zohoItem.sku})`);
+
+            // Bust the PDP cache so the new stock value renders on next request
+            // instead of waiting for the 5-min ISR window.
+            try {
+              revalidatePath(`/product/${existingProduct.id}`);
+            } catch (revalErr) {
+              console.warn(`[Zoho Sync] revalidatePath failed for ${existingProduct.id}:`, revalErr);
+            }
           } else {
             // Create new product
             const { error: insertError } = await supabase

@@ -3,6 +3,9 @@ import Image from 'next/image';
 import GlobalMasthead from '../components/GlobalMasthead';
 import { Users, Star, Truck, Shield, Gift, Heart } from 'lucide-react';
 
+// Static-ish community page — refresh once a day.
+export const revalidate = 86400;
+
 export const metadata: Metadata = {
   title: 'Ride with Us - Join the Highway 420 Community',
   description: 'Become part of the Highway 420 community. Enjoy exclusive membership benefits, premium products, and connect with fellow cannabis enthusiasts.',

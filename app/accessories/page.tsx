@@ -1,5 +1,8 @@
 import AccessoriesClientPage from './AccessoriesClientPage';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Smoking Accessories | Highway 420 - Premium Collection',
   description: 'Shop premium smoking accessories at Highway 420. Pipes, bongs, dab rigs, grinders, lighters, and more with discreet shipping and competitive prices.',

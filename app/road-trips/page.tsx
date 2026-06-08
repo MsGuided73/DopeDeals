@@ -8,6 +8,9 @@ export const metadata = {
   description: "Discover spots, scenes, and sessions across the country.",
 };
 
+// Content hub — cache for an hour.
+export const revalidate = 3600;
+
 const ASSETS = "https://qirbapivptotybspnbet.supabase.co/storage/v1/object/public/Highway420_assets";
 const COMMUNITY = `${ASSETS}/Road-Trips/General%20Community`;
 const TRIPS = `${ASSETS}/Road-Trips`;

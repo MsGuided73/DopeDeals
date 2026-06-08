@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   description: 'Learn about Highway 420\'s mission to provide premium cannabis culture products at the best prices.',
 };
 
+// Brand page rarely changes — refresh once a day.
+export const revalidate = 86400;
+
 export default function AboutPage() {
   return (
     <>

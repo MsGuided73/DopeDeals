@@ -1,5 +1,8 @@
 import MushroomsClientPage from './MushroomsClientPage';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Mushroom Products | Highway 420 - Premium Mushroom Collection',
   description: 'Shop premium mushroom products at Highway 420. High-quality, lab-tested mushroom products with discreet shipping and competitive prices.',

@@ -2,6 +2,9 @@ import { Suspense } from 'react';
 import PreRollsPageContent from './PreRollsPageContent';
 import GlobalMasthead from '../components/GlobalMasthead';
 
+// Category landing — refresh every minute so price/stock surface fast.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Premium Pre-Rolls | Highway 420',
   description:
