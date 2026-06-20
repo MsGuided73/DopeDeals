@@ -98,6 +98,23 @@ export async function middleware(request: NextRequest) {
 
   // Handle API routes separately (they have their own auth)
   if (pathname.startsWith('/api/')) {
+    // ── Inventory sync hold ────────────────────────────────────────────
+    // All inventory syncs are paused. Airtable is retired; Zoho is paused
+    // while we migrate to a new Zoho Inventory account. To re-enable Zoho
+    // once the new Inventory credentials are in place, remove '/api/zoho/sync'
+    // from this list. Until then every matching endpoint returns 503.
+    const HELD_SYNC_PREFIXES = [
+      '/api/airtable/', // retired
+      '/api/zoho/sync', // sync, sync-enhanced, sync-inventory, sync-brands, sync-categories
+      '/api/sync/',     // master-consolidation
+      '/api/import/',   // csv product importer
+    ];
+    if (HELD_SYNC_PREFIXES.some(prefix => pathname.startsWith(prefix))) {
+      return NextResponse.json(
+        { error: 'Inventory syncs are temporarily disabled.', code: 'SYNCS_ON_HOLD' },
+        { status: 503 },
+      );
+    }
     return response;
   }
 

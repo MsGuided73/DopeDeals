@@ -19,7 +19,13 @@
 /**
  * Apply image-required filter to a Supabase query against main_site_products.
  * Excludes rows where image_url is NULL, empty, the literal string 'null',
- * or a placeholder URL. Use this on every customer-facing read.
+ * a placeholder URL, or a known-dead host. Use this on every customer-facing read.
+ *
+ * Known-dead host: sigdistro.com. The distributor migrated WordPress -> Shopify,
+ * so every legacy https://sigdistro.com/wp-content/... URL now 301-redirects to
+ * sigg-distro.myshopify.com and 404s. Rows whose only image points there render
+ * as broken images, so they must be hidden until re-imported with a live image
+ * (e.g. migrated to Supabase storage).
  *
  * @param query A Supabase query builder mid-construction
  * @param column The column name to check (defaults to 'image_url')
@@ -31,6 +37,7 @@ export function applyImageRequiredFilter(query: any, column: string = 'image_url
     .neq(column, '')
     .neq(column, 'null')
     .not(column, 'ilike', '%placeholder%')
+    .not(column, 'ilike', '%sigdistro.com%')
     .ilike(column, 'http%');
 }
 
@@ -43,5 +50,7 @@ export function hasUsableImage(product: { image_url?: string | null; imageUrl?: 
   if (!url || url === 'null') return false;
   if (!/^https?:\/\//i.test(url)) return false;
   if (/placeholder/i.test(url)) return false;
+  // Known-dead host — sigdistro.com migrated WP -> Shopify; all legacy URLs 404.
+  if (/sigdistro\.com/i.test(url)) return false;
   return true;
 }
